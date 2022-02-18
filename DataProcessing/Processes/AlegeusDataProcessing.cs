@@ -30,7 +30,7 @@ namespace DataProcessing
             CreateHeaders(dbConn, fileLogParams);
 
             //PreCheckFilesAndProcess
-            //PreCheckFilesAndProcess(HeaderType.NotApplicable, dbConn, fileLogParams);
+            PreCheckFilesAndProcess(HeaderType.NotApplicable, dbConn, fileLogParams);
         }
 
         public static void CreateHeaders(DbConnection dbConn, FileOperationLogParams fileLogParams)
@@ -84,7 +84,7 @@ namespace DataProcessing
 
 
             //run query
-            var queryString = $"Select * from {tableName} order by template_type;";
+            var queryString = $"Select * from {tableName} order by template_type, folder_name;";
             var dtHeaderFolders = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null);
 
 

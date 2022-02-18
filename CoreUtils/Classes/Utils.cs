@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.VisualBasic;
@@ -133,28 +135,41 @@ namespace CoreUtils.Classes
         {
             var isNumeric = float.TryParse(value, out var number);
             return number;
-        }  
-        
+        }
+
         public static DateTime ToDateTime(string value)
         {
             var dateTime = DateTime.TryParse(value, out var number);
             return number;
         }
-        
-        public static string ToDateString (DateTime value)
+
+        public static string ToDateString(DateTime value)
         {
-            var str =  value.ToShortDateString();
+            var str = value.ToShortDateString();
             return str;
         }
-        public static string ToTimeString (DateTime value)
+        public static string ToTimeString(DateTime value)
         {
-            var str =  value.ToShortTimeString();
+            var str = value.ToShortTimeString();
             return str;
         }
-        public static string ToDateTimeString (DateTime value)
+        public static string ToDateTimeString(DateTime value)
         {
-            var str =  $"{ToDateString(value)} {ToTimeString(value)} ";
+            var str = $"{ToDateString(value)} {ToTimeString(value)} ";
             return str;
+        }
+
+        public static string GetExeBaseDir()
+        {
+            var processModule = Process.GetCurrentProcess().MainModule;
+            if (processModule != null)
+            {
+                string exePath = processModule.FileName;
+                string directoryPath = Path.GetDirectoryName(exePath);
+                return directoryPath;
+            }
+
+            return "";
         }
 
     }

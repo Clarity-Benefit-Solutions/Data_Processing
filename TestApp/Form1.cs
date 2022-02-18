@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Windows.Forms;
 using CoreUtils;
 using CoreUtils.Classes;
@@ -79,17 +80,18 @@ namespace TestApp
 
         private void cmdOpenAccessDB_Click(object sender, EventArgs e)
         {
-            Process.Start(
-                "C:/___Clarity/clarity_dev/r1_cl_sqldb/_NewApps/_MsAccessFiles/AlegeusErrorLogSystemv4v_Control-New.accdb");
+
+            string directoryPath = Utils.GetExeBaseDir();
+            Process.Start($"{directoryPath}/../../../_MsAccessFiles/AlegeusErrorLogSystemv4v_Control-New.accdb");
+
         }
-
-
 
         private void cmdCopyTestFiles_Click(object sender, EventArgs e)
         {
-            Process.Start("C:/SQLDBTEST/___TestFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
-            Process.Start("C:/SQLDBTEST/___TestFiles/copy_Alegeus_source_files_to_import_ftp.bat");
-            Process.Start("C:/SQLDBTEST/___TestFiles/copy_COBRA_source_files_to_import_ftp.bat");
+            string directoryPath = Utils.GetExeBaseDir();
+            Process.Start($"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
+            Process.Start($"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
+            Process.Start($"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
 
         }
 

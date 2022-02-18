@@ -300,12 +300,31 @@ namespace DataProcessing
 
         #region LocalRootPaths
 
+        public static string localTestRoot
+        {
+            get
+            {
+#if (CTXSUMEETDEV)
+                string path = $"{Utils.GetExeBaseDir()}/../../../__LocalTestDirsAndFiles";
+                DirectoryInfo dirInfo = new DirectoryInfo(path);
+                if (!dirInfo.Exists)
+                {
+                    dirInfo.Create();
+                }
+
+                return dirInfo.FullName;
+#else
+              return "G:/FTP"; ;
+#endif
+            }
+        }
+
         public static string localFtpRoot
         {
             get
             {
 #if (CTXSUMEETDEV)
-                return "C:/SQLDBTEST/FTP";
+                return $"{localTestRoot}/FTP";
 #else
               return "G:/FTP"; ;
 #endif
@@ -317,7 +336,7 @@ namespace DataProcessing
             get
             {
 #if (CTXSUMEETDEV)
-                return "C:/SQLDBTEST/FTP-IT";
+                return $"{localTestRoot}/FTP-IT";
 #else
               return "G:/FTP-IT";
 #endif
@@ -333,7 +352,7 @@ namespace DataProcessing
             get
             {
 #if (CTXSUMEETDEV)
-                return "C:/SQLDBTEST";
+                return $"{localTestRoot}";
 #else
                 return "G:/FTP";
 #endif

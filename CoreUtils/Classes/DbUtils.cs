@@ -334,7 +334,7 @@ namespace CoreUtils
 
         private static string FilePartsDelimiter = "--";
 
-        public static string AddUniqueIdToFileName(string fileName, HeaderType headerType = HeaderType.NotApplicable)
+        public static string AddUniqueIdAndHeaderTypeToFileName(string fileName, HeaderType headerType = HeaderType.NotApplicable)
         {
             fileName = StripUniqueIdAndHeaderTypeFromFileName(fileName);
 
@@ -383,7 +383,7 @@ namespace CoreUtils
             FileInfo srcFileInfo = new FileInfo(srcFilePath);
             string oldFileName = srcFileInfo.Name;
 
-            string newFileName = AddUniqueIdToFileName(oldFileName, headerType);
+            string newFileName = AddUniqueIdAndHeaderTypeToFileName(oldFileName, headerType);
 
             // fix for alegeus - max 30 chars incvluding extension
             string newFileNameFixed = newFileName;
