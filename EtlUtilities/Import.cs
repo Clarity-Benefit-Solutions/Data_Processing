@@ -204,6 +204,12 @@ namespace EtlUtilities
             return tempFileName;
         }
 
+        public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath, HeaderType folderHeaderType)
+        {
+            //todo: examine file and dtermine the correct type of header. If nothing can be guessed, return the folderHeaderType
+            return folderHeaderType;
+        }
+
         public static Boolean GetAlegeusFileFormatIsResultFile(EdiFileFormat fileFormat)
         {
             String fileFormatDesc = fileFormat.ToDescription();
@@ -577,6 +583,8 @@ namespace EtlUtilities
             ImpExpUtils.ImportCsvFileBulkCopy(headerType, dbConn, srcFilePath, hasHeaderRow, tableName, mappings, fileLogParams);
 
         }
+
+
 
     }
 }

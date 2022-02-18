@@ -134,10 +134,10 @@ namespace CoreUtils
                     foreach (DataRow drow in schemaTable.Rows)
                     {
                         string columnName = Convert.ToString(drow["ColumnName"]);
-                        DataColumn column = new DataColumn(columnName, (Type) (drow["DataType"]));
-                        column.Unique = (bool) drow["IsUnique"];
-                        column.AllowDBNull = (bool) drow["AllowDBNull"];
-                        column.AutoIncrement = (bool) drow["IsAutoIncrement"];
+                        DataColumn column = new DataColumn(columnName, (Type)(drow["DataType"]));
+                        column.Unique = (bool)drow["IsUnique"];
+                        column.AllowDBNull = (bool)drow["AllowDBNull"];
+                        column.AutoIncrement = (bool)drow["IsAutoIncrement"];
                         listCols.Add(column);
                         dt.Columns.Add(column);
                     }
@@ -148,13 +148,13 @@ namespace CoreUtils
                         DataRow dataRow = dt.NewRow();
                         for (int i = 0; i < listCols.Count; i++)
                         {
-                            dataRow[((DataColumn) listCols[i])] = reader[i];
+                            dataRow[((DataColumn)listCols[i])] = reader[i];
                         }
 
                         dt.Rows.Add(dataRow);
                     }
                 }
-              
+
                 //
                 retVal = dt;
             }
@@ -264,41 +264,86 @@ namespace CoreUtils
         }
 
 
-        public static string GetUniqueIdFromFileName(string newFileName)
+        public static string GetUniqueIdFromFileName(string fileName)
         {
-            int indexOfSep = newFileName.IndexOf("--");
+            int indexOfSep = fileName.IndexOf($"{FilePartsDelimiter}");
             if (indexOfSep > 0)
             {
-                return newFileName.Substring(0, indexOfSep).Trim();
+                return fileName.Substring(0, indexOfSep).Trim();
             }
 
             return "";
         }
 
-        public static string StripUniqueIdFromFileName(string newFileName)
+        public static HeaderType GetHeaderTypeFromFileName(string fileName)
         {
-            int indexOfSep = newFileName.IndexOf("--");
-            if (indexOfSep > 0)
+            string[] fileNameParts = fileName?.Split(new[] { FilePartsDelimiter }, StringSplitOptions.None);
+            if (fileNameParts.Length < 3)
             {
-                newFileName = newFileName.Substring(indexOfSep + 2);
+                return HeaderType.NotApplicable;
             }
+            else
+            {
+                string strHeaderType = fileNameParts[1];
+                if (strHeaderType == HeaderType.NotApplicable.ToNumberString())
+                {
+                    return HeaderType.NotApplicable;
+                }
+                else if (strHeaderType == HeaderType.New.ToNumberString())
+                {
+                    return HeaderType.New;
+                }
+                else if (strHeaderType == HeaderType.Old.ToNumberString())
+                {
+                    return HeaderType.Old;
+                }
+                else if (strHeaderType == HeaderType.NoChange.ToNumberString())
+                {
+                    return HeaderType.NoChange;
+                }
+                else if (strHeaderType == HeaderType.Own.ToNumberString())
+                {
+                    return HeaderType.Own;
+                }
+                else
+                {
+                    return HeaderType.NotApplicable;
+                }
 
-            newFileName = newFileName.Trim();
-
-            return newFileName;
+            }
         }
 
-        public static string AddUniqueIdToFileName(string newFileName)
+        public static string StripUniqueIdAndHeaderTypeFromFileName(string fileName)
         {
-            newFileName = StripUniqueIdFromFileName(newFileName);
+
+            string[] fileNameParts = fileName?.Split(new[] { FilePartsDelimiter }, StringSplitOptions.None);
+
+            // return the last part of the fileName
+            return fileNameParts[fileNameParts.Length - 1];
+            
+            //int indexOfSep = fileName.IndexOf($"{FilePartsDelimiter}");
+            //if (indexOfSep > 0)
+            //{
+            //    fileName = fileName.Substring(indexOfSep + 2);
+            //}
+
+            //fileName = fileName.Trim();
+
+            //return fileName;
+        }
+
+        private static string FilePartsDelimiter = "--";
+
+        public static string AddUniqueIdToFileName(string fileName, HeaderType headerType = HeaderType.NotApplicable)
+        {
+            fileName = StripUniqueIdAndHeaderTypeFromFileName(fileName);
 
             string fileId = Utils.RandomString(3);
-            newFileName = $"{fileId}--{newFileName}";
-
-
-            newFileName = newFileName.Trim();
-
-            return newFileName;
+            fileName = $"{fileId}{FilePartsDelimiter}{headerType.ToNumberString()}{FilePartsDelimiter}{fileName}";
+            //
+            fileName = fileName.Trim();
+            //
+            return fileName;
         }
 
 
@@ -327,7 +372,9 @@ namespace CoreUtils
         public static string AddUniqueIdToFileAndLogToDb(HeaderType headerType, string srcFilePath, Boolean fixFileNameLength,
             FileOperationLogParams fileLogParams)
         {
-            if (!Utils.IsBlank(GetUniqueIdFromFileName(srcFilePath)))
+            // if file has uniqueID and headerttype already, nothing to do
+            if (!Utils.IsBlank(GetUniqueIdFromFileName(srcFilePath))
+                && GetHeaderTypeFromFileName(srcFilePath) == headerType)
             {
                 return srcFilePath;
             }
@@ -336,7 +383,7 @@ namespace CoreUtils
             FileInfo srcFileInfo = new FileInfo(srcFilePath);
             string oldFileName = srcFileInfo.Name;
 
-            string newFileName = AddUniqueIdToFileName(oldFileName);
+            string newFileName = AddUniqueIdToFileName(oldFileName, headerType);
 
             // fix for alegeus - max 30 chars incvluding extension
             string newFileNameFixed = newFileName;

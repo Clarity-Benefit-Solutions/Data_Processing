@@ -59,13 +59,11 @@ namespace CoreUtils.Classes
 
     public enum HeaderType
     {
-        [Utils.DisplayText("HeaderType.Own")] Own = 1,
+        [Utils.DisplayText("HeaderType.NotApplicable")] NotApplicable = 0,
+        [Utils.DisplayText("HeaderType.Own")] Own,
         [Utils.DisplayText("HeaderType.Old")] Old,
         [Utils.DisplayText("HeaderType.New")] New,
         [Utils.DisplayText("HeaderType.NoChange")] NoChange,
-
-        [Utils.DisplayText("HeaderType.NotApplicable")]
-        NotApplicable
     }
 
     public enum PlatformType
