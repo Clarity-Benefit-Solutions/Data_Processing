@@ -207,7 +207,33 @@ namespace EtlUtilities
         public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath, HeaderType folderHeaderType)
         {
             //todo: examine file and dtermine the correct type of header. If nothing can be guessed, return the folderHeaderType
+            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
+
+            // no change: IA,XX,BENEFL1,New Beneflex Standard Import Template 2015,Standard Result Template,Beneflex Standard Export Template
+            if (contents.IndexOf("New Beneflex Standard Import Template 2015,") >= 0 && contents.IndexOf("BENEFL1,") >= 0)
+            {
+                return HeaderType.NoChange;
+            }
+            // Own: IA,XX,New Beneflex Standard Import Template 2015,Standard Result Template,Beneflex Standard Export Template
+            else if (contents.IndexOf("New Beneflex Standard Import Template 2015,") >= 0 && contents.IndexOf("BENEFL1,") < 0)
+            {
+                return HeaderType.Own;
+            }
+            
+            // New: IA,XX,BENEFL1,Clarity Standard Import Template, Standard Result Template, Beneflex Standard Export Template
+            else if (contents.IndexOf("Clarity Standard Import Template,") >= 0 && contents.IndexOf("BENEFL1,") >= 0)
+            {
+                return HeaderType.New;
+            }
+            
+            // Old: IA,XX,BENEFL1,New Beneflex Standard Import Template 2015,Standard Result Template,Beneflex Standard Export Template
+            else if (contents.IndexOf("New Beneflex Standard Import Template 2015,") >= 0 && contents.IndexOf("BENEFL1,") >= 0)
+            {
+                return HeaderType.Old;
+            }
+
             return folderHeaderType;
+
         }
 
         public static Boolean GetAlegeusFileFormatIsResultFile(EdiFileFormat fileFormat)

@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using ExcelDataReader;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
+using Sylvan.Data.Csv;
 
 
 namespace CoreUtils.Classes
@@ -383,6 +384,38 @@ namespace CoreUtils.Classes
             if (fileCallback != null) fileCallback(sourceFilePath, destFilePath, fileContents);
         }
 
+        public static string GetFlatFileContents(string sourceFilePath, int firstNLinesOnly = 0)
+        {
+            var srcFileInfo = new FileInfo(sourceFilePath);
+
+            // validate
+            if (!srcFileInfo.Exists)
+            {
+                var message =
+                    $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source File: {sourceFilePath} does not exist";
+                throw new Exception(message);
+            }
+
+            string contents = "";
+            // read each line and insert
+            using var inputFile = new StreamReader(sourceFilePath);
+            string line;
+            int rowNo = 0;
+            while ((line = inputFile.ReadLine()!) != null)
+            {
+                rowNo++;
+                contents += line;
+
+                if (firstNLinesOnly != 0 && rowNo >= firstNLinesOnly)
+                {
+                    return contents;
+                }
+
+            }
+
+            return contents;
+        }
+
         #endregion
 
         #region FileConversions
@@ -452,6 +485,6 @@ namespace CoreUtils.Classes
 
         #endregion
 
-       
+
     }
 }
