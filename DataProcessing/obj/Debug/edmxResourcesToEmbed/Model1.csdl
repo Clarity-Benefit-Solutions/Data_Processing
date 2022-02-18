@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Alegeus_File_ProcessingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="alegeus_file_staging">
+    <Key>
+      <PropertyRef Name="row_num" />
+    </Key>
+    <Property Name="data_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="folder_name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="row_num" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="Automated_Header_list">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="Folder_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="template_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IC_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="to_FTP" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="BENCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityContainer Name="Alegeus_File_ProcessingEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="alegeus_file_staging" EntityType="Self.alegeus_file_staging" />
+    <EntitySet Name="Automated_Header_list" EntityType="Self.Automated_Header_list" />
+    <FunctionImport Name="Alegeus_Header_n_success" />
+    <FunctionImport Name="build_auto_ftp_batfile" />
+    <FunctionImport Name="insert_to_auto_ftp_list" />
+    <FunctionImport Name="proc_alegeus_AlterHeaders2015" ReturnType="Collection(String)" />
+    <FunctionImport Name="proc_alegeus_AlterHeaders2019" ReturnType="Collection(String)" />
+    <FunctionImport Name="proc_alegeus_AlterHeadersNone" ReturnType="Collection(Alegeus_File_ProcessingModel.proc_alegeus_AlterHeadersNone_Result)" />
+  </EntityContainer>
+  <ComplexType Name="proc_alegeus_AlterHeadersNone_Result">
+    <Property Type="String" Name="file_row" Nullable="true" />
+    <Property Type="String" Name="folder_name" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Column1" Nullable="false" MaxLength="5" />
+  </ComplexType>
+</Schema>

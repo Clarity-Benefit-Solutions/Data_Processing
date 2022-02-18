@@ -1,0 +1,334 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Alegeus_ErrorLogModelStoreContainer" CdmEntityContainer="Alegeus_ErrorLogEntities1">
+    <EntitySetMapping Name="dbo_error_log_results_workflow_local">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.dbo_error_log_results_workflow_local">
+        <MappingFragment StoreEntitySet="dbo_error_log_results_workflow_local">
+          <ScalarProperty Name="error_code" ColumnName="error_code" />
+          <ScalarProperty Name="error_row" ColumnName="error_row" />
+          <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+          <ScalarProperty Name="error_message" ColumnName="error_message" />
+          <ScalarProperty Name="mbi_row_num" ColumnName="mbi_row_num" />
+          <ScalarProperty Name="mbi_line" ColumnName="mbi_line" />
+          <ScalarProperty Name="CRM_Check" ColumnName="CRM_Check" />
+          <ScalarProperty Name="Proc_Check" ColumnName="Proc_Check" />
+          <ScalarProperty Name="updated_by" ColumnName="updated_by" />
+          <ScalarProperty Name="updated_timestamp" ColumnName="updated_timestamp" />
+          <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+          <ScalarProperty Name="CRM" ColumnName="CRM" />
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+          <ScalarProperty Name="Notes_CRM" ColumnName="Notes_CRM" />
+          <ScalarProperty Name="row_type" ColumnName="row_type" />
+          <ScalarProperty Name="IDfield" ColumnName="IDfield" />
+          <ScalarProperty Name="Archive_Check" ColumnName="Archive_Check" />
+          <ScalarProperty Name="EmployerId" ColumnName="EmployerId" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="DependentID" ColumnName="DependentID" />
+          <ScalarProperty Name="PlanId" ColumnName="PlanId" />
+          <ScalarProperty Name="error_row_num" ColumnName="error_row_num" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="dbo_error_log_results_workflow_local_AL">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.dbo_error_log_results_workflow_local_AL">
+        <MappingFragment StoreEntitySet="dbo_error_log_results_workflow_local_AL">
+          <ScalarProperty Name="error_code" ColumnName="error_code" />
+          <ScalarProperty Name="error_row" ColumnName="error_row" />
+          <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+          <ScalarProperty Name="error_message" ColumnName="error_message" />
+          <ScalarProperty Name="mbi_row_num" ColumnName="mbi_row_num" />
+          <ScalarProperty Name="mbi_line" ColumnName="mbi_line" />
+          <ScalarProperty Name="CRM_Check" ColumnName="CRM_Check" />
+          <ScalarProperty Name="Proc_Check" ColumnName="Proc_Check" />
+          <ScalarProperty Name="updated_by" ColumnName="updated_by" />
+          <ScalarProperty Name="updated_timestamp" ColumnName="updated_timestamp" />
+          <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+          <ScalarProperty Name="CRM" ColumnName="CRM" />
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+          <ScalarProperty Name="Notes_CRM" ColumnName="Notes_CRM" />
+          <ScalarProperty Name="file_type" ColumnName="file_type" />
+          <ScalarProperty Name="IDfield" ColumnName="IDfield" />
+          <ScalarProperty Name="Archive_Check" ColumnName="Archive_Check" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="dbo_error_log_results_workflow_localBU">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.dbo_error_log_results_workflow_localBU">
+        <MappingFragment StoreEntitySet="dbo_error_log_results_workflow_localBU">
+          <ScalarProperty Name="error_code" ColumnName="error_code" />
+          <ScalarProperty Name="error_row" ColumnName="error_row" />
+          <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+          <ScalarProperty Name="error_message" ColumnName="error_message" />
+          <ScalarProperty Name="mbi_row_num" ColumnName="mbi_row_num" />
+          <ScalarProperty Name="mbi_line" ColumnName="mbi_line" />
+          <ScalarProperty Name="CRM_Check" ColumnName="CRM_Check" />
+          <ScalarProperty Name="Proc_Check" ColumnName="Proc_Check" />
+          <ScalarProperty Name="updated_by" ColumnName="updated_by" />
+          <ScalarProperty Name="updated_timestamp" ColumnName="updated_timestamp" />
+          <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+          <ScalarProperty Name="CRM" ColumnName="CRM" />
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+          <ScalarProperty Name="Notes_CRM" ColumnName="Notes_CRM" />
+          <ScalarProperty Name="file_type" ColumnName="file_type" />
+          <ScalarProperty Name="IDfield" ColumnName="IDfield" />
+          <ScalarProperty Name="Archive_Check" ColumnName="Archive_Check" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="dbo_tracked_errors_local">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.dbo_tracked_errors_local">
+        <MappingFragment StoreEntitySet="dbo_tracked_errors_local">
+          <ScalarProperty Name="Error_code" ColumnName="Error_code" />
+          <ScalarProperty Name="error_message" ColumnName="error_message" />
+          <ScalarProperty Name="crm" ColumnName="crm" />
+          <ScalarProperty Name="processing" ColumnName="processing" />
+          <ScalarProperty Name="control" ColumnName="control" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mbi_file_table">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.mbi_file_table">
+        <MappingFragment StoreEntitySet="mbi_file_table">
+          <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+          <ScalarProperty Name="data_row" ColumnName="data_row" />
+          <ScalarProperty Name="row_num" ColumnName="row_num" />
+          <ScalarProperty Name="row_type" ColumnName="row_type" />
+          <ScalarProperty Name="AccountStatus" ColumnName="AccountStatus" />
+          <ScalarProperty Name="AccountTypeCode" ColumnName="AccountTypeCode" />
+          <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+          <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+          <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="DeleteAccount" ColumnName="DeleteAccount" />
+          <ScalarProperty Name="DependentID" ColumnName="DependentID" />
+          <ScalarProperty Name="DepositType" ColumnName="DepositType" />
+          <ScalarProperty Name="Division" ColumnName="Division" />
+          <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+          <ScalarProperty Name="EligibilityDate" ColumnName="EligibilityDate" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="EmployeeDepositAmount" ColumnName="EmployeeDepositAmount" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="EmployeePayPeriodElection" ColumnName="EmployeePayPeriodElection" />
+          <ScalarProperty Name="EmployeeSocialSecurityNumber" ColumnName="EmployeeSocialSecurityNumber" />
+          <ScalarProperty Name="EmployeeStatus" ColumnName="EmployeeStatus" />
+          <ScalarProperty Name="EmployerDepositAmount" ColumnName="EmployerDepositAmount" />
+          <ScalarProperty Name="EmployerId" ColumnName="EmployerId" />
+          <ScalarProperty Name="EmployerPayPeriodElection" ColumnName="EmployerPayPeriodElection" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="OriginalPrefunded" ColumnName="OriginalPrefunded" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
+          <ScalarProperty Name="PlanId" ColumnName="PlanId" />
+          <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+          <ScalarProperty Name="Relationship" ColumnName="Relationship" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="TerminationDate" ColumnName="TerminationDate" />
+          <ScalarProperty Name="TpaId" ColumnName="TpaId" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="row_id" ColumnName="row_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mbi_file_table_stage">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.mbi_file_table_stage">
+        <MappingFragment StoreEntitySet="mbi_file_table_stage">
+          <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+          <ScalarProperty Name="data_row" ColumnName="data_row" />
+          <ScalarProperty Name="row_num" ColumnName="row_num" />
+          <ScalarProperty Name="row_type" ColumnName="row_type" />
+          <ScalarProperty Name="AccountStatus" ColumnName="AccountStatus" />
+          <ScalarProperty Name="AccountTypeCode" ColumnName="AccountTypeCode" />
+          <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+          <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+          <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="DeleteAccount" ColumnName="DeleteAccount" />
+          <ScalarProperty Name="DependentID" ColumnName="DependentID" />
+          <ScalarProperty Name="DepositType" ColumnName="DepositType" />
+          <ScalarProperty Name="Division" ColumnName="Division" />
+          <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+          <ScalarProperty Name="EligibilityDate" ColumnName="EligibilityDate" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="EmployeeDepositAmount" ColumnName="EmployeeDepositAmount" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="EmployeePayPeriodElection" ColumnName="EmployeePayPeriodElection" />
+          <ScalarProperty Name="EmployeeSocialSecurityNumber" ColumnName="EmployeeSocialSecurityNumber" />
+          <ScalarProperty Name="EmployeeStatus" ColumnName="EmployeeStatus" />
+          <ScalarProperty Name="EmployerDepositAmount" ColumnName="EmployerDepositAmount" />
+          <ScalarProperty Name="EmployerId" ColumnName="EmployerId" />
+          <ScalarProperty Name="EmployerPayPeriodElection" ColumnName="EmployerPayPeriodElection" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="OriginalPrefunded" ColumnName="OriginalPrefunded" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
+          <ScalarProperty Name="PlanId" ColumnName="PlanId" />
+          <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+          <ScalarProperty Name="Relationship" ColumnName="Relationship" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="TerminationDate" ColumnName="TerminationDate" />
+          <ScalarProperty Name="TpaId" ColumnName="TpaId" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mbi_file_table_stage_prv">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.mbi_file_table_stage_prv">
+        <MappingFragment StoreEntitySet="mbi_file_table_stage_prv">
+          <ScalarProperty Name="file_name" ColumnName="file_name" />
+          <ScalarProperty Name="row_num" ColumnName="row_num" />
+          <ScalarProperty Name="data_row" ColumnName="data_row" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="res_file_table">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.res_file_table">
+        <MappingFragment StoreEntitySet="res_file_table">
+          <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+          <ScalarProperty Name="error_row" ColumnName="error_row" />
+          <ScalarProperty Name="error_code" ColumnName="error_code" />
+          <ScalarProperty Name="error_message" ColumnName="error_message" />
+          <ScalarProperty Name="row_num" ColumnName="row_num" />
+          <ScalarProperty Name="AccountStatus" ColumnName="AccountStatus" />
+          <ScalarProperty Name="AccountTypeCode" ColumnName="AccountTypeCode" />
+          <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+          <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+          <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="DeleteAccount" ColumnName="DeleteAccount" />
+          <ScalarProperty Name="DependentID" ColumnName="DependentID" />
+          <ScalarProperty Name="DepositType" ColumnName="DepositType" />
+          <ScalarProperty Name="Division" ColumnName="Division" />
+          <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+          <ScalarProperty Name="EligibilityDate" ColumnName="EligibilityDate" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="EmployeeDepositAmount" ColumnName="EmployeeDepositAmount" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="EmployeePayPeriodElection" ColumnName="EmployeePayPeriodElection" />
+          <ScalarProperty Name="EmployeeSocialSecurityNumber" ColumnName="EmployeeSocialSecurityNumber" />
+          <ScalarProperty Name="EmployeeStatus" ColumnName="EmployeeStatus" />
+          <ScalarProperty Name="EmployerDepositAmount" ColumnName="EmployerDepositAmount" />
+          <ScalarProperty Name="EmployerId" ColumnName="EmployerId" />
+          <ScalarProperty Name="EmployerPayPeriodElection" ColumnName="EmployerPayPeriodElection" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="OriginalPrefunded" ColumnName="OriginalPrefunded" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
+          <ScalarProperty Name="PlanId" ColumnName="PlanId" />
+          <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+          <ScalarProperty Name="Relationship" ColumnName="Relationship" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="TerminationDate" ColumnName="TerminationDate" />
+          <ScalarProperty Name="TpaId" ColumnName="TpaId" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="row_type" ColumnName="row_type" />
+          <ScalarProperty Name="error_message_calc" ColumnName="error_message_calc" />
+          <ScalarProperty Name="res_file_name" ColumnName="res_file_name" />
+          <ScalarProperty Name="result_template" ColumnName="result_template" />
+          <ScalarProperty Name="row_id" ColumnName="row_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="res_file_table_stage">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.res_file_table_stage">
+        <MappingFragment StoreEntitySet="res_file_table_stage">
+          <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+          <ScalarProperty Name="result_template" ColumnName="result_template" />
+          <ScalarProperty Name="error_row" ColumnName="error_row" />
+          <ScalarProperty Name="error_code" ColumnName="error_code" />
+          <ScalarProperty Name="error_message" ColumnName="error_message" />
+          <ScalarProperty Name="row_num" ColumnName="row_num" />
+          <ScalarProperty Name="row_type" ColumnName="row_type" />
+          <ScalarProperty Name="AccountStatus" ColumnName="AccountStatus" />
+          <ScalarProperty Name="AccountTypeCode" ColumnName="AccountTypeCode" />
+          <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+          <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+          <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="DeleteAccount" ColumnName="DeleteAccount" />
+          <ScalarProperty Name="DependentID" ColumnName="DependentID" />
+          <ScalarProperty Name="DepositType" ColumnName="DepositType" />
+          <ScalarProperty Name="Division" ColumnName="Division" />
+          <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+          <ScalarProperty Name="EligibilityDate" ColumnName="EligibilityDate" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="EmployeeDepositAmount" ColumnName="EmployeeDepositAmount" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="EmployeePayPeriodElection" ColumnName="EmployeePayPeriodElection" />
+          <ScalarProperty Name="EmployeeSocialSecurityNumber" ColumnName="EmployeeSocialSecurityNumber" />
+          <ScalarProperty Name="EmployeeStatus" ColumnName="EmployeeStatus" />
+          <ScalarProperty Name="EmployerDepositAmount" ColumnName="EmployerDepositAmount" />
+          <ScalarProperty Name="EmployerId" ColumnName="EmployerId" />
+          <ScalarProperty Name="EmployerPayPeriodElection" ColumnName="EmployerPayPeriodElection" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+          <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+          <ScalarProperty Name="OriginalPrefunded" ColumnName="OriginalPrefunded" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
+          <ScalarProperty Name="PlanId" ColumnName="PlanId" />
+          <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+          <ScalarProperty Name="Relationship" ColumnName="Relationship" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="TerminationDate" ColumnName="TerminationDate" />
+          <ScalarProperty Name="TpaId" ColumnName="TpaId" />
+          <ScalarProperty Name="Zip" ColumnName="Zip" />
+          <ScalarProperty Name="error_message_calc" ColumnName="error_message_calc" />
+          <ScalarProperty Name="res_file_name" ColumnName="res_file_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionName="Alegeus_ErrorLogModel.Store.CsvSplit1" FunctionImportName="CsvSplit1">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Alegeus_ErrorLogModel.CsvSplit1_Result">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="val" ColumnName="val" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionName="Alegeus_ErrorLogModel.Store.SplitErrorRowStringToFields" FunctionImportName="SplitErrorRowStringToFields">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Alegeus_ErrorLogModel.SplitErrorRowStringToFields_Result">
+          <ScalarProperty Name="row_type" ColumnName="row_type" />
+          <ScalarProperty Name="bencode" ColumnName="bencode" />
+          <ScalarProperty Name="employee_id" ColumnName="employee_id" />
+          <ScalarProperty Name="plan_id" ColumnName="plan_id" />
+          <ScalarProperty Name="start_date" ColumnName="start_date" />
+          <ScalarProperty Name="end_date" ColumnName="end_date" />
+          <ScalarProperty Name="error_code" ColumnName="error_code" />
+          <ScalarProperty Name="error_message" ColumnName="error_message" />
+          <ScalarProperty Name="dummy" ColumnName="dummy" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionName="Alegeus_ErrorLogModel.Store.SplitStringsOrdered" FunctionImportName="SplitStringsOrdered">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Alegeus_ErrorLogModel.SplitStringsOrdered_Result">
+          <ScalarProperty Name="rn" ColumnName="rn" />
+          <ScalarProperty Name="Item" ColumnName="Item" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="Alegeus_ErrorLog_failure_alert" FunctionName="Alegeus_ErrorLogModel.Store.Alegeus_ErrorLog_failure_alert" />
+    <FunctionImportMapping FunctionImportName="Alegeus_ErrorLog_refreshsuccess_alert" FunctionName="Alegeus_ErrorLogModel.Store.Alegeus_ErrorLog_refreshsuccess_alert" />
+    <FunctionImportMapping FunctionImportName="alegeus_errorlog_track_new_ftp_errors" FunctionName="Alegeus_ErrorLogModel.Store.alegeus_errorlog_track_new_ftp_errors" />
+    <FunctionImportMapping FunctionImportName="check_imports_file" FunctionName="Alegeus_ErrorLogModel.Store.check_imports_file" />
+    <FunctionImportMapping FunctionImportName="process_mbi_file_table_stage_import" FunctionName="Alegeus_ErrorLogModel.Store.process_mbi_file_table_stage_import" />
+    <FunctionImportMapping FunctionImportName="process_res_file_table_stage_import" FunctionName="Alegeus_ErrorLogModel.Store.process_res_file_table_stage_import" />
+    <FunctionImportMapping FunctionImportName="SplitAllErrorRowStringsToFields" FunctionName="Alegeus_ErrorLogModel.Store.SplitAllErrorRowStringsToFields" />
+    <FunctionImportMapping FunctionImportName="zz_truncate_all" FunctionName="Alegeus_ErrorLogModel.Store.zz_truncate_all" />
+  </EntityContainerMapping>
+</Mapping>

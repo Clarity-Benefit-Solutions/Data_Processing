@@ -1,0 +1,487 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="COBRAModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'COBRA.dbo.bfx_broker_extract' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="bfx_broker_extract">
+          <Property Name="BrokerID" Type="varchar" MaxLength="50" />
+          <Property Name="ContactType" Type="varchar" MaxLength="250" />
+          <Property Name="FirstName" Type="varchar" MaxLength="250" />
+          <Property Name="LastName" Type="varchar" MaxLength="250" />
+          <Property Name="Email" Type="varchar" MaxLength="250" />
+          <Property Name="Title" Type="varchar" MaxLength="250" />
+          <Property Name="Department" Type="varchar" MaxLength="250" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="PhoneExtension" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2Extension" Type="varchar" MaxLength="50" />
+          <Property Name="Fax" Type="varchar" MaxLength="50" />
+          <Property Name="Address1" Type="varchar" MaxLength="250" />
+          <Property Name="Address2" Type="varchar" MaxLength="250" />
+          <Property Name="City" Type="varchar" MaxLength="250" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Active" Type="varchar" MaxLength="50" />
+          <Property Name="LoginStatus" Type="varchar" MaxLength="50" />
+          <Property Name="RegistrationCode" Type="varchar" MaxLength="50" />
+          <Property Name="RegistrationDate" Type="varchar" MaxLength="50" />
+          <Property Name="UserDisplayName" Type="varchar" MaxLength="250" />
+          <Property Name="AllowSSO" Type="varchar" MaxLength="50" />
+          <Property Name="SSOIdentifier" Type="varchar" MaxLength="250" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'COBRA.dbo.QB_file_data_fixtbl' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="QB_file_data_fixtbl">
+          <Property Name="QB_data" Type="nvarchar(max)" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRA.dbo.COBRA_FRC' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="COBRA_FRC">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="Expr2" />
+          </Key>
+          <Property Name="MemberID" Type="int" Nullable="false" />
+          <Property Name="first" Type="varchar" MaxLength="50" />
+          <Property Name="last" Type="varchar" MaxLength="50" />
+          <Property Name="SSN" Type="varchar" MaxLength="50" />
+          <Property Name="BillingStartDate" Type="date" />
+          <Property Name="BillingFrequency" Type="varchar" MaxLength="50" />
+          <Property Name="enrolled plans" Type="varchar" MaxLength="50" />
+          <Property Name="coverage level" Type="varchar" MaxLength="50" />
+          <Property Name="Status" Type="varchar" MaxLength="50" />
+          <Property Name="premium_date" Type="date" />
+          <Property Name="MemberOwes" Type="money" />
+          <Property Name="Expr3" Type="money" />
+          <Property Name="BillingType" Type="varchar" MaxLength="50" />
+          <Property Name="account type" Type="varchar" MaxLength="50" />
+          <Property Name="RateType" Type="varchar" MaxLength="50" />
+          <Property Name="Rate" Type="decimal" Precision="18" Scale="4" />
+          <Property Name="AmountType" Type="varchar" MaxLength="50" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Expr2" Type="varchar" MaxLength="7" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRA.dbo.COBRA_QB_demo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="COBRA_QB_demo">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="Active" />
+            <PropertyRef Name="ClientName" />
+            <PropertyRef Name="DivisionName" />
+            <PropertyRef Name="UsesHCTC" />
+          </Key>
+          <Property Name="MemberID" Type="int" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="ClientName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DivisionName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="MiddleInitial" Type="varchar" MaxLength="1" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Salutation" Type="varchar" MaxLength="50" />
+          <Property Name="SSN" Type="varchar" MaxLength="50" />
+          <Property Name="IndividualIdentifier" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2" Type="varchar" MaxLength="50" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Gender" Type="varchar" MaxLength="1" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="TobaccoUse" Type="varchar" MaxLength="50" />
+          <Property Name="EmployeeType" Type="varchar" MaxLength="50" />
+          <Property Name="PayrollType" Type="varchar" MaxLength="50" />
+          <Property Name="YearsOfService" Type="int" />
+          <Property Name="PremiumCouponType" Type="varchar" MaxLength="50" />
+          <Property Name="UsesHCTC" Type="bit" Nullable="false" />
+          <Property Name="EnteredDateTime" Type="datetime" />
+          <Property Name="EnteredByUser" Type="varchar" MaxLength="50" />
+          <Property Name="MethodEntered" Type="varchar" MaxLength="50" />
+          <Property Name="PaidThroughDate" Type="date" />
+          <Property Name="OnlineElectionProcessedDate" Type="datetime" />
+          <Property Name="BenefitGroup" Type="varchar" MaxLength="50" />
+          <Property Name="AccountStructure" Type="varchar" MaxLength="50" />
+          <Property Name="ClientCustomData" Type="varchar" MaxLength="50" />
+          <Property Name="AllowSSO" Type="bit" />
+          <Property Name="SSOIdentifier" Type="varchar" MaxLength="50" />
+          <Property Name="LastModifiedDate" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRA.dbo.COBRA_QB_plans' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="COBRA_QB_plans">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="InsuranceType" />
+            <PropertyRef Name="ClientPlanQBID" />
+          </Key>
+          <Property Name="MemberID" Type="int" Nullable="false" />
+          <Property Name="InsuranceType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FDOC" Type="date" />
+          <Property Name="LDOC" Type="date" />
+          <Property Name="MonthsOfCOBRA" Type="int" />
+          <Property Name="DaysToElect" Type="int" />
+          <Property Name="InitialPaymentGracePeriod" Type="int" />
+          <Property Name="SubsequentPaymentGracePeriod" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="50" />
+          <Property Name="StatusDate" Type="date" />
+          <Property Name="ElectionPostMarkDate" Type="date" />
+          <Property Name="TerminationDate" Type="date" />
+          <Property Name="PlanName" Type="varchar" MaxLength="50" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="EndDate" Type="date" />
+          <Property Name="CarrierPlanIdentification" Type="varchar" MaxLength="50" />
+          <Property Name="CoverageLevel" Type="varchar" MaxLength="50" />
+          <Property Name="BundleName" Type="varchar" MaxLength="50" />
+          <Property Name="IsElected" Type="bit" />
+          <Property Name="ClientPlanQBID" Type="int" Nullable="false" />
+          <Property Name="NumberOfUnits" Type="decimal" Precision="16" Scale="4" />
+        </EntityType>
+        <Function Name="Fix_COBRA_brokerage_Contacts_SSObollean" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Fix_COBRA_Client_Contacts_SSObollean" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Fix_COBRAQB_SSObollean" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Get_COBRA_QBs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="COBRAModelStoreContainer">
+          <EntitySet Name="COBRA_FRC" EntityType="Self.COBRA_FRC" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [COBRA_FRC].[MemberID] AS [MemberID], 
+    [COBRA_FRC].[first] AS [first], 
+    [COBRA_FRC].[last] AS [last], 
+    [COBRA_FRC].[SSN] AS [SSN], 
+    [COBRA_FRC].[BillingStartDate] AS [BillingStartDate], 
+    [COBRA_FRC].[BillingFrequency] AS [BillingFrequency], 
+    [COBRA_FRC].[enrolled plans] AS [enrolled plans], 
+    [COBRA_FRC].[coverage level] AS [coverage level], 
+    [COBRA_FRC].[Status] AS [Status], 
+    [COBRA_FRC].[premium_date] AS [premium_date], 
+    [COBRA_FRC].[MemberOwes] AS [MemberOwes], 
+    [COBRA_FRC].[Expr3] AS [Expr3], 
+    [COBRA_FRC].[BillingType] AS [BillingType], 
+    [COBRA_FRC].[account type] AS [account type], 
+    [COBRA_FRC].[RateType] AS [RateType], 
+    [COBRA_FRC].[Rate] AS [Rate], 
+    [COBRA_FRC].[AmountType] AS [AmountType], 
+    [COBRA_FRC].[Amount] AS [Amount], 
+    [COBRA_FRC].[Expr2] AS [Expr2]
+    FROM [dbo].[COBRA_FRC] AS [COBRA_FRC]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="COBRA_QB_demo" EntityType="Self.COBRA_QB_demo" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [COBRA_QB_demo].[MemberID] AS [MemberID], 
+    [COBRA_QB_demo].[Active] AS [Active], 
+    [COBRA_QB_demo].[ClientName] AS [ClientName], 
+    [COBRA_QB_demo].[DivisionName] AS [DivisionName], 
+    [COBRA_QB_demo].[FirstName] AS [FirstName], 
+    [COBRA_QB_demo].[MiddleInitial] AS [MiddleInitial], 
+    [COBRA_QB_demo].[LastName] AS [LastName], 
+    [COBRA_QB_demo].[Salutation] AS [Salutation], 
+    [COBRA_QB_demo].[SSN] AS [SSN], 
+    [COBRA_QB_demo].[IndividualIdentifier] AS [IndividualIdentifier], 
+    [COBRA_QB_demo].[Email] AS [Email], 
+    [COBRA_QB_demo].[Phone] AS [Phone], 
+    [COBRA_QB_demo].[Phone2] AS [Phone2], 
+    [COBRA_QB_demo].[Address1] AS [Address1], 
+    [COBRA_QB_demo].[Address2] AS [Address2], 
+    [COBRA_QB_demo].[City] AS [City], 
+    [COBRA_QB_demo].[State] AS [State], 
+    [COBRA_QB_demo].[PostalCode] AS [PostalCode], 
+    [COBRA_QB_demo].[Country] AS [Country], 
+    [COBRA_QB_demo].[Gender] AS [Gender], 
+    [COBRA_QB_demo].[DOB] AS [DOB], 
+    [COBRA_QB_demo].[TobaccoUse] AS [TobaccoUse], 
+    [COBRA_QB_demo].[EmployeeType] AS [EmployeeType], 
+    [COBRA_QB_demo].[PayrollType] AS [PayrollType], 
+    [COBRA_QB_demo].[YearsOfService] AS [YearsOfService], 
+    [COBRA_QB_demo].[PremiumCouponType] AS [PremiumCouponType], 
+    [COBRA_QB_demo].[UsesHCTC] AS [UsesHCTC], 
+    [COBRA_QB_demo].[EnteredDateTime] AS [EnteredDateTime], 
+    [COBRA_QB_demo].[EnteredByUser] AS [EnteredByUser], 
+    [COBRA_QB_demo].[MethodEntered] AS [MethodEntered], 
+    [COBRA_QB_demo].[PaidThroughDate] AS [PaidThroughDate], 
+    [COBRA_QB_demo].[OnlineElectionProcessedDate] AS [OnlineElectionProcessedDate], 
+    [COBRA_QB_demo].[BenefitGroup] AS [BenefitGroup], 
+    [COBRA_QB_demo].[AccountStructure] AS [AccountStructure], 
+    [COBRA_QB_demo].[ClientCustomData] AS [ClientCustomData], 
+    [COBRA_QB_demo].[AllowSSO] AS [AllowSSO], 
+    [COBRA_QB_demo].[SSOIdentifier] AS [SSOIdentifier], 
+    [COBRA_QB_demo].[LastModifiedDate] AS [LastModifiedDate]
+    FROM [dbo].[COBRA_QB_demo] AS [COBRA_QB_demo]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="COBRA_QB_plans" EntityType="Self.COBRA_QB_plans" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [COBRA_QB_plans].[MemberID] AS [MemberID], 
+    [COBRA_QB_plans].[InsuranceType] AS [InsuranceType], 
+    [COBRA_QB_plans].[FDOC] AS [FDOC], 
+    [COBRA_QB_plans].[LDOC] AS [LDOC], 
+    [COBRA_QB_plans].[MonthsOfCOBRA] AS [MonthsOfCOBRA], 
+    [COBRA_QB_plans].[DaysToElect] AS [DaysToElect], 
+    [COBRA_QB_plans].[InitialPaymentGracePeriod] AS [InitialPaymentGracePeriod], 
+    [COBRA_QB_plans].[SubsequentPaymentGracePeriod] AS [SubsequentPaymentGracePeriod], 
+    [COBRA_QB_plans].[Status] AS [Status], 
+    [COBRA_QB_plans].[StatusDate] AS [StatusDate], 
+    [COBRA_QB_plans].[ElectionPostMarkDate] AS [ElectionPostMarkDate], 
+    [COBRA_QB_plans].[TerminationDate] AS [TerminationDate], 
+    [COBRA_QB_plans].[PlanName] AS [PlanName], 
+    [COBRA_QB_plans].[StartDate] AS [StartDate], 
+    [COBRA_QB_plans].[EndDate] AS [EndDate], 
+    [COBRA_QB_plans].[CarrierPlanIdentification] AS [CarrierPlanIdentification], 
+    [COBRA_QB_plans].[CoverageLevel] AS [CoverageLevel], 
+    [COBRA_QB_plans].[BundleName] AS [BundleName], 
+    [COBRA_QB_plans].[IsElected] AS [IsElected], 
+    [COBRA_QB_plans].[ClientPlanQBID] AS [ClientPlanQBID], 
+    [COBRA_QB_plans].[NumberOfUnits] AS [NumberOfUnits]
+    FROM [dbo].[COBRA_QB_plans] AS [COBRA_QB_plans]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="COBRAModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="COBRA_FRC">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="Expr2" />
+          </Key>
+          <Property Name="MemberID" Type="Int32" Nullable="false" />
+          <Property Name="first" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="last" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SSN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BillingStartDate" Type="DateTime" Precision="0" />
+          <Property Name="BillingFrequency" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="enrolled_plans" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="coverage_level" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="premium_date" Type="DateTime" Precision="0" />
+          <Property Name="MemberOwes" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Expr3" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="BillingType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="account_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RateType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Rate" Type="Decimal" Precision="18" Scale="4" />
+          <Property Name="AmountType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Amount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Expr2" Type="String" MaxLength="7" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="COBRA_QB_demo">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="Active" />
+            <PropertyRef Name="ClientName" />
+            <PropertyRef Name="DivisionName" />
+            <PropertyRef Name="UsesHCTC" />
+          </Key>
+          <Property Name="MemberID" Type="Int32" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="ClientName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DivisionName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Salutation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SSN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IndividualIdentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="TobaccoUse" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PayrollType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="YearsOfService" Type="Int32" />
+          <Property Name="PremiumCouponType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UsesHCTC" Type="Boolean" Nullable="false" />
+          <Property Name="EnteredDateTime" Type="DateTime" Precision="3" />
+          <Property Name="EnteredByUser" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MethodEntered" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PaidThroughDate" Type="DateTime" Precision="0" />
+          <Property Name="OnlineElectionProcessedDate" Type="DateTime" Precision="3" />
+          <Property Name="BenefitGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AccountStructure" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ClientCustomData" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AllowSSO" Type="Boolean" />
+          <Property Name="SSOIdentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastModifiedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="COBRA_QB_plans">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="InsuranceType" />
+            <PropertyRef Name="ClientPlanQBID" />
+          </Key>
+          <Property Name="MemberID" Type="Int32" Nullable="false" />
+          <Property Name="InsuranceType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FDOC" Type="DateTime" Precision="0" />
+          <Property Name="LDOC" Type="DateTime" Precision="0" />
+          <Property Name="MonthsOfCOBRA" Type="Int32" />
+          <Property Name="DaysToElect" Type="Int32" />
+          <Property Name="InitialPaymentGracePeriod" Type="Int32" />
+          <Property Name="SubsequentPaymentGracePeriod" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StatusDate" Type="DateTime" Precision="0" />
+          <Property Name="ElectionPostMarkDate" Type="DateTime" Precision="0" />
+          <Property Name="TerminationDate" Type="DateTime" Precision="0" />
+          <Property Name="PlanName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="CarrierPlanIdentification" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CoverageLevel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BundleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsElected" Type="Boolean" />
+          <Property Name="ClientPlanQBID" Type="Int32" Nullable="false" />
+          <Property Name="NumberOfUnits" Type="Decimal" Precision="16" Scale="4" />
+        </EntityType>
+        <EntityContainer Name="COBRAEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="COBRA_FRC" EntityType="Self.COBRA_FRC" />
+          <EntitySet Name="COBRA_QB_demo" EntityType="Self.COBRA_QB_demo" />
+          <EntitySet Name="COBRA_QB_plans" EntityType="Self.COBRA_QB_plans" />
+          <FunctionImport Name="Fix_COBRA_brokerage_Contacts_SSObollean" />
+          <FunctionImport Name="Fix_COBRA_Client_Contacts_SSObollean" />
+          <FunctionImport Name="Fix_COBRAQB_SSObollean" />
+          <FunctionImport Name="Get_COBRA_QBs" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="COBRAModelStoreContainer" CdmEntityContainer="COBRAEntities">
+          <EntitySetMapping Name="COBRA_FRC">
+            <EntityTypeMapping TypeName="COBRAModel.COBRA_FRC">
+              <MappingFragment StoreEntitySet="COBRA_FRC">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="first" ColumnName="first" />
+                <ScalarProperty Name="last" ColumnName="last" />
+                <ScalarProperty Name="SSN" ColumnName="SSN" />
+                <ScalarProperty Name="BillingStartDate" ColumnName="BillingStartDate" />
+                <ScalarProperty Name="BillingFrequency" ColumnName="BillingFrequency" />
+                <ScalarProperty Name="enrolled_plans" ColumnName="enrolled plans" />
+                <ScalarProperty Name="coverage_level" ColumnName="coverage level" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="premium_date" ColumnName="premium_date" />
+                <ScalarProperty Name="MemberOwes" ColumnName="MemberOwes" />
+                <ScalarProperty Name="Expr3" ColumnName="Expr3" />
+                <ScalarProperty Name="BillingType" ColumnName="BillingType" />
+                <ScalarProperty Name="account_type" ColumnName="account type" />
+                <ScalarProperty Name="RateType" ColumnName="RateType" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="AmountType" ColumnName="AmountType" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Expr2" ColumnName="Expr2" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="COBRA_QB_demo">
+            <EntityTypeMapping TypeName="COBRAModel.COBRA_QB_demo">
+              <MappingFragment StoreEntitySet="COBRA_QB_demo">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="DivisionName" ColumnName="DivisionName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="SSN" ColumnName="SSN" />
+                <ScalarProperty Name="IndividualIdentifier" ColumnName="IndividualIdentifier" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="TobaccoUse" ColumnName="TobaccoUse" />
+                <ScalarProperty Name="EmployeeType" ColumnName="EmployeeType" />
+                <ScalarProperty Name="PayrollType" ColumnName="PayrollType" />
+                <ScalarProperty Name="YearsOfService" ColumnName="YearsOfService" />
+                <ScalarProperty Name="PremiumCouponType" ColumnName="PremiumCouponType" />
+                <ScalarProperty Name="UsesHCTC" ColumnName="UsesHCTC" />
+                <ScalarProperty Name="EnteredDateTime" ColumnName="EnteredDateTime" />
+                <ScalarProperty Name="EnteredByUser" ColumnName="EnteredByUser" />
+                <ScalarProperty Name="MethodEntered" ColumnName="MethodEntered" />
+                <ScalarProperty Name="PaidThroughDate" ColumnName="PaidThroughDate" />
+                <ScalarProperty Name="OnlineElectionProcessedDate" ColumnName="OnlineElectionProcessedDate" />
+                <ScalarProperty Name="BenefitGroup" ColumnName="BenefitGroup" />
+                <ScalarProperty Name="AccountStructure" ColumnName="AccountStructure" />
+                <ScalarProperty Name="ClientCustomData" ColumnName="ClientCustomData" />
+                <ScalarProperty Name="AllowSSO" ColumnName="AllowSSO" />
+                <ScalarProperty Name="SSOIdentifier" ColumnName="SSOIdentifier" />
+                <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="COBRA_QB_plans">
+            <EntityTypeMapping TypeName="COBRAModel.COBRA_QB_plans">
+              <MappingFragment StoreEntitySet="COBRA_QB_plans">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="InsuranceType" ColumnName="InsuranceType" />
+                <ScalarProperty Name="FDOC" ColumnName="FDOC" />
+                <ScalarProperty Name="LDOC" ColumnName="LDOC" />
+                <ScalarProperty Name="MonthsOfCOBRA" ColumnName="MonthsOfCOBRA" />
+                <ScalarProperty Name="DaysToElect" ColumnName="DaysToElect" />
+                <ScalarProperty Name="InitialPaymentGracePeriod" ColumnName="InitialPaymentGracePeriod" />
+                <ScalarProperty Name="SubsequentPaymentGracePeriod" ColumnName="SubsequentPaymentGracePeriod" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StatusDate" ColumnName="StatusDate" />
+                <ScalarProperty Name="ElectionPostMarkDate" ColumnName="ElectionPostMarkDate" />
+                <ScalarProperty Name="TerminationDate" ColumnName="TerminationDate" />
+                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="CarrierPlanIdentification" ColumnName="CarrierPlanIdentification" />
+                <ScalarProperty Name="CoverageLevel" ColumnName="CoverageLevel" />
+                <ScalarProperty Name="BundleName" ColumnName="BundleName" />
+                <ScalarProperty Name="IsElected" ColumnName="IsElected" />
+                <ScalarProperty Name="ClientPlanQBID" ColumnName="ClientPlanQBID" />
+                <ScalarProperty Name="NumberOfUnits" ColumnName="NumberOfUnits" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Fix_COBRA_brokerage_Contacts_SSObollean" FunctionName="COBRAModel.Store.Fix_COBRA_brokerage_Contacts_SSObollean" />
+          <FunctionImportMapping FunctionImportName="Fix_COBRA_Client_Contacts_SSObollean" FunctionName="COBRAModel.Store.Fix_COBRA_Client_Contacts_SSObollean" />
+          <FunctionImportMapping FunctionImportName="Fix_COBRAQB_SSObollean" FunctionName="COBRAModel.Store.Fix_COBRAQB_SSObollean" />
+          <FunctionImportMapping FunctionImportName="Get_COBRA_QBs" FunctionName="COBRAModel.Store.Get_COBRA_QBs" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

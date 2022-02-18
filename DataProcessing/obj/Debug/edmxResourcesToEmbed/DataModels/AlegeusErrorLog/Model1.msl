@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Alegeus_ErrorLogModelStoreContainer" CdmEntityContainer="Alegeus_ErrorLogEntities">
+    <EntitySetMapping Name="dbo_error_log_results_workflow_local">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.dbo_error_log_results_workflow_local">
+        <MappingFragment StoreEntitySet="dbo_error_log_results_workflow_local">
+          <ScalarProperty Name="error_code" ColumnName="error_code" />
+          <ScalarProperty Name="error_row" ColumnName="error_row" />
+          <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+          <ScalarProperty Name="error_message" ColumnName="error_message" />
+          <ScalarProperty Name="mbi_row_num" ColumnName="mbi_row_num" />
+          <ScalarProperty Name="mbi_line" ColumnName="mbi_line" />
+          <ScalarProperty Name="CRM_Check" ColumnName="CRM_Check" />
+          <ScalarProperty Name="Proc_Check" ColumnName="Proc_Check" />
+          <ScalarProperty Name="updated_by" ColumnName="updated_by" />
+          <ScalarProperty Name="updated_timestamp" ColumnName="updated_timestamp" />
+          <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+          <ScalarProperty Name="CRM" ColumnName="CRM" />
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+          <ScalarProperty Name="Notes_CRM" ColumnName="Notes_CRM" />
+          <ScalarProperty Name="file_type" ColumnName="file_type" />
+          <ScalarProperty Name="IDfield" ColumnName="IDfield" />
+          <ScalarProperty Name="Archive_Check" ColumnName="Archive_Check" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="dbo_error_log_results_workflow_local_AL">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.dbo_error_log_results_workflow_local_AL">
+        <MappingFragment StoreEntitySet="dbo_error_log_results_workflow_local_AL">
+          <ScalarProperty Name="error_code" ColumnName="error_code" />
+          <ScalarProperty Name="error_row" ColumnName="error_row" />
+          <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+          <ScalarProperty Name="error_message" ColumnName="error_message" />
+          <ScalarProperty Name="mbi_row_num" ColumnName="mbi_row_num" />
+          <ScalarProperty Name="mbi_line" ColumnName="mbi_line" />
+          <ScalarProperty Name="CRM_Check" ColumnName="CRM_Check" />
+          <ScalarProperty Name="Proc_Check" ColumnName="Proc_Check" />
+          <ScalarProperty Name="updated_by" ColumnName="updated_by" />
+          <ScalarProperty Name="updated_timestamp" ColumnName="updated_timestamp" />
+          <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+          <ScalarProperty Name="CRM" ColumnName="CRM" />
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+          <ScalarProperty Name="Notes_CRM" ColumnName="Notes_CRM" />
+          <ScalarProperty Name="file_type" ColumnName="file_type" />
+          <ScalarProperty Name="IDfield" ColumnName="IDfield" />
+          <ScalarProperty Name="Archive_Check" ColumnName="Archive_Check" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="dbo_error_log_results_workflow_localBU">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.dbo_error_log_results_workflow_localBU">
+        <MappingFragment StoreEntitySet="dbo_error_log_results_workflow_localBU">
+          <ScalarProperty Name="error_code" ColumnName="error_code" />
+          <ScalarProperty Name="error_row" ColumnName="error_row" />
+          <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+          <ScalarProperty Name="error_message" ColumnName="error_message" />
+          <ScalarProperty Name="mbi_row_num" ColumnName="mbi_row_num" />
+          <ScalarProperty Name="mbi_line" ColumnName="mbi_line" />
+          <ScalarProperty Name="CRM_Check" ColumnName="CRM_Check" />
+          <ScalarProperty Name="Proc_Check" ColumnName="Proc_Check" />
+          <ScalarProperty Name="updated_by" ColumnName="updated_by" />
+          <ScalarProperty Name="updated_timestamp" ColumnName="updated_timestamp" />
+          <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+          <ScalarProperty Name="CRM" ColumnName="CRM" />
+          <ScalarProperty Name="Notes" ColumnName="Notes" />
+          <ScalarProperty Name="Notes_CRM" ColumnName="Notes_CRM" />
+          <ScalarProperty Name="file_type" ColumnName="file_type" />
+          <ScalarProperty Name="IDfield" ColumnName="IDfield" />
+          <ScalarProperty Name="Archive_Check" ColumnName="Archive_Check" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="dbo_tracked_errors_local">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.dbo_tracked_errors_local">
+        <MappingFragment StoreEntitySet="dbo_tracked_errors_local">
+          <ScalarProperty Name="Error_code" ColumnName="Error_code" />
+          <ScalarProperty Name="error" ColumnName="error" />
+          <ScalarProperty Name="crm" ColumnName="crm" />
+          <ScalarProperty Name="processing" ColumnName="processing" />
+          <ScalarProperty Name="control" ColumnName="control" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="dbo_tracked_errors_local_AL">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.dbo_tracked_errors_local_AL">
+        <MappingFragment StoreEntitySet="dbo_tracked_errors_local_AL">
+          <ScalarProperty Name="Error_code" ColumnName="Error_code" />
+          <ScalarProperty Name="error" ColumnName="error" />
+          <ScalarProperty Name="crm" ColumnName="crm" />
+          <ScalarProperty Name="processing" ColumnName="processing" />
+          <ScalarProperty Name="control" ColumnName="control" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="mbi_file_table_stage">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.mbi_file_table_stage">
+        <MappingFragment StoreEntitySet="mbi_file_table_stage">
+          <ScalarProperty Name="file_name" ColumnName="file_name" />
+          <ScalarProperty Name="row_num" ColumnName="row_num" />
+          <ScalarProperty Name="data_row" ColumnName="data_row" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="res_file_table_stage">
+      <EntityTypeMapping TypeName="Alegeus_ErrorLogModel.res_file_table_stage">
+        <MappingFragment StoreEntitySet="res_file_table_stage">
+          <ScalarProperty Name="error_row" ColumnName="error_row" />
+          <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+          <ScalarProperty Name="row_num" ColumnName="row_num" />
+          <ScalarProperty Name="error_code" ColumnName="error_code" />
+          <ScalarProperty Name="error_message" ColumnName="error_message" />
+          <ScalarProperty Name="plan_id" ColumnName="plan_id" />
+          <ScalarProperty Name="employee_id" ColumnName="employee_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionName="Alegeus_ErrorLogModel.Store.SplitStringsOrdered" FunctionImportName="SplitStringsOrdered">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Alegeus_ErrorLogModel.SplitStringsOrdered_Result">
+          <ScalarProperty Name="rn" ColumnName="rn" />
+          <ScalarProperty Name="Item" ColumnName="Item" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="Alegeus_ErrorLog_failure_alert" FunctionName="Alegeus_ErrorLogModel.Store.Alegeus_ErrorLog_failure_alert" />
+    <FunctionImportMapping FunctionImportName="Alegeus_ErrorLog_refreshsuccess_alert" FunctionName="Alegeus_ErrorLogModel.Store.Alegeus_ErrorLog_refreshsuccess_alert" />
+  </EntityContainerMapping>
+</Mapping>

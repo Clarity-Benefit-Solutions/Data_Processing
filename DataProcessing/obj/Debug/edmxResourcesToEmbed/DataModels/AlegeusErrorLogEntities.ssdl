@@ -1,0 +1,732 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Alegeus_ErrorLogModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Alegeus_ErrorLog.dbo.CRM_fix09292020' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="CRM_fix09292020">
+          <Property Name="bencode" Type="nvarchar" MaxLength="255" />
+          <Property Name="crm" Type="nvarchar" MaxLength="255" />
+          <Property Name="correct_CRM" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Alegeus_ErrorLog.dbo.CRM_List' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="CRM_List">
+          <Property Name="BENCODE" Type="nvarchar" MaxLength="50" />
+          <Property Name="CRM" Type="nvarchar" MaxLength="100" />
+          <Property Name="CRM_email" Type="nvarchar" MaxLength="500" />
+          <Property Name="emp_services" Type="nvarchar" MaxLength="500" />
+          <Property Name="Primary_contact_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="Primary_contact_email" Type="nvarchar" MaxLength="500" />
+          <Property Name="client_start_date" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Alegeus_ErrorLog.dbo.CRM_List_BU' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="CRM_List_BU">
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="CRM" Type="varchar" MaxLength="50" />
+        </EntityType>-->
+  <EntityType Name="dbo_error_log_results_workflow_local">
+    <Key>
+      <PropertyRef Name="IDfield" />
+    </Key>
+    <Property Name="error_code" Type="int" />
+    <Property Name="error_row" Type="nvarchar" MaxLength="255" />
+    <Property Name="mbi_file_name" Type="nvarchar" MaxLength="255" />
+    <Property Name="error_message" Type="nvarchar(max)" />
+    <Property Name="mbi_row_num" Type="int" />
+    <Property Name="mbi_line" Type="nvarchar" MaxLength="255" />
+    <Property Name="CRM_Check" Type="bit" Nullable="false" />
+    <Property Name="Proc_Check" Type="bit" Nullable="false" />
+    <Property Name="updated_by" Type="nvarchar" MaxLength="255" />
+    <Property Name="updated_timestamp" Type="datetime" />
+    <Property Name="BENCODE" Type="nvarchar" MaxLength="255" />
+    <Property Name="CRM" Type="nvarchar" MaxLength="255" />
+    <Property Name="Notes" Type="nvarchar(max)" />
+    <Property Name="Notes_CRM" Type="nvarchar(max)" />
+    <Property Name="row_type" Type="nvarchar" MaxLength="255" />
+    <Property Name="IDfield" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Archive_Check" Type="bit" Nullable="false" />
+    <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+    <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+    <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+    <Property Name="error_row_num" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Alegeus_ErrorLog.dbo.dbo_error_log_results_workflow_local_AL' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="dbo_error_log_results_workflow_local_AL">
+    <Key>
+      <PropertyRef Name="CRM_Check" />
+      <PropertyRef Name="Proc_Check" />
+      <PropertyRef Name="IDfield" />
+      <PropertyRef Name="Archive_Check" />
+    </Key>
+    <Property Name="error_code" Type="int" />
+    <Property Name="error_row" Type="nvarchar" MaxLength="255" />
+    <Property Name="mbi_file_name" Type="nvarchar" MaxLength="255" />
+    <Property Name="error_message" Type="nvarchar(max)" />
+    <Property Name="mbi_row_num" Type="int" />
+    <Property Name="mbi_line" Type="nvarchar" MaxLength="255" />
+    <Property Name="CRM_Check" Type="bit" Nullable="false" />
+    <Property Name="Proc_Check" Type="bit" Nullable="false" />
+    <Property Name="updated_by" Type="nvarchar" MaxLength="255" />
+    <Property Name="updated_timestamp" Type="datetime" />
+    <Property Name="BENCODE" Type="nvarchar" MaxLength="255" />
+    <Property Name="CRM" Type="nvarchar" MaxLength="255" />
+    <Property Name="Notes" Type="nvarchar(max)" />
+    <Property Name="Notes_CRM" Type="nvarchar(max)" />
+    <Property Name="file_type" Type="nvarchar" MaxLength="255" />
+    <Property Name="IDfield" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Archive_Check" Type="bit" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Alegeus_ErrorLog.dbo.dbo_error_log_results_workflow_localBU' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="dbo_error_log_results_workflow_localBU">
+    <Key>
+      <PropertyRef Name="CRM_Check" />
+      <PropertyRef Name="Proc_Check" />
+      <PropertyRef Name="IDfield" />
+      <PropertyRef Name="Archive_Check" />
+    </Key>
+    <Property Name="error_code" Type="int" />
+    <Property Name="error_row" Type="nvarchar" MaxLength="255" />
+    <Property Name="mbi_file_name" Type="nvarchar" MaxLength="255" />
+    <Property Name="error_message" Type="nvarchar(max)" />
+    <Property Name="mbi_row_num" Type="int" />
+    <Property Name="mbi_line" Type="nvarchar" MaxLength="255" />
+    <Property Name="CRM_Check" Type="bit" Nullable="false" />
+    <Property Name="Proc_Check" Type="bit" Nullable="false" />
+    <Property Name="updated_by" Type="nvarchar" MaxLength="255" />
+    <Property Name="updated_timestamp" Type="datetime" />
+    <Property Name="BENCODE" Type="nvarchar" MaxLength="255" />
+    <Property Name="CRM" Type="nvarchar" MaxLength="255" />
+    <Property Name="Notes" Type="nvarchar(max)" />
+    <Property Name="Notes_CRM" Type="nvarchar(max)" />
+    <Property Name="file_type" Type="nvarchar" MaxLength="255" />
+    <Property Name="IDfield" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Archive_Check" Type="bit" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Alegeus_ErrorLog.dbo.dbo_ommited_errors' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="dbo_ommited_errors">
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_desc" Type="nvarchar(max)" />
+          <Property Name="user_desc" Type="nvarchar(max)" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Alegeus_ErrorLog.dbo.dbo_tracked_errors_local' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="dbo_tracked_errors_local">
+    <Key>
+      <PropertyRef Name="Error_code" />
+      <PropertyRef Name="crm" />
+      <PropertyRef Name="processing" />
+    </Key>
+    <Property Name="Error_code" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+    <Property Name="crm" Type="bit" Nullable="false" />
+    <Property Name="processing" Type="bit" Nullable="false" />
+    <Property Name="control" Type="bit" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Alegeus_ErrorLog.dbo.error_codes' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="error_codes">
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_desc" Type="nvarchar(max)" />
+          <Property Name="user_desc" Type="nvarchar(max)" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Alegeus_ErrorLog.dbo.mbi_file_table' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="mbi_file_table">
+    <Key>
+      <PropertyRef Name="row_id" />
+    </Key>
+    <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+    <Property Name="data_row" Type="nvarchar(max)" />
+    <Property Name="row_num" Type="int" />
+    <Property Name="row_type" Type="nvarchar" MaxLength="50" />
+    <Property Name="AccountStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="AddressLine1" Type="nvarchar" MaxLength="50" />
+    <Property Name="AddressLine2" Type="nvarchar" MaxLength="50" />
+    <Property Name="BirthDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="City" Type="nvarchar" MaxLength="50" />
+    <Property Name="Country" Type="nvarchar" MaxLength="50" />
+    <Property Name="DeleteAccount" Type="nvarchar" MaxLength="50" />
+    <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+    <Property Name="DepositType" Type="nvarchar" MaxLength="50" />
+    <Property Name="Division" Type="nvarchar" MaxLength="50" />
+    <Property Name="EffectiveDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="EligibilityDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="50" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+    <Property Name="MiddleInitial" Type="nvarchar" MaxLength="50" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="50" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+    <Property Name="PlanEndDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+    <Property Name="PlanStartDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="Relationship" Type="nvarchar" MaxLength="50" />
+    <Property Name="State" Type="nvarchar" MaxLength="50" />
+    <Property Name="TerminationDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="TpaId" Type="nvarchar" MaxLength="50" />
+    <Property Name="Zip" Type="nvarchar" MaxLength="50" />
+    <Property Name="row_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Alegeus_ErrorLog.dbo.mbi_file_table_prv' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="mbi_file_table_prv">
+          <Property Name="file_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="row_num" Type="int" />
+          <Property Name="data_row" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Alegeus_ErrorLog.dbo.mbi_file_table_stage' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="mbi_file_table_stage">
+    <Key>
+      <PropertyRef Name="row_num" />
+    </Key>
+    <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+    <Property Name="data_row" Type="nvarchar(max)" />
+    <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="row_type" Type="nvarchar" MaxLength="50" />
+    <Property Name="AccountStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="AddressLine1" Type="nvarchar" MaxLength="50" />
+    <Property Name="AddressLine2" Type="nvarchar" MaxLength="50" />
+    <Property Name="BirthDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="City" Type="nvarchar" MaxLength="50" />
+    <Property Name="Country" Type="nvarchar" MaxLength="50" />
+    <Property Name="DeleteAccount" Type="nvarchar" MaxLength="50" />
+    <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+    <Property Name="DepositType" Type="nvarchar" MaxLength="50" />
+    <Property Name="Division" Type="nvarchar" MaxLength="50" />
+    <Property Name="EffectiveDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="EligibilityDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="50" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+    <Property Name="MiddleInitial" Type="nvarchar" MaxLength="50" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="50" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+    <Property Name="PlanEndDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+    <Property Name="PlanStartDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="Relationship" Type="nvarchar" MaxLength="50" />
+    <Property Name="State" Type="nvarchar" MaxLength="50" />
+    <Property Name="TerminationDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="TpaId" Type="nvarchar" MaxLength="50" />
+    <Property Name="Zip" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Alegeus_ErrorLog.dbo.mbi_file_table_stage_prv' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="mbi_file_table_stage_prv">
+    <Key>
+      <PropertyRef Name="row_num" />
+    </Key>
+    <Property Name="file_name" Type="nvarchar" MaxLength="100" />
+    <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="data_row" Type="nvarchar(max)" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Alegeus_ErrorLog.dbo.res_file_table' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="res_file_table">
+    <Key>
+      <PropertyRef Name="row_id" />
+    </Key>
+    <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+    <Property Name="error_row" Type="nvarchar(max)" />
+    <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+    <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+    <Property Name="row_num" Type="int" />
+    <Property Name="AccountStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="AddressLine1" Type="nvarchar" MaxLength="50" />
+    <Property Name="AddressLine2" Type="nvarchar" MaxLength="50" />
+    <Property Name="BirthDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="City" Type="nvarchar" MaxLength="50" />
+    <Property Name="Country" Type="nvarchar" MaxLength="50" />
+    <Property Name="DeleteAccount" Type="nvarchar" MaxLength="50" />
+    <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+    <Property Name="DepositType" Type="nvarchar" MaxLength="50" />
+    <Property Name="Division" Type="nvarchar" MaxLength="50" />
+    <Property Name="EffectiveDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="EligibilityDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="50" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+    <Property Name="MiddleInitial" Type="nvarchar" MaxLength="50" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="50" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+    <Property Name="PlanEndDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+    <Property Name="PlanStartDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="Relationship" Type="nvarchar" MaxLength="50" />
+    <Property Name="State" Type="nvarchar" MaxLength="50" />
+    <Property Name="TerminationDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="TpaId" Type="nvarchar" MaxLength="50" />
+    <Property Name="Zip" Type="nvarchar" MaxLength="50" />
+    <Property Name="row_type" Type="varchar" MaxLength="50" />
+    <Property Name="error_message_calc" Type="varchar" MaxLength="500" />
+    <Property Name="res_file_name" Type="nvarchar" MaxLength="500" />
+    <Property Name="result_template" Type="nvarchar" MaxLength="100" />
+    <Property Name="row_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Alegeus_ErrorLog.dbo.res_file_table_stage' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="res_file_table_stage">
+    <Key>
+      <PropertyRef Name="row_num" />
+    </Key>
+    <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+    <Property Name="result_template" Type="nvarchar" MaxLength="50" />
+    <Property Name="error_row" Type="nvarchar(max)" />
+    <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+    <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+    <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="row_type" Type="nvarchar" MaxLength="50" />
+    <Property Name="AccountStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="AddressLine1" Type="nvarchar" MaxLength="50" />
+    <Property Name="AddressLine2" Type="nvarchar" MaxLength="50" />
+    <Property Name="BirthDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="City" Type="nvarchar" MaxLength="50" />
+    <Property Name="Country" Type="nvarchar" MaxLength="50" />
+    <Property Name="DeleteAccount" Type="nvarchar" MaxLength="50" />
+    <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+    <Property Name="DepositType" Type="nvarchar" MaxLength="50" />
+    <Property Name="Division" Type="nvarchar" MaxLength="50" />
+    <Property Name="EffectiveDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="EligibilityDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="50" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+    <Property Name="MiddleInitial" Type="nvarchar" MaxLength="50" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
+    <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="50" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+    <Property Name="PlanEndDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+    <Property Name="PlanStartDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="Relationship" Type="nvarchar" MaxLength="50" />
+    <Property Name="State" Type="nvarchar" MaxLength="50" />
+    <Property Name="TerminationDate" Type="nvarchar" MaxLength="50" />
+    <Property Name="TpaId" Type="nvarchar" MaxLength="50" />
+    <Property Name="Zip" Type="nvarchar" MaxLength="50" />
+    <Property Name="error_message_calc" Type="varchar" MaxLength="500" />
+    <Property Name="res_file_name" Type="nvarchar" MaxLength="500" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Alegeus_ErrorLog.dbo.CRM_Listview' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="CRM_Listview">
+          <Property Name="BENCODE" Type="nvarchar" MaxLength="50" />
+          <Property Name="CRM" Type="nvarchar" MaxLength="100" />
+          <Property Name="CRM_email" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Alegeus_ErrorLog.dbo.DistinctErrors' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="DistinctErrors">
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Alegeus_ErrorLog.dbo.error_log_results' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="error_log_results">
+          <Property Name="error_row" Type="nvarchar(max)" />
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="res_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="row_num" Type="int" />
+          <Property Name="row_type" Type="varchar" MaxLength="50" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Alegeus_ErrorLog.dbo.error_log_results_withmbi' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="error_log_results_withmbi">
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="res_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="error_row_num" Type="int" />
+          <Property Name="mbi_row_num" Type="int" />
+          <Property Name="row_type" Type="varchar" MaxLength="50" />
+          <Property Name="mbi_line" Type="nvarchar(max)" />
+          <Property Name="error_row" Type="nvarchar(max)" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Alegeus_ErrorLog.dbo.error_log_results_withmbi_with_CRM' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="error_log_results_withmbi_with_CRM">
+          <Property Name="CRM" Type="nvarchar" MaxLength="100" />
+          <Property Name="CRM_email" Type="nvarchar" MaxLength="500" />
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="res_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="row_type" Type="varchar" MaxLength="50" />
+          <Property Name="error_row" Type="nvarchar(max)" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_row_num" Type="int" />
+          <Property Name="mbi_row_num" Type="int" />
+          <Property Name="mbi_line" Type="nvarchar(max)" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Alegeus_ErrorLog.dbo.mbi_errors' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="mbi_errors">
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Alegeus_ErrorLog.dbo.mbi_no_errors' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="mbi_no_errors">
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Alegeus_ErrorLog.dbo.RESwithnoMBIrecords' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="RESwithnoMBIrecords">
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
+  <Function Name="Alegeus_ErrorLog_failure_alert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Alegeus_ErrorLog_refreshsuccess_alert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="alegeus_errorlog_track_new_ftp_errors" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="check_imports_file" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="CsvSplit1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="delimited" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="delimiter" Type="nvarchar" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="val" Type="nvarchar(max)" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
+  <Function Name="process_mbi_file_table_stage_import" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="process_res_file_table_stage_import" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SplitAllErrorRowStringsToFields" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="tableName" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SplitErrorRowStringToFields" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="csvString" Type="nvarchar(max)" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="row_type" Type="nvarchar" MaxLength="100" />
+          <Property Name="bencode" Type="nvarchar" MaxLength="100" />
+          <Property Name="employee_id" Type="nvarchar" MaxLength="100" />
+          <Property Name="plan_id" Type="nvarchar" MaxLength="100" />
+          <Property Name="start_date" Type="nvarchar" MaxLength="100" />
+          <Property Name="end_date" Type="nvarchar" MaxLength="100" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="100" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="dummy" Type="nvarchar" MaxLength="100" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
+  <Function Name="SplitStringsOrdered" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="List" Type="nvarchar" Mode="In" />
+    <Parameter Name="Delimiter" Type="nvarchar" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="rn" Type="bigint" />
+          <Property Name="Item" Type="nvarchar" MaxLength="2000" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
+  <Function Name="zz_truncate_all" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="Alegeus_ErrorLogModelStoreContainer">
+    <EntitySet Name="dbo_error_log_results_workflow_local" EntityType="Self.dbo_error_log_results_workflow_local" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="dbo_error_log_results_workflow_local_AL" EntityType="Self.dbo_error_log_results_workflow_local_AL" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [dbo_error_log_results_workflow_local_AL].[error_code] AS [error_code], 
+    [dbo_error_log_results_workflow_local_AL].[error_row] AS [error_row], 
+    [dbo_error_log_results_workflow_local_AL].[mbi_file_name] AS [mbi_file_name], 
+    [dbo_error_log_results_workflow_local_AL].[error_message] AS [error_message], 
+    [dbo_error_log_results_workflow_local_AL].[mbi_row_num] AS [mbi_row_num], 
+    [dbo_error_log_results_workflow_local_AL].[mbi_line] AS [mbi_line], 
+    [dbo_error_log_results_workflow_local_AL].[CRM_Check] AS [CRM_Check], 
+    [dbo_error_log_results_workflow_local_AL].[Proc_Check] AS [Proc_Check], 
+    [dbo_error_log_results_workflow_local_AL].[updated_by] AS [updated_by], 
+    [dbo_error_log_results_workflow_local_AL].[updated_timestamp] AS [updated_timestamp], 
+    [dbo_error_log_results_workflow_local_AL].[BENCODE] AS [BENCODE], 
+    [dbo_error_log_results_workflow_local_AL].[CRM] AS [CRM], 
+    [dbo_error_log_results_workflow_local_AL].[Notes] AS [Notes], 
+    [dbo_error_log_results_workflow_local_AL].[Notes_CRM] AS [Notes_CRM], 
+    [dbo_error_log_results_workflow_local_AL].[file_type] AS [file_type], 
+    [dbo_error_log_results_workflow_local_AL].[IDfield] AS [IDfield], 
+    [dbo_error_log_results_workflow_local_AL].[Archive_Check] AS [Archive_Check]
+    FROM [dbo].[dbo_error_log_results_workflow_local_AL] AS [dbo_error_log_results_workflow_local_AL]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="dbo_error_log_results_workflow_localBU" EntityType="Self.dbo_error_log_results_workflow_localBU" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [dbo_error_log_results_workflow_localBU].[error_code] AS [error_code], 
+    [dbo_error_log_results_workflow_localBU].[error_row] AS [error_row], 
+    [dbo_error_log_results_workflow_localBU].[mbi_file_name] AS [mbi_file_name], 
+    [dbo_error_log_results_workflow_localBU].[error_message] AS [error_message], 
+    [dbo_error_log_results_workflow_localBU].[mbi_row_num] AS [mbi_row_num], 
+    [dbo_error_log_results_workflow_localBU].[mbi_line] AS [mbi_line], 
+    [dbo_error_log_results_workflow_localBU].[CRM_Check] AS [CRM_Check], 
+    [dbo_error_log_results_workflow_localBU].[Proc_Check] AS [Proc_Check], 
+    [dbo_error_log_results_workflow_localBU].[updated_by] AS [updated_by], 
+    [dbo_error_log_results_workflow_localBU].[updated_timestamp] AS [updated_timestamp], 
+    [dbo_error_log_results_workflow_localBU].[BENCODE] AS [BENCODE], 
+    [dbo_error_log_results_workflow_localBU].[CRM] AS [CRM], 
+    [dbo_error_log_results_workflow_localBU].[Notes] AS [Notes], 
+    [dbo_error_log_results_workflow_localBU].[Notes_CRM] AS [Notes_CRM], 
+    [dbo_error_log_results_workflow_localBU].[file_type] AS [file_type], 
+    [dbo_error_log_results_workflow_localBU].[IDfield] AS [IDfield], 
+    [dbo_error_log_results_workflow_localBU].[Archive_Check] AS [Archive_Check]
+    FROM [dbo].[dbo_error_log_results_workflow_localBU] AS [dbo_error_log_results_workflow_localBU]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="dbo_tracked_errors_local" EntityType="Self.dbo_tracked_errors_local" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [dbo_tracked_errors_local].[Error_code] AS [Error_code], 
+    [dbo_tracked_errors_local].[error_message] AS [error_message], 
+    [dbo_tracked_errors_local].[crm] AS [crm], 
+    [dbo_tracked_errors_local].[processing] AS [processing], 
+    [dbo_tracked_errors_local].[control] AS [control]
+    FROM [dbo].[dbo_tracked_errors_local] AS [dbo_tracked_errors_local]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="mbi_file_table" EntityType="Self.mbi_file_table" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [mbi_file_table].[mbi_file_name] AS [mbi_file_name], 
+    [mbi_file_table].[data_row] AS [data_row], 
+    [mbi_file_table].[row_num] AS [row_num], 
+    [mbi_file_table].[row_type] AS [row_type], 
+    [mbi_file_table].[AccountStatus] AS [AccountStatus], 
+    [mbi_file_table].[AccountTypeCode] AS [AccountTypeCode], 
+    [mbi_file_table].[AddressLine1] AS [AddressLine1], 
+    [mbi_file_table].[AddressLine2] AS [AddressLine2], 
+    [mbi_file_table].[BirthDate] AS [BirthDate], 
+    [mbi_file_table].[City] AS [City], 
+    [mbi_file_table].[Country] AS [Country], 
+    [mbi_file_table].[DeleteAccount] AS [DeleteAccount], 
+    [mbi_file_table].[DependentID] AS [DependentID], 
+    [mbi_file_table].[DepositType] AS [DepositType], 
+    [mbi_file_table].[Division] AS [Division], 
+    [mbi_file_table].[EffectiveDate] AS [EffectiveDate], 
+    [mbi_file_table].[EligibilityDate] AS [EligibilityDate], 
+    [mbi_file_table].[Email] AS [Email], 
+    [mbi_file_table].[EmployeeDepositAmount] AS [EmployeeDepositAmount], 
+    [mbi_file_table].[EmployeeID] AS [EmployeeID], 
+    [mbi_file_table].[EmployeePayPeriodElection] AS [EmployeePayPeriodElection], 
+    [mbi_file_table].[EmployeeSocialSecurityNumber] AS [EmployeeSocialSecurityNumber], 
+    [mbi_file_table].[EmployeeStatus] AS [EmployeeStatus], 
+    [mbi_file_table].[EmployerDepositAmount] AS [EmployerDepositAmount], 
+    [mbi_file_table].[EmployerId] AS [EmployerId], 
+    [mbi_file_table].[EmployerPayPeriodElection] AS [EmployerPayPeriodElection], 
+    [mbi_file_table].[FirstName] AS [FirstName], 
+    [mbi_file_table].[LastName] AS [LastName], 
+    [mbi_file_table].[MiddleInitial] AS [MiddleInitial], 
+    [mbi_file_table].[MobileNumber] AS [MobileNumber], 
+    [mbi_file_table].[OriginalPrefunded] AS [OriginalPrefunded], 
+    [mbi_file_table].[Phone] AS [Phone], 
+    [mbi_file_table].[PlanEndDate] AS [PlanEndDate], 
+    [mbi_file_table].[PlanId] AS [PlanId], 
+    [mbi_file_table].[PlanStartDate] AS [PlanStartDate], 
+    [mbi_file_table].[Relationship] AS [Relationship], 
+    [mbi_file_table].[State] AS [State], 
+    [mbi_file_table].[TerminationDate] AS [TerminationDate], 
+    [mbi_file_table].[TpaId] AS [TpaId], 
+    [mbi_file_table].[Zip] AS [Zip], 
+    [mbi_file_table].[row_id] AS [row_id]
+    FROM [dbo].[mbi_file_table] AS [mbi_file_table]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="mbi_file_table_stage" EntityType="Self.mbi_file_table_stage" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [mbi_file_table_stage].[mbi_file_name] AS [mbi_file_name], 
+    [mbi_file_table_stage].[data_row] AS [data_row], 
+    [mbi_file_table_stage].[row_num] AS [row_num], 
+    [mbi_file_table_stage].[row_type] AS [row_type], 
+    [mbi_file_table_stage].[AccountStatus] AS [AccountStatus], 
+    [mbi_file_table_stage].[AccountTypeCode] AS [AccountTypeCode], 
+    [mbi_file_table_stage].[AddressLine1] AS [AddressLine1], 
+    [mbi_file_table_stage].[AddressLine2] AS [AddressLine2], 
+    [mbi_file_table_stage].[BirthDate] AS [BirthDate], 
+    [mbi_file_table_stage].[City] AS [City], 
+    [mbi_file_table_stage].[Country] AS [Country], 
+    [mbi_file_table_stage].[DeleteAccount] AS [DeleteAccount], 
+    [mbi_file_table_stage].[DependentID] AS [DependentID], 
+    [mbi_file_table_stage].[DepositType] AS [DepositType], 
+    [mbi_file_table_stage].[Division] AS [Division], 
+    [mbi_file_table_stage].[EffectiveDate] AS [EffectiveDate], 
+    [mbi_file_table_stage].[EligibilityDate] AS [EligibilityDate], 
+    [mbi_file_table_stage].[Email] AS [Email], 
+    [mbi_file_table_stage].[EmployeeDepositAmount] AS [EmployeeDepositAmount], 
+    [mbi_file_table_stage].[EmployeeID] AS [EmployeeID], 
+    [mbi_file_table_stage].[EmployeePayPeriodElection] AS [EmployeePayPeriodElection], 
+    [mbi_file_table_stage].[EmployeeSocialSecurityNumber] AS [EmployeeSocialSecurityNumber], 
+    [mbi_file_table_stage].[EmployeeStatus] AS [EmployeeStatus], 
+    [mbi_file_table_stage].[EmployerDepositAmount] AS [EmployerDepositAmount], 
+    [mbi_file_table_stage].[EmployerId] AS [EmployerId], 
+    [mbi_file_table_stage].[EmployerPayPeriodElection] AS [EmployerPayPeriodElection], 
+    [mbi_file_table_stage].[FirstName] AS [FirstName], 
+    [mbi_file_table_stage].[LastName] AS [LastName], 
+    [mbi_file_table_stage].[MiddleInitial] AS [MiddleInitial], 
+    [mbi_file_table_stage].[MobileNumber] AS [MobileNumber], 
+    [mbi_file_table_stage].[OriginalPrefunded] AS [OriginalPrefunded], 
+    [mbi_file_table_stage].[Phone] AS [Phone], 
+    [mbi_file_table_stage].[PlanEndDate] AS [PlanEndDate], 
+    [mbi_file_table_stage].[PlanId] AS [PlanId], 
+    [mbi_file_table_stage].[PlanStartDate] AS [PlanStartDate], 
+    [mbi_file_table_stage].[Relationship] AS [Relationship], 
+    [mbi_file_table_stage].[State] AS [State], 
+    [mbi_file_table_stage].[TerminationDate] AS [TerminationDate], 
+    [mbi_file_table_stage].[TpaId] AS [TpaId], 
+    [mbi_file_table_stage].[Zip] AS [Zip]
+    FROM [dbo].[mbi_file_table_stage] AS [mbi_file_table_stage]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="mbi_file_table_stage_prv" EntityType="Self.mbi_file_table_stage_prv" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [mbi_file_table_stage_prv].[file_name] AS [file_name], 
+    [mbi_file_table_stage_prv].[row_num] AS [row_num], 
+    [mbi_file_table_stage_prv].[data_row] AS [data_row]
+    FROM [dbo].[mbi_file_table_stage_prv] AS [mbi_file_table_stage_prv]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="res_file_table" EntityType="Self.res_file_table" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [res_file_table].[mbi_file_name] AS [mbi_file_name], 
+    [res_file_table].[error_row] AS [error_row], 
+    [res_file_table].[error_code] AS [error_code], 
+    [res_file_table].[error_message] AS [error_message], 
+    [res_file_table].[row_num] AS [row_num], 
+    [res_file_table].[AccountStatus] AS [AccountStatus], 
+    [res_file_table].[AccountTypeCode] AS [AccountTypeCode], 
+    [res_file_table].[AddressLine1] AS [AddressLine1], 
+    [res_file_table].[AddressLine2] AS [AddressLine2], 
+    [res_file_table].[BirthDate] AS [BirthDate], 
+    [res_file_table].[City] AS [City], 
+    [res_file_table].[Country] AS [Country], 
+    [res_file_table].[DeleteAccount] AS [DeleteAccount], 
+    [res_file_table].[DependentID] AS [DependentID], 
+    [res_file_table].[DepositType] AS [DepositType], 
+    [res_file_table].[Division] AS [Division], 
+    [res_file_table].[EffectiveDate] AS [EffectiveDate], 
+    [res_file_table].[EligibilityDate] AS [EligibilityDate], 
+    [res_file_table].[Email] AS [Email], 
+    [res_file_table].[EmployeeDepositAmount] AS [EmployeeDepositAmount], 
+    [res_file_table].[EmployeeID] AS [EmployeeID], 
+    [res_file_table].[EmployeePayPeriodElection] AS [EmployeePayPeriodElection], 
+    [res_file_table].[EmployeeSocialSecurityNumber] AS [EmployeeSocialSecurityNumber], 
+    [res_file_table].[EmployeeStatus] AS [EmployeeStatus], 
+    [res_file_table].[EmployerDepositAmount] AS [EmployerDepositAmount], 
+    [res_file_table].[EmployerId] AS [EmployerId], 
+    [res_file_table].[EmployerPayPeriodElection] AS [EmployerPayPeriodElection], 
+    [res_file_table].[FirstName] AS [FirstName], 
+    [res_file_table].[LastName] AS [LastName], 
+    [res_file_table].[MiddleInitial] AS [MiddleInitial], 
+    [res_file_table].[MobileNumber] AS [MobileNumber], 
+    [res_file_table].[OriginalPrefunded] AS [OriginalPrefunded], 
+    [res_file_table].[Phone] AS [Phone], 
+    [res_file_table].[PlanEndDate] AS [PlanEndDate], 
+    [res_file_table].[PlanId] AS [PlanId], 
+    [res_file_table].[PlanStartDate] AS [PlanStartDate], 
+    [res_file_table].[Relationship] AS [Relationship], 
+    [res_file_table].[State] AS [State], 
+    [res_file_table].[TerminationDate] AS [TerminationDate], 
+    [res_file_table].[TpaId] AS [TpaId], 
+    [res_file_table].[Zip] AS [Zip], 
+    [res_file_table].[row_type] AS [row_type], 
+    [res_file_table].[error_message_calc] AS [error_message_calc], 
+    [res_file_table].[res_file_name] AS [res_file_name], 
+    [res_file_table].[result_template] AS [result_template], 
+    [res_file_table].[row_id] AS [row_id]
+    FROM [dbo].[res_file_table] AS [res_file_table]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="res_file_table_stage" EntityType="Self.res_file_table_stage" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [res_file_table_stage].[mbi_file_name] AS [mbi_file_name], 
+    [res_file_table_stage].[result_template] AS [result_template], 
+    [res_file_table_stage].[error_row] AS [error_row], 
+    [res_file_table_stage].[error_code] AS [error_code], 
+    [res_file_table_stage].[error_message] AS [error_message], 
+    [res_file_table_stage].[row_num] AS [row_num], 
+    [res_file_table_stage].[row_type] AS [row_type], 
+    [res_file_table_stage].[AccountStatus] AS [AccountStatus], 
+    [res_file_table_stage].[AccountTypeCode] AS [AccountTypeCode], 
+    [res_file_table_stage].[AddressLine1] AS [AddressLine1], 
+    [res_file_table_stage].[AddressLine2] AS [AddressLine2], 
+    [res_file_table_stage].[BirthDate] AS [BirthDate], 
+    [res_file_table_stage].[City] AS [City], 
+    [res_file_table_stage].[Country] AS [Country], 
+    [res_file_table_stage].[DeleteAccount] AS [DeleteAccount], 
+    [res_file_table_stage].[DependentID] AS [DependentID], 
+    [res_file_table_stage].[DepositType] AS [DepositType], 
+    [res_file_table_stage].[Division] AS [Division], 
+    [res_file_table_stage].[EffectiveDate] AS [EffectiveDate], 
+    [res_file_table_stage].[EligibilityDate] AS [EligibilityDate], 
+    [res_file_table_stage].[Email] AS [Email], 
+    [res_file_table_stage].[EmployeeDepositAmount] AS [EmployeeDepositAmount], 
+    [res_file_table_stage].[EmployeeID] AS [EmployeeID], 
+    [res_file_table_stage].[EmployeePayPeriodElection] AS [EmployeePayPeriodElection], 
+    [res_file_table_stage].[EmployeeSocialSecurityNumber] AS [EmployeeSocialSecurityNumber], 
+    [res_file_table_stage].[EmployeeStatus] AS [EmployeeStatus], 
+    [res_file_table_stage].[EmployerDepositAmount] AS [EmployerDepositAmount], 
+    [res_file_table_stage].[EmployerId] AS [EmployerId], 
+    [res_file_table_stage].[EmployerPayPeriodElection] AS [EmployerPayPeriodElection], 
+    [res_file_table_stage].[FirstName] AS [FirstName], 
+    [res_file_table_stage].[LastName] AS [LastName], 
+    [res_file_table_stage].[MiddleInitial] AS [MiddleInitial], 
+    [res_file_table_stage].[MobileNumber] AS [MobileNumber], 
+    [res_file_table_stage].[OriginalPrefunded] AS [OriginalPrefunded], 
+    [res_file_table_stage].[Phone] AS [Phone], 
+    [res_file_table_stage].[PlanEndDate] AS [PlanEndDate], 
+    [res_file_table_stage].[PlanId] AS [PlanId], 
+    [res_file_table_stage].[PlanStartDate] AS [PlanStartDate], 
+    [res_file_table_stage].[Relationship] AS [Relationship], 
+    [res_file_table_stage].[State] AS [State], 
+    [res_file_table_stage].[TerminationDate] AS [TerminationDate], 
+    [res_file_table_stage].[TpaId] AS [TpaId], 
+    [res_file_table_stage].[Zip] AS [Zip], 
+    [res_file_table_stage].[error_message_calc] AS [error_message_calc], 
+    [res_file_table_stage].[res_file_name] AS [res_file_name]
+    FROM [dbo].[res_file_table_stage] AS [res_file_table_stage]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>
