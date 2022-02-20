@@ -372,6 +372,18 @@ namespace CoreUtils
         public static string AddUniqueIdToFileAndLogToDb(HeaderType headerType, string srcFilePath, Boolean fixFileNameLength,
             FileOperationLogParams fileLogParams)
         {
+
+            // get filename without leading fileid
+            FileInfo srcFileInfo = new FileInfo(srcFilePath);
+            string oldFileName = srcFileInfo.Name;
+
+            // ignore some files
+            if (oldFileName.StartsWith("."))
+            {
+                return srcFilePath;
+            }
+
+
             // if file has uniqueID and headerttype already, nothing to do
             if (!Utils.IsBlank(GetUniqueIdFromFileName(srcFilePath))
                 && GetHeaderTypeFromFileName(srcFilePath) == headerType)
@@ -379,9 +391,6 @@ namespace CoreUtils
                 return srcFilePath;
             }
 
-            // get filename without leading fileid
-            FileInfo srcFileInfo = new FileInfo(srcFilePath);
-            string oldFileName = srcFileInfo.Name;
 
             string newFileName = AddUniqueIdAndHeaderTypeToFileName(oldFileName, headerType);
 

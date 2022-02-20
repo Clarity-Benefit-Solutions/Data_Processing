@@ -206,31 +206,31 @@ namespace EtlUtilities
 
         public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath, HeaderType folderHeaderType)
         {
-            //todo: examine file and dtermine the correct type of header. If nothing can be guessed, return the folderHeaderType
+            //todo: @Luis: get specs for detecting the file types and share with @Sumeet
             string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
 
+            // New: IA,XX,BENEFL1,Clarity Standard Import Template, Standard Result Template, Beneflex Standard Export Template
+            if (contents.Contains("XX,") && contents.Contains("Clarity Standard Import Template,") && contents.Contains("BENEFL1,"))
+            {
+                return HeaderType.New;
+            }
+
+            // Old: IA,XX,BENEFL1,New Beneflex Standard Import Template 2015,Standard Result Template,Beneflex Standard Export Template
+            else if (contents.Contains("XX,") && contents.Contains("New Beneflex Standard Import Template 2015,"))
+            {
+                return HeaderType.Old;
+            }
             // no change: IA,XX,BENEFL1,New Beneflex Standard Import Template 2015,Standard Result Template,Beneflex Standard Export Template
-            if (contents.IndexOf("New Beneflex Standard Import Template 2015,") >= 0 && contents.IndexOf("BENEFL1,") >= 0)
+            else if (contents.Contains("New Beneflex Standard Import Template 2015,") && contents.Contains("BENEFL1,"))
             {
                 return HeaderType.NoChange;
             }
             // Own: IA,XX,New Beneflex Standard Import Template 2015,Standard Result Template,Beneflex Standard Export Template
-            else if (contents.IndexOf("New Beneflex Standard Import Template 2015,") >= 0 && contents.IndexOf("BENEFL1,") < 0)
+            if (contents.Contains("New Beneflex Standard Import Template 2015,") && !contents.Contains("BENEFL1,"))
             {
                 return HeaderType.Own;
             }
-            
-            // New: IA,XX,BENEFL1,Clarity Standard Import Template, Standard Result Template, Beneflex Standard Export Template
-            else if (contents.IndexOf("Clarity Standard Import Template,") >= 0 && contents.IndexOf("BENEFL1,") >= 0)
-            {
-                return HeaderType.New;
-            }
-            
-            // Old: IA,XX,BENEFL1,New Beneflex Standard Import Template 2015,Standard Result Template,Beneflex Standard Export Template
-            else if (contents.IndexOf("New Beneflex Standard Import Template 2015,") >= 0 && contents.IndexOf("BENEFL1,") >= 0)
-            {
-                return HeaderType.Old;
-            }
+
 
             return folderHeaderType;
 
@@ -479,7 +479,6 @@ namespace EtlUtilities
                     {
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.Any, 0, 0, 0, 0));
-                        // todo: ? planid??
                         mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.Any, 0, 0, 0, 0));
