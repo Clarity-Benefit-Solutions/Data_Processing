@@ -105,7 +105,7 @@ namespace DataProcessing
 
                     }
                 },
-                () => { }
+                (arg1, arg2, ex) => { /*todo: log error */ }
             );
 
             //
@@ -227,10 +227,11 @@ namespace DataProcessing
                                             $"Moved file to COBRA folder");
 
                                         DbUtils.LogFileOperation(fileLogParams);
-                                    });
+                                    },
+                                    (arg1, arg2, ex) => { /*todo: log error */ });
                             }
                         },
-                        () => { }
+                        (arg1, arg2, ex) => { /*todo: log error */ }
                     );
                 } //iterateDir
             } //foreach (DataRow row in folders.Rows)
@@ -278,7 +279,8 @@ namespace DataProcessing
                                     $"Renamed file to *.csv");
 
                                 DbUtils.LogFileOperation(fileLogParams);
-                            });
+                            },
+                            (arg1, arg2, ex) => { /*todo: log error */ });
                     }
                 }, null
             ); //iterateDir
@@ -316,7 +318,8 @@ namespace DataProcessing
                                     $"Moved QB File to MoveQBCsvFilesToPreparedQB folder");
 
                                 DbUtils.LogFileOperation(fileLogParams);
-                            });
+                            },
+                            (arg1, arg2, ex) => { /*todo: log error */ });
                     }
                 }, null
             ); //iterateDir
@@ -369,7 +372,8 @@ namespace DataProcessing
                                     $"Moved Empty file to Archive - Done folder");
 
                                 DbUtils.LogFileOperation(fileLogParams);
-                            });
+                            },
+                            (arg1, arg2, ex) => { /*todo: log error */ });
                     }
                 }, null
             ); //iterateDir
@@ -445,7 +449,7 @@ namespace DataProcessing
                         $"Prepared Flat File for COBRA");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                () => { }
+                (arg1, arg2, ex) => { /*todo: log error */ }
             );
 
             //
@@ -496,10 +500,11 @@ namespace DataProcessing
                                     "MoveCobraFtpFilesAfterPrepare",
                                     "Success", $"Moved File");
                                 DbUtils.LogFileOperation(fileLogParams);
-                            });
+                            },
+                            (arg1, arg2, ex) => { /*todo: log error */ });
                     }
                 },
-                () => { }
+                (arg1, arg2, ex) => { /*todo: log error */ }
             );
 
             // 2. move all holding and prepared files
@@ -516,7 +521,7 @@ namespace DataProcessing
                         "Success", $"Moved File");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                () => { }
+                (arg1, arg2, ex) => { /*todo: log error */ }
             );
 
             //3. move out blank files

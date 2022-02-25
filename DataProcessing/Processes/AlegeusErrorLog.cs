@@ -84,7 +84,7 @@ namespace DataProcessing
                         "Delete File in Dir");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                () => { }
+                (arg1, arg2, ex) => { /*todo: log error */ }
             );
 
             //
@@ -122,7 +122,7 @@ namespace DataProcessing
                         "Success", $"Processing File ${srcFilePath}");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                () => { }
+                (arg1, arg2, ex) => { /*todo: log error */ }
             );
 
 
@@ -143,7 +143,7 @@ namespace DataProcessing
                         "Success", $"Processing File ${srcFilePath}");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                () => { }
+                (arg1, arg2, ex) => { /*todo: log error */ }
             );
 
             //
@@ -239,7 +239,7 @@ namespace DataProcessing
                         "Success", "Moved File to Archive");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                () => { }
+                (arg1, arg2, ex) => { /*todo: log error */ }
             );
             // move resFiles to Archive
             FileUtils.MoveFiles(
@@ -255,7 +255,7 @@ namespace DataProcessing
 
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                () => { }
+                (arg1, arg2, ex) => { /*todo: log error */ }
             );
 
             //

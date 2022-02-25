@@ -74,7 +74,10 @@ namespace DataProcessing
                         "Delete File in Header Dir");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                () => { }
+                (arg1, arg2, ex) =>
+                {
+                    //todo: log error
+                }
             );
 
 
@@ -154,7 +157,11 @@ namespace DataProcessing
                                 "Success", $"Processing File ${srcFilePath}");
                             DbUtils.LogFileOperation(fileLogParams);
                         },
-                        () => { }
+                        (arg1, arg2, ex) =>
+                        {
+                            //todo: log error
+                        }
+
                     );
 
                     // 3b. move all source files (with new names) to Headers dir
@@ -169,7 +176,11 @@ namespace DataProcessing
                                 "Success", "Copied Source File to Header Directory");
                             DbUtils.LogFileOperation(fileLogParams1);
                         },
-                        () => { }
+                        (arg1, arg2, ex) =>
+                        {
+                            //todo: log error
+                        }
+
                     );
                 }
             } // each dr
@@ -187,7 +198,11 @@ namespace DataProcessing
                         "Copied File to Archive Directory");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                () => { }
+                (arg1, arg2, ex) =>
+                {
+                    //todo: log error
+                }
+
             );
 
 
@@ -202,7 +217,11 @@ namespace DataProcessing
                         "Success", "Deleted File In HoldAll Directory");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                () => { }
+                (arg1, arg2, ex) =>
+                {
+                    //todo: log error
+                }
+
             );
 
             //5b: copy all header files to HoldAll
@@ -217,7 +236,11 @@ namespace DataProcessing
                         "Copied File to HoldAll Directory");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                () => { }
+                (arg1, arg2, ex) =>
+                {
+                    //todo: log error
+                }
+
             );
 
             //
@@ -236,7 +259,9 @@ namespace DataProcessing
             //
 
             // Iterate and convert all Excel files in fileProcessingHeadersRoot - no subDirs
-            FileUtils.ConvertAllExcelFilesToCsv(Vars.alegeusFileHeadersRoot, false, Vars.alegeusFileHeadersRoot, dbConn, fileLogParams);
+            FileUtils.ConvertAllExcelFilesToCsv(Vars.alegeusFileHeadersRoot, false, Vars.alegeusFileHeadersRoot, dbConn, fileLogParams,
+                (arg1, arg2, ex) => { /*todo: log error */ }
+                );
 
             // Log
             fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}", "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
@@ -339,7 +364,11 @@ namespace DataProcessing
                         "Added Header to File");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                () => { }
+                (arg1, arg2, ex) =>
+                {
+                    //todo: log error
+                }
+
             );
         }
 
@@ -362,7 +391,11 @@ namespace DataProcessing
                         "Success", "Copied HoldAll File to Processing");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                () => { }
+                (arg1, arg2, ex) =>
+                {
+                    //todo: log error
+                }
+
             );
 
             //
@@ -392,7 +425,8 @@ namespace DataProcessing
                         "Success", "Renamed txt file to mbi");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                () => { }
+                (arg1, arg2, ex) => { /*todo: log error */ }
+
             );
 
             //
@@ -420,10 +454,12 @@ namespace DataProcessing
                     foreach (var fileExt in extensionsToDelete)
                     {
                         var delFilePath = FileUtils.GetDestFilePath(srcFilePath, fileExt);
-                        FileUtils.DeleteFileIfExists(delFilePath, null);
+                        FileUtils.DeleteFileIfExists(delFilePath, null,
+                            (arg1, arg2, ex) => { /*todo: log error */ }
+                            );
                     }
                 },
-                () => { }
+                (arg1, arg2, ex) => { /*todo: log error */ }
             );
 
             //
@@ -462,7 +498,8 @@ namespace DataProcessing
                                 "Success", "PreCheck OK. Moved File to PreCheck OK Directory");
                             //
                             DbUtils.LogFileOperation(fileLogParams);
-                        });
+                        },
+                            (arg1, arg2, ex) => { /*todo: log error */ });
                     }
 
                     // on failure
@@ -479,10 +516,11 @@ namespace DataProcessing
                                 "Success", "PreeCheck FAIL. Moved File to PreCheck FAIL Directory");
                             //
                             DbUtils.LogFileOperation(fileLogParams);
-                        });
+                        },
+                            (arg1, arg2, ex) => { /*todo: log error */ });
                     }
                 },
-                () => { }
+                (arg1, arg2, ex) => { /*todo: log error */ }
             );
 
             //

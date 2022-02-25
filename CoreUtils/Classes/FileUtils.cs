@@ -512,7 +512,7 @@ namespace CoreUtils.Classes
                 foreach (var fileMask in fileMasks)
                     DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMask, destDirectory,
                         destFileName, destFileExt, fileCallback,
-                        null /*we don't want to trigger complete till all masks are processed*/);
+                        onErrorCallback);
 
             }
             catch (Exception ex)

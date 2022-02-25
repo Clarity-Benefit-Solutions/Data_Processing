@@ -9,7 +9,7 @@ using Renci.SshNet.Sftp;
 namespace CoreUtils.Classes
 {
     public delegate void FtpSingleFileCallback(string file1, string file2, string fileContents);
-    public delegate void FtpFileonErrorCallback();
+    public delegate void FtpFileonErrorCallback(object arg1, object arg2, Exception ex);
 
 
     [Guid("E321976A-45C3-4BC5-BC0B-E4743213CABC")]
@@ -81,7 +81,7 @@ namespace CoreUtils.Classes
                 this.client = client1;
             }
 
-           
+
             //
             return this.client;
         }
@@ -102,10 +102,8 @@ namespace CoreUtils.Classes
             // iterate for each fileMask
             foreach (var sourceDirectory in sourceDirectories)
                 IterateDirectory(sourceDirectory, iterateType, subDirsAlso, fileMasks, fileCallback,
-                    null /*we dont want to trigger complete till all masks are processed*/);
+                   onErrorCallback);
 
-            // callback for complete
-            if (onErrorCallback != null) onErrorCallback();
         }
 
         public void IterateDirectory(string directory, DirectoryIterateType iterateType, bool subDirsAlso,
@@ -116,10 +114,8 @@ namespace CoreUtils.Classes
             // iterate for each fileMask
             foreach (var fileMask in fileMasks)
                 IterateDirectory(directory, iterateType, subDirsAlso, fileMask, fileCallback,
-                    null /*we don't want to trigger complete till all masks are processed*/);
+                    onErrorCallback);
 
-            // callback for complete
-            if (onErrorCallback != null) onErrorCallback();
         }
 
         public void IterateDirectory(string directory, DirectoryIterateType iterateType, bool subDirsAlso,
@@ -187,8 +183,6 @@ namespace CoreUtils.Classes
                 }
             }
 
-            // callback for complete
-            if (onErrorCallback != null) onErrorCallback();
         }
 
         public void CopyOrMoveFiles(FtpFileOperation fileOperation, string[] sourceDirectories, bool subDirsAlso, string[] fileMasks,
@@ -206,8 +200,6 @@ namespace CoreUtils.Classes
                 DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMasks, destDirectory,
                     destFileName, destFileExt, fileCallback, onErrorCallback);
 
-            // callback for complete
-            if (onErrorCallback != null) onErrorCallback();
         }
 
         public void CopyOrMoveFiles(FtpFileOperation fileOperation, string sourceDirectory, bool subDirsAlso, string fileMask, string destDirectory,
@@ -238,8 +230,6 @@ namespace CoreUtils.Classes
                 DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory, subDirsAlso, fileMasks, "", "", "",
                     fileCallback, onErrorCallback);
 
-            // callback for complete
-            if (onErrorCallback != null) onErrorCallback();
         }
 
         public void DeleteFiles(string sourceDirectory, bool subDirsAlso, string[] fileMasks,
@@ -276,10 +266,8 @@ namespace CoreUtils.Classes
             foreach (var fileMask in fileMasks)
                 DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMask, destDirectory,
                     destFileName, destFileExt, fileCallback,
-                    null /*we don't want to trigger complete till all masks are processed*/);
+                    onErrorCallback);
 
-            // callback for complete
-            if (onErrorCallback != null) onErrorCallback();
         }
 
         private void DoMultipleFilesOperation(FtpFileOperation fileOperation, string sourceDirectory,
@@ -300,10 +288,17 @@ namespace CoreUtils.Classes
                     DoSingleFtpFileOperation(fileOperation, foundFile, destFullFilePath, fileCallback);
                 },
                 // at end 
-                () =>
+                (arg1, arg2, ex) =>
                 {
                     // callback for complete
-                    if (onErrorCallback != null) onErrorCallback();
+                    if (onErrorCallback != null)
+                    {
+                        onErrorCallback(sourceDirectory, fileMask, ex);
+                    }
+                    else
+                    {
+                        throw ex;
+                    }
                 }
             );
         }
