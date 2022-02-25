@@ -174,7 +174,9 @@ namespace DataProcessing
                         "Importing Alegeus File");
 
                     //2. import file
-                    Import.ImportAlegeusFile(headerType, dbConn, srcFilePath, false, fileLogParams);
+                    Import.ImportAlegeusFile(headerType, dbConn, srcFilePath, false, fileLogParams,
+                        (arg1, arg2, ex) => { /*todo: log error */ }
+                    );
 
                 }
                 , null

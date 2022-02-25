@@ -54,17 +54,20 @@ namespace DataProcessing
         public readonly FileCheckResults fileCheckResults = new FileCheckResults();
         //
         private readonly MySqlConnection dbConnPortalWc;
+        //
+        public OnErrorCallback OnErrorCallback { get; }
 
         //
         private static Dictionary<string, string> cachedDBChecks = new Dictionary<string, string>();
 
-        public FileChecker(string _srcFilePath, PlatformType _platformType, DbConnection _dbConn, FileOperationLogParams _fileLogParams) : base()
+        public FileChecker(string _srcFilePath, PlatformType _platformType, DbConnection _dbConn, FileOperationLogParams _fileLogParams, OnErrorCallback _onErrorCallback) : base()
         {
             this.srcFilePath = _srcFilePath;
             this.PlatformType = _platformType;
             this.fileLogParams = _fileLogParams;
             this.dbConn = _dbConn;
             this.dbConnPortalWc = Vars.dbConnPortalWc;
+            this.OnErrorCallback = _onErrorCallback;
         }
 
         public void CheckFile(FileCheckType fileCheckType)

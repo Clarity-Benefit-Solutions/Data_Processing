@@ -486,7 +486,9 @@ namespace DataProcessing
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // check the file 
-                    using var fileChecker = new FileChecker(srcFilePath, PlatformType.Alegeus, Vars.dbConnAlegeusErrorLog, fileLogParams);
+                    using var fileChecker = new FileChecker(srcFilePath, PlatformType.Alegeus, Vars.dbConnAlegeusErrorLog, fileLogParams,
+                        (arg1, arg2, ex) => { /*todo: log error */ }
+                    );
                     fileChecker.CheckFile(FileCheckType.AllData);
 
                     // on success
