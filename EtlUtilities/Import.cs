@@ -226,7 +226,7 @@ namespace EtlUtilities
                 return HeaderType.NoChange;
             }
             // Own: IA,XX,New Beneflex Standard Import Template 2015,Standard Result Template,Beneflex Standard Export Template
-            if (contents.Contains("New Beneflex Standard Import Template 2015,") && !contents.Contains("BENEFL1,"))
+            else if (contents.Contains("New Beneflex Standard Import Template 2015,") && !contents.Contains("BENEFL1,"))
             {
                 return HeaderType.Own;
             }

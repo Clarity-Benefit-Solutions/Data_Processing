@@ -128,31 +128,26 @@ namespace CoreUtils.Classes
                     case "IQ":
                         return EdiFileFormat.AlegeusNewEmployeeId;
 
-                    case "IW":
-                        return EdiFileFormat.AlegeusEmployeeAutoReview;
-
-
                     case "IR":
                         return EdiFileFormat.AlegeusCoverageGeneralSetup;
-
-                    case "IV":
-                        return EdiFileFormat.AlegeusEmployerPhysicalAccount;
-
+              
                     case "IS":
-
                         return EdiFileFormat.AlegeusEmployerDemographics;
 
                     case "IT":
                         return EdiFileFormat.AlegeusEmployerLogicalAccount;
 
-
                     case "IU":
                         return EdiFileFormat.AlegeusEmployerStandardPlan;
 
+                    case "IV":
+                        return EdiFileFormat.AlegeusEmployerPhysicalAccount;
+
+                    case "IW":
+                        return EdiFileFormat.AlegeusEmployeeAutoReview;
+
                     case "IX":
-
                         return EdiFileFormat.AlegeusEmployerSplitPlan;
-
 
                     case "IZ":
                         return EdiFileFormat.AlegeusEmployeeHrInfo;
@@ -181,7 +176,6 @@ namespace CoreUtils.Classes
 
                     case "RZ":
                         return EdiFileFormat.AlegeusResultsEmployeeHrInfo;
-
 
                 }
 

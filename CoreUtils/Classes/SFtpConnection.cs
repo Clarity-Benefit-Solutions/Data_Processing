@@ -9,7 +9,7 @@ using Renci.SshNet.Sftp;
 namespace CoreUtils.Classes
 {
     public delegate void FtpSingleFileCallback(string file1, string file2, string fileContents);
-    public delegate void FtpFileActionCompleteCallback();
+    public delegate void FtpFileonErrorCallback();
 
 
     [Guid("E321976A-45C3-4BC5-BC0B-E4743213CABC")]
@@ -91,7 +91,7 @@ namespace CoreUtils.Classes
         public void IterateDirectory(string[] sourceDirectories, DirectoryIterateType iterateType,
             bool subDirsAlso, string[] fileMasks,
             FtpSingleFileCallback fileCallback,
-            FtpFileActionCompleteCallback actionCompleteCallback)
+            FtpFileonErrorCallback onErrorCallback)
         {
             if (sourceDirectories == null || sourceDirectories.Length == 0)
             {
@@ -105,11 +105,11 @@ namespace CoreUtils.Classes
                     null /*we dont want to trigger complete till all masks are processed*/);
 
             // callback for complete
-            if (actionCompleteCallback != null) actionCompleteCallback();
+            if (onErrorCallback != null) onErrorCallback();
         }
 
         public void IterateDirectory(string directory, DirectoryIterateType iterateType, bool subDirsAlso,
-            string[] fileMasks, FtpSingleFileCallback fileCallback, FtpFileActionCompleteCallback actionCompleteCallback)
+            string[] fileMasks, FtpSingleFileCallback fileCallback, FtpFileonErrorCallback onErrorCallback)
         {
             if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] { "*.*" };
 
@@ -119,11 +119,11 @@ namespace CoreUtils.Classes
                     null /*we don't want to trigger complete till all masks are processed*/);
 
             // callback for complete
-            if (actionCompleteCallback != null) actionCompleteCallback();
+            if (onErrorCallback != null) onErrorCallback();
         }
 
         public void IterateDirectory(string directory, DirectoryIterateType iterateType, bool subDirsAlso,
-            string fileMask, FtpSingleFileCallback fileCallback, FtpFileActionCompleteCallback actionCompleteCallback)
+            string fileMask, FtpSingleFileCallback fileCallback, FtpFileonErrorCallback onErrorCallback)
         {
             // validate
             if (Utils.IsBlank(directory))
@@ -143,9 +143,9 @@ namespace CoreUtils.Classes
                 var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : fileCallback should be set";
                 throw new Exception(message);
             }
-            //if (actionCompleteCallback == null)
+            //if (onErrorCallback == null)
             //{
-            //    string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : actionCompleteCallback should be set";
+            //    string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : onErrorCallback should be set";
             //    throw new Exception(message);
             //}
 
@@ -188,12 +188,12 @@ namespace CoreUtils.Classes
             }
 
             // callback for complete
-            if (actionCompleteCallback != null) actionCompleteCallback();
+            if (onErrorCallback != null) onErrorCallback();
         }
 
         public void CopyOrMoveFiles(FtpFileOperation fileOperation, string[] sourceDirectories, bool subDirsAlso, string[] fileMasks,
             string destDirectory, string destFileName, string destFileExt, FtpSingleFileCallback fileCallback,
-            FtpFileActionCompleteCallback actionCompleteCallback)
+            FtpFileonErrorCallback onErrorCallback)
         {
             if (sourceDirectories == null || sourceDirectories.Length == 0)
             {
@@ -204,18 +204,18 @@ namespace CoreUtils.Classes
             // iterate for each fileMask
             foreach (var sourceDirectory in sourceDirectories)
                 DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMasks, destDirectory,
-                    destFileName, destFileExt, fileCallback, actionCompleteCallback);
+                    destFileName, destFileExt, fileCallback, onErrorCallback);
 
             // callback for complete
-            if (actionCompleteCallback != null) actionCompleteCallback();
+            if (onErrorCallback != null) onErrorCallback();
         }
 
         public void CopyOrMoveFiles(FtpFileOperation fileOperation, string sourceDirectory, bool subDirsAlso, string fileMask, string destDirectory,
             string destFileName, string destFileExt, FtpSingleFileCallback fileCallback,
-            FtpFileActionCompleteCallback actionCompleteCallback)
+            FtpFileonErrorCallback onErrorCallback)
         {
             DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMask, destDirectory,
-                destFileName, destFileExt, fileCallback, actionCompleteCallback);
+                destFileName, destFileExt, fileCallback, onErrorCallback);
         }
 
         public void CopyOrMoveFile(FtpFileOperation fileOperation, string sourceFilePath, string destFilePath, FtpSingleFileCallback fileCallback)
@@ -225,7 +225,7 @@ namespace CoreUtils.Classes
 
 
         public void DeleteFiles(string[] sourceDirectories, bool subDirsAlso, string[] fileMasks,
-            FtpSingleFileCallback fileCallback, FtpFileActionCompleteCallback actionCompleteCallback)
+            FtpSingleFileCallback fileCallback, FtpFileonErrorCallback onErrorCallback)
         {
             if (sourceDirectories == null || sourceDirectories.Length == 0)
             {
@@ -236,24 +236,24 @@ namespace CoreUtils.Classes
             // iterate for each fileMask
             foreach (var sourceDirectory in sourceDirectories)
                 DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory, subDirsAlso, fileMasks, "", "", "",
-                    fileCallback, actionCompleteCallback);
+                    fileCallback, onErrorCallback);
 
             // callback for complete
-            if (actionCompleteCallback != null) actionCompleteCallback();
+            if (onErrorCallback != null) onErrorCallback();
         }
 
         public void DeleteFiles(string sourceDirectory, bool subDirsAlso, string[] fileMasks,
-            FtpSingleFileCallback fileCallback, FtpFileActionCompleteCallback actionCompleteCallback)
+            FtpSingleFileCallback fileCallback, FtpFileonErrorCallback onErrorCallback)
         {
             DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory, subDirsAlso, fileMasks, "", "", "",
-                fileCallback, actionCompleteCallback);
+                fileCallback, onErrorCallback);
         }
 
         public void DeleteFiles(string sourceDirectory, bool subDirsAlso, string fileMask,
-            FtpSingleFileCallback fileCallback, FtpFileActionCompleteCallback actionCompleteCallback)
+            FtpSingleFileCallback fileCallback, FtpFileonErrorCallback onErrorCallback)
         {
             DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory, subDirsAlso, fileMask, "", "", "",
-                fileCallback, actionCompleteCallback);
+                fileCallback, onErrorCallback);
         }
 
         public void DeleteFileIfExists(string sourceFilePath, FtpSingleFileCallback fileCallback)
@@ -268,7 +268,7 @@ namespace CoreUtils.Classes
 
         private void DoMultipleFilesOperation(FtpFileOperation fileOperation, string sourceDirectory,
             bool subDirsAlso, string[] fileMasks, string destDirectory, string destFileName, string destFileExt,
-            FtpSingleFileCallback fileCallback, FtpFileActionCompleteCallback actionCompleteCallback)
+            FtpSingleFileCallback fileCallback, FtpFileonErrorCallback onErrorCallback)
         {
             if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] { "*.*" };
 
@@ -279,12 +279,12 @@ namespace CoreUtils.Classes
                     null /*we don't want to trigger complete till all masks are processed*/);
 
             // callback for complete
-            if (actionCompleteCallback != null) actionCompleteCallback();
+            if (onErrorCallback != null) onErrorCallback();
         }
 
         private void DoMultipleFilesOperation(FtpFileOperation fileOperation, string sourceDirectory,
             bool subDirsAlso, string fileMask, string destDirectory, string destFileName, string destFileExt,
-            FtpSingleFileCallback fileCallback, FtpFileActionCompleteCallback actionCompleteCallback)
+            FtpSingleFileCallback fileCallback, FtpFileonErrorCallback onErrorCallback)
         {
             IterateDirectory(sourceDirectory, DirectoryIterateType.Files, subDirsAlso, fileMask,
                 // handle each found file
@@ -303,7 +303,7 @@ namespace CoreUtils.Classes
                 () =>
                 {
                     // callback for complete
-                    if (actionCompleteCallback != null) actionCompleteCallback();
+                    if (onErrorCallback != null) onErrorCallback();
                 }
             );
         }
