@@ -130,7 +130,7 @@ namespace CoreUtils.Classes
 
                     case "IR":
                         return EdiFileFormat.AlegeusCoverageGeneralSetup;
-              
+
                     case "IS":
                         return EdiFileFormat.AlegeusEmployerDemographics;
 
@@ -184,243 +184,319 @@ namespace CoreUtils.Classes
 
         public static void ImportSingleColumnFlatFile(HeaderType headerType, DbConnection dbConn,
             string srcFilePath, string srcFileName,
-            string tableName, string fileColName, string contentsColName, FileOperationLogParams fileLogParams)
+            string tableName, string fileColName, string contentsColName, FileOperationLogParams fileLogParams, OnErrorCallback onErrorCallback)
         {
-            fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import using {tableName}");
-            LogFileOperation(fileLogParams);
-
-            // read each line and insert
-            using (var inputFile = new StreamReader(srcFilePath))
+            try
             {
-                string line;
-                while ((line = inputFile.ReadLine()!) != null)
-                {
-                    // insert each line into table
-                    var query = $"INSERT INTO {tableName} " +
-                                $" ({fileColName}, {contentsColName}) " +
-                                $" values ('{Utils.DbQuote(srcFileName)}', '{Utils.DbQuote(line)}')";
+                fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import using {tableName}");
+                LogFileOperation(fileLogParams);
 
-                    // pass new dbLogParams() to ensure no recursion of logging!
-                    DbQuery(DbOperation.ExecuteNonQuery, dbConn, query, null,
-                        fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                            $"ImportFlatFile-{srcFilePath}", fileLogParams.ProcessingTaskOutcomeDetails,
-                            fileLogParams.OriginalFullPath)
-                        , doNotLogOperationToDb: true);
+                // read each line and insert
+                using (var inputFile = new StreamReader(srcFilePath))
+                {
+                    string line;
+                    while ((line = inputFile.ReadLine()!) != null)
+                    {
+                        // insert each line into table
+                        var query = $"INSERT INTO {tableName} " +
+                                    $" ({fileColName}, {contentsColName}) " +
+                                    $" values ('{Utils.DbQuote(srcFileName)}', '{Utils.DbQuote(line)}')";
+
+                        // pass new dbLogParams() to ensure no recursion of logging!
+                        DbQuery(DbOperation.ExecuteNonQuery, dbConn, query, null,
+                            fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
+                                $"ImportFlatFile-{srcFilePath}", fileLogParams.ProcessingTaskOutcomeDetails,
+                                fileLogParams.OriginalFullPath)
+                            , doNotLogOperationToDb: true);
+                    }
+                }
+
+                fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
+                LogFileOperation(fileLogParams);
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(srcFilePath, srcFileName, ex);
+                }
+                else
+                {
+                    throw;
                 }
             }
-
-            fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
-            LogFileOperation(fileLogParams);
         }
 
         public static void ExportSingleColumnFlatFile(string filePath, DbConnection dbConn,
             string queryString, string fileColName, string contentsColName, DbParameters queryParams,
-            FileOperationLogParams fileLogParams)
+            FileOperationLogParams fileLogParams, OnErrorCallback onErrorCallback)
         {
-            fileLogParams?.SetTaskOutcome("Starting", $"Starting: Export using {queryString}");
-            LogFileOperation(fileLogParams);
-
-            // query
-            var dt = (DataTable)DbQuery(DbOperation.ExecuteReader, dbConn, queryString, queryParams,
-                fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                    $"ExportFlatFile-{filePath}", fileLogParams.ProcessingTaskOutcomeDetails,
-                    fileLogParams.OriginalFullPath));
-            //
-
-            // loop thru rows
-            using var writer = new StreamWriter(filePath, false);
-            foreach (DataRow row in dt.Rows)
+            try
             {
-                var line = row[contentsColName].ToString();
-                writer.WriteLine(line);
+                fileLogParams?.SetTaskOutcome("Starting", $"Starting: Export using {queryString}");
+                LogFileOperation(fileLogParams);
+
+                // query
+                var dt = (DataTable)DbQuery(DbOperation.ExecuteReader, dbConn, queryString, queryParams,
+                    fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
+                        $"ExportFlatFile-{filePath}", fileLogParams.ProcessingTaskOutcomeDetails,
+                        fileLogParams.OriginalFullPath));
+                //
+
+                // loop thru rows
+                using var writer = new StreamWriter(filePath, false);
+                foreach (DataRow row in dt.Rows)
+                {
+                    var line = row[contentsColName].ToString();
+                    writer.WriteLine(line);
+                }
+
+                // close
+                if (writer != null) writer.Close();
+
+                // log
+                fileLogParams?.SetTaskOutcome("Completed", $"Completed: Export using {queryString}");
+                LogFileOperation(fileLogParams);
             }
-
-            // close
-            if (writer != null) writer.Close();
-
-            // log
-            fileLogParams?.SetTaskOutcome("Completed", $"Completed: Export using {queryString}");
-            LogFileOperation(fileLogParams);
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(filePath, queryString, ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
         public static void ImportCsvFile<T>(string filePath, DbConnection dbConn, string tableName,
-            string[] contentsColNames, bool hasHeaders, FileOperationLogParams fileLogParams)
+            string[] contentsColNames, bool hasHeaders, FileOperationLogParams fileLogParams, OnErrorCallback onErrorCallback)
         {
-            fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import Into {tableName}");
-            LogFileOperation(fileLogParams);
-
-            var theType = typeof(T);
-
-            var insertColumnNames = string.Join(",", contentsColNames);
-
-            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            try
             {
-                NewLine = Environment.NewLine,
-                // in case HasHeaderRecord = false, the reader will use Index attributes of the class properties to match
-                HasHeaderRecord = hasHeaders
-            };
+                fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import Into {tableName}");
+                LogFileOperation(fileLogParams);
 
-            using (var reader = new StreamReader(filePath))
-            using (var csv = new CsvReader(reader, config))
-            {
-                var records = csv.GetRecords<T>();
+                var theType = typeof(T);
 
-                foreach (var row in records)
+                var insertColumnNames = string.Join(",", contentsColNames);
+
+                var config = new CsvConfiguration(CultureInfo.InvariantCulture)
                 {
-                    // get insertValues string
-                    var insertValuesString = "";
-                    foreach (var columnName in contentsColNames)
+                    NewLine = Environment.NewLine,
+                    // in case HasHeaderRecord = false, the reader will use Index attributes of the class properties to match
+                    HasHeaderRecord = hasHeaders
+                };
+
+                using (var reader = new StreamReader(filePath))
+                using (var csv = new CsvReader(reader, config))
+                {
+                    var records = csv.GetRecords<T>();
+
+                    foreach (var row in records)
                     {
-                        var value = theType.GetProperty(columnName)?.GetValue(row, null);
-                        insertValuesString += $"'{Utils.DbQuote(value?.ToString())}',";
+                        // get insertValues string
+                        var insertValuesString = "";
+                        foreach (var columnName in contentsColNames)
+                        {
+                            var value = theType.GetProperty(columnName)?.GetValue(row, null);
+                            insertValuesString += $"'{Utils.DbQuote(value?.ToString())}',";
+                        }
+
+                        insertValuesString = insertValuesString.Substring(0, insertValuesString.Length - 1);
+
+                        //
+                        var query = $"INSERT INTO {tableName} " +
+                                    $" ({insertColumnNames}) " +
+                                    $" values ({insertValuesString})";
+
+                        // pass new dbLogParams() to ensure no recursion of logging!
+                        DbQuery(DbOperation.ExecuteNonQuery, dbConn, query, null,
+                            fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
+                                $"ImportCsvFile-{filePath}", fileLogParams.ProcessingTaskOutcomeDetails,
+                                fileLogParams.OriginalFullPath)
+                            , doNotLogOperationToDb: true);
                     }
+                }
 
-                    insertValuesString = insertValuesString.Substring(0, insertValuesString.Length - 1);
-
-                    //
-                    var query = $"INSERT INTO {tableName} " +
-                                $" ({insertColumnNames}) " +
-                                $" values ({insertValuesString})";
-
-                    // pass new dbLogParams() to ensure no recursion of logging!
-                    DbQuery(DbOperation.ExecuteNonQuery, dbConn, query, null,
-                        fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                            $"ImportCsvFile-{filePath}", fileLogParams.ProcessingTaskOutcomeDetails,
-                            fileLogParams.OriginalFullPath)
-                        , doNotLogOperationToDb: true);
+                // log
+                fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
+                LogFileOperation(fileLogParams);
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(filePath, tableName, ex);
+                }
+                else
+                {
+                    throw;
                 }
             }
-
-            // log
-            fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
-            LogFileOperation(fileLogParams);
         } // routine
 
         public static void ImportCsvFileBulkCopy(HeaderType headerType, DbConnection dbConn,
             string srcFilePath, bool hasHeaderRow, string tableName, TypedCsvSchema columnMappings,
-            FileOperationLogParams fileLogParams)
+            FileOperationLogParams fileLogParams, OnErrorCallback onErrorCallback)
         {
-            fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import Into {tableName}");
-            LogFileOperation(fileLogParams);
-
-            //
-            // truncate table
-            TruncateTable(dbConn, tableName,
-                fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                    "Truncate Table", fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath));
-
-
-            if (columnMappings == null || columnMappings.Count == 0)
+            try
             {
-                var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : columnMappings should be set";
-                throw new Exception(message);
-            }
 
-            // Get the schema for the target table
+                fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import Into {tableName}");
+                LogFileOperation(fileLogParams);
 
-            // init SqlBulkCopy
-            using var bcp = new SqlBulkCopy(dbConn.ConnectionString, _defaultSqlBulkCopyOptions);
+                //
+                // truncate table
+                TruncateTable(dbConn, tableName,
+                    fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
+                        "Truncate Table", fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath));
 
-            // source columns for reading and mapping for writing
-            var listCols = new List<TypedCsvColumn>();
-            foreach (TypedCsvColumn column in columnMappings.Columns)
-            {
-                // for reading
-                listCols.Add(column);
 
-                //for writing to DB
-                if (!Utils.IsBlank(column.ColumnName))
+                if (columnMappings == null || columnMappings.Count == 0)
                 {
-                    bcp.ColumnMappings.Add(new SqlBulkCopyColumnMapping(column.SourceColumn, column.DestinationColumn));
+                    var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : columnMappings should be set";
+                    throw new Exception(message);
+                }
+
+                // Get the schema for the target table
+
+                // init SqlBulkCopy
+                using var bcp = new SqlBulkCopy(dbConn.ConnectionString, _defaultSqlBulkCopyOptions);
+
+                // source columns for reading and mapping for writing
+                var listCols = new List<TypedCsvColumn>();
+                foreach (TypedCsvColumn column in columnMappings.Columns)
+                {
+                    // for reading
+                    listCols.Add(column);
+
+                    //for writing to DB
+                    if (!Utils.IsBlank(column.ColumnName))
+                    {
+                        bcp.ColumnMappings.Add(new SqlBulkCopyColumnMapping(column.SourceColumn, column.DestinationColumn));
+                    }
+                    else
+                    {
+                        bcp.ColumnMappings.Add(new SqlBulkCopyColumnMapping(column.SourceOrdinal, column.DestinationOrdinal));
+                    }
+                }
+
+                // create csv reader options
+                var csvDataReaderOptions =
+                    new CsvDataReaderOptions
+                    {
+                        Schema = new CsvSchema(listCols),
+                        HasHeaders = hasHeaderRow
+                    };
+
+                // create the csv reader
+                using var csv = SylvanCsvDataReader.Create(srcFilePath, csvDataReaderOptions);
+
+                //
+                bcp.BulkCopyTimeout = 0;
+                bcp.DestinationTableName = tableName;
+                bcp.BatchSize = 1;
+
+                // write all rows to server
+                bcp.WriteToServer(csv);
+
+                //
+                fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
+                LogFileOperation(fileLogParams);
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(srcFilePath, tableName, ex);
                 }
                 else
                 {
-                    bcp.ColumnMappings.Add(new SqlBulkCopyColumnMapping(column.SourceOrdinal, column.DestinationOrdinal));
+                    throw;
                 }
             }
-
-            // create csv reader options
-            var csvDataReaderOptions =
-                new CsvDataReaderOptions
-                {
-                    Schema = new CsvSchema(listCols),
-                    HasHeaders = hasHeaderRow
-                };
-
-            // create the csv reader
-            using var csv = SylvanCsvDataReader.Create(srcFilePath, csvDataReaderOptions);
-
-            //
-            bcp.BulkCopyTimeout = 0;
-            bcp.DestinationTableName = tableName;
-            bcp.BatchSize = 1;
-
-            // write all rows to server
-            bcp.WriteToServer(csv);
-
-            //
-            fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
-            LogFileOperation(fileLogParams);
         }
 
         public static void ImportCsvFileBulkCopyAutoSchema(HeaderType headerType, DbConnection dbConn,
             string srcFilePath, bool hasHeaderRow,
             string tableName,
-            FileOperationLogParams fileLogParams)
+            FileOperationLogParams fileLogParams, OnErrorCallback onErrorCallback)
         {
-            fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import Into {tableName}");
-            LogFileOperation(fileLogParams);
+            try
+            {
+                fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import Into {tableName}");
+                LogFileOperation(fileLogParams);
 
-            //
-            // truncate table
-            TruncateTable(dbConn, tableName,
-                fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                    "Truncate Table", fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath));
+                //
+                // truncate table
+                TruncateTable(dbConn, tableName,
+                    fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
+                        "Truncate Table", fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath));
 
 
-            // Get the schema for the target table
-            var conn = new SqlConnection();
-            conn.Open();
+                // Get the schema for the target table
+                var conn = new SqlConnection();
+                conn.Open();
 
-            var cmd = conn.CreateCommand();
-            cmd.CommandText = $"select top 0 * from {tableName}";
-            var reader = cmd.ExecuteReader();
-            var schemaTable = reader.GetSchemaTable();
-            var listCols = new List<TypedCsvColumn>();
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = $"select top 0 * from {tableName}";
+                var reader = cmd.ExecuteReader();
+                var schemaTable = reader.GetSchemaTable();
+                var listCols = new List<TypedCsvColumn>();
 
-            if (schemaTable != null)
-                foreach (DataRow row in schemaTable.Rows)
+                if (schemaTable != null)
+                    foreach (DataRow row in schemaTable.Rows)
+                    {
+                        var columnName = Convert.ToString(row["ColumnName"]);
+                        //
+                        var column =
+                            new TypedCsvColumn(columnName, columnName);
+
+                        listCols.Add(column);
+                    }
+
+                // create csv reader options
+                var csvDataReaderOptions =
+                    new CsvDataReaderOptions
+                    {
+                        Schema = new CsvSchema(listCols),
+                        HasHeaders = hasHeaderRow
+                    };
+
+                var csv = SylvanCsvDataReader.Create(srcFilePath, csvDataReaderOptions);
+
+                //
+                var bcp = new SqlBulkCopy(conn.ConnectionString, _defaultSqlBulkCopyOptions);
+                //
+                bcp.BulkCopyTimeout = 0;
+                bcp.DestinationTableName = tableName;
+                bcp.BatchSize = 10000;
+                //
+                bcp.WriteToServer(csv);
+
+                //
+                fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
+                LogFileOperation(fileLogParams);
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
                 {
-                    var columnName = Convert.ToString(row["ColumnName"]);
-                    //
-                    var column =
-                        new TypedCsvColumn(columnName, columnName);
-
-                    listCols.Add(column);
+                    onErrorCallback(srcFilePath, tableName, ex);
                 }
-
-            // create csv reader options
-            var csvDataReaderOptions =
-                new CsvDataReaderOptions
+                else
                 {
-                    Schema = new CsvSchema(listCols),
-                    HasHeaders = hasHeaderRow
-                };
-
-            var csv = SylvanCsvDataReader.Create(srcFilePath, csvDataReaderOptions);
-
-            //
-            var bcp = new SqlBulkCopy(conn.ConnectionString, _defaultSqlBulkCopyOptions);
-            //
-            bcp.BulkCopyTimeout = 0;
-            bcp.DestinationTableName = tableName;
-            bcp.BatchSize = 10000;
-            //
-            bcp.WriteToServer(csv);
-
-            //
-            fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
-            LogFileOperation(fileLogParams);
+                    throw;
+                }
+            }
         }
     } // class
 } // ns

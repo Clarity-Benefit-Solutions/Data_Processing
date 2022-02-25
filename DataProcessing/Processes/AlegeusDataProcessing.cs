@@ -332,7 +332,9 @@ namespace DataProcessing
                     }
 
                     ImpExpUtils.ImportSingleColumnFlatFile(headerType, dbConn, srcFilePath, srcFilePath, tableName, "folder_name",
-                        "data_row", fileLogParams);
+                        "data_row", fileLogParams,
+                        (arg1, arg2, ex) => { /*todo: log error */ }
+                    );
 
                     //3. run script to fix data
                     // no need to fix - csv parser skips "
@@ -356,7 +358,9 @@ namespace DataProcessing
                     var outputTableName = "[dbo].[alegeus_file_final]";
                     var queryStringExp = $"Select * from {outputTableName} order by row_num asc";
                     ImpExpUtils.ExportSingleColumnFlatFile(expFilePath, dbConn, queryStringExp,
-                        "folder_name", "file_row", null, fileLogParams);
+                        "folder_name", "file_row", null, fileLogParams,
+                        (arg1, arg2, ex) => { /*todo: log error */ }
+                    );
 
                     // add to fileLog
                     fileLogParams?.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,

@@ -171,7 +171,9 @@ namespace DataProcessing
             var newPath = Import.PrefixLineWithEntireLineAndFileName(headerType, currentFilePath, this.srcFilePath, fileLogParams);
 
             // import into table so we can manipulate the file
-            ImpExpUtils.ImportCsvFileBulkCopy(this.headerType, this.dbConn, newPath, this.hasHeaderRow, tableName, mappings, this.fileLogParams);
+            ImpExpUtils.ImportCsvFileBulkCopy(this.headerType, this.dbConn, newPath, this.hasHeaderRow, tableName, mappings, this.fileLogParams,
+                (arg1, arg2, ex) => { /*todo: log error */ }
+                );
 
             // update check type for table
             string queryString1 = $"update {tableName} set check_type = 'PreCheck' where 1 = 1;";

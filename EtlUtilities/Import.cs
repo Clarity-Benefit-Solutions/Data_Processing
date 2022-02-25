@@ -26,7 +26,8 @@ namespace EtlUtilities
 {
     public static class Import
     {
-        public static void ImportCrmListCsvHlpr(HeaderType headerType, DbConnection dbConn, string srcFilePath, string tableName, FileOperationLogParams fileLogParams)
+        public static void ImportCrmListCsvHlpr(HeaderType headerType, DbConnection dbConn, string srcFilePath, string tableName, FileOperationLogParams fileLogParams
+            , OnErrorCallback onErrorCallback)
         {
             fileLogParams?.SetFileNames("", "", "", "", "", "ImportCrmListManual", "CRMList", "Starting: Get CRM List");
 
@@ -43,10 +44,11 @@ namespace EtlUtilities
             };
 
             //
-            ImpExpUtils.ImportCsvFile<CsvFileSpecs>(srcFilePath, dbConn, tableName, columns, false, fileLogParams);
+            ImpExpUtils.ImportCsvFile<CsvFileSpecs>(srcFilePath, dbConn, tableName, columns, false, fileLogParams, onErrorCallback);
 
         }
-        public static void ImportAlegeusFile(HeaderType headerType, DbConnection dbConn, string srcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams)
+        public static void ImportAlegeusFile(HeaderType headerType, DbConnection dbConn, string srcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams
+            , OnErrorCallback onErrorCallback)
         {
 
             //
@@ -64,108 +66,143 @@ namespace EtlUtilities
                     isResultFile ? "res_file_table_stage" : "mbi_file_table_stage",
                     isResultFile ? "res_file_name" : "mbi_file_name",
                     isResultFile ? "error_row" : "data_row",
-                    fileLogParams);
+                    fileLogParams,
+                    onErrorCallback
+                );
 
                 return;
 
             }
 
             // 2. import the file
-            ImportAlegeusFile(fileFormats, headerType, dbConn, srcFilePath, hasHeaderRow, fileLogParams);
+            ImportAlegeusFile(fileFormats, headerType, dbConn, srcFilePath, hasHeaderRow, fileLogParams,
+                onErrorCallback);
 
         }
 
         //doesnt work - mappings not clear
-        public static void ImportAlegeusFile(Dictionary<EdiFileFormat, List<int>> fileFormats, HeaderType headerType, DbConnection dbConn, string srcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams)
+        public static void ImportAlegeusFile(Dictionary<EdiFileFormat, List<int>> fileFormats, HeaderType headerType, DbConnection dbConn, string srcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams
+            , OnErrorCallback onErrorCallback)
         {
-
-            string fileName = Path.GetFileName(srcFilePath);
-            fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, "", "", "ImportAlegeusFile", $"Starting: Import {fileName}", "Starting");
-
-            // split text fileinto multiple files
-            Dictionary<EdiFileFormat, Object[]> files = new Dictionary<EdiFileFormat, Object[]>();
-
-            //
-            foreach (EdiFileFormat fileFormat in fileFormats.Keys)
+            try
             {
-                // get temp file for each format
-                string splitFileName = Path.GetTempFileName();
-                var splitFileWriter = new StreamWriter(splitFileName, false);
-                files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
-            }
 
-            // open file for reading
-            // read each line and insert
-            using (var inputFile = new StreamReader(srcFilePath))
-            {
-                int rowNo = 0;
-                string line;
-                while ((line = inputFile.ReadLine()) != null)
+                string fileName = Path.GetFileName(srcFilePath);
+                fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, "", "", "ImportAlegeusFile", $"Starting: Import {fileName}", "Starting");
+
+                // split text fileinto multiple files
+                Dictionary<EdiFileFormat, Object[]> files = new Dictionary<EdiFileFormat, Object[]>();
+
+                //
+                foreach (EdiFileFormat fileFormat in fileFormats.Keys)
                 {
-                    rowNo++;
+                    // get temp file for each format
+                    string splitFileName = Path.GetTempFileName();
+                    var splitFileWriter = new StreamWriter(splitFileName, false);
+                    files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
+                }
 
-                    foreach (EdiFileFormat fileFormat2 in fileFormats.Keys)
+                // open file for reading
+                // read each line and insert
+                using (var inputFile = new StreamReader(srcFilePath))
+                {
+                    int rowNo = 0;
+                    string line;
+                    while ((line = inputFile.ReadLine()) != null)
                     {
-                        if (fileFormats[fileFormat2].Contains(rowNo)
-                            || (line?.Substring(0, 2) == "RA" || line?.Substring(0, 2) == "IA"))
+                        rowNo++;
+
+                        foreach (EdiFileFormat fileFormat2 in fileFormats.Keys)
                         {
-                            // get temp file for each format
-                            var splitFileWriter = (StreamWriter)files[fileFormat2][0];
-                            // if there is prvUnwrittenLine it was probably a header line - write to the file that 
+                            if (fileFormats[fileFormat2].Contains(rowNo)
+                                || (line?.Substring(0, 2) == "RA" || line?.Substring(0, 2) == "IA"))
+                            {
+                                // get temp file for each format
+                                var splitFileWriter = (StreamWriter)files[fileFormat2][0];
+                                // if there is prvUnwrittenLine it was probably a header line - write to the file that 
 
-                            splitFileWriter.WriteLine(line);
-                            continue;
+                                splitFileWriter.WriteLine(line);
+                                continue;
+                            }
                         }
-                    }
 
-                    // go to next line if a line was written
+                        // go to next line if a line was written
+                    }
+                }
+                // close all files
+                //
+                foreach (var fileFormat3 in files.Keys)
+                {
+                    // get temp file for each format
+                    var writer = (StreamWriter)files[fileFormat3][0];
+                    writer.Close();
+
+                    // import the file
+                    ImportAlegeusFile(fileFormat3, headerType, dbConn, (string)files[fileFormat3][1], srcFilePath, hasHeaderRow, fileLogParams, onErrorCallback);
                 }
             }
-            // close all files
-            //
-            foreach (var fileFormat3 in files.Keys)
+            catch (Exception ex)
             {
-                // get temp file for each format
-                var writer = (StreamWriter)files[fileFormat3][0];
-                writer.Close();
-
-                // import the file
-                ImportAlegeusFile(fileFormat3, headerType, dbConn, (string)files[fileFormat3][1], srcFilePath, hasHeaderRow, fileLogParams);
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(srcFilePath, fileFormats, ex);
+                }
+                else
+                {
+                    throw;
+                }
             }
 
         }
 
 
-        private static void ImportAlegeusFile(EdiFileFormat fileFormat, HeaderType headerType, DbConnection dbConn, string srcFilePath, string orgSrcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams)
+        private static void ImportAlegeusFile(EdiFileFormat fileFormat, HeaderType headerType, DbConnection dbConn, string srcFilePath, string orgSrcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams
+            , OnErrorCallback onErrorCallback)
         {
-            // check mappinsg and type opf file (Import or Result)
-            TypedCsvSchema mappings = GetAlegeusFileImportMappings(fileFormat);
-            Boolean isResultFile = GetAlegeusFileFormatIsResultFile(fileFormat);
+            try
+            {
+                // check mappinsg and type opf file (Import or Result)
+                TypedCsvSchema mappings = GetAlegeusFileImportMappings(fileFormat);
+                Boolean isResultFile = GetAlegeusFileFormatIsResultFile(fileFormat);
 
-            //
-            var newPath = PrefixLineWithEntireLineAndFileName(headerType, srcFilePath, orgSrcFilePath, fileLogParams);
-            //
-            string tableName = isResultFile ? "[dbo].[res_file_table_stage]" : "[dbo].[mbi_file_table_stage]";
-            string postImportProc = isResultFile ? "dbo.process_res_file_table_stage_import" : "dbo.process_mbi_file_table_stage_import";
+                //
+                var newPath = PrefixLineWithEntireLineAndFileName(headerType, srcFilePath, orgSrcFilePath, fileLogParams);
+                //
+                string tableName = isResultFile ? "[dbo].[res_file_table_stage]" : "[dbo].[mbi_file_table_stage]";
+                string postImportProc = isResultFile ? "dbo.process_res_file_table_stage_import" : "dbo.process_mbi_file_table_stage_import";
 
-            // truncate staging table
-            DbUtils.TruncateTable(dbConn, tableName,
-                fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                    "Truncate Table", fileLogParams.ProcessingTaskOutcomeDetails,
-                    fileLogParams.OriginalFullPath));
+                // truncate staging table
+                DbUtils.TruncateTable(dbConn, tableName,
+                    fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
+                        "Truncate Table", fileLogParams.ProcessingTaskOutcomeDetails,
+                        fileLogParams.OriginalFullPath));
 
 
-            // import the file with bulk copy
-            ImpExpUtils.ImportCsvFileBulkCopy(headerType, dbConn, newPath, hasHeaderRow, tableName, mappings, fileLogParams);
+                // import the file with bulk copy
+                ImpExpUtils.ImportCsvFileBulkCopy(headerType, dbConn, newPath, hasHeaderRow, tableName, mappings, fileLogParams, onErrorCallback
+                );
 
-            //
-            // run postimport query to take from staging to final table
-            string queryString = $"exec {postImportProc};";
-            DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
-                fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                    fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath,
-                    fileLogParams.NewFileFullPath));
-
+                //
+                // run postimport query to take from staging to final table
+                string queryString = $"exec {postImportProc};";
+                DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
+                    fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
+                        fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath,
+                        fileLogParams.NewFileFullPath));
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(orgSrcFilePath, fileFormat, ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
         public static string PrefixLineWithEntireLineAndFileName(HeaderType headerType, string srcFilePath, string orgSrcFilePath, FileOperationLogParams fileLogParams)
@@ -588,24 +625,42 @@ namespace EtlUtilities
         }
 
 
-        public static void ImportCrmListFileBulkCopy(HeaderType headerType, DbConnection dbConn, string srcFilePath, Boolean hasHeaderRow, string tableName, FileOperationLogParams fileLogParams)
+        public static void ImportCrmListFileBulkCopy(HeaderType headerType, DbConnection dbConn, string srcFilePath, Boolean hasHeaderRow, string tableName, FileOperationLogParams fileLogParams
+            , OnErrorCallback onErrorCallback)
         {
-            string fileName = Path.GetFileName(srcFilePath);
-            fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, tableName, tableName, "ImportCrmListFileBulkCopy", $"Starting: Import {fileName}", "Starting");
+            try
+            {
+                string fileName = Path.GetFileName(srcFilePath);
+                fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, tableName, tableName, "ImportCrmListFileBulkCopy", $"Starting: Import {fileName}", "Starting");
 
-            //
-            TypedCsvSchema mappings = new TypedCsvSchema();
-            //
-            mappings.Add(new TypedCsvColumn("BENCODE", "BENCODE"));
-            mappings.Add(new TypedCsvColumn("CRM", "CRM"));
-            mappings.Add(new TypedCsvColumn("CRM_email", "CRM_email"));
-            mappings.Add(new TypedCsvColumn("emp_services", "emp_services"));
-            mappings.Add(new TypedCsvColumn("Primary_contact_name", "Primary_contact_name"));
-            mappings.Add(new TypedCsvColumn("Primary_contact_email", "Primary_contact_email"));
-            mappings.Add(new TypedCsvColumn("client_start_date", "client_start_date"));
+                //
+                TypedCsvSchema mappings = new TypedCsvSchema();
+                //
+                mappings.Add(new TypedCsvColumn("BENCODE", "BENCODE"));
+                mappings.Add(new TypedCsvColumn("CRM", "CRM"));
+                mappings.Add(new TypedCsvColumn("CRM_email", "CRM_email"));
+                mappings.Add(new TypedCsvColumn("emp_services", "emp_services"));
+                mappings.Add(new TypedCsvColumn("Primary_contact_name", "Primary_contact_name"));
+                mappings.Add(new TypedCsvColumn("Primary_contact_email", "Primary_contact_email"));
+                mappings.Add(new TypedCsvColumn("client_start_date", "client_start_date"));
 
-            //
-            ImpExpUtils.ImportCsvFileBulkCopy(headerType, dbConn, srcFilePath, hasHeaderRow, tableName, mappings, fileLogParams);
+                //
+                ImpExpUtils.ImportCsvFileBulkCopy(headerType, dbConn, srcFilePath, hasHeaderRow, tableName, mappings, fileLogParams,
+                    (arg1, arg2, ex) => { /*todo: log error */ }
+                );
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(srcFilePath, tableName, ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
         }
 

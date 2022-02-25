@@ -417,7 +417,9 @@ namespace DataProcessing
                     //2. import file
                     string procName = "dbo.[Fix_COBRAQB_SSObollean]";
                     ImpExpUtils.ImportSingleColumnFlatFile(headerType, dbConnCobra, srcFilePath, srcFilePath, tableName, "folder_name",
-                        "QB_data", fileLogParams);
+                        "QB_data", fileLogParams,
+                        (arg1, arg2, ex) => { /*todo: log error */ }
+                    );
 
                     //3. run script to fix data
                     string queryString = "";
@@ -441,7 +443,9 @@ namespace DataProcessing
                     string queryStringExp = $"Select * from {outputTableName} order by row_num asc";
                     //
                     ImpExpUtils.ExportSingleColumnFlatFile(expFilePath, dbConnCobra, queryStringExp,
-                        "folder_name", "QB_data", null, fileLogParams);
+                        "folder_name", "QB_data", null, fileLogParams,
+                        (arg1, arg2, ex) => { /*todo: log error */ }
+                    );
 
                     // add to fileLog
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
