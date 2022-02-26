@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
@@ -16,7 +17,7 @@ namespace CoreUtils.Classes
 {
     public delegate void SingleFileCallback(string filePath1, string filePath2, string fileContents);
 
-    public delegate void OnErrorCallback(object arg1, object arg2, Exception ex);
+    public delegate void OnErrorCallback(string arg1, string arg2, Exception ex);
 
 
     [Guid("EAA4976A-45C3-4BC5-BC0B-E474F4C3CABC")]
@@ -47,7 +48,7 @@ namespace CoreUtils.Classes
                 // callback for complete
                 if (onErrorCallback != null)
                 {
-                    onErrorCallback(sourceDirectories, fileMasks, ex);
+                    onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
                 }
                 else
                 {
@@ -72,7 +73,7 @@ namespace CoreUtils.Classes
                 // callback for complete
                 if (onErrorCallback != null)
                 {
-                    onErrorCallback(directory, fileMasks, ex);
+                    onErrorCallback(directory, fileMasks.Join(","), ex);
                 }
                 else
                 {
@@ -164,7 +165,7 @@ namespace CoreUtils.Classes
                 // callback for complete
                 if (onErrorCallback != null)
                 {
-                    onErrorCallback(sourceDirectories, fileMasks, ex);
+                    onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
                 }
                 else
                 {
@@ -219,7 +220,7 @@ namespace CoreUtils.Classes
                 // callback for complete
                 if (onErrorCallback != null)
                 {
-                    onErrorCallback(sourceDirectories, fileMasks, ex);
+                    onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
                 }
                 else
                 {
@@ -242,7 +243,7 @@ namespace CoreUtils.Classes
                 // callback for complete
                 if (onErrorCallback != null)
                 {
-                    onErrorCallback(sourceDirectory, fileMasks, ex);
+                    onErrorCallback(sourceDirectory, fileMasks.Join(","), ex);
                 }
                 else
                 {
@@ -296,7 +297,7 @@ namespace CoreUtils.Classes
                 // callback for complete
                 if (onErrorCallback != null)
                 {
-                    onErrorCallback(sourceDirectories, fileMasks, ex);
+                    onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
                 }
                 else
                 {
@@ -318,7 +319,7 @@ namespace CoreUtils.Classes
                 // callback for complete
                 if (onErrorCallback != null)
                 {
-                    onErrorCallback(sourceDirectory, fileMasks, ex);
+                    onErrorCallback(sourceDirectory, fileMasks.Join(","), ex);
                 }
                 else
                 {
@@ -520,7 +521,7 @@ namespace CoreUtils.Classes
                 // callback for complete
                 if (onErrorCallback != null)
                 {
-                    onErrorCallback(sourceDirectory, fileMasks, ex);
+                    onErrorCallback(sourceDirectory, fileMasks.Join(","), ex);
                 }
                 else
                 {

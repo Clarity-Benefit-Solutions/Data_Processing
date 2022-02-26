@@ -251,7 +251,7 @@ namespace CoreUtils.Classes
                 // callback for complete
                 if (onErrorCallback != null)
                 {
-                    onErrorCallback(sourceDirectories, fileMasks, ex);
+                    onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
                 }
                 else
                 {

@@ -146,7 +146,7 @@ namespace EtlUtilities
                 // callback for complete
                 if (onErrorCallback != null)
                 {
-                    onErrorCallback(srcFilePath, fileFormats, ex);
+                    onErrorCallback(srcFilePath, fileFormats.Values.ToString(), ex);
                 }
                 else
                 {
@@ -196,7 +196,7 @@ namespace EtlUtilities
                 // callback for complete
                 if (onErrorCallback != null)
                 {
-                    onErrorCallback(orgSrcFilePath, fileFormat, ex);
+                    onErrorCallback(orgSrcFilePath, fileFormat.ToDescription(), ex);
                 }
                 else
                 {
@@ -646,7 +646,11 @@ namespace EtlUtilities
 
                 //
                 ImpExpUtils.ImportCsvFileBulkCopy(headerType, dbConn, srcFilePath, hasHeaderRow, tableName, mappings, fileLogParams,
-                    (arg1, arg2, ex) => { /*todo: log error */ }
+                    (arg1, arg2, ex) =>
+                    {
+                        fileLogParams.SetTaskOutcome("ERROR", $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                        DbUtils.LogFileOperation(fileLogParams);
+                    }
                 );
             }
             catch (Exception ex)

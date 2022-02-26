@@ -84,7 +84,15 @@ namespace DataProcessing
                         "Delete File in Dir");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) => { /*todo: log error */ }
+                (arg1, arg2, ex) =>
+                {
+                    if (fileLogParams == null) { throw ex; } else 
+                    {
+                        fileLogParams.SetTaskOutcome("ERROR",
+                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                        DbUtils.LogFileOperation(fileLogParams);
+                    }
+                }
             );
 
             //
@@ -122,7 +130,15 @@ namespace DataProcessing
                         "Success", $"Processing File ${srcFilePath}");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) => { /*todo: log error */ }
+                (arg1, arg2, ex) =>
+                {
+                    if (fileLogParams == null) { throw ex; } else 
+                    {
+                        fileLogParams.SetTaskOutcome("ERROR",
+                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                        DbUtils.LogFileOperation(fileLogParams);
+                    }
+                }
             );
 
 
@@ -143,7 +159,15 @@ namespace DataProcessing
                         "Success", $"Processing File ${srcFilePath}");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) => { /*todo: log error */ }
+                (arg1, arg2, ex) =>
+                {
+                    if (fileLogParams == null) { throw ex; } else 
+                    {
+                        fileLogParams.SetTaskOutcome("ERROR",
+                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                        DbUtils.LogFileOperation(fileLogParams);
+                    }
+                }
             );
 
             //
@@ -175,7 +199,15 @@ namespace DataProcessing
 
                     //2. import file
                     Import.ImportAlegeusFile(headerType, dbConn, srcFilePath, false, fileLogParams,
-                        (arg1, arg2, ex) => { /*todo: log error */ }
+                        (arg1, arg2, ex) =>
+                        {
+                            if (fileLogParams == null) { throw ex; } else 
+                            {
+                                fileLogParams.SetTaskOutcome("ERROR",
+                                    $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                                DbUtils.LogFileOperation(fileLogParams);
+                            }
+                        }
                     );
 
                 }
@@ -241,7 +273,15 @@ namespace DataProcessing
                         "Success", "Moved File to Archive");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) => { /*todo: log error */ }
+                (arg1, arg2, ex) =>
+                {
+                    if (fileLogParams == null) { throw ex; } else 
+                    {
+                        fileLogParams.SetTaskOutcome("ERROR",
+                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                        DbUtils.LogFileOperation(fileLogParams);
+                    }
+                }
             );
             // move resFiles to Archive
             FileUtils.MoveFiles(
@@ -257,7 +297,15 @@ namespace DataProcessing
 
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) => { /*todo: log error */ }
+                (arg1, arg2, ex) =>
+                {
+                    if (fileLogParams == null) { throw ex; } else 
+                    {
+                        fileLogParams.SetTaskOutcome("ERROR",
+                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                        DbUtils.LogFileOperation(fileLogParams);
+                    }
+                }
             );
 
             //

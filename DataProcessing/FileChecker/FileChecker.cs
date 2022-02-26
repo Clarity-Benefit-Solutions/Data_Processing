@@ -175,7 +175,16 @@ namespace DataProcessing
 
             // import into table so we can manipulate the file
             ImpExpUtils.ImportCsvFileBulkCopy(this.headerType, this.dbConn, newPath, this.hasHeaderRow, tableName, mappings, this.fileLogParams,
-                (arg1, arg2, ex) => { /*todo: log error */ }
+                (arg1, arg2, ex) =>
+                {
+                    if (fileLogParams == null) { throw ex; }
+                    else
+                    {
+                        fileLogParams.SetTaskOutcome("ERROR",
+                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                        DbUtils.LogFileOperation(fileLogParams);
+                    }
+                }
                 );
 
             // update check type for table

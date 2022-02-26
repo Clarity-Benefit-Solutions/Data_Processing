@@ -86,6 +86,12 @@ namespace CoreUtils.Classes
         {
             return Convert.ToDecimal(enVal).ToString("0");
         }
+        //extension method to get string from array
+        public static string Join(this string[] arr, string joinWith)
+        {
+            return String.Join(joinWith, arr);
+        }   
+  
 
 
         public static Boolean TextMatchesPattern(string fileName, string pattern)

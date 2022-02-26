@@ -51,14 +51,15 @@ namespace CoreUtils.Classes
         public MessageLogParams SetSubModuleStepAndCommand(string subModuleName, string stepType, string stepName,
             string command)
         {
-            var cloned = (MessageLogParams)MemberwiseClone();
             //
-            cloned.SubModuleName = subModuleName;
-            cloned.StepType = stepType;
-            cloned.StepName = stepName;
-            cloned.Command = command;
+            SubModuleName = subModuleName;
+            StepType = stepType;
+            StepName = stepName;
+            Command = command;
             //
-            return cloned;
+            //var cloned = (MessageLogParams)MemberwiseClone();
+            //return cloned;
+            return this;
         }
 
         public MessageLogParams SetStepAndCommand(string stepName, string command)
@@ -73,11 +74,12 @@ namespace CoreUtils.Classes
 
         public MessageLogParams SetCommand(string command)
         {
-            var cloned = (MessageLogParams)MemberwiseClone();
+            Command = command;
             //
-            cloned.Command = command;
             //
-            return cloned;
+            //var cloned = (MessageLogParams)MemberwiseClone();
+            //return cloned;
+            return this; 
         }
     }
 
@@ -142,13 +144,15 @@ namespace CoreUtils.Classes
 
         public FileOperationLogParams ReInitIds()
         {
-            var cloned = (FileOperationLogParams)MemberwiseClone();
+            
             //
-            cloned.FileLogId = 0;
-            cloned.FileLogTaskId = 0;
-            cloned.FileId = "";
+            FileLogId = 0;
+            FileLogTaskId = 0;
+            FileId = "";
             //
-            return cloned;
+            //var cloned = (MessageLogParams)MemberwiseClone();
+            //return cloned;
+            return this;
         }
 
 
@@ -156,7 +160,6 @@ namespace CoreUtils.Classes
             string newFileName, string newFullPath, string processingTask, string processingTaskOutcome,
             string processingTaskOutcomeDetails)
         {
-            var cloned = (FileOperationLogParams)MemberwiseClone();
             //
             FileId = fileId;
             OriginalFileName = originalFileName;
@@ -175,11 +178,11 @@ namespace CoreUtils.Classes
             //
             CalculateIds();
             //
-            return cloned;
+            //var cloned = (FileOperationLogParams)MemberwiseClone();
+            return this;
         }
-        public FileOperationLogParams SetSourceFolderName(string folderName, string bencode="", string icType = "", string templateType = "")
+        public FileOperationLogParams SetSourceFolderName(string folderName, string bencode = "", string icType = "", string templateType = "")
         {
-            var cloned = (FileOperationLogParams)MemberwiseClone();
             //
             FolderName = folderName;
             IcType = icType;
@@ -193,19 +196,20 @@ namespace CoreUtils.Classes
             //
             CalculateIds();
             //
-            return cloned;
+            //var cloned = (FileOperationLogParams)MemberwiseClone();
+            return this;
         }
         public FileOperationLogParams SetTaskOutcome(string processingTaskOutcome,
          string processingTaskOutcomeDetails)
         {
-            var cloned = (FileOperationLogParams)MemberwiseClone();
             //
             ProcessingTaskOutcome = processingTaskOutcome;
             ProcessingTaskOutcomeDetails = processingTaskOutcomeDetails;
             //
             CalculateIds();
-            //
-            return cloned;
+
+            //var cloned = (FileOperationLogParams)MemberwiseClone();
+            return this;
         }
 
         public void setOriginalFileUploadedOn(DateTime originalFileUploadedOn)

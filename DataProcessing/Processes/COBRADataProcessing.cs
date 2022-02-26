@@ -105,7 +105,15 @@ namespace DataProcessing
 
                     }
                 },
-                (arg1, arg2, ex) => { /*todo: log error */ }
+                (arg1, arg2, ex) =>
+                {
+                    if (fileLogParams == null) { throw ex; } else 
+                    {
+                        fileLogParams.SetTaskOutcome("ERROR",
+                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                        DbUtils.LogFileOperation(fileLogParams);
+                    }
+                }
             );
 
             //
@@ -228,10 +236,27 @@ namespace DataProcessing
 
                                         DbUtils.LogFileOperation(fileLogParams);
                                     },
-                                    (arg1, arg2, ex) => { /*todo: log error */ });
+                                    (arg1, arg2, ex) =>
+                                    {
+                                        if (fileLogParams == null) { throw ex; } else 
+                                        {
+                                            fileLogParams.SetTaskOutcome("ERROR",
+                                                $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                                            DbUtils.LogFileOperation(fileLogParams);
+                                        }
+                                    }
+                                );
                             }
                         },
-                        (arg1, arg2, ex) => { /*todo: log error */ }
+                        (arg1, arg2, ex) =>
+                        {
+                            if (fileLogParams == null) { throw ex; } else 
+                            {
+                                fileLogParams.SetTaskOutcome("ERROR",
+                                    $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                                DbUtils.LogFileOperation(fileLogParams);
+                            }
+                        }
                     );
                 } //iterateDir
             } //foreach (DataRow row in folders.Rows)
@@ -280,7 +305,16 @@ namespace DataProcessing
 
                                 DbUtils.LogFileOperation(fileLogParams);
                             },
-                            (arg1, arg2, ex) => { /*todo: log error */ });
+                            (arg1, arg2, ex) =>
+                            {
+                                if (fileLogParams == null) { throw ex; } else 
+                                {
+                                    fileLogParams.SetTaskOutcome("ERROR",
+                                        $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                                    DbUtils.LogFileOperation(fileLogParams);
+                                }
+                            }
+                        );
                     }
                 }, null
             ); //iterateDir
@@ -319,7 +353,16 @@ namespace DataProcessing
 
                                 DbUtils.LogFileOperation(fileLogParams);
                             },
-                            (arg1, arg2, ex) => { /*todo: log error */ });
+                            (arg1, arg2, ex) =>
+                            {
+                                if (fileLogParams == null) { throw ex; } else 
+                                {
+                                    fileLogParams.SetTaskOutcome("ERROR",
+                                        $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                                    DbUtils.LogFileOperation(fileLogParams);
+                                }
+                            }
+                        );
                     }
                 }, null
             ); //iterateDir
@@ -373,7 +416,16 @@ namespace DataProcessing
 
                                 DbUtils.LogFileOperation(fileLogParams);
                             },
-                            (arg1, arg2, ex) => { /*todo: log error */ });
+                            (arg1, arg2, ex) =>
+                            {
+                                if (fileLogParams == null) { throw ex; } else 
+                                {
+                                    fileLogParams.SetTaskOutcome("ERROR",
+                                        $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                                    DbUtils.LogFileOperation(fileLogParams);
+                                }
+                            }
+                        );
                     }
                 }, null
             ); //iterateDir
@@ -418,7 +470,15 @@ namespace DataProcessing
                     string procName = "dbo.[Fix_COBRAQB_SSObollean]";
                     ImpExpUtils.ImportSingleColumnFlatFile(headerType, dbConnCobra, srcFilePath, srcFilePath, tableName, "folder_name",
                         "QB_data", fileLogParams,
-                        (arg1, arg2, ex) => { /*todo: log error */ }
+                        (arg1, arg2, ex) =>
+                        {
+                            if (fileLogParams == null) { throw ex; } else 
+                            {
+                                fileLogParams.SetTaskOutcome("ERROR",
+                                    $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                                DbUtils.LogFileOperation(fileLogParams);
+                            }
+                        }
                     );
 
                     //3. run script to fix data
@@ -444,7 +504,15 @@ namespace DataProcessing
                     //
                     ImpExpUtils.ExportSingleColumnFlatFile(expFilePath, dbConnCobra, queryStringExp,
                         "folder_name", "QB_data", null, fileLogParams,
-                        (arg1, arg2, ex) => { /*todo: log error */ }
+                        (arg1, arg2, ex) =>
+                        {
+                            if (fileLogParams == null) { throw ex; } else 
+                            {
+                                fileLogParams.SetTaskOutcome("ERROR",
+                                    $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                                DbUtils.LogFileOperation(fileLogParams);
+                            }
+                        }
                     );
 
                     // add to fileLog
@@ -453,7 +521,15 @@ namespace DataProcessing
                         $"Prepared Flat File for COBRA");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) => { /*todo: log error */ }
+                (arg1, arg2, ex) =>
+                {
+                    if (fileLogParams == null) { throw ex; } else 
+                    {
+                        fileLogParams.SetTaskOutcome("ERROR",
+                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                        DbUtils.LogFileOperation(fileLogParams);
+                    }
+                }
             );
 
             //
@@ -505,10 +581,26 @@ namespace DataProcessing
                                     "Success", $"Moved File");
                                 DbUtils.LogFileOperation(fileLogParams);
                             },
-                            (arg1, arg2, ex) => { /*todo: log error */ });
+                            (arg1, arg2, ex) =>
+                            {
+                                if (fileLogParams == null) { throw ex; } else 
+                                {
+                                    fileLogParams.SetTaskOutcome("ERROR",
+                                        $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                                    DbUtils.LogFileOperation(fileLogParams);
+                                }
+                            });
                     }
                 },
-                (arg1, arg2, ex) => { /*todo: log error */ }
+                (arg1, arg2, ex) =>
+                {
+                    if (fileLogParams == null) { throw ex; } else 
+                    {
+                        fileLogParams.SetTaskOutcome("ERROR",
+                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                        DbUtils.LogFileOperation(fileLogParams);
+                    }
+                }
             );
 
             // 2. move all holding and prepared files
@@ -525,7 +617,15 @@ namespace DataProcessing
                         "Success", $"Moved File");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) => { /*todo: log error */ }
+                (arg1, arg2, ex) =>
+                {
+                    if (fileLogParams == null) { throw ex; } else 
+                    {
+                        fileLogParams.SetTaskOutcome("ERROR",
+                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
+                        DbUtils.LogFileOperation(fileLogParams);
+                    }
+                }
             );
 
             //3. move out blank files
