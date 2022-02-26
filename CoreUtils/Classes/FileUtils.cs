@@ -551,8 +551,15 @@ namespace CoreUtils.Classes
                         //
                         DoSingleFileOperation(fileOperation, foundFile, destFullFilePath, fileCallback, onErrorCallback);
                     },
-                   // at end 
-                    (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, null); }
+                    // at end 
+                    (arg1, arg2, ex) =>
+                    {
+                        if (onErrorCallback == null)
+                        {
+                            throw ex;
+                        }
+                        onErrorCallback(arg1, arg2, ex);
+                    }
                 );
             }
             catch (Exception ex)
