@@ -204,9 +204,7 @@ namespace CoreUtils.Classes
 
                         // pass new dbLogParams() to ensure no recursion of logging!
                         DbQuery(DbOperation.ExecuteNonQuery, dbConn, query, null,
-                            fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                                $"ImportFlatFile-{srcFilePath}", fileLogParams.ProcessingTaskOutcomeDetails,
-                                fileLogParams.OriginalFullPath)
+                            fileLogParams?.GetMessageLogParams()
                             , doNotLogOperationToDb: true);
                     }
                 }
@@ -239,9 +237,7 @@ namespace CoreUtils.Classes
 
                 // query
                 var dt = (DataTable)DbQuery(DbOperation.ExecuteReader, dbConn, queryString, queryParams,
-                    fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                        $"ExportFlatFile-{filePath}", fileLogParams.ProcessingTaskOutcomeDetails,
-                        fileLogParams.OriginalFullPath));
+                    fileLogParams?.GetMessageLogParams());
                 //
 
                 // loop thru rows
@@ -316,9 +312,7 @@ namespace CoreUtils.Classes
 
                         // pass new dbLogParams() to ensure no recursion of logging!
                         DbQuery(DbOperation.ExecuteNonQuery, dbConn, query, null,
-                            fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                                $"ImportCsvFile-{filePath}", fileLogParams.ProcessingTaskOutcomeDetails,
-                                fileLogParams.OriginalFullPath)
+                            fileLogParams?.GetMessageLogParams()
                             , doNotLogOperationToDb: true);
                     }
                 }
@@ -354,8 +348,7 @@ namespace CoreUtils.Classes
                 //
                 // truncate table
                 TruncateTable(dbConn, tableName,
-                    fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                        "Truncate Table", fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath));
+                    fileLogParams?.GetMessageLogParams());
 
 
                 if (columnMappings == null || columnMappings.Count == 0)
@@ -437,8 +430,7 @@ namespace CoreUtils.Classes
                 //
                 // truncate table
                 TruncateTable(dbConn, tableName,
-                    fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                        "Truncate Table", fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath));
+                    fileLogParams?.GetMessageLogParams());
 
 
                 // Get the schema for the target table

@@ -74,7 +74,7 @@ namespace DataProcessing
         {
 
             //
-            Dictionary<EdiFileFormat, List<int>> fileFormats = ImpExpUtils.GetAlegeusFileFormats(this.srcFilePath, true, this.fileLogParams);
+            Dictionary<EdiFileFormat, List<int>> fileFormats = ImpExpUtils.GetAlegeusFileFormats(this.srcFilePath, false, this.fileLogParams);
 
             // file may contain only a header...
             if (fileFormats.Count == 0)
@@ -165,9 +165,7 @@ namespace DataProcessing
 
             // truncate staging table
             DbUtils.TruncateTable(dbConn, tableName,
-                fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                    "Truncate Table", fileLogParams.ProcessingTaskOutcomeDetails,
-                    fileLogParams.OriginalFullPath));
+                fileLogParams?.GetMessageLogParams());
 
 
             // import the file with bulk copy
@@ -190,9 +188,8 @@ namespace DataProcessing
             // update check type for table
             string queryString1 = $"update {tableName} set check_type = 'PreCheck' where 1 = 1;";
             DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString1, null,
-               fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                   fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath,
-                   fileLogParams.NewFileFullPath));
+                    fileLogParams?.GetMessageLogParams()
+                );
 
             // check file data
             CheckFileData(fileFormat, mappings);
@@ -202,9 +199,8 @@ namespace DataProcessing
             string queryString = $"exec {postImportProc};";
             //
             DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
-                fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                    fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath,
-                    fileLogParams.NewFileFullPath));
+                    fileLogParams?.GetMessageLogParams()
+                );
 
         }
         private void CheckFileData(EdiFileFormat fileFormat, TypedCsvSchema mappings)
@@ -456,9 +452,8 @@ namespace DataProcessing
                         //
                         DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                             queryString, null,
-                            fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                                fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath,
-                                fileLogParams.NewFileFullPath));
+                            fileLogParams?.GetMessageLogParams()
+                            );
 
                         if (dbResults.Rows.Count == 0)
                         {
@@ -528,9 +523,7 @@ namespace DataProcessing
                         //
                         DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                             queryString, null,
-                            fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                                fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath,
-                                fileLogParams.NewFileFullPath));
+                            fileLogParams?.GetMessageLogParams());
 
                         if (dbResults.Rows.Count == 0)
                         {
@@ -600,9 +593,7 @@ namespace DataProcessing
                         ////
                         //DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         //    queryString, null,
-                        //    fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                        //        fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath,
-                        //        fileLogParams.NewFileFullPath));
+                        //     fileLogParams?.GetMessageLogParams()));
 
                         //if (dbResults.Rows.Count == 0)
                         //{
@@ -674,9 +665,7 @@ namespace DataProcessing
                         //
                         DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                             queryString, null,
-                            fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                                fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath,
-                                fileLogParams.NewFileFullPath));
+                            fileLogParams?.GetMessageLogParams());
 
                         if (dbResults.Rows.Count == 0)
                         {
@@ -761,9 +750,7 @@ namespace DataProcessing
                         //
                         DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                             queryString, null,
-                            fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                                fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath,
-                                fileLogParams.NewFileFullPath));
+                            fileLogParams?.GetMessageLogParams());
 
                         if (dbResults.Rows.Count == 0)
                         {
@@ -848,9 +835,7 @@ namespace DataProcessing
                         ////
                         //DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         //    queryString, null,
-                        //    fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                        //        fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath,
-                        //        fileLogParams.NewFileFullPath));
+                        //     fileLogParams?.GetMessageLogParams());
 
                         //if (dbResults.Rows.Count == 0)
                         //{

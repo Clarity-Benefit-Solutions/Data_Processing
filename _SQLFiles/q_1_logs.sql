@@ -25,10 +25,10 @@ file_processing_tasks_log
 select *
 from
     Alegeus_File_Processing.dbo.file_processing_tasks_log
-    -- where fileLogId=7
+    where fileLogId=98
 order by
     fileLogId desc
-  , fileLogTaskId;
+  , fileLogTaskId desc;
 
 /*processing_script_tbl*/
 select *

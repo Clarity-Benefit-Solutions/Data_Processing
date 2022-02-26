@@ -240,9 +240,7 @@ namespace DataProcessing
                             ";
             // run query
             DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
-                fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                    fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath,
-                    fileLogParams.NewFileFullPath));
+                fileLogParams?.GetMessageLogParams());
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",

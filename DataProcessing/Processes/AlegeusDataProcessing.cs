@@ -354,9 +354,7 @@ namespace DataProcessing
                     //1. truncate staging table
                     var tableName = "[dbo].[alegeus_file_staging]";
                     DbUtils.TruncateTable(dbConn, tableName,
-                        fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                            "Truncate Table", fileLogParams.ProcessingTaskOutcomeDetails,
-                            fileLogParams.OriginalFullPath));
+                        fileLogParams?.GetMessageLogParams());
 
 
                     //2. import file
@@ -411,9 +409,7 @@ namespace DataProcessing
 
                     // run fix headers query
                     DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
-                        fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                            fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath,
-                            fileLogParams.NewFileFullPath));
+                        fileLogParams?.GetMessageLogParams());
 
                     //4. Export File
                     var expFilePath = FileUtils.GetDestFilePath(srcFilePath, ".mbi");

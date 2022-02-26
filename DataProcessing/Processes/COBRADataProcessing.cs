@@ -68,8 +68,7 @@ namespace DataProcessing
             //1. truncate staging table
             string tableName = "[dbo].[processing_script_tbl]";
             DbUtils.TruncateTable(dbConn, tableName,
-                fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                    "Truncate Table", fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath));
+                fileLogParams?.GetMessageLogParams());
 
             FileUtils.IterateDirectory(
                 Vars.localFtpRoot, DirectoryIterateType.Directories, false, fileExt,
@@ -93,9 +92,7 @@ namespace DataProcessing
 
                         // run fix headers query
                         DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
-                            fileLogParams.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                                fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath, fileLogParams.ProcessingTask)
-                            );
+                            fileLogParams?.GetMessageLogParams());
                         //
                         fileLogParams.SetFileNames("", Path.GetFileName(srcDirPath), srcDirPath,
                             Path.GetFileName(destFilePath), destFilePath, "MoveCobraFtpFiles-ListFTPFolders",
@@ -462,9 +459,7 @@ namespace DataProcessing
                     // ReSharper disable once StringLiteralTypo
                     string tableName = "[dbo].[QB_file_data_fixtbl]";
                     DbUtils.TruncateTable(dbConnCobra, tableName,
-                        fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                            "Truncate Table", fileLogParams.ProcessingTaskOutcomeDetails,
-                            fileLogParams.OriginalFullPath));
+                        fileLogParams?.GetMessageLogParams());
 
                     //2. import file
                     string procName = "dbo.[Fix_COBRAQB_SSObollean]";
@@ -492,9 +487,7 @@ namespace DataProcessing
 
                     // run fix headers query
                     DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConnCobra, queryString, null,
-                        fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                            fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath,
-                            fileLogParams.NewFileFullPath));
+                        fileLogParams?.GetMessageLogParams());
                     //4. Export File
 
                     string expFilePath = FileUtils.GetDestFilePath(srcFilePath, "");

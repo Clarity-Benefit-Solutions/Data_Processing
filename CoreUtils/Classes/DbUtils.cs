@@ -252,9 +252,7 @@ namespace CoreUtils
             }
 
             // logDbOperation
-            LogMessage(fileLogParams.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath,
-                fileLogParams.NewFileFullPath));
+            LogMessage(fileLogParams?.GetMessageLogParams());
 
             // raise event
             RaiseOnLogFileOperationCallback(fileLogParams);
@@ -320,7 +318,7 @@ namespace CoreUtils
 
             // return the last part of the fileName
             return fileNameParts[fileNameParts.Length - 1];
-            
+
             //int indexOfSep = fileName.IndexOf($"{FilePartsDelimiter}");
             //if (indexOfSep > 0)
             //{

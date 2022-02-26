@@ -174,9 +174,7 @@ namespace EtlUtilities
 
                 // truncate staging table
                 DbUtils.TruncateTable(dbConn, tableName,
-                    fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                        "Truncate Table", fileLogParams.ProcessingTaskOutcomeDetails,
-                        fileLogParams.OriginalFullPath));
+                    fileLogParams?.GetMessageLogParams());
 
 
                 // import the file with bulk copy
@@ -187,9 +185,7 @@ namespace EtlUtilities
                 // run postimport query to take from staging to final table
                 string queryString = $"exec {postImportProc};";
                 DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
-                    fileLogParams?.DbMessageLogParams?.SetSubModuleStepAndCommand(fileLogParams.ProcessingTask,
-                        fileLogParams.ProcessingTaskOutcomeDetails, fileLogParams.OriginalFullPath,
-                        fileLogParams.NewFileFullPath));
+                    fileLogParams?.GetMessageLogParams());
             }
             catch (Exception ex)
             {

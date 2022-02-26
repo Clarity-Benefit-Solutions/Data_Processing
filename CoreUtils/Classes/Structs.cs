@@ -79,7 +79,7 @@ namespace CoreUtils.Classes
             //
             //var cloned = (MessageLogParams)MemberwiseClone();
             //return cloned;
-            return this; 
+            return this;
         }
     }
 
@@ -142,9 +142,11 @@ namespace CoreUtils.Classes
             return cloned;
         }
 
+
+
         public FileOperationLogParams ReInitIds()
         {
-            
+
             //
             FileLogId = 0;
             FileLogTaskId = 0;
@@ -155,6 +157,12 @@ namespace CoreUtils.Classes
             return this;
         }
 
+        public MessageLogParams GetMessageLogParams()
+        {
+            //DbConnection dbConnection, string logTableName, string moduleName, string subModuleName,
+            //string stepType, string stepName, string command
+            return new MessageLogParams(this.DbConnection, "Alegeus_File_Processing.dbo.message_log", this.Platform, this.NewFileFullPath, this.ProcessingTask, this.ProcessingTaskOutcome, this.ProcessingTaskOutcomeDetails);
+        }
 
         public FileOperationLogParams SetFileNames(string fileId, string originalFileName, string originalFullPath,
             string newFileName, string newFullPath, string processingTask, string processingTaskOutcome,
