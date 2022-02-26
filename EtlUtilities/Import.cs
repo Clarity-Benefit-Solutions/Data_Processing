@@ -642,11 +642,7 @@ namespace EtlUtilities
 
                 //
                 ImpExpUtils.ImportCsvFileBulkCopy(headerType, dbConn, srcFilePath, hasHeaderRow, tableName, mappings, fileLogParams,
-                    (arg1, arg2, ex) =>
-                    {
-                        fileLogParams.SetTaskOutcome("ERROR", $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                        DbUtils.LogFileOperation(fileLogParams);
-                    }
+                    (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                 );
             }
             catch (Exception ex)

@@ -261,6 +261,17 @@ namespace CoreUtils
             fileLogParams.ReInitIds();
         }
 
+        public static void LogError(string arg1, string arg2, Exception ex, FileOperationLogParams fileLogParams)
+        {
+            if (fileLogParams == null)
+            {
+                throw ex;
+            }
+            fileLogParams.SetTaskOutcome("ERROR", $"ERROR {fileLogParams.ProcessingTask}: {arg1} - {arg2} - {ex.ToString()}");
+            //
+            DbUtils.LogFileOperation(fileLogParams);
+        }
+
 
         public static string GetUniqueIdFromFileName(string fileName)
         {
@@ -275,7 +286,7 @@ namespace CoreUtils
 
         public static HeaderType GetHeaderTypeFromFileName(string fileName)
         {
-            string[] fileNameParts = fileName?.Split(new[] { FilePartsDelimiter }, StringSplitOptions.None);
+            string[] fileNameParts = fileName?.Split(new[] {FilePartsDelimiter}, StringSplitOptions.None);
             if (fileNameParts.Length < 3)
             {
                 return HeaderType.NotApplicable;
@@ -314,7 +325,7 @@ namespace CoreUtils
         public static string StripUniqueIdAndHeaderTypeFromFileName(string fileName)
         {
 
-            string[] fileNameParts = fileName?.Split(new[] { FilePartsDelimiter }, StringSplitOptions.None);
+            string[] fileNameParts = fileName?.Split(new[] {FilePartsDelimiter}, StringSplitOptions.None);
 
             // return the last part of the fileName
             return fileNameParts[fileNameParts.Length - 1];

@@ -551,19 +551,8 @@ namespace CoreUtils.Classes
                         //
                         DoSingleFileOperation(fileOperation, foundFile, destFullFilePath, fileCallback, onErrorCallback);
                     },
-                    // at end 
-                    (arg1, arg2, ex) =>
-                    {
-                        // callback for complete
-                        if (onErrorCallback != null)
-                        {
-                            onErrorCallback(sourceDirectory, fileMask, ex);
-                        }
-                        else
-                        {
-                            throw ex;
-                        }
-                    }
+                   // at end 
+                    (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, null); }
                 );
             }
             catch (Exception ex)
@@ -714,18 +703,7 @@ namespace CoreUtils.Classes
                         onErrorCallback);
                 } /*end fileCallBack*/
                 , /*onErrorCallback*/  // at end 
-                (arg1, arg2, ex) =>
-                {
-                    // callback for complete
-                    if (onErrorCallback != null)
-                    {
-                        onErrorCallback(sourceDir, destDir, ex);
-                    }
-                    else
-                    {
-                        throw ex;
-                    }
-                } /*end onErrorCallback*/
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }/*end onErrorCallback*/
             ); //FileUtils.IterateDirectory;
         } //end method
 

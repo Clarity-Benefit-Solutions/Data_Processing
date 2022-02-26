@@ -316,18 +316,7 @@ namespace CoreUtils.Classes
                     DoSingleFtpFileOperation(fileOperation, foundFile, destFullFilePath, fileCallback, onErrorCallback);
                 },
                 // at end 
-                (arg1, arg2, ex) =>
-                {
-                    // callback for complete
-                    if (onErrorCallback != null)
-                    {
-                        onErrorCallback(sourceDirectory, fileMask, ex);
-                    }
-                    else
-                    {
-                        throw ex;
-                    }
-                }
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, null); }
             );
         }
 

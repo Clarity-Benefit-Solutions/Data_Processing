@@ -110,9 +110,12 @@ namespace CoreUtils.Classes
         public string TemplateType = "";
         public string ToFtp = "";
 
+       
+
         public FileOperationLogParams()
         {
         }
+
 
         public FileOperationLogParams(DbConnection dbConnection, MessageLogParams dbMessageLogParams, string platform,
             string logTableName, string fileId, string folderName, string templateType, string icType, string toFtp,

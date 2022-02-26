@@ -74,16 +74,7 @@ namespace DataProcessing
                         "Deleted File in Header Dir");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) =>
-                {
-                    if (fileLogParams == null) { throw ex; }
-                    else
-                    {
-                        fileLogParams.SetTaskOutcome("ERROR",
-                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                        DbUtils.LogFileOperation(fileLogParams);
-                    }
-                }
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
 
 
@@ -163,16 +154,7 @@ namespace DataProcessing
                                 "Success", $"Processing File ${srcFilePath}");
                             DbUtils.LogFileOperation(fileLogParams);
                         },
-                        (arg1, arg2, ex) =>
-                        {
-                            if (fileLogParams == null) { throw ex; }
-                            else
-                            {
-                                fileLogParams.SetTaskOutcome("ERROR",
-                                    $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                                DbUtils.LogFileOperation(fileLogParams);
-                            }
-                        }
+                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
 
                     );
 
@@ -188,16 +170,7 @@ namespace DataProcessing
                                 "Success", "Copied Source File to Header Directory");
                             DbUtils.LogFileOperation(fileLogParams1);
                         },
-                        (arg1, arg2, ex) =>
-                        {
-                            if (fileLogParams == null) { throw ex; }
-                            else
-                            {
-                                fileLogParams.SetTaskOutcome("ERROR",
-                                    $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                                DbUtils.LogFileOperation(fileLogParams);
-                            }
-                        }
+                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
 
                     );
                 }
@@ -216,16 +189,7 @@ namespace DataProcessing
                         "Copied File to Archive Directory");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) =>
-                {
-                    if (fileLogParams == null) { throw ex; }
-                    else
-                    {
-                        fileLogParams.SetTaskOutcome("ERROR",
-                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                        DbUtils.LogFileOperation(fileLogParams);
-                    }
-                }
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
 
             );
 
@@ -241,16 +205,7 @@ namespace DataProcessing
                         "Success", "Deleted File In HoldAll Directory");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) =>
-                {
-                    if (fileLogParams == null) { throw ex; }
-                    else
-                    {
-                        fileLogParams.SetTaskOutcome("ERROR",
-                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                        DbUtils.LogFileOperation(fileLogParams);
-                    }
-                }
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
 
             );
 
@@ -266,16 +221,7 @@ namespace DataProcessing
                         "Copied File to HoldAll Directory");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) =>
-                {
-                    if (fileLogParams == null) { throw ex; }
-                    else
-                    {
-                        fileLogParams.SetTaskOutcome("ERROR",
-                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                        DbUtils.LogFileOperation(fileLogParams);
-                    }
-                }
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
 
             );
 
@@ -297,19 +243,7 @@ namespace DataProcessing
             // Iterate and convert all Excel files in fileProcessingHeadersRoot - no subDirs
             FileUtils.ConvertAllExcelFilesToCsv(Vars.alegeusFileHeadersRoot, false, Vars.alegeusFileHeadersRoot, dbConn,
                 fileLogParams,
-                (arg1, arg2, ex) =>
-                {
-                    if (fileLogParams == null)
-                    {
-                        throw ex;
-                    }
-                    else
-                    {
-                        fileLogParams.SetTaskOutcome("ERROR",
-                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                        DbUtils.LogFileOperation(fileLogParams);
-                    }
-                }
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                 );
 
             // Log
@@ -382,19 +316,7 @@ namespace DataProcessing
                     ImpExpUtils.ImportSingleColumnFlatFile(headerType, dbConn, srcFilePath, srcFilePath, tableName,
                         "folder_name",
                         "data_row", fileLogParams,
-                        (arg1, arg2, ex) =>
-                        {
-                            if (fileLogParams == null)
-                            {
-                                throw ex;
-                            }
-                            else
-                            {
-                                fileLogParams.SetTaskOutcome("ERROR",
-                                    $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                                DbUtils.LogFileOperation(fileLogParams);
-                            }
-                        }
+                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                     );
 
                     //3. run script to fix data
@@ -418,19 +340,7 @@ namespace DataProcessing
                     var queryStringExp = $"Select * from {outputTableName} order by row_num asc";
                     ImpExpUtils.ExportSingleColumnFlatFile(expFilePath, dbConn, queryStringExp,
                         "folder_name", "file_row", null, fileLogParams,
-                        (arg1, arg2, ex) =>
-                        {
-                            if (fileLogParams == null)
-                            {
-                                throw ex;
-                            }
-                            else
-                            {
-                                fileLogParams.SetTaskOutcome("ERROR",
-                                    $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                                DbUtils.LogFileOperation(fileLogParams);
-                            }
-                        }
+                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                     );
 
                     // add to fileLog
@@ -439,19 +349,8 @@ namespace DataProcessing
                         "Added Header to File");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) =>
-                {
-
-                    if (fileLogParams == null)
-                    {
-                        throw ex;
-                    }
-                    else
-                        fileLogParams.SetTaskOutcome("ERROR",
-                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-
-                    DbUtils.LogFileOperation(fileLogParams);
-                });
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                );
         }
 
         protected static void CopyHoldAllFilesToPreCheckDir(DbConnection dbConn, FileOperationLogParams fileLogParams)
@@ -473,16 +372,7 @@ namespace DataProcessing
                     "Success", "Copied HoldAll File to Processing");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) =>
-                {
-                    if (fileLogParams == null) { throw ex; }
-                    else
-                    {
-                        fileLogParams.SetTaskOutcome("ERROR",
-                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                        DbUtils.LogFileOperation(fileLogParams);
-                    }
-                }
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
 
             );
 
@@ -513,16 +403,7 @@ namespace DataProcessing
                     "Success", "Renamed txt file to mbi");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) =>
-                {
-                    if (fileLogParams == null) { throw ex; }
-                    else
-                    {
-                        fileLogParams.SetTaskOutcome("ERROR",
-                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                        DbUtils.LogFileOperation(fileLogParams);
-                    }
-                }
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
 
             );
 
@@ -552,29 +433,11 @@ namespace DataProcessing
                     {
                         var delFilePath = FileUtils.GetDestFilePath(srcFilePath, fileExt);
                         FileUtils.DeleteFileIfExists(delFilePath, null,
-                            (arg1, arg2, ex) =>
-                            {
-                                if (fileLogParams == null) { throw ex; }
-                                else
-                                {
-                                    fileLogParams.SetTaskOutcome("ERROR",
-                                        $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                                    DbUtils.LogFileOperation(fileLogParams);
-                                }
-                            }
+                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                             );
                     }
                 },
-                (arg1, arg2, ex) =>
-                {
-                    if (fileLogParams == null) { throw ex; }
-                    else
-                    {
-                        fileLogParams.SetTaskOutcome("ERROR",
-                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                        DbUtils.LogFileOperation(fileLogParams);
-                    }
-                }
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
 
             //
@@ -598,16 +461,7 @@ namespace DataProcessing
                 {
                 // check the file 
                 using var fileChecker = new FileChecker(srcFilePath, PlatformType.Alegeus, Vars.dbConnAlegeusErrorLog, fileLogParams,
-                    (arg1, arg2, ex) =>
-                    {
-                        if (fileLogParams == null) { throw ex; }
-                        else
-                        {
-                            fileLogParams.SetTaskOutcome("ERROR",
-                                $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                            DbUtils.LogFileOperation(fileLogParams);
-                        }
-                    }
+                    (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                 );
                     fileChecker.CheckFile(FileCheckType.AllData);
 
@@ -626,19 +480,7 @@ namespace DataProcessing
                             //
                             DbUtils.LogFileOperation(fileLogParams);
                             },
-                            (arg1, arg2, ex) =>
-                            {
-                                if (fileLogParams == null)
-                                {
-                                    throw ex;
-                                }
-                                else
-                                {
-                                    fileLogParams.SetTaskOutcome("ERROR",
-                                        $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                                    DbUtils.LogFileOperation(fileLogParams);
-                                }
-                            }
+                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                             );
 
                     }
@@ -658,30 +500,12 @@ namespace DataProcessing
                     //
                     DbUtils.LogFileOperation(fileLogParams);
                     },
-                        (arg1, arg2, ex) =>
-                        {
-                            if (fileLogParams == null) { throw ex; }
-                            else
-                            {
-                                fileLogParams.SetTaskOutcome("ERROR",
-                                    $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                                DbUtils.LogFileOperation(fileLogParams);
-                            }
-                        }
+                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                         );
 
                     }
                 },
-                (arg1, arg2, ex) =>
-                {
-                    if (fileLogParams == null) { throw ex; }
-                    else
-                    {
-                        fileLogParams.SetTaskOutcome("ERROR",
-                            $"ERROR {fileLogParams.ProcessingTask}: {ex.ToString()}");
-                        DbUtils.LogFileOperation(fileLogParams);
-                    }
-                }
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
 
             //
