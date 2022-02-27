@@ -58,10 +58,7 @@ namespace TestApp
             
 
             listLogs.Invalidate();
-            listLogs.Update();
-            listLogs.Refresh();
-            Application.DoEvents();
-            Application.DoEvents();
+            // listLogs.Refresh();
             Application.DoEvents();
         }
 

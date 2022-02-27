@@ -226,8 +226,8 @@ namespace CoreUtils.Classes
         {
             try
             {
-                fileLogParams?.SetTaskOutcome("Starting", $"Starting: Export using {queryString}");
-                LogFileOperation(fileLogParams);
+                //fileLogParams?.SetTaskOutcome("Starting", $"Starting: Export using {queryString}");
+                //LogFileOperation(fileLogParams);
 
                 // query
                 var dt = (DataTable) DbQuery(DbOperation.ExecuteReader, dbConn, queryString, queryParams,
@@ -245,9 +245,9 @@ namespace CoreUtils.Classes
                 // close
                 if (writer != null) writer.Close();
 
-                // log
-                fileLogParams?.SetTaskOutcome("Success", $"Completed: Export using {queryString}");
-                LogFileOperation(fileLogParams);
+                //// log
+                //fileLogParams?.SetTaskOutcome("Success", $"Completed: Export using {queryString}");
+                //LogFileOperation(fileLogParams);
             }
             catch (Exception ex)
             {
