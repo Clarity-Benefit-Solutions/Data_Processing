@@ -25,7 +25,8 @@ namespace CoreUtils.Classes
                                                                        SqlBulkCopyOptions.FireTriggers |
                                                                        SqlBulkCopyOptions.TableLock;
 
-        public static Dictionary<EdiFileFormat, List<int>> GetAlegeusFileFormats(string srcFilePath, Boolean hasHeaders, FileOperationLogParams fileLogParams)
+        public static Dictionary<EdiFileFormat, List<int>> GetAlegeusFileFormats(string srcFilePath, bool hasHeaders,
+            FileOperationLogParams fileLogParams)
         {
             // open csvdatareader, read the file, and check the 2nd row
             var csvDataReaderOptions =
@@ -49,12 +50,13 @@ namespace CoreUtils.Classes
                     var fileFormat = GetAlegeusRowFormat(firstColValue);
 
                     // don't take header and unknown as we will not send them across  or parse them
-                    if (fileFormat != EdiFileFormat.Unknown && fileFormat != EdiFileFormat.AlegeusHeader && fileFormat != EdiFileFormat.AlegeusResultsHeader)
+                    if (fileFormat != EdiFileFormat.Unknown && fileFormat != EdiFileFormat.AlegeusHeader &&
+                        fileFormat != EdiFileFormat.AlegeusResultsHeader)
                     {
                         if (fileFormats.ContainsKey(fileFormat))
                             fileFormats[fileFormat].Add(rowNo);
                         else
-                            fileFormats.Add(fileFormat, new List<int> { rowNo });
+                            fileFormats.Add(fileFormat, new List<int> {rowNo});
                     }
                 }
             }
@@ -65,10 +67,7 @@ namespace CoreUtils.Classes
 
         public static EdiFileFormat GetAlegeusRowFormat(object[] rowValues)
         {
-            if (rowValues == null || rowValues.Length == 0)
-            {
-                return EdiFileFormat.Unknown;
-            }
+            if (rowValues == null || rowValues.Length == 0) return EdiFileFormat.Unknown;
 
             var firstFieldValue = rowValues[0].ToString();
             return GetAlegeusRowFormat(firstFieldValue);
@@ -79,7 +78,6 @@ namespace CoreUtils.Classes
             if (!Utils.IsBlank(firstFieldValue) && firstFieldValue.Length == 2)
                 switch (firstFieldValue)
                 {
-
                     case "IA":
                         return EdiFileFormat.AlegeusHeader;
 
@@ -176,7 +174,6 @@ namespace CoreUtils.Classes
 
                     case "RZ":
                         return EdiFileFormat.AlegeusResultsEmployeeHrInfo;
-
                 }
 
             return EdiFileFormat.Unknown;
@@ -184,12 +181,13 @@ namespace CoreUtils.Classes
 
         public static void ImportSingleColumnFlatFile(HeaderType headerType, DbConnection dbConn,
             string srcFilePath, string srcFileName,
-            string tableName, string fileColName, string contentsColName, FileOperationLogParams fileLogParams, OnErrorCallback onErrorCallback)
+            string tableName, string fileColName, string contentsColName, FileOperationLogParams fileLogParams,
+            OnErrorCallback onErrorCallback)
         {
             try
             {
-                fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import using {tableName}");
-                LogFileOperation(fileLogParams);
+                //fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import using {tableName}");
+                //LogFileOperation(fileLogParams);
 
                 // read each line and insert
                 using (var inputFile = new StreamReader(srcFilePath))
@@ -209,20 +207,16 @@ namespace CoreUtils.Classes
                     }
                 }
 
-                fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
-                LogFileOperation(fileLogParams);
+                //fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
+                //LogFileOperation(fileLogParams);
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(srcFilePath, srcFileName, ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -236,7 +230,7 @@ namespace CoreUtils.Classes
                 LogFileOperation(fileLogParams);
 
                 // query
-                var dt = (DataTable)DbQuery(DbOperation.ExecuteReader, dbConn, queryString, queryParams,
+                var dt = (DataTable) DbQuery(DbOperation.ExecuteReader, dbConn, queryString, queryParams,
                     fileLogParams?.GetMessageLogParams());
                 //
 
@@ -259,23 +253,20 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(filePath, queryString, ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
         public static void ImportCsvFile<T>(string filePath, DbConnection dbConn, string tableName,
-            string[] contentsColNames, bool hasHeaders, FileOperationLogParams fileLogParams, OnErrorCallback onErrorCallback)
+            string[] contentsColNames, bool hasHeaders, FileOperationLogParams fileLogParams,
+            OnErrorCallback onErrorCallback)
         {
             try
             {
-                fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import Into {tableName}");
-                LogFileOperation(fileLogParams);
+                //fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import Into {tableName}");
+                //LogFileOperation(fileLogParams);
 
                 var theType = typeof(T);
 
@@ -317,21 +308,17 @@ namespace CoreUtils.Classes
                     }
                 }
 
-                // log
-                fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
-                LogFileOperation(fileLogParams);
+                //// log
+                //fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
+                //LogFileOperation(fileLogParams);
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(filePath, tableName, ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         } // routine
 
@@ -341,9 +328,8 @@ namespace CoreUtils.Classes
         {
             try
             {
-
-                fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import Into {tableName}");
-                LogFileOperation(fileLogParams);
+                //fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import Into {tableName}");
+                //LogFileOperation(fileLogParams);
 
                 //
                 // truncate table
@@ -364,20 +350,18 @@ namespace CoreUtils.Classes
 
                 // source columns for reading and mapping for writing
                 var listCols = new List<TypedCsvColumn>();
-                foreach (TypedCsvColumn column in columnMappings.Columns)
+                foreach (var column in columnMappings.Columns)
                 {
                     // for reading
                     listCols.Add(column);
 
                     //for writing to DB
                     if (!Utils.IsBlank(column.ColumnName))
-                    {
-                        bcp.ColumnMappings.Add(new SqlBulkCopyColumnMapping(column.SourceColumn, column.DestinationColumn));
-                    }
+                        bcp.ColumnMappings.Add(new SqlBulkCopyColumnMapping(column.SourceColumn,
+                            column.DestinationColumn));
                     else
-                    {
-                        bcp.ColumnMappings.Add(new SqlBulkCopyColumnMapping(column.SourceOrdinal, column.DestinationOrdinal));
-                    }
+                        bcp.ColumnMappings.Add(new SqlBulkCopyColumnMapping(column.SourceOrdinal,
+                            column.DestinationOrdinal));
                 }
 
                 // create csv reader options
@@ -399,21 +383,17 @@ namespace CoreUtils.Classes
                 // write all rows to server
                 bcp.WriteToServer(csv);
 
-                //
-                fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
-                LogFileOperation(fileLogParams);
+                ////
+                //fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
+                //LogFileOperation(fileLogParams);
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(srcFilePath, tableName, ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -424,8 +404,8 @@ namespace CoreUtils.Classes
         {
             try
             {
-                fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import Into {tableName}");
-                LogFileOperation(fileLogParams);
+                //fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import Into {tableName}");
+                //LogFileOperation(fileLogParams);
 
                 //
                 // truncate table
@@ -473,21 +453,17 @@ namespace CoreUtils.Classes
                 //
                 bcp.WriteToServer(csv);
 
-                //
-                fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
-                LogFileOperation(fileLogParams);
+                ////
+                //fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
+                //LogFileOperation(fileLogParams);
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(srcFilePath, tableName, ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
     } // class

@@ -25,7 +25,10 @@ file_processing_tasks_log
 select *
 from
     Alegeus_File_Processing.dbo.file_processing_tasks_log
-    where fileLogId=98
+    where (
+--         fileLogId=118
+        processingTask like '%AutomatedHeaders-<PreCheckFilesAndProcess%'
+        )
 order by
     fileLogId desc
   , fileLogTaskId desc;

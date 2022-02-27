@@ -19,6 +19,10 @@ namespace CoreUtils
     {
         public delegate void OnLogOperationCallback(MessageLogParams logParams);
 
+        private static string FilePartsDelimiter = "--";
+
+        public static int MAX_FILENAME_LENGTH_FTP = 60;
+
         public static event EventHandler<MessageLogParams> EventOnLogOperationCallback;
 
         public static void RaiseOnLogOperationCallback(MessageLogParams logParams)
@@ -80,7 +84,8 @@ namespace CoreUtils
 
 
         public static Object DbQuery(DbOperation dbOperation, DbConnection dbConn, string queryString,
-            DbParameters queryParams = null, MessageLogParams logParams = null, Boolean isSP = false, Boolean doNotLogOperationToDb = false)
+            DbParameters queryParams = null, MessageLogParams logParams = null, Boolean isSP = false,
+            Boolean doNotLogOperationToDb = false)
         {
             // validate
             if (dbConn is null)
@@ -134,10 +139,10 @@ namespace CoreUtils
                     foreach (DataRow drow in schemaTable.Rows)
                     {
                         string columnName = Convert.ToString(drow["ColumnName"]);
-                        DataColumn column = new DataColumn(columnName, (Type)(drow["DataType"]));
-                        column.Unique = (bool)drow["IsUnique"];
-                        column.AllowDBNull = (bool)drow["AllowDBNull"];
-                        column.AutoIncrement = (bool)drow["IsAutoIncrement"];
+                        DataColumn column = new DataColumn(columnName, (Type) (drow["DataType"]));
+                        column.Unique = (bool) drow["IsUnique"];
+                        column.AllowDBNull = (bool) drow["AllowDBNull"];
+                        column.AutoIncrement = (bool) drow["IsAutoIncrement"];
                         listCols.Add(column);
                         dt.Columns.Add(column);
                     }
@@ -148,7 +153,7 @@ namespace CoreUtils
                         DataRow dataRow = dt.NewRow();
                         for (int i = 0; i < listCols.Count; i++)
                         {
-                            dataRow[((DataColumn)listCols[i])] = reader[i];
+                            dataRow[((DataColumn) listCols[i])] = reader[i];
                         }
 
                         dt.Rows.Add(dataRow);
@@ -222,6 +227,7 @@ namespace CoreUtils
                 {
                     //  Debug.WriteLine("a");
                 }
+
                 DbParameters queryParams = new DbParameters();
                 queryParams.Add(new SqlParameter("@platform", fileLogParams.Platform));
                 queryParams.Add(new SqlParameter("@fileLogId", fileLogParams.FileLogId));
@@ -244,10 +250,11 @@ namespace CoreUtils
 
                 queryParams.Add(new SqlParameter("@processingTask", fileLogParams.ProcessingTask));
                 queryParams.Add(new SqlParameter("@processingTaskOutcome", fileLogParams.ProcessingTaskOutcome));
-                queryParams.Add(new SqlParameter("@processingTaskOutcomeDetails", fileLogParams.ProcessingTaskOutcomeDetails));
+                queryParams.Add(new SqlParameter("@processingTaskOutcomeDetails",
+                    fileLogParams.ProcessingTaskOutcomeDetails));
 
                 // pass new dbLogParams() to ensure no recursion of logging!
-                DataTable dt = (DataTable)DbQuery(DbOperation.ExecuteReader, fileLogParams.DbConnection, logQuery,
+                DataTable dt = (DataTable) DbQuery(DbOperation.ExecuteReader, fileLogParams.DbConnection, logQuery,
                     queryParams, null, true);
             }
 
@@ -267,9 +274,11 @@ namespace CoreUtils
             {
                 throw ex;
             }
-            fileLogParams.SetTaskOutcome("ERROR", $"ERROR {fileLogParams.ProcessingTask}: {arg1} - {arg2} - {ex.ToString()}");
+
+            fileLogParams.SetTaskOutcome("ERROR",
+                $"ERROR {fileLogParams.ProcessingTask}: {arg1} - {arg2} - {ex.ToString()}");
             //
-            DbUtils.LogFileOperation(fileLogParams);
+            LogFileOperation(fileLogParams);
         }
 
 
@@ -318,13 +327,11 @@ namespace CoreUtils
                 {
                     return HeaderType.NotApplicable;
                 }
-
             }
         }
 
         public static string StripUniqueIdAndHeaderTypeFromFileName(string fileName)
         {
-
             string[] fileNameParts = fileName?.Split(new[] {FilePartsDelimiter}, StringSplitOptions.None);
 
             // return the last part of the fileName
@@ -341,9 +348,8 @@ namespace CoreUtils
             //return fileName;
         }
 
-        private static string FilePartsDelimiter = "--";
-
-        public static string AddUniqueIdAndHeaderTypeToFileName(string fileName, HeaderType headerType = HeaderType.NotApplicable)
+        public static string AddUniqueIdAndHeaderTypeToFileName(string fileName,
+            HeaderType headerType = HeaderType.NotApplicable)
         {
             fileName = StripUniqueIdAndHeaderTypeFromFileName(fileName);
 
@@ -366,7 +372,7 @@ namespace CoreUtils
                 string logQuery = $"select dbo.getFileLogId('{fileName}');";
 
                 // pass new dbLogParams() to ensure no recursion of logging!
-                int fileLogId = (int)DbQuery(DbOperation.ExecuteScalar, logParams.DbConnection, logQuery, null, null,
+                int fileLogId = (int) DbQuery(DbOperation.ExecuteScalar, logParams.DbConnection, logQuery, null, null,
                     false);
                 return fileLogId;
             }
@@ -376,12 +382,10 @@ namespace CoreUtils
             }
         }
 
-        public static int MAX_FILENAME_LENGTH_FTP = 60;
-
-        public static string AddUniqueIdToFileAndLogToDb(HeaderType headerType, string srcFilePath, Boolean fixFileNameLength,
+        public static string AddUniqueIdToFileAndLogToDb(HeaderType headerType, string srcFilePath,
+            Boolean fixFileNameLength,
             FileOperationLogParams fileLogParams)
         {
-
             // get filename without leading fileid
             FileInfo srcFileInfo = new FileInfo(srcFilePath);
             string oldFileName = srcFileInfo.Name;
@@ -407,7 +411,8 @@ namespace CoreUtils
             string newFileNameFixed = newFileName;
             if (fixFileNameLength)
             {
-                newFileNameFixed = $" {Utils.Left(Path.GetFileNameWithoutExtension(newFileName), MAX_FILENAME_LENGTH_FTP - 4)}{Path.GetExtension(newFileName)}";
+                newFileNameFixed =
+                    $" {Utils.Left(Path.GetFileNameWithoutExtension(newFileName), MAX_FILENAME_LENGTH_FTP - 4)}{Path.GetExtension(newFileName)}";
             }
 
             //
@@ -437,6 +442,7 @@ namespace CoreUtils
 
                 return newFilePath;
             }
+
             //
             return srcFilePath;
         }

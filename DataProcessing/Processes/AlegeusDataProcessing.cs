@@ -4,11 +4,9 @@ using System.Data.Common;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 using CoreUtils;
 using CoreUtils.Classes;
 using EtlUtilities;
-using Google.Protobuf.WellKnownTypes;
 
 namespace DataProcessing
 {
@@ -51,14 +49,14 @@ namespace DataProcessing
 
             //RemoveDuplicateFilesInPreCheckDir
             RemoveDuplicateFilesInPreCheckDir(dbConn, fileLogParams);
-
         }
 
         protected static void MoveSourceFilesToHeaderDirs(DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}", "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
 
 
@@ -80,12 +78,12 @@ namespace DataProcessing
 
             //2. Get list of folders for header from DB
             //decide table name
-            string tableName = "dbo.[Header_list_ALL]";
+            var tableName = "dbo.[Header_list_ALL]";
 
 
             //run query
             var queryString = $"Select * from {tableName} order by template_type, folder_name;";
-            var dtHeaderFolders = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null);
+            var dtHeaderFolders = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null);
 
 
             //3. for each header folder, get file and move to header1 folder
@@ -100,12 +98,11 @@ namespace DataProcessing
                 // 3. for each source folder
                 if (!Utils.IsBlank(rowFolderName))
                 {
-
                     // we need to set these first before setting folderName
                     var fileLogParams1 = Vars.dbFileProcessingLogParams;
                     fileLogParams1.SetFileNames("", rowFolderName, rowFolderName,
                         "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                        "Success", $"Added Source Files Folder");
+                        "Success", "Added Source Files Folder");
                     //
                     fileLogParams1.Bencode = rowBenCode;
                     fileLogParams1.TemplateType = rowTemplateType;
@@ -114,7 +111,7 @@ namespace DataProcessing
                     fileLogParams1.SetSourceFolderName(rowFolderName);
                     //
                     DbUtils.LogFileOperation(fileLogParams);
-                    HeaderType headerType = HeaderType.NotApplicable;
+                    var headerType = HeaderType.NotApplicable;
 
                     // get folder header type
                     switch (rowTemplateType?.ToLower())
@@ -134,7 +131,6 @@ namespace DataProcessing
                         default:
                             headerType = HeaderType.NotApplicable;
                             break;
-
                     }
 
                     // change from PROD source dir to Ctx source dir
@@ -150,12 +146,12 @@ namespace DataProcessing
                                 fileLogParams1);
 
                             fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
-                                Path.GetFileName(uniqueIdFilePath), "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                                Path.GetFileName(uniqueIdFilePath), "",
+                                $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
                                 "Success", $"Processing File ${srcFilePath}");
                             DbUtils.LogFileOperation(fileLogParams);
                         },
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-
                     );
 
                     // 3b. move all source files (with new names) to Headers dir
@@ -171,7 +167,6 @@ namespace DataProcessing
                             DbUtils.LogFileOperation(fileLogParams1);
                         },
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-
                     );
                 }
             } // each dr
@@ -190,7 +185,6 @@ namespace DataProcessing
                     DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-
             );
 
 
@@ -206,7 +200,6 @@ namespace DataProcessing
                     DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-
             );
 
             //5b: copy all header files to HoldAll
@@ -222,21 +215,21 @@ namespace DataProcessing
                     DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-
             );
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}", "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
-
         }
 
         protected static void ConvertAllHeaderExcelFilesToCsv(DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             // Log
-            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}", "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
 
@@ -244,13 +237,13 @@ namespace DataProcessing
             FileUtils.ConvertAllExcelFilesToCsv(Vars.alegeusFileHeadersRoot, false, Vars.alegeusFileHeadersRoot, dbConn,
                 fileLogParams,
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-                );
+            );
 
             // Log
-            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}", "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
-
         } //end method
 
         protected static void AddHeaderToAllHeaderDirFiles(DbConnection dbConn,
@@ -258,14 +251,16 @@ namespace DataProcessing
 
         {
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}", "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
             AddHeaderToAllHeaderDirFilesForExt("*.mbi", dbConn, fileLogParams);
             AddHeaderToAllHeaderDirFilesForExt("*.csv", dbConn, fileLogParams);
             AddHeaderToAllHeaderDirFilesForExt("*.txt", dbConn, fileLogParams);
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}", "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
@@ -274,16 +269,15 @@ namespace DataProcessing
             FileOperationLogParams fileLogParams)
 
         {
-
             // Iterate all files in header dir
             FileUtils.IterateDirectory(
                 Vars.alegeusFileHeadersRoot, DirectoryIterateType.Files, false, fileExt,
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // 0. calc headerType for file
-                    HeaderType folderHeaderType = DbUtils.GetHeaderTypeFromFileName(srcFilePath);
+                    var folderHeaderType = DbUtils.GetHeaderTypeFromFileName(srcFilePath);
 
-                    HeaderType headerType = Import.GetAlegeusHeaderTypeFromFile(srcFilePath, folderHeaderType);
+                    var headerType = Import.GetAlegeusHeaderTypeFromFile(srcFilePath, folderHeaderType);
 
                     //1. truncate staging table
                     var tableName = "[dbo].[alegeus_file_staging]";
@@ -324,7 +318,7 @@ namespace DataProcessing
                     //var queryString = $" UPDATE {tableName} set folder_name = '' where folder_name is null; " + "\r\n" +
                     //                  $" UPDATE {tableName} set data_row = replace(data_row, '\"', ''); " + "\r\n";
 
-                    var queryString = $" ";
+                    var queryString = " ";
 
                     // fix header proc
                     if (!Utils.IsBlank(procName)) queryString += $" EXEC {procName};" + "\r\n";
@@ -350,14 +344,14 @@ namespace DataProcessing
                     DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-                );
+            );
         }
 
         protected static void CopyHoldAllFilesToPreCheckDir(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
-
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}", "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
             //
@@ -366,59 +360,60 @@ namespace DataProcessing
                 Vars.alegeusFilesPreCheckRoot, "", "",
                 (srcFilePath, destFilePath, dummy2) =>
                 {
-                // add to fileLog
-                fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                    Path.GetFileName(destFilePath), destFilePath, "AutomatedHeaders-CopyHoldAllFilesToProcessing",
-                    "Success", "Copied HoldAll File to Processing");
+                    // add to fileLog
+                    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                        Path.GetFileName(destFilePath), destFilePath, "AutomatedHeaders-CopyHoldAllFilesToProcessing",
+                        "Success", "Copied HoldAll File to Processing");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-
             );
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}", "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
 
         protected static void MoveHeaderDirFilesToPreCheck(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
-
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}", "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
 
             //1. Copy / y G:\FTP\AutomatedHeaderV1_Files\*.* G:\FTP\AutomatedHeaderV1_Files\Archive
             //
             FileUtils.MoveFiles(
-                new string[] { Vars.alegeusFileHeadersRoot }, false, new string[] { "*.txt", "*.csv", "*.mbi" },
+                new[] {Vars.alegeusFileHeadersRoot}, false, new[] {"*.txt", "*.csv", "*.mbi"},
                 Vars.alegeusFilesPreCheckRoot, "", ".mbi",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
-                // add to fileLog
-                fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                    Path.GetFileName(destFilePath), destFilePath, "AutomatedHeaders-renameHeaderDirTxtFilesToMbi",
-                    "Success", "Renamed txt file to mbi");
+                    // add to fileLog
+                    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                        Path.GetFileName(destFilePath), destFilePath, "AutomatedHeaders-renameHeaderDirTxtFilesToMbi",
+                        "Success", "Renamed txt file to mbi");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-
             );
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}", "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
 
-        protected static void RemoveDuplicateFilesInPreCheckDir(DbConnection dbConn, FileOperationLogParams fileLogParams)
+        protected static void RemoveDuplicateFilesInPreCheckDir(DbConnection dbConn,
+            FileOperationLogParams fileLogParams)
         {
-
             //1. delete xls, xlsx, txt, csv for each mbi file found
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}", "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
             //
@@ -426,22 +421,23 @@ namespace DataProcessing
                 Vars.alegeusFilesPreCheckRoot, DirectoryIterateType.Files, false, "*.mbi",
                 (srcFilePath, destFilePath, dummy2) =>
                 {
-                // delete xls, xlsx, txt, csv
-                string[] extensionsToDelete = { ".xls", ".xlsx", ".txt", ".csv" };
+                    // delete xls, xlsx, txt, csv
+                    string[] extensionsToDelete = {".xls", ".xlsx", ".txt", ".csv"};
 
                     foreach (var fileExt in extensionsToDelete)
                     {
                         var delFilePath = FileUtils.GetDestFilePath(srcFilePath, fileExt);
                         FileUtils.DeleteFileIfExists(delFilePath, null,
                             (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-                            );
+                        );
                     }
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}", "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
@@ -449,9 +445,9 @@ namespace DataProcessing
         protected static void PreCheckFilesAndProcess(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
-
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}", "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
             //
@@ -459,57 +455,58 @@ namespace DataProcessing
                 Vars.alegeusFilesPreCheckRoot, DirectoryIterateType.Files, false, "*.mbi",
                 (srcFilePath, destFilePath, dummy2) =>
                 {
-                // check the file 
-                using var fileChecker = new FileChecker(srcFilePath, PlatformType.Alegeus, Vars.dbConnAlegeusErrorLog, fileLogParams,
-                    (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-                );
+                    // check the file 
+                    using var fileChecker = new FileChecker(srcFilePath, PlatformType.Alegeus,
+                        Vars.dbConnAlegeusErrorLog, fileLogParams,
+                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                    );
                     fileChecker.CheckFile(FileCheckType.AllData);
 
-                // on success
-                if (fileChecker.fileCheckResults.Succcess)
+                    // on success
+                    if (fileChecker.fileCheckResults.Succcess)
                     {
                         var fileName = Path.GetFileName(srcFilePath);
                         var newFilePath = $"{Vars.alegeusFilesPreCheckOKRoot}/{fileName}";
                         FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
                             {
-                            // add to fileLog
-                            fileLogParams.SetFileNames("", fileName, srcFilePath,
+                                // add to fileLog
+                                fileLogParams.SetFileNames("", fileName, srcFilePath,
                                     Path.GetFileName(newFilePath), newFilePath,
                                     $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
                                     "Success", "PreCheck OK. Moved File to PreCheck OK Directory");
-                            //
-                            DbUtils.LogFileOperation(fileLogParams);
+                                //
+                                DbUtils.LogFileOperation(fileLogParams);
                             },
                             (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-                            );
-
+                        );
                     }
 
-                // on failure
-                else
+                    // on failure
+                    else
                     {
                         var fileName = Path.GetFileName(srcFilePath);
                         var newFilePath = $"{Vars.alegeusFilesPreCheckFailRoot}/{fileName}";
-                    //
-                    FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
-                    {
-                    // add to fileLog
-                    fileLogParams.SetFileNames("", fileName, srcFilePath,
-                        Path.GetFileName(newFilePath), newFilePath, $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                        "Success", "PreeCheck FAIL. Moved File to PreCheck FAIL Directory");
-                    //
-                    DbUtils.LogFileOperation(fileLogParams);
-                    },
-                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                        //
+                        FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
+                            {
+                                // add to fileLog
+                                fileLogParams.SetFileNames("", fileName, srcFilePath,
+                                    Path.GetFileName(newFilePath), newFilePath,
+                                    $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                                    "Fail", "PreCheck FAIL. Moved File to PreCheck FAIL Directory");
+                                //
+                                DbUtils.LogFileOperation(fileLogParams);
+                            },
+                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                         );
-
                     }
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}", "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }

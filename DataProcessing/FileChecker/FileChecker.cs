@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.Common;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
-using System.Data.SqlClient;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using CoreUtils;
 using CoreUtils.Classes;
-using DataProcessing.DataModels;
 using DataProcessing.DataModels.AlegeusErrorLog;
 using EtlUtilities;
 using MySql.Data.MySqlClient;
@@ -26,41 +19,32 @@ namespace DataProcessing
 {
     public class FileCheckResults : Dictionary<int, string>
     {
-        public Boolean Succcess
-        {
-            get
-            {
-                return this.Count == 0;
-            }
-        }
-
         public FileCheckResults() : base()
         {
+        }
 
+        public Boolean Succcess
+        {
+            get { return this.Count == 0; }
         }
     }
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class FileChecker : IDisposable
     {
-        public string srcFilePath { get; set; }
-        public PlatformType PlatformType { get; set; }
-        public EdiFileFormat EdiFileFormat { get; set; }
-        public FileOperationLogParams fileLogParams { get; set; }
-        public DbConnection dbConn { get; set; }
-        public Boolean hasHeaderRow = false;
-        public HeaderType headerType = HeaderType.NotApplicable;
-        //
-        public readonly FileCheckResults fileCheckResults = new FileCheckResults();
-        //
-        private readonly MySqlConnection dbConnPortalWc;
-        //
-        public OnErrorCallback OnErrorCallback { get; }
-
         //
         private static Dictionary<string, string> cachedDBChecks = new Dictionary<string, string>();
 
-        public FileChecker(string _srcFilePath, PlatformType _platformType, DbConnection _dbConn, FileOperationLogParams _fileLogParams, OnErrorCallback _onErrorCallback) : base()
+        //
+        private readonly MySqlConnection dbConnPortalWc;
+
+        //
+        public readonly FileCheckResults fileCheckResults = new FileCheckResults();
+        public Boolean hasHeaderRow = false;
+        public HeaderType headerType = HeaderType.NotApplicable;
+
+        public FileChecker(string _srcFilePath, PlatformType _platformType, DbConnection _dbConn,
+            FileOperationLogParams _fileLogParams, OnErrorCallback _onErrorCallback) : base()
         {
             this.srcFilePath = _srcFilePath;
             this.PlatformType = _platformType;
@@ -70,11 +54,26 @@ namespace DataProcessing
             this.OnErrorCallback = _onErrorCallback;
         }
 
+        public string srcFilePath { get; set; }
+        public PlatformType PlatformType { get; set; }
+        public EdiFileFormat EdiFileFormat { get; set; }
+        public FileOperationLogParams fileLogParams { get; set; }
+
+        public DbConnection dbConn { get; set; }
+
+        //
+        public OnErrorCallback OnErrorCallback { get; }
+
+        public void Dispose()
+        {
+            //
+        }
+
         public void CheckFile(FileCheckType fileCheckType)
         {
-
             //
-            Dictionary<EdiFileFormat, List<int>> fileFormats = ImpExpUtils.GetAlegeusFileFormats(this.srcFilePath, false, this.fileLogParams);
+            Dictionary<EdiFileFormat, List<int>> fileFormats =
+                ImpExpUtils.GetAlegeusFileFormats(this.srcFilePath, false, this.fileLogParams);
 
             // file may contain only a header...
             if (fileFormats.Count == 0)
@@ -92,7 +91,8 @@ namespace DataProcessing
         {
             // 2. import the file
             string fileName = Path.GetFileName(srcFilePath) ?? string.Empty;
-            fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, "", "", "CheckFile", $"Starting: Check {fileName}", "Starting");
+            fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, "", "",
+                "CheckFile", $"Starting: Check {fileName}", "Starting");
 
             // split text fileinto multiple files
             Dictionary<EdiFileFormat, Object[]> files = new Dictionary<EdiFileFormat, Object[]>();
@@ -103,7 +103,7 @@ namespace DataProcessing
                 // get temp file for each format
                 string splitFileName = Path.GetTempFileName();
                 var splitFileWriter = new StreamWriter(splitFileName, false);
-                files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
+                files.Add(fileFormat, new Object[] {splitFileWriter, splitFileName});
             }
 
             // open file for reading
@@ -121,10 +121,10 @@ namespace DataProcessing
                         if (
                             fileFormats[fileFormat2].Contains(rowNo)
                             || Utils.Left(line, 2) == "RA" || Utils.Left(line, 2) == "IA"
-                            )
+                        )
                         {
                             // get temp file for each format
-                            var splitFileWriter = (StreamWriter)files[fileFormat2][0];
+                            var splitFileWriter = (StreamWriter) files[fileFormat2][0];
                             // if there is prvUnwrittenLine it was probably a header line - write to the file that 
 
                             splitFileWriter.WriteLine(line);
@@ -135,16 +135,17 @@ namespace DataProcessing
                     // go to next line if a line was written
                 }
             }
+
             // close all files
             //
             foreach (var fileFormat3 in files.Keys)
             {
                 // get temp file for each format
-                var writer = (StreamWriter)files[fileFormat3][0];
+                var writer = (StreamWriter) files[fileFormat3][0];
                 writer.Close();
 
                 // import the file
-                CheckFile(fileFormat3, (string)files[fileFormat3][1]);
+                CheckFile(fileFormat3, (string) files[fileFormat3][1]);
             }
         }
 
@@ -169,18 +170,21 @@ namespace DataProcessing
 
 
             // import the file with bulk copy
-            var newPath = Import.PrefixLineWithEntireLineAndFileName(headerType, currentFilePath, this.srcFilePath, fileLogParams);
+            var newPath =
+                Import.PrefixLineWithEntireLineAndFileName(headerType, currentFilePath, this.srcFilePath,
+                    fileLogParams);
 
             // import into table so we can manipulate the file
-            ImpExpUtils.ImportCsvFileBulkCopy(this.headerType, this.dbConn, newPath, this.hasHeaderRow, tableName, mappings, this.fileLogParams,
+            ImpExpUtils.ImportCsvFileBulkCopy(this.headerType, this.dbConn, newPath, this.hasHeaderRow, tableName,
+                mappings, this.fileLogParams,
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-                );
+            );
 
             // update check type for table
             string queryString1 = $"update {tableName} set check_type = 'PreCheck' where 1 = 1;";
             DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString1, null,
-                    fileLogParams?.GetMessageLogParams()
-                );
+                fileLogParams?.GetMessageLogParams()
+            );
 
             // check file data
             CheckFileData(fileFormat, mappings);
@@ -190,10 +194,10 @@ namespace DataProcessing
             string queryString = $"exec {postImportProc};";
             //
             DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
-                    fileLogParams?.GetMessageLogParams()
-                );
-
+                fileLogParams?.GetMessageLogParams()
+            );
         }
+
         private void CheckFileData(EdiFileFormat fileFormat, TypedCsvSchema mappings)
         {
             // ensure previously cached data is not used so
@@ -273,6 +277,7 @@ namespace DataProcessing
                         {
                             skipRestOfRow = this.CheckEmployeeExists(row, column);
                         }
+
                         break;
                     // plan related
                     case "planid":
@@ -318,19 +323,22 @@ namespace DataProcessing
                 // format
                 if (!Utils.IsValueOfFormat(value, column.FormatType))
                 {
-                    this.AddErrorForRow(row, column.SourceColumn, $"{column.SourceColumn} must formatted as {column.FormatType.ToDescription()}");
+                    this.AddErrorForRow(row, column.SourceColumn,
+                        $"{column.SourceColumn} must formatted as {column.FormatType.ToDescription()}");
                 }
 
                 // minLength
                 if (column.MinLength > 0 && value.Length < column.MinLength)
                 {
-                    this.AddErrorForRow(row, column.SourceColumn, $"{column.SourceColumn} must minimum {column.MinLength} characters long");
+                    this.AddErrorForRow(row, column.SourceColumn,
+                        $"{column.SourceColumn} must minimum {column.MinLength} characters long");
                 }
 
                 // maxLength
                 if (column.MinLength > 0 && value.Length < column.MinLength)
                 {
-                    this.AddErrorForRow(row, column.SourceColumn, $"{column.SourceColumn} must minimum {column.MinLength} characters long");
+                    this.AddErrorForRow(row, column.SourceColumn,
+                        $"{column.SourceColumn} must minimum {column.MinLength} characters long");
                 }
 
                 // min/max value
@@ -344,15 +352,16 @@ namespace DataProcessing
                     float numValue = Utils.ToNumber(value);
                     if (numValue < column.MinValue)
                     {
-                        this.AddErrorForRow(row, column.SourceColumn, $"{column.SourceColumn} must be a number with a value greater than ${column.MinValue}");
+                        this.AddErrorForRow(row, column.SourceColumn,
+                            $"{column.SourceColumn} must be a number with a value greater than ${column.MinValue}");
                     }
+
                     if (numValue > column.MaxValue)
                     {
-                        this.AddErrorForRow(row, column.SourceColumn, $"{column.SourceColumn} must be a number with a value less than ${column.MaxValue}");
+                        this.AddErrorForRow(row, column.SourceColumn,
+                            $"{column.SourceColumn} must be a number with a value less than ${column.MaxValue}");
                     }
                 }
-
-
             }
         }
 
@@ -360,7 +369,8 @@ namespace DataProcessing
             string errMessage)
         {
             // add to row so it will be saved back to DB for row by row data
-            row.error_code = errCode + "\n"; ;
+            row.error_code = errCode + "\n";
+            ;
             row.error_message += errMessage + "\n";
             //
             int key = row.source_row_no ?? 0;
@@ -421,7 +431,8 @@ namespace DataProcessing
         public Boolean CheckEmployerExists(mbi_file_table_stage row, TypedCsvColumn column)
         {
             var errorMessage = "";
-            var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}";
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}";
             if (cachedDBChecks.ContainsKey(cacheKey))
             {
                 errorMessage = cachedDBChecks[cacheKey];
@@ -441,10 +452,10 @@ namespace DataProcessing
                             $"select employer_id, employer_name, employer_status from wc.wc_employers " +
                             $" where employer_id = '{Utils.DbQuote(row.EmployerId)}' ";
                         //
-                        DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        DataTable dbResults = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                             queryString, null,
                             fileLogParams?.GetMessageLogParams()
-                            );
+                        );
 
                         if (dbResults.Rows.Count == 0)
                         {
@@ -467,6 +478,7 @@ namespace DataProcessing
                         throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
                     }
                 }
+
                 //
                 cachedDBChecks.Add(cacheKey, errorMessage);
             }
@@ -487,7 +499,8 @@ namespace DataProcessing
         public Boolean CheckEmployeeExists(mbi_file_table_stage row, TypedCsvColumn column)
         {
             var errorMessage = "";
-            var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}-{row.EmployeeID}";
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}-{row.EmployeeID}";
             if (cachedDBChecks.ContainsKey(cacheKey))
             {
                 errorMessage = cachedDBChecks[cacheKey];
@@ -497,11 +510,13 @@ namespace DataProcessing
                 // check DB
                 if (Utils.IsBlank(row.EmployerId))
                 {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n"; ;
+                    errorMessage += $"The Employer ID cannot be blank" + "\n";
+                    ;
                 }
                 else if (Utils.IsBlank(row.EmployeeID))
                 {
-                    errorMessage += $"The Employee ID cannot be blank" + "\n"; ;
+                    errorMessage += $"The Employee ID cannot be blank" + "\n";
+                    ;
                 }
                 else
                 {
@@ -512,13 +527,16 @@ namespace DataProcessing
                             $" where employerid = '{Utils.DbQuote(row.EmployerId)}' " +
                             $" and employeeid = '{Utils.DbQuote(row.EmployeeID)}' ";
                         //
-                        DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        DataTable dbResults = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                             queryString, null,
                             fileLogParams?.GetMessageLogParams());
 
                         if (dbResults.Rows.Count == 0)
                         {
-                            errorMessage += $"The Employee ID {row.EmployeeID} could not be found for Employer Id {row.EmployerId}" + "\n"; ;
+                            errorMessage +=
+                                $"The Employee ID {row.EmployeeID} could not be found for Employer Id {row.EmployerId}" +
+                                "\n";
+                            ;
                         }
                         else
                         {
@@ -537,6 +555,7 @@ namespace DataProcessing
                         throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
                     }
                 }
+
                 //
                 cachedDBChecks.Add(cacheKey, errorMessage);
             }
@@ -553,10 +572,12 @@ namespace DataProcessing
                 return false;
             }
         }
+
         public Boolean CheckDependentExists(mbi_file_table_stage row, TypedCsvColumn column)
         {
             var errorMessage = "";
-            var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}-{row.EmployeeID}";
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}-{row.EmployeeID}";
             if (cachedDBChecks.ContainsKey(cacheKey))
             {
                 errorMessage = cachedDBChecks[cacheKey];
@@ -566,11 +587,13 @@ namespace DataProcessing
                 // check DB
                 if (Utils.IsBlank(row.EmployerId))
                 {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n"; ;
+                    errorMessage += $"The Employer ID cannot be blank" + "\n";
+                    ;
                 }
                 else if (Utils.IsBlank(row.EmployeeID))
                 {
-                    errorMessage += $"The Employee ID cannot be blank" + "\n"; ;
+                    errorMessage += $"The Employee ID cannot be blank" + "\n";
+                    ;
                 }
                 else
                 {
@@ -606,6 +629,7 @@ namespace DataProcessing
                         throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
                     }
                 }
+
                 //
                 cachedDBChecks.Add(cacheKey, errorMessage);
             }
@@ -622,10 +646,12 @@ namespace DataProcessing
                 return false;
             }
         }
+
         public Boolean CheckEmployerPlanExists(mbi_file_table_stage row, TypedCsvColumn column)
         {
             var errorMessage = "";
-            var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}-{row.PlanId}";
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}-{row.PlanId}";
             if (cachedDBChecks.ContainsKey(cacheKey))
             {
                 errorMessage = cachedDBChecks[cacheKey];
@@ -635,11 +661,13 @@ namespace DataProcessing
                 // check DB
                 if (Utils.IsBlank(row.EmployerId))
                 {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n"; ;
+                    errorMessage += $"The Employer ID cannot be blank" + "\n";
+                    ;
                 }
                 else if (Utils.IsBlank(row.PlanId))
                 {
-                    errorMessage += $"The Plan ID cannot be blank" + "\n"; ;
+                    errorMessage += $"The Plan ID cannot be blank" + "\n";
+                    ;
                 }
                 else
                 {
@@ -654,31 +682,37 @@ namespace DataProcessing
                             $" group by employer_id, plan_id, account_type_code " +
                             $" LIMIT 1 ";
                         //
-                        DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        DataTable dbResults = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                             queryString, null,
                             fileLogParams?.GetMessageLogParams());
 
                         if (dbResults.Rows.Count == 0)
                         {
-                            errorMessage += $"The Plan ID {row.PlanId} could not be found for Employer Id {row.EmployerId}" + "\n"; ;
+                            errorMessage +=
+                                $"The Plan ID {row.PlanId} could not be found for Employer Id {row.EmployerId}" + "\n";
+                            ;
                         }
                         else
                         {
                             DataRow rec = dbResults.Rows[0];
-                            DateTime plan_year_start_date = (DateTime)rec["plan_year_start_date"];
-                            DateTime plan_year_end_date = (DateTime)rec["plan_year_end_date"];
-                            DateTime grace_period_end_date = (DateTime)rec["grace_period_end_date"];
+                            DateTime plan_year_start_date = (DateTime) rec["plan_year_start_date"];
+                            DateTime plan_year_end_date = (DateTime) rec["plan_year_end_date"];
+                            DateTime grace_period_end_date = (DateTime) rec["grace_period_end_date"];
 
                             //todo: check plan dates match Alegeus
                             if (!Utils.IsBlank(row.PlanStartDate) && plan_year_start_date > DateTime.Now.Date)
                             {
                                 errorMessage +=
-                                    $"The Plan ID {row.PlanId} starts only on {Utils.ToDateString(plan_year_start_date)}" + "\n";
+                                    $"The Plan ID {row.PlanId} starts only on {Utils.ToDateString(plan_year_start_date)}" +
+                                    "\n";
                             }
+
                             if (!Utils.IsBlank(row.PlanEndDate) && plan_year_end_date < DateTime.Now.Date)
                             {
                                 errorMessage =
-                                    $"The Plan ID {row.PlanId} ended on {Utils.ToDateString(plan_year_end_date)}" + "\n"; ;
+                                    $"The Plan ID {row.PlanId} ended on {Utils.ToDateString(plan_year_end_date)}" +
+                                    "\n";
+                                ;
                             }
                         }
                     }
@@ -687,6 +721,7 @@ namespace DataProcessing
                         throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
                     }
                 }
+
                 //
                 cachedDBChecks.Add(cacheKey, errorMessage);
             }
@@ -703,10 +738,12 @@ namespace DataProcessing
                 return false;
             }
         }
+
         public Boolean CheckEmployeePlanExists(mbi_file_table_stage row, TypedCsvColumn column)
         {
             var errorMessage = "";
-            var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}-{row.EmployeeID}-{row.PlanId}";
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}-{row.EmployeeID}-{row.PlanId}";
             if (cachedDBChecks.ContainsKey(cacheKey))
             {
                 errorMessage = cachedDBChecks[cacheKey];
@@ -716,15 +753,18 @@ namespace DataProcessing
                 // check DB
                 if (Utils.IsBlank(row.EmployerId))
                 {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n"; ;
+                    errorMessage += $"The Employer ID cannot be blank" + "\n";
+                    ;
                 }
                 else if (Utils.IsBlank(row.EmployeeID))
                 {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n"; ;
+                    errorMessage += $"The Employer ID cannot be blank" + "\n";
+                    ;
                 }
                 else if (Utils.IsBlank(row.PlanId))
                 {
-                    errorMessage += $"The Plan ID cannot be blank" + "\n"; ;
+                    errorMessage += $"The Plan ID cannot be blank" + "\n";
+                    ;
                 }
                 else
                 {
@@ -739,19 +779,22 @@ namespace DataProcessing
                             $" group by employerid, employeeid, plancode, plandesc" +
                             $" LIMIT 1 ";
                         //
-                        DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        DataTable dbResults = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                             queryString, null,
                             fileLogParams?.GetMessageLogParams());
 
                         if (dbResults.Rows.Count == 0)
                         {
-                            errorMessage += $"The Plan ID {row.PlanId} could not be found for Employer Id {row.EmployerId} and Employee Id {row.EmployeeID}" + "\n"; ;
+                            errorMessage +=
+                                $"The Plan ID {row.PlanId} could not be found for Employer Id {row.EmployerId} and Employee Id {row.EmployeeID}" +
+                                "\n";
+                            ;
                         }
                         else
                         {
                             DataRow rec = dbResults.Rows[0];
-                            DateTime plan_year_start_date = (DateTime)rec["planstart"];
-                            DateTime plan_year_end_date = (DateTime)rec["planend"];
+                            DateTime plan_year_start_date = (DateTime) rec["planstart"];
+                            DateTime plan_year_end_date = (DateTime) rec["planend"];
                             //DateTime grace_period_end_date = Utils.ToDateTime(rec["grace_period_end_date"]?.ToString());
 
                             // todo: check depositdate are within the plan dates in Alegeus
@@ -759,12 +802,16 @@ namespace DataProcessing
                             if (plan_year_start_date > DateTime.Now.Date)
                             {
                                 errorMessage +=
-                                    $"The Plan ID {row.PlanId} starts only on {Utils.ToDateString(plan_year_start_date)}" + "\n";
+                                    $"The Plan ID {row.PlanId} starts only on {Utils.ToDateString(plan_year_start_date)}" +
+                                    "\n";
                             }
+
                             if (plan_year_end_date < DateTime.Now.Date)
                             {
                                 errorMessage =
-                                    $"The Plan ID {row.PlanId} ended on {Utils.ToDateString(plan_year_end_date)}" + "\n"; ;
+                                    $"The Plan ID {row.PlanId} ended on {Utils.ToDateString(plan_year_end_date)}" +
+                                    "\n";
+                                ;
                             }
                         }
                     }
@@ -773,6 +820,7 @@ namespace DataProcessing
                         throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
                     }
                 }
+
                 //
                 cachedDBChecks.Add(cacheKey, errorMessage);
             }
@@ -793,7 +841,8 @@ namespace DataProcessing
         public Boolean CheckDependentPlanExists(mbi_file_table_stage row, TypedCsvColumn column)
         {
             var errorMessage = "";
-            var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}-{row.PlanId}";
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}-{row.PlanId}";
             if (cachedDBChecks.ContainsKey(cacheKey))
             {
                 errorMessage = cachedDBChecks[cacheKey];
@@ -803,15 +852,18 @@ namespace DataProcessing
                 // check DB
                 if (Utils.IsBlank(row.EmployerId))
                 {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n"; ;
+                    errorMessage += $"The Employer ID cannot be blank" + "\n";
+                    ;
                 }
                 else if (Utils.IsBlank(row.EmployeeID))
                 {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n"; ;
+                    errorMessage += $"The Employer ID cannot be blank" + "\n";
+                    ;
                 }
                 else if (Utils.IsBlank(row.PlanId))
                 {
-                    errorMessage += $"The Plan ID cannot be blank" + "\n"; ;
+                    errorMessage += $"The Plan ID cannot be blank" + "\n";
+                    ;
                 }
                 else
                 {
@@ -857,6 +909,7 @@ namespace DataProcessing
                         throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
                     }
                 }
+
                 //
                 cachedDBChecks.Add(cacheKey, errorMessage);
             }
@@ -872,11 +925,6 @@ namespace DataProcessing
             {
                 return false;
             }
-        }
-
-        public void Dispose()
-        {
-            //
         }
     }
 }

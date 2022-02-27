@@ -1,21 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Windows.Forms;
 using CoreUtils;
 using CoreUtils.Classes;
-using Sylvan.Data.Csv;
-
 //using ETLBox.Connection;
 //using ETLBox.DataFlow;
 //using ETLBox.DataFlow.Connectors;
-
-
 using SylvanCsvDataReader = Sylvan.Data.Csv.CsvDataReader;
 using CsvHelperCsvDataReader = CsvHelper.CsvDataReader;
 
@@ -26,7 +18,8 @@ namespace EtlUtilities
 {
     public static class Import
     {
-        public static void ImportCrmListCsvHlpr(HeaderType headerType, DbConnection dbConn, string srcFilePath, string tableName, FileOperationLogParams fileLogParams
+        public static void ImportCrmListCsvHlpr(HeaderType headerType, DbConnection dbConn, string srcFilePath,
+            string tableName, FileOperationLogParams fileLogParams
             , OnErrorCallback onErrorCallback)
         {
             fileLogParams?.SetFileNames("", "", "", "", "", "ImportCrmListManual", "CRMList", "Starting: Get CRM List");
@@ -44,17 +37,18 @@ namespace EtlUtilities
             };
 
             //
-            ImpExpUtils.ImportCsvFile<CsvFileSpecs>(srcFilePath, dbConn, tableName, columns, false, fileLogParams, onErrorCallback);
-
+            ImpExpUtils.ImportCsvFile<CsvFileSpecs>(srcFilePath, dbConn, tableName, columns, false, fileLogParams,
+                onErrorCallback);
         }
-        public static void ImportAlegeusFile(HeaderType headerType, DbConnection dbConn, string srcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams
+
+        public static void ImportAlegeusFile(HeaderType headerType, DbConnection dbConn, string srcFilePath,
+            Boolean hasHeaderRow, FileOperationLogParams fileLogParams
             , OnErrorCallback onErrorCallback)
         {
-
             //
             Dictionary<EdiFileFormat, List<int>> fileFormats = ImpExpUtils.GetAlegeusFileFormats(
-                                                                                srcFilePath, hasHeaderRow, fileLogParams
-                                                                                );
+                srcFilePath, hasHeaderRow, fileLogParams
+            );
 
             // file may contain only a header...
             if (fileFormats.Count == 0)
@@ -71,24 +65,23 @@ namespace EtlUtilities
                 );
 
                 return;
-
             }
 
             // 2. import the file
             ImportAlegeusFile(fileFormats, headerType, dbConn, srcFilePath, hasHeaderRow, fileLogParams,
                 onErrorCallback);
-
         }
 
         //doesnt work - mappings not clear
-        public static void ImportAlegeusFile(Dictionary<EdiFileFormat, List<int>> fileFormats, HeaderType headerType, DbConnection dbConn, string srcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams
+        public static void ImportAlegeusFile(Dictionary<EdiFileFormat, List<int>> fileFormats, HeaderType headerType,
+            DbConnection dbConn, string srcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams
             , OnErrorCallback onErrorCallback)
         {
             try
             {
-
                 string fileName = Path.GetFileName(srcFilePath);
-                fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, "", "", "ImportAlegeusFile", $"Starting: Import {fileName}", "Starting");
+                fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, "", "",
+                    "ImportAlegeusFile", $"Starting: Import {fileName}", "Starting");
 
                 // split text fileinto multiple files
                 Dictionary<EdiFileFormat, Object[]> files = new Dictionary<EdiFileFormat, Object[]>();
@@ -99,7 +92,7 @@ namespace EtlUtilities
                     // get temp file for each format
                     string splitFileName = Path.GetTempFileName();
                     var splitFileWriter = new StreamWriter(splitFileName, false);
-                    files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
+                    files.Add(fileFormat, new Object[] {splitFileWriter, splitFileName});
                 }
 
                 // open file for reading
@@ -118,7 +111,7 @@ namespace EtlUtilities
                                 || (line?.Substring(0, 2) == "RA" || line?.Substring(0, 2) == "IA"))
                             {
                                 // get temp file for each format
-                                var splitFileWriter = (StreamWriter)files[fileFormat2][0];
+                                var splitFileWriter = (StreamWriter) files[fileFormat2][0];
                                 // if there is prvUnwrittenLine it was probably a header line - write to the file that 
 
                                 splitFileWriter.WriteLine(line);
@@ -129,16 +122,18 @@ namespace EtlUtilities
                         // go to next line if a line was written
                     }
                 }
+
                 // close all files
                 //
                 foreach (var fileFormat3 in files.Keys)
                 {
                     // get temp file for each format
-                    var writer = (StreamWriter)files[fileFormat3][0];
+                    var writer = (StreamWriter) files[fileFormat3][0];
                     writer.Close();
 
                     // import the file
-                    ImportAlegeusFile(fileFormat3, headerType, dbConn, (string)files[fileFormat3][1], srcFilePath, hasHeaderRow, fileLogParams, onErrorCallback);
+                    ImportAlegeusFile(fileFormat3, headerType, dbConn, (string) files[fileFormat3][1], srcFilePath,
+                        hasHeaderRow, fileLogParams, onErrorCallback);
                 }
             }
             catch (Exception ex)
@@ -153,11 +148,11 @@ namespace EtlUtilities
                     throw;
                 }
             }
-
         }
 
 
-        private static void ImportAlegeusFile(EdiFileFormat fileFormat, HeaderType headerType, DbConnection dbConn, string srcFilePath, string orgSrcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams
+        private static void ImportAlegeusFile(EdiFileFormat fileFormat, HeaderType headerType, DbConnection dbConn,
+            string srcFilePath, string orgSrcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams
             , OnErrorCallback onErrorCallback)
         {
             try
@@ -167,10 +162,13 @@ namespace EtlUtilities
                 Boolean isResultFile = GetAlegeusFileFormatIsResultFile(fileFormat);
 
                 //
-                var newPath = PrefixLineWithEntireLineAndFileName(headerType, srcFilePath, orgSrcFilePath, fileLogParams);
+                var newPath =
+                    PrefixLineWithEntireLineAndFileName(headerType, srcFilePath, orgSrcFilePath, fileLogParams);
                 //
                 string tableName = isResultFile ? "[dbo].[res_file_table_stage]" : "[dbo].[mbi_file_table_stage]";
-                string postImportProc = isResultFile ? "dbo.process_res_file_table_stage_import" : "dbo.process_mbi_file_table_stage_import";
+                string postImportProc = isResultFile
+                    ? "dbo.process_res_file_table_stage_import"
+                    : "dbo.process_mbi_file_table_stage_import";
 
                 // truncate staging table
                 DbUtils.TruncateTable(dbConn, tableName,
@@ -178,7 +176,8 @@ namespace EtlUtilities
 
 
                 // import the file with bulk copy
-                ImpExpUtils.ImportCsvFileBulkCopy(headerType, dbConn, newPath, hasHeaderRow, tableName, mappings, fileLogParams, onErrorCallback
+                ImpExpUtils.ImportCsvFileBulkCopy(headerType, dbConn, newPath, hasHeaderRow, tableName, mappings,
+                    fileLogParams, onErrorCallback
                 );
 
                 //
@@ -201,9 +200,9 @@ namespace EtlUtilities
             }
         }
 
-        public static string PrefixLineWithEntireLineAndFileName(HeaderType headerType, string srcFilePath, string orgSrcFilePath, FileOperationLogParams fileLogParams)
+        public static string PrefixLineWithEntireLineAndFileName(HeaderType headerType, string srcFilePath,
+            string orgSrcFilePath, FileOperationLogParams fileLogParams)
         {
-
             string fileName = Path.GetFileName(orgSrcFilePath);
             //fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, orgSrcFilePath, "", "", $"{ MethodBase.GetCurrentMethod()?.Name}", $"Adding Entire Line as Last Column", "Starting");
 
@@ -227,11 +226,13 @@ namespace EtlUtilities
                         // add extra cols as sometimes error message column is missing
                         line = line + ",,,,,,,,,,,,,,,,,,,,";
                     }
+
                     // add src file path as res_file_name 
                     var newLine = $"{rowNo},{Utils.CsvQuote(line)},{fileName},{line}";
                     splitFileWriter.WriteLine(newLine);
                 }
             }
+
             splitFileWriter.Close();
 
             return tempFileName;
@@ -243,7 +244,8 @@ namespace EtlUtilities
             string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
 
             // New: IA,XX,BENEFL1,Clarity Standard Import Template, Standard Result Template, Beneflex Standard Export Template
-            if (contents.Contains("XX,") && contents.Contains("Clarity Standard Import Template,") && contents.Contains("BENEFL1,"))
+            if (contents.Contains("XX,") && contents.Contains("Clarity Standard Import Template,") &&
+                contents.Contains("BENEFL1,"))
             {
                 return HeaderType.New;
             }
@@ -266,7 +268,6 @@ namespace EtlUtilities
 
 
             return folderHeaderType;
-
         }
 
         public static Boolean GetAlegeusFileFormatIsResultFile(EdiFileFormat fileFormat)
@@ -325,7 +326,8 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeSocialSecurityNumber", "EmployeeSocialSecurityNumber", FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeSocialSecurityNumber", "EmployeeSocialSecurityNumber",
+                            FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("LastName", "LastName", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("FirstName", "FirstName", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("MiddleInitial", "MiddleInitial", FormatType.Any, 0, 0, 0, 0));
@@ -339,8 +341,10 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("Country", "Country", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("Email", "Email", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("MobileNumber", "MobileNumber", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeStatus", "EmployeeStatus", FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeStatus", "EmployeeStatus", FormatType.Any, 0, 0, 0,
+                            0));
                     }
+
                     //
                     if (fileFormat == EdiFileFormat.AlegeusResultsDemographics)
                     {
@@ -365,17 +369,20 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanId", "PlanId", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.Any, 0, 0, 0,
+                            0));
                         mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("AccountStatus", "AccountStatus", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("OriginalPrefunded", "OriginalPrefunded", FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("OriginalPrefunded", "OriginalPrefunded", FormatType.Any, 0, 0,
+                            0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeePayPeriodElection",
                             "EmployeePayPeriodElection", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerPayPeriodElection",
                             "EmployerPayPeriodElection", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EffectiveDate", "EffectiveDate", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("TerminationDate", "TerminationDate", FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("TerminationDate", "TerminationDate", FormatType.Any, 0, 0, 0,
+                            0));
                     }
 
                     //
@@ -429,7 +436,6 @@ namespace EtlUtilities
                         //
                         mappings.Add(new TypedCsvColumn("error_code", "error_code", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("error_message", "error_message", FormatType.Any, 0, 0, 0, 0));
-
                     }
 
                     break;
@@ -446,11 +452,13 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("DependentID", "DependentID", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.Any, 0, 0, 0,
+                            0));
                         mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("DeleteAccount", "DeleteAccount", FormatType.Any, 0, 0, 0, 0));
                     }
+
                     //
                     if (fileFormat == EdiFileFormat.AlegeusResultsDependentLink)
                     {
@@ -495,7 +503,8 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("IssueCard", "IssueCard", FormatType.Any, 0, 0, 0, 0));
 
                         //?? todo: to verify next column mapping
-                        mappings.Add(new TypedCsvColumn("AddressLine1", "AddressLine1", FormatType.Any, 0, 0, 0, 0));  // Shipping Address Code
+                        mappings.Add(new TypedCsvColumn("AddressLine1", "AddressLine1", FormatType.Any, 0, 0, 0,
+                            0)); // Shipping Address Code
                         //
                         mappings.Add(new TypedCsvColumn("error_code", "error_code", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("error_message", "error_message", FormatType.Any, 0, 0, 0, 0));
@@ -512,20 +521,22 @@ namespace EtlUtilities
                     {
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.Any, 0, 0, 0,
+                            0));
                         mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount", FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount",
+                            FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount",
+                            FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EffectiveDate", "EffectiveDate", FormatType.Any, 0, 0, 0, 0));
                     }
 
                     //
                     if (fileFormat == EdiFileFormat.AlegeusResultsEmployeeDeposit)
                     {
-
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.Any, 0, 0, 0, 0));
                         // ? planid??
                         mappings.Add(new TypedCsvColumn("PlanId", "PlanId", FormatType.Any, 0, 0, 0, 0));
@@ -533,12 +544,13 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount", FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount",
+                            FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount",
+                            FormatType.Any, 0, 0, 0, 0));
                         //
                         mappings.Add(new TypedCsvColumn("error_code", "error_code", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("error_message", "error_message", FormatType.Any, 0, 0, 0, 0));
-
                     }
 
                     break;
@@ -553,20 +565,22 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.Any, 0, 0, 0, 0));
                         // ? planid??
-                        mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.Any, 0, 0, 0,
+                            0));
                         mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount", FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount",
+                            FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount",
+                            FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EffectiveDate", "EffectiveDate", FormatType.Any, 0, 0, 0, 0));
                     }
 
                     //
                     if (fileFormat == EdiFileFormat.AlegeusResultsEmployeeDeposit)
                     {
-
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.Any, 0, 0, 0, 0));
                         // ? planid??
                         mappings.Add(new TypedCsvColumn("PlanId", "PlanId", FormatType.Any, 0, 0, 0, 0));
@@ -574,12 +588,13 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount", FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount",
+                            FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount",
+                            FormatType.Any, 0, 0, 0, 0));
                         //
                         mappings.Add(new TypedCsvColumn("error_code", "error_code", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("error_message", "error_message", FormatType.Any, 0, 0, 0, 0));
-
                     }
 
                     break;
@@ -595,10 +610,11 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EligibilityDate", "EligibilityDate", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("TerminationDate", "TerminationDate", FormatType.Any, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EligibilityDate", "EligibilityDate", FormatType.Any, 0, 0, 0,
+                            0));
+                        mappings.Add(new TypedCsvColumn("TerminationDate", "TerminationDate", FormatType.Any, 0, 0, 0,
+                            0));
                         mappings.Add(new TypedCsvColumn("Division", "Division", FormatType.Any, 0, 0, 0, 0));
-
                     }
 
                     //
@@ -609,11 +625,9 @@ namespace EtlUtilities
                         //
                         mappings.Add(new TypedCsvColumn("error_code", "error_code", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("error_message", "error_message", FormatType.Any, 0, 0, 0, 0));
-
                     }
 
                     break;
-
             }
 
             // entrire line
@@ -621,13 +635,15 @@ namespace EtlUtilities
         }
 
 
-        public static void ImportCrmListFileBulkCopy(HeaderType headerType, DbConnection dbConn, string srcFilePath, Boolean hasHeaderRow, string tableName, FileOperationLogParams fileLogParams
+        public static void ImportCrmListFileBulkCopy(HeaderType headerType, DbConnection dbConn, string srcFilePath,
+            Boolean hasHeaderRow, string tableName, FileOperationLogParams fileLogParams
             , OnErrorCallback onErrorCallback)
         {
             try
             {
                 string fileName = Path.GetFileName(srcFilePath);
-                fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, tableName, tableName, "ImportCrmListFileBulkCopy", $"Starting: Import {fileName}", "Starting");
+                fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, tableName,
+                    tableName, "ImportCrmListFileBulkCopy", $"Starting: Import {fileName}", "Starting");
 
                 //
                 TypedCsvSchema mappings = new TypedCsvSchema();
@@ -641,7 +657,8 @@ namespace EtlUtilities
                 mappings.Add(new TypedCsvColumn("client_start_date", "client_start_date"));
 
                 //
-                ImpExpUtils.ImportCsvFileBulkCopy(headerType, dbConn, srcFilePath, hasHeaderRow, tableName, mappings, fileLogParams,
+                ImpExpUtils.ImportCsvFileBulkCopy(headerType, dbConn, srcFilePath, hasHeaderRow, tableName, mappings,
+                    fileLogParams,
                     (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                 );
             }
@@ -657,11 +674,6 @@ namespace EtlUtilities
                     throw;
                 }
             }
-
         }
-
-
-
     }
 }
-

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Common;
-using System.IO;
 using System.Runtime.InteropServices;
 
 namespace CoreUtils.Classes
@@ -43,7 +42,7 @@ namespace CoreUtils.Classes
 
         public MessageLogParams Clone()
         {
-            var cloned = (MessageLogParams)MemberwiseClone();
+            var cloned = (MessageLogParams) MemberwiseClone();
             //
             return cloned;
         }
@@ -64,7 +63,7 @@ namespace CoreUtils.Classes
 
         public MessageLogParams SetStepAndCommand(string stepName, string command)
         {
-            var cloned = (MessageLogParams)MemberwiseClone();
+            var cloned = (MessageLogParams) MemberwiseClone();
             //
             cloned.StepName = stepName;
             cloned.Command = command;
@@ -110,7 +109,6 @@ namespace CoreUtils.Classes
         public string TemplateType = "";
         public string ToFtp = "";
 
-       
 
         public FileOperationLogParams()
         {
@@ -139,17 +137,15 @@ namespace CoreUtils.Classes
 
         public FileOperationLogParams Clone()
         {
-            var cloned = (FileOperationLogParams)MemberwiseClone();
+            var cloned = (FileOperationLogParams) MemberwiseClone();
             cloned.DbMessageLogParams = DbMessageLogParams;
             //
             return cloned;
         }
 
 
-
         public FileOperationLogParams ReInitIds()
         {
-
             //
             FileLogId = 0;
             FileLogTaskId = 0;
@@ -164,7 +160,8 @@ namespace CoreUtils.Classes
         {
             //DbConnection dbConnection, string logTableName, string moduleName, string subModuleName,
             //string stepType, string stepName, string command
-            return new MessageLogParams(this.DbConnection, "Alegeus_File_Processing.dbo.message_log", this.Platform, this.NewFileFullPath, this.ProcessingTask, this.ProcessingTaskOutcome, this.ProcessingTaskOutcomeDetails);
+            return new MessageLogParams(DbConnection, "Alegeus_File_Processing.dbo.message_log", Platform,
+                NewFileFullPath, ProcessingTask, ProcessingTaskOutcome, ProcessingTaskOutcomeDetails);
         }
 
         public FileOperationLogParams SetFileNames(string fileId, string originalFileName, string originalFullPath,
@@ -192,7 +189,9 @@ namespace CoreUtils.Classes
             //var cloned = (FileOperationLogParams)MemberwiseClone();
             return this;
         }
-        public FileOperationLogParams SetSourceFolderName(string folderName, string bencode = "", string icType = "", string templateType = "")
+
+        public FileOperationLogParams SetSourceFolderName(string folderName, string bencode = "", string icType = "",
+            string templateType = "")
         {
             //
             FolderName = folderName;
@@ -210,8 +209,9 @@ namespace CoreUtils.Classes
             //var cloned = (FileOperationLogParams)MemberwiseClone();
             return this;
         }
+
         public FileOperationLogParams SetTaskOutcome(string processingTaskOutcome,
-         string processingTaskOutcomeDetails)
+            string processingTaskOutcomeDetails)
         {
             //
             ProcessingTaskOutcome = processingTaskOutcome;
@@ -234,17 +234,10 @@ namespace CoreUtils.Classes
             if (Utils.IsBlank(OriginalFileName) && Utils.IsBlank(NewFileName))
             {
                 if (!Utils.IsBlank(FolderName))
-                {
                     OriginalFileName = FolderName;
-                }
                 else if (!Utils.IsBlank(ProcessingTask))
-                {
                     OriginalFileName = ProcessingTask;
-                }
-                else if (!Utils.IsBlank(Platform))
-                {
-                    OriginalFileName = Platform;
-                }
+                else if (!Utils.IsBlank(Platform)) OriginalFileName = Platform;
             }
 
             var orgFileId = DbUtils.GetUniqueIdFromFileName(OriginalFileName);

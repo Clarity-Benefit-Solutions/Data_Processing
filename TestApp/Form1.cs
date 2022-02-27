@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Windows.Forms;
 using CoreUtils;
 using CoreUtils.Classes;
@@ -70,7 +69,7 @@ namespace TestApp
 
         private void cmdClearLog_Click(object sender, EventArgs e)
         {
-            this.listLogs.Items.Clear();
+            listLogs.Items.Clear();
         }
 
         private void cmdClearAll_Click(object sender, EventArgs e)
@@ -80,31 +79,30 @@ namespace TestApp
 
         private void cmdOpenAccessDB_Click(object sender, EventArgs e)
         {
-
-            string directoryPath = Utils.GetExeBaseDir();
+            var directoryPath = Utils.GetExeBaseDir();
             Process.Start($"{directoryPath}/../../../_MsAccessFiles/AlegeusErrorLogSystemv4v_Control-New.accdb");
-
         }
 
         private void cmdCopyTestFiles_Click(object sender, EventArgs e)
         {
-            string directoryPath = Utils.GetExeBaseDir();
+            var directoryPath = Utils.GetExeBaseDir();
             Process.Start($"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
-            Process.Start($"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
-            Process.Start($"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
-
+            Process.Start(
+                $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
+            Process.Start(
+                $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
         }
 
         private void cmdDoALL_Click(object sender, EventArgs e)
         {
             var eventArgs = EventArgs.Empty;
-            this.cmdCopyTestFiles_Click(this, eventArgs);
-            this.cmdClearLog_Click(this, eventArgs);
-            this.cmdClearAll_Click(this, eventArgs);
-            this.cmdProcessCobraFiles_Click(this, eventArgs);
-            this.cmdProcessAlegeusFiles_Click(this, eventArgs);
-            this.cmdRetrieveFtpErrorLogs_Click(this, eventArgs);
-            this.cmdOpenAccessDB_Click(this, eventArgs);
+            cmdCopyTestFiles_Click(this, eventArgs);
+            cmdClearLog_Click(this, eventArgs);
+            cmdClearAll_Click(this, eventArgs);
+            cmdProcessCobraFiles_Click(this, eventArgs);
+            cmdProcessAlegeusFiles_Click(this, eventArgs);
+            cmdRetrieveFtpErrorLogs_Click(this, eventArgs);
+            cmdOpenAccessDB_Click(this, eventArgs);
         }
     }
 }

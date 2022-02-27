@@ -47,12 +47,10 @@ namespace DataProcessing
                 return _dbCtxCobraFileProcessingDefault;
             }
         }
+
         private static COBRAEntities DbCtxCobraFileProcessingNew
         {
-            get
-            {
-                return new COBRAEntities(connStrNameCobraFileProcessing);
-            }
+            get { return new COBRAEntities(connStrNameCobraFileProcessing); }
         }
 
 
@@ -102,16 +100,15 @@ namespace DataProcessing
             get
             {
                 if (_dbCtxAlegeusFileProcessingDefault == null)
-                    _dbCtxAlegeusFileProcessingDefault = new Alegeus_File_ProcessingEntities(connStrNameAlegeusFileProcessing);
+                    _dbCtxAlegeusFileProcessingDefault =
+                        new Alegeus_File_ProcessingEntities(connStrNameAlegeusFileProcessing);
                 return _dbCtxAlegeusFileProcessingDefault;
             }
         }
+
         private static Alegeus_File_ProcessingEntities DbCtxAlegeusFileProcessingNew
         {
-            get
-            {
-                return new Alegeus_File_ProcessingEntities(connStrNameAlegeusFileProcessing);
-            }
+            get { return new Alegeus_File_ProcessingEntities(connStrNameAlegeusFileProcessing); }
         }
 
         private static DbConnection _dbConnAlegeusFileProcessing;
@@ -164,12 +161,10 @@ namespace DataProcessing
                 return _dbCtxAlegeusErrorLogDefault;
             }
         }
+
         public static Alegeus_ErrorLogEntities dbCtxAlegeusErrorLogNew
         {
-            get
-            {
-               return new Alegeus_ErrorLogEntities(connStrNameAlegeusErrorLog);
-            }
+            get { return new Alegeus_ErrorLogEntities(connStrNameAlegeusErrorLog); }
         }
 
         private static DbConnection _dbConnAlegeusErrorLog;
@@ -189,6 +184,7 @@ namespace DataProcessing
         }
 
         #endregion
+
         #region DbConnPortalWc
 
         private static string _connStrNamePortalWc;
@@ -236,7 +232,6 @@ namespace DataProcessing
                     {
                         _dbConnPortalWc = new MySqlConnection(connString);
                         if (_dbConnPortalWc.State != ConnectionState.Open) _dbConnPortalWc.Open();
-
                     }
                     //_dbConnPortalWc = dbCtxPortalWcDefault.Database.Connection;
                     //if (_dbConnPortalWc.State != ConnectionState.Open) _dbConnPortalWc.Open();
@@ -421,25 +416,24 @@ namespace DataProcessing
 #if (CTXSUMEETDEV)
                     _remoteAlegeusFtpConnection = new SFtpConnection("localhost", 22, "alegeus", "a");
 #else
-                    _remoteAlegeusFtpHost = = new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
+                    _remoteAlegeusFtpHost = =
+ new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
 #endif
                 }
 
                 return _remoteAlegeusFtpConnection;
             }
         }
+
         public static string remoteAlegeusFtpRootPath
         {
             get
             {
-
-
 #if (CTXSUMEETDEV)
                 return "/C:/Users/alegeus/alegeus_ftp_root";
 #else
                     return "/";
 #endif
-
             }
         }
 
@@ -452,7 +446,8 @@ namespace DataProcessing
 #if (CTXSUMEETDEV)
                 _remoteCobraFtpConnection = new SFtpConnection("localhost", 21, "alegeus", "a");
 #else
-                _remoteCobraFtpConnection = = new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
+                _remoteCobraFtpConnection = =
+ new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
 #endif
 
                 return _remoteCobraFtpConnection;

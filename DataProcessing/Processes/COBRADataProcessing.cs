@@ -58,9 +58,9 @@ namespace DataProcessing
             DbConnection dbConn, FileOperationLogParams fileLogParams)
 
         {
-
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             fileLogParams.SetSourceFolderName(Vars.localFtpRoot);
             DbUtils.LogFileOperation(fileLogParams);
             //
@@ -99,17 +99,16 @@ namespace DataProcessing
                             "Success", $"Added Source Files Folder");
                         fileLogParams.SetSourceFolderName(srcDirPath);
                         DbUtils.LogFileOperation(fileLogParams);
-
                     }
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
-
         }
 
 
@@ -120,7 +119,8 @@ namespace DataProcessing
             //echo y| del  G:\FTP\AutomatedHeaderV1_Files\*.*
             //
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
 
@@ -131,7 +131,7 @@ namespace DataProcessing
             //run query
             string queryString = $"Select * from {tableName} ;";
             DataTable folders =
-                (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null,
+                (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null,
                     fileLogParams.DbMessageLogParams);
 
 
@@ -196,15 +196,16 @@ namespace DataProcessing
 
                             if (processThisFile && !Utils.IsBlank(destDirPath))
                             {
-
                                 // add uniqueId to file so we can track it across folders and operations
-                                var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(headerType, srcFilePath, true,
+                                var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(headerType, srcFilePath,
+                                    true,
                                     fileLogParams1);
 
                                 //
 
                                 fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
-                                    Path.GetFileName(uniqueIdFilePath), "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                                    Path.GetFileName(uniqueIdFilePath), "",
+                                    $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
                                     "Success", $"Processing File ${srcFilePath}");
 
                                 DbUtils.LogFileOperation(fileLogParams);
@@ -236,18 +237,18 @@ namespace DataProcessing
 
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
-
         } // sub
 
         protected static void MoveCobraFtpFiles2(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
-
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
 
@@ -291,11 +292,11 @@ namespace DataProcessing
             // 3. csv files from 
             // from COBRA IMPORTS\Holding,ToDecrypt/*.* -> HOLDING\PreparedQB, COBRA IMPORTS\QB*.csv
             FileUtils.IterateDirectory(
-                new string[] { Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingDecryptRoot, Vars.cobraImportRoot },
+                new string[] {Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingDecryptRoot, Vars.cobraImportRoot},
                 DirectoryIterateType.Files,
                 false,
                 // TODO: do we need to move *.* files from decrypt? not clear
-                new string[] { "*.csv" },
+                new string[] {"*.csv"},
                 (srcFilePath, dummy1, dummy2) =>
                 {
                     //check file name and move to appropriate directory
@@ -326,17 +327,18 @@ namespace DataProcessing
 
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
-
         } // routine
 
         protected static void MoveCobraBlankFtpFilesToArchive(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
 
@@ -350,7 +352,7 @@ namespace DataProcessing
                 },
                 DirectoryIterateType.Files,
                 false,
-                new string[] { "*.csv" },
+                new string[] {"*.csv"},
                 (srcFilePath, dummy1, dummy2) =>
                 {
                     //check file name and move to appropriate directory
@@ -381,19 +383,19 @@ namespace DataProcessing
 
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
-
         }
 
         protected static void PrepareCobraQbFtpFiles(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
 
         {
-
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
 
@@ -415,7 +417,8 @@ namespace DataProcessing
 
                     //2. import file
                     string procName = "dbo.[Fix_COBRAQB_SSObollean]";
-                    ImpExpUtils.ImportSingleColumnFlatFile(headerType, dbConnCobra, srcFilePath, srcFilePath, tableName, "folder_name",
+                    ImpExpUtils.ImportSingleColumnFlatFile(headerType, dbConnCobra, srcFilePath, srcFilePath, tableName,
+                        "folder_name",
                         "QB_data", fileLogParams,
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                     );
@@ -442,12 +445,12 @@ namespace DataProcessing
                     ImpExpUtils.ExportSingleColumnFlatFile(expFilePath, dbConnCobra, queryStringExp,
                         "folder_name", "QB_data", null, fileLogParams,
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-
                     );
 
                     // add to fileLog
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                        Path.GetFileName(expFilePath), expFilePath, $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Completed",
+                        Path.GetFileName(expFilePath), expFilePath,
+                        $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Completed",
                         $"Prepared Flat File for COBRA");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
@@ -455,29 +458,29 @@ namespace DataProcessing
             );
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
-
         }
 
         protected static void MoveCobraFtpFilesAfterPrepare(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
 
         {
-
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
 
             // 1. move test files
             // from COBRA IMPORTS, HOLDING, HOLDING\PreparedQB -> COBRA_testfiles
             FileUtils.IterateDirectory(
-                new string[] { Vars.cobraImportRoot, Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot },
+                new string[] {Vars.cobraImportRoot, Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot},
                 DirectoryIterateType.Files,
                 false,
-                new string[] { "*.*" },
+                new string[] {"*.*"},
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     FileInfo fileInfo = new FileInfo(srcFilePath);
@@ -513,9 +516,9 @@ namespace DataProcessing
             // 2. move all holding and prepared files
             // from HOLDING, HOLDING\PreparedQB -> IMPORTS
             FileUtils.MoveFiles(
-                new string[] { Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot },
+                new string[] {Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot},
                 false,
-                new string[] { "*.*" },
+                new string[] {"*.*"},
                 Vars.cobraImportRoot, "", "",
                 (srcFilePath, destFilePath, dummy2) =>
                 {
@@ -531,10 +534,10 @@ namespace DataProcessing
             MoveCobraBlankFtpFilesToArchive(headerType, dbConn, fileLogParams);
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
-
         } // routine
     } // end class
 } // end namespace

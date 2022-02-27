@@ -73,9 +73,9 @@ namespace DataProcessing
             DbUtils.LogFileOperation(fileLogParams);
             //
             //
-            FileUtils.DeleteFiles(new[] { Vars.alegeusErrorLogMbiFilesRoot, Vars.alegeusErrorLogResFilesRoot }
+            FileUtils.DeleteFiles(new[] {Vars.alegeusErrorLogMbiFilesRoot, Vars.alegeusErrorLogResFilesRoot}
                 , false
-                , new[] { "*.mbi", "*.dne", "*.txt", "*.res" },
+                , new[] {"*.mbi", "*.dne", "*.txt", "*.res"},
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // add to fileLog
@@ -97,7 +97,6 @@ namespace DataProcessing
         protected static void GetFtpFilesFromAlegeus(HeaderType headerType, SFtpConnection ftpConn,
             FileOperationLogParams fileLogParams)
         {
-
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
@@ -108,14 +107,14 @@ namespace DataProcessing
             // download mbi dir files
             ftpConn.CopyOrMoveFiles(
                 FtpFileOperation.DownloadAndDelete,
-                new string[] { Vars.remoteAlegeusFtpRootPath }, true,
-                new string[] { "*.mbi", "*.dne" },
+                new string[] {Vars.remoteAlegeusFtpRootPath}, true,
+                new string[] {"*.mbi", "*.dne"},
                 Vars.alegeusErrorLogMbiFilesRoot, "", "",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
                     // add uniqueId to file so we can track it across folders and operations
                     var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(headerType, destFilePath, false,
-                            fileLogParams);
+                        fileLogParams);
 
                     fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
                         Path.GetFileName(uniqueIdFilePath), "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
@@ -129,17 +128,18 @@ namespace DataProcessing
             // download res dir files
             ftpConn.CopyOrMoveFiles(
                 FtpFileOperation.DownloadAndDelete,
-                new string[] { Vars.remoteAlegeusFtpRootPath }, true,
-                new string[] { "*.res" },
+                new string[] {Vars.remoteAlegeusFtpRootPath}, true,
+                new string[] {"*.res"},
                 Vars.alegeusErrorLogResFilesRoot, "", "",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
                     // add uniqueId to file so we can track it across folders and operations
                     var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(headerType, destFilePath, true,
-                          fileLogParams);
+                        fileLogParams);
 
                     fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
-                        Path.GetFileName(uniqueIdFilePath), "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                        Path.GetFileName(uniqueIdFilePath), "",
+                        $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
                         "Success", $"Processing File ${srcFilePath}");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
@@ -156,7 +156,6 @@ namespace DataProcessing
         protected static void ImportAlegeusFiles(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
-
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
@@ -164,8 +163,8 @@ namespace DataProcessing
 
             //
             FileUtils.IterateDirectory(
-                new[] { Vars.alegeusErrorLogResFilesRoot, Vars.alegeusErrorLogMbiFilesRoot }, DirectoryIterateType.Files
-                , false, new[] { "*.res", "*.dne", "*.txt", "*.mbi" },
+                new[] {Vars.alegeusErrorLogResFilesRoot, Vars.alegeusErrorLogMbiFilesRoot}, DirectoryIterateType.Files
+                , false, new[] {"*.res", "*.dne", "*.txt", "*.mbi"},
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     //
@@ -177,7 +176,6 @@ namespace DataProcessing
                     Import.ImportAlegeusFile(headerType, dbConn, srcFilePath, false, fileLogParams,
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                     );
-
                 }
                 , null
             );

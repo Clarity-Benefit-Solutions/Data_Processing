@@ -1,17 +1,11 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using ExcelDataReader;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-using Sylvan.Data.Csv;
-
 
 namespace CoreUtils.Classes
 {
@@ -47,20 +41,16 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
         public static void IterateDirectory(string directory, DirectoryIterateType iterateType, bool subDirsAlso,
             string[] fileMasks, SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] { "*.*" };
+            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] {"*.*"};
 
             try
             {
@@ -72,13 +62,9 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(directory, fileMasks.Join(","), ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -86,7 +72,8 @@ namespace CoreUtils.Classes
             string fileMask, SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
             try
-            {  // validate
+            {
+                // validate
                 if (Utils.IsBlank(directory))
                 {
                     var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : directory should be set";
@@ -125,19 +112,14 @@ namespace CoreUtils.Classes
 
                 // callback for each file
                 foreach (var file in files) fileCallback(file, "", "");
-
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(directory, fileMask, ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -158,19 +140,14 @@ namespace CoreUtils.Classes
                 foreach (var sourceDirectory in sourceDirectories)
                     DoMultipleFilesOperation(FileOperation.Move, sourceDirectory, subDirsAlso, fileMasks, destDirectory,
                         destFileName, destFileExt, fileCallback, onErrorCallback);
-
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -187,13 +164,9 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceDirectory, fileMask, ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -209,23 +182,19 @@ namespace CoreUtils.Classes
                     var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : sourceDirectories should be set";
                     throw new Exception(message);
                 }
+
                 // iterate for each fileMask
                 foreach (var sourceDirectory in sourceDirectories)
                     DoMultipleFilesOperation(FileOperation.Copy, sourceDirectory, subDirsAlso, fileMasks, destDirectory,
                         destFileName, destFileExt, fileCallback, onErrorCallback);
-
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -236,19 +205,15 @@ namespace CoreUtils.Classes
             try
             {
                 DoMultipleFilesOperation(FileOperation.Copy, sourceDirectory, subDirsAlso, fileMasks, destDirectory,
-                destFileName, destFileExt, fileCallback, onErrorCallback);
+                    destFileName, destFileExt, fileCallback, onErrorCallback);
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceDirectory, fileMasks.Join(","), ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -265,13 +230,9 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceDirectory, fileMask, ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -290,19 +251,14 @@ namespace CoreUtils.Classes
                 foreach (var sourceDirectory in sourceDirectories)
                     DoMultipleFilesOperation(FileOperation.Delete, sourceDirectory, subDirsAlso, fileMasks, "", "", "",
                         fileCallback, onErrorCallback);
-
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -318,13 +274,9 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceDirectory, fileMasks.Join(","), ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -334,23 +286,20 @@ namespace CoreUtils.Classes
             try
             {
                 DoMultipleFilesOperation(FileOperation.Delete, sourceDirectory, subDirsAlso, fileMask, "", "", "",
-                 fileCallback, onErrorCallback);
+                    fileCallback, onErrorCallback);
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceDirectory, fileMask, ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
-        public static void MoveFile(string sourceFilePath, string destFilePath, SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
+        public static void MoveFile(string sourceFilePath, string destFilePath, SingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
         {
             try
             {
@@ -360,34 +309,26 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceFilePath, destFilePath, ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
-        public static void CopyFile(string sourceFilePath, string destFilePath, SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
+        public static void CopyFile(string sourceFilePath, string destFilePath, SingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
         {
             try
             {
                 DoSingleFileOperation(FileOperation.Copy, sourceFilePath, destFilePath, fileCallback, onErrorCallback);
-
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceFilePath, destFilePath, ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -441,7 +382,8 @@ namespace CoreUtils.Classes
         }
 
 
-        public static void DeleteFile(string sourceFilePath, SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
+        public static void DeleteFile(string sourceFilePath, SingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
         {
             try
             {
@@ -451,17 +393,14 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceFilePath, "", ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
-        public static void DeleteFileIfExists(string sourceFilePath, SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
+        public static void DeleteFileIfExists(string sourceFilePath, SingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
         {
             try
             {
@@ -471,17 +410,14 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceFilePath, "", ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
-        public static void ReadFile(string sourceFilePath, SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
+        public static void ReadFile(string sourceFilePath, SingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
         {
             try
             {
@@ -491,13 +427,9 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceFilePath, "", ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -506,7 +438,7 @@ namespace CoreUtils.Classes
             bool subDirsAlso, string[] fileMasks, string destDirectory, string destFileName, string destFileExt,
             SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] { "*.*" };
+            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] {"*.*"};
             try
             {
                 // iterate for each fileMask
@@ -514,19 +446,14 @@ namespace CoreUtils.Classes
                     DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMask, destDirectory,
                         destFileName, destFileExt, fileCallback,
                         onErrorCallback);
-
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceDirectory, fileMasks.Join(","), ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -549,15 +476,13 @@ namespace CoreUtils.Classes
                         var destFileExtOnly = Utils.IsBlank(destFileExt) ? fileInfo.Extension : destFileExt;
                         var destFullFilePath = $"{destDirectory}/{destFileNameOnly}{destFileExtOnly}";
                         //
-                        DoSingleFileOperation(fileOperation, foundFile, destFullFilePath, fileCallback, onErrorCallback);
+                        DoSingleFileOperation(fileOperation, foundFile, destFullFilePath, fileCallback,
+                            onErrorCallback);
                     },
                     // at end 
                     (arg1, arg2, ex) =>
                     {
-                        if (onErrorCallback == null)
-                        {
-                            throw ex;
-                        }
+                        if (onErrorCallback == null) throw ex;
                         onErrorCallback(arg1, arg2, ex);
                     }
                 );
@@ -566,13 +491,9 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceDirectory, fileMask, ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -643,13 +564,9 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceFilePath, destFilePath, ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
@@ -665,21 +582,17 @@ namespace CoreUtils.Classes
                 throw new Exception(message);
             }
 
-            string contents = "";
+            var contents = "";
             // read each line and insert
             using var inputFile = new StreamReader(sourceFilePath);
             string line;
-            int rowNo = 0;
+            var rowNo = 0;
             while ((line = inputFile.ReadLine()!) != null)
             {
                 rowNo++;
                 contents += line;
 
-                if (firstNLinesOnly != 0 && rowNo >= firstNLinesOnly)
-                {
-                    return contents;
-                }
-
+                if (firstNLinesOnly != 0 && rowNo >= firstNLinesOnly) return contents;
             }
 
             return contents;
@@ -709,8 +622,8 @@ namespace CoreUtils.Classes
                         },
                         onErrorCallback);
                 } /*end fileCallBack*/
-                , /*onErrorCallback*/  // at end 
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }/*end onErrorCallback*/
+                , /*onErrorCallback*/ // at end 
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); } /*end onErrorCallback*/
             ); //FileUtils.IterateDirectory;
         } //end method
 
@@ -759,18 +672,12 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                {
                     onErrorCallback(sourceFilePath, destFilePath, ex);
-                }
                 else
-                {
                     throw;
-                }
             }
         }
 
         #endregion
-
-
     }
 }

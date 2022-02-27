@@ -2,13 +2,11 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 
 namespace CoreUtils.Classes
 {
-
     public static class Utils
     {
         private static readonly Random Random = new Random();
@@ -27,22 +25,17 @@ namespace CoreUtils.Classes
 
         public static string Left(string value, int length)
         {
-            if (IsBlank(value))
-            {
-                return value;
-            }
+            if (IsBlank(value)) return value;
 
-            int charsToTake = Math.Min(length, value.Length);
+            var charsToTake = Math.Min(length, value.Length);
             return value.Substring(0, charsToTake);
         }
+
         public static string Right(string value, int length)
         {
-            if (IsBlank(value))
-            {
-                return value;
-            }
+            if (IsBlank(value)) return value;
 
-            int charsToTake = Math.Min(length, value.Length);
+            var charsToTake = Math.Min(length, value.Length);
             return value.Length <= length ? value : value.Substring(value.Length - charsToTake);
         }
 
@@ -75,7 +68,7 @@ namespace CoreUtils.Classes
 
                 if (attrs.Length > 0)
 
-                    return ((DisplayText)attrs[0]).text;
+                    return ((DisplayText) attrs[0]).text;
             }
 
             return en.ToString();
@@ -86,20 +79,17 @@ namespace CoreUtils.Classes
         {
             return Convert.ToDecimal(enVal).ToString("0");
         }
+
         //extension method to get string from array
         public static string Join(this string[] arr, string joinWith)
         {
-            return String.Join(joinWith, arr);
-        }   
-  
+            return string.Join(joinWith, arr);
+        }
 
 
-        public static Boolean TextMatchesPattern(string fileName, string pattern)
+        public static bool TextMatchesPattern(string fileName, string pattern)
         {
-            if (Operators.LikeString(fileName, pattern, CompareMethod.Text))
-            {
-                return true;
-            }
+            if (Operators.LikeString(fileName, pattern, CompareMethod.Text)) return true;
 
             return false;
         }
@@ -111,26 +101,13 @@ namespace CoreUtils.Classes
             return item;
         }
 
-        //extension method to add desc attribute to enum item
-        public class DisplayText : Attribute
+        public static bool IsValueOfFormat(string value, FormatType formatType)
         {
-            public DisplayText(string text)
-            {
-                this.text = text;
-            }
-
-            public string text { get; set; }
-        }
-
-        public static Boolean IsValueOfFormat(string value, FormatType formatType)
-        {
-            if (formatType == FormatType.Any)
-            {
-                return true;
-            }
+            if (formatType == FormatType.Any) return true;
 
             return true;
         }
+
         public static bool IsNumeric(string value)
         {
             var isNumeric = float.TryParse(value, out _);
@@ -154,11 +131,13 @@ namespace CoreUtils.Classes
             var str = value.ToShortDateString();
             return str;
         }
+
         public static string ToTimeString(DateTime value)
         {
             var str = value.ToShortTimeString();
             return str;
         }
+
         public static string ToDateTimeString(DateTime value)
         {
             var str = $"{ToDateString(value)} {ToTimeString(value)} ";
@@ -170,13 +149,23 @@ namespace CoreUtils.Classes
             var processModule = Process.GetCurrentProcess().MainModule;
             if (processModule != null)
             {
-                string exePath = processModule.FileName;
-                string directoryPath = Path.GetDirectoryName(exePath);
+                var exePath = processModule.FileName;
+                var directoryPath = Path.GetDirectoryName(exePath);
                 return directoryPath;
             }
 
             return "";
         }
 
+        //extension method to add desc attribute to enum item
+        public class DisplayText : Attribute
+        {
+            public DisplayText(string text)
+            {
+                this.text = text;
+            }
+
+            public string text { get; set; }
+        }
     }
 }

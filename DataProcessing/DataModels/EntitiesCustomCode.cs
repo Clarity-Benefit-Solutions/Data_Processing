@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using CoreUtils.Classes;
+
 // ReSharper disable All
 
 namespace DataProcessing.DataModels.AlegeusFileProcessing
@@ -84,6 +84,7 @@ namespace DataProcessing.DataModels.AlegeusErrorLog
             }
         }
     }
+
     public partial class mbi_file_table_stage
     {
         public string ColumnValue(string colName)
