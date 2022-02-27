@@ -33,7 +33,7 @@ namespace CoreUtils.Classes
             if (!Utils.IsBlank(privateKeyPath))
             {
                 var keyFile = new PrivateKeyFile(PrivateKeyPath, PrivateKeyPassPhrase);
-                keyFiles = new[] {keyFile};
+                keyFiles = new[] { keyFile };
             }
 
             if (Utils.IsBlank(PrivateKeyPath) || keyFiles?.Length == 0)
@@ -102,7 +102,7 @@ namespace CoreUtils.Classes
         public void IterateDirectory(string directory, DirectoryIterateType iterateType, bool subDirsAlso,
             string[] fileMasks, FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] {"*.*"};
+            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] { "*.*" };
 
             // iterate for each fileMask
             foreach (var fileMask in fileMasks)
@@ -167,7 +167,14 @@ namespace CoreUtils.Classes
                     else if (ftpFile.IsRegularFile && ftpFile.Name != "." && ftpFile.Name != ".." &&
                              Utils.TextMatchesPattern(ftpFile.Name, fileMask))
                     {
-                        fileCallback(ftpFile.FullName, null, null);
+                        if (ftpFile.Name.StartsWith("."))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            fileCallback(ftpFile.FullName, null, null);
+                        }
                     }
             }
             catch (Exception ex)
@@ -274,7 +281,7 @@ namespace CoreUtils.Classes
             bool subDirsAlso, string[] fileMasks, string destDirectory, string destFileName, string destFileExt,
             FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] {"*.*"};
+            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] { "*.*" };
 
             // iterate for each fileMask
             foreach (var fileMask in fileMasks)

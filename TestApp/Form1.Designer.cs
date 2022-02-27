@@ -33,7 +33,6 @@ namespace TestApp
         {
             this.cmdProcessCobraFiles = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.listLogs = new System.Windows.Forms.ListBox();
             this.cmdProcessAlegeusFiles = new System.Windows.Forms.Button();
             this.cmdRetrieveFtpErrorLogs = new System.Windows.Forms.Button();
             this.cmdClearLog = new System.Windows.Forms.Button();
@@ -41,6 +40,8 @@ namespace TestApp
             this.cmdOpenAccessDB = new System.Windows.Forms.Button();
             this.cmdDoALL = new System.Windows.Forms.Button();
             this.cmdCopyTestFiles = new System.Windows.Forms.Button();
+            this.listLogs = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.listLogs)).BeginInit();
             this.SuspendLayout();
             // 
             // cmdProcessCobraFiles
@@ -61,18 +62,6 @@ namespace TestApp
             this.label1.Size = new System.Drawing.Size(39, 17);
             this.label1.TabIndex = 2;
             this.label1.Text = "Logs";
-            // 
-            // listLogs
-            // 
-            this.listLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listLogs.FormattingEnabled = true;
-            this.listLogs.ItemHeight = 16;
-            this.listLogs.Location = new System.Drawing.Point(23, 102);
-            this.listLogs.Name = "listLogs";
-            this.listLogs.Size = new System.Drawing.Size(1395, 740);
-            this.listLogs.TabIndex = 3;
             // 
             // cmdProcessAlegeusFiles
             // 
@@ -144,11 +133,28 @@ namespace TestApp
             this.cmdCopyTestFiles.UseVisualStyleBackColor = true;
             this.cmdCopyTestFiles.Click += new System.EventHandler(this.cmdCopyTestFiles_Click);
             // 
+            // listLogs
+            // 
+            this.listLogs.AllowUserToAddRows = false;
+            this.listLogs.AllowUserToDeleteRows = false;
+            this.listLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listLogs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.listLogs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.listLogs.Location = new System.Drawing.Point(23, 116);
+            this.listLogs.Name = "listLogs";
+            this.listLogs.RowHeadersWidth = 51;
+            this.listLogs.RowTemplate.Height = 24;
+            this.listLogs.Size = new System.Drawing.Size(1405, 733);
+            this.listLogs.TabIndex = 12;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1440, 861);
+            this.Controls.Add(this.listLogs);
             this.Controls.Add(this.cmdCopyTestFiles);
             this.Controls.Add(this.cmdDoALL);
             this.Controls.Add(this.cmdOpenAccessDB);
@@ -156,11 +162,11 @@ namespace TestApp
             this.Controls.Add(this.cmdClearLog);
             this.Controls.Add(this.cmdRetrieveFtpErrorLogs);
             this.Controls.Add(this.cmdProcessAlegeusFiles);
-            this.Controls.Add(this.listLogs);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cmdProcessCobraFiles);
             this.Name = "Form1";
             this.Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)(this.listLogs)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -170,7 +176,6 @@ namespace TestApp
 
         private Button cmdProcessCobraFiles;
         private Label label1;
-        private ListBox listLogs;
         private Button cmdProcessAlegeusFiles;
         private Button cmdRetrieveFtpErrorLogs;
         private Button cmdClearLog;
@@ -178,6 +183,7 @@ namespace TestApp
         private Button cmdOpenAccessDB;
         private Button cmdDoALL;
         private Button cmdCopyTestFiles;
+        private DataGridView listLogs;
     }
 }
 

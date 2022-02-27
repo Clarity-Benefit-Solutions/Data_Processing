@@ -50,7 +50,7 @@ namespace CoreUtils.Classes
         public static void IterateDirectory(string directory, DirectoryIterateType iterateType, bool subDirsAlso,
             string[] fileMasks, SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] {"*.*"};
+            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] { "*.*" };
 
             try
             {
@@ -111,7 +111,17 @@ namespace CoreUtils.Classes
 
 
                 // callback for each file
-                foreach (var file in files) fileCallback(file, "", "");
+                foreach (var file in files)
+                {
+                    if (Path.GetFileName(file).StartsWith("."))
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        fileCallback(file, "", "");
+                    }
+                };
             }
             catch (Exception ex)
             {
@@ -438,7 +448,7 @@ namespace CoreUtils.Classes
             bool subDirsAlso, string[] fileMasks, string destDirectory, string destFileName, string destFileExt,
             SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] {"*.*"};
+            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] { "*.*" };
             try
             {
                 // iterate for each fileMask

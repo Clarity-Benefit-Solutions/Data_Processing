@@ -219,7 +219,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
@@ -241,7 +241,7 @@ namespace DataProcessing
 
             // Log
             fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         } //end method
@@ -260,7 +260,7 @@ namespace DataProcessing
             AddHeaderToAllHeaderDirFilesForExt("*.txt", dbConn, fileLogParams);
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
@@ -371,7 +371,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
@@ -402,7 +402,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
@@ -437,7 +437,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
@@ -513,7 +513,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }

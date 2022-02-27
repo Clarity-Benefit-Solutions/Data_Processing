@@ -207,7 +207,7 @@ namespace CoreUtils.Classes
                     }
                 }
 
-                //fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
+                //fileLogParams?.SetTaskOutcome("Success", $"Completed: Import Into {tableName}");
                 //LogFileOperation(fileLogParams);
             }
             catch (Exception ex)
@@ -246,7 +246,7 @@ namespace CoreUtils.Classes
                 if (writer != null) writer.Close();
 
                 // log
-                fileLogParams?.SetTaskOutcome("Completed", $"Completed: Export using {queryString}");
+                fileLogParams?.SetTaskOutcome("Success", $"Completed: Export using {queryString}");
                 LogFileOperation(fileLogParams);
             }
             catch (Exception ex)
@@ -309,7 +309,7 @@ namespace CoreUtils.Classes
                 }
 
                 //// log
-                //fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
+                //fileLogParams?.SetTaskOutcome("Success", $"Completed: Import Into {tableName}");
                 //LogFileOperation(fileLogParams);
             }
             catch (Exception ex)
@@ -384,7 +384,7 @@ namespace CoreUtils.Classes
                 bcp.WriteToServer(csv);
 
                 ////
-                //fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
+                //fileLogParams?.SetTaskOutcome("Success", $"Completed: Import Into {tableName}");
                 //LogFileOperation(fileLogParams);
             }
             catch (Exception ex)
@@ -454,7 +454,7 @@ namespace CoreUtils.Classes
                 bcp.WriteToServer(csv);
 
                 ////
-                //fileLogParams?.SetTaskOutcome("Completed", $"Completed: Import Into {tableName}");
+                //fileLogParams?.SetTaskOutcome("Success", $"Completed: Import Into {tableName}");
                 //LogFileOperation(fileLogParams);
             }
             catch (Exception ex)

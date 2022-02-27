@@ -106,7 +106,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
@@ -205,7 +205,7 @@ namespace DataProcessing
 
                                 fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
                                     Path.GetFileName(uniqueIdFilePath), "",
-                                    $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                                    $"MoveCobraFtpFiles-{MethodBase.GetCurrentMethod()?.Name}",
                                     "Success", $"Processing File ${srcFilePath}");
 
                                 DbUtils.LogFileOperation(fileLogParams);
@@ -238,7 +238,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         } // sub
@@ -328,7 +328,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         } // routine
@@ -384,7 +384,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
@@ -450,7 +450,7 @@ namespace DataProcessing
                     // add to fileLog
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                         Path.GetFileName(expFilePath), expFilePath,
-                        $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Completed",
+                        $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Success",
                         $"Prepared Flat File for COBRA");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
@@ -459,7 +459,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
@@ -535,7 +535,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         } // routine

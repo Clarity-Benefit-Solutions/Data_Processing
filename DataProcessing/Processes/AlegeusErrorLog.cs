@@ -89,7 +89,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
@@ -148,7 +148,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
@@ -188,7 +188,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
@@ -216,7 +216,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
@@ -264,7 +264,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Completed", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         } // routine
