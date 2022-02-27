@@ -7,7 +7,7 @@ using CoreUtils.Classes;
 using DataProcessing.DataModels.AlegeusErrorLog;
 using DataProcessing.DataModels.AlegeusFileProcessing;
 using DataProcessing.DataModels.COBRA;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 
 // ReSharper disable All
 

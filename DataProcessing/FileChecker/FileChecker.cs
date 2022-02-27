@@ -10,7 +10,7 @@ using CoreUtils;
 using CoreUtils.Classes;
 using DataProcessing.DataModels.AlegeusErrorLog;
 using EtlUtilities;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 
 // ReSharper disable All
 
