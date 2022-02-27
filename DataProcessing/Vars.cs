@@ -430,9 +430,21 @@ namespace DataProcessing
             get
             {
 #if (CTXSUMEETDEV)
-                return "/C:/Users/alegeus/alegeus_ftp_root";
+                return "/" + FileUtils.FixPath($"{localTestRoot}/_local_FTP_Server_Server/Alegeus");
 #else
-                    return "/";
+                return "/";
+#endif
+            }
+        }
+
+        public static string remoteCobraFtpRootPath
+        {
+            get
+            {
+#if (CTXSUMEETDEV)
+                return $"{localTestRoot}/_local_FTP_Server_Server/COBRA";
+#else
+                return "/";
 #endif
             }
         }
@@ -454,9 +466,9 @@ namespace DataProcessing
             }
         }
 
+
         #endregion
-
-
+        
         #region CobraFileProcessingPaths
 
         public static string cobraImportRoot => $"{processingRoot}/COBRA IMPORTS";
@@ -490,8 +502,7 @@ namespace DataProcessing
         }
 
         #endregion
-
-
+        
         #region AlegeusFileProcessingPaths
 
         public static string[] alegeusIgnoreFtpSourceDirs

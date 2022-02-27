@@ -21,6 +21,12 @@ namespace TestApp
             //string logText = $"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - {logParams}";
             //listLogs.Items.Add(logText);
             //listLogs.TopIndex = listLogs.Items.Count - 1;
+            //listLogs.Invalidate();
+            //listLogs.Update();
+            //listLogs.Refresh();
+            //Application.DoEvents();
+            //Application.DoEvents();
+            //Application.DoEvents();
         }
 
         private void HandleOnFileLogOperationCallback(object sender, FileOperationLogParams logParams)
@@ -28,6 +34,13 @@ namespace TestApp
             var logText = $"{DateTime.Now.ToString(CultureInfo.InvariantCulture)} - {logParams}";
             listLogs.Items.Add(logText);
             listLogs.TopIndex = listLogs.Items.Count - 1;
+
+            listLogs.Invalidate();
+            listLogs.Update();
+            listLogs.Refresh();
+            Application.DoEvents();
+            Application.DoEvents();
+            Application.DoEvents();
         }
 
         public void SubscribeToEvents()

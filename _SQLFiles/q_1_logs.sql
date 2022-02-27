@@ -30,8 +30,7 @@ from
         processingTask like '%AutomatedHeaders-<PreCheckFilesAndProcess%'
         )
 order by
-    fileLogId desc
-  , fileLogTaskId desc;
+    fileLogTaskId desc;
 
 /*processing_script_tbl*/
 select *

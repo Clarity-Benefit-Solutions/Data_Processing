@@ -169,13 +169,19 @@ namespace DataProcessing
                 {
                     //
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                        Path.GetFileName(destFilePath), destFilePath, "ErrorLog-ImportAlegeusFiles", "Success",
-                        "Importing Alegeus File");
+                        Path.GetFileName(destFilePath), destFilePath, "ErrorLog-ImportAlegeusFiles", "Starting",
+                        "Starting: Import Alegeus File");
+                    DbUtils.LogFileOperation(fileLogParams);
 
                     //2. import file
                     Import.ImportAlegeusFile(headerType, dbConn, srcFilePath, false, fileLogParams,
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                     );
+
+                    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                        Path.GetFileName(destFilePath), destFilePath, "ErrorLog-ImportAlegeusFiles", "Success",
+                        "Completed: Import Alegeus File");
+                    DbUtils.LogFileOperation(fileLogParams);
                 }
                 , null
             );

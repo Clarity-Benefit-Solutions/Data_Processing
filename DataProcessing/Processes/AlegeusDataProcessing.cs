@@ -460,6 +460,13 @@ namespace DataProcessing
                         Vars.dbConnAlegeusErrorLog, fileLogParams,
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                     );
+
+                    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                        Path.GetFileName(srcFilePath), srcFilePath,
+                        $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                        "Starting", "Starting PreCheck");
+                    DbUtils.LogFileOperation(fileLogParams);
+
                     fileChecker.CheckFile(FileCheckType.AllData);
 
                     // on success
