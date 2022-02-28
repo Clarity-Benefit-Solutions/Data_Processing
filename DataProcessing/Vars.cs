@@ -11,6 +11,7 @@ using DataProcessing.DataModels.AlegeusErrorLog;
 using DataProcessing.DataModels.AlegeusFileProcessing;
 using DataProcessing.DataModels.COBRA;
 using MySqlConnector;
+using StackExchange.Profiling;
 
 // ReSharper disable All
 
@@ -57,9 +58,9 @@ namespace DataProcessing
         }
 
 
-        private SqlConnection _dbConnCobraFileProcessing;
+        private DbConnection _dbConnCobraFileProcessing;
 
-        public SqlConnection dbConnCobraFileProcessing
+        public DbConnection dbConnCobraFileProcessing
         {
             get
             {
@@ -70,6 +71,11 @@ namespace DataProcessing
                         DbUtils.GetProviderConnString(connStrNameCobraFileProcessing);
                     //
                     _dbConnCobraFileProcessing = new SqlConnection(connString);
+                    // profiling
+#if PROFILE
+                    _dbConnCobraFileProcessing = new StackExchange.Profiling.Data.ProfiledDbConnection(_dbConnCobraFileProcessing, MiniProfiler.Current);
+#endif
+
                     if (_dbConnCobraFileProcessing.State != ConnectionState.Open) _dbConnCobraFileProcessing.Open();
                 }
 
@@ -118,9 +124,9 @@ namespace DataProcessing
             get { return new Alegeus_File_ProcessingEntities("name=" + connStrNameAlegeusFileProcessing); }
         }
 
-        private SqlConnection _dbConnAlegeusFileProcessing;
+        private DbConnection _dbConnAlegeusFileProcessing;
 
-        public SqlConnection dbConnAlegeusFileProcessing
+        public DbConnection dbConnAlegeusFileProcessing
         {
             get
             {
@@ -130,6 +136,11 @@ namespace DataProcessing
                         DbUtils.GetProviderConnString(connStrNameAlegeusFileProcessing);
                     //
                     _dbConnAlegeusFileProcessing = new SqlConnection(connString);
+                    // profiling
+#if PROFILE
+                    _dbConnAlegeusFileProcessing = new StackExchange.Profiling.Data.ProfiledDbConnection(_dbConnAlegeusFileProcessing, MiniProfiler.Current);
+#endif
+
                     if (_dbConnAlegeusFileProcessing.State != ConnectionState.Open) _dbConnAlegeusFileProcessing.Open();
                 }
 
@@ -177,9 +188,9 @@ namespace DataProcessing
             get { return new Alegeus_ErrorLogEntities("name=" + connStrNameAlegeusErrorLog); }
         }
 
-        private SqlConnection _dbConnAlegeusErrorLog;
+        private DbConnection _dbConnAlegeusErrorLog;
 
-        public SqlConnection dbConnAlegeusErrorLog
+        public DbConnection dbConnAlegeusErrorLog
         {
             get
             {
@@ -189,6 +200,11 @@ namespace DataProcessing
                         DbUtils.GetProviderConnString(connStrNameAlegeusErrorLog);
                     //
                     _dbConnAlegeusErrorLog = new SqlConnection(connString);
+                    // profiling
+#if PROFILE
+                    _dbConnAlegeusErrorLog = new StackExchange.Profiling.Data.ProfiledDbConnection(_dbConnAlegeusErrorLog, MiniProfiler.Current);
+#endif
+
                     if (_dbConnAlegeusErrorLog.State != ConnectionState.Open) _dbConnAlegeusErrorLog.Open();
                 }
 
@@ -231,9 +247,9 @@ namespace DataProcessing
         //    }
         //}
 
-        private MySqlConnection _dbConnPortalWc;
+        private DbConnection _dbConnPortalWc;
 
-        public MySqlConnection dbConnPortalWc
+        public DbConnection dbConnPortalWc
         {
             get
             {
@@ -243,6 +259,12 @@ namespace DataProcessing
                         DbUtils.GetProviderConnString(connStrNamePortalWc);
                     //
                     _dbConnPortalWc = new MySqlConnection(connString);
+
+                    // profiling
+#if PROFILE
+                    _dbConnPortalWc = new StackExchange.Profiling.Data.ProfiledDbConnection(_dbConnPortalWc, MiniProfiler.Current);
+#endif
+
                     if (_dbConnPortalWc.State != ConnectionState.Open) _dbConnPortalWc.Open();
 
                 }

@@ -36,7 +36,7 @@ namespace DataProcessing
         private static Dictionary<string, string> cachedDBChecks = new Dictionary<string, string>();
 
         //
-        private readonly MySqlConnection dbConnPortalWc;
+        private readonly DbConnection dbConnPortalWc;
 
         //
         public readonly FileCheckResults fileCheckResults = new FileCheckResults();
@@ -525,9 +525,12 @@ namespace DataProcessing
                     if (PlatformType == PlatformType.Alegeus)
                     {
                         string queryString =
-                            $"select employerid, employeeid, is_active from wc.vw_wc_participants  " +
-                            $" where employerid = '{Utils.DbQuote(row.EmployerId)}' " +
-                            $" and employeeid = '{Utils.DbQuote(row.EmployeeID)}' ";
+                            $"SELECT employerid, employeeid, wc.wc_is_active_status(employeestatus, employeeid,employerid) is_active " + 
+                            " FROM wc.wc_participants  " +
+                            /* send employeeid first as has more unique index */
+                            " USE INDEX (wc_participants_eeid_erid_index) " +
+                            $" where employeeid = '{Utils.DbQuote(row.EmployeeID)}' " +
+                            $" and employerid = '{Utils.DbQuote(row.EmployerId)}' ";
                         //
                         DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                             queryString, null,
