@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using System.Data.Entity.Core.EntityClient;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
@@ -139,10 +141,10 @@ namespace CoreUtils
                     foreach (DataRow drow in schemaTable.Rows)
                     {
                         string columnName = Convert.ToString(drow["ColumnName"]);
-                        DataColumn column = new DataColumn(columnName, (Type) (drow["DataType"]));
-                        column.Unique = (bool) drow["IsUnique"];
-                        column.AllowDBNull = (bool) drow["AllowDBNull"];
-                        column.AutoIncrement = (bool) drow["IsAutoIncrement"];
+                        DataColumn column = new DataColumn(columnName, (Type)(drow["DataType"]));
+                        column.Unique = (bool)drow["IsUnique"];
+                        column.AllowDBNull = (bool)drow["AllowDBNull"];
+                        column.AutoIncrement = (bool)drow["IsAutoIncrement"];
                         listCols.Add(column);
                         dt.Columns.Add(column);
                     }
@@ -153,7 +155,7 @@ namespace CoreUtils
                         DataRow dataRow = dt.NewRow();
                         for (int i = 0; i < listCols.Count; i++)
                         {
-                            dataRow[((DataColumn) listCols[i])] = reader[i];
+                            dataRow[((DataColumn)listCols[i])] = reader[i];
                         }
 
                         dt.Rows.Add(dataRow);
@@ -254,7 +256,7 @@ namespace CoreUtils
                     fileLogParams.ProcessingTaskOutcomeDetails));
 
                 // pass new dbLogParams() to ensure no recursion of logging!
-                DataTable dt = (DataTable) DbQuery(DbOperation.ExecuteReader, fileLogParams.DbConnection, logQuery,
+                DataTable dt = (DataTable)DbQuery(DbOperation.ExecuteReader, fileLogParams.DbConnection, logQuery,
                     queryParams, null, true);
             }
 
@@ -295,7 +297,7 @@ namespace CoreUtils
 
         public static HeaderType GetHeaderTypeFromFileName(string fileName)
         {
-            string[] fileNameParts = fileName?.Split(new[] {FilePartsDelimiter}, StringSplitOptions.None);
+            string[] fileNameParts = fileName?.Split(new[] { FilePartsDelimiter }, StringSplitOptions.None);
             if (fileNameParts.Length < 3)
             {
                 return HeaderType.NotApplicable;
@@ -332,7 +334,7 @@ namespace CoreUtils
 
         public static string StripUniqueIdAndHeaderTypeFromFileName(string fileName)
         {
-            string[] fileNameParts = fileName?.Split(new[] {FilePartsDelimiter}, StringSplitOptions.None);
+            string[] fileNameParts = fileName?.Split(new[] { FilePartsDelimiter }, StringSplitOptions.None);
 
             // return the last part of the fileName
             return fileNameParts[fileNameParts.Length - 1];
@@ -372,7 +374,7 @@ namespace CoreUtils
                 string logQuery = $"select dbo.getFileLogId('{fileName}');";
 
                 // pass new dbLogParams() to ensure no recursion of logging!
-                int fileLogId = (int) DbQuery(DbOperation.ExecuteScalar, logParams.DbConnection, logQuery, null, null,
+                int fileLogId = (int)DbQuery(DbOperation.ExecuteScalar, logParams.DbConnection, logQuery, null, null,
                     false);
                 return fileLogId;
             }
@@ -445,6 +447,25 @@ namespace CoreUtils
 
             //
             return srcFilePath;
+
+        }
+
+        public static string GetConnString(string connStringName)
+        {
+            string entityConnectionString = ConfigurationManager.ConnectionStrings[connStringName].ConnectionString;
+            return entityConnectionString;
+
+        }
+
+        public static string GetProviderConnString(string connStringName)
+        {
+            string entityConnectionString = GetConnString(connStringName);
+            if (entityConnectionString.IndexOf("provider connection string=") > 0)
+                return new EntityConnectionStringBuilder(entityConnectionString).ProviderConnectionString;
+            else
+            {
+                return entityConnectionString;
+            }
         }
 
         public class DbParameters : List<SqlParameter>

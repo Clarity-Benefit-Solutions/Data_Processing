@@ -2,7 +2,10 @@
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using System.Data.Entity.Core.EntityClient;
+using System.Data.SqlClient;
 using System.IO;
+using CoreUtils;
 using CoreUtils.Classes;
 using DataProcessing.DataModels.AlegeusErrorLog;
 using DataProcessing.DataModels.AlegeusFileProcessing;
@@ -26,9 +29,9 @@ namespace DataProcessing
                 if (Utils.IsBlank(_connStrNameCobraFileProcessing))
                 {
 #if (CTXSUMEETDEV)
-                    _connStrNameCobraFileProcessing = "name=COBRAEntitiesCTXSUMEETDEV";
+                    _connStrNameCobraFileProcessing = "COBRAEntitiesCTXSUMEETDEV";
 #else
-                    _connStrNameCobraFileProcessing = "name=COBRAEntitiesCTXPROD";
+                    _connStrNameCobraFileProcessing = "COBRAEntitiesCTXPROD";
 #endif
                 }
 
@@ -43,26 +46,30 @@ namespace DataProcessing
             get
             {
                 if (_dbCtxCobraFileProcessingDefault == null)
-                    _dbCtxCobraFileProcessingDefault = new COBRAEntities(connStrNameCobraFileProcessing);
+                    _dbCtxCobraFileProcessingDefault = new COBRAEntities("name=" + connStrNameCobraFileProcessing);
                 return _dbCtxCobraFileProcessingDefault;
             }
         }
 
         private COBRAEntities DbCtxCobraFileProcessingNew
         {
-            get { return new COBRAEntities(connStrNameCobraFileProcessing); }
+            get { return new COBRAEntities("name=" + connStrNameCobraFileProcessing); }
         }
 
 
-        private DbConnection _dbConnCobraFileProcessing;
+        private SqlConnection _dbConnCobraFileProcessing;
 
-        public DbConnection dbConnCobraFileProcessing
+        public SqlConnection dbConnCobraFileProcessing
         {
             get
             {
                 if (_dbConnCobraFileProcessing == null)
                 {
-                    _dbConnCobraFileProcessing = DbCtxCobraFileProcessingNew.Database.Connection;
+
+                    string connString =
+                        DbUtils.GetProviderConnString(connStrNameCobraFileProcessing);
+                    //
+                    _dbConnCobraFileProcessing = new SqlConnection(connString);
                     if (_dbConnCobraFileProcessing.State != ConnectionState.Open) _dbConnCobraFileProcessing.Open();
                 }
 
@@ -83,9 +90,9 @@ namespace DataProcessing
                 if (Utils.IsBlank(_connStrNameAlegeusFileProcessing))
                 {
 #if (CTXSUMEETDEV)
-                    _connStrNameAlegeusFileProcessing = "name=Alegeus_File_ProcessingEntitiesCTXSUMEETDEV";
+                    _connStrNameAlegeusFileProcessing = "Alegeus_File_ProcessingEntitiesCTXSUMEETDEV";
 #else
-                    _connStrNameAlegeusFileProcessing = "name=Alegeus_File_ProcessingEntitiesCTXPROD";
+                    _connStrNameAlegeusFileProcessing = "Alegeus_File_ProcessingEntitiesCTXPROD";
 #endif
                 }
 
@@ -101,25 +108,28 @@ namespace DataProcessing
             {
                 if (_dbCtxAlegeusFileProcessingDefault == null)
                     _dbCtxAlegeusFileProcessingDefault =
-                        new Alegeus_File_ProcessingEntities(connStrNameAlegeusFileProcessing);
+                        new Alegeus_File_ProcessingEntities("name=" + connStrNameAlegeusFileProcessing);
                 return _dbCtxAlegeusFileProcessingDefault;
             }
         }
 
         private Alegeus_File_ProcessingEntities DbCtxAlegeusFileProcessingNew
         {
-            get { return new Alegeus_File_ProcessingEntities(connStrNameAlegeusFileProcessing); }
+            get { return new Alegeus_File_ProcessingEntities("name=" + connStrNameAlegeusFileProcessing); }
         }
 
-        private DbConnection _dbConnAlegeusFileProcessing;
+        private SqlConnection _dbConnAlegeusFileProcessing;
 
-        public DbConnection dbConnAlegeusFileProcessing
+        public SqlConnection dbConnAlegeusFileProcessing
         {
             get
             {
                 if (_dbConnAlegeusFileProcessing == null)
                 {
-                    _dbConnAlegeusFileProcessing = DbCtxAlegeusFileProcessingNew.Database.Connection;
+                    string connString =
+                        DbUtils.GetProviderConnString(connStrNameAlegeusFileProcessing);
+                    //
+                    _dbConnAlegeusFileProcessing = new SqlConnection(connString);
                     if (_dbConnAlegeusFileProcessing.State != ConnectionState.Open) _dbConnAlegeusFileProcessing.Open();
                 }
 
@@ -140,9 +150,9 @@ namespace DataProcessing
                 if (Utils.IsBlank(_connStrNameAlegeusErrorLog))
                 {
 #if (CTXSUMEETDEV)
-                    _connStrNameAlegeusErrorLog = "name=Alegeus_ErrorLogEntitiesCTXSUMEETDEV";
+                    _connStrNameAlegeusErrorLog = "Alegeus_ErrorLogEntitiesCTXSUMEETDEV";
 #else
-                    _connStrNameAlegeusErrorLog = "name=Alegeus_ErrorLogEntitiesCTXPROD";
+                    _connStrNameAlegeusErrorLog = "Alegeus_ErrorLogEntitiesCTXPROD";
 #endif
                 }
 
@@ -157,25 +167,28 @@ namespace DataProcessing
             get
             {
                 if (_dbCtxAlegeusErrorLogDefault == null)
-                    _dbCtxAlegeusErrorLogDefault = new Alegeus_ErrorLogEntities(connStrNameAlegeusErrorLog);
+                    _dbCtxAlegeusErrorLogDefault = new Alegeus_ErrorLogEntities("name=" + connStrNameAlegeusErrorLog);
                 return _dbCtxAlegeusErrorLogDefault;
             }
         }
 
         public Alegeus_ErrorLogEntities dbCtxAlegeusErrorLogNew
         {
-            get { return new Alegeus_ErrorLogEntities(connStrNameAlegeusErrorLog); }
+            get { return new Alegeus_ErrorLogEntities("name=" + connStrNameAlegeusErrorLog); }
         }
 
-        private DbConnection _dbConnAlegeusErrorLog;
+        private SqlConnection _dbConnAlegeusErrorLog;
 
-        public DbConnection dbConnAlegeusErrorLog
+        public SqlConnection dbConnAlegeusErrorLog
         {
             get
             {
                 if (_dbConnAlegeusErrorLog == null)
                 {
-                    _dbConnAlegeusErrorLog = dbCtxAlegeusErrorLogNew.Database.Connection;
+                    string connString =
+                        DbUtils.GetProviderConnString(connStrNameAlegeusErrorLog);
+                    //
+                    _dbConnAlegeusErrorLog = new SqlConnection(connString);
                     if (_dbConnAlegeusErrorLog.State != ConnectionState.Open) _dbConnAlegeusErrorLog.Open();
                 }
 
@@ -196,9 +209,9 @@ namespace DataProcessing
                 if (Utils.IsBlank(_connStrNamePortalWc))
                 {
 #if (CTXSUMEETDEV)
-                    _connStrNamePortalWc = "name=PortalWcCTXSUMEETDEV";
+                    _connStrNamePortalWc = "PortalWcCTXSUMEETDEV";
 #else
-                    _connStrNamePortalWc = "name=PortalWcCTXPROD";
+                    _connStrNamePortalWc = "PortalWcCTXPROD";
 #endif
                 }
 
@@ -226,15 +239,12 @@ namespace DataProcessing
             {
                 if (_dbConnPortalWc == null)
                 {
-                    string connStringName = connStrNamePortalWc.Replace("name=", "");
-                    string connString = ConfigurationManager.ConnectionStrings[connStringName].ToString();
-                    if (!Utils.IsBlank(connString))
-                    {
-                        _dbConnPortalWc = new MySqlConnection(connString);
-                        if (_dbConnPortalWc.State != ConnectionState.Open) _dbConnPortalWc.Open();
-                    }
-                    //_dbConnPortalWc = dbCtxPortalWcDefault.Database.Connection;
-                    //if (_dbConnPortalWc.State != ConnectionState.Open) _dbConnPortalWc.Open();
+                    string connString =
+                        DbUtils.GetProviderConnString(connStrNamePortalWc);
+                    //
+                    _dbConnPortalWc = new MySqlConnection(connString);
+                    if (_dbConnPortalWc.State != ConnectionState.Open) _dbConnPortalWc.Open();
+
                 }
 
                 return _dbConnPortalWc;
