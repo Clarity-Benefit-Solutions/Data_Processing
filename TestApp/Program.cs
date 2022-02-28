@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace TestApp
@@ -11,6 +12,8 @@ namespace TestApp
         [STAThread]
         private static void Main()
         {
+            Thread.CurrentThread.Name = "Main";
+                
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
