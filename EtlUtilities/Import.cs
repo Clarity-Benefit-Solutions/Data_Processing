@@ -376,13 +376,17 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("AccountStatus", "AccountStatus", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("OriginalPrefunded", "OriginalPrefunded", FormatType.Any, 0, 0,
                             0, 0));
+                        mappings.Add(new TypedCsvColumn("OngoingPrefunded", "OngoingPrefunded", FormatType.Any, 0, 0,
+                            0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeePayPeriodElection",
                             "EmployeePayPeriodElection", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerPayPeriodElection",
                             "EmployerPayPeriodElection", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EffectiveDate", "EffectiveDate", FormatType.Any, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("TerminationDate", "TerminationDate", FormatType.Any, 0, 0, 0,
-                            0));
+                      
+                        // sumeet: this seems wrong - we are getting a amount value as next column
+                        //mappings.Add(new TypedCsvColumn("EffectiveDate", "EffectiveDate", FormatType.Any, 0, 0, 0, 0));
+                        //mappings.Add(new TypedCsvColumn("TerminationDate", "TerminationDate", FormatType.Any, 0, 0, 0,
+                        //    0));
                     }
 
                     //

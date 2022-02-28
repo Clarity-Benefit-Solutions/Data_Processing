@@ -20,11 +20,15 @@ namespace DataProcessing
        
         public static async Task ProcessAll()
         {
+            // ensure cobra files are moved
+            await CobraDataProcessing.ProcessAll();
+
             //
             await Task.Factory.StartNew
             (
                 () =>
                 {
+                    
                     Thread.CurrentThread.Name = "ProcessAlegeusFiles";
                     AlegeusDataProcessing alegeusDataProcessing = new AlegeusDataProcessing();
                     alegeusDataProcessing.ProcessAllFiles();
@@ -33,7 +37,10 @@ namespace DataProcessing
         }
 
         public void ProcessAllFiles()
-        {
+        {   
+           
+
+
             //
             var fileLogParams = Vars.dbFileProcessingLogParams;
 
@@ -95,8 +102,7 @@ namespace DataProcessing
             //2. Get list of folders for header from DB
             //decide table name
             var tableName = "dbo.[Header_list_ALL]";
-
-
+            
             //run query
             var queryString = $"Select * from {tableName} order by template_type, folder_name;";
             var dtHeaderFolders = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null);
@@ -125,8 +131,10 @@ namespace DataProcessing
                     fileLogParams1.IcType = rowIcType;
                     fileLogParams1.ToFtp = rowtoFtp;
                     fileLogParams1.SetSourceFolderName(rowFolderName);
-                    //
-                    DbUtils.LogFileOperation(fileLogParams);
+
+                    // do not log - gives too many lines
+                    //DbUtils.LogFileOperation(fileLogParams);
+
                     var headerType = HeaderType.NotApplicable;
 
                     // get folder header type
@@ -198,7 +206,9 @@ namespace DataProcessing
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                         Path.GetFileName(destFilePath), destFilePath, "AutomatedHeaders-CopyToArchive", "Success",
                         "Copied File to Archive Directory");
-                    DbUtils.LogFileOperation(fileLogParams);
+
+                    // do not log - gives too many lines
+                    // DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
@@ -213,7 +223,8 @@ namespace DataProcessing
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                         Path.GetFileName(destFilePath), destFilePath, "AutomatedHeaders-DeleteAllFilesInHoldAll",
                         "Success", "Deleted File In HoldAll Directory");
-                    DbUtils.LogFileOperation(fileLogParams);
+                    // do not log - gives too many lines
+                    // DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
@@ -228,7 +239,8 @@ namespace DataProcessing
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                         Path.GetFileName(destFilePath), destFilePath, "AutomatedHeaders-CopyFilesToHoldAll", "Success",
                         "Copied File to HoldAll Directory");
-                    DbUtils.LogFileOperation(fileLogParams);
+                    // do not log - gives too many lines
+                    // DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
@@ -380,7 +392,8 @@ namespace DataProcessing
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                         Path.GetFileName(destFilePath), destFilePath, "AutomatedHeaders-CopyHoldAllFilesToProcessing",
                         "Success", "Copied HoldAll File to Processing");
-                    DbUtils.LogFileOperation(fileLogParams);
+                    // do not log - gives too many lines
+                    // DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
@@ -411,7 +424,8 @@ namespace DataProcessing
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                         Path.GetFileName(destFilePath), destFilePath, "AutomatedHeaders-renameHeaderDirTxtFilesToMbi",
                         "Success", "Renamed txt file to mbi");
-                    DbUtils.LogFileOperation(fileLogParams);
+                    // do not log - gives too many lines
+                    // DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );

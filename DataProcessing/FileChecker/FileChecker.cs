@@ -33,7 +33,7 @@ namespace DataProcessing
     public class FileChecker : IDisposable
     {
         //
-        private static Dictionary<string, string> cachedDBChecks = new Dictionary<string, string>();
+        private static Dictionary<string, Object> cachedDBChecks = new Dictionary<string, Object>();
 
         //
         private readonly DbConnection dbConnPortalWc;
@@ -205,7 +205,7 @@ namespace DataProcessing
             // ensure previously cached data is not used so
             // so create a new db context to ensure stale data will NOT be used
             var dbErrorLog = Vars.dbCtxAlegeusErrorLogNew;
-            // get all rows
+            // get all dbRows
 
             // ALTERNATE METHOD: refresh previous data - not working
             /*
@@ -213,26 +213,26 @@ namespace DataProcessing
                         //((IObjectContextAdapter) dbErrorLog).ObjectContext.Refresh(RefreshMode.StoreWins, dbErrorLog.mbi_file_table_stage);
             */
             // get all data
-            var rows = dbErrorLog.mbi_file_table_stage
-                .OrderBy(row => row.source_row_no)
+            var dataRows = dbErrorLog.mbi_file_table_stage
+                .OrderBy(dataRow => dataRow.source_row_no)
                 .ToList();
 
-            //check each row
+            //check each dataRow
             int rowNo = 0;
-            foreach (var row in rows)
+            foreach (var dataRow in dataRows)
             {
                 rowNo++;
-                this.CheckFileData(fileFormat, row, mappings);
+                this.CheckFileData(fileFormat, dataRow, mappings);
             }
 
             // save any changes
             dbErrorLog.SaveChanges();
         }
 
-        private void CheckFileData(EdiFileFormat fileFormat, mbi_file_table_stage row, TypedCsvSchema mappings)
+        private void CheckFileData(EdiFileFormat fileFormat, mbi_file_table_stage dataRow, TypedCsvSchema mappings)
         {
-            // don't check header row
-            if (row.row_type == "IA" || row.row_type == "RA")
+            // don't check header dataRow
+            if (dataRow.row_type == "IA" || dataRow.row_type == "RA")
             {
                 return;
             }
@@ -263,13 +263,13 @@ namespace DataProcessing
                 {
                     // tpa ID
                     case "tpaid":
-                        skipRestOfRow = this.CheckTpaExists(row, column);
+                        skipRestOfRow = this.CheckTpaExists(dataRow, column);
                         break;
 
                     // ER ID
                     case "employerid":
                         //ER must exist before any Import files are sent
-                        skipRestOfRow = this.CheckEmployerExists(row, column);
+                        skipRestOfRow = this.CheckEmployerExists(dataRow, column);
                         break;
 
                     // EE ID
@@ -277,7 +277,7 @@ namespace DataProcessing
                         //ER must exist before any Import files are sent. But for IB files, employee need not exist - he is being added
                         if (fileFormat != EdiFileFormat.AlegeusDemographics)
                         {
-                            skipRestOfRow = this.CheckEmployeeExists(row, column);
+                            skipRestOfRow = this.CheckEmployeeExists(dataRow, column);
                         }
 
                         break;
@@ -286,23 +286,23 @@ namespace DataProcessing
                         //case "planstartdate":
                         //case "planenddate":
                         // note: employee need not exist for IC files but employer must have a plan and EE must exist for the ER already via ann IB file load
-                        skipRestOfRow = this.CheckEmployeeExists(row, column);
+                        skipRestOfRow = this.CheckEmployeeExists(dataRow, column);
                         if (!skipRestOfRow)
                         {
-                            skipRestOfRow = this.CheckEmployerPlanExists(row, column);
+                            skipRestOfRow = this.CheckEmployerPlanExists(dataRow, column);
                         }
 
-                        //if (!Utils.IsBlank(row.DependentID))
+                        //if (!Utils.IsBlank(dataRow.DependentID))
                         //{
-                        //    skipRestOfRow = this.CheckDependentPlanExists(row, column);
+                        //    skipRestOfRow = this.CheckDependentPlanExists(dataRow, column);
                         //}
-                        //else if (!Utils.IsBlank(row.EmployeeID))
+                        //else if (!Utils.IsBlank(dataRow.EmployeeID))
                         //{
-                        //    skipRestOfRow = this.CheckEmployeePlanExists(row, column);
+                        //    skipRestOfRow = this.CheckEmployeePlanExists(dataRow, column);
                         //}
                         //else
                         //{
-                        //    skipRestOfRow = this.CheckEmployerPlanExists(row, column);
+                        //    skipRestOfRow = this.CheckEmployerPlanExists(dataRow, column);
                         //}
                         break;
 
@@ -313,11 +313,11 @@ namespace DataProcessing
                 // skip checking other columns if a important column value is invalid
                 if (skipRestOfRow)
                 {
-                    continue;
+                    return;
                 }
 
                 // get value for the column
-                var value = row.ColumnValue(column.SourceColumn) ?? "";
+                var value = dataRow.ColumnValue(column.SourceColumn) ?? "";
 
 
                 // check against column rules
@@ -325,21 +325,21 @@ namespace DataProcessing
                 // format
                 if (!Utils.IsValueOfFormat(value, column.FormatType))
                 {
-                    this.AddErrorForRow(row, column.SourceColumn,
+                    this.AddErrorForRow(dataRow, column.SourceColumn,
                         $"{column.SourceColumn} must formatted as {column.FormatType.ToDescription()}");
                 }
 
                 // minLength
                 if (column.MinLength > 0 && value.Length < column.MinLength)
                 {
-                    this.AddErrorForRow(row, column.SourceColumn,
+                    this.AddErrorForRow(dataRow, column.SourceColumn,
                         $"{column.SourceColumn} must minimum {column.MinLength} characters long");
                 }
 
                 // maxLength
                 if (column.MinLength > 0 && value.Length < column.MinLength)
                 {
-                    this.AddErrorForRow(row, column.SourceColumn,
+                    this.AddErrorForRow(dataRow, column.SourceColumn,
                         $"{column.SourceColumn} must minimum {column.MinLength} characters long");
                 }
 
@@ -348,64 +348,64 @@ namespace DataProcessing
                 {
                     if (!Utils.IsNumeric(value))
                     {
-                        this.AddErrorForRow(row, column.SourceColumn, $"{column.SourceColumn} must be a number");
+                        this.AddErrorForRow(dataRow, column.SourceColumn, $"{column.SourceColumn} must be a number");
                     }
 
                     float numValue = Utils.ToNumber(value);
                     if (numValue < column.MinValue)
                     {
-                        this.AddErrorForRow(row, column.SourceColumn,
+                        this.AddErrorForRow(dataRow, column.SourceColumn,
                             $"{column.SourceColumn} must be a number with a value greater than ${column.MinValue}");
                     }
 
                     if (numValue > column.MaxValue)
                     {
-                        this.AddErrorForRow(row, column.SourceColumn,
+                        this.AddErrorForRow(dataRow, column.SourceColumn,
                             $"{column.SourceColumn} must be a number with a value less than ${column.MaxValue}");
                     }
                 }
             }
         }
 
-        private void AddErrorForRow(mbi_file_table_stage row, string errCode,
+        private void AddErrorForRow(mbi_file_table_stage dataRow, string errCode,
             string errMessage)
         {
-            // add to row so it will be saved back to DB for row by row data
-            row.error_code = errCode + "\n";
+            // add to dataRow so it will be saved back to DB for dataRow by dataRow data
+            dataRow.error_code = errCode + "\n";
             ;
-            row.error_message += errMessage + "\n";
+            dataRow.error_message += errMessage + "\n";
             //
-            int key = row.source_row_no ?? 0;
+            int key = dataRow.source_row_no ?? 0;
             if (this.fileCheckResults.ContainsKey(key))
             {
-                this.fileCheckResults[key] = $"{row.source_row_no}: {errCode} : {errMessage}";
+                this.fileCheckResults[key] = $"{dataRow.source_row_no}: {errCode} : {errMessage}";
             }
             else
             {
-                this.fileCheckResults.Add(key, $"{row.source_row_no}: {errCode} : {errMessage}");
+                this.fileCheckResults.Add(key, $"{dataRow.source_row_no}: {errCode} : {errMessage}");
             }
         }
 
-        public Boolean CheckTpaExists(mbi_file_table_stage row, TypedCsvColumn column)
+        public Boolean CheckTpaExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
         {
             var errorMessage = "";
-            var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{row.TpaId}";
+            var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{dataRow.TpaId}";
             if (cachedDBChecks.ContainsKey(cacheKey))
             {
-                errorMessage = cachedDBChecks[cacheKey];
+                errorMessage = cachedDBChecks[cacheKey]?.ToString();
             }
             else
             {
                 if (PlatformType == PlatformType.Alegeus)
                 {
                     // check DB
-                    if (Utils.IsBlank(row.TpaId))
+                    if (Utils.IsBlank(dataRow.TpaId))
                     {
                         errorMessage = "TPA ID cannot be blank. It must always be BENEFL";
                     }
-                    else if (row.TpaId != "BENEFL")
+                    else if (dataRow.TpaId != "BENEFL")
                     {
-                        errorMessage = $"TPA ID {row.TpaId} is invalid. It must always be BENEFL";
+                        errorMessage = $"TPA ID {dataRow.TpaId} is invalid. It must always be BENEFL";
                     }
                 }
                 else
@@ -420,7 +420,7 @@ namespace DataProcessing
             //
             if (!Utils.IsBlank(errorMessage))
             {
-                this.AddErrorForRow(row, column.SourceColumn, $"{errorMessage}");
+                this.AddErrorForRow(dataRow, column.SourceColumn, $"{errorMessage}");
                 // do not check any more
                 return true;
             }
@@ -430,19 +430,19 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckEmployerExists(mbi_file_table_stage row, TypedCsvColumn column)
+        public Boolean CheckEmployerExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
         {
             var errorMessage = "";
             var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}";
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}";
             if (cachedDBChecks.ContainsKey(cacheKey))
             {
-                errorMessage = cachedDBChecks[cacheKey];
+                errorMessage = cachedDBChecks[cacheKey]?.ToString();
             }
             else
             {
                 // check DB
-                if (Utils.IsBlank(row.EmployerId))
+                if (Utils.IsBlank(dataRow.EmployerId))
                 {
                     errorMessage = $"The Employer ID cannot be blank";
                 }
@@ -452,7 +452,7 @@ namespace DataProcessing
                     {
                         string queryString =
                             $"select employer_id, employer_name, employer_status from wc.wc_employers " +
-                            $" where employer_id = '{Utils.DbQuote(row.EmployerId)}' ";
+                            $" where employer_id = '{Utils.DbQuote(dataRow.EmployerId)}' ";
                         //
                         DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                             queryString, null,
@@ -461,17 +461,17 @@ namespace DataProcessing
 
                         if (dbResults.Rows.Count == 0)
                         {
-                            errorMessage = $"The Employer ID {row.EmployerId} could not be found";
+                            errorMessage = $"The Employer ID {dataRow.EmployerId} could not be found";
                         }
                         else
                         {
-                            DataRow rec = dbResults.Rows[0];
+                            DataRow dbData = dbResults.Rows[0];
                             //todo: does employer status need to be checked
-                            string status = rec["employer_status"]?.ToString();
+                            string status = dbData["employer_status"]?.ToString();
                             if (status != "Active" && status != "New")
                             {
                                 errorMessage =
-                                    $"The Employer ID {row.EmployerId} has status {status} which is not valid";
+                                    $"The Employer ID {dataRow.EmployerId} has status {status} which is not valid";
                             }
                         }
                     }
@@ -488,7 +488,111 @@ namespace DataProcessing
             //
             if (!Utils.IsBlank(errorMessage))
             {
-                this.AddErrorForRow(row, column.SourceColumn, $"{errorMessage}");
+                this.AddErrorForRow(dataRow, column.SourceColumn, $"{errorMessage}");
+                // do not check any more
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
+        private DataTable GetAllEmployeesForEmployer(string employerId)
+        {
+            DataTable dbResults = new DataTable();
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployees";
+            if (cachedDBChecks.ContainsKey(cacheKey))
+            {
+                dbResults = (DataTable)cachedDBChecks[cacheKey];
+            }
+            else
+            {
+                if (PlatformType == PlatformType.Alegeus)
+                {
+                    string queryString =
+                        $"SELECT employerid, employeeid, wc.wc_is_active_status(employeestatus, employeeid,employerid) is_active " +
+                        $" FROM wc.wc_participants  " +
+                        $" where employerid = '{Utils.DbQuote(employerId)}' " +
+                        $" ORDER by employeeid ";
+                    //
+                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        queryString, null,
+                        fileLogParams?.GetMessageLogParams());
+
+                    // create index on EmployeeID
+
+                    DataColumn[] indices = new DataColumn[1];
+                    indices[0] = (DataColumn)dbResults.Columns["employeeid"];
+                    dbResults.PrimaryKey = indices;
+
+                    //
+                    cachedDBChecks.Add(cacheKey, dbResults);
+                }
+                else
+                {
+                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
+                }
+            }
+
+            return dbResults;
+
+        }
+
+        public Boolean CheckEmployeeExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
+        {
+            var errorMessage = "";
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.EmployeeID}";
+            if (cachedDBChecks.ContainsKey(cacheKey))
+            {
+                errorMessage = cachedDBChecks[cacheKey]?.ToString();
+            }
+            else
+            {
+                // check DB
+                if (Utils.IsBlank(dataRow.EmployerId))
+                {
+                    throw new Exception($"The Employer ID cannot be blank");
+                }
+                else if (Utils.IsBlank(dataRow.EmployeeID))
+                {
+                    throw new Exception($"The Employee ID cannot be blank");
+                }
+                else
+                {
+                    DataTable dbResults = GetAllEmployeesForEmployer(dataRow.EmployerId);
+                    DataRow[] dbRows = dbResults.Select($"employeeid = '{dataRow.EmployeeID}'");
+                    if (dbRows.Length == 0)
+                    {
+                        errorMessage +=
+                            $"The Employee ID {dataRow.EmployeeID} could not be found for Employer Id {dataRow.EmployerId}" +
+                            "\n";
+                        ;
+                    }
+                    else
+                    {
+                        // todo: we may be activating an employee - do not check?
+                        DataRow dbData = dbRows[0];
+                        float status = Utils.ToNumber(dbData["is_active"]?.ToString());
+                        if (status <= 0 && Utils.ToNumber(dataRow.EmployeeStatus) > 1)
+                        {
+                            errorMessage +=
+                                $"The Employee ID {dataRow.EmployeeID} has status {status} which is not valid" + "\n";
+                        }
+                    }
+
+                }
+
+                //
+                cachedDBChecks.Add(cacheKey, errorMessage);
+            }
+
+            //
+            if (!Utils.IsBlank(errorMessage))
+            {
+                this.AddErrorForRow(dataRow, column.SourceColumn, $"{errorMessage}");
                 // do not check any more
                 return true;
             }
@@ -498,67 +602,290 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckEmployeeExists(mbi_file_table_stage row, TypedCsvColumn column)
+        // cache all plans for ER to reduce number of queries to database - each query for a single plan takes around 150 ms so we aree saving significant time esp for ER witjh many EE
+        private DataTable GetAllPlansForEmployer(string employerId)
+        {
+            DataTable dbResults = new DataTable();
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployerPlans";
+            if (cachedDBChecks.ContainsKey(cacheKey))
+            {
+                dbResults = (DataTable)cachedDBChecks[cacheKey];
+            }
+            else
+            {
+                if (PlatformType == PlatformType.Alegeus)
+                {
+                    string queryString =
+                        $"select employer_id, account_type_code, plan_id, min(plan_year_start_date) as plan_year_start_date, max(plan_year_end_date) as plan_year_end_date, max(grace_period_end_date) grace_period_end_date " +
+                        $" from wc.wc_employer_plans " +
+                        $" where employer_id = '{Utils.DbQuote(employerId)}' " +
+                        $" order by employer_id, plan_id, account_type_code "
+                        ;
+                    //
+                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        queryString, null,
+                        fileLogParams?.GetMessageLogParams());
+
+                    // create index on EmployeeID
+
+                    DataColumn[] indices = new DataColumn[2];
+                    indices[0] = (DataColumn)dbResults.Columns["account_type_code"];
+                    indices[1] = (DataColumn)dbResults.Columns["plan_id"];
+                    dbResults.PrimaryKey = indices;
+
+                    //
+                    cachedDBChecks.Add(cacheKey, dbResults);
+                }
+                else
+                {
+                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
+                }
+            }
+
+            return dbResults;
+
+        }
+
+        public Boolean CheckEmployerPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
         {
             var errorMessage = "";
             var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}-{row.EmployeeID}";
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.AccountTypeCode}-{dataRow.PlanId}";
             if (cachedDBChecks.ContainsKey(cacheKey))
             {
-                errorMessage = cachedDBChecks[cacheKey];
+                errorMessage = cachedDBChecks[cacheKey]?.ToString();
             }
             else
             {
                 // check DB
-                if (Utils.IsBlank(row.EmployerId))
+                if (Utils.IsBlank(dataRow.EmployerId))
                 {
                     errorMessage += $"The Employer ID cannot be blank" + "\n";
                     ;
                 }
-                else if (Utils.IsBlank(row.EmployeeID))
+                else if (Utils.IsBlank(dataRow.PlanId))
                 {
-                    errorMessage += $"The Employee ID cannot be blank" + "\n";
+                    errorMessage += $"The Plan ID cannot be blank" + "\n";
                     ;
                 }
                 else
                 {
-                    if (PlatformType == PlatformType.Alegeus)
+                    DataTable dbResults = GetAllPlansForEmployer(dataRow.EmployerId);
+                    // planid is not always present e.g. in deposit file
+                    string filter = $"employer_id = '{dataRow.EmployerId}'";
+                    if (!Utils.IsBlank(dataRow.AccountTypeCode))
                     {
-                        string queryString =
-                            $"SELECT employerid, employeeid, wc.wc_is_active_status(employeestatus, employeeid,employerid) is_active " + 
-                            " FROM wc.wc_participants  " +
-                            /* send employeeid first as has more unique index */
-                            " USE INDEX (wc_participants_eeid_erid_index) " +
-                            $" where employeeid = '{Utils.DbQuote(row.EmployeeID)}' " +
-                            $" and employerid = '{Utils.DbQuote(row.EmployerId)}' ";
-                        //
-                        DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
-                            queryString, null,
-                            fileLogParams?.GetMessageLogParams());
+                        filter += $"and account_type_code = '{dataRow.AccountTypeCode}' ";
+                    }
+                    if (!Utils.IsBlank(dataRow.PlanId))
+                    {
+                        filter += $"and plan_id = '{dataRow.PlanId}' ";
+                    }
+                    DataRow[] dbRows = dbResults.Select(filter);
 
-                        if (dbResults.Rows.Count == 0)
-                        {
-                            errorMessage +=
-                                $"The Employee ID {row.EmployeeID} could not be found for Employer Id {row.EmployerId}" +
-                                "\n";
-                            ;
-                        }
-                        else
-                        {
-                            // todo: we may be activating an employee - do not check?
-                            DataRow rec = dbResults.Rows[0];
-                            float status = Utils.ToNumber(rec["is_active"]?.ToString());
-                            if (status <= 0 && Utils.ToNumber(row.EmployeeStatus) > 1)
-                            {
-                                errorMessage +=
-                                    $"The Employee ID {row.EmployeeID} has status {status} which is not valid" + "\n";
-                            }
-                        }
+                    if (dbRows.Length == 0)
+                    {
+                        errorMessage +=
+                            $"The Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId}" + "\n";
+                        ;
                     }
                     else
                     {
-                        throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
+                        DataRow dbData = dbRows[0];
+                        DateTime actualPlanStartDate = (DateTime)dbData["plan_year_start_date"];
+                        DateTime actualPlanEndDate = (DateTime)dbData["plan_year_end_date"];
+                        DateTime actualGracePeriodEndDate = (DateTime)dbData["grace_period_end_date"];
+
+
+                        //check plan dates match Alegeus
+                        if (!Utils.IsBlank(dataRow.PlanStartDate) && actualPlanStartDate > Utils.ToDateTime(dataRow.PlanStartDate))
+                        {
+                            errorMessage +=
+                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}" +
+                                "\n";
+                        }
+
+                        if (!Utils.IsBlank(dataRow.PlanEndDate) && actualPlanEndDate < Utils.ToDateTime(dataRow.PlanEndDate))
+                        {
+                            errorMessage =
+                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}" +
+                                "\n";
+                            ;
+                        }
+                        //check effectivedate is within plan dates
+                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanStartDate > Utils.ToDateTime(dataRow.EffectiveDate))
+                        {
+                            errorMessage +=
+                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}" +
+                                "\n";
+                        }
+
+                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanEndDate < Utils.ToDateTime(dataRow.EffectiveDate))
+                        {
+                            errorMessage =
+                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}" +
+                                "\n";
+                            ;
+                        }
+
                     }
+
+                    //
+                    cachedDBChecks.Add(cacheKey, errorMessage);
+                }
+            }
+
+            //
+            if (!Utils.IsBlank(errorMessage))
+            {
+                this.AddErrorForRow(dataRow, column.SourceColumn, $"{errorMessage}");
+                // do not check any more
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        private DataTable GetAllEmployeePlansForEmployer(string employerId)
+        {
+            DataTable dbResults = new DataTable();
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployeePlans";
+            if (cachedDBChecks.ContainsKey(cacheKey))
+            {
+                dbResults = (DataTable)cachedDBChecks[cacheKey];
+            }
+            else
+            {
+                if (PlatformType == PlatformType.Alegeus)
+                {
+                    string queryString =
+                        $" select employerid, employeeid, plancode, plandesc, min(planstart) as planstart, max(planend) as planend " +
+                        $" from wc.wc_participant_plans " +
+                        $" where employerid = '{Utils.DbQuote(employerId)}' " +
+                        $" order by employerid, employeeid, plancode, plandesc"
+                        ;
+                    ;
+                    //
+                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        queryString, null,
+                        fileLogParams?.GetMessageLogParams());
+
+                    // create index on EmployeeID
+
+                    DataColumn[] indices = new DataColumn[3];
+                    indices[0] = (DataColumn)dbResults.Columns["employeeid"];
+                    indices[1] = (DataColumn)dbResults.Columns["plancode"];
+                    indices[2] = (DataColumn)dbResults.Columns["plandesc"];
+                    dbResults.PrimaryKey = indices;
+
+                    //
+                    cachedDBChecks.Add(cacheKey, dbResults);
+                }
+                else
+                {
+                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
+                }
+            }
+
+            return dbResults;
+
+        }
+        
+        public Boolean CheckEmployeePlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
+        {
+            var errorMessage = "";
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.EmployeeID}-{dataRow.AccountTypeCode}-{dataRow.PlanId}";
+            if (cachedDBChecks.ContainsKey(cacheKey))
+            {
+                errorMessage = cachedDBChecks[cacheKey]?.ToString();
+            }
+            else
+            {
+                // check DB
+                if (Utils.IsBlank(dataRow.EmployerId))
+                {
+                    errorMessage += $"The Employer ID cannot be blank" + "\n";
+                    ;
+                }
+                else if (Utils.IsBlank(dataRow.EmployeeID))
+                {
+                    errorMessage += $"The Employer ID cannot be blank" + "\n";
+                    ;
+                }
+                else if (Utils.IsBlank(dataRow.PlanId))
+                {
+                    errorMessage += $"The Plan ID cannot be blank" + "\n";
+                    ;
+                }
+                else
+                {
+                    DataTable dbResults = GetAllEmployeePlansForEmployer(dataRow.EmployerId);
+
+                    // planid is not always present e.g. in deposit file
+                    string filter = $"employeeid = '{dataRow.EmployeeID}' ";
+                    if (!Utils.IsBlank(dataRow.AccountTypeCode))
+                    {
+                        filter += $"and plancode = '{dataRow.AccountTypeCode}' ";
+                    }
+                    if (!Utils.IsBlank(dataRow.PlanId))
+                    {
+                        filter += $"and plandesc = '{dataRow.PlanId}' ";
+                    }
+                    DataRow[] dbRows = dbResults.Select(filter);
+
+                    if (dbRows.Length == 0)
+                    {
+                        errorMessage +=
+                            $"The Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId} and Employee Id {dataRow.EmployeeID}" +
+                            "\n";
+                        ;
+                    }
+                    else
+                    {
+                        DataRow dbData = dbRows[0];
+                        DateTime actualPlanStartDate = (DateTime)dbData["planstart"];
+                        DateTime actualPlanEndDate = (DateTime)dbData["planend"];
+                        DateTime actualGracePeriodEndDate = Utils.ToDateTime(dbData["actualGracePeriodEndDate"]?.ToString());
+
+                        //check plan dates match Alegeus
+                        if (!Utils.IsBlank(dataRow.PlanStartDate) && actualPlanStartDate > Utils.ToDateTime(dataRow.PlanStartDate))
+                        {
+                            errorMessage +=
+                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}" +
+                                "\n";
+                        }
+
+                        if (!Utils.IsBlank(dataRow.PlanEndDate) && actualPlanEndDate < Utils.ToDateTime(dataRow.PlanEndDate))
+                        {
+                            errorMessage =
+                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}" +
+                                "\n";
+                            ;
+                        }
+                        //check effectivedate is within plan dates
+                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanStartDate > Utils.ToDateTime(dataRow.EffectiveDate))
+                        {
+                            errorMessage +=
+                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}" +
+                                "\n";
+                        }
+
+                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanEndDate < Utils.ToDateTime(dataRow.EffectiveDate))
+                        {
+                            errorMessage =
+                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}" +
+                                "\n";
+                            ;
+                        }
+
+                    }
+
                 }
 
                 //
@@ -568,7 +895,7 @@ namespace DataProcessing
             //
             if (!Utils.IsBlank(errorMessage))
             {
-                this.AddErrorForRow(row, column.SourceColumn, $"{errorMessage}");
+                this.AddErrorForRow(dataRow, column.SourceColumn, $"{errorMessage}");
                 // do not check any more
                 return true;
             }
@@ -578,24 +905,24 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckDependentExists(mbi_file_table_stage row, TypedCsvColumn column)
+        public Boolean CheckDependentExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
         {
             var errorMessage = "";
             var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}-{row.EmployeeID}";
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.EmployeeID}";
             if (cachedDBChecks.ContainsKey(cacheKey))
             {
-                errorMessage = cachedDBChecks[cacheKey];
+                errorMessage = cachedDBChecks[cacheKey]?.ToString();
             }
             else
             {
                 // check DB
-                if (Utils.IsBlank(row.EmployerId))
+                if (Utils.IsBlank(dataRow.EmployerId))
                 {
                     errorMessage += $"The Employer ID cannot be blank" + "\n";
                     ;
                 }
-                else if (Utils.IsBlank(row.EmployeeID))
+                else if (Utils.IsBlank(dataRow.EmployeeID))
                 {
                     errorMessage += $"The Employee ID cannot be blank" + "\n";
                     ;
@@ -607,8 +934,8 @@ namespace DataProcessing
                         //todo: add data in Portal for Dependents
                         //string queryString =
                         //    $"select employer_id, employee_id, is_active from wc.vw_wc_participants  " +
-                        //    $" where employer_id = '{Utils.DbQuote(row.EmployerId)}' " +
-                        //    $" and employee_id = '{Utils.DbQuote(row.EmployeeID)}' ";
+                        //    $" where employer_id = '{Utils.DbQuote(dataRow.EmployerId)}' " +
+                        //    $" and employee_id = '{Utils.DbQuote(dataRow.EmployeeID)}' ";
                         ////
                         //DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         //    queryString, null,
@@ -616,16 +943,16 @@ namespace DataProcessing
 
                         //if (dbResults.Rows.Count == 0)
                         //{
-                        //    errorMessage += $"The Employee ID {row.EmployeeID} could not be found for Employer Id {row.EmployerId}" + "\n"; ;
+                        //    errorMessage += $"The Employee ID {dataRow.EmployeeID} could not be found for Employer Id {dataRow.EmployerId}" + "\n"; ;
                         //}
                         //else
                         //{
-                        //    DataRow rec = dbResults.Rows[0];
-                        //    float status = Utils.ToNumber(rec["is_active"]?.ToString());
+                        //    DataRow dbData = dbResults.Rows[0];
+                        //    float status = Utils.ToNumber(dbData["is_active"]?.ToString());
                         //    if (status <= 0)
                         //    {
                         //        errorMessage +=
-                        //            $"The Employee ID {row.EmployeeID} has status {status} which is not valid" + "\n";
+                        //            $"The Employee ID {dataRow.EmployeeID} has status {status} which is not valid" + "\n";
                         //    }
                         //}
                     }
@@ -642,7 +969,7 @@ namespace DataProcessing
             //
             if (!Utils.IsBlank(errorMessage))
             {
-                this.AddErrorForRow(row, column.SourceColumn, $"{errorMessage}");
+                this.AddErrorForRow(dataRow, column.SourceColumn, $"{errorMessage}");
                 // do not check any more
                 return true;
             }
@@ -651,221 +978,29 @@ namespace DataProcessing
                 return false;
             }
         }
-
-        public Boolean CheckEmployerPlanExists(mbi_file_table_stage row, TypedCsvColumn column)
+        public Boolean CheckDependentPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
         {
             var errorMessage = "";
             var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}-{row.PlanId}";
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.PlanId}";
             if (cachedDBChecks.ContainsKey(cacheKey))
             {
-                errorMessage = cachedDBChecks[cacheKey];
+                errorMessage = cachedDBChecks[cacheKey]?.ToString();
             }
             else
             {
                 // check DB
-                if (Utils.IsBlank(row.EmployerId))
+                if (Utils.IsBlank(dataRow.EmployerId))
                 {
                     errorMessage += $"The Employer ID cannot be blank" + "\n";
                     ;
                 }
-                else if (Utils.IsBlank(row.PlanId))
-                {
-                    errorMessage += $"The Plan ID cannot be blank" + "\n";
-                    ;
-                }
-                else
-                {
-                    if (PlatformType == PlatformType.Alegeus)
-                    {
-                        string queryString =
-                            $"select employer_id, plan_id, min(plan_year_start_date) as plan_year_start_date, max(plan_year_end_date) as plan_year_end_date, max(grace_period_end_date) grace_period_end_date " +
-                            $" from wc.wc_employer_plans " +
-                            $" where employer_id = '{Utils.DbQuote(row.EmployerId)}' " +
-                            $" and plan_id = '{Utils.DbQuote(row.PlanId)}'" +
-                            $" and account_type_code = '{Utils.DbQuote(row.AccountTypeCode)}'" +
-                            $" group by employer_id, plan_id, account_type_code " +
-                            $" LIMIT 1 ";
-                        //
-                        DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
-                            queryString, null,
-                            fileLogParams?.GetMessageLogParams());
-
-                        if (dbResults.Rows.Count == 0)
-                        {
-                            errorMessage +=
-                                $"The Plan ID {row.PlanId} could not be found for Employer Id {row.EmployerId}" + "\n";
-                            ;
-                        }
-                        else
-                        {
-                            DataRow rec = dbResults.Rows[0];
-                            DateTime plan_year_start_date = (DateTime)rec["plan_year_start_date"];
-                            DateTime plan_year_end_date = (DateTime)rec["plan_year_end_date"];
-                            DateTime grace_period_end_date = (DateTime)rec["grace_period_end_date"];
-
-                            //todo: check plan dates match Alegeus
-                            if (!Utils.IsBlank(row.PlanStartDate) && plan_year_start_date > DateTime.Now.Date)
-                            {
-                                errorMessage +=
-                                    $"The Plan ID {row.PlanId} starts only on {Utils.ToDateString(plan_year_start_date)}" +
-                                    "\n";
-                            }
-
-                            if (!Utils.IsBlank(row.PlanEndDate) && plan_year_end_date < DateTime.Now.Date)
-                            {
-                                errorMessage =
-                                    $"The Plan ID {row.PlanId} ended on {Utils.ToDateString(plan_year_end_date)}" +
-                                    "\n";
-                                ;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
-                    }
-                }
-
-                //
-                cachedDBChecks.Add(cacheKey, errorMessage);
-            }
-
-            //
-            if (!Utils.IsBlank(errorMessage))
-            {
-                this.AddErrorForRow(row, column.SourceColumn, $"{errorMessage}");
-                // do not check any more
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public Boolean CheckEmployeePlanExists(mbi_file_table_stage row, TypedCsvColumn column)
-        {
-            var errorMessage = "";
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}-{row.EmployeeID}-{row.PlanId}";
-            if (cachedDBChecks.ContainsKey(cacheKey))
-            {
-                errorMessage = cachedDBChecks[cacheKey];
-            }
-            else
-            {
-                // check DB
-                if (Utils.IsBlank(row.EmployerId))
+                else if (Utils.IsBlank(dataRow.EmployeeID))
                 {
                     errorMessage += $"The Employer ID cannot be blank" + "\n";
                     ;
                 }
-                else if (Utils.IsBlank(row.EmployeeID))
-                {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n";
-                    ;
-                }
-                else if (Utils.IsBlank(row.PlanId))
-                {
-                    errorMessage += $"The Plan ID cannot be blank" + "\n";
-                    ;
-                }
-                else
-                {
-                    if (PlatformType == PlatformType.Alegeus)
-                    {
-                        string queryString =
-                            $" select employerid, employeeid, plancode, plandesc, min(planstart) as planstart, max(planend) as planend from wc.wc_participant_plans " +
-                            $" where employerid = '{Utils.DbQuote(row.EmployerId)}' " +
-                            $" and employeeid = '{Utils.DbQuote(row.EmployeeID)}' " +
-                            /*$" and plandesc = '{Utils.DbQuote(row.PlanId)}'" +*/
-                            $" and plancode = '{Utils.DbQuote(row.AccountTypeCode)}'" +
-                            $" group by employerid, employeeid, plancode, plandesc" +
-                            $" LIMIT 1 ";
-                        //
-                        DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
-                            queryString, null,
-                            fileLogParams?.GetMessageLogParams());
-
-                        if (dbResults.Rows.Count == 0)
-                        {
-                            errorMessage +=
-                                $"The Plan ID {row.PlanId} could not be found for Employer Id {row.EmployerId} and Employee Id {row.EmployeeID}" +
-                                "\n";
-                            ;
-                        }
-                        else
-                        {
-                            DataRow rec = dbResults.Rows[0];
-                            DateTime plan_year_start_date = (DateTime)rec["planstart"];
-                            DateTime plan_year_end_date = (DateTime)rec["planend"];
-                            //DateTime grace_period_end_date = Utils.ToDateTime(rec["grace_period_end_date"]?.ToString());
-
-                            // todo: check depositdate are within the plan dates in Alegeus
-                            // todo: check begin and end dates match those in Alegeus
-                            if (plan_year_start_date > DateTime.Now.Date)
-                            {
-                                errorMessage +=
-                                    $"The Plan ID {row.PlanId} starts only on {Utils.ToDateString(plan_year_start_date)}" +
-                                    "\n";
-                            }
-
-                            if (plan_year_end_date < DateTime.Now.Date)
-                            {
-                                errorMessage =
-                                    $"The Plan ID {row.PlanId} ended on {Utils.ToDateString(plan_year_end_date)}" +
-                                    "\n";
-                                ;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
-                    }
-                }
-
-                //
-                cachedDBChecks.Add(cacheKey, errorMessage);
-            }
-
-            //
-            if (!Utils.IsBlank(errorMessage))
-            {
-                this.AddErrorForRow(row, column.SourceColumn, $"{errorMessage}");
-                // do not check any more
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public Boolean CheckDependentPlanExists(mbi_file_table_stage row, TypedCsvColumn column)
-        {
-            var errorMessage = "";
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{row.EmployerId}-{row.PlanId}";
-            if (cachedDBChecks.ContainsKey(cacheKey))
-            {
-                errorMessage = cachedDBChecks[cacheKey];
-            }
-            else
-            {
-                // check DB
-                if (Utils.IsBlank(row.EmployerId))
-                {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n";
-                    ;
-                }
-                else if (Utils.IsBlank(row.EmployeeID))
-                {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n";
-                    ;
-                }
-                else if (Utils.IsBlank(row.PlanId))
+                else if (Utils.IsBlank(dataRow.PlanId))
                 {
                     errorMessage += $"The Plan ID cannot be blank" + "\n";
                     ;
@@ -877,9 +1012,9 @@ namespace DataProcessing
                         // todo: add data in Portal for dependent plans
                         //string queryString =
                         //    $" select employerid,employeeid, plancode, plandesc, planstart,planend from wc.wc_participant_plans " +
-                        //    $" where employerid = '{Utils.DbQuote(row.EmployerId)}' " +
-                        //    $" where employeeid = '{Utils.DbQuote(row.EmployeeID)}' " +
-                        //    $" and (plancode = '{Utils.DbQuote(row.PlanId)}' OR plandesc = '{Utils.DbQuote(row.PlanId)}' )";
+                        //    $" where employerid = '{Utils.DbQuote(dataRow.EmployerId)}' " +
+                        //    $" where employeeid = '{Utils.DbQuote(dataRow.EmployeeID)}' " +
+                        //    $" and (plancode = '{Utils.DbQuote(dataRow.PlanId)}' OR plandesc = '{Utils.DbQuote(dataRow.PlanId)}' )";
                         ////
                         //DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         //    queryString, null,
@@ -887,25 +1022,25 @@ namespace DataProcessing
 
                         //if (dbResults.Rows.Count == 0)
                         //{
-                        //    errorMessage += $"The Plan ID {row.PlanId} could not be found for Employer Id {row.EmployerId} and Employee Id {row.EmployeeID}" + "\n"; ;
+                        //    errorMessage += $"The Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId} and Employee Id {dataRow.EmployeeID}" + "\n"; ;
                         //}
                         //else
                         //{
-                        //    DataRow rec = dbResults.Rows[0];
-                        //    DateTime plan_year_start_date = Utils.ToDateTime(rec["planstart"]?.ToString());
-                        //    DateTime plan_year_end_date = Utils.ToDateTime(rec["planend"]?.ToString());
-                        //    //DateTime grace_period_end_date = Utils.ToDateTime(rec["grace_period_end_date"]?.ToString());
+                        //    DataRow dbData = dbResults.Rows[0];
+                        //    DateTime actualPlanStartDate = Utils.ToDateTime(dbData["planstart"]?.ToString());
+                        //    DateTime actualPlanEndDate = Utils.ToDateTime(dbData["planend"]?.ToString());
+                        //    //DateTime actualGracePeriodEndDate = Utils.ToDateTime(dbData["actualGracePeriodEndDate"]?.ToString());
 
                         //    //
-                        //    if (plan_year_start_date > DateTime.Now.Date)
+                        //    if (actualPlanStartDate > DateTime.Now.Date)
                         //    {
                         //        errorMessage +=
-                        //            $"The Plan ID {row.PlanId} starts only on {Utils.ToDateString(plan_year_start_date)}" + "\n";
+                        //            $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)}" + "\n";
                         //    }
-                        //    if (plan_year_end_date < DateTime.Now.Date)
+                        //    if (actualPlanEndDate < DateTime.Now.Date)
                         //    {
                         //        errorMessage =
-                        //            $"The Plan ID {row.PlanId} ended on {Utils.ToDateString(plan_year_end_date)}" + "\n"; ;
+                        //            $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)}" + "\n"; ;
                         //    }
                         //}
                     }
@@ -922,7 +1057,7 @@ namespace DataProcessing
             //
             if (!Utils.IsBlank(errorMessage))
             {
-                this.AddErrorForRow(row, column.SourceColumn, $"{errorMessage}");
+                this.AddErrorForRow(dataRow, column.SourceColumn, $"{errorMessage}");
                 // do not check any more
                 return true;
             }

@@ -48,27 +48,20 @@ namespace DataProcessing
             // dbConn for logging
             DbConnection dbConn = fileLogParams.DbConnection;
 
-            // MoveCobraFtpFiles
-            MoveCobraFtpFiles(HeaderType.Own, dbConn, fileLogParams);
+            //MoveSourceFilesToCobraDirs
+            MakeListOfCobraFtpSourceFolders(HeaderType.NotApplicable, "*.*", dbConn, fileLogParams);
 
-            // MoveCobraFtpFiles2
-            MoveCobraFtpFiles2(HeaderType.Own, dbConn, fileLogParams);
+            //MoveSourceFilesToCobraDirs
+            MoveSourceFilesToCobraDirs(HeaderType.NotApplicable, "*.*", dbConn, fileLogParams);
+
+            // MoveCobraFtpFiles
+            MoveCobraFtpFiles(HeaderType.NotApplicable, dbConn, fileLogParams);
 
             // PrepareCobraQbFtpFiles
-            PrepareCobraQbFtpFiles(HeaderType.Own, dbConn, fileLogParams);
+            PrepareCobraQbFtpFiles(HeaderType.NotApplicable, dbConn, fileLogParams);
 
             // MoveCobraFtpFilesAfterPrepare
-            MoveCobraFtpFilesAfterPrepare(HeaderType.Own, dbConn, fileLogParams);
-        }
-
-        public void MoveCobraFtpFiles(HeaderType headerType, DbConnection dbConn,
-            FileOperationLogParams fileLogParams)
-        {
-            //MoveSourceFilesToCobraDirs
-            MakeListOfCobraFtpSourceFolders(headerType, "*.*", dbConn, fileLogParams);
-
-            //MoveSourceFilesToCobraDirs
-            MoveSourceFilesToCobraDirs(headerType, "*.*", dbConn, fileLogParams);
+            MoveCobraFtpFilesAfterPrepare(HeaderType.NotApplicable, dbConn, fileLogParams);
         }
 
 
@@ -113,10 +106,12 @@ namespace DataProcessing
                             fileLogParams?.GetMessageLogParams());
                         //
                         fileLogParams.SetFileNames("", Path.GetFileName(srcDirPath), srcDirPath,
-                            Path.GetFileName(destFilePath), destFilePath, "MoveCobraFtpFiles-ListFTPFolders",
+                            Path.GetFileName(destFilePath), destFilePath, "CobraProcessing-ListFTPFolders",
                             "Success", $"Added Source Files Folder");
                         fileLogParams.SetSourceFolderName(srcDirPath);
-                        DbUtils.LogFileOperation(fileLogParams);
+
+                        // do not log - gives too many lines
+                        //DbUtils.LogFileOperation(fileLogParams);
                     }
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
@@ -223,14 +218,13 @@ namespace DataProcessing
 
                                 fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
                                     Path.GetFileName(uniqueIdFilePath), "",
-                                    $"MoveCobraFtpFiles-{MethodBase.GetCurrentMethod()?.Name}",
+                                    $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                                     "Success", $"Processing File ${srcFilePath}");
 
                                 DbUtils.LogFileOperation(fileLogParams);
                                 //
                                 string uniqueIdFileName = Path.GetFileName(uniqueIdFilePath);
                                 string destFilePath = $"{destDirPath}/{uniqueIdFileName}";
-
 
                                 FileUtils.MoveFile(
                                     uniqueIdFilePath, destFilePath,
@@ -239,10 +233,10 @@ namespace DataProcessing
                                         //
                                         fileLogParams.SetFileNames("", uniqueIdFileName, uniqueIdFilePath,
                                             Path.GetFileName(destFilePath), destFilePath,
-                                            "MoveCobraFtpFiles-MoveFilesToCobraFolders", "Success",
+                                            "CobraProcessing-MoveFilesToCobraFolders", "Success",
                                             $"Moved file to COBRA folder");
 
-                                        DbUtils.LogFileOperation(fileLogParams);
+                                        //DbUtils.LogFileOperation(fileLogParams);
                                     },
                                     (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                                 );
@@ -261,7 +255,7 @@ namespace DataProcessing
             //
         } // sub
 
-        protected void MoveCobraFtpFiles2(HeaderType headerType, DbConnection dbConn,
+        protected void MoveCobraFtpFiles(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             //
@@ -285,14 +279,13 @@ namespace DataProcessing
                         string destFilePath =
                             $"{fileInfo.Directory}/{Path.GetFileNameWithoutExtension(fileInfo.Name)}.csv";
 
-
                         FileUtils.MoveFile(srcFilePath, destFilePath,
                             (srcFilePath2, destFilePath2, dummy4) =>
                             {
                                 //
                                 fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath2), srcFilePath2,
                                     Path.GetFileName(destFilePath2), destFilePath2,
-                                    "MoveCobraFtpFiles2-RenameTxtAndMbiFiles", "Success",
+                                    $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Success",
                                     $"Renamed file to *.csv");
 
                                 DbUtils.LogFileOperation(fileLogParams);
@@ -332,7 +325,7 @@ namespace DataProcessing
                                 //
                                 fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath2), srcFilePath2,
                                     Path.GetFileName(destFilePath2), destFilePath2,
-                                    "MoveCobraFtpFiles2-MoveQBCsvFilesToPreparedQB", "Success",
+                                    "CobraProcessing-MoveQBCsvFilesToPreparedQB", "Success",
                                     $"Moved QB File to MoveQBCsvFilesToPreparedQB folder");
 
                                 DbUtils.LogFileOperation(fileLogParams);
@@ -388,7 +381,7 @@ namespace DataProcessing
                                 //
                                 fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath2), srcFilePath2,
                                     Path.GetFileName(destFilePath2), destFilePath2,
-                                    "MoveCobraFtpFiles2-MoveEmptyFiles", "Success",
+                                    "CobraProcessing-MoveEmptyFiles", "Success",
                                     $"Moved Empty file to Archive - Done folder");
 
                                 DbUtils.LogFileOperation(fileLogParams);
@@ -520,7 +513,7 @@ namespace DataProcessing
                             {
                                 fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                                     Path.GetFileName(destFilePath), destFilePath,
-                                    "MoveCobraFtpFilesAfterPrepare",
+                                    "CobraProcessing-AfterPrepare",
                                     "Success", $"Moved File");
                                 DbUtils.LogFileOperation(fileLogParams);
                             },
@@ -541,7 +534,7 @@ namespace DataProcessing
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                        Path.GetFileName(destFilePath), destFilePath, "MoveCobraFtpFilesAfterPrepare",
+                        Path.GetFileName(destFilePath), destFilePath, "CobraProcessing-AfterPrepare",
                         "Success", $"Moved File");
                     DbUtils.LogFileOperation(fileLogParams);
                 },

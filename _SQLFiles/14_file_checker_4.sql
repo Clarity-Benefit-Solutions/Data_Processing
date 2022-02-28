@@ -37,3 +37,11 @@ as
         file_processing_log h;
 
 select * from vw_file_processing_log where ErrorCount > 0;
+
+alter table Alegeus_ErrorLog..mbi_file_table_stage add OngoingPrefunded nvarchar(50);
+alter table Alegeus_ErrorLog..mbi_file_table add OngoingPrefunded nvarchar(50);
+
+alter table Alegeus_ErrorLog..res_file_table_stage add OngoingPrefunded nvarchar(50);
+alter table Alegeus_ErrorLog..res_file_table add OngoingPrefunded nvarchar(50);
+
+select * from Alegeus_ErrorLog..mbi_file_table_stage where len(error_message) > 0;

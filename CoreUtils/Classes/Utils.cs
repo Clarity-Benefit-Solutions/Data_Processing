@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualBasic;
@@ -68,7 +69,7 @@ namespace CoreUtils.Classes
 
                 if (attrs.Length > 0)
 
-                    return ((DisplayText) attrs[0]).text;
+                    return ((DisplayText)attrs[0]).text;
             }
 
             return en.ToString();
@@ -122,8 +123,12 @@ namespace CoreUtils.Classes
 
         public static DateTime ToDateTime(string value)
         {
-            var dateTime = DateTime.TryParse(value, out var number);
-            return number;
+            Boolean parsed = DateTime.TryParseExact(value, "yyyyMMdd", null, DateTimeStyles.None, out var aDate);
+            if (!parsed)
+            {
+                return DateTime.MinValue; // throw new Exception($"Could Not Convert String {value} into a valid date using format yyyyMMdd");
+            }
+            return aDate;
         }
 
         public static string ToDateString(DateTime value)
