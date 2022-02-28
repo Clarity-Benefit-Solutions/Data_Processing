@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using CoreUtils;
 using CoreUtils.Classes;
 
@@ -19,6 +21,20 @@ namespace DataProcessing
     public class CobraDataProcessing
     {
         private Vars Vars { get; } = new Vars();
+
+        public static async Task ProcessAll()
+        {
+            //
+            await Task.Factory.StartNew
+            (
+                () =>
+                {
+                    Thread.CurrentThread.Name = "ProcessCobraFiles";
+                    CobraDataProcessing cobraProcessing = new CobraDataProcessing();
+                    cobraProcessing.MoveAndProcessCobraFtpFiles();
+                }
+            );
+        }
 
         public void MoveAndProcessCobraFtpFiles()
         {
@@ -133,7 +149,7 @@ namespace DataProcessing
             //run query
             string queryString = $"Select * from {tableName} ;";
             DataTable folders =
-                (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null,
+                (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null,
                     fileLogParams.DbMessageLogParams);
 
 
@@ -294,11 +310,11 @@ namespace DataProcessing
             // 3. csv files from 
             // from COBRA IMPORTS\Holding,ToDecrypt/*.* -> HOLDING\PreparedQB, COBRA IMPORTS\QB*.csv
             FileUtils.IterateDirectory(
-                new string[] {Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingDecryptRoot, Vars.cobraImportRoot},
+                new string[] { Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingDecryptRoot, Vars.cobraImportRoot },
                 DirectoryIterateType.Files,
                 false,
                 // TODO: do we need to move *.* files from decrypt? not clear
-                new string[] {"*.csv"},
+                new string[] { "*.csv" },
                 (srcFilePath, dummy1, dummy2) =>
                 {
                     //check file name and move to appropriate directory
@@ -354,7 +370,7 @@ namespace DataProcessing
                 },
                 DirectoryIterateType.Files,
                 false,
-                new string[] {"*.csv"},
+                new string[] { "*.csv" },
                 (srcFilePath, dummy1, dummy2) =>
                 {
                     //check file name and move to appropriate directory
@@ -479,10 +495,10 @@ namespace DataProcessing
             // 1. move test files
             // from COBRA IMPORTS, HOLDING, HOLDING\PreparedQB -> COBRA_testfiles
             FileUtils.IterateDirectory(
-                new string[] {Vars.cobraImportRoot, Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot},
+                new string[] { Vars.cobraImportRoot, Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot },
                 DirectoryIterateType.Files,
                 false,
-                new string[] {"*.*"},
+                new string[] { "*.*" },
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     FileInfo fileInfo = new FileInfo(srcFilePath);
@@ -518,9 +534,9 @@ namespace DataProcessing
             // 2. move all holding and prepared files
             // from HOLDING, HOLDING\PreparedQB -> IMPORTS
             FileUtils.MoveFiles(
-                new string[] {Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot},
+                new string[] { Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot },
                 false,
-                new string[] {"*.*"},
+                new string[] { "*.*" },
                 Vars.cobraImportRoot, "", "",
                 (srcFilePath, destFilePath, dummy2) =>
                 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
@@ -79,35 +80,19 @@ namespace TestApp
         private async void cmdProcessCobraFiles_Click(object sender, EventArgs e)
         {
             cmdProcessCobraFiles.Enabled = false;
-            //
-            await Task.Factory.StartNew
-            (
-                () =>
-                {
-                    Thread.CurrentThread.Name = "ProcessCobraFiles";
-                    CobraDataProcessing cobraProcessing = new CobraDataProcessing();
-                    cobraProcessing.MoveAndProcessCobraFtpFiles();
-                }
-            );
 
-            //
+            await CobraDataProcessing.ProcessAll();
+
             cmdProcessCobraFiles.Enabled = true;
         }
+
 
 
         private async void cmdProcessAlegeusFiles_Click(object sender, EventArgs e)
         {
             cmdProcessAlegeusFiles.Enabled = false;
             //
-            await Task.Factory.StartNew
-            (
-                () =>
-                {
-                    AlegeusDataProcessing dataProcessing = new AlegeusDataProcessing();
-                    dataProcessing.ProcessAllFiles();
-                }
-            );
-
+            await AlegeusDataProcessing.ProcessAll();
             //
             cmdProcessAlegeusFiles.Enabled = true;
         }
@@ -116,16 +101,7 @@ namespace TestApp
         {
             cmdRetrieveFtpErrorLogs.Enabled = false;
             //
-            await Task.Factory.StartNew
-            (
-                () =>
-              {
-                  AlegeusErrorLog errorLog = new AlegeusErrorLog();
-                  errorLog.RetrieveErrorLogs();
-              }
-                );
-
-
+            await AlegeusErrorLog.ProcessAll();
             //
             cmdRetrieveFtpErrorLogs.Enabled = true;
         }
@@ -157,30 +133,26 @@ namespace TestApp
 
         private async void cmdCopyTestFiles_Click(object sender, EventArgs e)
         {  //
-            await Task.Factory.StartNew
-            (
-                () =>
-              {
-                  var directoryPath = Utils.GetExeBaseDir();
-                  Process.Start($"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
-                  Process.Start(
-                      $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
-                  Process.Start(
-                      $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
-              }
-            );
+
+            var directoryPath = Utils.GetExeBaseDir();
+            Process.Start($"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
+            Process.Start(
+                $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
+            Process.Start(
+                $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
+
 
         }
 
-        private void cmdDoALL_Click(object sender, EventArgs e)
+        private async void cmdDoALL_Click(object sender, EventArgs e)
         {
             var eventArgs = EventArgs.Empty;
             cmdCopyTestFiles_Click(this, eventArgs);
             cmdClearLog_Click(this, eventArgs);
             cmdClearAll_Click(this, eventArgs);
-            cmdProcessCobraFiles_Click(this, eventArgs);
-            cmdProcessAlegeusFiles_Click(this, eventArgs);
-            cmdRetrieveFtpErrorLogs_Click(this, eventArgs);
+            await CobraDataProcessing.ProcessAll();
+            await AlegeusDataProcessing.ProcessAll();
+            await AlegeusErrorLog.ProcessAll();
             cmdOpenAccessDB_Click(this, eventArgs);
         }
     }

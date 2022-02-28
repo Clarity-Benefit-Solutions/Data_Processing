@@ -4,6 +4,8 @@ using System.Data.Common;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using CoreUtils;
 using CoreUtils.Classes;
 using EtlUtilities;
@@ -15,6 +17,20 @@ namespace DataProcessing
     public class AlegeusDataProcessing
     {
         private Vars Vars { get; } = new Vars();
+       
+        public static async Task ProcessAll()
+        {
+            //
+            await Task.Factory.StartNew
+            (
+                () =>
+                {
+                    Thread.CurrentThread.Name = "ProcessAlegeusFiles";
+                    AlegeusDataProcessing alegeusDataProcessing = new AlegeusDataProcessing();
+                    alegeusDataProcessing.ProcessAllFiles();
+                }
+            );
+        }
 
         public void ProcessAllFiles()
         {

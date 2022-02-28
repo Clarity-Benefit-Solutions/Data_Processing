@@ -2,6 +2,8 @@
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using CoreUtils;
 using CoreUtils.Classes;
 using EtlUtilities;
@@ -19,6 +21,19 @@ namespace DataProcessing
     {
         private Vars Vars { get; } = new Vars();
 
+        public static async Task ProcessAll()
+        {
+            //
+            await Task.Factory.StartNew
+            (
+                () =>
+                {
+                    Thread.CurrentThread.Name = "AlegeusErrorLog";
+                    AlegeusErrorLog alegeusErrorLog = new AlegeusErrorLog();
+                    alegeusErrorLog.RetrieveErrorLogs();
+                }
+            );
+        }
         public void USERVERYCAUTIOUSLY_ClearAllTables()
         {
             var dbConn = Vars.dbConnAlegeusErrorLog;
