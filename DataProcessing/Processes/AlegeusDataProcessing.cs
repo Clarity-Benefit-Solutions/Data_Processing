@@ -521,6 +521,8 @@ namespace DataProcessing
                     // on failure
                     else
                     {
+                        // todo: output file with errors with ext *.*.pre
+                        // todo: split file into OK and failed parts?
                         var fileName = Path.GetFileName(srcFilePath);
                         var newFilePath = $"{Vars.alegeusFilesPreCheckFailRoot}/{fileName}";
                         //
