@@ -10,13 +10,13 @@ using DataProcessing;
 namespace TestApp
 {
 
-    
+
 
 
     public partial class Form1 : Form
     {
         private BindingSource bindingSource1 = new BindingSource();
-        
+
         public Form1()
         {
             InitializeComponent();
@@ -26,7 +26,7 @@ namespace TestApp
             this.listLogs.DataSource = bindingSource1;
 
             SubscribeToEvents();
-            
+
         }
 
         private void HandleOnLogOperationCallback(object sender, MessageLogParams logParams)
@@ -55,7 +55,7 @@ namespace TestApp
 
             this.bindingSource1.Add(logItem);
             this.bindingSource1.MoveLast();
-            
+
 
             listLogs.Invalidate();
             // listLogs.Refresh();
@@ -75,7 +75,8 @@ namespace TestApp
         {
             cmdProcessCobraFiles.Enabled = false;
             //
-            CobraDataProcessing.MoveAndProcessCobraFtpFiles();
+            CobraDataProcessing cobraProcessing = new CobraDataProcessing();
+            cobraProcessing.MoveAndProcessCobraFtpFiles();
             //
             cmdProcessCobraFiles.Enabled = true;
         }
@@ -85,7 +86,8 @@ namespace TestApp
         {
             cmdProcessAlegeusFiles.Enabled = false;
             //
-            AlegeusDataProcessing.ProcessAllFiles();
+            AlegeusDataProcessing dataProcessing = new AlegeusDataProcessing();
+            dataProcessing.ProcessAllFiles();
             //
             cmdProcessAlegeusFiles.Enabled = true;
         }
@@ -94,7 +96,8 @@ namespace TestApp
         {
             cmdRetrieveFtpErrorLogs.Enabled = false;
             //
-            AlegeusErrorLog.RetrieveErrorLogs();
+            AlegeusErrorLog errorLog = new AlegeusErrorLog();
+            errorLog.RetrieveErrorLogs();
             //
             cmdRetrieveFtpErrorLogs.Enabled = true;
         }
@@ -106,7 +109,8 @@ namespace TestApp
 
         private void cmdClearAll_Click(object sender, EventArgs e)
         {
-            AlegeusErrorLog.USERVERYCAUTIOUSLY_ClearAllTables();
+            AlegeusErrorLog errorLog = new AlegeusErrorLog();
+            errorLog.USERVERYCAUTIOUSLY_ClearAllTables();
         }
 
         private void cmdOpenAccessDB_Click(object sender, EventArgs e)

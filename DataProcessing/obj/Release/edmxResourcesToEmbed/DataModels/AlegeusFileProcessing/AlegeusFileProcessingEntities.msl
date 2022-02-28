@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Alegeus_File_ProcessingModelStoreContainer" CdmEntityContainer="Alegeus_File_ProcessingEntities">
+    <EntitySetMapping Name="alegeus_file_staging">
+      <EntityTypeMapping TypeName="Alegeus_File_ProcessingModel.alegeus_file_staging">
+        <MappingFragment StoreEntitySet="alegeus_file_staging">
+          <ScalarProperty Name="data_row" ColumnName="data_row" />
+          <ScalarProperty Name="folder_name" ColumnName="folder_name" />
+          <ScalarProperty Name="row_num" ColumnName="row_num" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Automated_Header_list">
+      <EntityTypeMapping TypeName="Alegeus_File_ProcessingModel.Automated_Header_list">
+        <MappingFragment StoreEntitySet="Automated_Header_list">
+          <ScalarProperty Name="Folder_name" ColumnName="Folder_name" />
+          <ScalarProperty Name="template_type" ColumnName="template_type" />
+          <ScalarProperty Name="IC_type" ColumnName="IC_type" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="to_FTP" ColumnName="to_FTP" />
+          <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Alegeus_Header_n_success" FunctionName="Alegeus_File_ProcessingModel.Store.Alegeus_Header_n_success" />
+    <FunctionImportMapping FunctionImportName="build_auto_ftp_batfile" FunctionName="Alegeus_File_ProcessingModel.Store.build_auto_ftp_batfile" />
+    <FunctionImportMapping FunctionImportName="insert_to_auto_ftp_list" FunctionName="Alegeus_File_ProcessingModel.Store.insert_to_auto_ftp_list" />
+    <FunctionImportMapping FunctionImportName="proc_alegeus_AlterHeaders2015" FunctionName="Alegeus_File_ProcessingModel.Store.proc_alegeus_AlterHeaders2015" />
+    <FunctionImportMapping FunctionImportName="proc_alegeus_AlterHeaders2019" FunctionName="Alegeus_File_ProcessingModel.Store.proc_alegeus_AlterHeaders2019" />
+    <FunctionImportMapping FunctionImportName="proc_alegeus_AlterHeadersNone" FunctionName="Alegeus_File_ProcessingModel.Store.proc_alegeus_AlterHeadersNone">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="Alegeus_File_ProcessingModel.proc_alegeus_AlterHeadersNone_Result">
+          <ScalarProperty Name="file_row" ColumnName="file_row" />
+          <ScalarProperty Name="folder_name" ColumnName="folder_name" />
+          <ScalarProperty Name="Column1" ColumnName="Column1" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="file_processing_log">
+      <EntityTypeMapping TypeName="Alegeus_File_ProcessingModel.file_processing_log">
+        <MappingFragment StoreEntitySet="file_processing_log">
+          <ScalarProperty Name="originalFileUploadedOn" ColumnName="originalFileUploadedOn" />
+          <ScalarProperty Name="created_at" ColumnName="created_at" />
+          <ScalarProperty Name="newFileFullPath" ColumnName="newFileFullPath" />
+          <ScalarProperty Name="newFileName" ColumnName="newFileName" />
+          <ScalarProperty Name="originalFullPath" ColumnName="originalFullPath" />
+          <ScalarProperty Name="originalFileName" ColumnName="originalFileName" />
+          <ScalarProperty Name="bencode" ColumnName="bencode" />
+          <ScalarProperty Name="toFTP" ColumnName="toFTP" />
+          <ScalarProperty Name="ICType" ColumnName="ICType" />
+          <ScalarProperty Name="templateType" ColumnName="templateType" />
+          <ScalarProperty Name="folderName" ColumnName="folderName" />
+          <ScalarProperty Name="fileId" ColumnName="fileId" />
+          <ScalarProperty Name="fileLogId" ColumnName="fileLogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="file_processing_tasks_log">
+      <EntityTypeMapping TypeName="Alegeus_File_ProcessingModel.file_processing_tasks_log">
+        <MappingFragment StoreEntitySet="file_processing_tasks_log">
+          <ScalarProperty Name="created_at" ColumnName="created_at" />
+          <ScalarProperty Name="newFileFullPath" ColumnName="newFileFullPath" />
+          <ScalarProperty Name="newFileName" ColumnName="newFileName" />
+          <ScalarProperty Name="originalFullPath" ColumnName="originalFullPath" />
+          <ScalarProperty Name="originalFileName" ColumnName="originalFileName" />
+          <ScalarProperty Name="processingTaskOutcomeDetails" ColumnName="processingTaskOutcomeDetails" />
+          <ScalarProperty Name="processingTaskOutcome" ColumnName="processingTaskOutcome" />
+          <ScalarProperty Name="processingTask" ColumnName="processingTask" />
+          <ScalarProperty Name="fileId" ColumnName="fileId" />
+          <ScalarProperty Name="fileLogId" ColumnName="fileLogId" />
+          <ScalarProperty Name="fileLogTaskId" ColumnName="fileLogTaskId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="message_log">
+      <EntityTypeMapping TypeName="Alegeus_File_ProcessingModel.message_log">
+        <MappingFragment StoreEntitySet="message_log">
+          <ScalarProperty Name="created_at" ColumnName="created_at" />
+          <ScalarProperty Name="command" ColumnName="command" />
+          <ScalarProperty Name="step_name" ColumnName="step_name" />
+          <ScalarProperty Name="step_type" ColumnName="step_type" />
+          <ScalarProperty Name="submodule_name" ColumnName="submodule_name" />
+          <ScalarProperty Name="module_name" ColumnName="module_name" />
+          <ScalarProperty Name="log_id" ColumnName="log_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="insert_file_processing_log" FunctionName="Alegeus_File_ProcessingModel.Store.insert_file_processing_log" />
+  </EntityContainerMapping>
+</Mapping>

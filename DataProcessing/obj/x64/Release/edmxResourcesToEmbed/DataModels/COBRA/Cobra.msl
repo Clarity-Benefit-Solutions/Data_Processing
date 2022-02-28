@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="COBRAModelStoreContainer" CdmEntityContainer="COBRAEntities">
+    <EntitySetMapping Name="COBRA_FRC">
+      <EntityTypeMapping TypeName="COBRAModel.COBRA_FRC">
+        <MappingFragment StoreEntitySet="COBRA_FRC">
+          <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+          <ScalarProperty Name="first" ColumnName="first" />
+          <ScalarProperty Name="last" ColumnName="last" />
+          <ScalarProperty Name="SSN" ColumnName="SSN" />
+          <ScalarProperty Name="BillingStartDate" ColumnName="BillingStartDate" />
+          <ScalarProperty Name="BillingFrequency" ColumnName="BillingFrequency" />
+          <ScalarProperty Name="enrolled_plans" ColumnName="enrolled plans" />
+          <ScalarProperty Name="coverage_level" ColumnName="coverage level" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="premium_date" ColumnName="premium_date" />
+          <ScalarProperty Name="MemberOwes" ColumnName="MemberOwes" />
+          <ScalarProperty Name="Expr3" ColumnName="Expr3" />
+          <ScalarProperty Name="BillingType" ColumnName="BillingType" />
+          <ScalarProperty Name="account_type" ColumnName="account type" />
+          <ScalarProperty Name="RateType" ColumnName="RateType" />
+          <ScalarProperty Name="Rate" ColumnName="Rate" />
+          <ScalarProperty Name="AmountType" ColumnName="AmountType" />
+          <ScalarProperty Name="Amount" ColumnName="Amount" />
+          <ScalarProperty Name="Expr2" ColumnName="Expr2" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="COBRA_QB_demo">
+      <EntityTypeMapping TypeName="COBRAModel.COBRA_QB_demo">
+        <MappingFragment StoreEntitySet="COBRA_QB_demo">
+          <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+          <ScalarProperty Name="DivisionName" ColumnName="DivisionName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+          <ScalarProperty Name="SSN" ColumnName="SSN" />
+          <ScalarProperty Name="IndividualIdentifier" ColumnName="IndividualIdentifier" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="Address2" ColumnName="Address2" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="State" ColumnName="State" />
+          <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+          <ScalarProperty Name="Country" ColumnName="Country" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="DOB" ColumnName="DOB" />
+          <ScalarProperty Name="TobaccoUse" ColumnName="TobaccoUse" />
+          <ScalarProperty Name="EmployeeType" ColumnName="EmployeeType" />
+          <ScalarProperty Name="PayrollType" ColumnName="PayrollType" />
+          <ScalarProperty Name="YearsOfService" ColumnName="YearsOfService" />
+          <ScalarProperty Name="PremiumCouponType" ColumnName="PremiumCouponType" />
+          <ScalarProperty Name="UsesHCTC" ColumnName="UsesHCTC" />
+          <ScalarProperty Name="EnteredDateTime" ColumnName="EnteredDateTime" />
+          <ScalarProperty Name="EnteredByUser" ColumnName="EnteredByUser" />
+          <ScalarProperty Name="MethodEntered" ColumnName="MethodEntered" />
+          <ScalarProperty Name="PaidThroughDate" ColumnName="PaidThroughDate" />
+          <ScalarProperty Name="OnlineElectionProcessedDate" ColumnName="OnlineElectionProcessedDate" />
+          <ScalarProperty Name="BenefitGroup" ColumnName="BenefitGroup" />
+          <ScalarProperty Name="AccountStructure" ColumnName="AccountStructure" />
+          <ScalarProperty Name="ClientCustomData" ColumnName="ClientCustomData" />
+          <ScalarProperty Name="AllowSSO" ColumnName="AllowSSO" />
+          <ScalarProperty Name="SSOIdentifier" ColumnName="SSOIdentifier" />
+          <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="COBRA_QB_plans">
+      <EntityTypeMapping TypeName="COBRAModel.COBRA_QB_plans">
+        <MappingFragment StoreEntitySet="COBRA_QB_plans">
+          <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+          <ScalarProperty Name="InsuranceType" ColumnName="InsuranceType" />
+          <ScalarProperty Name="FDOC" ColumnName="FDOC" />
+          <ScalarProperty Name="LDOC" ColumnName="LDOC" />
+          <ScalarProperty Name="MonthsOfCOBRA" ColumnName="MonthsOfCOBRA" />
+          <ScalarProperty Name="DaysToElect" ColumnName="DaysToElect" />
+          <ScalarProperty Name="InitialPaymentGracePeriod" ColumnName="InitialPaymentGracePeriod" />
+          <ScalarProperty Name="SubsequentPaymentGracePeriod" ColumnName="SubsequentPaymentGracePeriod" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="StatusDate" ColumnName="StatusDate" />
+          <ScalarProperty Name="ElectionPostMarkDate" ColumnName="ElectionPostMarkDate" />
+          <ScalarProperty Name="TerminationDate" ColumnName="TerminationDate" />
+          <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="CarrierPlanIdentification" ColumnName="CarrierPlanIdentification" />
+          <ScalarProperty Name="CoverageLevel" ColumnName="CoverageLevel" />
+          <ScalarProperty Name="BundleName" ColumnName="BundleName" />
+          <ScalarProperty Name="IsElected" ColumnName="IsElected" />
+          <ScalarProperty Name="ClientPlanQBID" ColumnName="ClientPlanQBID" />
+          <ScalarProperty Name="NumberOfUnits" ColumnName="NumberOfUnits" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="Fix_COBRA_brokerage_Contacts_SSObollean" FunctionName="COBRAModel.Store.Fix_COBRA_brokerage_Contacts_SSObollean" />
+    <FunctionImportMapping FunctionImportName="Fix_COBRA_Client_Contacts_SSObollean" FunctionName="COBRAModel.Store.Fix_COBRA_Client_Contacts_SSObollean" />
+    <FunctionImportMapping FunctionImportName="Fix_COBRAQB_SSObollean" FunctionName="COBRAModel.Store.Fix_COBRAQB_SSObollean" />
+    <FunctionImportMapping FunctionImportName="Get_COBRA_QBs" FunctionName="COBRAModel.Store.Get_COBRA_QBs" />
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Alegeus_File_ProcessingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="alegeus_file_staging">
+    <Key>
+      <PropertyRef Name="row_num" />
+    </Key>
+    <Property Name="data_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="folder_name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="row_num" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+  </EntityType>
+  <EntityType Name="Automated_Header_list">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="Folder_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="template_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IC_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="to_FTP" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="BENCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityContainer Name="Alegeus_File_ProcessingEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="alegeus_file_staging" EntityType="Self.alegeus_file_staging" />
+    <EntitySet Name="Automated_Header_list" EntityType="Self.Automated_Header_list" />
+    <FunctionImport Name="Alegeus_Header_n_success" />
+    <FunctionImport Name="build_auto_ftp_batfile" />
+    <FunctionImport Name="insert_to_auto_ftp_list" />
+    <FunctionImport Name="proc_alegeus_AlterHeaders2015" ReturnType="Collection(String)" />
+    <FunctionImport Name="proc_alegeus_AlterHeaders2019" ReturnType="Collection(String)" />
+    <FunctionImport Name="proc_alegeus_AlterHeadersNone" ReturnType="Collection(Alegeus_File_ProcessingModel.proc_alegeus_AlterHeadersNone_Result)" />
+    <EntitySet Name="file_processing_log" EntityType="Alegeus_File_ProcessingModel.file_processing_log" />
+    <EntitySet Name="file_processing_tasks_log" EntityType="Alegeus_File_ProcessingModel.file_processing_tasks_log" />
+    <EntitySet Name="message_log" EntityType="Alegeus_File_ProcessingModel.message_log" />
+    <FunctionImport Name="insert_file_processing_log" ReturnType="Collection(Int32)">
+      <Parameter Name="fileLogId" Mode="InOut" Type="Int32" />
+      <Parameter Name="fileId" Mode="In" Type="String" />
+      <Parameter Name="folderName" Mode="In" Type="String" />
+      <Parameter Name="templateType" Mode="In" Type="String" />
+      <Parameter Name="ICType" Mode="In" Type="String" />
+      <Parameter Name="toFTP" Mode="In" Type="String" />
+      <Parameter Name="bencode" Mode="In" Type="String" />
+      <Parameter Name="originalFileName" Mode="In" Type="String" />
+      <Parameter Name="originalFullPath" Mode="In" Type="String" />
+      <Parameter Name="originalFileUploadedOn" Mode="In" Type="String" />
+      <Parameter Name="newFileName" Mode="In" Type="String" />
+      <Parameter Name="newFileFullPath" Mode="In" Type="String" />
+      <Parameter Name="fileLogTaskId" Mode="InOut" Type="Int32" />
+      <Parameter Name="processingTask" Mode="In" Type="String" />
+      <Parameter Name="processingTaskOutcome" Mode="In" Type="String" />
+      <Parameter Name="processingTaskOutcomeDetails" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="proc_alegeus_AlterHeadersNone_Result">
+    <Property Type="String" Name="file_row" Nullable="true" />
+    <Property Type="String" Name="folder_name" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="Column1" Nullable="false" MaxLength="5" />
+  </ComplexType>
+  <EntityType Name="file_processing_log">
+    <Key>
+      <PropertyRef Name="fileLogId" />
+    </Key>
+    <Property Name="fileLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fileId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="folderName" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+    <Property Name="templateType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ICType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="toFTP" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="bencode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="originalFileName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="originalFullPath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="newFileName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="newFileFullPath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="created_at" Type="DateTime" Precision="3" />
+    <Property Name="originalFileUploadedOn" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="file_processing_tasks_log">
+    <Key>
+      <PropertyRef Name="fileLogTaskId" />
+    </Key>
+    <Property Name="fileLogTaskId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fileLogId" Type="Int32" />
+    <Property Name="fileId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="processingTask" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="processingTaskOutcome" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="processingTaskOutcomeDetails" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="originalFileName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="originalFullPath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="newFileName" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="newFileFullPath" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="created_at" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="message_log">
+    <Key>
+      <PropertyRef Name="log_id" />
+    </Key>
+    <Property Name="log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="module_name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="submodule_name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="step_type" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="step_name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="command" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+    <Property Name="created_at" Type="DateTime" Precision="3" />
+  </EntityType>
+</Schema>

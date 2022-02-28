@@ -14,10 +14,10 @@ namespace DataProcessing
     [ComVisible(true)]
     public class AlegeusDataProcessing
     {
-        public static void ProcessAllFiles()
-        {
-            // init logParams
+        private Vars Vars { get; } = new Vars();
 
+        public void ProcessAllFiles()
+        {
             //
             var fileLogParams = Vars.dbFileProcessingLogParams;
 
@@ -31,7 +31,7 @@ namespace DataProcessing
             PreCheckFilesAndProcess(HeaderType.NotApplicable, dbConn, fileLogParams);
         }
 
-        public static void CreateHeaders(DbConnection dbConn, FileOperationLogParams fileLogParams)
+        public void CreateHeaders(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
             //MoveSourceFilesToCobraDirs
             MoveSourceFilesToHeaderDirs(dbConn, fileLogParams);
@@ -51,7 +51,7 @@ namespace DataProcessing
             RemoveDuplicateFilesInPreCheckDir(dbConn, fileLogParams);
         }
 
-        protected static void MoveSourceFilesToHeaderDirs(DbConnection dbConn,
+        protected void MoveSourceFilesToHeaderDirs(DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             //
@@ -83,7 +83,7 @@ namespace DataProcessing
 
             //run query
             var queryString = $"Select * from {tableName} order by template_type, folder_name;";
-            var dtHeaderFolders = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null);
+            var dtHeaderFolders = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null);
 
 
             //3. for each header folder, get file and move to header1 folder
@@ -224,7 +224,7 @@ namespace DataProcessing
             //
         }
 
-        protected static void ConvertAllHeaderExcelFilesToCsv(DbConnection dbConn,
+        protected void ConvertAllHeaderExcelFilesToCsv(DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             // Log
@@ -246,7 +246,7 @@ namespace DataProcessing
             //
         } //end method
 
-        protected static void AddHeaderToAllHeaderDirFiles(DbConnection dbConn,
+        protected void AddHeaderToAllHeaderDirFiles(DbConnection dbConn,
             FileOperationLogParams fileLogParams)
 
         {
@@ -265,7 +265,7 @@ namespace DataProcessing
             //
         }
 
-        protected static void AddHeaderToAllHeaderDirFilesForExt(string fileExt, DbConnection dbConn,
+        protected void AddHeaderToAllHeaderDirFilesForExt(string fileExt, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
 
         {
@@ -347,7 +347,7 @@ namespace DataProcessing
             );
         }
 
-        protected static void CopyHoldAllFilesToPreCheckDir(DbConnection dbConn, FileOperationLogParams fileLogParams)
+        protected void CopyHoldAllFilesToPreCheckDir(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
@@ -376,7 +376,7 @@ namespace DataProcessing
             //
         }
 
-        protected static void MoveHeaderDirFilesToPreCheck(DbConnection dbConn, FileOperationLogParams fileLogParams)
+        protected void MoveHeaderDirFilesToPreCheck(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
@@ -387,7 +387,7 @@ namespace DataProcessing
             //1. Copy / y G:\FTP\AutomatedHeaderV1_Files\*.* G:\FTP\AutomatedHeaderV1_Files\Archive
             //
             FileUtils.MoveFiles(
-                new[] {Vars.alegeusFileHeadersRoot}, false, new[] {"*.txt", "*.csv", "*.mbi"},
+                new[] { Vars.alegeusFileHeadersRoot }, false, new[] { "*.txt", "*.csv", "*.mbi" },
                 Vars.alegeusFilesPreCheckRoot, "", ".mbi",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
@@ -407,7 +407,7 @@ namespace DataProcessing
             //
         }
 
-        protected static void RemoveDuplicateFilesInPreCheckDir(DbConnection dbConn,
+        protected void RemoveDuplicateFilesInPreCheckDir(DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             //1. delete xls, xlsx, txt, csv for each mbi file found
@@ -422,7 +422,7 @@ namespace DataProcessing
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // delete xls, xlsx, txt, csv
-                    string[] extensionsToDelete = {".xls", ".xlsx", ".txt", ".csv"};
+                    string[] extensionsToDelete = { ".xls", ".xlsx", ".txt", ".csv" };
 
                     foreach (var fileExt in extensionsToDelete)
                     {
@@ -442,7 +442,7 @@ namespace DataProcessing
             //
         }
 
-        protected static void PreCheckFilesAndProcess(HeaderType headerType, DbConnection dbConn,
+        protected void PreCheckFilesAndProcess(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             //

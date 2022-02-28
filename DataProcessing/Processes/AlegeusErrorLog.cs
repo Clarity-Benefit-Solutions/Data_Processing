@@ -17,7 +17,9 @@ namespace DataProcessing
     [ComVisible(true)]
     public class AlegeusErrorLog
     {
-        public static void USERVERYCAUTIOUSLY_ClearAllTables()
+        private Vars Vars { get; } = new Vars();
+
+        public void USERVERYCAUTIOUSLY_ClearAllTables()
         {
             var dbConn = Vars.dbConnAlegeusErrorLog;
             var fileLogParams = Vars.dbFileProcessingLogParams;
@@ -28,7 +30,7 @@ namespace DataProcessing
                 false, false);
         }
 
-        public static void RetrieveErrorLogs()
+        public void RetrieveErrorLogs()
         {
             // init logParams
 
@@ -60,7 +62,7 @@ namespace DataProcessing
             MoveFilesToArchive(headerType, dbConn, fileLogParams);
         }
 
-        protected static void DeleteStagingFiles(HeaderType headerType, DbConnection dbConn,
+        protected void DeleteStagingFiles(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             //1. Clear all files in AutomatedHeaderV1_Files
@@ -94,7 +96,7 @@ namespace DataProcessing
             //
         }
 
-        protected static void GetFtpFilesFromAlegeus(HeaderType headerType, SFtpConnection ftpConn,
+        protected void GetFtpFilesFromAlegeus(HeaderType headerType, SFtpConnection ftpConn,
             FileOperationLogParams fileLogParams)
         {
             //
@@ -153,7 +155,7 @@ namespace DataProcessing
             //
         }
 
-        protected static void ImportAlegeusFiles(HeaderType headerType, DbConnection dbConn,
+        protected void ImportAlegeusFiles(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             //
@@ -194,7 +196,7 @@ namespace DataProcessing
         }
 
 
-        protected static void TrackAllNewFtpFileErrors(HeaderType headerType, DbConnection dbConn,
+        protected void TrackAllNewFtpFileErrors(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
 
         {
@@ -221,7 +223,7 @@ namespace DataProcessing
             //
         }
 
-        protected static void MoveFilesToArchive(HeaderType headerType, DbConnection dbConn,
+        protected void MoveFilesToArchive(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             //

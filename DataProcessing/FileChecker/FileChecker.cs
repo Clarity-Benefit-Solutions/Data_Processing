@@ -42,6 +42,8 @@ namespace DataProcessing
         public readonly FileCheckResults fileCheckResults = new FileCheckResults();
         public Boolean hasHeaderRow = false;
         public HeaderType headerType = HeaderType.NotApplicable;
+        private Vars Vars { get; } = new Vars();
+
 
         public FileChecker(string _srcFilePath, PlatformType _platformType, DbConnection _dbConn,
             FileOperationLogParams _fileLogParams, OnErrorCallback _onErrorCallback) : base()
@@ -103,7 +105,7 @@ namespace DataProcessing
                 // get temp file for each format
                 string splitFileName = Path.GetTempFileName();
                 var splitFileWriter = new StreamWriter(splitFileName, false);
-                files.Add(fileFormat, new Object[] {splitFileWriter, splitFileName});
+                files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
             }
 
             // open file for reading
@@ -124,7 +126,7 @@ namespace DataProcessing
                         )
                         {
                             // get temp file for each format
-                            var splitFileWriter = (StreamWriter) files[fileFormat2][0];
+                            var splitFileWriter = (StreamWriter)files[fileFormat2][0];
                             // if there is prvUnwrittenLine it was probably a header line - write to the file that 
 
                             splitFileWriter.WriteLine(line);
@@ -141,11 +143,11 @@ namespace DataProcessing
             foreach (var fileFormat3 in files.Keys)
             {
                 // get temp file for each format
-                var writer = (StreamWriter) files[fileFormat3][0];
+                var writer = (StreamWriter)files[fileFormat3][0];
                 writer.Close();
 
                 // import the file
-                CheckFile(fileFormat3, (string) files[fileFormat3][1]);
+                CheckFile(fileFormat3, (string)files[fileFormat3][1]);
             }
         }
 
@@ -452,7 +454,7 @@ namespace DataProcessing
                             $"select employer_id, employer_name, employer_status from wc.wc_employers " +
                             $" where employer_id = '{Utils.DbQuote(row.EmployerId)}' ";
                         //
-                        DataTable dbResults = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                             queryString, null,
                             fileLogParams?.GetMessageLogParams()
                         );
@@ -527,7 +529,7 @@ namespace DataProcessing
                             $" where employerid = '{Utils.DbQuote(row.EmployerId)}' " +
                             $" and employeeid = '{Utils.DbQuote(row.EmployeeID)}' ";
                         //
-                        DataTable dbResults = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                             queryString, null,
                             fileLogParams?.GetMessageLogParams());
 
@@ -682,7 +684,7 @@ namespace DataProcessing
                             $" group by employer_id, plan_id, account_type_code " +
                             $" LIMIT 1 ";
                         //
-                        DataTable dbResults = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                             queryString, null,
                             fileLogParams?.GetMessageLogParams());
 
@@ -695,9 +697,9 @@ namespace DataProcessing
                         else
                         {
                             DataRow rec = dbResults.Rows[0];
-                            DateTime plan_year_start_date = (DateTime) rec["plan_year_start_date"];
-                            DateTime plan_year_end_date = (DateTime) rec["plan_year_end_date"];
-                            DateTime grace_period_end_date = (DateTime) rec["grace_period_end_date"];
+                            DateTime plan_year_start_date = (DateTime)rec["plan_year_start_date"];
+                            DateTime plan_year_end_date = (DateTime)rec["plan_year_end_date"];
+                            DateTime grace_period_end_date = (DateTime)rec["grace_period_end_date"];
 
                             //todo: check plan dates match Alegeus
                             if (!Utils.IsBlank(row.PlanStartDate) && plan_year_start_date > DateTime.Now.Date)
@@ -779,7 +781,7 @@ namespace DataProcessing
                             $" group by employerid, employeeid, plancode, plandesc" +
                             $" LIMIT 1 ";
                         //
-                        DataTable dbResults = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                             queryString, null,
                             fileLogParams?.GetMessageLogParams());
 
@@ -793,8 +795,8 @@ namespace DataProcessing
                         else
                         {
                             DataRow rec = dbResults.Rows[0];
-                            DateTime plan_year_start_date = (DateTime) rec["planstart"];
-                            DateTime plan_year_end_date = (DateTime) rec["planend"];
+                            DateTime plan_year_start_date = (DateTime)rec["planstart"];
+                            DateTime plan_year_end_date = (DateTime)rec["planend"];
                             //DateTime grace_period_end_date = Utils.ToDateTime(rec["grace_period_end_date"]?.ToString());
 
                             // todo: check depositdate are within the plan dates in Alegeus

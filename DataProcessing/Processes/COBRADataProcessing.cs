@@ -18,7 +18,9 @@ namespace DataProcessing
     [SuppressMessage("ReSharper", "StringLiteralTypo")]
     public class CobraDataProcessing
     {
-        public static void MoveAndProcessCobraFtpFiles()
+        private Vars Vars { get; } = new Vars();
+
+        public void MoveAndProcessCobraFtpFiles()
         {
             // init logParams
             MessageLogParams logParams = Vars.dbMessageLogParams;
@@ -43,7 +45,7 @@ namespace DataProcessing
             MoveCobraFtpFilesAfterPrepare(HeaderType.Own, dbConn, fileLogParams);
         }
 
-        public static void MoveCobraFtpFiles(HeaderType headerType, DbConnection dbConn,
+        public void MoveCobraFtpFiles(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             //MoveSourceFilesToCobraDirs
@@ -54,7 +56,7 @@ namespace DataProcessing
         }
 
 
-        protected static void MakeListOfCobraFtpSourceFolders(HeaderType headerType, string fileExt,
+        protected void MakeListOfCobraFtpSourceFolders(HeaderType headerType, string fileExt,
             DbConnection dbConn, FileOperationLogParams fileLogParams)
 
         {
@@ -112,7 +114,7 @@ namespace DataProcessing
         }
 
 
-        protected static void MoveSourceFilesToCobraDirs(HeaderType headerType, string fileExt,
+        protected void MoveSourceFilesToCobraDirs(HeaderType headerType, string fileExt,
             DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
             //1. Clear all files in AutomatedHeaderV1_Files
@@ -243,7 +245,7 @@ namespace DataProcessing
             //
         } // sub
 
-        protected static void MoveCobraFtpFiles2(HeaderType headerType, DbConnection dbConn,
+        protected void MoveCobraFtpFiles2(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             //
@@ -333,7 +335,7 @@ namespace DataProcessing
             //
         } // routine
 
-        protected static void MoveCobraBlankFtpFilesToArchive(HeaderType headerType, DbConnection dbConn,
+        protected void MoveCobraBlankFtpFilesToArchive(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             //
@@ -389,7 +391,7 @@ namespace DataProcessing
             //
         }
 
-        protected static void PrepareCobraQbFtpFiles(HeaderType headerType, DbConnection dbConn,
+        protected void PrepareCobraQbFtpFiles(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
 
         {
@@ -464,7 +466,7 @@ namespace DataProcessing
             //
         }
 
-        protected static void MoveCobraFtpFilesAfterPrepare(HeaderType headerType, DbConnection dbConn,
+        protected void MoveCobraFtpFilesAfterPrepare(HeaderType headerType, DbConnection dbConn,
             FileOperationLogParams fileLogParams)
 
         {

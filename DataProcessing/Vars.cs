@@ -13,13 +13,13 @@ using MySqlConnector;
 
 namespace DataProcessing
 {
-    public static class Vars
+    public class Vars
     {
         #region DbCobraFileProcessing
 
-        private static string _connStrNameCobraFileProcessing;
+        private string _connStrNameCobraFileProcessing;
 
-        private static string connStrNameCobraFileProcessing
+        private string connStrNameCobraFileProcessing
         {
             get
             {
@@ -36,9 +36,9 @@ namespace DataProcessing
             }
         }
 
-        private static COBRAEntities _dbCtxCobraFileProcessingDefault;
+        private COBRAEntities _dbCtxCobraFileProcessingDefault;
 
-        private static COBRAEntities DbCtxCobraFileProcessingDefault
+        private COBRAEntities DbCtxCobraFileProcessingDefault
         {
             get
             {
@@ -48,15 +48,15 @@ namespace DataProcessing
             }
         }
 
-        private static COBRAEntities DbCtxCobraFileProcessingNew
+        private COBRAEntities DbCtxCobraFileProcessingNew
         {
             get { return new COBRAEntities(connStrNameCobraFileProcessing); }
         }
 
 
-        private static DbConnection _dbConnCobraFileProcessing;
+        private DbConnection _dbConnCobraFileProcessing;
 
-        public static DbConnection dbConnCobraFileProcessing
+        public DbConnection dbConnCobraFileProcessing
         {
             get
             {
@@ -74,9 +74,9 @@ namespace DataProcessing
 
         #region DbAlegeusCobraFileProcessing
 
-        private static string _connStrNameAlegeusFileProcessing;
+        private string _connStrNameAlegeusFileProcessing;
 
-        private static string connStrNameAlegeusFileProcessing
+        private string connStrNameAlegeusFileProcessing
         {
             get
             {
@@ -93,9 +93,9 @@ namespace DataProcessing
             }
         }
 
-        private static Alegeus_File_ProcessingEntities _dbCtxAlegeusFileProcessingDefault;
+        private Alegeus_File_ProcessingEntities _dbCtxAlegeusFileProcessingDefault;
 
-        private static Alegeus_File_ProcessingEntities DbCtxAlegeusFileProcessingDefault
+        private Alegeus_File_ProcessingEntities DbCtxAlegeusFileProcessingDefault
         {
             get
             {
@@ -106,14 +106,14 @@ namespace DataProcessing
             }
         }
 
-        private static Alegeus_File_ProcessingEntities DbCtxAlegeusFileProcessingNew
+        private Alegeus_File_ProcessingEntities DbCtxAlegeusFileProcessingNew
         {
             get { return new Alegeus_File_ProcessingEntities(connStrNameAlegeusFileProcessing); }
         }
 
-        private static DbConnection _dbConnAlegeusFileProcessing;
+        private DbConnection _dbConnAlegeusFileProcessing;
 
-        public static DbConnection dbConnAlegeusFileProcessing
+        public DbConnection dbConnAlegeusFileProcessing
         {
             get
             {
@@ -131,9 +131,9 @@ namespace DataProcessing
 
         #region DBAlegeusErroLog
 
-        private static string _connStrNameAlegeusErrorLog;
+        private string _connStrNameAlegeusErrorLog;
 
-        private static string connStrNameAlegeusErrorLog
+        private string connStrNameAlegeusErrorLog
         {
             get
             {
@@ -150,9 +150,9 @@ namespace DataProcessing
             }
         }
 
-        private static Alegeus_ErrorLogEntities _dbCtxAlegeusErrorLogDefault;
+        private Alegeus_ErrorLogEntities _dbCtxAlegeusErrorLogDefault;
 
-        public static Alegeus_ErrorLogEntities DbCtxAlegeusErrorLogDefault
+        public Alegeus_ErrorLogEntities DbCtxAlegeusErrorLogDefault
         {
             get
             {
@@ -162,14 +162,14 @@ namespace DataProcessing
             }
         }
 
-        public static Alegeus_ErrorLogEntities dbCtxAlegeusErrorLogNew
+        public Alegeus_ErrorLogEntities dbCtxAlegeusErrorLogNew
         {
             get { return new Alegeus_ErrorLogEntities(connStrNameAlegeusErrorLog); }
         }
 
-        private static DbConnection _dbConnAlegeusErrorLog;
+        private DbConnection _dbConnAlegeusErrorLog;
 
-        public static DbConnection dbConnAlegeusErrorLog
+        public DbConnection dbConnAlegeusErrorLog
         {
             get
             {
@@ -187,9 +187,9 @@ namespace DataProcessing
 
         #region DbConnPortalWc
 
-        private static string _connStrNamePortalWc;
+        private string _connStrNamePortalWc;
 
-        private static string connStrNamePortalWc
+        private string connStrNamePortalWc
         {
             get
             {
@@ -206,9 +206,9 @@ namespace DataProcessing
             }
         }
 
-        //private static PortalWc _dbCtxPortalWcDefault;
+        //private  PortalWc _dbCtxPortalWcDefault;
 
-        //public static PortalWc dbCtxPortalWcDefault
+        //public  PortalWc dbCtxPortalWcDefault
         //{
         //    get
         //    {
@@ -218,9 +218,9 @@ namespace DataProcessing
         //    }
         //}
 
-        private static MySqlConnection _dbConnPortalWc;
+        private MySqlConnection _dbConnPortalWc;
 
-        public static MySqlConnection dbConnPortalWc
+        public MySqlConnection dbConnPortalWc
         {
             get
             {
@@ -245,9 +245,9 @@ namespace DataProcessing
 
         #region DbLogging
 
-        private static MessageLogParams _dbMessageLogParams;
+        private MessageLogParams _dbMessageLogParams;
 
-        public static MessageLogParams dbMessageLogParams
+        public MessageLogParams dbMessageLogParams
         {
             get
             {
@@ -268,9 +268,9 @@ namespace DataProcessing
         }
 
 
-        private static FileOperationLogParams _dbFileProcessingLogParams;
+        private FileOperationLogParams _dbFileProcessingLogParams;
 
-        public static FileOperationLogParams dbFileProcessingLogParams
+        public FileOperationLogParams dbFileProcessingLogParams
         {
             get
             {
@@ -295,7 +295,7 @@ namespace DataProcessing
 
         #region LocalRootPaths
 
-        public static string localTestRoot
+        public string localTestRoot
         {
             get
             {
@@ -314,7 +314,7 @@ namespace DataProcessing
             }
         }
 
-        public static string localFtpRoot
+        public string localFtpRoot
         {
             get
             {
@@ -326,7 +326,7 @@ namespace DataProcessing
             }
         }
 
-        public static string localFtpItRoot
+        public string localFtpItRoot
         {
             get
             {
@@ -338,11 +338,11 @@ namespace DataProcessing
             }
         }
 
-        public static string prodLocalFtpRoot => "G:/FTP";
+        public string prodLocalFtpRoot => "G:/FTP";
 
-        public static string prodLocalFtpItRoot => "G:/FTP-IT";
+        public string prodLocalFtpItRoot => "G:/FTP-IT";
 
-        public static string processingRoot
+        public string processingRoot
         {
             get
             {
@@ -354,17 +354,17 @@ namespace DataProcessing
             }
         }
 
-        public static string paylocityFtpRoot => $"{localFtpRoot}/Paylocity";
+        public string paylocityFtpRoot => $"{localFtpRoot}/Paylocity";
 
-        public static string fromBoomiFtpRoot => $"{localFtpItRoot}/fromBoomi";
+        public string fromBoomiFtpRoot => $"{localFtpItRoot}/fromBoomi";
 
-        public static string toBoomiFtpRoot => $"{localFtpItRoot}/ToBoomi";
+        public string toBoomiFtpRoot => $"{localFtpItRoot}/ToBoomi";
 
-        public static string salesForceCrmListPath => $"{localFtpRoot}/fromBoomi/CRM_List.csv";
+        public string salesForceCrmListPath => $"{localFtpRoot}/fromBoomi/CRM_List.csv";
 
-        private static Dictionary<string, string> _prodToRunningCtxPathReplacePatterns;
+        private Dictionary<string, string> _prodToRunningCtxPathReplacePatterns;
 
-        public static Dictionary<string, string> prodToRunningCtxPathReplacePatterns
+        public Dictionary<string, string> prodToRunningCtxPathReplacePatterns
         {
             get
             {
@@ -381,7 +381,7 @@ namespace DataProcessing
             }
         }
 
-        public static string ConvertFilePathFromProdToCtx(string prodFilePath)
+        public string ConvertFilePathFromProdToCtx(string prodFilePath)
         {
             if (Utils.IsBlank(prodFilePath)) return prodFilePath;
 
@@ -405,9 +405,9 @@ namespace DataProcessing
 
         #region remoteFtp
 
-        private static SFtpConnection _remoteAlegeusFtpConnection;
+        private SFtpConnection _remoteAlegeusFtpConnection;
 
-        public static SFtpConnection RemoteAlegeusFtpConnection
+        public SFtpConnection RemoteAlegeusFtpConnection
         {
             get
             {
@@ -416,8 +416,7 @@ namespace DataProcessing
 #if (CTXSUMEETDEV)
                     _remoteAlegeusFtpConnection = new SFtpConnection("localhost", 22, "alegeus", "a");
 #else
-                    _remoteAlegeusFtpHost = =
- new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
+                    _remoteAlegeusFtpConnection = new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
 #endif
                 }
 
@@ -425,7 +424,7 @@ namespace DataProcessing
             }
         }
 
-        public static string remoteAlegeusFtpRootPath
+        public string remoteAlegeusFtpRootPath
         {
             get
             {
@@ -437,7 +436,7 @@ namespace DataProcessing
             }
         }
 
-        public static string remoteCobraFtpRootPath
+        public string remoteCobraFtpRootPath
         {
             get
             {
@@ -449,17 +448,16 @@ namespace DataProcessing
             }
         }
 
-        private static SFtpConnection _remoteCobraFtpConnection;
+        private SFtpConnection _remoteCobraFtpConnection;
 
-        public static SFtpConnection RemoteCobraFtpConnection
+        public SFtpConnection RemoteCobraFtpConnection
         {
             get
             {
 #if (CTXSUMEETDEV)
                 _remoteCobraFtpConnection = new SFtpConnection("localhost", 21, "alegeus", "a");
 #else
-                _remoteCobraFtpConnection = =
- new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
+                _remoteCobraFtpConnection = new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
 #endif
 
                 return _remoteCobraFtpConnection;
@@ -468,26 +466,26 @@ namespace DataProcessing
 
 
         #endregion
-        
+
         #region CobraFileProcessingPaths
 
-        public static string cobraImportRoot => $"{processingRoot}/COBRA IMPORTS";
+        public string cobraImportRoot => $"{processingRoot}/COBRA IMPORTS";
 
-        public static string cobraImportHoldingRoot => $"{processingRoot}/COBRA IMPORTS/Holding";
+        public string cobraImportHoldingRoot => $"{processingRoot}/COBRA IMPORTS/Holding";
 
-        public static string cobraImportTestFilesRoot => $"{processingRoot}/COBRA IMPORTS/COBRA_testfiles";
+        public string cobraImportTestFilesRoot => $"{processingRoot}/COBRA IMPORTS/COBRA_testfiles";
 
-        public static string cobraImportHoldingPreparedQbRoot => $"{processingRoot}/COBRA IMPORTS/Holding/PreparedQB";
+        public string cobraImportHoldingPreparedQbRoot => $"{processingRoot}/COBRA IMPORTS/Holding/PreparedQB";
 
-        public static string cobraImportArchiveDoneRoot => $"{processingRoot}/COBRA IMPORTS/Archive - Done";
+        public string cobraImportArchiveDoneRoot => $"{processingRoot}/COBRA IMPORTS/Archive - Done";
 
-        public static string cobraImportArchiveEmptyRoot => $"{processingRoot}/COBRA IMPORTS/Archive - Empty";
+        public string cobraImportArchiveEmptyRoot => $"{processingRoot}/COBRA IMPORTS/Archive - Empty";
 
-        public static string cobraImportArchiveErrorRoot => $"{processingRoot}/COBRA IMPORTS/Archive - Error";
+        public string cobraImportArchiveErrorRoot => $"{processingRoot}/COBRA IMPORTS/Archive - Error";
 
-        public static string cobraImportHoldingDecryptRoot => $"{processingRoot}/COBRA IMPORTS/Holding/ToDecrypt";
+        public string cobraImportHoldingDecryptRoot => $"{processingRoot}/COBRA IMPORTS/Holding/ToDecrypt";
 
-        public static string[] cobraIgnoreFtpSourceDirs
+        public string[] cobraIgnoreFtpSourceDirs
         {
             get
             {
@@ -502,10 +500,10 @@ namespace DataProcessing
         }
 
         #endregion
-        
+
         #region AlegeusFileProcessingPaths
 
-        public static string[] alegeusIgnoreFtpSourceDirs
+        public string[] alegeusIgnoreFtpSourceDirs
         {
             get
             {
@@ -518,29 +516,29 @@ namespace DataProcessing
             }
         }
 
-        public static string alegeusFileHeadersRoot => $"{processingRoot}/AutomatedHeaderV1_Files";
+        public string alegeusFileHeadersRoot => $"{processingRoot}/AutomatedHeaderV1_Files";
 
-        public static string alegeusFileHeadersArchiveRoot => $"{processingRoot}/AutomatedHeaderV1_Files/Archive";
+        public string alegeusFileHeadersArchiveRoot => $"{processingRoot}/AutomatedHeaderV1_Files/Archive";
 
-        public static string alegeusFilesPreCheckRoot => $"{processingRoot}/To_Alegeus_Pre_Process";
-        public static string alegeusFilesPreCheckOKRoot => $"{processingRoot}/To_Alegeus_Pre_Process/Check_OK";
-        public static string alegeusFilesPreCheckFailRoot => $"{processingRoot}/To_Alegeus_Pre_Process/Check_FAIL";
+        public string alegeusFilesPreCheckRoot => $"{processingRoot}/To_Alegeus_Pre_Process";
+        public string alegeusFilesPreCheckOKRoot => $"{processingRoot}/To_Alegeus_Pre_Process/Check_OK";
+        public string alegeusFilesPreCheckFailRoot => $"{processingRoot}/To_Alegeus_Pre_Process/Check_FAIL";
 
-        public static string alegeusFilesPreCheckHoldAllRoot => $"{processingRoot}/To_Alegeus_Pre_Process/HoldALL";
+        public string alegeusFilesPreCheckHoldAllRoot => $"{processingRoot}/To_Alegeus_Pre_Process/HoldALL";
 
-        public static string alegeusFilesFTPHoldingRoot => $"{processingRoot}/To_Alegeus_FTP_Holding";
+        public string alegeusFilesFTPHoldingRoot => $"{processingRoot}/To_Alegeus_FTP_Holding";
 
         #endregion
 
         #region ErrorLogPaths
 
-        public static string alegeusErrorLogMbiFilesRoot => $"{processingRoot}/AlegeusErrorLog/mbiFiles";
+        public string alegeusErrorLogMbiFilesRoot => $"{processingRoot}/AlegeusErrorLog/mbiFiles";
 
-        public static string alegeusErrorLogMbiFilesArchiveRoot => $"{processingRoot}/AlegeusErrorLog/mbiFiles/Archive";
+        public string alegeusErrorLogMbiFilesArchiveRoot => $"{processingRoot}/AlegeusErrorLog/mbiFiles/Archive";
 
-        public static string alegeusErrorLogResFilesRoot => $"{processingRoot}/AlegeusErrorLog/resFiles";
+        public string alegeusErrorLogResFilesRoot => $"{processingRoot}/AlegeusErrorLog/resFiles";
 
-        public static string alegeusErrorLogResFilesArchiveRoot => $"{processingRoot}/AlegeusErrorLog/resFiles/Archive";
+        public string alegeusErrorLogResFilesArchiveRoot => $"{processingRoot}/AlegeusErrorLog/resFiles/Archive";
 
         #endregion
     }
