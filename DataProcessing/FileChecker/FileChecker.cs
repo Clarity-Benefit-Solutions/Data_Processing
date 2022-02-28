@@ -11,12 +11,26 @@ using CoreUtils.Classes;
 using DataProcessing.DataModels.AlegeusErrorLog;
 using EtlUtilities;
 using MySqlConnector;
+using System.Runtime.Caching;
 
 // ReSharper disable All
 
 // ReSharper disable once CheckNamespace
 namespace DataProcessing
 {
+    public class ExtendedCache : MemoryCache
+    {
+        public ExtendedCache(string name, System.Collections.Specialized.NameValueCollection config = null) : base(name, config)
+        {
+
+        }
+
+        public ExtendedCache() : base("Default", null)
+        {
+
+        }
+
+    }
     public class FileCheckResults : Dictionary<int, string>
     {
         public FileCheckResults() : base()
@@ -795,7 +809,7 @@ namespace DataProcessing
             return dbResults;
 
         }
-        
+
         public Boolean CheckEmployeePlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
         {
             var errorMessage = "";
