@@ -18,7 +18,7 @@ using System.Runtime.Caching;
 // ReSharper disable once CheckNamespace
 namespace DataProcessing
 {
-   
+
     public class FileCheckResults : Dictionary<int, string>
     {
         public FileCheckResults() : base()
@@ -431,6 +431,46 @@ namespace DataProcessing
                 return false;
             }
         }
+        private DataTable GetAllEmployers()
+        {
+            DataTable dbResults = new DataTable();
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-AllEmployers";
+            if (_cache.ContainsKey(cacheKey))
+            {
+                dbResults = (DataTable)_cache.Get(cacheKey);
+            }
+            else
+            {
+                if (PlatformType == PlatformType.Alegeus)
+                {
+                    string queryString =
+                        $"select employer_id, employer_name, employer_status from wc.wc_employers " +
+                        $" order by employer_id ;";
+                    //
+                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        queryString, null,
+                        fileLogParams?.GetMessageLogParams());
+
+                    // create index on EmployeeID
+
+                    DataColumn[] indices = new DataColumn[1];
+                    indices[0] = (DataColumn)dbResults.Columns["employerid"];
+                    dbResults.PrimaryKey = indices;
+
+                    //
+                    _cache.Add(cacheKey, dbResults);
+                }
+                else
+                {
+                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
+                }
+            }
+
+            return dbResults;
+
+        }
+
 
         public Boolean CheckEmployerExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
         {
@@ -450,37 +490,28 @@ namespace DataProcessing
                 }
                 else
                 {
-                    if (PlatformType == PlatformType.Alegeus)
-                    {
-                        string queryString =
-                            $"select employer_id, employer_name, employer_status from wc.wc_employers " +
-                            $" where employer_id = '{Utils.DbQuote(dataRow.EmployerId)}' ";
-                        //
-                        DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
-                            queryString, null,
-                            fileLogParams?.GetMessageLogParams()
-                        );
+                    DataTable dbResults = GetAllEmployers();
+                    // planid is not always present e.g. in deposit file
+                    string filter = $"employer_id = '{dataRow.EmployerId}'";
+                    DataRow[] dbRows = dbResults.Select(filter);
 
-                        if (dbResults.Rows.Count == 0)
-                        {
-                            errorMessage = $"The Employer ID {dataRow.EmployerId} could not be found";
-                        }
-                        else
-                        {
-                            DataRow dbData = dbResults.Rows[0];
-                            //todo: does employer status need to be checked
-                            string status = dbData["employer_status"]?.ToString();
-                            if (status != "Active" && status != "New")
-                            {
-                                errorMessage =
-                                    $"The Employer ID {dataRow.EmployerId} has status {status} which is not valid";
-                            }
-                        }
+                    if (dbRows.Length == 0)
+                    {
+                        errorMessage = $"The Employer ID {dataRow.EmployerId} could not be found";
                     }
                     else
                     {
-                        throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
+                        DataRow dbData = dbRows[0];
+
+                        //todo: does employer status need to be checked
+                        string status = dbData["employer_status"]?.ToString();
+                        if (status != "Active" && status != "New")
+                        {
+                            errorMessage =
+                                $"The Employer ID {dataRow.EmployerId} has status {status} which is not valid";
+                        }
                     }
+
                 }
 
                 //
@@ -540,8 +571,8 @@ namespace DataProcessing
 
             return dbResults;
 
-        }
-
+        }  // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
+      
         public Boolean CheckEmployeeExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
         {
             var errorMessage = "";
