@@ -259,7 +259,8 @@ namespace DataProcessing
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                         Path.GetFileName(destFilePath), destFilePath, $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                         "Success", "Moved File to Archive");
-                    DbUtils.LogFileOperation(fileLogParams);
+                    // do not log - gives too many lines
+                    // DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
@@ -275,7 +276,8 @@ namespace DataProcessing
                         Path.GetFileName(destFilePath), destFilePath, $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                         "Success", "Moved File to Archive");
 
-                    DbUtils.LogFileOperation(fileLogParams);
+                    // do not log - gives too many lines
+                    // DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
