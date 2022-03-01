@@ -51,25 +51,3 @@ alter table Alegeus_ErrorLog..res_file_table_stage
     add OngoingPrefunded nvarchar(50);
 alter table Alegeus_ErrorLog..res_file_table
     add OngoingPrefunded nvarchar(50);
-
-select *
-from
-    Alegeus_ErrorLog..mbi_file_table_stage
-where
-    len( error_message ) > 0;
-
-exec Alegeus_ErrorLog..process_mbi_file_table_stage_import;
-
-select
-    concat(
-            data_row , ','
-        , case
-              when len( error_message ) > 0 then concat( 'ERRORS: ' , error_message )
-              else ''
-          end )
-from
-    Alegeus_ErrorLog..mbi_file_table
-where
-    mbi_file_name = '110--3--Wisenbaker_Election_01272022.mbi'
-order by
-    mbi_file_table.source_row_no;

@@ -120,6 +120,8 @@ namespace DataProcessing
                     ///////////////////////////////////////
 
                     // todo: output file with errors with ext *.*.pre
+                    string srcFileName = Path.GetFileName(this.srcFilePath);
+                    ;
                     newFilePath = $"{Vars.alegeusFilesPreCheckFailRoot}/{fileName}";
                     newErrorFilePath = $"{newFilePath}.err";
 
@@ -128,7 +130,7 @@ namespace DataProcessing
                     //
                     var queryStringExp = $" select concat(data_row, ',', case when len(error_message) > 0 then concat( 'ERRORS: ' , error_message ) else ''end ) as file_row" +
                                          $" from {outputTableName} " +
-                                         $" where mbi_file_name = '{this.srcFilePath}'" +
+                                         $" where mbi_file_name = '{srcFileName}'" +
                                          $" order by mbi_file_table.source_row_no; ";
 
                     ImpExpUtils.ExportSingleColumnFlatFile(newErrorFilePath, dbConn, queryStringExp,
@@ -286,7 +288,10 @@ namespace DataProcessing
             );
 
             // update check type for table
-            string queryString1 = $"update {tableName} set check_type = 'PreCheck' where 1 = 1;";
+            string queryString1 = $" update {tableName} set " +
+                                  $" /* set check type */check_type = 'PreCheck', " +
+                                  $" /* remove extra csv commas added to line */ data_row = replace(data_row, ',,,,,,,,,,,,,,,,,,,,', '') " +
+                                  $" where 1 = 1;";
             DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString1, null,
                 fileLogParams?.GetMessageLogParams()
             );

@@ -18,6 +18,8 @@ namespace EtlUtilities
 {
     public static class Import
     {
+        public static readonly string AppendCommasToCsvLine = ",,,,,,,,,,,,,,,,,,,,";
+
         public static void ImportCrmListCsvHlpr(HeaderType headerType, DbConnection dbConn, string srcFilePath,
             string tableName, FileOperationLogParams fileLogParams
             , OnErrorCallback onErrorCallback)
@@ -218,12 +220,12 @@ namespace EtlUtilities
                     // for each header row, ensure enough columns are created as header columns are less than the data columns and then the csv data reader errors when asked for columns that are in the data schema but not in the header itself
                     if (line.Substring(0, 2) == "IA" || line.Substring(0, 2) == "RA")
                     {
-                        line = line + ",,,,,,,,,,,,,,,,,,,,";
+                        line = line + AppendCommasToCsvLine;
                     }
                     else
                     {
                         // add extra cols as sometimes error message column is missing
-                        line = line + ",,,,,,,,,,,,,,,,,,,,";
+                        line = line + AppendCommasToCsvLine;
                     }
 
                     // add src file path as res_file_name 

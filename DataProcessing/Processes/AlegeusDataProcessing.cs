@@ -358,7 +358,7 @@ namespace DataProcessing
                     //4. Export File
                     var expFilePath = FileUtils.GetDestFilePath(srcFilePath, ".mbi");
 
-                    var outputTableName = "[dbo].[mbi_file_table]";
+                    var outputTableName = "[dbo].[alegeus_file_final]";
                     var queryStringExp = $"Select * from {outputTableName} order by row_num asc";
                     ImpExpUtils.ExportSingleColumnFlatFile(expFilePath, dbConn, queryStringExp,
                          "file_row", null, fileLogParams,

@@ -454,7 +454,7 @@ namespace DataProcessing
                     string queryStringExp = $"Select * from {outputTableName} order by row_num asc";
                     //
                     ImpExpUtils.ExportSingleColumnFlatFile(expFilePath, dbConnCobra, queryStringExp,
-                        "folder_name", "QB_data", null, fileLogParams,
+                        "QB_data", null, fileLogParams,
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                     );
 
