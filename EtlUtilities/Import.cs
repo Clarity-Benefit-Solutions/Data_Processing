@@ -92,7 +92,7 @@ namespace EtlUtilities
                     // get temp file for each format
                     string splitFileName = Path.GetTempFileName();
                     var splitFileWriter = new StreamWriter(splitFileName, false);
-                    files.Add(fileFormat, new Object[] {splitFileWriter, splitFileName});
+                    files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
                 }
 
                 // open file for reading
@@ -111,7 +111,7 @@ namespace EtlUtilities
                                 || (line?.Substring(0, 2) == "RA" || line?.Substring(0, 2) == "IA"))
                             {
                                 // get temp file for each format
-                                var splitFileWriter = (StreamWriter) files[fileFormat2][0];
+                                var splitFileWriter = (StreamWriter)files[fileFormat2][0];
                                 // if there is prvUnwrittenLine it was probably a header line - write to the file that 
 
                                 splitFileWriter.WriteLine(line);
@@ -128,11 +128,11 @@ namespace EtlUtilities
                 foreach (var fileFormat3 in files.Keys)
                 {
                     // get temp file for each format
-                    var writer = (StreamWriter) files[fileFormat3][0];
+                    var writer = (StreamWriter)files[fileFormat3][0];
                     writer.Close();
 
                     // import the file
-                    ImportAlegeusFile(fileFormat3, headerType, dbConn, (string) files[fileFormat3][1], srcFilePath,
+                    ImportAlegeusFile(fileFormat3, headerType, dbConn, (string)files[fileFormat3][1], srcFilePath,
                         hasHeaderRow, fileLogParams, onErrorCallback);
                 }
             }
@@ -200,8 +200,7 @@ namespace EtlUtilities
             }
         }
 
-        public static string PrefixLineWithEntireLineAndFileName(HeaderType headerType, string srcFilePath,
-            string orgSrcFilePath, FileOperationLogParams fileLogParams)
+        public static string PrefixLineWithEntireLineAndFileName(HeaderType headerType, string srcFilePath, string orgSrcFilePath, FileOperationLogParams fileLogParams)
         {
             string fileName = Path.GetFileName(orgSrcFilePath);
             //fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, orgSrcFilePath, "", "", $"{ MethodBase.GetCurrentMethod()?.Name}", $"Adding Entire Line as Last Column", "Starting");
@@ -382,7 +381,7 @@ namespace EtlUtilities
                             "EmployeePayPeriodElection", FormatType.Any, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerPayPeriodElection",
                             "EmployerPayPeriodElection", FormatType.Any, 0, 0, 0, 0));
-                      
+
                         // sumeet: this seems wrong - we are getting a amount value as next column
                         //mappings.Add(new TypedCsvColumn("EffectiveDate", "EffectiveDate", FormatType.Any, 0, 0, 0, 0));
                         //mappings.Add(new TypedCsvColumn("TerminationDate", "TerminationDate", FormatType.Any, 0, 0, 0,

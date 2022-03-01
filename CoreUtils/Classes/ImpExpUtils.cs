@@ -221,7 +221,7 @@ namespace CoreUtils.Classes
         }
 
         public static void ExportSingleColumnFlatFile(string filePath, DbConnection dbConn,
-            string queryString, string fileColName, string contentsColName, DbParameters queryParams,
+            string queryString, string contentsColName, DbParameters queryParams,
             FileOperationLogParams fileLogParams, OnErrorCallback onErrorCallback)
         {
             try

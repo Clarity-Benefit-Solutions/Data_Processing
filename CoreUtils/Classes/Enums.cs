@@ -89,6 +89,23 @@ namespace CoreUtils.Classes
         AllData
         //
     }
+    public enum OperationResult
+    {
+        [Utils.DisplayText("OperationResult.Ok")]
+        Ok = 1,
+
+        [Utils.DisplayText("OperationResult.PartialFail")]
+        PartialFail,
+        
+        [Utils.DisplayText("OperationResult.CompleteFail")]
+        CompleteFail,
+
+        [Utils.DisplayText("OperationResult.ProcessingError")]
+        ProcessingError,
+
+
+
+    }
 
     public enum EdiFileFormat
     {

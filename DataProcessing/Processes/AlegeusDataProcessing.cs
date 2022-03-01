@@ -358,10 +358,10 @@ namespace DataProcessing
                     //4. Export File
                     var expFilePath = FileUtils.GetDestFilePath(srcFilePath, ".mbi");
 
-                    var outputTableName = "[dbo].[alegeus_file_final]";
+                    var outputTableName = "[dbo].[mbi_file_table]";
                     var queryStringExp = $"Select * from {outputTableName} order by row_num asc";
                     ImpExpUtils.ExportSingleColumnFlatFile(expFilePath, dbConn, queryStringExp,
-                        "folder_name", "file_row", null, fileLogParams,
+                         "file_row", null, fileLogParams,
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                     );
 
@@ -496,49 +496,10 @@ namespace DataProcessing
                         $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
                         "Starting", "Starting PreCheck");
                     DbUtils.LogFileOperation(fileLogParams);
+                    
+                    //
+                    fileChecker.CheckFileAndMove(FileCheckType.AllData);
 
-                    fileChecker.CheckFile(FileCheckType.AllData);
-
-                    // on success
-                    if (fileChecker.fileCheckResults.Succcess)
-                    {
-                        var fileName = Path.GetFileName(srcFilePath);
-                        var newFilePath = $"{Vars.alegeusFilesPreCheckOKRoot}/{fileName}";
-                        FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
-                            {
-                                // add to fileLog
-                                fileLogParams.SetFileNames("", fileName, srcFilePath,
-                                    Path.GetFileName(newFilePath), newFilePath,
-                                    $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                                    "Success", "PreCheck OK. Moved File to PreCheck OK Directory");
-                                //
-                                DbUtils.LogFileOperation(fileLogParams);
-                            },
-                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-                        );
-                    }
-
-                    // on failure
-                    else
-                    {
-                        // todo: output file with errors with ext *.*.pre
-                        // todo: split file into OK and failed parts?
-                        var fileName = Path.GetFileName(srcFilePath);
-                        var newFilePath = $"{Vars.alegeusFilesPreCheckFailRoot}/{fileName}";
-                        //
-                        FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
-                            {
-                                // add to fileLog
-                                fileLogParams.SetFileNames("", fileName, srcFilePath,
-                                    Path.GetFileName(newFilePath), newFilePath,
-                                    $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                                    "Fail", "PreCheck FAIL. Moved File to PreCheck FAIL Directory");
-                                //
-                                DbUtils.LogFileOperation(fileLogParams);
-                            },
-                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-                        );
-                    }
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );

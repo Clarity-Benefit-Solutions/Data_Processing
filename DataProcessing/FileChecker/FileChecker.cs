@@ -21,13 +21,20 @@ namespace DataProcessing
 
     public class FileCheckResults : Dictionary<int, string>
     {
+        internal Boolean markAsCompleteFail = false;
+
         public FileCheckResults() : base()
         {
         }
 
-        public Boolean Succcess
+        public Boolean HasErrors
         {
-            get { return this.Count == 0; }
+            get { return this.Count > 0; }
+        }
+
+        public Boolean IsCompleteFail
+        {
+            get { return this.markAsCompleteFail; }
         }
     }
 
@@ -73,22 +80,117 @@ namespace DataProcessing
             //
         }
 
-        public void CheckFile(FileCheckType fileCheckType)
+        public OperationResult CheckFileAndMove(FileCheckType fileCheckType)
+        {
+            // check file
+            OperationResult result = CheckFile(fileCheckType);
+
+            // move file
+            var fileName = Path.GetFileName(this.srcFilePath);
+            var newFilePath = this.srcFilePath;
+            var newErrorFilePath = "";
+
+            // act on result
+            switch (result)
+            {
+
+                ///////////////////////////////////////
+                case OperationResult.Ok:
+                    ///////////////////////////////////////
+
+                    newFilePath = $"{Vars.alegeusFilesPreCheckOKRoot}/{fileName}";
+                    FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
+                    {
+                        // add to fileLog
+                        fileLogParams.SetFileNames("", fileName, srcFilePath,
+                                Path.GetFileName(newFilePath), newFilePath,
+                                $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                                "Success", "PreCheck OK. Moved File to PreCheck OK Directory");
+                        //
+                        DbUtils.LogFileOperation(fileLogParams);
+                    },
+                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                    );
+                    break;
+
+                ///////////////////////////////////////
+                case OperationResult.CompleteFail:
+                case OperationResult.ProcessingError:
+                case OperationResult.PartialFail:
+                    ///////////////////////////////////////
+
+                    // todo: output file with errors with ext *.*.pre
+                    newFilePath = $"{Vars.alegeusFilesPreCheckFailRoot}/{fileName}";
+                    newErrorFilePath = $"{newFilePath}.err";
+
+                    // export error file
+                    var outputTableName = "[dbo].[mbi_file_table]";
+                    //
+                    var queryStringExp = $" select concat(data_row, ',', case when len(error_message) > 0 then concat( 'ERRORS: ' , error_message ) else ''end ) as file_row" +
+                                         $" from {outputTableName} " +
+                                         $" where mbi_file_name = '{this.srcFilePath}'" +
+                                         $" order by mbi_file_table.source_row_no; ";
+
+                    ImpExpUtils.ExportSingleColumnFlatFile(newErrorFilePath, dbConn, queryStringExp,
+                        "file_row", null, fileLogParams,
+                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                    );
+
+                    //
+                    FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
+                    {
+                        // add to fileLog
+                        fileLogParams.SetFileNames("", fileName, srcFilePath,
+                                Path.GetFileName(newFilePath), newFilePath,
+                                $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                                "Fail", "PreCheck FAIL. Moved File to PreCheck FAIL Directory");
+                        //
+                        DbUtils.LogFileOperation(fileLogParams);
+                    },
+                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                    );
+
+                    break;
+            }
+            //
+            return result;
+        }
+        private OperationResult CheckFile(FileCheckType fileCheckType)
         {
             //
             Dictionary<EdiFileFormat, List<int>> fileFormats =
                 ImpExpUtils.GetAlegeusFileFormats(this.srcFilePath, false, this.fileLogParams);
 
+            var result = OperationResult.Ok;
+
             // file may contain only a header...
             if (fileFormats.Count == 0)
             {
                 this.fileCheckResults.Add(0, "File Is Empty");
-                return;
+                result = OperationResult.CompleteFail;
             }
             else
             {
+                // check the file
                 this.CheckFile(fileFormats);
+
+                //
+                if (this.fileCheckResults.IsCompleteFail)
+                {
+                    result = OperationResult.CompleteFail;
+                }
+                else if (this.fileCheckResults.HasErrors)
+                {
+                    result = OperationResult.PartialFail;
+                }
+                else
+                {
+                    result = OperationResult.Ok;
+                }
+
             }
+
+            return result;
         }
 
         private void CheckFile(Dictionary<EdiFileFormat, List<int>> fileFormats)
@@ -148,7 +250,7 @@ namespace DataProcessing
                 var writer = (StreamWriter)files[fileFormat3][0];
                 writer.Close();
 
-                // import the file
+                // import and check the file
                 CheckFile(fileFormat3, (string)files[fileFormat3][1]);
             }
         }
@@ -175,8 +277,7 @@ namespace DataProcessing
 
             // import the file with bulk copy
             var newPath =
-                Import.PrefixLineWithEntireLineAndFileName(headerType, currentFilePath, this.srcFilePath,
-                    fileLogParams);
+                Import.PrefixLineWithEntireLineAndFileName(headerType, currentFilePath, this.srcFilePath, fileLogParams);
 
             // import into table so we can manipulate the file
             ImpExpUtils.ImportCsvFileBulkCopy(this.headerType, this.dbConn, newPath, this.hasHeaderRow, tableName,
@@ -369,8 +470,7 @@ namespace DataProcessing
             }
         }
 
-        private void AddErrorForRow(mbi_file_table_stage dataRow, string errCode,
-            string errMessage)
+        private void AddErrorForRow(mbi_file_table_stage dataRow, string errCode, string errMessage, Boolean markAsCompleteFail = false)
         {
             // add to dataRow so it will be saved back to DB for dataRow by dataRow data
             dataRow.error_code = errCode + "\n";
@@ -385,6 +485,11 @@ namespace DataProcessing
             else
             {
                 this.fileCheckResults.Add(key, $"{dataRow.source_row_no}: {errCode} : {errMessage}");
+            }
+            //
+            if (markAsCompleteFail)
+            {
+                this.fileCheckResults.markAsCompleteFail = true;
             }
         }
 
@@ -431,6 +536,7 @@ namespace DataProcessing
                 return false;
             }
         }
+
         private DataTable GetAllEmployers()
         {
             DataTable dbResults = new DataTable();
@@ -471,7 +577,6 @@ namespace DataProcessing
 
         }
 
-
         public Boolean CheckEmployerExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
         {
             var errorMessage = "";
@@ -511,9 +616,7 @@ namespace DataProcessing
                                 $"The Employer ID {dataRow.EmployerId} has status {status} which is not valid";
                         }
                     }
-
                 }
-
                 //
                 _cache.Add(cacheKey, errorMessage);
             }
@@ -572,7 +675,7 @@ namespace DataProcessing
             return dbResults;
 
         }  // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
-      
+
         public Boolean CheckEmployeeExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
         {
             var errorMessage = "";

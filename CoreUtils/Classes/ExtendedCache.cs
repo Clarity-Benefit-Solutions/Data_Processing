@@ -100,7 +100,7 @@ namespace CoreUtils.Classes
 
             DiskCache.Set(key, byteArray, CacheEntryOptions);
 
-            // remove from MemoryCache
+            // remove from MemoryCache so we don't have a previous invalid value returned
             MemoryCache.Remove(key);
 
             return item;
@@ -113,9 +113,6 @@ namespace CoreUtils.Classes
 
             DateTimeOffset dateTimeOffset = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero).AddSeconds(SlidingExpiration.TotalSeconds);
             MemoryCache.Set(key, item, dateTimeOffset);
-
-            // remove from DiskCache
-            DiskCache.Remove(key);
 
             return item;
         }
