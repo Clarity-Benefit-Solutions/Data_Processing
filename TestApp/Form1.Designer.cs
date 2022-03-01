@@ -166,6 +166,7 @@ namespace TestApp
             this.Controls.Add(this.cmdProcessCobraFiles);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             ((System.ComponentModel.ISupportInitialize)(this.listLogs)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

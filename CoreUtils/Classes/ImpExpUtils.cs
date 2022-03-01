@@ -226,6 +226,9 @@ namespace CoreUtils.Classes
         {
             try
             {
+                //
+                FileUtils.EnsurePathExists(filePath);
+
                 //fileLogParams?.SetTaskOutcome("Starting", $"Starting: Export using {queryString}");
                 //LogFileOperation(fileLogParams);
 
@@ -235,6 +238,8 @@ namespace CoreUtils.Classes
                 //
 
                 // loop thru rows
+                //
+                FileUtils.EnsurePathExists(filePath);
                 using var writer = new StreamWriter(filePath, false);
                 foreach (DataRow row in dt.Rows)
                 {

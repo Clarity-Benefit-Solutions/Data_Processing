@@ -93,7 +93,8 @@ namespace DataProcessing
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                         Path.GetFileName(destFilePath), destFilePath, "AutomatedHeaders-ClearAllFiles", "Success",
                         "Deleted File in Header Dir");
-                    DbUtils.LogFileOperation(fileLogParams);
+                    // do not log - gives too many lines
+                    // DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
@@ -318,7 +319,7 @@ namespace DataProcessing
                     switch (headerType)
                     {
                         case HeaderType.Own:
-                            procName = "";
+                            procName = "dbo.[proc_alegeus_AlterHeadersOwn]";
                             break;
                         case HeaderType.Old:
                             procName = "dbo.[proc_alegeus_AlterHeaders2015]";

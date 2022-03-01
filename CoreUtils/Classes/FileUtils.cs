@@ -670,6 +670,8 @@ namespace CoreUtils.Classes
                         csvContent += string.Join(",", arr) + "\n";
                     }
 
+                    //
+                    FileUtils.EnsurePathExists(destFilePath);
                     var csv = new StreamWriter(destFilePath, false);
                     csv.Write(csvContent);
                     csv.Close();
@@ -689,5 +691,17 @@ namespace CoreUtils.Classes
         }
 
         #endregion
+
+        public static void EnsurePathExists(string fullFilePath)
+        {
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(fullFilePath)!);
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
+        }
     }
 }

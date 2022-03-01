@@ -99,7 +99,8 @@ namespace DataProcessing
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                         Path.GetFileName(destFilePath), destFilePath, "ErrorLog-DeleteStagingFiles", "Success",
                         "Delete File in Dir");
-                    DbUtils.LogFileOperation(fileLogParams);
+                    // do not log - gives too many lines
+                    //DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );

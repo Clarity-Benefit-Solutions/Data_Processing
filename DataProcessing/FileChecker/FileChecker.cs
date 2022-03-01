@@ -42,6 +42,8 @@ namespace DataProcessing
     public class FileChecker : IDisposable
     {
         //
+        public static readonly string ErrorSeparator = ";";
+        //
         private static ExtendedCache _cache = new ExtendedCache(TimeSpan.FromHours(1), TimeSpan.FromHours(5), null);
 
         //
@@ -97,7 +99,6 @@ namespace DataProcessing
                 ///////////////////////////////////////
                 case OperationResult.Ok:
                     ///////////////////////////////////////
-
                     newFilePath = $"{Vars.alegeusFilesPreCheckOKRoot}/{fileName}";
                     FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
                     {
@@ -128,7 +129,7 @@ namespace DataProcessing
                     // export error file
                     var outputTableName = "[dbo].[mbi_file_table]";
                     //
-                    var queryStringExp = $" select concat(data_row, ',', case when len(error_message) > 0 then concat( 'ERRORS: ' , error_message ) else ''end ) as file_row" +
+                    var queryStringExp = $" select concat(data_row, ',', case when len(error_message) > 0 then concat( 'PreCheck Errors: ' , error_message ) else 'PreCheck: OK' end ) as file_row" +
                                          $" from {outputTableName} " +
                                          $" where mbi_file_name = '{srcFileName}'" +
                                          $" order by mbi_file_table.source_row_no; ";
@@ -210,6 +211,8 @@ namespace DataProcessing
             {
                 // get temp file for each format
                 string splitFileName = Path.GetTempFileName();
+                FileUtils.EnsurePathExists(splitFileName);
+                //
                 var splitFileWriter = new StreamWriter(splitFileName, false);
                 files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
             }
@@ -478,9 +481,24 @@ namespace DataProcessing
         private void AddErrorForRow(mbi_file_table_stage dataRow, string errCode, string errMessage, Boolean markAsCompleteFail = false)
         {
             // add to dataRow so it will be saved back to DB for dataRow by dataRow data
-            dataRow.error_code = errCode + "\n";
-            ;
-            dataRow.error_message += errMessage + "\n";
+
+            if (Utils.IsBlank(dataRow.error_code))
+            {
+                dataRow.error_code = errCode;
+            }
+            else
+            {
+                dataRow.error_code = ErrorSeparator + errCode;
+            }
+            if (Utils.IsBlank(dataRow.error_message))
+            {
+                dataRow.error_message = errMessage;
+            }
+            else
+            {
+                dataRow.error_message = ErrorSeparator + errMessage;
+            }
+
             //
             int key = dataRow.source_row_no ?? 0;
             if (this.fileCheckResults.ContainsKey(key))
@@ -708,8 +726,7 @@ namespace DataProcessing
                     if (dbRows.Length == 0)
                     {
                         errorMessage +=
-                            $"The Employee ID {dataRow.EmployeeID} could not be found for Employer Id {dataRow.EmployerId}" +
-                            "\n";
+                            $"The Employee ID {dataRow.EmployeeID} could not be found for Employer Id {dataRow.EmployerId}";
                         ;
                     }
                     else
@@ -720,7 +737,7 @@ namespace DataProcessing
                         if (status <= 0 && Utils.ToNumber(dataRow.EmployeeStatus) > 1)
                         {
                             errorMessage +=
-                                $"The Employee ID {dataRow.EmployeeID} has status {status} which is not valid" + "\n";
+                                $"The Employee ID {dataRow.EmployeeID} has status {status} which is not valid";
                         }
                     }
 
@@ -802,12 +819,12 @@ namespace DataProcessing
                 // check DB
                 if (Utils.IsBlank(dataRow.EmployerId))
                 {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n";
+                    errorMessage += $"The Employer ID cannot be blank";
                     ;
                 }
                 else if (Utils.IsBlank(dataRow.PlanId))
                 {
-                    errorMessage += $"The Plan ID cannot be blank" + "\n";
+                    errorMessage += $"The Plan ID cannot be blank";
                     ;
                 }
                 else
@@ -828,7 +845,7 @@ namespace DataProcessing
                     if (dbRows.Length == 0)
                     {
                         errorMessage +=
-                            $"The Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId}" + "\n";
+                            $"The Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId}";
                         ;
                     }
                     else
@@ -843,30 +860,26 @@ namespace DataProcessing
                         if (!Utils.IsBlank(dataRow.PlanStartDate) && actualPlanStartDate > Utils.ToDateTime(dataRow.PlanStartDate))
                         {
                             errorMessage +=
-                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}" +
-                                "\n";
+                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
                         }
 
                         if (!Utils.IsBlank(dataRow.PlanEndDate) && actualPlanEndDate < Utils.ToDateTime(dataRow.PlanEndDate))
                         {
                             errorMessage =
-                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}" +
-                                "\n";
+                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}";
                             ;
                         }
                         //check effectivedate is within plan dates
                         if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanStartDate > Utils.ToDateTime(dataRow.EffectiveDate))
                         {
                             errorMessage +=
-                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}" +
-                                "\n";
+                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
                         }
 
                         if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanEndDate < Utils.ToDateTime(dataRow.EffectiveDate))
                         {
                             errorMessage =
-                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}" +
-                                "\n";
+                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}";
                             ;
                         }
 
@@ -951,17 +964,17 @@ namespace DataProcessing
                 // check DB
                 if (Utils.IsBlank(dataRow.EmployerId))
                 {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n";
+                    errorMessage += $"The Employer ID cannot be blank";
                     ;
                 }
                 else if (Utils.IsBlank(dataRow.EmployeeID))
                 {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n";
+                    errorMessage += $"The Employer ID cannot be blank";
                     ;
                 }
                 else if (Utils.IsBlank(dataRow.PlanId))
                 {
-                    errorMessage += $"The Plan ID cannot be blank" + "\n";
+                    errorMessage += $"The Plan ID cannot be blank";
                     ;
                 }
                 else
@@ -983,8 +996,7 @@ namespace DataProcessing
                     if (dbRows.Length == 0)
                     {
                         errorMessage +=
-                            $"The Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId} and Employee Id {dataRow.EmployeeID}" +
-                            "\n";
+                            $"The Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId} and Employee Id {dataRow.EmployeeID}";
                         ;
                     }
                     else
@@ -998,30 +1010,26 @@ namespace DataProcessing
                         if (!Utils.IsBlank(dataRow.PlanStartDate) && actualPlanStartDate > Utils.ToDateTime(dataRow.PlanStartDate))
                         {
                             errorMessage +=
-                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}" +
-                                "\n";
+                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
                         }
 
                         if (!Utils.IsBlank(dataRow.PlanEndDate) && actualPlanEndDate < Utils.ToDateTime(dataRow.PlanEndDate))
                         {
                             errorMessage =
-                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}" +
-                                "\n";
+                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}";
                             ;
                         }
                         //check effectivedate is within plan dates
                         if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanStartDate > Utils.ToDateTime(dataRow.EffectiveDate))
                         {
                             errorMessage +=
-                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}" +
-                                "\n";
+                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
                         }
 
                         if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanEndDate < Utils.ToDateTime(dataRow.EffectiveDate))
                         {
                             errorMessage =
-                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}" +
-                                "\n";
+                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}";
                             ;
                         }
 
@@ -1060,12 +1068,12 @@ namespace DataProcessing
                 // check DB
                 if (Utils.IsBlank(dataRow.EmployerId))
                 {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n";
+                    errorMessage += $"The Employer ID cannot be blank";
                     ;
                 }
                 else if (Utils.IsBlank(dataRow.EmployeeID))
                 {
-                    errorMessage += $"The Employee ID cannot be blank" + "\n";
+                    errorMessage += $"The Employee ID cannot be blank";
                     ;
                 }
                 else
@@ -1084,7 +1092,7 @@ namespace DataProcessing
 
                         //if (dbResults.Rows.Count == 0)
                         //{
-                        //    errorMessage += $"The Employee ID {dataRow.EmployeeID} could not be found for Employer Id {dataRow.EmployerId}" + "\n"; ;
+                        //    errorMessage += $"The Employee ID {dataRow.EmployeeID} could not be found for Employer Id {dataRow.EmployerId}" ; ;
                         //}
                         //else
                         //{
@@ -1093,7 +1101,7 @@ namespace DataProcessing
                         //    if (status <= 0)
                         //    {
                         //        errorMessage +=
-                        //            $"The Employee ID {dataRow.EmployeeID} has status {status} which is not valid" + "\n";
+                        //            $"The Employee ID {dataRow.EmployeeID} has status {status} which is not valid" ;
                         //    }
                         //}
                     }
@@ -1133,17 +1141,17 @@ namespace DataProcessing
                 // check DB
                 if (Utils.IsBlank(dataRow.EmployerId))
                 {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n";
+                    errorMessage += $"The Employer ID cannot be blank";
                     ;
                 }
                 else if (Utils.IsBlank(dataRow.EmployeeID))
                 {
-                    errorMessage += $"The Employer ID cannot be blank" + "\n";
+                    errorMessage += $"The Employer ID cannot be blank";
                     ;
                 }
                 else if (Utils.IsBlank(dataRow.PlanId))
                 {
-                    errorMessage += $"The Plan ID cannot be blank" + "\n";
+                    errorMessage += $"The Plan ID cannot be blank";
                     ;
                 }
                 else
@@ -1163,7 +1171,7 @@ namespace DataProcessing
 
                         //if (dbResults.Rows.Count == 0)
                         //{
-                        //    errorMessage += $"The Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId} and Employee Id {dataRow.EmployeeID}" + "\n"; ;
+                        //    errorMessage += $"The Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId} and Employee Id {dataRow.EmployeeID}" ; ;
                         //}
                         //else
                         //{
@@ -1176,12 +1184,12 @@ namespace DataProcessing
                         //    if (actualPlanStartDate > DateTime.Now.Date)
                         //    {
                         //        errorMessage +=
-                        //            $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)}" + "\n";
+                        //            $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)}" ;
                         //    }
                         //    if (actualPlanEndDate < DateTime.Now.Date)
                         //    {
                         //        errorMessage =
-                        //            $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)}" + "\n"; ;
+                        //            $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)}" ; ;
                         //    }
                         //}
                     }

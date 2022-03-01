@@ -507,4 +507,3 @@ end
 go
 
 
- select concat(data_row, ',', case when len(error_message) > 0 then concat( 'ERRORS: ' , error_message ) else ''end ) as file_row from [dbo].[mbi_file_table]  where mbi_file_name = 'C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\__LocalTestDirsAndFiles/To_Alegeus_Pre_Process\\110--3--Wisenbaker_Election_01272022.mbi' order by mbi_file_table.source_row_no;

@@ -93,6 +93,8 @@ namespace EtlUtilities
                 {
                     // get temp file for each format
                     string splitFileName = Path.GetTempFileName();
+                    FileUtils.EnsurePathExists(splitFileName);
+                    //
                     var splitFileWriter = new StreamWriter(splitFileName, false);
                     files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
                 }
@@ -209,6 +211,8 @@ namespace EtlUtilities
 
             //
             string tempFileName = Path.GetTempFileName();
+            FileUtils.EnsurePathExists(tempFileName);
+            //
             using var splitFileWriter = new StreamWriter(tempFileName, false);
             using (var inputFile = new StreamReader(srcFilePath))
             {

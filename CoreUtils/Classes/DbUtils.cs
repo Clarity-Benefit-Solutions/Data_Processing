@@ -401,7 +401,7 @@ namespace CoreUtils
 
             // if file has uniqueID and headerttype already, nothing to do
             if (!Utils.IsBlank(GetUniqueIdFromFileName(srcFilePath))
-                && GetHeaderTypeFromFileName(srcFilePath) == headerType)
+                && (GetHeaderTypeFromFileName(srcFilePath) == headerType || headerType == HeaderType.NotApplicable))
             {
                 return srcFilePath;
             }
