@@ -18,19 +18,7 @@ using System.Runtime.Caching;
 // ReSharper disable once CheckNamespace
 namespace DataProcessing
 {
-    public class ExtendedCache : MemoryCache
-    {
-        public ExtendedCache(string name, System.Collections.Specialized.NameValueCollection config = null) : base(name, config)
-        {
-
-        }
-
-        public ExtendedCache() : base("Default", null)
-        {
-
-        }
-
-    }
+   
     public class FileCheckResults : Dictionary<int, string>
     {
         public FileCheckResults() : base()
@@ -47,7 +35,7 @@ namespace DataProcessing
     public class FileChecker : IDisposable
     {
         //
-        private static Dictionary<string, Object> cachedDBChecks = new Dictionary<string, Object>();
+        private static ExtendedCache _cache = new ExtendedCache(TimeSpan.FromHours(1), TimeSpan.FromHours(5), null);
 
         //
         private readonly DbConnection dbConnPortalWc;
@@ -404,9 +392,9 @@ namespace DataProcessing
         {
             var errorMessage = "";
             var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{dataRow.TpaId}";
-            if (cachedDBChecks.ContainsKey(cacheKey))
+            if (_cache.ContainsKey(cacheKey))
             {
-                errorMessage = cachedDBChecks[cacheKey]?.ToString();
+                errorMessage = _cache.Get(cacheKey)?.ToString();
             }
             else
             {
@@ -428,7 +416,7 @@ namespace DataProcessing
                 }
 
                 //
-                cachedDBChecks.Add(cacheKey, errorMessage);
+                _cache.Add(cacheKey, errorMessage);
             }
 
             //
@@ -449,9 +437,9 @@ namespace DataProcessing
             var errorMessage = "";
             var cacheKey =
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}";
-            if (cachedDBChecks.ContainsKey(cacheKey))
+            if (_cache.ContainsKey(cacheKey))
             {
-                errorMessage = cachedDBChecks[cacheKey]?.ToString();
+                errorMessage = _cache.Get(cacheKey)?.ToString();
             }
             else
             {
@@ -496,7 +484,7 @@ namespace DataProcessing
                 }
 
                 //
-                cachedDBChecks.Add(cacheKey, errorMessage);
+                _cache.Add(cacheKey, errorMessage);
             }
 
             //
@@ -517,9 +505,9 @@ namespace DataProcessing
             DataTable dbResults = new DataTable();
             var cacheKey =
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployees";
-            if (cachedDBChecks.ContainsKey(cacheKey))
+            if (_cache.ContainsKey(cacheKey))
             {
-                dbResults = (DataTable)cachedDBChecks[cacheKey];
+                dbResults = (DataTable)_cache.Get(cacheKey);
             }
             else
             {
@@ -542,7 +530,7 @@ namespace DataProcessing
                     dbResults.PrimaryKey = indices;
 
                     //
-                    cachedDBChecks.Add(cacheKey, dbResults);
+                    _cache.Add(cacheKey, dbResults);
                 }
                 else
                 {
@@ -559,9 +547,9 @@ namespace DataProcessing
             var errorMessage = "";
             var cacheKey =
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.EmployeeID}";
-            if (cachedDBChecks.ContainsKey(cacheKey))
+            if (_cache.ContainsKey(cacheKey))
             {
-                errorMessage = cachedDBChecks[cacheKey]?.ToString();
+                errorMessage = _cache.Get(cacheKey)?.ToString();
             }
             else
             {
@@ -600,7 +588,7 @@ namespace DataProcessing
                 }
 
                 //
-                cachedDBChecks.Add(cacheKey, errorMessage);
+                _cache.Add(cacheKey, errorMessage);
             }
 
             //
@@ -622,9 +610,9 @@ namespace DataProcessing
             DataTable dbResults = new DataTable();
             var cacheKey =
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployerPlans";
-            if (cachedDBChecks.ContainsKey(cacheKey))
+            if (_cache.ContainsKey(cacheKey))
             {
-                dbResults = (DataTable)cachedDBChecks[cacheKey];
+                dbResults = (DataTable)_cache.Get(cacheKey);
             }
             else
             {
@@ -649,7 +637,7 @@ namespace DataProcessing
                     dbResults.PrimaryKey = indices;
 
                     //
-                    cachedDBChecks.Add(cacheKey, dbResults);
+                    _cache.Add(cacheKey, dbResults);
                 }
                 else
                 {
@@ -666,9 +654,9 @@ namespace DataProcessing
             var errorMessage = "";
             var cacheKey =
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.AccountTypeCode}-{dataRow.PlanId}";
-            if (cachedDBChecks.ContainsKey(cacheKey))
+            if (_cache.ContainsKey(cacheKey))
             {
-                errorMessage = cachedDBChecks[cacheKey]?.ToString();
+                errorMessage = _cache.Get(cacheKey)?.ToString();
             }
             else
             {
@@ -746,7 +734,7 @@ namespace DataProcessing
                     }
 
                     //
-                    cachedDBChecks.Add(cacheKey, errorMessage);
+                    _cache.Add(cacheKey, errorMessage);
                 }
             }
 
@@ -769,9 +757,9 @@ namespace DataProcessing
             DataTable dbResults = new DataTable();
             var cacheKey =
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployeePlans";
-            if (cachedDBChecks.ContainsKey(cacheKey))
+            if (_cache.ContainsKey(cacheKey))
             {
-                dbResults = (DataTable)cachedDBChecks[cacheKey];
+                dbResults = (DataTable)_cache.Get(cacheKey);
             }
             else
             {
@@ -798,7 +786,7 @@ namespace DataProcessing
                     dbResults.PrimaryKey = indices;
 
                     //
-                    cachedDBChecks.Add(cacheKey, dbResults);
+                    _cache.Add(cacheKey, dbResults);
                 }
                 else
                 {
@@ -815,9 +803,9 @@ namespace DataProcessing
             var errorMessage = "";
             var cacheKey =
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.EmployeeID}-{dataRow.AccountTypeCode}-{dataRow.PlanId}";
-            if (cachedDBChecks.ContainsKey(cacheKey))
+            if (_cache.ContainsKey(cacheKey))
             {
-                errorMessage = cachedDBChecks[cacheKey]?.ToString();
+                errorMessage = _cache.Get(cacheKey)?.ToString();
             }
             else
             {
@@ -903,7 +891,7 @@ namespace DataProcessing
                 }
 
                 //
-                cachedDBChecks.Add(cacheKey, errorMessage);
+                _cache.Add(cacheKey, errorMessage);
             }
 
             //
@@ -924,9 +912,9 @@ namespace DataProcessing
             var errorMessage = "";
             var cacheKey =
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.EmployeeID}";
-            if (cachedDBChecks.ContainsKey(cacheKey))
+            if (_cache.ContainsKey(cacheKey))
             {
-                errorMessage = cachedDBChecks[cacheKey]?.ToString();
+                errorMessage = _cache.Get(cacheKey)?.ToString();
             }
             else
             {
@@ -977,7 +965,7 @@ namespace DataProcessing
                 }
 
                 //
-                cachedDBChecks.Add(cacheKey, errorMessage);
+                _cache.Add(cacheKey, errorMessage);
             }
 
             //
@@ -997,9 +985,9 @@ namespace DataProcessing
             var errorMessage = "";
             var cacheKey =
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.PlanId}";
-            if (cachedDBChecks.ContainsKey(cacheKey))
+            if (_cache.ContainsKey(cacheKey))
             {
-                errorMessage = cachedDBChecks[cacheKey]?.ToString();
+                errorMessage = _cache.Get(cacheKey)?.ToString();
             }
             else
             {
@@ -1065,7 +1053,7 @@ namespace DataProcessing
                 }
 
                 //
-                cachedDBChecks.Add(cacheKey, errorMessage);
+                _cache.Add(cacheKey, errorMessage);
             }
 
             //
