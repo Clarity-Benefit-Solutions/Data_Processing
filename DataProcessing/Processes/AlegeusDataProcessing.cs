@@ -173,8 +173,8 @@ namespace DataProcessing
                             fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
                                 Path.GetFileName(uniqueIdFilePath), "",
                                 $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                                "Success", $"Processing File ${srcFilePath}");
-                            DbUtils.LogFileOperation(fileLogParams);
+                                "Success", $"Found Source File");
+                            //DbUtils.LogFileOperation(fileLogParams);
                         },
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                     );

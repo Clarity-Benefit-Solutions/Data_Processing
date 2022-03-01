@@ -136,7 +136,7 @@ namespace DataProcessing
 
                     fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
                         Path.GetFileName(uniqueIdFilePath), "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                        "Success", $"Processing File ${srcFilePath}");
+                        "Success", $"Got MBI/DNE File from FTP");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
@@ -157,8 +157,8 @@ namespace DataProcessing
 
                     fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
                         Path.GetFileName(uniqueIdFilePath), "",
-                        $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                        "Success", $"Processing File ${srcFilePath}");
+                        $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+                        "Success", $"Got Res File from FTP");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }

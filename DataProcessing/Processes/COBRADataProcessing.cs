@@ -219,9 +219,9 @@ namespace DataProcessing
                                 fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
                                     Path.GetFileName(uniqueIdFilePath), "",
                                     $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                                    "Success", $"Processing File ${srcFilePath}");
+                                    "Starting", $"Started Processing File");
 
-                                DbUtils.LogFileOperation(fileLogParams);
+                                //DbUtils.LogFileOperation(fileLogParams);
                                 //
                                 string uniqueIdFileName = Path.GetFileName(uniqueIdFilePath);
                                 string destFilePath = $"{destDirPath}/{uniqueIdFileName}";
