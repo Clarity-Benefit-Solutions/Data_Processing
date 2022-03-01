@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,11 @@ namespace CoreUtils.Classes
 
     public class ExtendedCache
     {
-        private SqliteCache Cache { get; } = null;
+        // for large object storage to avoid overloading memory as it is slower
+        private SqliteCache DiskCache { get; } = null;
+
+        // for string storage as it is faster
+        private MemoryCache MemoryCache { get; } = null;
 
         private SqliteCacheOptions Options { get; }
 
@@ -24,7 +29,7 @@ namespace CoreUtils.Classes
 
         public DistributedCacheEntryOptions CacheEntryOptions { get; }
 
-        private int _countOfSetOperations = 0;
+        private Int64 _countOfSetOperations = 0;
 
         public ExtendedCache(TimeSpan slidingExpiration, TimeSpan cleanupTimeSpan, ILogger<SqliteCache> logger = null)
         {
@@ -62,41 +67,76 @@ namespace CoreUtils.Classes
                 Logger = logger;
             }
 
-            Cache = new SqliteCache(Options, Logger);
+            DiskCache = new SqliteCache(Options, Logger);
+
+            //
+            MemoryCache = MemoryCache.Default;
 
         }
 
+        // stores string in DiskCache
         public Object Add(string key, Object item)
         {
             if (item == null)
                 return null;
+
+            //
+            if (item is String || item is string || item is Int32 || item is Int64 || item is Boolean)
+            {
+               return this.Add(key, (string)item);
+            }
+
+            // remove expired every N sets
+            _countOfSetOperations++;
+            if (_countOfSetOperations >= 1000)
+            {
+                DiskCache.RemoveExpiredAsync();
+            }
 
             BinaryFormatter bf = new BinaryFormatter();
             using MemoryStream ms = new MemoryStream();
             bf.Serialize(ms, item);
             Byte[] byteArray = ms.ToArray();
 
-            Cache.Set(key, byteArray, CacheEntryOptions);
+            DiskCache.Set(key, byteArray, CacheEntryOptions);
+
+            // remove from MemoryCache
+            MemoryCache.Remove(key);
 
             return item;
         }
+        // stores string in MemoryCache
+        public Object Add(string key, string item)
+        {
+            if (item == null)
+                return null;
+
+            DateTimeOffset dateTimeOffset = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero).AddSeconds(SlidingExpiration.TotalSeconds);
+            MemoryCache.Set(key, item, dateTimeOffset);
+
+            // remove from DiskCache
+            DiskCache.Remove(key);
+
+            return item;
+        }
+
         public Object Get(string key)
         {
-            // remove expired every N sets
-            _countOfSetOperations++;
-            if (_countOfSetOperations >= 100)
+            // try mem cache
+            string value = (string)MemoryCache.Get(key);
+            if (value != null)
             {
-                Cache.RemoveExpiredAsync();
+                return value;
             }
 
-            //
-            Byte[] byteArray = Cache.Get(key);
+            // try DiskCache
+            Byte[] byteArray = DiskCache.Get(key);
             if (byteArray == null || byteArray.Length == 0)
             {
                 return null;
             }
-
-            MemoryStream memStream = new MemoryStream();
+            //
+            using MemoryStream memStream = new MemoryStream();
             BinaryFormatter binForm = new BinaryFormatter();
             memStream.Write(byteArray, 0, byteArray.Length);
             memStream.Seek(0, SeekOrigin.Begin);
@@ -106,8 +146,15 @@ namespace CoreUtils.Classes
         }
         public Boolean ContainsKey(string key)
         {
-            Byte[] byteArray = Cache.Get(key);
+            // try mem cache
+            string item = (string)MemoryCache.Get(key);
+            if (item != null)
+            {
+                return true;
+            }
 
+            // try DiskCache
+            Byte[] byteArray = DiskCache.Get(key);
             if (byteArray == null || byteArray.Length == 0)
             {
                 return false;

@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MiniProfiler.Providers.MySql</name>
+    </assembly>
+    <members>
+        <member name="T:StackExchange.Profiling.Storage.MySqlStorage">
+            <summary>
+            Understands how to store a <see cref="T:StackExchange.Profiling.MiniProfiler"/> to a MySQL database.
+            </summary>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StackExchange.Profiling.Storage.MySqlStorage"/> class with the specified connection string.
+            </summary>
+            <param name="connectionString">The connection string to use.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:StackExchange.Profiling.Storage.MySqlStorage"/> class with the specified connection string
+            and the given table names to use.
+            </summary>
+            <param name="connectionString">The connection string to use.</param>
+            <param name="profilersTable">The table name to use for MiniProfilers.</param>
+            <param name="timingsTable">The table name to use for MiniProfiler Timings.</param>
+            <param name="clientTimingsTable">The table name to use for MiniProfiler Client Timings.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.Save(StackExchange.Profiling.MiniProfiler)">
+            <summary>
+            Stores to <c>dbo.MiniProfilers</c> under its <see cref="P:StackExchange.Profiling.MiniProfiler.Id"/>;
+            </summary>
+            <param name="profiler">The <see cref="T:StackExchange.Profiling.MiniProfiler"/> to save.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.SaveAsync(StackExchange.Profiling.MiniProfiler)">
+            <summary>
+            Asynchronously stores to <c>dbo.MiniProfilers</c> under its <see cref="P:StackExchange.Profiling.MiniProfiler.Id"/>.
+            </summary>
+            <param name="profiler">The <see cref="T:StackExchange.Profiling.MiniProfiler"/> to save.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.Load(System.Guid)">
+            <summary>
+            Loads the <c>MiniProfiler</c> identified by 'id' from the database.
+            </summary>
+            <param name="id">The profiler ID to load.</param>
+            <returns>The loaded <see cref="T:StackExchange.Profiling.MiniProfiler"/>.</returns>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.LoadAsync(System.Guid)">
+            <summary>
+            Loads the <c>MiniProfiler</c> identified by 'id' from the database.
+            </summary>
+            <param name="id">The profiler ID to load.</param>
+            <returns>The loaded <see cref="T:StackExchange.Profiling.MiniProfiler"/>.</returns>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.SetUnviewed(System.String,System.Guid)">
+            <summary>
+            Sets a particular profiler session so it is considered "unviewed"  
+            </summary>
+            <param name="user">The user to set this profiler ID as unviewed for.</param>
+            <param name="id">The profiler ID to set unviewed.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.SetUnviewedAsync(System.String,System.Guid)">
+            <summary>
+            Asynchronously sets a particular profiler session so it is considered "unviewed"  
+            </summary>
+            <param name="user">The user to set this profiler ID as unviewed for.</param>
+            <param name="id">The profiler ID to set unviewed.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.SetViewed(System.String,System.Guid)">
+            <summary>
+            Sets a particular profiler session to "viewed"
+            </summary>
+            <param name="user">The user to set this profiler ID as viewed for.</param>
+            <param name="id">The profiler ID to set viewed.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.SetViewedAsync(System.String,System.Guid)">
+            <summary>
+            Asynchronously sets a particular profiler session to "viewed"
+            </summary>
+            <param name="user">The user to set this profiler ID as viewed for.</param>
+            <param name="id">The profiler ID to set viewed.</param>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.GetUnviewedIds(System.String)">
+            <summary>
+            Returns a list of <see cref="P:StackExchange.Profiling.MiniProfiler.Id"/>s that haven't been seen by <paramref name="user"/>.
+            </summary>
+            <param name="user">User identified by the current <c>MiniProfilerOptions.UserProvider</c></param>
+            <returns>The list of keys for the supplied user</returns>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.GetUnviewedIdsAsync(System.String)">
+            <summary>
+            Asynchronously returns a list of <see cref="P:StackExchange.Profiling.MiniProfiler.Id"/>s that haven't been seen by <paramref name="user"/>.
+            </summary>
+            <param name="user">User identified by the current <c>MiniProfilerOptions.UserProvider</c></param>
+            <returns>The list of keys for the supplied user</returns>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.List(System.Int32,System.Nullable{System.DateTime},System.Nullable{System.DateTime},StackExchange.Profiling.Storage.ListResultsOrder)">
+            <summary>
+            List the MiniProfiler Ids for the given search criteria.
+            </summary>
+            <param name="maxResults">The max number of results</param>
+            <param name="start">Search window start</param>
+            <param name="finish">Search window end</param>
+            <param name="orderBy">Result order</param>
+            <returns>The list of GUID keys</returns>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.ListAsync(System.Int32,System.Nullable{System.DateTime},System.Nullable{System.DateTime},StackExchange.Profiling.Storage.ListResultsOrder)">
+            <summary>
+            Asynchronously returns the MiniProfiler Ids for the given search criteria.
+            </summary>
+            <param name="maxResults">The max number of results</param>
+            <param name="start">Search window start</param>
+            <param name="finish">Search window end</param>
+            <param name="orderBy">Result order</param>
+            <returns>The list of GUID keys</returns>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.GetConnection">
+            <summary>
+            Returns a connection to MySQL Server.
+            </summary>
+        </member>
+        <member name="M:StackExchange.Profiling.Storage.MySqlStorage.GetTableCreationScripts">
+            <summary>
+            SQL statements to create the MySQL tables.
+            </summary>
+        </member>
+    </members>
+</doc>

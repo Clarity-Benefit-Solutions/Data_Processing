@@ -22,9 +22,7 @@ namespace TestApp
             var profiler = MiniProfiler.StartNew("TestApp");
 #endif
 
-        ExtendedCache _cache = new ExtendedCache(TimeSpan.FromHours(1), TimeSpan.FromHours(5), null);
-
-        Application.EnableVisualStyles();
+            Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
 
