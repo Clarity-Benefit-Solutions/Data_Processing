@@ -245,7 +245,7 @@ namespace EtlUtilities
 
         public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath, HeaderType folderHeaderType)
         {
-            //todo: @Luis: get specs for detecting the file types and share with @Sumeet
+            //todo: FileChecker: @Luis: get specs for detecting the file types and share with @Sumeet
             string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
 
             // New: IA,XX,BENEFL1,Clarity Standard Import Template, Standard Result Template, Beneflex Standard Export Template
@@ -564,7 +564,7 @@ namespace EtlUtilities
 
                     break;
                 /////////////////////////////////////////////////////
-                /// todo: mapping for II,RI
+                // todo: FileChecker: mapping for II,RI
                 //  II, RI
                 case EdiFileFormat.AlegeusEmployeeCardFees:
                 case EdiFileFormat.AlegeusResultsEmployeeCardFees:

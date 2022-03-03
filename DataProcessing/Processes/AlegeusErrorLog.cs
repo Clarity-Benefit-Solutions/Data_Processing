@@ -12,7 +12,7 @@ using EtlUtilities;
 
 // ReSharper disable StringLiteralTypo
 
-//todo: how to avoid reimporting the same result file over and over again
+//todo: FTPErrors: how to avoid reimporting the same result file over and over again: shall we move all files older than 2 days?
 namespace DataProcessing
 {
     [Guid("EAFED76A-45C1-4AC5-BC0B-4321F4C3C83F")]

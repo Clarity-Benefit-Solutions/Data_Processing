@@ -120,9 +120,7 @@ namespace DataProcessing
                 case OperationResult.PartialFail:
                     ///////////////////////////////////////
 
-                    // todo: output file with errors with ext *.*.pre
                     string srcFileName = Path.GetFileName(this.srcFilePath);
-                    ;
                     newFilePath = $"{Vars.alegeusFilesPreCheckFailRoot}/{fileName}";
                     newErrorFilePath = $"{newFilePath}.err";
 
@@ -631,7 +629,7 @@ namespace DataProcessing
                     {
                         DataRow dbData = dbRows[0];
 
-                        //todo: does employer status need to be checked
+                        //todo: FileChecker: does employer status need to be checked
                         string status = dbData["employer_status"]?.ToString();
                         if (status != "Active" && status != "New")
                         {
@@ -731,7 +729,7 @@ namespace DataProcessing
                     }
                     else
                     {
-                        // todo: we may be activating an employee - do not check?
+                        // todo: FileChecker: we may be activating an employee - do not check?
                         DataRow dbData = dbRows[0];
                         float status = Utils.ToNumber(dbData["is_active"]?.ToString());
                         if (status <= 0 && Utils.ToNumber(dataRow.EmployeeStatus) > 1)
@@ -1080,7 +1078,7 @@ namespace DataProcessing
                 {
                     if (PlatformType == PlatformType.Alegeus)
                     {
-                        //todo: add data in Portal for Dependents
+                        //todo: FileChecker: add data in Portal for Dependents
                         //string queryString =
                         //    $"select employer_id, employee_id, is_active from wc.vw_wc_participants  " +
                         //    $" where employer_id = '{Utils.DbQuote(dataRow.EmployerId)}' " +
@@ -1158,7 +1156,7 @@ namespace DataProcessing
                 {
                     if (PlatformType == PlatformType.Alegeus)
                     {
-                        // todo: add data in Portal for dependent plans
+                        // todo: FileChecker: add data in Portal for dependent plans
                         //string queryString =
                         //    $" select employerid,employeeid, plancode, plandesc, planstart,planend from wc.wc_participant_plans " +
                         //    $" where employerid = '{Utils.DbQuote(dataRow.EmployerId)}' " +
