@@ -16,8 +16,8 @@ using EtlUtilities;
 
 namespace DataProcessing
 {
-    [Guid("EAA4776C-45C3-4BC5-BC0B-4321F4C3C83F")]
-    [ComVisible(true)]
+    
+    
     [SuppressMessage("ReSharper", "StringLiteralTypo")]
     public class CobraDataProcessing
     {
@@ -288,7 +288,7 @@ namespace DataProcessing
             //2. move out blank files
             MoveCobraBlankFtpFilesToArchive(headerType, dbConn, fileLogParams);
 
-            // 3. csv files from 
+            // 3. move csv files for preparation of QB
             // from COBRA IMPORTS\Holding,ToDecrypt/*.* -> HOLDING\PreparedQB, COBRA IMPORTS\QB*.csv
             FileUtils.IterateDirectory(
                 new string[] { Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingDecryptRoot, Vars.cobraImportRoot },

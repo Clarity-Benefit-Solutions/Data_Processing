@@ -15,8 +15,8 @@ using CoreUtils.Classes;
 
 namespace CoreUtils
 {
-    [Guid("EAA49FDE-45C3-4BC5-BC0B-1234F4C3C83F")]
-    [ComVisible(true)]
+    
+    
     public class DbUtils
     {
         public delegate void OnLogOperationCallback(MessageLogParams logParams);

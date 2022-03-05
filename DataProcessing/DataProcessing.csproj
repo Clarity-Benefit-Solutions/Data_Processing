@@ -24,8 +24,9 @@
     <DefineConstants>TRACE;DEBUG;CTXSUMEETDEV;NOPROFILE;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RegisterForComInterop>true</RegisterForComInterop>
+    <RegisterForComInterop>false</RegisterForComInterop>
     <LangVersion>latest</LangVersion>
+    <DocumentationFile>bin\Debug\DataProcessing.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>

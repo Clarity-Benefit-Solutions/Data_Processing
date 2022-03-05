@@ -12,8 +12,8 @@ using EtlUtilities;
 
 namespace DataProcessing
 {
-    [Guid("EAA4976A-45C1-4AC5-BC0B-4321F4C3C83F")]
-    [ComVisible(true)]
+    
+    
     public class AlegeusDataProcessing
     {
         private Vars Vars { get; } = new Vars();

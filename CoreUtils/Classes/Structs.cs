@@ -4,8 +4,8 @@ using System.Runtime.InteropServices;
 
 namespace CoreUtils.Classes
 {
-    [Guid("EAACDA6A-45C3-4BC5-BC0B-1234F4C3C83F")]
-    [ComVisible(true)]
+    
+    
     public class MessageLogParams : EventArgs
     {
         public string Command = "";
@@ -82,8 +82,8 @@ namespace CoreUtils.Classes
         }
     }
 
-    [Guid("321CDA6A-45C3-4BC5-BC0B-1234F4C3C83F")]
-    [ComVisible(true)]
+    
+    
     public class FileOperationLogParams : EventArgs
     {
         public string Bencode = "";

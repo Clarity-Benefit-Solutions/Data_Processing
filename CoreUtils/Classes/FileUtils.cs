@@ -14,8 +14,8 @@ namespace CoreUtils.Classes
     public delegate void OnErrorCallback(string arg1, string arg2, Exception ex);
 
 
-    [Guid("EAA4976A-45C3-4BC5-BC0B-E474F4C3CABC")]
-    [ComVisible(true)]
+    
+    
     public class FileUtils
     {
         #region IOOperations

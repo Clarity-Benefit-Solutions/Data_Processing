@@ -10,8 +10,8 @@ namespace CoreUtils.Classes
     public delegate void FtpSingleFileCallback(string file1, string file2, string fileContents);
 
 
-    [Guid("E321976A-45C3-4BC5-BC0B-E4743213CABC")]
-    [ComVisible(true)]
+    
+    
     public class SFtpConnection
     {
         // ReSharper disable once InconsistentNaming

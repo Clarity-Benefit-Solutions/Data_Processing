@@ -81,6 +81,7 @@ namespace DataProcessing
         {
             //
         }
+        #region CheckFile
 
         public OperationResult CheckFileAndMove(FileCheckType fileCheckType)
         {
@@ -372,13 +373,13 @@ namespace DataProcessing
                 {
                     // tpa ID
                     case "tpaid":
-                        skipRestOfRow = this.CheckTpaExists(dataRow, column);
+                        skipRestOfRow = this.CheckTpaExists(dataRow, column, fileFormat);
                         break;
 
                     // ER ID
                     case "employerid":
                         //ER must exist before any Import files are sent
-                        skipRestOfRow = this.CheckEmployerExists(dataRow, column);
+                        skipRestOfRow = this.CheckEmployerExists(dataRow, column, fileFormat);
                         break;
 
                     // EE ID
@@ -386,7 +387,7 @@ namespace DataProcessing
                         //ER must exist before any Import files are sent. But for IB files, employee need not exist - he is being added
                         if (fileFormat != EdiFileFormat.AlegeusDemographics)
                         {
-                            skipRestOfRow = this.CheckEmployeeExists(dataRow, column);
+                            skipRestOfRow = this.CheckEmployeeExists(dataRow, column, fileFormat);
                         }
 
                         break;
@@ -398,7 +399,7 @@ namespace DataProcessing
                         skipRestOfRow = this.CheckEmployeeExists(dataRow, column);
                         if (!skipRestOfRow)
                         {
-                            skipRestOfRow = this.CheckEmployerPlanExists(dataRow, column);
+                            skipRestOfRow = this.CheckEmployerPlanExists(dataRow, column, fileFormat);
                         }
 
                         //if (!Utils.IsBlank(dataRow.DependentID))
@@ -513,8 +514,11 @@ namespace DataProcessing
                 this.fileCheckResults.markAsCompleteFail = true;
             }
         }
+        #endregion CheckFile
 
-        public Boolean CheckTpaExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
+       
+        #region checkData
+        public Boolean CheckTpaExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
         {
             var errorMessage = "";
             var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{dataRow.TpaId}";
@@ -557,48 +561,8 @@ namespace DataProcessing
                 return false;
             }
         }
-
-        private DataTable GetAllEmployers()
-        {
-            DataTable dbResults = new DataTable();
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-AllEmployers";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                dbResults = (DataTable)_cache.Get(cacheKey);
-            }
-            else
-            {
-                if (PlatformType == PlatformType.Alegeus)
-                {
-                    string queryString =
-                        $"select employer_id, employer_name, employer_status from wc.wc_employers " +
-                        $" order by employer_id ;";
-                    //
-                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
-                        queryString, null,
-                        fileLogParams?.GetMessageLogParams());
-
-                    // create index on EmployeeID
-
-                    DataColumn[] indices = new DataColumn[1];
-                    indices[0] = (DataColumn)dbResults.Columns["employerid"];
-                    dbResults.PrimaryKey = indices;
-
-                    //
-                    _cache.Add(cacheKey, dbResults);
-                }
-                else
-                {
-                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
-                }
-            }
-
-            return dbResults;
-
-        }
-
-        public Boolean CheckEmployerExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
+        
+        public Boolean CheckEmployerExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
         {
             var errorMessage = "";
             var cacheKey =
@@ -629,7 +593,7 @@ namespace DataProcessing
                     {
                         DataRow dbData = dbRows[0];
 
-                        //todo: FileChecker: does employer status need to be checked
+                        //todo: FileChecker: verify if employer status need to be checked
                         string status = dbData["employer_status"]?.ToString();
                         if (status != "Active" && status != "New")
                         {
@@ -655,50 +619,7 @@ namespace DataProcessing
             }
         }
 
-        // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
-        private DataTable GetAllEmployeesForEmployer(string employerId)
-        {
-            DataTable dbResults = new DataTable();
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployees";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                dbResults = (DataTable)_cache.Get(cacheKey);
-            }
-            else
-            {
-                if (PlatformType == PlatformType.Alegeus)
-                {
-                    string queryString =
-                        $"SELECT employerid, employeeid, wc.wc_is_active_status(employeestatus, employeeid,employerid) is_active " +
-                        $" FROM wc.wc_participants  " +
-                        $" where employerid = '{Utils.DbQuote(employerId)}' " +
-                        $" ORDER by employeeid ";
-                    //
-                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
-                        queryString, null,
-                        fileLogParams?.GetMessageLogParams());
-
-                    // create index on EmployeeID
-
-                    DataColumn[] indices = new DataColumn[1];
-                    indices[0] = (DataColumn)dbResults.Columns["employeeid"];
-                    dbResults.PrimaryKey = indices;
-
-                    //
-                    _cache.Add(cacheKey, dbResults);
-                }
-                else
-                {
-                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
-                }
-            }
-
-            return dbResults;
-
-        }  // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
-
-        public Boolean CheckEmployeeExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
+        public Boolean CheckEmployeeExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat = EdiFileFormat.Unknown)
         {
             var errorMessage = "";
             var cacheKey =
@@ -720,8 +641,14 @@ namespace DataProcessing
                 }
                 else
                 {
+                    // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
+                    if (fileFormat == EdiFileFormat.AlegeusDemographics)
+                    {
+                        return false;
+                    }
+
                     DataTable dbResults = GetAllEmployeesForEmployer(dataRow.EmployerId);
-                    DataRow[] dbRows = dbResults.Select($"employeeid = '{dataRow.EmployeeID}'");
+                    DataRow[] dbRows = dbResults.Select($"employerid = '{dataRow.EmployerId}' and employeeid = '{dataRow.EmployeeID}'");
                     if (dbRows.Length == 0)
                     {
                         errorMessage +=
@@ -730,7 +657,6 @@ namespace DataProcessing
                     }
                     else
                     {
-                        // todo: FileChecker: we may be activating an employee - do not check?
                         DataRow dbData = dbRows[0];
                         float status = Utils.ToNumber(dbData["is_active"]?.ToString());
                         if (status <= 0 && Utils.ToNumber(dataRow.EmployeeStatus) > 1)
@@ -739,7 +665,6 @@ namespace DataProcessing
                                 $"The Employee ID {dataRow.EmployeeID} has status {status} which is not valid";
                         }
                     }
-
                 }
 
                 //
@@ -759,52 +684,7 @@ namespace DataProcessing
             }
         }
 
-        // cache all plans for ER to reduce number of queries to database - each query for a single plan takes around 150 ms so we aree saving significant time esp for ER witjh many EE
-        private DataTable GetAllPlansForEmployer(string employerId)
-        {
-            DataTable dbResults = new DataTable();
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployerPlans";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                dbResults = (DataTable)_cache.Get(cacheKey);
-            }
-            else
-            {
-                if (PlatformType == PlatformType.Alegeus)
-                {
-                    string queryString =
-                        $"select employer_id, account_type_code, plan_id, min(plan_year_start_date) as plan_year_start_date, max(plan_year_end_date) as plan_year_end_date, max(grace_period_end_date) grace_period_end_date " +
-                        $" from wc.wc_employer_plans " +
-                        $" where employer_id = '{Utils.DbQuote(employerId)}' " +
-                        $" order by employer_id, plan_id, account_type_code "
-                        ;
-                    //
-                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
-                        queryString, null,
-                        fileLogParams?.GetMessageLogParams());
-
-                    // create index on EmployeeID
-
-                    DataColumn[] indices = new DataColumn[2];
-                    indices[0] = (DataColumn)dbResults.Columns["account_type_code"];
-                    indices[1] = (DataColumn)dbResults.Columns["plan_id"];
-                    dbResults.PrimaryKey = indices;
-
-                    //
-                    _cache.Add(cacheKey, dbResults);
-                }
-                else
-                {
-                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
-                }
-            }
-
-            return dbResults;
-
-        }
-
-        public Boolean CheckEmployerPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
+        public Boolean CheckEmployerPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
         {
             var errorMessage = "";
             var cacheKey =
@@ -902,54 +782,7 @@ namespace DataProcessing
             }
 
         }
-
-        private DataTable GetAllEmployeePlansForEmployer(string employerId)
-        {
-            DataTable dbResults = new DataTable();
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployeePlans";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                dbResults = (DataTable)_cache.Get(cacheKey);
-            }
-            else
-            {
-                if (PlatformType == PlatformType.Alegeus)
-                {
-                    string queryString =
-                        $" select employerid, employeeid, plancode, plandesc, min(planstart) as planstart, max(planend) as planend " +
-                        $" from wc.wc_participant_plans " +
-                        $" where employerid = '{Utils.DbQuote(employerId)}' " +
-                        $" order by employerid, employeeid, plancode, plandesc"
-                        ;
-                    ;
-                    //
-                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
-                        queryString, null,
-                        fileLogParams?.GetMessageLogParams());
-
-                    // create index on EmployeeID
-
-                    DataColumn[] indices = new DataColumn[3];
-                    indices[0] = (DataColumn)dbResults.Columns["employeeid"];
-                    indices[1] = (DataColumn)dbResults.Columns["plancode"];
-                    indices[2] = (DataColumn)dbResults.Columns["plandesc"];
-                    dbResults.PrimaryKey = indices;
-
-                    //
-                    _cache.Add(cacheKey, dbResults);
-                }
-                else
-                {
-                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
-                }
-            }
-
-            return dbResults;
-
-        }
-
-        public Boolean CheckEmployeePlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
+        public Boolean CheckEmployeePlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
         {
             var errorMessage = "";
             var cacheKey =
@@ -1053,166 +886,195 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckDependentExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
+        public Boolean CheckDependentExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
         {
-            var errorMessage = "";
+            // dependent plans are linked to the employee
+            return CheckEmployeeExists(dataRow, column, fileFormat);
+
+        }
+
+        public Boolean CheckDependentPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
+        {
+            // dependent plans are linked to the employee
+            return CheckEmployeePlanExists(dataRow, column, fileFormat);
+        }
+        #endregion checkData
+
+        #region cacheEmployerData
+        private DataTable GetAllEmployers()
+        {
+            DataTable dbResults = new DataTable();
             var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.EmployeeID}";
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-AllEmployers";
             if (_cache.ContainsKey(cacheKey))
             {
-                errorMessage = _cache.Get(cacheKey)?.ToString();
+                dbResults = (DataTable)_cache.Get(cacheKey);
             }
             else
             {
-                // check DB
-                if (Utils.IsBlank(dataRow.EmployerId))
+                if (PlatformType == PlatformType.Alegeus)
                 {
-                    errorMessage += $"The Employer ID cannot be blank";
-                    ;
-                }
-                else if (Utils.IsBlank(dataRow.EmployeeID))
-                {
-                    errorMessage += $"The Employee ID cannot be blank";
-                    ;
+                    string queryString =
+                        $"select employer_id, employer_name, employer_status from wc.wc_employers " +
+                        $" order by employer_id ;";
+                    //
+                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        queryString, null,
+                        fileLogParams?.GetMessageLogParams());
+
+                    // create index on EmployeeID
+
+                    DataColumn[] indices = new DataColumn[1];
+                    indices[0] = (DataColumn)dbResults.Columns["employerid"];
+                    dbResults.PrimaryKey = indices;
+
+                    //
+                    _cache.Add(cacheKey, dbResults);
                 }
                 else
                 {
-                    if (PlatformType == PlatformType.Alegeus)
-                    {
-                        //todo: FileChecker: add data in Portal for Dependents
-                        //string queryString =
-                        //    $"select employer_id, employee_id, is_active from wc.vw_wc_participants  " +
-                        //    $" where employer_id = '{Utils.DbQuote(dataRow.EmployerId)}' " +
-                        //    $" and employee_id = '{Utils.DbQuote(dataRow.EmployeeID)}' ";
-                        ////
-                        //DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
-                        //    queryString, null,
-                        //     fileLogParams?.GetMessageLogParams()));
-
-                        //if (dbResults.Rows.Count == 0)
-                        //{
-                        //    errorMessage += $"The Employee ID {dataRow.EmployeeID} could not be found for Employer Id {dataRow.EmployerId}" ; ;
-                        //}
-                        //else
-                        //{
-                        //    DataRow dbData = dbResults.Rows[0];
-                        //    float status = Utils.ToNumber(dbData["is_active"]?.ToString());
-                        //    if (status <= 0)
-                        //    {
-                        //        errorMessage +=
-                        //            $"The Employee ID {dataRow.EmployeeID} has status {status} which is not valid" ;
-                        //    }
-                        //}
-                    }
-                    else
-                    {
-                        throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
-                    }
+                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
                 }
-
-                //
-                _cache.Add(cacheKey, errorMessage);
             }
 
-            //
-            if (!Utils.IsBlank(errorMessage))
-            {
-                this.AddErrorForRow(dataRow, column.SourceColumn, $"{errorMessage}");
-                // do not check any more
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return dbResults;
+
         }
-        public Boolean CheckDependentPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column)
+
+        // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
+        private DataTable GetAllEmployeesForEmployer(string employerId)
         {
-            var errorMessage = "";
+            DataTable dbResults = new DataTable();
             var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.PlanId}";
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployees";
             if (_cache.ContainsKey(cacheKey))
             {
-                errorMessage = _cache.Get(cacheKey)?.ToString();
+                dbResults = (DataTable)_cache.Get(cacheKey);
             }
             else
             {
-                // check DB
-                if (Utils.IsBlank(dataRow.EmployerId))
+                if (PlatformType == PlatformType.Alegeus)
                 {
-                    errorMessage += $"The Employer ID cannot be blank";
-                    ;
-                }
-                else if (Utils.IsBlank(dataRow.EmployeeID))
-                {
-                    errorMessage += $"The Employer ID cannot be blank";
-                    ;
-                }
-                else if (Utils.IsBlank(dataRow.PlanId))
-                {
-                    errorMessage += $"The Plan ID cannot be blank";
-                    ;
+                    string queryString =
+                        $"SELECT employerid, employeeid, wc.wc_is_active_status(employeestatus, employeeid,employerid) is_active " +
+                        $" FROM wc.wc_participants  " +
+                        $" where employerid = '{Utils.DbQuote(employerId)}' " +
+                        $" ORDER by employeeid ";
+                    //
+                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        queryString, null,
+                        fileLogParams?.GetMessageLogParams());
+
+                    // create index on EmployeeID
+
+                    DataColumn[] indices = new DataColumn[1];
+                    indices[0] = (DataColumn)dbResults.Columns["employeeid"];
+                    dbResults.PrimaryKey = indices;
+
+                    //
+                    _cache.Add(cacheKey, dbResults);
                 }
                 else
                 {
-                    if (PlatformType == PlatformType.Alegeus)
-                    {
-                        // todo: FileChecker: add data in Portal for dependent plans
-                        //string queryString =
-                        //    $" select employerid,employeeid, plancode, plandesc, planstart,planend from wc.wc_participant_plans " +
-                        //    $" where employerid = '{Utils.DbQuote(dataRow.EmployerId)}' " +
-                        //    $" where employeeid = '{Utils.DbQuote(dataRow.EmployeeID)}' " +
-                        //    $" and (plancode = '{Utils.DbQuote(dataRow.PlanId)}' OR plandesc = '{Utils.DbQuote(dataRow.PlanId)}' )";
-                        ////
-                        //DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
-                        //    queryString, null,
-                        //     fileLogParams?.GetMessageLogParams());
-
-                        //if (dbResults.Rows.Count == 0)
-                        //{
-                        //    errorMessage += $"The Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId} and Employee Id {dataRow.EmployeeID}" ; ;
-                        //}
-                        //else
-                        //{
-                        //    DataRow dbData = dbResults.Rows[0];
-                        //    DateTime actualPlanStartDate = Utils.ToDateTime(dbData["planstart"]?.ToString());
-                        //    DateTime actualPlanEndDate = Utils.ToDateTime(dbData["planend"]?.ToString());
-                        //    //DateTime actualGracePeriodEndDate = Utils.ToDateTime(dbData["actualGracePeriodEndDate"]?.ToString());
-
-                        //    //
-                        //    if (actualPlanStartDate > DateTime.Now.Date)
-                        //    {
-                        //        errorMessage +=
-                        //            $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)}" ;
-                        //    }
-                        //    if (actualPlanEndDate < DateTime.Now.Date)
-                        //    {
-                        //        errorMessage =
-                        //            $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)}" ; ;
-                        //    }
-                        //}
-                    }
-                    else
-                    {
-                        throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
-                    }
+                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
                 }
-
-                //
-                _cache.Add(cacheKey, errorMessage);
             }
 
-            //
-            if (!Utils.IsBlank(errorMessage))
+            return dbResults;
+
+        }  // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
+           // cache all plans for ER to reduce number of queries to database - each query for a single plan takes around 150 ms so we aree saving significant time esp for ER witjh many EE
+
+        private DataTable GetAllPlansForEmployer(string employerId)
+        {
+            DataTable dbResults = new DataTable();
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployerPlans";
+            if (_cache.ContainsKey(cacheKey))
             {
-                this.AddErrorForRow(dataRow, column.SourceColumn, $"{errorMessage}");
-                // do not check any more
-                return true;
+                dbResults = (DataTable)_cache.Get(cacheKey);
             }
             else
             {
-                return false;
+                if (PlatformType == PlatformType.Alegeus)
+                {
+                    string queryString =
+                        $"select employer_id, account_type_code, plan_id, min(plan_year_start_date) as plan_year_start_date, max(plan_year_end_date) as plan_year_end_date, max(grace_period_end_date) grace_period_end_date " +
+                        $" from wc.wc_employer_plans " +
+                        $" where employer_id = '{Utils.DbQuote(employerId)}' " +
+                        $" order by employer_id, plan_id, account_type_code "
+                        ;
+                    //
+                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        queryString, null,
+                        fileLogParams?.GetMessageLogParams());
+
+                    // create index on EmployeeID
+
+                    DataColumn[] indices = new DataColumn[2];
+                    indices[0] = (DataColumn)dbResults.Columns["account_type_code"];
+                    indices[1] = (DataColumn)dbResults.Columns["plan_id"];
+                    dbResults.PrimaryKey = indices;
+
+                    //
+                    _cache.Add(cacheKey, dbResults);
+                }
+                else
+                {
+                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
+                }
             }
+
+            return dbResults;
+
         }
+
+        private DataTable GetAllEmployeePlansForEmployer(string employerId)
+        {
+            DataTable dbResults = new DataTable();
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployeePlans";
+            if (_cache.ContainsKey(cacheKey))
+            {
+                dbResults = (DataTable)_cache.Get(cacheKey);
+            }
+            else
+            {
+                if (PlatformType == PlatformType.Alegeus)
+                {
+                    string queryString =
+                            $" select employerid, employeeid, plancode, plandesc, min(planstart) as planstart, max(planend) as planend " +
+                            $" from wc.wc_participant_plans " +
+                            $" where employerid = '{Utils.DbQuote(employerId)}' " +
+                            $" order by employerid, employeeid, plancode, plandesc"
+                        ;
+                    ;
+                    //
+                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        queryString, null,
+                        fileLogParams?.GetMessageLogParams());
+
+                    // create index on EmployeeID
+
+                    DataColumn[] indices = new DataColumn[3];
+                    indices[0] = (DataColumn)dbResults.Columns["employeeid"];
+                    indices[1] = (DataColumn)dbResults.Columns["plancode"];
+                    indices[2] = (DataColumn)dbResults.Columns["plandesc"];
+                    dbResults.PrimaryKey = indices;
+
+                    //
+                    _cache.Add(cacheKey, dbResults);
+                }
+                else
+                {
+                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
+                }
+            }
+
+            return dbResults;
+
+        }
+        #endregion cacheEmployerData        
+
     }
 }

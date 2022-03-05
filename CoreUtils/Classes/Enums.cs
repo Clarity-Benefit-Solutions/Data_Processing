@@ -2,8 +2,8 @@
 
 namespace CoreUtils.Classes
 {
-    [Guid("EAA4976A-ABCD-4BC5-BC0B-1234F4C3C83F")]
-    [ComVisible(true)]
+    
+    
     public enum FileOperation
     {
         Move = 1,
@@ -13,8 +13,8 @@ namespace CoreUtils.Classes
         Read
     }
 
-    [Guid("EAA4976A-DCBA-4BC5-BC0B-1234F4C3C83F")]
-    [ComVisible(true)]
+    
+    
     public enum FtpFileOperation
     {
         Download,
@@ -26,8 +26,8 @@ namespace CoreUtils.Classes
     }
 
 
-    [Guid("EAA4976A-45C3-4BC5-1ACD-1234F4C3C83F")]
-    [ComVisible(true)]
+    
+    
     public enum DbOperation
     {
         ExecuteScalar = 1,

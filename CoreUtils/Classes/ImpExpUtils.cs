@@ -16,8 +16,8 @@ using CsvHelperCsvDataReader = CsvHelper.CsvDataReader;
 
 namespace CoreUtils.Classes
 {
-    [Guid("EAA4976A-45C3-4BC5-BC0B-E474F4C3C83F")]
-    [ComVisible(true)]
+    
+    
     public static class ImpExpUtils
     {
         private static SqlBulkCopyOptions _defaultSqlBulkCopyOptions = SqlBulkCopyOptions.KeepNulls |
