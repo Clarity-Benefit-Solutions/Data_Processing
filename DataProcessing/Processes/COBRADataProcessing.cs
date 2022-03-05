@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CoreUtils;
 using CoreUtils.Classes;
+using EtlUtilities;
 
 // ReSharper disable All
 
@@ -182,32 +183,19 @@ namespace DataProcessing
 
                             Boolean processThisFile = false;
                             string destDirPath = "";
-
-                            // mbi, txt, csv of type COBRA - move out of FTP folders so they will not be processed for Alegeus
-                            if (fileInfo.Extension == ".mbi" || fileInfo.Extension == ".csv" ||
-                                fileInfo.Extension == ".txt")
-
-                            {
-                                if (fileInfo.Name.IndexOf("VERSION", StringComparison.InvariantCulture) >= 0)
-                                {
-                                    processThisFile = true;
-                                    destDirPath = $"{Vars.cobraImportHoldingRoot}";
-                                }
-                                else if (fileInfo.Name.IndexOf("QB", StringComparison.InvariantCulture) >= 0
-                                         || fileInfo.Name.IndexOf("NPM", StringComparison.InvariantCulture) >= 0)
-                                {
-                                    processThisFile = true;
-                                    destDirPath = $"{Vars.cobraImportRoot}";
-                                }
-                            }
-                            // encrypted files
-                            else if (fileInfo.Extension == ".pgp")
+                            // look inside file to dtermine if it is a COBRA file
+                            if (fileInfo.Extension == ".pgp")
                             {
                                 processThisFile = true;
                                 destDirPath = $"{Vars.cobraImportHoldingDecryptRoot}";
                             }
+                            else if (Import.IsCobraImportFile(srcFilePath))
+                            {
+                                processThisFile = true;
+                                destDirPath = $"{Vars.cobraImportRoot}";
+                            }
 
-                            if (processThisFile && !Utils.IsBlank(destDirPath))
+                            if (processThisFile && !Utils.IsBlank((destDirPath)))
                             {
                                 // add uniqueId to file so we can track it across folders and operations
                                 var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(headerType, srcFilePath,

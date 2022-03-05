@@ -273,6 +273,38 @@ namespace EtlUtilities
 
 
             return folderHeaderType;
+
+        }
+        public static Boolean IsCobraImportFile(string srcFilePath)
+        {
+            //todo: FileChecker: @Luis: get specs for detecting the file types and share with @Sumeet
+            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
+
+            // New: IA,XX,BENEFL1,Clarity Standard Import Template, Standard Result Template, Beneflex Standard Export Template
+            if (contents.Contains("[VERSION],"))
+            {
+                return true;
+            }
+
+          
+            // if (fileInfo.Name.IndexOf("QB", StringComparison.InvariantCulture) >= 0
+            //             || fileInfo.Name.IndexOf("NPM", StringComparison.InvariantCulture) >= 0)
+            //    {
+            //        return true;
+            //    }
+            //}
+            //// encrypted files
+            //else if (fileInfo.Extension == ".pgp")
+            //{
+            //    processThisFile = true;
+            //    destDirPath = $"{Vars.cobraImportHoldingDecryptRoot}";
+            //}
+
+            //if (processThisFile
+
+
+
+            return false;
         }
 
         public static Boolean GetAlegeusFileFormatIsResultFile(EdiFileFormat fileFormat)

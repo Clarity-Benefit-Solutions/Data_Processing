@@ -654,6 +654,7 @@ namespace DataProcessing
                 return false;
             }
         }
+
         // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
         private DataTable GetAllEmployeesForEmployer(string employerId)
         {
