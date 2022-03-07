@@ -15,8 +15,6 @@ using EtlUtilities;
 //todo: FTPErrors: how to avoid reimporting the same result file over and over again: shall we move all files older than 2 days?
 namespace DataProcessing
 {
-    
-    
     public class AlegeusErrorLog
     {
         private Vars Vars { get; } = new Vars();

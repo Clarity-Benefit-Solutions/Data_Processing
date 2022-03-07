@@ -594,12 +594,12 @@ namespace DataProcessing
                         DataRow dbData = dbRows[0];
 
                         //todo: FileChecker: verify if employer status need to be checked
-                        string status = dbData["employer_status"]?.ToString();
-                        if (status != "Active" && status != "New")
-                        {
-                            errorMessage =
-                                $"The Employer ID {dataRow.EmployerId} has status {status} which is not valid";
-                        }
+                        //string status = dbData["employer_status"]?.ToString();
+                        //if (status != "Active" && status != "New")
+                        //{
+                        //    errorMessage =
+                        //        $"The Employer ID {dataRow.EmployerId} has status {status} which is not valid";
+                        //}
                     }
                 }
                 //
