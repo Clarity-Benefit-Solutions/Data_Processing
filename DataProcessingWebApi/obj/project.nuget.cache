@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "44gJrKWjsQytQAQuU+wf5na+xBnLhHsVN8f2ZigM8gLPSV28JCglM0oekUTq14ePgOfmJarrAWPp8Vgo6mpz+Q==",
+  "success": true,
+  "projectFilePath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\DataProcessingWebApi\\DataProcessingWebApi.fsproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\sumeet\\.nuget\\packages\\fsharp.core\\4.7.1\\fsharp.core.4.7.1.nupkg.sha512",
+    "C:\\Users\\sumeet\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.10.9\\microsoft.visualstudio.azure.containers.tools.targets.1.10.9.nupkg.sha512",
+    "C:\\Users\\sumeet\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
+  ],
+  "logs": []
+}

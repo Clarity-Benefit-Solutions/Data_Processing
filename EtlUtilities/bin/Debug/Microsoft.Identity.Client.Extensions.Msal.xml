@@ -125,16 +125,10 @@
             Allows clients to listen for cache updates originating from disk.
             </summary>
             <remarks>
-            This event does not fire when the application is built against Xamarin.Mac, but it does fire on .Net Core on all 3 operating systems.
+            This event does not fire when the application is built against Mone framework (e.g. Xamarin.Mac), but it does fire on .Net Core on all 3 operating systems.
             </remarks>
         </member>
-        <member name="F:Microsoft.Identity.Client.Extensions.Msal.MsalCacheHelper._registeredCaches">
-            <summary>
-            Contains a reference to all caches currently registered to synchronize with this MsalCacheHelper, along with
-            timestamp of the cache file the last time they deserialized.
-            </summary>
-        </member>
-        <member name="M:Microsoft.Identity.Client.Extensions.Msal.MsalCacheHelper.GetAccountIdentifiersAsync(Microsoft.Identity.Client.Extensions.Msal.StorageCreationProperties,Microsoft.Identity.Client.Extensions.Msal.TraceSourceLogger)">
+        <member name="M:Microsoft.Identity.Client.Extensions.Msal.MsalCacheHelper.GetAccountIdentifiersNoLockAsync(Microsoft.Identity.Client.Extensions.Msal.StorageCreationProperties,Microsoft.Identity.Client.Extensions.Msal.TraceSourceLogger)">
             <summary>
             Gets the current set of accounts in the cache by creating a new public client, and
             deserializing the cache into a temporary object.
@@ -162,7 +156,7 @@
             Creates a new instance of <see cref="T:Microsoft.Identity.Client.Extensions.Msal.MsalCacheHelper"/>. To configure MSAL to use this cache persistence, call <see cref="M:Microsoft.Identity.Client.Extensions.Msal.MsalCacheHelper.RegisterCache(Microsoft.Identity.Client.ITokenCache)"/>
             </summary>
             <param name="storageCreationProperties">Properties to use when creating storage on disk.</param>
-            <param name="logger">Passing null uses a default logger</param>
+            <param name="logger">Passing null uses the default TraceSource logger. See https://github.com/AzureAD/microsoft-authentication-extensions-for-dotnet/wiki/Logging for details.</param>
             <returns>A new instance of <see cref="T:Microsoft.Identity.Client.Extensions.Msal.MsalCacheHelper"/>.</returns>
         </member>
         <member name="P:Microsoft.Identity.Client.Extensions.Msal.MsalCacheHelper.UserRootDirectory">
@@ -172,20 +166,24 @@
         </member>
         <member name="M:Microsoft.Identity.Client.Extensions.Msal.MsalCacheHelper.RegisterCache(Microsoft.Identity.Client.ITokenCache)">
             <summary>
-            Registers a token cache to synchronize with on disk storage.
+            Registers a token cache to synchronize with the persistent storage.
             </summary>
-            <param name="tokenCache">Token Cache</param>
+            <param name="tokenCache">The application token cache, typically referenced as <see cref="P:Microsoft.Identity.Client.IClientApplicationBase.UserTokenCache"/></param>
+            <remarks>Call <see cref="M:Microsoft.Identity.Client.Extensions.Msal.MsalCacheHelper.UnregisterCache(Microsoft.Identity.Client.ITokenCache)"/> to have the given token cache stop syncronizing.</remarks>
         </member>
         <member name="M:Microsoft.Identity.Client.Extensions.Msal.MsalCacheHelper.UnregisterCache(Microsoft.Identity.Client.ITokenCache)">
             <summary>
             Unregisters a token cache so it no longer synchronizes with on disk storage.
             </summary>
-            <param name="tokenCache"></param>
         </member>
         <member name="M:Microsoft.Identity.Client.Extensions.Msal.MsalCacheHelper.Clear">
             <summary>
-            Clears the token store
+            Clears the token store. Equivalent to a delete operation on the persistence layer (file delete). 
             </summary>
+            <remarks>
+            Apps should use MSAL's RemoveAccount to delete accounts, which is guaranteed to remove confidential information about that account. The token
+            cache also contains metadata required for MSAL to operate, degrading the experience and perf when deleted.
+            </remarks>
         </member>
         <member name="M:Microsoft.Identity.Client.Extensions.Msal.MsalCacheHelper.LoadUnencryptedTokenCache">
             <summary>
@@ -450,125 +448,12 @@
             </summary>
             <returns>the real user ID of the calling process</returns>
         </member>
-        <member name="T:Microsoft.Identity.Client.Extensions.Msal.MacKeyChain">
+        <member name="M:Microsoft.Identity.Client.Extensions.Msal.MacOSKeychain.#ctor(System.String)">
             <summary>
-            APIs for reading, writing and deleting data from Mac KeyChain
+            Open the default keychain (current user's login keychain).
             </summary>
-        </member>
-        <member name="M:Microsoft.Identity.Client.Extensions.Msal.MacKeyChain.WriteKey(System.String,System.String,System.Byte[])">
-            <summary>
-            Writes specifies vaue for given service and account names.
-            </summary>
-            <param name="serviceName">Service name.</param>
-            <param name="accountName">Account name.</param>
-            <param name="value">Value.</param>
-        </member>
-        <member name="M:Microsoft.Identity.Client.Extensions.Msal.MacKeyChain.RetrieveKey(System.String,System.String,Microsoft.Identity.Client.Extensions.Msal.TraceSourceLogger)">
-            <summary>
-            Retrieves value for the specified service and account names.
-            </summary>
-            <returns>The key.</returns>
-            <param name="serviceName">Service name.</param>
-            <param name="accountName">Account name.</param>
-            <param name="logger">Logger</param>
-            <returns>null if key corresponding to given serviceName and accountName is not found</returns>
-        </member>
-        <member name="M:Microsoft.Identity.Client.Extensions.Msal.MacKeyChain.DeleteKey(System.String,System.String)">
-            <summary>
-            Deletes the key specified by given service and account names.
-            </summary>
-            <param name="serviceName">Service name.</param>
-            <param name="accountName">Account name.</param>
-        </member>
-        <member name="T:Microsoft.Identity.Client.Extensions.Msal.MacNativeMethods">
-            <summary>
-            Helper native methods for MAC keychain
-            </summary>
-        </member>
-        <member name="F:Microsoft.Identity.Client.Extensions.Msal.MacNativeMethods.securityFrameworkLib">
-            <summary>
-            Location of the security framework
-            </summary>
-        </member>
-        <member name="F:Microsoft.Identity.Client.Extensions.Msal.MacNativeMethods.coreFoundationFrameworkLib">
-            <summary>
-            Location of the core foundation libs
-            </summary>
-        </member>
-        <member name="F:Microsoft.Identity.Client.Extensions.Msal.MacNativeMethods.errSecSuccess">
-            <summary>
-            Definitions for all Keychain error codes can be found at:
-            https://developer.apple.com/library/mac/documentation/Security/Reference/keychainservices/#//apple_ref/doc/uid/TP30000898-CH5g-CJBEABHG
-            </summary>
-        </member>
-        <member name="F:Microsoft.Identity.Client.Extensions.Msal.MacNativeMethods.errSecDuplicateItem">
-            <summary>
-            See link for errSucSuccess
-            </summary>
-        </member>
-        <member name="F:Microsoft.Identity.Client.Extensions.Msal.MacNativeMethods.errSecItemNotFound">
-            <summary>
-            See link for errSucSuccess
-            </summary>
-        </member>
-        <member name="M:Microsoft.Identity.Client.Extensions.Msal.MacNativeMethods.SecKeychainFindGenericPassword(System.IntPtr,System.UInt32,System.String,System.UInt32,System.String,System.UInt32@,System.IntPtr@,System.IntPtr@)">
-            <summary>
-            Find entry in the keychian
-            </summary>
-            <param name="keychainOrArray">Store</param>
-            <param name="serviceNameLength">Length of service name</param>
-            <param name="serviceName">Service name</param>
-            <param name="accountNameLength">Account name length</param>
-            <param name="accountName">account name</param>
-            <param name="passwordLength">password length</param>
-            <param name="passwordData">Password data</param>
-            <param name="itemRef">Item reference</param>
-            <returns>Code indicating result</returns>
-        </member>
-        <member name="M:Microsoft.Identity.Client.Extensions.Msal.MacNativeMethods.SecKeychainAddGenericPassword(System.IntPtr,System.UInt32,System.String,System.UInt32,System.String,System.UInt32,System.Byte[],System.IntPtr@)">
-            <summary>
-            Add a password.
-            </summary>
-            <param name="keychain">Pointer to the keychain</param>
-            <param name="serviceNameLength">Service name length</param>
-            <param name="serviceName">Service name</param>
-            <param name="accountNameLength">account name length</param>
-            <param name="accountName"> account name</param>
-            <param name="passwordLength">password length</param>
-            <param name="passwordData">password</param>
-            <param name="itemRef">Item from the keychain</param>
-            <returns>Code indicating result</returns>
-        </member>
-        <member name="M:Microsoft.Identity.Client.Extensions.Msal.MacNativeMethods.SecKeychainItemModifyAttributesAndData(System.IntPtr,System.IntPtr,System.UInt32,System.Byte[])">
-            <summary>
-            Modify keychain data
-            </summary>
-            <param name="itemRef">Item to modify</param>
-            <param name="attrList">Attribute list</param>
-            <param name="length">Length of list</param>
-            <param name="data">data</param>
-            <returns>Code indicating result</returns>
-        </member>
-        <member name="M:Microsoft.Identity.Client.Extensions.Msal.MacNativeMethods.SecKeychainItemDelete(System.IntPtr)">
-            <summary>
-            Delete an item from the keychain
-            </summary>
-            <param name="itemRef">Item to delete</param>
-            <returns>Code indicating result</returns>
-        </member>
-        <member name="M:Microsoft.Identity.Client.Extensions.Msal.MacNativeMethods.SecKeychainItemFreeContent(System.IntPtr,System.IntPtr)">
-            <summary>
-            Free item from memeory
-            </summary>
-            <param name="attrList">attribute list</param>
-            <param name="data">Data</param>
-            <returns>Code indicating the result</returns>
-        </member>
-        <member name="M:Microsoft.Identity.Client.Extensions.Msal.MacNativeMethods.CFRelease(System.IntPtr)">
-            <summary>
-            Release pointer
-            </summary>
-            <param name="cf">Pointer to release</param>
+            <param name="namespace">Optional namespace to scope credential operations.</param>
+            <returns>Default keychain.</returns>
         </member>
         <member name="T:Microsoft.Identity.Client.Extensions.Msal.SharedUtilities">
             <summary>
@@ -615,7 +500,7 @@
             An immutable class containing information required to instantiate storage objects for MSAL caches in various platforms.
             </summary>
         </member>
-        <member name="M:Microsoft.Identity.Client.Extensions.Msal.StorageCreationProperties.#ctor(System.String,System.String,System.String,System.String,System.Boolean,System.String,System.String,System.String,System.Collections.Generic.KeyValuePair{System.String,System.String},System.Collections.Generic.KeyValuePair{System.String,System.String},System.String,System.Int32,System.Int32)">
+        <member name="M:Microsoft.Identity.Client.Extensions.Msal.StorageCreationProperties.#ctor(System.String,System.String,System.String,System.String,System.Boolean,System.String,System.String,System.String,System.Collections.Generic.KeyValuePair{System.String,System.String},System.Collections.Generic.KeyValuePair{System.String,System.String},System.Int32,System.Int32,System.String,System.String)">
             <summary>
             This constructor is intentionally internal. To get one of these objects use <see cref="M:Microsoft.Identity.Client.Extensions.Msal.StorageCreationPropertiesBuilder.Build"/>.
             </summary>
@@ -687,8 +572,15 @@
         </member>
         <member name="P:Microsoft.Identity.Client.Extensions.Msal.StorageCreationProperties.ClientId">
             <summary>
-            The client id
+            The client id.
             </summary>
+            <remarks> Only required for the MsalCacheHelper.CacheChanged event</remarks>
+        </member>
+        <member name="P:Microsoft.Identity.Client.Extensions.Msal.StorageCreationProperties.Authority">
+            <summary>
+            The authority
+            </summary>
+            <remarks> Only required for the MsalCacheHelper.CacheChanged event</remarks>
         </member>
         <member name="T:Microsoft.Identity.Client.Extensions.Msal.StorageCreationPropertiesBuilder">
             <summary>
@@ -703,6 +595,13 @@
             <param name="cacheDirectory">The name of the directory containing the cache file.</param>
             <param name="clientId">The client id for the calling application</param>
         </member>
+        <member name="M:Microsoft.Identity.Client.Extensions.Msal.StorageCreationPropertiesBuilder.#ctor(System.String,System.String)">
+            <summary>
+            Constructs a new instance of this builder associated with the given cache file.
+            </summary>
+            <param name="cacheFileName">The name of the cache file to use when creating or opening storage.</param>
+            <param name="cacheDirectory">The name of the directory containing the cache file.</param>
+        </member>
         <member name="M:Microsoft.Identity.Client.Extensions.Msal.StorageCreationPropertiesBuilder.Build">
             <summary>
             Returns an immutable instance of <see cref="T:Microsoft.Identity.Client.Extensions.Msal.StorageCreationProperties"/> matching the configuration of this builder.
@@ -716,6 +615,16 @@
             <param name="serviceName">The mac keychain service name</param>
             <param name="accountName">The mac keychain account name</param>
             <returns>The augmented builder</returns>
+        </member>
+        <member name="M:Microsoft.Identity.Client.Extensions.Msal.StorageCreationPropertiesBuilder.WithCacheChangedEvent(System.String,System.String)">
+            <summary>
+            Enables the use of the MsalCacheHelper.CacheChanged event, which notifies about
+            accounts added and removed. These accounts are scoped to the client_id and authority
+            specified here.
+            </summary>
+            <param name="clientId">The client id for which you wish to receive notifications</param>
+            <param name="authority">The authority for which you wish to receive notifications</param>
+            <returns>The augmented builder</returns>        
         </member>
         <member name="M:Microsoft.Identity.Client.Extensions.Msal.StorageCreationPropertiesBuilder.CustomizeLockRetry(System.Int32,System.Int32)">
             <summary>
@@ -785,6 +694,16 @@
             
             </summary>
             <param name="message"></param>
+        </member>
+        <member name="T:Microsoft.Identity.Extensions.InteropException">
+            <summary>
+            An unexpected error occurred in interop-code.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Identity.Extensions.InteropException.ErrorCode">
+            <summary>
+            Native error code.
+            </summary>
         </member>
     </members>
 </doc>

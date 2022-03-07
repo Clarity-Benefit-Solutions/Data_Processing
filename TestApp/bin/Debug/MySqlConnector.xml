@@ -117,14 +117,13 @@
             <see cref="T:MySqlConnector.Core.ICommandPayloadCreator"/> creates the data for an "execute query" command for one or more <see cref="T:MySqlConnector.Core.IMySqlCommand"/> objects in a command list.
             </summary>
         </member>
-        <member name="M:MySqlConnector.Core.ICommandPayloadCreator.WriteQueryCommand(MySqlConnector.Core.CommandListPosition@,System.Collections.Generic.IDictionary{System.String,MySqlConnector.Core.CachedProcedure},MySqlConnector.Protocol.Serialization.ByteBufferWriter,System.Boolean)">
+        <member name="M:MySqlConnector.Core.ICommandPayloadCreator.WriteQueryCommand(MySqlConnector.Core.CommandListPosition@,System.Collections.Generic.IDictionary{System.String,MySqlConnector.Core.CachedProcedure},MySqlConnector.Protocol.Serialization.ByteBufferWriter)">
             <summary>
             Writes the payload for an "execute query" command to <paramref name="writer"/>.
             </summary>
             <param name="commandListPosition">The command list and its current position. This will be updated to the position of the next command to write (or past the end if there are no more commands).</param>
             <param name="cachedProcedures">A <see cref="T:MySqlConnector.Core.CachedProcedure"/> for all the stored procedures in the command list, if any.</param>
             <param name="writer">The <see cref="T:MySqlConnector.Protocol.Serialization.ByteBufferWriter"/> to write the payload to.</param>
-            <param name="appendSemicolon">Whether a statement-separating semicolon should be appended if it's missing.</param>
             <returns><c>true</c> if a command was written; otherwise, <c>false</c> (if there were no more commands in the list).</returns>
         </member>
         <member name="M:MySqlConnector.Core.ILoadBalancer.LoadBalance(System.Collections.Generic.IReadOnlyList{System.String})">
@@ -186,14 +185,13 @@
             <typeparam name="T">An <see cref="T:System.IDisposable"/> type.</typeparam>
             <param name="disposable">The object to dispose.</param>
         </member>
-        <member name="M:MySqlConnector.Core.SingleCommandPayloadCreator.WriteQueryPayload(MySqlConnector.Core.IMySqlCommand,System.Collections.Generic.IDictionary{System.String,MySqlConnector.Core.CachedProcedure},MySqlConnector.Protocol.Serialization.ByteBufferWriter,System.Boolean)">
+        <member name="M:MySqlConnector.Core.SingleCommandPayloadCreator.WriteQueryPayload(MySqlConnector.Core.IMySqlCommand,System.Collections.Generic.IDictionary{System.String,MySqlConnector.Core.CachedProcedure},MySqlConnector.Protocol.Serialization.ByteBufferWriter)">
             <summary>
             Writes the text of <paramref name="command"/> to <paramref name="writer"/>, encoded in UTF-8.
             </summary>
             <param name="command">The command.</param>
             <param name="cachedProcedures">The cached procedures.</param>
             <param name="writer">The output writer.</param>
-            <param name="appendSemicolon">Whether a statement-separating semicolon should be appended if it's missing.</param>
             <returns><c>true</c> if a complete command was written; otherwise, <c>false</c>.</returns>
         </member>
         <member name="F:MySqlConnector.Core.SqlParser.FinalParseStates.Complete">
@@ -869,13 +867,7 @@
             <inheritdoc/>
         </member>
         <member name="M:MySqlConnector.MySqlCommand.ExecuteNonQuery">
-            <summary>
-            Executes this command on the associated <see cref="T:MySqlConnector.MySqlConnection"/>.
-            </summary>
-            <returns>The number of rows affected.</returns>
-            <remarks>For UPDATE, INSERT, and DELETE statements, the return value is the number of rows affected by the command.
-            For stored procedures, the return value is the number of rows affected by the last statement in the stored procedure,
-            or zero if the last statement is a SELECT. For all other types of statements, the return value is -1.</remarks>
+            <inheritdoc/>
         </member>
         <member name="M:MySqlConnector.MySqlCommand.ExecuteScalar">
             <inheritdoc/>
@@ -910,16 +902,6 @@
             <remarks>
             See <a href="https://dev.mysql.com/doc/refman/8.0/en/information-functions.html#function_last-insert-id"><c>LAST_INSERT_ID()</c></a> for more information.
             </remarks>
-        </member>
-        <member name="M:MySqlConnector.MySqlCommand.ExecuteNonQueryAsync(System.Threading.CancellationToken)">
-            <summary>
-            Executes this command asynchronously on the associated <see cref="T:MySqlConnector.MySqlConnection"/>.
-            </summary>
-            <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A task representing the asynchronous operation.</returns>
-            <remarks>For UPDATE, INSERT, and DELETE statements, the return value is the number of rows affected by the command.
-            For stored procedures, the return value is the number of rows affected by the last statement in the stored procedure,
-            or zero if the last statement is a SELECT. For all other types of statements, the return value is -1.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlCommand.MySqlConnector#Core#ICancellableCommand#RegisterCancel(System.Threading.CancellationToken)">
             <summary>
@@ -1556,14 +1538,6 @@
             Initializes a new instance of <see cref="T:MySqlConnector.MySqlConversionException"/>.
             </summary>
             <param name="message">The exception message.</param>
-        </member>
-        <member name="P:MySqlConnector.MySqlDataReader.RecordsAffected">
-            <summary>
-            Gets the number of rows changed, inserted, or deleted by execution of the SQL statement.
-            </summary>
-            <remarks>For UPDATE, INSERT, and DELETE statements, the return value is the number of rows affected by the command.
-            For stored procedures, the return value is the number of rows affected by the last statement in the stored procedure,
-            or zero if the last statement is a SELECT. For all other types of statements, the return value is -1.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlDataReader.GetSchemaTable">
             <summary>
