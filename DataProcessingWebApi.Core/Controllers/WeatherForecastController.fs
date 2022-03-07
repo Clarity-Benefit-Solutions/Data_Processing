@@ -7,6 +7,7 @@ open System.Threading.Tasks
 open Microsoft.AspNetCore.Mvc
 open Microsoft.Extensions.Logging
 open DataProcessingWebApi
+open DataProcessing;
 
 [<ApiController>]
 [<Route("[controller]")>]
@@ -17,6 +18,8 @@ type WeatherForecastController (logger : ILogger<WeatherForecastController>) =
 
     [<HttpGet>]
     member __.Get() : WeatherForecast[] =
+
+        DataProcessing.AlegeusDataProcessing.ProcessAll();
         let rng = System.Random()
         [|
             for index in 0..4 ->

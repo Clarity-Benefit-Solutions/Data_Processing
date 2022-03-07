@@ -8,6 +8,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
+using DataProcessing;
 
 namespace DataProcessingWebApi
 {
@@ -21,6 +22,9 @@ namespace DataProcessingWebApi
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            var task = DataProcessing.AlegeusErrorLog.ProcessAll();
+            task.Wait();
         }
     }
 }
