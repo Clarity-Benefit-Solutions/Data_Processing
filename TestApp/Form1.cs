@@ -157,23 +157,5 @@ namespace TestApp
         }
     }
 
-    public class LogFields
-    {
-        public string LogTime { get; } = "";
-        public string FileId { get; } = "";
-        public string Task { get; } = "";
-        public string Status { get; } = "";
-        public string FileName { get; } = "";
-        public string OutcomeDetails { get; } = "";
-
-        public LogFields(string logTime, string fileId, string task, string status, string fileName, string outcomeDetails)
-        {
-            LogTime = logTime;
-            FileId = fileId;
-            Task = task;
-            Status = status;
-            FileName = fileName;
-            OutcomeDetails = outcomeDetails;
-        }
-    }
+   
 }

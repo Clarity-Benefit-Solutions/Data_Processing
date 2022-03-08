@@ -45,6 +45,18 @@
             Determines whether the section has a <see cref="P:Microsoft.Extensions.Configuration.IConfigurationSection.Value"/> or has children
             </summary>
         </member>
+        <member name="M:Microsoft.Extensions.Configuration.ConfigurationExtensions.GetRequiredSection(Microsoft.Extensions.Configuration.IConfiguration,System.String)">
+            <summary>
+            Gets a configuration sub-section with the specified key.
+            </summary>
+            <param name="configuration"></param>
+            <param name="key">The key of the configuration section.</param>
+            <returns>The <see cref="T:Microsoft.Extensions.Configuration.IConfigurationSection"/>.</returns>
+            <remarks>
+                If no matching sub-section is found with the specified key, an exception is raised.
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">There is no section with key <paramref name="key"/>.</exception>
+        </member>
         <member name="T:Microsoft.Extensions.Configuration.ConfigurationPath">
             <summary>
             Utility methods and constants for manipulating Configuration paths
@@ -246,6 +258,9 @@
             </summary>
             <param name="builder">The <see cref="T:Microsoft.Extensions.Configuration.IConfigurationBuilder"/>.</param>
             <returns>An <see cref="T:Microsoft.Extensions.Configuration.IConfigurationProvider"/></returns>
+        </member>
+        <member name="P:System.SR.InvalidSectionName">
+            <summary>Section '{0}' not found in configuration.</summary>
         </member>
     </members>
 </doc>

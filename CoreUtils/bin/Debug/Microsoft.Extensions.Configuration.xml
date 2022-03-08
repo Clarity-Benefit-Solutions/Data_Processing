@@ -6,7 +6,7 @@
     <members>
         <member name="T:Microsoft.Extensions.Configuration.ChainedBuilderExtensions">
             <summary>
-            IConfigurationBuilder extension methods for the chaind configuration provider.
+            Extension methods for adding <see cref="T:Microsoft.Extensions.Configuration.IConfiguration"/> to an <see cref="T:Microsoft.Extensions.Configuration.IConfigurationBuilder"/>.
             </summary>
         </member>
         <member name="M:Microsoft.Extensions.Configuration.ChainedBuilderExtensions.AddConfiguration(Microsoft.Extensions.Configuration.IConfigurationBuilder,Microsoft.Extensions.Configuration.IConfiguration)">
@@ -139,6 +139,9 @@
             The default instance.
             </summary>
         </member>
+        <member name="P:Microsoft.Extensions.Configuration.ConfigurationKeyComparer.Comparison">
+            <summary>A comparer delegate with the default instance.</summary>
+        </member>
         <member name="M:Microsoft.Extensions.Configuration.ConfigurationKeyComparer.Compare(System.String,System.String)">
             <summary>
             Compares two strings.
@@ -146,6 +149,29 @@
             <param name="x">First string.</param>
             <param name="y">Second string.</param>
             <returns>Less than 0 if x is less than y, 0 if x is equal to y and greater than 0 if x is greater than y.</returns>
+        </member>
+        <member name="T:Microsoft.Extensions.Configuration.ConfigurationManager">
+            <summary>
+            Configuration is mutable configuration object. It is both an <see cref="T:Microsoft.Extensions.Configuration.IConfigurationBuilder"/> and an <see cref="T:Microsoft.Extensions.Configuration.IConfigurationRoot"/>.
+            As sources are added, it updates its current view of configuration.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Configuration.ConfigurationManager.#ctor">
+            <summary>
+            Creates an empty mutable configuration object that is both an <see cref="T:Microsoft.Extensions.Configuration.IConfigurationBuilder"/> and an <see cref="T:Microsoft.Extensions.Configuration.IConfigurationRoot"/>.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Configuration.ConfigurationManager.Item(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.Extensions.Configuration.ConfigurationManager.GetSection(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.Extensions.Configuration.ConfigurationManager.GetChildren">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.Extensions.Configuration.ConfigurationManager.Dispose">
+            <inheritdoc/>
         </member>
         <member name="T:Microsoft.Extensions.Configuration.ConfigurationProvider">
             <summary>
@@ -473,8 +499,14 @@
             <param name="builder">The <see cref="T:Microsoft.Extensions.Configuration.IConfigurationBuilder"/>.</param>
             <returns>An <see cref="T:Microsoft.Extensions.Configuration.IConfigurationProvider"/></returns>
         </member>
-        <member name="P:Microsoft.Extensions.Configuration.Resources.Error_NoSources">
+        <member name="P:System.SR.Error_NoSources">
             <summary>A configuration source is not registered. Please register one before setting a value.</summary>
+        </member>
+        <member name="P:System.SR.InvalidNullArgument">
+            <summary>Null is not a valid value for '{0}'.</summary>
+        </member>
+        <member name="P:System.SR.StreamConfigurationProvidersAlreadyLoaded">
+            <summary>StreamConfigurationProviders cannot be loaded more than once.</summary>
         </member>
     </members>
 </doc>

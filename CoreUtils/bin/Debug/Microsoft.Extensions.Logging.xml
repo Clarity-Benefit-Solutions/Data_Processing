@@ -4,6 +4,51 @@
         <name>Microsoft.Extensions.Logging</name>
     </assembly>
     <members>
+        <member name="T:Microsoft.Extensions.Logging.ActivityTrackingOptions">
+            <summary>
+            Flags to indicate which trace context parts should be included with the logging scopes.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Extensions.Logging.ActivityTrackingOptions.None">
+            <summary>
+            None of the trace context part wil be included in the logging.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Extensions.Logging.ActivityTrackingOptions.SpanId">
+            <summary>
+            Span Id will be included in the logging.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Extensions.Logging.ActivityTrackingOptions.TraceId">
+            <summary>
+            Trace Id will be included in the logging.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Extensions.Logging.ActivityTrackingOptions.ParentId">
+            <summary>
+            Parent Id will be included in the logging.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Extensions.Logging.ActivityTrackingOptions.TraceState">
+            <summary>
+            Trace State will be included in the logging.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Extensions.Logging.ActivityTrackingOptions.TraceFlags">
+            <summary>
+            Trace flags will be included in the logging.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Extensions.Logging.ActivityTrackingOptions.Tags">
+            <summary>
+            Tags will be included in the logging.
+            </summary>
+        </member>
+        <member name="F:Microsoft.Extensions.Logging.ActivityTrackingOptions.Baggage">
+            <summary>
+            Items of baggage will be included in the logging.
+            </summary>
+        </member>
         <member name="T:Microsoft.Extensions.Logging.FilterLoggingBuilderExtensions">
             <summary>
             Extension methods for setting up logging services in an <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" />.
@@ -101,63 +146,63 @@
             <summary>
             Adds a log filter to the factory.
             </summary>
-            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> to add the filter to.</param>
+            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.LoggerFilterOptions"/> to add the filter to.</param>
             <param name="categoryLevelFilter">The filter function to apply.</param>
-            <returns>The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> so that additional calls can be chained.</returns>
+            <returns>The <see cref="T:Microsoft.Extensions.Logging.LoggerFilterOptions"/> so that additional calls can be chained.</returns>
         </member>
         <member name="M:Microsoft.Extensions.Logging.FilterLoggingBuilderExtensions.AddFilter``1(Microsoft.Extensions.Logging.LoggerFilterOptions,System.Func{System.String,Microsoft.Extensions.Logging.LogLevel,System.Boolean})">
             <summary>
             Adds a log filter for the given <see cref="T:Microsoft.Extensions.Logging.ILoggerProvider"/>.
             </summary>
-            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> to add the filter to.</param>
+            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.LoggerFilterOptions"/> to add the filter to.</param>
             <param name="categoryLevelFilter">The filter function to apply.</param>
             <typeparam name="T">The <see cref="T:Microsoft.Extensions.Logging.ILoggerProvider"/> which this filter will be added for.</typeparam>
-            <returns>The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> so that additional calls can be chained.</returns>
+            <returns>The <see cref="T:Microsoft.Extensions.Logging.LoggerFilterOptions"/> so that additional calls can be chained.</returns>
         </member>
         <member name="M:Microsoft.Extensions.Logging.FilterLoggingBuilderExtensions.AddFilter(Microsoft.Extensions.Logging.LoggerFilterOptions,System.Func{Microsoft.Extensions.Logging.LogLevel,System.Boolean})">
             <summary>
             Adds a log filter to the factory.
             </summary>
-            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> to add the filter to.</param>
+            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.LoggerFilterOptions"/> to add the filter to.</param>
             <param name="levelFilter">The filter function to apply.</param>
-            <returns>The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> so that additional calls can be chained.</returns>
+            <returns>The <see cref="T:Microsoft.Extensions.Logging.LoggerFilterOptions"/> so that additional calls can be chained.</returns>
         </member>
         <member name="M:Microsoft.Extensions.Logging.FilterLoggingBuilderExtensions.AddFilter``1(Microsoft.Extensions.Logging.LoggerFilterOptions,System.Func{Microsoft.Extensions.Logging.LogLevel,System.Boolean})">
             <summary>
             Adds a log filter for the given <see cref="T:Microsoft.Extensions.Logging.ILoggerProvider"/>.
             </summary>
-            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> to add the filter to.</param>
+            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.LoggerFilterOptions"/> to add the filter to.</param>
             <param name="levelFilter">The filter function to apply.</param>
             <typeparam name="T">The <see cref="T:Microsoft.Extensions.Logging.ILoggerProvider"/> which this filter will be added for.</typeparam>
-            <returns>The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> so that additional calls can be chained.</returns>
+            <returns>The <see cref="T:Microsoft.Extensions.Logging.LoggerFilterOptions"/> so that additional calls can be chained.</returns>
         </member>
         <member name="M:Microsoft.Extensions.Logging.FilterLoggingBuilderExtensions.AddFilter(Microsoft.Extensions.Logging.LoggerFilterOptions,System.String,Microsoft.Extensions.Logging.LogLevel)">
             <summary>
             Adds a log filter to the factory.
             </summary>
-            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> to add the filter to.</param>
+            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.LoggerFilterOptions"/> to add the filter to.</param>
             <param name="category">The category to filter.</param>
             <param name="level">The level to filter.</param>
-            <returns>The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> so that additional calls can be chained.</returns>
+            <returns>The <see cref="T:Microsoft.Extensions.Logging.LoggerFilterOptions"/> so that additional calls can be chained.</returns>
         </member>
         <member name="M:Microsoft.Extensions.Logging.FilterLoggingBuilderExtensions.AddFilter``1(Microsoft.Extensions.Logging.LoggerFilterOptions,System.String,Microsoft.Extensions.Logging.LogLevel)">
             <summary>
             Adds a log filter for the given <see cref="T:Microsoft.Extensions.Logging.ILoggerProvider"/>.
             </summary>
-            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> to add the filter to.</param>
+            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.LoggerFilterOptions"/> to add the filter to.</param>
             <param name="category">The category to filter.</param>
             <param name="level">The level to filter.</param>
             <typeparam name="T">The <see cref="T:Microsoft.Extensions.Logging.ILoggerProvider"/> which this filter will be added for.</typeparam>
-            <returns>The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> so that additional calls can be chained.</returns>
+            <returns>The <see cref="T:Microsoft.Extensions.Logging.LoggerFilterOptions"/> so that additional calls can be chained.</returns>
         </member>
         <member name="M:Microsoft.Extensions.Logging.FilterLoggingBuilderExtensions.AddFilter(Microsoft.Extensions.Logging.LoggerFilterOptions,System.String,System.Func{Microsoft.Extensions.Logging.LogLevel,System.Boolean})">
             <summary>
             Adds a log filter to the factory.
             </summary>
-            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> to add the filter to.</param>
+            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.LoggerFilterOptions"/> to add the filter to.</param>
             <param name="category">The category to filter.</param>
             <param name="levelFilter">The filter function to apply.</param>
-            <returns>The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> so that additional calls can be chained.</returns>
+            <returns>The <see cref="T:Microsoft.Extensions.Logging.LoggerFilterOptions"/> so that additional calls can be chained.</returns>
         </member>
         <member name="M:Microsoft.Extensions.Logging.FilterLoggingBuilderExtensions.AddFilter``1(Microsoft.Extensions.Logging.LoggerFilterOptions,System.String,System.Func{Microsoft.Extensions.Logging.LogLevel,System.Boolean})">
             <summary>
@@ -209,6 +254,14 @@
             <param name="providers">The providers to use in producing <see cref="T:Microsoft.Extensions.Logging.ILogger"/> instances.</param>
             <param name="filterOption">The filter option to use.</param>
         </member>
+        <member name="M:Microsoft.Extensions.Logging.LoggerFactory.#ctor(System.Collections.Generic.IEnumerable{Microsoft.Extensions.Logging.ILoggerProvider},Microsoft.Extensions.Options.IOptionsMonitor{Microsoft.Extensions.Logging.LoggerFilterOptions},Microsoft.Extensions.Options.IOptions{Microsoft.Extensions.Logging.LoggerFactoryOptions})">
+            <summary>
+            Creates a new <see cref="T:Microsoft.Extensions.Logging.LoggerFactory"/> instance.
+            </summary>
+            <param name="providers">The providers to use in producing <see cref="T:Microsoft.Extensions.Logging.ILogger"/> instances.</param>
+            <param name="filterOption">The filter option to use.</param>
+            <param name="options">The <see cref="T:Microsoft.Extensions.Logging.LoggerFactoryOptions"/>.</param>
+        </member>
         <member name="M:Microsoft.Extensions.Logging.LoggerFactory.Create(System.Action{Microsoft.Extensions.Logging.ILoggingBuilder})">
             <summary>
             Creates new instance of <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> configured using provided <paramref name="configure"/> delegate.
@@ -237,6 +290,26 @@
         </member>
         <member name="M:Microsoft.Extensions.Logging.LoggerFactory.Dispose">
             <inheritdoc/>
+        </member>
+        <member name="T:Microsoft.Extensions.Logging.LoggerFactoryOptions">
+            <summary>
+            The options for a LoggerFactory.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.LoggerFactoryOptions.#ctor">
+            <summary>
+            Creates a new <see cref="T:Microsoft.Extensions.Logging.LoggerFactoryOptions"/> instance.
+            </summary>
+        </member>
+        <member name="P:Microsoft.Extensions.Logging.LoggerFactoryOptions.ActivityTrackingOptions">
+            <summary>
+            Gets or sets <see cref="T:Microsoft.Extensions.Logging.LoggerFactoryOptions"/> value to indicate which parts of the tracing context information should be included with the logging scopes.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Extensions.Logging.LoggerFactoryScopeProvider">
+            <summary>
+            Default implementation of <see cref="T:Microsoft.Extensions.Logging.IExternalScopeProvider"/>
+            </summary>
         </member>
         <member name="T:Microsoft.Extensions.Logging.LoggerFilterOptions">
             <summary>
@@ -317,7 +390,7 @@
             <summary>
             Adds the given <see cref="T:Microsoft.Extensions.Logging.ILoggerProvider"/> to the <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/>
             </summary>
-            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> to add to the <paramref name="provider"/>.</param>
+            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> to add the <paramref name="provider"/> to.</param>
             <param name="provider">The <see cref="T:Microsoft.Extensions.Logging.ILoggerProvider"/> to add to the <paramref name="builder"/>.</param>
             <returns>The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> so that additional calls can be chained.</returns>
         </member>
@@ -326,6 +399,14 @@
             Removes all <see cref="T:Microsoft.Extensions.Logging.ILoggerProvider"/>s from <paramref name="builder"/>.
             </summary>
             <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> to remove <see cref="T:Microsoft.Extensions.Logging.ILoggerProvider"/>s from.</param>
+            <returns>The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> so that additional calls can be chained.</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.Logging.LoggingBuilderExtensions.Configure(Microsoft.Extensions.Logging.ILoggingBuilder,System.Action{Microsoft.Extensions.Logging.LoggerFactoryOptions})">
+            <summary>
+            Configure the <paramref name="builder"/> with the <see cref="T:Microsoft.Extensions.Logging.LoggerFactoryOptions"/>.
+            </summary>
+            <param name="builder">The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> to be configured with <see cref="T:Microsoft.Extensions.Logging.LoggerFactoryOptions"/></param>
+            <param name="action">The action used to configure the logger factory</param>
             <returns>The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> so that additional calls can be chained.</returns>
         </member>
         <member name="T:Microsoft.Extensions.Logging.ProviderAliasAttribute">
@@ -387,6 +468,12 @@
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection" /> to add services to.</param>
             <param name="configure">The <see cref="T:Microsoft.Extensions.Logging.ILoggingBuilder"/> configuration delegate.</param>
             <returns>The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> so that additional calls can be chained.</returns>
+        </member>
+        <member name="P:System.SR.InvalidActivityTrackingOptions">
+            <summary>{0} is invalid ActivityTrackingOptions value.</summary>
+        </member>
+        <member name="P:System.SR.MoreThanOneWildcard">
+            <summary>Only one wildcard character is allowed in category name.</summary>
         </member>
     </members>
 </doc>

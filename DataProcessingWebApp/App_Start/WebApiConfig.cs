@@ -15,6 +15,12 @@ namespace DataProcessingWebApp
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
+                name: "DataProcessingApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = ""}
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }

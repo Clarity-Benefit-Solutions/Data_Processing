@@ -8,14 +8,42 @@ using Microsoft.VisualBasic.CompilerServices;
 
 namespace CoreUtils.Classes
 {
+    public class LogFields
+    {
+        public string LogTime { get; }
+        public string FileId { get; }
+        public string Task { get; }
+        public string Status { get; }
+        public string FileName { get; }
+        public string OutcomeDetails { get; }
+
+        public LogFields(string logTime, string fileId, string task, string status, string fileName, string outcomeDetails)
+        {
+            LogTime = logTime;
+            FileId = fileId;
+            Task = task;
+            Status = status;
+            FileName = fileName;
+            OutcomeDetails = outcomeDetails;
+        }
+
+        public override string ToString()
+        {
+            return $"{LogTime}\t{FileId}\t{Task}\t{Status}\t{FileName}\t{OutcomeDetails}";
+        }
+    }
+
     public static class Utils
     {
+
         private static readonly Random Random = new Random();
 
         public static string DbQuote(string value)
         {
             return value.Replace("'", "''");
         }
+        
+     
 
         public static string CsvQuote(string value)
         {
@@ -82,11 +110,11 @@ namespace CoreUtils.Classes
         }
 
         //extension method to get string from array
-        public static string Join(this string[] arr, string joinWith)
+        public static string Join(this object[] arr, string joinWith)
         {
             return string.Join(joinWith, arr);
         }
-
+    
 
         public static bool TextMatchesPattern(string fileName, string pattern)
         {

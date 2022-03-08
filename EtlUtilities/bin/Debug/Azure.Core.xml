@@ -32,6 +32,277 @@
         <member name="M:Azure.Core.AccessToken.GetHashCode">
             <summary>Returns the hash code for this instance.</summary><returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         </member>
+        <member name="T:Azure.Core.AzureLocation">
+            <summary>
+            Represents an Azure geography region where supported resource providers live.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.EastAsia">
+            <summary>
+            Public cloud location for East Asia.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.SoutheastAsia">
+            <summary>
+            Public cloud location for Southeast Asia.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.CentralUS">
+            <summary>
+            Public cloud location for Central US.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.EastUS">
+            <summary>
+            Public cloud location for East US.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.EastUS2">
+            <summary>
+            Public cloud location for East US 2.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.WestUS">
+            <summary>
+            Public cloud location for West US.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.NorthCentralUS">
+            <summary>
+            Public cloud location for North Central US.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.SouthCentralUS">
+            <summary>
+            Public cloud location for South Central US.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.NorthEurope">
+            <summary>
+            Public cloud location for North Europe.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.WestEurope">
+            <summary>
+            Public cloud location for West Europe.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.JapanWest">
+            <summary>
+            Public cloud location for Japan West.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.JapanEast">
+            <summary>
+            Public cloud location for Japan East.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.BrazilSouth">
+            <summary>
+            Public cloud location for Brazil South.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.AustraliaEast">
+            <summary>
+            Public cloud location for Australia East.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.AustraliaSoutheast">
+            <summary>
+            Public cloud location for Australia Southeast.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.SouthIndia">
+            <summary>
+            Public cloud location for South India.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.CentralIndia">
+            <summary>
+            Public cloud location for Central India.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.WestIndia">
+            <summary>
+            Public cloud location for West India.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.CanadaCentral">
+            <summary>
+            Public cloud location for Canada Central.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.CanadaEast">
+            <summary>
+            Public cloud location for Canada East.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.UKSouth">
+            <summary>
+            Public cloud location for UK South.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.UKWest">
+            <summary>
+            Public cloud location for UK West.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.WestCentralUS">
+            <summary>
+            Public cloud location for West Central US.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.WestUS2">
+            <summary>
+            Public cloud location for West US 2.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.KoreaCentral">
+            <summary>
+            Public cloud location for Korea Central.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.KoreaSouth">
+            <summary>
+            Public cloud location for Korea South.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.FranceCentral">
+            <summary>
+            Public cloud location for France Central.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.FranceSouth">
+            <summary>
+            Public cloud location for France South.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.AustraliaCentral">
+            <summary>
+            Public cloud location for Australia Central.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.AustraliaCentral2">
+            <summary>
+            Public cloud location for Australia Central 2.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.UAECentral">
+            <summary>
+            Public cloud location for UAE Central.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.UAENorth">
+            <summary>
+            Public cloud location for UAE North.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.SouthAfricaNorth">
+            <summary>
+            Public cloud location for South Africa North.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.SouthAfricaWest">
+            <summary>
+            Public cloud location for South Africa West.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.SwitzerlandNorth">
+            <summary>
+            Public cloud location for Switzerland North.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.SwitzerlandWest">
+            <summary>
+            Public cloud location for Switzerland West.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.GermanyNorth">
+            <summary>
+            Public cloud location for Germany North.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.GermanyWestCentral">
+            <summary>
+            Public cloud location for Germany West Central.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.NorwayWest">
+            <summary>
+            Public cloud location for Norway West.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.BrazilSoutheast">
+            <summary>
+            Public cloud location for Brazil Southeast.
+            </summary>
+        </member>
+        <member name="M:Azure.Core.AzureLocation.#ctor(System.String)">
+            <summary> Initializes a new instance of Location. </summary>
+            <param name="location"> The location name or the display name. </param>
+        </member>
+        <member name="M:Azure.Core.AzureLocation.#ctor(System.String,System.String)">
+            <summary> Initializes a new instance of Location. </summary>
+            <param name="name"> The location name. </param>
+            <param name="displayName"> The display name of the location. </param>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.Name">
+            <summary>
+            Gets a location name consisting of only lowercase characters without white spaces or any separation character between words, e.g. "westus".
+            </summary>
+        </member>
+        <member name="P:Azure.Core.AzureLocation.DisplayName">
+            <summary>
+            Gets a location display name consisting of titlecase words or alphanumeric characters separated by whitespaces, e.g. "West US".
+            </summary>
+        </member>
+        <member name="M:Azure.Core.AzureLocation.ToString">
+            <summary>
+            Gets the name of a location object.
+            </summary>
+            <returns> The name. </returns>
+        </member>
+        <member name="M:Azure.Core.AzureLocation.op_Implicit(System.String)~Azure.Core.AzureLocation">
+            <summary>
+            Creates a new location implicitly from a string.
+            </summary>
+            <param name="location"> String to be assigned in the Name form. </param>
+        </member>
+        <member name="M:Azure.Core.AzureLocation.Equals(Azure.Core.AzureLocation)">
+            <summary>
+            Detects if a location object is equal to another location instance or a string representing the location name.
+            </summary>
+            <param name="other"> AzureLocation object or name as a string. </param>
+            <returns> True or false. </returns>
+        </member>
+        <member name="M:Azure.Core.AzureLocation.op_Implicit(Azure.Core.AzureLocation)~System.String">
+            <summary>
+            Creates a string implicitly from a AzureLocation object.
+            </summary>
+            <param name="location"> AzureLocation object to be assigned. </param>
+        </member>
+        <member name="M:Azure.Core.AzureLocation.Equals(System.Object)">
+            <summary>Indicates whether this instance and a specified object are equal.</summary><param name="obj">The object to compare with the current instance.</param><returns><see langword="true" /> if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, <see langword="false" />.</returns>
+        </member>
+        <member name="M:Azure.Core.AzureLocation.GetHashCode">
+            <summary>Returns the hash code for this instance.</summary><returns>A 32-bit signed integer that is the hash code for this instance.</returns>
+        </member>
+        <member name="M:Azure.Core.AzureLocation.op_Equality(Azure.Core.AzureLocation,Azure.Core.AzureLocation)">
+            <summary>
+            Compares this <see cref="T:Azure.Core.AzureLocation" /> instance with another object and determines if they are equals.
+            </summary>
+            <param name="left"> The object on the left side of the operator. </param>
+            <param name="right"> The object on the right side of the operator. </param>
+            <returns> True if they are equal, otherwise false. </returns>
+        </member>
+        <member name="M:Azure.Core.AzureLocation.op_Inequality(Azure.Core.AzureLocation,Azure.Core.AzureLocation)">
+            <summary>
+            Compares this <see cref="T:Azure.Core.AzureLocation" /> instance with another object and determines if they are equals.
+            </summary>
+            <param name="left"> The object on the left side of the operator. </param>
+            <param name="right"> The object on the right side of the operator. </param>
+            <returns> True if they are not equal, otherwise false. </returns>
+        </member>
         <member name="T:Azure.Core.ClientOptions">
             <summary>
             Base type for all client option types, exposes various common client options like <see cref="P:Azure.Core.ClientOptions.Diagnostics" />, <see cref="P:Azure.Core.ClientOptions.Retry" />, <see cref="P:Azure.Core.ClientOptions.Transport" />.
@@ -80,6 +351,69 @@
         </member>
         <member name="M:Azure.Core.ClientOptions.ToString">
             <summary>Returns a string that represents the current object.</summary><returns>A string that represents the current object.</returns>
+        </member>
+        <member name="T:Azure.Core.ContentType">
+            <summary>
+            Represents content type.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.ContentType.ApplicationJson">
+            <summary>
+            application/json
+            </summary>
+        </member>
+        <member name="P:Azure.Core.ContentType.ApplicationOctetStream">
+            <summary>
+            application/json
+            </summary>
+        </member>
+        <member name="P:Azure.Core.ContentType.TextPlain">
+            <summary>
+            application/json
+            </summary>
+        </member>
+        <member name="M:Azure.Core.ContentType.#ctor(System.String)">
+            <summary>
+            Creates an instance of <see cref="T:Azure.Core.ContentType" />.
+            </summary>
+            <param name="contentType">The content type string.</param>
+        </member>
+        <member name="M:Azure.Core.ContentType.op_Implicit(System.String)~Azure.Core.ContentType">
+            <summary>
+            Creates an instance of <see cref="T:Azure.Core.ContentType" />.
+            </summary>
+            <param name="contentType">The content type string.</param>
+        </member>
+        <member name="M:Azure.Core.ContentType.Equals(Azure.Core.ContentType)">
+            <summary>Indicates whether the current object is equal to another object of the same type.</summary><param name="other">An object to compare with this object.</param><returns><see langword="true" /> if the current object is equal to the <paramref name="other" /> parameter; otherwise, <see langword="false" />.</returns>
+        </member>
+        <member name="M:Azure.Core.ContentType.Equals(System.String)">
+            <summary>Indicates whether the current object is equal to another object of the same type.</summary><param name="other">An object to compare with this object.</param><returns><see langword="true" /> if the current object is equal to the <paramref name="other" /> parameter; otherwise, <see langword="false" />.</returns>
+        </member>
+        <member name="M:Azure.Core.ContentType.Equals(System.Object)">
+            <summary>Indicates whether this instance and a specified object are equal.</summary><param name="obj">The object to compare with the current instance.</param><returns><see langword="true" /> if <paramref name="obj" /> and this instance are the same type and represent the same value; otherwise, <see langword="false" />.</returns>
+        </member>
+        <member name="M:Azure.Core.ContentType.GetHashCode">
+            <summary>Returns the hash code for this instance.</summary><returns>A 32-bit signed integer that is the hash code for this instance.</returns>
+        </member>
+        <member name="M:Azure.Core.ContentType.op_Equality(Azure.Core.ContentType,Azure.Core.ContentType)">
+            <summary>
+            Compares equality of two <see cref="T:Azure.Core.ContentType" /> instances.
+            </summary>
+            <param name="left">The method to compare.</param>
+            <param name="right">The method to compare against.</param>
+            <returns><c>true</c> if <see cref="T:Azure.Core.ContentType" /> values are equal for <paramref name="left" /> and <paramref name="right" />, otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:Azure.Core.ContentType.op_Inequality(Azure.Core.ContentType,Azure.Core.ContentType)">
+            <summary>
+            Compares inequality of two <see cref="T:Azure.Core.ContentType" /> instances.
+            </summary>
+            <param name="left">The method to compare.</param>
+            <param name="right">The method to compare against.</param>
+            <returns><c>true</c> if <see cref="T:Azure.Core.ContentType" /> values are equal for <paramref name="left" /> and <paramref name="right" />, otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:Azure.Core.ContentType.ToString">
+            <summary>Returns the fully qualified type name of this instance.</summary><returns>The fully qualified type name.</returns>
         </member>
         <member name="T:Azure.Core.Cryptography.IKeyEncryptionKey">
             <summary>
@@ -180,7 +514,7 @@
         </member>
         <member name="T:Azure.Core.DiagnosticsOptions">
             <summary>
-            Exposes client options related to logging, telemetry and distributed tracing.
+            Exposes client options related to logging, telemetry, and distributed tracing.
             </summary>
         </member>
         <member name="P:Azure.Core.DiagnosticsOptions.IsLoggingEnabled">
@@ -212,7 +546,7 @@
         </member>
         <member name="P:Azure.Core.DiagnosticsOptions.LoggedHeaderNames">
             <summary>
-            Gets a list of headers names that are not redacted during logging.
+            Gets a list of header names that are not redacted during logging.
             </summary>
         </member>
         <member name="P:Azure.Core.DiagnosticsOptions.LoggedQueryParameters">
@@ -222,7 +556,7 @@
         </member>
         <member name="P:Azure.Core.DiagnosticsOptions.ApplicationId">
             <summary>
-            Gets or sets the value sent a the first part of "User-Agent" headers for all requests issues by this client. Defaults to <see cref="P:Azure.Core.DiagnosticsOptions.DefaultApplicationId" />.
+            Gets or sets the value sent as the first part of "User-Agent" headers for all requests issues by this client. Defaults to <see cref="P:Azure.Core.DiagnosticsOptions.DefaultApplicationId" />.
             </summary>
         </member>
         <member name="P:Azure.Core.DiagnosticsOptions.DefaultApplicationId">
@@ -1300,6 +1634,32 @@
             <param name="message">The <see cref="T:Azure.Core.HttpMessage" /> with the <see cref="T:Azure.Core.Request" /> to be authorized.</param>
             <param name="context">The <see cref="T:Azure.Core.TokenRequestContext" /> used to authorize the <see cref="T:Azure.Core.Request" />.</param>
         </member>
+        <member name="T:Azure.Core.Pipeline.DisposableHttpPipeline">
+            <summary>
+            An implementation of <see cref="T:Azure.Core.Pipeline.HttpPipeline" /> that may contain resources that require disposal.
+            </summary>
+        </member>
+        <member name="M:Azure.Core.Pipeline.DisposableHttpPipeline.#ctor(Azure.Core.Pipeline.HttpPipelineTransport,System.Int32,System.Int32,Azure.Core.Pipeline.HttpPipelinePolicy[],Azure.Core.ResponseClassifier,System.Boolean)">
+            <summary>
+            Creates a new instance of <see cref="T:Azure.Core.Pipeline.HttpPipeline" /> with the provided transport, policies and response classifier.
+            </summary>
+            <param name="transport">The <see cref="T:Azure.Core.Pipeline.HttpPipelineTransport" /> to use for sending the requests.</param>
+            <param name="perCallIndex"></param>
+            <param name="perRetryIndex"></param>
+            <param name="policies">Policies to be invoked as part of the pipeline in order.</param>
+            <param name="responseClassifier">The response classifier to be used in invocations.</param>
+            <param name="isTransportOwnedInternally"> </param>
+        </member>
+        <member name="M:Azure.Core.Pipeline.DisposableHttpPipeline.Dispose">
+            <summary>
+            Disposes the underlying transport if it is owned by the client, i.e. it was created via the Build method on <see cref="T:Azure.Core.Pipeline.HttpPipelineBuilder" />. If the underlying transport is not owned by the client, i.e. it was supplied as a custom transport on <see cref="T:Azure.Core.ClientOptions" />, it will not be disposed.
+            <remarks>
+            The reason not to dispose a transport owned outside the client, i.e. one that was provided via <see cref="T:Azure.Core.ClientOptions" /> is to account for scenarios
+            where the custom transport may be shared across clients. In this case, it is possible to dispose of a transport
+            still in use by other clients. When the transport is created internally, it can properly determine if a shared instance is in use.
+            </remarks>
+            </summary>
+        </member>
         <member name="T:Azure.Core.Pipeline.HttpClientTransport">
             <summary>
             An <see cref="T:Azure.Core.Pipeline.HttpPipelineTransport" /> implementation that uses <see cref="T:System.Net.Http.HttpClient" /> as the transport.
@@ -1309,6 +1669,12 @@
             <summary>
             Creates a new <see cref="T:Azure.Core.Pipeline.HttpClientTransport" /> instance using default configuration.
             </summary>
+        </member>
+        <member name="M:Azure.Core.Pipeline.HttpClientTransport.#ctor(Azure.Core.Pipeline.HttpPipelineTransportOptions)">
+            <summary>
+            Creates a new <see cref="T:Azure.Core.Pipeline.HttpClientTransport" /> instance using default configuration.
+            </summary>
+            <param name="options">The <see cref="T:Azure.Core.Pipeline.HttpPipelineTransportOptions" /> that to configure the behavior of the transport.</param>
         </member>
         <member name="M:Azure.Core.Pipeline.HttpClientTransport.#ctor(System.Net.Http.HttpMessageHandler)">
             <summary>
@@ -1346,6 +1712,11 @@
             </summary>
             <param name="message">The <see cref="T:Azure.Core.HttpMessage" /> containing request and response.</param>
         </member>
+        <member name="M:Azure.Core.Pipeline.HttpClientTransport.Dispose">
+            <summary>
+            Disposes the underlying <see cref="T:System.Net.Http.HttpClient" />.
+            </summary>
+        </member>
         <member name="T:Azure.Core.Pipeline.HttpPipeline">
             <summary>
             Represents a primitive for sending HTTP requests and receiving responses extensible by adding <see cref="T:Azure.Core.Pipeline.HttpPipelinePolicy" /> processing steps.
@@ -1369,6 +1740,13 @@
             <summary>
             Creates a new <see cref="T:Azure.Core.HttpMessage" /> instance.
             </summary>
+            <returns>The message.</returns>
+        </member>
+        <member name="M:Azure.Core.Pipeline.HttpPipeline.CreateMessage(Azure.RequestContext)">
+            <summary>
+            Creates a new <see cref="T:Azure.Core.HttpMessage" /> instance.
+            </summary>
+            <param name="context">Context specifying the message options.</param>
             <returns>The message.</returns>
         </member>
         <member name="P:Azure.Core.Pipeline.HttpPipeline.ResponseClassifier">
@@ -1455,6 +1833,17 @@
             <param name="perRetryPolicies">Client provided per-retry policies.</param>
             <param name="responseClassifier">The client provided response classifier.</param>
             <returns>A new instance of <see cref="T:Azure.Core.Pipeline.HttpPipeline" /></returns>
+        </member>
+        <member name="M:Azure.Core.Pipeline.HttpPipelineBuilder.Build(Azure.Core.ClientOptions,Azure.Core.Pipeline.HttpPipelinePolicy[],Azure.Core.Pipeline.HttpPipelinePolicy[],Azure.Core.Pipeline.HttpPipelineTransportOptions,Azure.Core.ResponseClassifier)">
+            <summary>
+            Creates an instance of <see cref="T:Azure.Core.Pipeline.DisposableHttpPipeline" /> populated with default policies, customer provided policies from <paramref name="options" />, client provided per call policies, and the supplied <see cref="T:Azure.Core.Pipeline.HttpPipelineTransportOptions" />.
+            </summary>
+            <param name="options">The customer provided client options object.</param>
+            <param name="perCallPolicies">Client provided per-call policies.</param>
+            <param name="perRetryPolicies">Client provided per-retry policies.</param>
+            <param name="transportOptions">The customer provided transport options which will be applied to the default transport. Note: If a custom transport has been supplied via the <paramref name="options" />, these <paramref name="transportOptions" /> will be ignored.</param>
+            <param name="responseClassifier">The client provided response classifier.</param>
+            <returns>A new instance of <see cref="T:Azure.Core.Pipeline.DisposableHttpPipeline" /></returns>
         </member>
         <member name="T:Azure.Core.Pipeline.HttpPipelinePolicy">
             <summary>
@@ -1552,6 +1941,23 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Azure.Core.Pipeline.HttpPipelineTransport.Create(Azure.Core.Pipeline.HttpPipelineTransportOptions)">
+            <summary>
+            Creates the default <see cref="T:Azure.Core.Pipeline.HttpPipelineTransport" /> based on the current environment and configuration.
+            </summary>
+            <param name="options"><see cref="T:Azure.Core.Pipeline.HttpPipelineTransportOptions" /> that affect how the transport is configured.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Azure.Core.Pipeline.HttpPipelineTransportOptions">
+            <summary>
+            Enables configuration of options for the <see cref="T:Azure.Core.Pipeline.HttpClientTransport" />
+            </summary>
+        </member>
+        <member name="P:Azure.Core.Pipeline.HttpPipelineTransportOptions.ServerCertificateCustomValidationCallback">
+            <summary>
+            A delegate that validates the certificate presented by the server.
+            </summary>
+        </member>
         <member name="T:Azure.Core.Pipeline.HttpWebRequestTransport">
             <summary>
             The <see cref="T:System.Net.HttpWebRequest" /> based <see cref="T:Azure.Core.Pipeline.HttpPipelineTransport" /> implementation.
@@ -1607,6 +2013,34 @@
             <param name="timeoutToken">The linked token that is cancelled on timeout provided token.</param>
             <param name="inner">The inner exception to use.</param>
             <param name="timeout">The timeout used for the operation.</param>
+        </member>
+        <member name="T:Azure.Core.Pipeline.ServerCertificateCustomValidationArgs">
+            <summary>
+            Enables configuration of options for the <see cref="T:Azure.Core.Pipeline.HttpClientTransport" />
+            </summary>
+        </member>
+        <member name="P:Azure.Core.Pipeline.ServerCertificateCustomValidationArgs.Certificate">
+            <summary>
+            The certificate used to authenticate the remote party.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.Pipeline.ServerCertificateCustomValidationArgs.CertificateAuthorityChain">
+            <summary>
+            The chain of certificate authorities associated with the remote certificate.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.Pipeline.ServerCertificateCustomValidationArgs.SslPolicyErrors">
+            <summary>
+            One or more errors associated with the remote certificate.
+            </summary>
+        </member>
+        <member name="M:Azure.Core.Pipeline.ServerCertificateCustomValidationArgs.#ctor(System.Security.Cryptography.X509Certificates.X509Certificate2,System.Security.Cryptography.X509Certificates.X509Chain,System.Net.Security.SslPolicyErrors)">
+            <summary>
+            Initializes an instance of <see cref="T:Azure.Core.Pipeline.ServerCertificateCustomValidationArgs" />.
+            </summary>
+            <param name="certificate">The certificate</param>
+            <param name="certificateAuthorityChain"></param>
+            <param name="sslPolicyErrors"></param>
         </member>
         <member name="M:Azure.Core.Pipeline.ClientDiagnostics.ExtractFailureContent(System.String,Azure.Core.ResponseHeaders,System.String@,System.String@,System.Collections.Generic.IDictionary{System.String,System.String}@)">
             <summary>
@@ -2091,6 +2525,241 @@
             Returns a string representation of this <see cref="T:Azure.Core.RequestUriBuilder" />.
             </summary>
             <returns>A string representation of this <see cref="T:Azure.Core.RequestUriBuilder" />.</returns>
+        </member>
+        <member name="T:Azure.Core.ResourceIdentifier">
+            <summary>
+            An Azure Resource Manager resource identifier.
+            </summary>
+        </member>
+        <member name="F:Azure.Core.ResourceIdentifier.Root">
+            <summary>
+            The root of the resource hierarchy.
+            </summary>
+        </member>
+        <member name="M:Azure.Core.ResourceIdentifier.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Azure.Core.ResourceIdentifier" /> class.
+            </summary>
+            <param name="resourceId"> The id string to create the ResourceIdentifier from. </param>
+            <remarks>
+            For more information on ResourceIdentifier format see the following.
+            ResourceGroup level id https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-functions-resource#resourceid
+            Subscription level id https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-functions-resource#subscriptionresourceid
+            Tenant level id https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-functions-resource#tenantresourceid
+            Extension id https://docs.microsoft.com/en-us/azure/azure-resource-manager/templates/template-functions-resource#extensionresourceid
+            </remarks>
+        </member>
+        <member name="P:Azure.Core.ResourceIdentifier.ResourceType">
+            <summary>
+            The resource type of the resource.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.ResourceIdentifier.Name">
+            <summary>
+            The name of the resource.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.ResourceIdentifier.Parent">
+            <summary>
+            The immediate parent containing this resource.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.ResourceIdentifier.IsProviderResource">
+            <summary>
+            Determines whether this resource is in the same namespace as its parent.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.ResourceIdentifier.SubscriptionId">
+            <summary>
+            Gets the subscription id if it exists otherwise null.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.ResourceIdentifier.Provider">
+            <summary>
+            Gets the provider namespace if it exists otherwise null.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.ResourceIdentifier.Location">
+            <summary>
+            Gets the location if it exists otherwise null.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.ResourceIdentifier.ResourceGroupName">
+            <summary>
+            The name of the resource group if it exists otherwise null.
+            </summary>
+        </member>
+        <member name="M:Azure.Core.ResourceIdentifier.ToString">
+            <summary>
+            Return the string representation of the resource identifier.
+            </summary>
+            <returns> The string representation of this resource identifier. </returns>
+        </member>
+        <member name="M:Azure.Core.ResourceIdentifier.Equals(Azure.Core.ResourceIdentifier)">
+            <summary>
+            Determine if this resource identifier is equivalent to the given resource identifier.
+            </summary>
+            <param name="other"> The resource identifier to compare to. </param>
+            <returns>True if the resource identifiers are equivalent, otherwise false. </returns>
+        </member>
+        <member name="M:Azure.Core.ResourceIdentifier.CompareTo(Azure.Core.ResourceIdentifier)">
+            <summary>
+            Compre this resource identifier to the given resource identifier.
+            </summary>
+            <param name="other"> The resource identifier to compare to. </param>
+            <returns> 0 if the resource identifiers are equivalent, less than 0 if this resource identifier
+            should be ordered before the given resource identifier, greater than 0 if this resource identifier
+            should be ordered after the given resource identifier. </returns>
+        </member>
+        <member name="M:Azure.Core.ResourceIdentifier.Equals(System.Object)">
+            <summary>Determines whether the specified object is equal to the current object.</summary><param name="obj">The object to compare with the current object.</param><returns><see langword="true" /> if the specified object  is equal to the current object; otherwise, <see langword="false" />.</returns>
+        </member>
+        <member name="M:Azure.Core.ResourceIdentifier.GetHashCode">
+            <summary>Serves as the default hash function.</summary><returns>A hash code for the current object.</returns>
+        </member>
+        <member name="M:Azure.Core.ResourceIdentifier.op_Implicit(Azure.Core.ResourceIdentifier)~System.String">
+            <summary>
+            Convert a resource identifier to a string.
+            </summary>
+            <param name="id"> The resource identifier. </param>
+        </member>
+        <member name="M:Azure.Core.ResourceIdentifier.op_Equality(Azure.Core.ResourceIdentifier,Azure.Core.ResourceIdentifier)">
+            <summary>
+            Operator overloading for '=='.
+            </summary>
+            <param name="left"> Left ResourceIdentifier object to compare. </param>
+            <param name="right"> Right ResourceIdentifier object to compare. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Azure.Core.ResourceIdentifier.op_Inequality(Azure.Core.ResourceIdentifier,Azure.Core.ResourceIdentifier)">
+            <summary>
+            Operator overloading for '!='.
+            </summary>
+            <param name="left"> Left ResourceIdentifier object to compare. </param>
+            <param name="right"> Right ResourceIdentifier object to compare. </param>
+            <returns></returns>
+        </member>
+        <member name="M:Azure.Core.ResourceIdentifier.op_LessThan(Azure.Core.ResourceIdentifier,Azure.Core.ResourceIdentifier)">
+            <summary>
+            Compares one <see cref="T:Azure.Core.ResourceIdentifier" /> with another instance.
+            </summary>
+            <param name="left"> The object on the left side of the operator. </param>
+            <param name="right"> The object on the right side of the operator. </param>
+            <returns> True if the left object is less than the right. </returns>
+        </member>
+        <member name="M:Azure.Core.ResourceIdentifier.op_LessThanOrEqual(Azure.Core.ResourceIdentifier,Azure.Core.ResourceIdentifier)">
+            <summary>
+            Compares one <see cref="T:Azure.Core.ResourceIdentifier" /> with another instance.
+            </summary>
+            <param name="left"> The object on the left side of the operator. </param>
+            <param name="right"> The object on the right side of the operator. </param>
+            <returns> True if the left object is less than or equal to the right. </returns>
+        </member>
+        <member name="M:Azure.Core.ResourceIdentifier.op_GreaterThan(Azure.Core.ResourceIdentifier,Azure.Core.ResourceIdentifier)">
+            <summary>
+            Compares one <see cref="T:Azure.Core.ResourceIdentifier" /> with another instance.
+            </summary>
+            <param name="left"> The object on the left side of the operator. </param>
+            <param name="right"> The object on the right side of the operator. </param>
+            <returns> True if the left object is greater than the right. </returns>
+        </member>
+        <member name="M:Azure.Core.ResourceIdentifier.op_GreaterThanOrEqual(Azure.Core.ResourceIdentifier,Azure.Core.ResourceIdentifier)">
+            <summary>
+            Compares one <see cref="T:Azure.Core.ResourceIdentifier" /> with another instance.
+            </summary>
+            <param name="left"> The object on the left side of the operator. </param>
+            <param name="right"> The object on the right side of the operator. </param>
+            <returns> True if the left object is greater than or equal to the right. </returns>
+        </member>
+        <member name="M:Azure.Core.ResourceIdentifier.AppendProviderResource(System.String,System.String,System.String)">
+            <summary>
+            Add a provider resource to an existing resource id.
+            </summary>
+            <param name="providerNamespace"> The provider namespace of the added resource. </param>
+            <param name="resourceType"> The simple type of the added resource, without slashes (/),
+            for example, 'virtualMachines'. </param>
+            <param name="resourceName"> The name of the resource.</param>
+            <returns> The combined resource id. </returns>
+        </member>
+        <member name="M:Azure.Core.ResourceIdentifier.AppendChildResource(System.String,System.String)">
+            <summary>
+            Add a provider resource to an existing resource id.
+            </summary>
+            <param name="childResourceType"> The simple type of the child resource, without slashes (/),
+            for example, 'subnets'. </param>
+            <param name="childResourceName"> The name of the resource. </param>
+            <returns> The combined resource id. </returns>
+        </member>
+        <member name="T:Azure.Core.ResourceType">
+            <summary>
+            Structure representing a resource type.
+            </summary>
+            <remarks> See https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-providers-and-types for more info. </remarks>
+        </member>
+        <member name="M:Azure.Core.ResourceType.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Azure.Core.ResourceType" /> class.
+            </summary>
+            <param name="resourceType"> The resource type string to convert. </param>
+        </member>
+        <member name="M:Azure.Core.ResourceType.GetLastType">
+            <summary>
+            Gets the last resource type name.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.ResourceType.Namespace">
+            <summary>
+            Gets the resource type Namespace.
+            </summary>
+        </member>
+        <member name="P:Azure.Core.ResourceType.Type">
+            <summary>
+            Gets the resource Type.
+            </summary>
+        </member>
+        <member name="M:Azure.Core.ResourceType.op_Implicit(System.String)~Azure.Core.ResourceType">
+            <summary>
+            Implicit operator for initializing a <see cref="T:Azure.Core.ResourceType" /> instance from a string.
+            </summary>
+            <param name="resourceType"> String to be converted into a <see cref="T:Azure.Core.ResourceType" /> object. </param>
+        </member>
+        <member name="M:Azure.Core.ResourceType.op_Implicit(Azure.Core.ResourceType)~System.String">
+            <summary>
+            Implicit operator for initializing a string from a <see cref="T:Azure.Core.ResourceType" />.
+            </summary>
+            <param name="resourceType"> <see cref="T:Azure.Core.ResourceType" /> to be converted into a string. </param>
+        </member>
+        <member name="M:Azure.Core.ResourceType.op_Equality(Azure.Core.ResourceType,Azure.Core.ResourceType)">
+            <summary>
+            Compares two <see cref="T:Azure.Core.ResourceType" /> objects.
+            </summary>
+            <param name="left"> First <see cref="T:Azure.Core.ResourceType" /> object. </param>
+            <param name="right"> Second <see cref="T:Azure.Core.ResourceType" /> object. </param>
+            <returns> True if they are equal, otherwise False. </returns>
+        </member>
+        <member name="M:Azure.Core.ResourceType.op_Inequality(Azure.Core.ResourceType,Azure.Core.ResourceType)">
+            <summary>
+            Compares two <see cref="T:Azure.Core.ResourceType" /> objects.
+            </summary>
+            <param name="left"> First <see cref="T:Azure.Core.ResourceType" /> object. </param>
+            <param name="right"> Second <see cref="T:Azure.Core.ResourceType" /> object. </param>
+            <returns> False if they are equal, otherwise True. </returns>
+        </member>
+        <member name="M:Azure.Core.ResourceType.Equals(Azure.Core.ResourceType)">
+            <summary>
+            Compares this <see cref="T:Azure.Core.ResourceType" /> instance with another object and determines if they are equals.
+            </summary>
+            <param name="other"> <see cref="T:Azure.Core.ResourceType" /> object to compare. </param>
+            <returns> True if they are equals, otherwise false. </returns>
+        </member>
+        <member name="M:Azure.Core.ResourceType.ToString">
+            <summary>Returns the fully qualified type name of this instance.</summary><returns>The fully qualified type name.</returns>
+        </member>
+        <member name="M:Azure.Core.ResourceType.Equals(System.Object)">
+            <summary>Indicates whether this instance and a specified object are equal.</summary><param name="other">The object to compare with the current instance.</param><returns><see langword="true" /> if <paramref name="other" /> and this instance are the same type and represent the same value; otherwise, <see langword="false" />.</returns>
+        </member>
+        <member name="M:Azure.Core.ResourceType.GetHashCode">
+            <summary>Returns the hash code for this instance.</summary><returns>A 32-bit signed integer that is the hash code for this instance.</returns>
         </member>
         <member name="T:Azure.Core.ResponseClassifier">
             <summary>
@@ -3002,8 +3671,8 @@
             begin paging from the beginning.
             </param>
             <param name="pageSizeHint">
-            The size of <see cref="T:Azure.Page`1" />s that should be requested (from
-            service operations that support it).
+            The number of items per <see cref="T:Azure.Page`1" /> that should be requested (from
+            service operations that support it). It's not guaranteed that the value will be respected.
             </param>
             <returns>
             An async sequence of <see cref="T:Azure.Page`1" />s.
@@ -3174,6 +3843,22 @@
             <exception cref="T:System.ArgumentException">
             Thrown when the <paramref name="signature" /> is empty.
             </exception>
+        </member>
+        <member name="T:Azure.ErrorOptions">
+            <summary>
+            ErrorOptions controls the behavior of an operation when an unexpected response status code is received.
+            </summary>
+        </member>
+        <member name="F:Azure.ErrorOptions.Default">
+            <summary>
+            Indicates that an operation should throw an exception when the response indicates a failure.
+            </summary>
+        </member>
+        <member name="F:Azure.ErrorOptions.NoThrow">
+            <summary>
+            Indicates that an operation should not throw an exception when the response indicates a failure.
+            Callers should check the Response.IsError property instead of catching exceptions.
+            </summary>
         </member>
         <member name="T:Azure.ETag">
             <summary>
@@ -3633,7 +4318,7 @@
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> used for the service call.</param>
             <returns>The HTTP response received from the server.</returns>
             <remarks>
-            This operation will update the value returned from GetRawResponse and might update HasCompleted, HasValue, and Value.
+            This operation will update the value returned from GetRawResponse and might update HasCompleted.
             </remarks>
         </member>
         <member name="M:Azure.Operation.UpdateStatus(System.Threading.CancellationToken)">
@@ -3643,7 +4328,7 @@
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> used for the service call.</param>
             <returns>The HTTP response received from the server.</returns>
             <remarks>
-            This operation will update the value returned from GetRawResponse and might update HasCompleted, HasValue, and Value.
+            This operation will update the value returned from GetRawResponse and might update HasCompleted.
             </remarks>
         </member>
         <member name="M:Azure.Operation.WaitForCompletionResponseAsync(System.Threading.CancellationToken)">
@@ -3670,6 +4355,39 @@
             <remarks>
             This method will periodically call UpdateStatusAsync till HasCompleted is true, then return the final response of the operation.
             </remarks>
+        </member>
+        <member name="M:Azure.Operation.WaitForCompletionResponse(System.Threading.CancellationToken)">
+            <summary>
+            Periodically calls the server till the long-running operation completes.
+            </summary>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> used for the periodical service calls.</param>
+            <returns>The last HTTP response received from the server.</returns>
+            <remarks>
+            This method will periodically call UpdateStatusAsync till HasCompleted is true, then return the final response of the operation.
+            </remarks>
+        </member>
+        <member name="M:Azure.Operation.WaitForCompletionResponse(System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            Periodically calls the server till the long-running operation completes.
+            </summary>
+            <param name="pollingInterval">
+            The interval between status requests to the server.
+            The interval can change based on information returned from the server.
+            For example, the server might communicate to the client that there is not reason to poll for status change sooner than some time.
+            </param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> used for the periodical service calls.</param>
+            <returns>The last HTTP response received from the server.</returns>
+            <remarks>
+            This method will periodically call UpdateStatusAsync till HasCompleted is true, then return the final response of the operation.
+            </remarks>
+        </member>
+        <member name="M:Azure.Operation.GetServerDelay(Azure.Response,System.TimeSpan)">
+            <summary>
+            Calculates the delay to be used for calls to WaitForCompletion.
+            </summary>
+            <param name="response">The <see cref="T:Azure.Response" />.</param>
+            <param name="pollingInterval">The polling interval specified by the call to WaitForCompletion.</param>
+            <returns></returns>
         </member>
         <member name="M:Azure.Operation.Equals(System.Object)">
             <summary>Determines whether the specified object is equal to the current object.</summary><param name="obj">The object to compare with the current object.</param><returns><see langword="true" /> if the specified object  is equal to the current object; otherwise, <see langword="false" />.</returns>
@@ -3698,6 +4416,31 @@
             <summary>
             Returns true if the long-running operation completed successfully and has produced final result (accessible by Value property).
             </summary>
+        </member>
+        <member name="M:Azure.Operation`1.WaitForCompletion(System.Threading.CancellationToken)">
+            <summary>
+            Periodically calls the server till the long-running operation completes.
+            </summary>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> used for the periodical service calls.</param>
+            <returns>The last HTTP response received from the server.</returns>
+            <remarks>
+            This method will periodically call UpdateStatusAsync till HasCompleted is true, then return the final result of the operation.
+            </remarks>
+        </member>
+        <member name="M:Azure.Operation`1.WaitForCompletion(System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            Periodically calls the server till the long-running operation completes.
+            </summary>
+            <param name="pollingInterval">
+            The interval between status requests to the server.
+            The interval can change based on information returned from the server.
+            For example, the server might communicate to the client that there is not reason to poll for status change sooner than some time.
+            </param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken" /> used for the periodical service calls.</param>
+            <returns>The last HTTP response received from the server.</returns>
+            <remarks>
+            This method will periodically call UpdateStatusAsync till HasCompleted is true, then return the final result of the operation.
+            </remarks>
         </member>
         <member name="M:Azure.Operation`1.WaitForCompletionAsync(System.Threading.CancellationToken)">
             <summary>
@@ -3848,8 +4591,8 @@
             begin paging from the beginning.
             </param>
             <param name="pageSizeHint">
-            The size of <see cref="T:Azure.Page`1" />s that should be requested (from
-            service operations that support it).
+            The number of items per <see cref="T:Azure.Page`1" /> that should be requested (from
+            service operations that support it). It's not guaranteed that the value will be respected.
             </param>
             <returns>
             An async sequence of <see cref="T:Azure.Page`1" />s.
@@ -3940,6 +4683,42 @@
             unmodified.
             </summary>
         </member>
+        <member name="T:Azure.RequestContext">
+            <summary>
+            Options which can be used to control the behavior of a request sent by a client.
+            </summary>
+        </member>
+        <member name="M:Azure.RequestContext.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Azure.RequestContext" /> class.
+            </summary>
+        </member>
+        <member name="M:Azure.RequestContext.op_Implicit(Azure.ErrorOptions)~Azure.RequestContext">
+            <summary>
+            Initializes a new instance of the <see cref="T:Azure.RequestContext" /> class using the given <see cref="P:Azure.RequestContext.ErrorOptions" />.
+            </summary>
+            <param name="options"></param>
+        </member>
+        <member name="P:Azure.RequestContext.CancellationToken">
+            <summary>
+            The token to check for cancellation.
+            </summary>
+        </member>
+        <member name="P:Azure.RequestContext.ErrorOptions">
+            <summary>
+            Controls under what conditions the operation raises an exception if the underlying response indicates a failure.
+            </summary>
+        </member>
+        <member name="M:Azure.RequestContext.AddPolicy(Azure.Core.Pipeline.HttpPipelinePolicy,Azure.Core.HttpPipelinePosition)">
+            <summary>
+            Adds an <see cref="T:Azure.Core.Pipeline.HttpPipelinePolicy" /> into the pipeline for the duration of this request.
+            The position of policy in the pipeline is controlled by <paramref name="position" /> parameter.
+            If you want the policy to execute once per client request use <see cref="F:Azure.Core.HttpPipelinePosition.PerCall" />
+            otherwise use <see cref="F:Azure.Core.HttpPipelinePosition.PerRetry" /> to run the policy for every retry.
+            </summary>
+            <param name="policy">The <see cref="T:Azure.Core.Pipeline.HttpPipelinePolicy" /> instance to be added to the pipeline.</param>
+            <param name="position">The position of the policy in the pipeline.</param>
+        </member>
         <member name="T:Azure.RequestFailedException">
             <summary>
             An exception thrown when service request fails.
@@ -3981,6 +4760,11 @@
             <param name="message">The error message that explains the reason for the exception.</param>
             <param name="errorCode">The service specific error code.</param>
             <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
+        </member>
+        <member name="M:Azure.RequestFailedException.#ctor(Azure.Response)">
+            <summary>Initializes a new instance of the <see cref="T:Azure.RequestFailedException"></see> class
+            with an error message, HTTP status code, error code obtained from the specified response.</summary>
+            <param name="response">The response to obtain error details from.</param>
         </member>
         <member name="M:Azure.RequestFailedException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
             <summary>Initializes a new instance of the <see cref="T:System.Exception" /> class with serialized data.</summary><param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> that holds the serialized object data about the exception being thrown.</param><param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext" /> that contains contextual information about the source or destination.</param><exception cref="T:System.ArgumentNullException"><paramref name="info" /> is <see langword="null" />.</exception><exception cref="T:System.Runtime.Serialization.SerializationException">The class name is <see langword="null" /> or <see cref="P:System.Exception.HResult" /> is zero (0).</exception>
@@ -4029,6 +4813,12 @@
         <member name="M:Azure.Response.Dispose">
             <summary>
             Frees resources held by this <see cref="T:Azure.Response" /> instance.
+            </summary>
+        </member>
+        <member name="P:Azure.Response.IsError">
+            <summary>
+            Indicates whether the status code of the returned response is considered
+            an error code.
             </summary>
         </member>
         <member name="M:Azure.Response.TryGetHeader(System.String,System.String@)">
