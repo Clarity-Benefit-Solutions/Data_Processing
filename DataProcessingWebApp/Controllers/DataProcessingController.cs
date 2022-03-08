@@ -40,6 +40,7 @@ namespace DataProcessingWebApp.Controllers
             return new string[] { "value1", "value2" };
         }
 
+        //todo: how does a webapp access local files
         // GET api/<controller>/5
         public async Task<HttpResponseMessage> Get(string id)
         {
@@ -58,11 +59,11 @@ namespace DataProcessingWebApp.Controllers
                         break;
 
                     case "processalegeusfiles":
-                        await CobraDataProcessing.ProcessAll();
+                        await AlegeusDataProcessing.ProcessAll();
                         break;
 
                     case "retrieveftperrorlogs":
-                        await CobraDataProcessing.ProcessAll();
+                        await AlegeusErrorLog.ProcessAll();
                         break;
                     default:
                         var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : {id} is not a valid operation";
