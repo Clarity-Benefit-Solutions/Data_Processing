@@ -73,8 +73,8 @@ namespace DataProcessingWebApp.Controllers
 
                 //
                 string[] arr = listLogs.ToArray();
-                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, "value");
-                response.Content = new StringContent(string.Join("\n", arr), Encoding.Unicode);
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK);
+                response.Content = new StringContent(string.Join("\n", arr), Encoding.Unicode, "text/plain");
                 response.Headers.CacheControl = new CacheControlHeaderValue()
                 {
                     MaxAge = TimeSpan.FromMinutes(0)
@@ -84,7 +84,7 @@ namespace DataProcessingWebApp.Controllers
             catch (Exception ex)
             {
                 HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.InternalServerError, "");
-                response.Content = new StringContent(ex.ToString(), Encoding.Unicode);
+                response.Content = new StringContent(ex.ToString(), Encoding.Unicode, "text/plain");
                 response.Headers.CacheControl = new CacheControlHeaderValue()
                 {
                     MaxAge = TimeSpan.FromMinutes(0)

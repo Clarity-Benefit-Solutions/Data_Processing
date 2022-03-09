@@ -19,6 +19,7 @@ using System.Runtime.Caching;
 namespace DataProcessing
 {
 
+    
     public class FileCheckResults : Dictionary<int, string>
     {
         internal Boolean markAsCompleteFail = false;

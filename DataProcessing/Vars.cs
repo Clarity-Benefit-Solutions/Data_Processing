@@ -23,6 +23,10 @@ namespace DataProcessing
 
         private string _connStrNameCobraFileProcessing;
 
+        public static bool IsRunningAsWebApp { get; set; }
+
+        public static string WebAppRootPath { get; set; }
+
         private string connStrNameCobraFileProcessing
         {
             get
@@ -327,12 +331,23 @@ namespace DataProcessing
 
         #region LocalRootPaths
 
+       
         public string localTestRoot
         {
             get
             {
 #if (CTXSUMEETDEV)
-                string path = $"{Utils.GetExeBaseDir()}/../../../__LocalTestDirsAndFiles";
+                string path = "";
+                if (!IsRunningAsWebApp)
+                {
+                    path = $"{Utils.GetExeBaseDir()}/../../../__LocalTestDirsAndFiles";
+                }
+                else
+                {
+                    path = $"{WebAppRootPath}/../__LocalTestDirsAndFiles"; 
+                }
+                
+
                 DirectoryInfo dirInfo = new DirectoryInfo(path);
                 if (!dirInfo.Exists)
                 {
