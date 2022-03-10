@@ -42,7 +42,7 @@ namespace CoreUtils.Classes
             {
                 CachePath = $"{Path.GetTempFileName()}.sqlite",
                 CleanupInterval = cleanupTimeSpan != null ? cleanupTimeSpan : TimeSpan.FromHours(1),
-                MemoryOnly = false
+                MemoryOnly = true
             };
 
             //
@@ -53,7 +53,7 @@ namespace CoreUtils.Classes
 
             CacheEntryOptions = new DistributedCacheEntryOptions
             {
-                SlidingExpiration = slidingExpiration
+                SlidingExpiration = slidingExpiration,
             };
 
 
@@ -66,8 +66,16 @@ namespace CoreUtils.Classes
             {
                 Logger = logger;
             }
-
-            DiskCache = new SqliteCache(Options, Logger);
+            try
+            {
+                DiskCache = new SqliteCache(Options, Logger);
+            }
+            catch (Exception)
+            {
+                // ignore - happens in Web! get error Exception: Library e_sqlite3 not found
+                // plat: win
+                // suffix: DLL
+            }
 
             //
             MemoryCache = MemoryCache.Default;
@@ -81,9 +89,9 @@ namespace CoreUtils.Classes
                 return null;
 
             //
-            if (item is String || item is string || item is Int32 || item is Int64 || item is Boolean)
+            if (item is String || item is string || item is Int32 || item is Int64 || item is Boolean || DiskCache == null)
             {
-               return this.Add(key, (string)item);
+                return this.AddToMemoryCache(key, item);
             }
 
             // remove expired every N sets
@@ -115,6 +123,16 @@ namespace CoreUtils.Classes
             MemoryCache.Set(key, item, dateTimeOffset);
 
             return item;
+        }   
+        public Object AddToMemoryCache(string key, object item)
+        {
+            if (item == null)
+                return null;
+
+            DateTimeOffset dateTimeOffset = new DateTimeOffset(DateTime.UtcNow, TimeSpan.Zero).AddSeconds(SlidingExpiration.TotalSeconds);
+            MemoryCache.Set(key, item, dateTimeOffset);
+
+            return item;
         }
 
         public Object Get(string key)
@@ -126,6 +144,10 @@ namespace CoreUtils.Classes
                 return value;
             }
 
+            if (DiskCache == null)
+            {
+                return null;
+            }
             // try DiskCache
             Byte[] byteArray = DiskCache.Get(key);
             if (byteArray == null || byteArray.Length == 0)
@@ -149,6 +171,12 @@ namespace CoreUtils.Classes
             {
                 return true;
             }
+
+            if (DiskCache == null)
+            {
+                return false;
+            }
+
 
             // try DiskCache
             Byte[] byteArray = DiskCache.Get(key);

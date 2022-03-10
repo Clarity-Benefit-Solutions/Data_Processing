@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using CoreUtils;
@@ -22,9 +17,12 @@ namespace TestApp
     {
         private Dispatcher _uiDispatcher = Dispatcher.CurrentDispatcher;
         private BindingSource _bindingSource1 = new BindingSource();
+        Vars vars = new Vars();
+
 
         public Form1()
         {
+            SubscribeToUnhandledExceptions();
             InitializeComponent();
 
             this.listLogs.AutoGenerateColumns = true;
@@ -33,6 +31,29 @@ namespace TestApp
 
             //
             SubscribeToEvents();
+
+
+        }
+
+        private void SubscribeToUnhandledExceptions()
+        {
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(HandleUnhandledException);
+        }
+
+
+        private void HandleUnhandledException(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.ExceptionObject;
+            var logItem = new LogFields(
+                DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                "",
+               "Unhandled Exception",
+               $"Unhandled Exception", "",
+                $"Unhandled Exception: {e.ToString()}"
+                );
+
+            this.HandleOnFileLogOperationCallback(null, logItem, null);
 
         }
 
@@ -48,15 +69,24 @@ namespace TestApp
                 logParams.ProcessingTaskOutcomeDetails
             );
 
+            this.HandleOnFileLogOperationCallback(sender, logItem, null);
+        }
 
+        private void HandleOnFileLogOperationCallback(object sender, LogFields logItem, Exception ex )
+        {
             if (listLogs.InvokeRequired)
             {
                 listLogs.Invoke(
                     (Action)(() =>
-                   {
-                       _bindingSource1.Add(logItem);
-                       _bindingSource1.MoveLast();
-                   }
+                    {
+                        _bindingSource1.Add(logItem);
+                        _bindingSource1.MoveLast();
+
+                        if (ex != null)
+                        {
+                            ShowThreadExceptionDialog("Unhandled Error", ex);
+                        }
+                    }
                 )
                     );
             }
@@ -65,7 +95,20 @@ namespace TestApp
                 // thread - safe equivalent 
                 _bindingSource1.Add(logItem);
                 _bindingSource1.MoveLast();
+                
+                if (ex != null)
+                {
+                    ShowThreadExceptionDialog("Unhandled Error", ex);
+                }
             }
+        }
+        public static DialogResult ShowThreadExceptionDialog(string title, Exception e)
+        {
+            string errorMsg = "An application error occurred. Please contact the adminstrator " +
+                "with the following information:\n\n";
+            errorMsg = errorMsg + e.Message + "\n\nStack Trace:\n" + e.StackTrace;
+            return MessageBox.Show(errorMsg, title, MessageBoxButtons.AbortRetryIgnore,
+                MessageBoxIcon.Stop);
         }
 
         public void SubscribeToEvents()
@@ -81,9 +124,27 @@ namespace TestApp
         {
             cmdProcessCobraFiles.Enabled = false;
 
-            await CobraDataProcessing.ProcessAll();
+            try
+            {
+                await CobraDataProcessing.ProcessAll();
+            }
+            catch (Exception ex)
+            {
 
-            cmdProcessCobraFiles.Enabled = true;
+                this.HandleOnFileLogOperationCallback(sender,
+                    new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                        "",
+                       "Unhandled Exception",
+                       $"Unhandled Exception", "",
+                        $"Unhandled Exception: {ex.ToString()}"
+                        ),
+                    ex
+                    );
+            }
+            finally
+            {
+                cmdProcessCobraFiles.Enabled = true;
+            }
         }
 
 
@@ -91,71 +152,189 @@ namespace TestApp
         private async void cmdProcessAlegeusFiles_Click(object sender, EventArgs e)
         {
             cmdProcessAlegeusFiles.Enabled = false;
-            //
-            await AlegeusDataProcessing.ProcessAll();
-            //
-            cmdProcessAlegeusFiles.Enabled = true;
+
+            try
+            {
+                await AlegeusDataProcessing.ProcessAll();
+            }
+            catch (Exception ex)
+            {
+
+                this.HandleOnFileLogOperationCallback(sender,
+                    new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                        "",
+                       "Unhandled Exception",
+                       $"Unhandled Exception", "",
+                        $"Unhandled Exception: {ex.ToString()}"
+                        ),
+                    ex
+                    );
+            }
+            finally
+            {
+                cmdProcessAlegeusFiles.Enabled = true;
+            }
+
         }
 
         private async void cmdRetrieveFtpErrorLogs_Click(object sender, EventArgs e)
         {
             cmdRetrieveFtpErrorLogs.Enabled = false;
-            //
-            await AlegeusErrorLog.ProcessAll();
-            //
-            cmdRetrieveFtpErrorLogs.Enabled = true;
+
+            try
+            {
+                await AlegeusErrorLog.ProcessAll();
+            }
+            catch (Exception ex)
+            {
+
+                this.HandleOnFileLogOperationCallback(sender,
+                    new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                        "",
+                       "Unhandled Exception",
+                       $"Unhandled Exception", "",
+                        $"Unhandled Exception: {ex.ToString()}"
+                        ),
+                    ex
+                    );
+            }
+            finally
+            {
+                cmdRetrieveFtpErrorLogs.Enabled = true;
+            }
+
         }
 
-        private async void cmdClearLog_Click(object sender, EventArgs e)
+        private void cmdClearLog_Click(object sender, EventArgs e)
         {
             _bindingSource1.Clear();
         }
 
-        private async void cmdClearAll_Click(object sender, EventArgs e)
+        private void cmdClearAll_Click(object sender, EventArgs e)
         {
-            //
-            await Task.Factory.StartNew
-            (
-                () =>
-               {
-                   AlegeusErrorLog errorLog = new AlegeusErrorLog();
-                   errorLog.USERVERYCAUTIOUSLY_ClearAllTables();
-               }
-            );
+            cmdClearAll.Enabled = false;
+            try
+            {
+                AlegeusErrorLog errorLog = new AlegeusErrorLog();
+                errorLog.USERVERYCAUTIOUSLY_ClearAllTables();
+            }
+            catch (Exception ex)
+            {
+
+                this.HandleOnFileLogOperationCallback(sender,
+                    new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                        "",
+                       "Unhandled Exception",
+                       $"Unhandled Exception", "",
+                        $"Unhandled Exception: {ex.ToString()}"
+                        ),
+                    ex
+                    );
+            }
+            finally
+            {
+                cmdClearAll.Enabled = true;
+            }
+        }
+
+        private void cmdOpenAccessDB_Click(object sender, EventArgs e)
+        {
+            cmdOpenAccessDB.Enabled = false;
+
+            try
+            {
+                var directoryPath = Utils.GetExeBaseDir();
+                Process.Start($"{directoryPath}/../../../_MsAccessFiles/AlegeusErrorLogSystemv4v_Control-New.accdb");
+            }
+            catch (Exception ex)
+            {
+
+                this.HandleOnFileLogOperationCallback(sender,
+                    new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                        "",
+                       "Unhandled Exception",
+                       $"Unhandled Exception", "",
+                        $"Unhandled Exception: {ex.ToString()}"
+                        ),
+                    ex
+                    );
+            }
+            finally
+            {
+                cmdOpenAccessDB.Enabled = true;
+            }
 
         }
 
-        private async void cmdOpenAccessDB_Click(object sender, EventArgs e)
-        {
-            var directoryPath = Utils.GetExeBaseDir();
-            Process.Start($"{directoryPath}/../../../_MsAccessFiles/AlegeusErrorLogSystemv4v_Control-New.accdb");
-        }
-
-        private async void cmdCopyTestFiles_Click(object sender, EventArgs e)
+        private void cmdCopyTestFiles_Click(object sender, EventArgs e)
         {  //
+            cmdCopyTestFiles.Enabled = false;
 
-            var directoryPath = Utils.GetExeBaseDir();
-            Process.Start($"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
-            Process.Start(
-                $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
-            Process.Start(
-                $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
+            try
+            {
+                var directoryPath = Utils.GetExeBaseDir();
+                Process.Start($"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
+                Process.Start(
+                    $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
+                Process.Start(
+                    $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
+            }
+            catch (Exception ex)
+            {
+
+                this.HandleOnFileLogOperationCallback(sender,
+                    new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                        "",
+                       "Unhandled Exception",
+                       $"Unhandled Exception", "",
+                        $"Unhandled Exception: {ex.ToString()}"
+                        ),
+                    ex
+                    );
+            }
+            finally
+            {
+                cmdCopyTestFiles.Enabled = true;
+            }
 
 
         }
 
         private async void cmdDoALL_Click(object sender, EventArgs e)
         {
-            var eventArgs = EventArgs.Empty;
-            cmdCopyTestFiles_Click(this, eventArgs);
-            cmdClearLog_Click(this, eventArgs);
-            cmdClearAll_Click(this, eventArgs);
-            await CobraDataProcessing.ProcessAll();
-            await AlegeusDataProcessing.ProcessAll();
-            await AlegeusErrorLog.ProcessAll();
-            cmdOpenAccessDB_Click(this, eventArgs);
+            cmdDoALL.Enabled = false;
+
+            try
+            {
+                var eventArgs = EventArgs.Empty;
+                cmdCopyTestFiles_Click(this, eventArgs);
+                cmdClearLog_Click(this, eventArgs);
+                cmdClearAll_Click(this, eventArgs);
+                await CobraDataProcessing.ProcessAll();
+                await AlegeusDataProcessing.ProcessAll();
+                await AlegeusErrorLog.ProcessAll();
+                cmdOpenAccessDB_Click(this, eventArgs);
+            }
+            catch (Exception ex)
+            {
+
+                this.HandleOnFileLogOperationCallback(sender,
+                    new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                        "",
+                       "Unhandled Exception",
+                       $"Unhandled Exception", "",
+                        $"Unhandled Exception: {ex.ToString()}"
+                        ),
+                    ex
+                    );
+            }
+            finally
+            {
+                cmdDoALL.Enabled = true;
+            }
+
         }
     }
 
-   
+
 }

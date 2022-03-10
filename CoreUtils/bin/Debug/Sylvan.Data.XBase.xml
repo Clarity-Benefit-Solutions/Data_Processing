@@ -1,0 +1,263 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sylvan.Data.XBase</name>
+    </assembly>
+    <members>
+        <member name="T:Sylvan.Data.XBase.EncodingNotSupportedException">
+            <summary>
+            The exception that is thrown when an XBase file contains an unsupported text encoding.
+            </summary>
+        </member>
+        <member name="P:Sylvan.Data.XBase.EncodingNotSupportedException.LanguageCode">
+            <summary>
+            The language code for the unsupported language.
+            </summary>
+        </member>
+        <member name="T:Sylvan.Data.XBase.UnsupportedColumnTypeException">
+            <summary>
+            The exception that is thrown when an XBase file contains an unsupported colum type.
+            </summary>
+        </member>
+        <member name="P:Sylvan.Data.XBase.UnsupportedColumnTypeException.Ordinal">
+            <summary>
+            Gets the ordinal of the column.
+            </summary>
+        </member>
+        <member name="P:Sylvan.Data.XBase.UnsupportedColumnTypeException.Name">
+            <summary>
+            Gets the name of the column.
+            </summary>
+        </member>
+        <member name="P:Sylvan.Data.XBase.UnsupportedColumnTypeException.TypeCode">
+            <summary>
+            The type code for the unsupported column.
+            </summary>
+        </member>
+        <member name="T:Sylvan.Data.XBase.XBaseDataReader">
+            <summary>
+            A forward-only data reader for xBase (.dbf) data files.
+            </summary>
+        </member>
+        <member name="P:Sylvan.Data.XBase.XBaseDataReader.ModifiedDate">
+            <summary>
+            Gets the last modified date of the file.
+            </summary>
+        </member>
+        <member name="P:Sylvan.Data.XBase.XBaseDataReader.VisibleFieldCount">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.Create(System.String,Sylvan.Data.XBase.XBaseDataReaderOptions)">
+            <summary>
+            Creates a new XBaseDataReader.
+            </summary>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.Create(System.String,System.String,Sylvan.Data.XBase.XBaseDataReaderOptions)">
+            <summary>
+            Creates a new XBaseDataReader.
+            </summary>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.Create(System.IO.Stream)">
+            <summary>
+            Creates a new XBaseDataReader.
+            </summary>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.Create(System.IO.Stream,Sylvan.Data.XBase.XBaseDataReaderOptions)">
+            <summary>
+            Creates a new XBaseDataReader.
+            </summary>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.Create(System.IO.Stream,System.IO.Stream)">
+            <summary>
+            Creates a new XBaseDataReader.
+            </summary>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.Create(System.IO.Stream,System.IO.Stream,Sylvan.Data.XBase.XBaseDataReaderOptions)">
+            <summary>
+            Creates a new XBaseDataReader.
+            </summary>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.CreateAsync(System.IO.Stream,Sylvan.Data.XBase.XBaseDataReaderOptions)">
+            <summary>
+            Creates a new XBaseDataReader.
+            </summary>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.CreateAsync(System.IO.Stream,System.IO.Stream,Sylvan.Data.XBase.XBaseDataReaderOptions)">
+            <summary>
+            Creates a new XBaseDataReader.
+            </summary>
+        </member>
+        <member name="P:Sylvan.Data.XBase.XBaseDataReader.IsDeletedRow">
+            <summary>
+            Indicates if the current row is marked as deleted.
+            Deleted rows are only read when the <see cref="P:Sylvan.Data.XBase.XBaseDataReaderOptions.ReadDeletedRecords"/>
+            option is enabled.
+            </summary>
+        </member>
+        <member name="P:Sylvan.Data.XBase.XBaseDataReader.Item(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="P:Sylvan.Data.XBase.XBaseDataReader.Item(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="P:Sylvan.Data.XBase.XBaseDataReader.Depth">
+            <inheritdoc/>
+        </member>
+        <member name="P:Sylvan.Data.XBase.XBaseDataReader.FieldCount">
+            <inheritdoc/>
+        </member>
+        <member name="P:Sylvan.Data.XBase.XBaseDataReader.HasRows">
+            <inheritdoc/>
+        </member>
+        <member name="P:Sylvan.Data.XBase.XBaseDataReader.IsClosed">
+            <inheritdoc/>
+        </member>
+        <member name="P:Sylvan.Data.XBase.XBaseDataReader.RecordsAffected">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetBoolean(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetByte(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetBytes(System.Int32,System.Int64,System.Byte[],System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetChar(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetChars(System.Int32,System.Int64,System.Char[],System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetDataTypeName(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetDateTime(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetDecimal(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetDouble(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetFieldType(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetFloat(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetGuid(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetInt16(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetInt32(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetInt64(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetName(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetOrdinal(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetString(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetStream(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetTextReader(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetValue(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetValues(System.Object[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.IsDBNull(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.NextResult">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.Read">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.ReadAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetColumnSchema">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.GetSchemaTable">
+            <inheritdoc/>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReader.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="P:Sylvan.Data.XBase.XBaseDataReader.DataAccessor.CanBeNull">
+            <summary>
+            Indicates if the dbase type can hold a null value.
+            Date, for example can be filled with ' ', which has no meaningful value.
+            Int32, on the other hand, is store in a 4-byte binary representation
+            so cannot represent a null value.
+            </summary>
+        </member>
+        <member name="T:Sylvan.Data.XBase.XBaseDataReaderOptions">
+            <summary>
+            Options for creating <see cref="T:Sylvan.Data.XBase.XBaseDataReader"/>.
+            </summary>
+        </member>
+        <member name="M:Sylvan.Data.XBase.XBaseDataReaderOptions.#ctor">
+            <summary>
+            Creates a new <see cref="T:Sylvan.Data.XBase.XBaseDataReaderOptions"/>.
+            </summary>
+        </member>
+        <member name="P:Sylvan.Data.XBase.XBaseDataReaderOptions.IgnoreMissingMemo">
+            <summary>
+            Ignore a missing memo stream.
+            </summary>
+            <remarks>
+            When false, the default, the DBaseDataReader will throw an exception
+            during initialization if a memo stream is expected but not provided.
+            When true, any data access that requires the memo stream will produce an exception
+            upon acccess. Non-memo fields are all available.
+            </remarks>
+        </member>
+        <member name="P:Sylvan.Data.XBase.XBaseDataReaderOptions.IgnoreUnsupportedTypes">
+            <summary>
+            Ignores columns of unknown types.
+            </summary>
+            <remarks>
+            When this is disabled, the data reader will throw an exception during
+            construction when an unknown type is encountered.
+            
+            When this is enabled, columns of unknown type will be accessable as
+            binary data via GetBytes or GetValue.
+            </remarks>
+        </member>
+        <member name="P:Sylvan.Data.XBase.XBaseDataReaderOptions.ReadDeletedRecords">
+            <summary>
+            Indicates if deleted records should be read.
+            </summary>
+        </member>
+        <member name="P:Sylvan.Data.XBase.XBaseDataReaderOptions.Encoding">
+            <summary>
+            Specifies an explicit encoding.
+            </summary>
+            <remarks>
+            By default, the encoding specified in the file header will be used.
+            </remarks>
+        </member>
+    </members>
+</doc>
