@@ -138,7 +138,7 @@ namespace CoreUtils.Classes
         public Object Get(string key)
         {
             // try mem cache
-            string value = (string)MemoryCache.Get(key);
+            Object value = MemoryCache.Get(key);
             if (value != null)
             {
                 return value;
@@ -166,7 +166,7 @@ namespace CoreUtils.Classes
         public Boolean ContainsKey(string key)
         {
             // try mem cache
-            string item = (string)MemoryCache.Get(key);
+            Object item = MemoryCache.Get(key);
             if (item != null)
             {
                 return true;
