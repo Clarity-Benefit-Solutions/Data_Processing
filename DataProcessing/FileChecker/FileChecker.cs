@@ -284,7 +284,7 @@ namespace DataProcessing
 
             // import the file with bulk copy
             var newPath =
-                Import.PrefixLineWithEntireLineAndFileName( currentFilePath, this.srcFilePath, fileLogParams);
+                Import.PrefixLineWithEntireLineAndFileName(currentFilePath, this.srcFilePath, fileLogParams);
 
             // import into table so we can manipulate the file
             ImpExpUtils.ImportCsvFileBulkCopy(this.dbConn, newPath, this.hasHeaderRow, tableName,
@@ -407,7 +407,7 @@ namespace DataProcessing
                         break;
                 }
 
-                
+
                 // skip checking other columns if a important column value is invalid
                 if (skipRestOfRow)
                 {
@@ -1031,11 +1031,12 @@ namespace DataProcessing
         #endregion cacheEmployerData
 
         #region CheckUtils
-        private static readonly Regex regexInteger = new Regex(@"[^0-9]");
-        private static readonly Regex regexAlphaNumeric = new Regex(@"[^a-zA-Z0-9]");
-        private static readonly Regex regexAlphaOnly = new Regex(@"[^a-zA-Z]");
-        private static readonly Regex regexAlphaAndDashes = new Regex(@"[^a-zA-Z\-]");
-        private static readonly Regex regexDouble = new Regex(@"[^0-9\.]");
+        private static readonly Regex regexInteger = new Regex("[^0-9]");
+        private static readonly Regex regexAlphaNumeric = new Regex("[^a-zA-Z0-9]");
+        private static readonly Regex regexAlphaOnly = new Regex("[^a-zA-Z]");
+        private static readonly Regex regexAlphaAndDashes = new Regex("[^a-zA-Z-]");
+        private static readonly Regex regexNumericAndDashes = new Regex("[^0-9-]");
+        private static readonly Regex regexDouble = new Regex("[^0-9.]");
 
         public string EnsureValueIsOfFormatAndMatchesRules(mbi_file_table_stage dataRow, TypedCsvColumn column)
         {
@@ -1076,6 +1077,11 @@ namespace DataProcessing
                     case FormatType.AlphaAndDashes:
                         // replace all non alphanumeric
                         value = regexAlphaAndDashes.Replace(value, String.Empty);
+                        break;
+
+                    case FormatType.NumbersAndDashes:
+                        // replace all non alphanumeric
+                        value = regexNumericAndDashes.Replace(value, String.Empty);
                         break;
 
                     case FormatType.Integer:
@@ -1151,6 +1157,11 @@ namespace DataProcessing
                 }
             }
 
+            // pad ssn to 9 digits with leading zeros
+            if (column.SourceColumn == "EmployeeSocialSecurityNumber" && value.Length < column.MinLength)
+            {
+                value = value.PadLeft(column.MinLength, '0');
+            }
 
             // set row column value to the fixed value if it has changed
             if (value != orgValue)

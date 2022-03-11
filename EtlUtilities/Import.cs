@@ -428,7 +428,7 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("FirstName", "FirstName", FormatType.AlphaOnly, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("MiddleInitial", "MiddleInitial", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("BirthDate", "BirthDate", FormatType.IsoDate, null, 8, 8, 0, 0));
-                        mappings.Add(new TypedCsvColumn("Phone", "Phone", FormatType.AlphaAndDashes, null, 0, 10, 0, 0));
+                        mappings.Add(new TypedCsvColumn("Phone", "Phone", FormatType.NumbersAndDashes, null, 0, 10, 0, 0));
                         mappings.Add(new TypedCsvColumn("AddressLine1", "AddressLine1", FormatType.AlphaNumeric, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("AddressLine2", "AddressLine2", FormatType.AlphaNumeric, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("City", "City", FormatType.AlphaOnly, null, 0, 0, 0, 0));
@@ -436,7 +436,7 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("Zip", "Zip", FormatType.Integer, null, 0, 5, 0, 0));
                         mappings.Add(new TypedCsvColumn("Country", "Country", FormatType.AlphaOnly, "US", 2, 2, 0, 0));
                         mappings.Add(new TypedCsvColumn("Email", "Email", FormatType.Email, null, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("MobileNumber", "MobileNumber", FormatType.AlphaAndDashes, null, 0, 10, 0, 0));
+                        mappings.Add(new TypedCsvColumn("MobileNumber", "MobileNumber", FormatType.NumbersAndDashes, null, 0, 10, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeStatus", "EmployeeStatus", FormatType.Integer, "2|5", 1, 1, 0,
                             0));
 
@@ -540,7 +540,7 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("LastName", "LastName", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("FirstName", "FirstName", FormatType.AlphaOnly, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("MiddleInitial", "MiddleInitial", FormatType.String, null, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("Phone", "Phone", FormatType.AlphaAndDashes, null, 0, 10, 0, 0));
+                        mappings.Add(new TypedCsvColumn("Phone", "Phone", FormatType.NumbersAndDashes, null, 0, 10, 0, 0));
                         mappings.Add(new TypedCsvColumn("AddressLine1", "AddressLine1", FormatType.AlphaNumeric, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("AddressLine2", "AddressLine2", FormatType.AlphaNumeric, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("City", "City", FormatType.AlphaOnly, null, 0, 0, 0, 0));

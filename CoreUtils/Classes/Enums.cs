@@ -52,6 +52,7 @@ namespace CoreUtils.Classes
         [Utils.DisplayText("AlphaNumeric")] AlphaNumeric,
         [Utils.DisplayText("AlphaOnly")] AlphaOnly,
         [Utils.DisplayText("AlphaAndDashes")] AlphaAndDashes,
+        [Utils.DisplayText("NumbersAndDashes")] NumbersAndDashes,
         [Utils.DisplayText("Integer")] Integer,
         [Utils.DisplayText("Double")] Double,
         [Utils.DisplayText("YYYYMMDD")] IsoDate,
