@@ -64,6 +64,7 @@ namespace CoreUtils.Classes
         [Utils.DisplayText("HeaderType.Own")] Own,
         [Utils.DisplayText("HeaderType.Old")] Old,
         [Utils.DisplayText("HeaderType.New")] New,
+        [Utils.DisplayText("HeaderType.SegmentedFunding")] SegmentedFunding,
 
         [Utils.DisplayText("HeaderType.NoChange")]
         NoChange

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using CoreUtils;
 using CoreUtils.Classes;
+using Sylvan.Data.Csv;
 //using ETLBox.Connection;
 //using ETLBox.DataFlow;
 //using ETLBox.DataFlow.Connectors;
@@ -243,50 +244,97 @@ namespace EtlUtilities
             return tempFileName;
         }
 
-        public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath, HeaderType folderHeaderType)
+        public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath)
         {
-            //todo: FileChecker: @Luis: get specs for detecting the file types and share with @Sumeet
-            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
+            //todo: FileChecker: @Luis: get specs record_types other than IB, IC, IH
+            string contents = FileUtils.GetFlatFileContents(srcFilePath, 2);
+            string[] lines = contents.Split('\n');
 
-            // New: IA,XX,BENEFL1,Clarity Standard Import Template, Standard Result Template, Beneflex Standard Export Template
-            if (contents.Contains("XX,") && contents.Contains("Clarity Standard Import Template,") &&
-                contents.Contains("BENEFL1,"))
+            // if no lines, ignore
+            if (lines.Length < 1)
             {
-                return HeaderType.New;
+                return HeaderType.NotApplicable;
             }
 
-            // Old: IA,XX,BENEFL1,New Beneflex Standard Import Template 2015,Standard Result Template,Beneflex Standard Export Template
-            else if (contents.Contains("XX,") && contents.Contains("New Beneflex Standard Import Template 2015,"))
+            int rowNo = 0;
+            foreach (string line in lines)
             {
-                return HeaderType.Old;
-            }
-            // no change: IA,XX,BENEFL1,New Beneflex Standard Import Template 2015,Standard Result Template,Beneflex Standard Export Template
-            else if (contents.Contains("New Beneflex Standard Import Template 2015,") && contents.Contains("BENEFL1,"))
-            {
-                return HeaderType.NoChange;
-            }
-            // Own: IA,XX,New Beneflex Standard Import Template 2015,Standard Result Template,Beneflex Standard Export Template
-            else if (contents.Contains("New Beneflex Standard Import Template 2015,") && !contents.Contains("BENEFL1,"))
-            {
-                return HeaderType.Own;
+                rowNo++;
+                var columns = line.Split(',');
+
+                // if blank line, go to next line
+                if (columns.Length < 1)
+                {
+                    continue;
+                }
+
+                // get file format
+                var firstColValue = columns[0];
+                var fileFormat = ImpExpUtils.GetAlegeusRowFormat(firstColValue);
+                // note: we are also detecting header type from conettn for prev Own and NoChange header folders
+                switch (fileFormat)
+                {
+                    case EdiFileFormat.Unknown:
+                        continue;
+
+                    case EdiFileFormat.AlegeusDemographics:
+                        switch (columns.Length)
+                        {
+                            case 19:
+                                return HeaderType.Old;
+
+                            case 24:
+                                return HeaderType.New;
+                            // can also be segmented header!
+
+                            default:
+                                return HeaderType.Old;
+                        }
+                    case EdiFileFormat.AlegeusEmployeeDeposit:
+                        switch (columns.Length)
+                        {
+                            case 11:
+                                // same cols for New and Segemented Funding!
+                                return HeaderType.Old;
+
+                            // default is Old
+                            default:
+                                return HeaderType.Old;
+                        }
+                    case EdiFileFormat.AlegeusEnrollment:
+                        switch (columns.Length)
+                        {
+                            case 14:
+                                return HeaderType.Old;
+
+                            case 15:
+                                return HeaderType.New;
+
+                            case 16:
+                                return HeaderType.SegmentedFunding;
+
+                            default:
+                                return HeaderType.Old;
+                        }
+                    default:
+                        return HeaderType.Old;
+                }
             }
 
-
-            return folderHeaderType;
+            return HeaderType.NotApplicable;
 
         }
         public static Boolean IsCobraImportFile(string srcFilePath)
         {
-            //todo: FileChecker: @Luis: get specs for detecting the file types and share with @Sumeet
+            // COBRA files, first line starts with [VERSION],
             string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
 
-            // New: IA,XX,BENEFL1,Clarity Standard Import Template, Standard Result Template, Beneflex Standard Export Template
             if (contents.Contains("[VERSION],"))
             {
                 return true;
             }
 
-          
+
             // if (fileInfo.Name.IndexOf("QB", StringComparison.InvariantCulture) >= 0
             //             || fileInfo.Name.IndexOf("NPM", StringComparison.InvariantCulture) >= 0)
             //    {

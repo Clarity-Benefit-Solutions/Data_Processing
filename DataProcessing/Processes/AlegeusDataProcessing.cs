@@ -136,27 +136,27 @@ namespace DataProcessing
                     // do not log - gives too many lines
                     //DbUtils.LogFileOperation(fileLogParams);
 
-                    var headerType = HeaderType.NotApplicable;
+                    //var headerType = HeaderType.NotApplicable;
 
-                    // get folder header type
-                    switch (rowTemplateType?.ToLower())
-                    {
-                        case "new":
-                            headerType = HeaderType.New;
-                            break;
-                        case "old":
-                            headerType = HeaderType.Old;
-                            break;
-                        case "none":
-                            headerType = HeaderType.NoChange;
-                            break;
-                        case "own":
-                            headerType = HeaderType.Own;
-                            break;
-                        default:
-                            headerType = HeaderType.NotApplicable;
-                            break;
-                    }
+                    //// get folder header type
+                    //switch (rowTemplateType?.ToLower())
+                    //{
+                    //    case "new":
+                    //        headerType = HeaderType.New;
+                    //        break;
+                    //    case "old":
+                    //        headerType = HeaderType.Old;
+                    //        break;
+                    //    case "none":
+                    //        headerType = HeaderType.NoChange;
+                    //        break;
+                    //    case "own":
+                    //        headerType = HeaderType.Own;
+                    //        break;
+                    //    default:
+                    //        headerType = HeaderType.NotApplicable;
+                    //        break;
+                    //}
 
                     // change from PROD source dir to Ctx source dir
                     rowFolderName = Vars.ConvertFilePathFromProdToCtx(rowFolderName);
@@ -166,6 +166,8 @@ namespace DataProcessing
                         rowFolderName, DirectoryIterateType.Files, false, "*.*",
                         (srcFilePath, destFilePath, dummy2) =>
                         {
+                            var headerType = Import.GetAlegeusHeaderTypeFromFile(srcFilePath);
+
                             // add uniqueId to file so we can track it across folders and operations
                             var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(headerType, srcFilePath, true,
                                 fileLogParams1);
@@ -303,10 +305,8 @@ namespace DataProcessing
                 Vars.alegeusFileHeadersRoot, DirectoryIterateType.Files, false, fileExt,
                 (srcFilePath, destFilePath, dummy2) =>
                 {
-                    // 0. calc headerType for file
-                    var folderHeaderType = DbUtils.GetHeaderTypeFromFileName(srcFilePath);
-
-                    var headerType = Import.GetAlegeusHeaderTypeFromFile(srcFilePath, folderHeaderType);
+                    //
+                    var headerType = Import.GetAlegeusHeaderTypeFromFile(srcFilePath);
 
                     //1. truncate staging table
                     var tableName = "[dbo].[alegeus_file_staging]";

@@ -16,8 +16,8 @@ using EtlUtilities;
 
 namespace DataProcessing
 {
-    
-    
+
+
     [SuppressMessage("ReSharper", "StringLiteralTypo")]
     public class CobraDataProcessing
     {
@@ -409,13 +409,12 @@ namespace DataProcessing
                     DbConnection dbConnCobra = Vars.dbConnCobraFileProcessing;
 
                     //1. truncate staging table
-                    // ReSharper disable once StringLiteralTypo
-                    string tableName = "[dbo].[QB_file_data_fixtbl]";
+                    string tableName = @"[dbo].[QB_file_data_fixtbl]";
                     DbUtils.TruncateTable(dbConnCobra, tableName,
                         fileLogParams?.GetMessageLogParams());
 
                     //2. import file
-                    string procName = "dbo.[Fix_COBRAQB_SSObollean]";
+                    string procName = @"dbo.[Fix_COBRAQB_SSObollean]";
                     ImpExpUtils.ImportSingleColumnFlatFile(headerType, dbConnCobra, srcFilePath, srcFilePath, tableName,
                         "folder_name",
                         "QB_data", fileLogParams,
