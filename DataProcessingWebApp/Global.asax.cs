@@ -19,7 +19,7 @@ namespace DataProcessingWebApp
         {
             //
             DataProcessing.Vars.IsRunningAsWebApp = true;
-            DataProcessing.Vars.WebAppRootPath = System.Web.Hosting.HostingEnvironment.MapPath("~/"); ;
+            //DataProcessing.Vars.WebAppRootPath = System.Web.Hosting.HostingEnvironment.MapPath("~/"); ;
             //
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);

@@ -14,3 +14,6 @@ create unique index app_settings_uk on app_settings(environment, setting_name);
 
 
 update app_settings set setting_value = replace(setting_value, '\', '/');
+
+
+select * from Alegeus_File_Processing.dbo.app_settings order by environment, setting_name

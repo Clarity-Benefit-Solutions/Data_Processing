@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Data.Entity.Core.EntityClient;
 using System.Data.SqlClient;
 using System.IO;
+using System.Reflection;
 using CoreUtils;
 using CoreUtils.Classes;
 using DataProcessing.DataModels.AlegeusErrorLog;
@@ -31,10 +33,10 @@ namespace DataProcessing
             {
                 if (Utils.IsBlank(_connStrNameCobraFileProcessing))
                 {
-#if (CTXSUMEETDEV)
-                    _connStrNameCobraFileProcessing = "COBRAEntitiesCTXSUMEETDEV";
+#if (TEST)
+                    _connStrNameCobraFileProcessing = "COBRAEntitiesTEST";
 #else
-                    _connStrNameCobraFileProcessing = "COBRAEntitiesCTXPROD";
+                    _connStrNameCobraFileProcessing = "COBRAEntities";
 #endif
                 }
 
@@ -97,10 +99,10 @@ namespace DataProcessing
             {
                 if (Utils.IsBlank(_connStrNameAlegeusFileProcessing))
                 {
-#if (CTXSUMEETDEV)
-                    _connStrNameAlegeusFileProcessing = "Alegeus_File_ProcessingEntitiesCTXSUMEETDEV";
+#if (TEST)
+                    _connStrNameAlegeusFileProcessing = "Alegeus_File_ProcessingEntitiesTEST";
 #else
-                    _connStrNameAlegeusFileProcessing = "Alegeus_File_ProcessingEntitiesCTXPROD";
+                    _connStrNameAlegeusFileProcessing = "Alegeus_File_ProcessingEntities";
 #endif
                 }
 
@@ -162,10 +164,10 @@ namespace DataProcessing
             {
                 if (Utils.IsBlank(_connStrNameAlegeusErrorLog))
                 {
-#if (CTXSUMEETDEV)
-                    _connStrNameAlegeusErrorLog = "Alegeus_ErrorLogEntitiesCTXSUMEETDEV";
+#if (TEST)
+                    _connStrNameAlegeusErrorLog = "Alegeus_ErrorLogEntitiesTEST";
 #else
-                    _connStrNameAlegeusErrorLog = "Alegeus_ErrorLogEntitiesCTXPROD";
+                    _connStrNameAlegeusErrorLog = "Alegeus_ErrorLogEntities";
 #endif
                 }
 
@@ -226,10 +228,10 @@ namespace DataProcessing
             {
                 if (Utils.IsBlank(_connStrNamePortalWc))
                 {
-#if (CTXSUMEETDEV)
-                    _connStrNamePortalWc = "PortalWcCTXSUMEETDEV";
+#if (TEST)
+                    _connStrNamePortalWc = "PortalWcTEST";
 #else
-                    _connStrNamePortalWc = "PortalWcCTXPROD";
+                    _connStrNamePortalWc = "PortalWc";
 #endif
                 }
 
@@ -366,7 +368,7 @@ namespace DataProcessing
             {
                 if (_remoteAlegeusFtpConnection == null)
                 {
-#if (CTXSUMEETDEV)
+#if (TEST)
                     _remoteAlegeusFtpConnection = new SFtpConnection("localhost", 22, "alegeus", "a");
 #else
                     _remoteAlegeusFtpConnection = new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
@@ -381,7 +383,7 @@ namespace DataProcessing
         {
             get
             {
-#if (CTXSUMEETDEV)
+#if (TEST)
                 return "/" + FileUtils.FixPath($"{GetAppSetting("localTestFilesPath")}/_local_FTP_Server_Server/Alegeus");
 #else
                 return "/";
@@ -393,7 +395,7 @@ namespace DataProcessing
         {
             get
             {
-#if (CTXSUMEETDEV)
+#if (TEST)
                 return $"{GetAppSetting("localTestFilesPath")}/_local_FTP_Server_Server/COBRA";
 #else
                 return "/";
@@ -407,7 +409,7 @@ namespace DataProcessing
         {
             get
             {
-#if (CTXSUMEETDEV)
+#if (TEST)
                 _remoteCobraFtpConnection = new SFtpConnection("localhost", 21, "alegeus", "a");
 #else
                 _remoteCobraFtpConnection = new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
@@ -422,9 +424,49 @@ namespace DataProcessing
 
         #region FileProcessingPaths
 
+        private static DataTable appSettings;
+
         private string GetAppSetting(string settingName)
         {
-            return "";
+            if (appSettings == null)
+            {
+                appSettings = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnAlegeusErrorLog,
+                    "select * from Alegeus_File_Processing.dbo.app_settings order by environment, setting_name", null, null, false, true);
+
+                if (appSettings == null)
+                {
+                    string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Could Not get appSettings";
+                    throw new Exception(message);
+                }
+            }
+            string environment = "";
+# if TEST
+            environment = "TEST";
+#else
+          environment = "PROD";
+#endif
+            // try exact environment
+            string filter = $"environment In ('{environment}') and setting_name = '{settingName}' ";
+
+            DataRow[] dbRows = appSettings.Select(filter);
+            if (dbRows.Length == 0)
+            {
+                // try PROD env
+                filter = $"environment In ('PROD') and setting_name = '{settingName}' ";
+                dbRows = appSettings.Select(filter);
+
+            }
+
+            if (dbRows.Length == 0)
+            {
+                string message = $"The App Setting {settingName} could not be found for environments ({environment}, 'PROD')";
+                throw new Exception(message);
+            }
+            else
+            {
+                return dbRows[0]["setting_value"].ToString();
+
+            }
         }
 
         public string localFtpRoot => $"{GetAppSetting("FtpPath")}";
@@ -465,7 +507,7 @@ namespace DataProcessing
         public string alegeusFilesPreCheckFailRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckFailPath")}";
         public string alegeusFilesReprocessRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesReprocessPath")}";
 
-        public string alegeusFilesPreCheckHoldAllRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("1alegeusFilesPreCheckHoldAllPath")}";
+        public string alegeusFilesPreCheckHoldAllRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckHoldAllPath")}";
 
         #endregion
 
