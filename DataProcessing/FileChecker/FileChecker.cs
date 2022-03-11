@@ -1169,7 +1169,7 @@ namespace DataProcessing
 
 
             // 2. check against GENERAL rules
-            if (column.FixedValue != null && value != column.FixedValue)
+            if (column.FixedValue != null && value != column.FixedValue && !column.FixedValue.Split('|').Contains(value))
             {
                 this.AddErrorForRow(dataRow, column.SourceColumn,
                     $"{column.SourceColumn} must always be {column.FixedValue}. {orgValue} is not valid");
@@ -1180,14 +1180,14 @@ namespace DataProcessing
             if (column.MinLength > 0 && value.Length < column.MinLength)
             {
                 this.AddErrorForRow(dataRow, column.SourceColumn,
-                    $"{column.SourceColumn} must minimum {column.MinLength} characters long. {orgValue} is not valid");
+                    $"{column.SourceColumn} must be minimum {column.MinLength} characters long. {orgValue} is not valid");
             }
 
             // maxLength
-            if (column.MinLength > 0 && value.Length < column.MinLength)
+            if (column.MaxLength > 0 && value.Length > column.MaxLength)
             {
                 this.AddErrorForRow(dataRow, column.SourceColumn,
-                    $"{column.SourceColumn} must minimum {column.MinLength} characters long. {orgValue} is not valid");
+                    $"{column.SourceColumn} must be maximum {column.MaxLength} characters long. {orgValue} is not valid");
             }
 
             // min/max value

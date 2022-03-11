@@ -427,7 +427,7 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("LastName", "LastName", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("FirstName", "FirstName", FormatType.AlphaOnly, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("MiddleInitial", "MiddleInitial", FormatType.String, null, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("BirthDate", "BirthDate", FormatType.IsoDate, null, 8, 8, 0, 0));
+                        mappings.Add(new TypedCsvColumn("BirthDate", "BirthDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("Phone", "Phone", FormatType.NumbersAndDashes, null, 0, 10, 0, 0));
                         mappings.Add(new TypedCsvColumn("AddressLine1", "AddressLine1", FormatType.AlphaNumeric, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("AddressLine2", "AddressLine2", FormatType.AlphaNumeric, null, 0, 0, 0, 0));
@@ -441,9 +441,9 @@ namespace EtlUtilities
                             0));
 
                         // for New & Segmented
-                        mappings.Add(new TypedCsvColumn("EligibilityDate", "EligibilityDate", FormatType.IsoDate, null, 8, 8, 0,
+                        mappings.Add(new TypedCsvColumn("EligibilityDate", "EligibilityDate", FormatType.IsoDate, null, 0, 0, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("TerminationDate", "TerminationDate", FormatType.IsoDate, null, 8, 8, 0,
+                        mappings.Add(new TypedCsvColumn("TerminationDate", "TerminationDate", FormatType.IsoDate, null, 0, 0, 0,
                             0));
                         mappings.Add(new TypedCsvColumn("AlternateId", "AlternateId", FormatType.String, null, 0, 0, 0,
                             0));
@@ -479,8 +479,8 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.AlphaNumeric, null, 3, 15, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 8, 8, 0, 0));
-                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 8, 8, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("AccountStatus", "AccountStatus", FormatType.Integer, "2|5", 1, 1, 0, 0));
                         mappings.Add(new TypedCsvColumn("OriginalPrefunded", "OriginalPrefunded", FormatType.Double, null, 4, 0,
                             0, 0));
@@ -499,8 +499,8 @@ namespace EtlUtilities
                             "EmployerPayPeriodElection", FormatType.Double, null, 4, 0, 0, 0));
 
 
-                        mappings.Add(new TypedCsvColumn("EffectiveDate", "EffectiveDate", FormatType.IsoDate, null, 8, 8, 0, 0));
-                        mappings.Add(new TypedCsvColumn("TerminationDate", "TerminationDate", FormatType.IsoDate, null, 8, 8, 0,
+                        mappings.Add(new TypedCsvColumn("EffectiveDate", "EffectiveDate", FormatType.IsoDate, null, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("TerminationDate", "TerminationDate", FormatType.IsoDate, null, 0, 0, 0,
                             0));
 
                         if (headerType == HeaderType.SegmentedFunding)
@@ -516,8 +516,8 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanId", "PlanId", FormatType.AlphaNumeric, null, 3, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 8, 8, 0, 0));
-                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 8, 8, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         //
                         mappings.Add(new TypedCsvColumn("error_code", "error_code", FormatType.String, null, 0, 0, 0, 0));
                         //mappings.Add(new TypedCsvColumn("error_message", "error_message", FormatType.String, null,0, 0, 0, 0));
@@ -547,7 +547,7 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("State", "State", FormatType.AlphaOnly, null, 2, 2, 0, 0));
                         mappings.Add(new TypedCsvColumn("Zip", "Zip", FormatType.Integer, null, 0, 5, 0, 0));
                         mappings.Add(new TypedCsvColumn("Country", "Country", FormatType.AlphaOnly, "US", 2, 2, 0, 0));
-                        mappings.Add(new TypedCsvColumn("BirthDate", "BirthDate", FormatType.IsoDate, null, 8, 8, 0, 0));
+                        mappings.Add(new TypedCsvColumn("BirthDate", "BirthDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("Relationship", "Relationship", FormatType.String, null, 0, 0, 0, 0));
                     }
 
@@ -579,8 +579,8 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("DependentID", "DependentID", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.AlphaNumeric, null, 3, 15, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 8, 8, 0, 0));
-                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 8, 8, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("DeleteAccount", "DeleteAccount", FormatType.String, null, 0, 0, 0, 0));
                     }
 
@@ -591,8 +591,8 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("DependentID", "DependentID", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanId", "PlanId", FormatType.AlphaNumeric, null, 3, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 8, 8, 0, 0));
-                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 8, 8, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
 
                         //
                         mappings.Add(new TypedCsvColumn("error_code", "error_code", FormatType.String, null, 0, 0, 0, 0));
@@ -648,13 +648,13 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.AlphaNumeric, null, 3, 15, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 8, 8, 0, 0));
-                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 8, 8, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount", FormatType.Double, null, 4, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount", FormatType.Double, null, 4, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EffectiveDate", "EffectiveDate", FormatType.IsoDate, null, 8, 8, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EffectiveDate", "EffectiveDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                     }
 
                     //
@@ -663,8 +663,8 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
                         // ? planid??
                         mappings.Add(new TypedCsvColumn("PlanId", "PlanId", FormatType.AlphaNumeric, null, 3, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 8, 8, 0, 0));
-                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 8, 8, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount", FormatType.Double, null, 4, 0, 0, 0));
@@ -688,13 +688,13 @@ namespace EtlUtilities
                         // ? planid??
                         mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.AlphaNumeric, null, 3, 15, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 8, 8, 0, 0));
-                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 8, 8, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount", FormatType.Double, null, 4, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount", FormatType.Double, null, 4, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EffectiveDate", "EffectiveDate", FormatType.IsoDate, null, 8, 8, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EffectiveDate", "EffectiveDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                     }
 
                     //
@@ -703,8 +703,8 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
                         // ? planid??
                         mappings.Add(new TypedCsvColumn("PlanId", "PlanId", FormatType.AlphaNumeric, null, 3, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 8, 8, 0, 0));
-                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 8, 8, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount", FormatType.Double, null, 4, 0, 0, 0));
@@ -727,9 +727,9 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.String, "BENEFL", 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EligibilityDate", "EligibilityDate", FormatType.IsoDate, null, 8, 8, 0,
+                        mappings.Add(new TypedCsvColumn("EligibilityDate", "EligibilityDate", FormatType.IsoDate, null, 0, 0, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("TerminationDate", "TerminationDate", FormatType.IsoDate, null, 8, 8, 0,
+                        mappings.Add(new TypedCsvColumn("TerminationDate", "TerminationDate", FormatType.IsoDate, null, 0, 0, 0,
                             0));
                         mappings.Add(new TypedCsvColumn("Division", "Division", FormatType.String, null, 0, 0, 0, 0));
                     }
