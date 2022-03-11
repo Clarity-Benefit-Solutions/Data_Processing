@@ -25,8 +25,6 @@ namespace DataProcessing
 
         public static bool IsRunningAsWebApp { get; set; }
 
-        public static string WebAppRootPath { get; set; }
-
         private string connStrNameCobraFileProcessing
         {
             get
@@ -331,102 +329,10 @@ namespace DataProcessing
 
         #region LocalRootPaths
 
-       
-        public string localTestRoot
-        {
-            get
-            {
-#if (CTXSUMEETDEV)
-                string path = "";
-                if (!IsRunningAsWebApp)
-                {
-                    path = $"{Utils.GetExeBaseDir()}/../../../__LocalTestDirsAndFiles";
-                }
-                else
-                {
-                    path = $"{WebAppRootPath}/../__LocalTestDirsAndFiles"; 
-                }
-                
 
-                DirectoryInfo dirInfo = new DirectoryInfo(path);
-                if (!dirInfo.Exists)
-                {
-                    dirInfo.Create();
-                }
 
-                return dirInfo.FullName;
-#else
-              return "G:/FTP"; ;
-#endif
-            }
-        }
 
-        public string localFtpRoot
-        {
-            get
-            {
-#if (CTXSUMEETDEV)
-                return $"{localTestRoot}/FTP";
-#else
-              return "G:/FTP"; ;
-#endif
-            }
-        }
 
-        public string localFtpItRoot
-        {
-            get
-            {
-#if (CTXSUMEETDEV)
-                return $"{localTestRoot}/FTP-IT";
-#else
-              return "G:/FTP-IT";
-#endif
-            }
-        }
-
-        public string prodLocalFtpRoot => "G:/FTP";
-
-        public string prodLocalFtpItRoot => "G:/FTP-IT";
-
-        public string processingRoot
-        {
-            get
-            {
-#if (CTXSUMEETDEV)
-                return $"{localTestRoot}";
-#else
-                return "G:/FTP";
-#endif
-            }
-        }
-
-        public string paylocityFtpRoot => $"{localFtpRoot}/Paylocity";
-
-        public string fromBoomiFtpRoot => $"{localFtpItRoot}/fromBoomi";
-
-        public string toBoomiFtpRoot => $"{localFtpItRoot}/ToBoomi";
-
-        public string salesForceCrmListPath => $"{localFtpRoot}/fromBoomi/CRM_List.csv";
-
-        private Dictionary<string, string> _prodToRunningCtxPathReplacePatterns;
-
-        public Dictionary<string, string> prodToRunningCtxPathReplacePatterns
-        {
-            get
-            {
-                if (_prodToRunningCtxPathReplacePatterns == null)
-                    _prodToRunningCtxPathReplacePatterns = new Dictionary<string, string>
-                    {
-                        {"G:/FTP/To_Alegeus_FTP_Holding/Archive", alegeusFileHeadersArchiveRoot},
-                        {"G:/FTP/To_Alegeus_FTP_Holding/HoldALL", alegeusFilesPreCheckHoldAllRoot},
-                        {"G:/FTP/To_Alegeus_FTP_Holding", alegeusFilesPreCheckRoot},
-                        {"G:/FTP/AutomatedHeaderV1_Files", alegeusFileHeadersRoot},
-                        {"G:/FTP", localFtpRoot}
-                    };
-                return _prodToRunningCtxPathReplacePatterns;
-            }
-        }
 
         public string ConvertFilePathFromProdToCtx(string prodFilePath)
         {
@@ -476,7 +382,7 @@ namespace DataProcessing
             get
             {
 #if (CTXSUMEETDEV)
-                return "/" + FileUtils.FixPath($"{localTestRoot}/_local_FTP_Server_Server/Alegeus");
+                return "/" + FileUtils.FixPath($"{GetAppSetting("localTestFilesPath")}/_local_FTP_Server_Server/Alegeus");
 #else
                 return "/";
 #endif
@@ -488,7 +394,7 @@ namespace DataProcessing
             get
             {
 #if (CTXSUMEETDEV)
-                return $"{localTestRoot}/_local_FTP_Server_Server/COBRA";
+                return $"{GetAppSetting("localTestFilesPath")}/_local_FTP_Server_Server/COBRA";
 #else
                 return "/";
 #endif
@@ -514,23 +420,65 @@ namespace DataProcessing
 
         #endregion
 
-        #region CobraFileProcessingPaths
+        #region FileProcessingPaths
 
-        public string cobraImportRoot => $"{processingRoot}/COBRA IMPORTS";
+        private string GetAppSetting(string settingName)
+        {
+            return "";
+        }
 
-        public string cobraImportHoldingRoot => $"{processingRoot}/COBRA IMPORTS/Holding";
+        public string localFtpRoot => $"{GetAppSetting("FtpPath")}";
+        public string localFtpItRoot => $"{GetAppSetting("FtpItPath")}";
 
-        public string cobraImportTestFilesRoot => $"{processingRoot}/COBRA IMPORTS/COBRA_testfiles";
+        public string paylocityFtpRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("paylocityFtpPath")}";
 
-        public string cobraImportHoldingPreparedQbRoot => $"{processingRoot}/COBRA IMPORTS/Holding/PreparedQB";
+        public string fromBoomiFtpRoot => $"{GetAppSetting("FtpItPath")}{GetAppSetting("FromBoomiFtpItPath")}";
 
-        public string cobraImportArchiveDoneRoot => $"{processingRoot}/COBRA IMPORTS/Archive - Done";
+        public string toBoomiFtpRoot => $"{GetAppSetting("FtpItPath")}{GetAppSetting("ToBoomiFtpItPath")}";
 
-        public string cobraImportArchiveEmptyRoot => $"{processingRoot}/COBRA IMPORTS/Archive - Empty";
+        public string salesForceCrmListPath => $"{GetAppSetting("FtpPath")}{GetAppSetting("SalesForceCrmListPath")}";
 
-        public string cobraImportArchiveErrorRoot => $"{processingRoot}/COBRA IMPORTS/Archive - Error";
+        public string cobraImportRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("SalesForceCrmListPath")}";
 
-        public string cobraImportHoldingDecryptRoot => $"{processingRoot}/COBRA IMPORTS/Holding/ToDecrypt";
+        public string cobraImportHoldingRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("CobraImportPath")}";
+
+        public string cobraImportTestFilesRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("CobraImportTestFilesPath")}";
+
+        public string cobraImportHoldingPreparedQbRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("cobraImportHoldingPreparedQbPath")}";
+
+        public string cobraImportArchiveDoneRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("cobraImportArchiveDonePath")}";
+
+        public string cobraImportArchiveEmptyRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("cobraImportArchiveEmptyPath")}";
+
+        public string cobraImportArchiveErrorRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("cobraImportArchiveErrorPath")}";
+
+        public string cobraImportHoldingDecryptRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("cobraImportHoldingDecryptPath")}";
+
+
+        public string alegeusFileHeadersRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFileHeadersPath")}";
+
+        public string alegeusFileHeadersArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFileHeadersArchivePath")}";
+
+        public string alegeusFilesPreCheckRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckPath")}";
+        public string alegeusFilesPreCheckOKRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckOKPath")}";
+        public string alegeusFilesPreCheckOKArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckOKArchivePath")}";
+        public string alegeusFilesPreCheckFailRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckFailPath")}";
+        public string alegeusFilesReprocessRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesReprocessPath")}";
+
+        public string alegeusFilesPreCheckHoldAllRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("1alegeusFilesPreCheckHoldAllPath")}";
+
+        #endregion
+
+        #region ErrorLogPaths
+
+        public string alegeusErrorLogMbiFilesRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogMbiFilesPath")}";
+
+        public string alegeusErrorLogMbiFilesArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogMbiFilesArchivePath")}";
+
+        public string alegeusErrorLogResFilesRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogResFilesPath")}";
+
+        public string alegeusErrorLogResFilesArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogResFilesArchivePath")}";
+
 
         public string[] cobraIgnoreFtpSourceDirs
         {
@@ -538,7 +486,7 @@ namespace DataProcessing
             {
                 string[] dirs =
                 {
-                    $"{localFtpRoot}/processing@claritybenefitsolutions", cobraImportRoot, cobraImportHoldingRoot,
+                    $"{GetAppSetting("localTestFilesPath")}/processing@claritybenefitsolutions", cobraImportRoot, cobraImportHoldingRoot,
                     cobraImportHoldingDecryptRoot, alegeusFilesPreCheckRoot, alegeusFilesPreCheckHoldAllRoot,
                     alegeusFileHeadersArchiveRoot, alegeusFileHeadersRoot
                 };
@@ -546,9 +494,6 @@ namespace DataProcessing
             }
         }
 
-        #endregion
-
-        #region AlegeusFileProcessingPaths
 
         public string[] alegeusIgnoreFtpSourceDirs
         {
@@ -563,30 +508,24 @@ namespace DataProcessing
             }
         }
 
-        public string alegeusFileHeadersRoot => $"{processingRoot}/AutomatedHeaderV1_Files";
+        private Dictionary<string, string> _prodToRunningCtxPathReplacePatterns;
 
-        public string alegeusFileHeadersArchiveRoot => $"{processingRoot}/AutomatedHeaderV1_Files/Archive";
-
-        public string alegeusFilesPreCheckRoot => $"{processingRoot}/To_Alegeus_Pre_Process";
-        public string alegeusFilesPreCheckOKRoot => $"{processingRoot}/To_Alegeus_Pre_Process/Check_OK";
-        public string alegeusFilesPreCheckFailRoot => $"{processingRoot}/To_Alegeus_Pre_Process/Check_FAIL";
-
-        public string alegeusFilesPreCheckHoldAllRoot => $"{processingRoot}/To_Alegeus_Pre_Process/HoldALL";
-
-        public string alegeusFilesFTPHoldingRoot => $"{processingRoot}/To_Alegeus_FTP_Holding";
-
-        #endregion
-
-        #region ErrorLogPaths
-
-        public string alegeusErrorLogMbiFilesRoot => $"{processingRoot}/AlegeusErrorLog/mbiFiles";
-
-        public string alegeusErrorLogMbiFilesArchiveRoot => $"{processingRoot}/AlegeusErrorLog/mbiFiles/Archive";
-
-        public string alegeusErrorLogResFilesRoot => $"{processingRoot}/AlegeusErrorLog/resFiles";
-
-        public string alegeusErrorLogResFilesArchiveRoot => $"{processingRoot}/AlegeusErrorLog/resFiles/Archive";
-
+        public Dictionary<string, string> prodToRunningCtxPathReplacePatterns
+        {
+            get
+            {
+                if (_prodToRunningCtxPathReplacePatterns == null)
+                    _prodToRunningCtxPathReplacePatterns = new Dictionary<string, string>
+                    {
+                        {"G:/FTP/To_Alegeus_FTP_Holding/Archive", alegeusFileHeadersArchiveRoot},
+                        {"G:/FTP/To_Alegeus_FTP_Holding/HoldALL", alegeusFilesPreCheckHoldAllRoot},
+                        {"G:/FTP/To_Alegeus_FTP_Holding", alegeusFilesPreCheckRoot},
+                        {"G:/FTP/AutomatedHeaderV1_Files", alegeusFileHeadersRoot},
+                        {"G:/FTP", GetAppSetting("FtpPath")}
+                    };
+                return _prodToRunningCtxPathReplacePatterns;
+            }
+        }
         #endregion
     }
 }
