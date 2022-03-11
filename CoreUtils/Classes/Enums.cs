@@ -47,7 +47,12 @@ namespace CoreUtils.Classes
     public enum FormatType
     {
         [Utils.DisplayText("")] Any = 0,
-        [Utils.DisplayText("Number")] Number,
+        [Utils.DisplayText("String")] String,
+        [Utils.DisplayText("StringNumbersOnly")] AlphaNumeric,
+        [Utils.DisplayText("AlphaOnly")] AlphaOnly,
+        [Utils.DisplayText("AlphaOnly")] Email,
+        [Utils.DisplayText("AlphaAndDashes")] AlphaAndDashes,
+        [Utils.DisplayText("Numeric")] Numeric,
         [Utils.DisplayText("Double")] Double,
         [Utils.DisplayText("YYYYMMDD")] IsoDate,
 

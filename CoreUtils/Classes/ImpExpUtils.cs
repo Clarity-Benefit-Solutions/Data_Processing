@@ -16,8 +16,8 @@ using CsvHelperCsvDataReader = CsvHelper.CsvDataReader;
 
 namespace CoreUtils.Classes
 {
-    
-    
+
+
     public static class ImpExpUtils
     {
         private static SqlBulkCopyOptions _defaultSqlBulkCopyOptions = SqlBulkCopyOptions.KeepNulls |
@@ -56,7 +56,7 @@ namespace CoreUtils.Classes
                         if (fileFormats.ContainsKey(fileFormat))
                             fileFormats[fileFormat].Add(rowNo);
                         else
-                            fileFormats.Add(fileFormat, new List<int> {rowNo});
+                            fileFormats.Add(fileFormat, new List<int> { rowNo });
                     }
                 }
             }
@@ -80,9 +80,6 @@ namespace CoreUtils.Classes
                 {
                     case "IA":
                         return EdiFileFormat.AlegeusHeader;
-
-                    case "RA":
-                        return EdiFileFormat.AlegeusResultsHeader;
 
                     case "IB":
                         return EdiFileFormat.AlegeusDemographics;
@@ -151,6 +148,9 @@ namespace CoreUtils.Classes
                         return EdiFileFormat.AlegeusEmployeeHrInfo;
 
                     // results files
+                    case "RA":
+                        return EdiFileFormat.AlegeusResultsHeader;
+
                     case "RB":
                         return EdiFileFormat.AlegeusResultsDemographics;
 
@@ -233,7 +233,7 @@ namespace CoreUtils.Classes
                 //LogFileOperation(fileLogParams);
 
                 // query
-                var dt = (DataTable) DbQuery(DbOperation.ExecuteReader, dbConn, queryString, queryParams,
+                var dt = (DataTable)DbQuery(DbOperation.ExecuteReader, dbConn, queryString, queryParams,
                     fileLogParams?.GetMessageLogParams());
                 //
 

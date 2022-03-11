@@ -26,11 +26,12 @@ namespace CoreUtils.Classes
         }
 
         public TypedCsvColumn(string sourceColumn, string destinationColumn, FormatType formatType = FormatType.Any,
-            int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0)
+            string fixedValue="", int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0)
         {
             ColumnName = sourceColumn;
             DestinationColumn = destinationColumn;
             FormatType = formatType;
+            FixedValue = fixedValue;
             MinLength = minLength;
             MaxLength = maxLength;
             MinValue = minValue;
@@ -42,6 +43,7 @@ namespace CoreUtils.Classes
         }
 
         public string DestinationColumn { get; set; }
+        public string FixedValue { get; set; }
         public int DestinationOrdinal { get; set; }
         public FormatType FormatType { get; set; }
         public int MinLength { get; set; }
@@ -109,7 +111,7 @@ namespace CoreUtils.Classes
         public TypedCsvSchema Add(string sourceColumn, string destinationColumn, FormatType formatType = FormatType.Any,
             int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0)
         {
-            Columns.Add(new TypedCsvColumn(sourceColumn, destinationColumn, formatType, minLength, maxLength));
+            Columns.Add(new TypedCsvColumn(sourceColumn, destinationColumn, formatType, null,minLength, maxLength));
             return this;
         }
     }
