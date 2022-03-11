@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using CoreUtils;
 using CoreUtils.Classes;
+using CsvHelper;
+using CsvHelper.Configuration;
 using Sylvan.Data.Csv;
 //using ETLBox.Connection;
 //using ETLBox.DataFlow;
@@ -71,7 +74,7 @@ namespace EtlUtilities
             }
 
             // 2. import the file
-            ImportAlegeusFile(fileFormats,  dbConn, srcFilePath, hasHeaderRow, fileLogParams,
+            ImportAlegeusFile(fileFormats, dbConn, srcFilePath, hasHeaderRow, fileLogParams,
                 onErrorCallback);
         }
 
@@ -137,7 +140,7 @@ namespace EtlUtilities
                     writer.Close();
 
                     // import the file
-                    ImportAlegeusFile(fileFormat3,  dbConn, (string)files[fileFormat3][1], srcFilePath,
+                    ImportAlegeusFile(fileFormat3, dbConn, (string)files[fileFormat3][1], srcFilePath,
                         hasHeaderRow, fileLogParams, onErrorCallback);
                 }
             }
@@ -170,7 +173,7 @@ namespace EtlUtilities
 
                 //
                 var newPath =
-                    PrefixLineWithEntireLineAndFileName( srcFilePath, orgSrcFilePath, fileLogParams);
+                    PrefixLineWithEntireLineAndFileName(srcFilePath, orgSrcFilePath, fileLogParams);
                 //
                 string tableName = isResultFile ? "[dbo].[res_file_table_stage]" : "[dbo].[mbi_file_table_stage]";
                 string postImportProc = isResultFile
@@ -183,7 +186,7 @@ namespace EtlUtilities
 
 
                 // import the file with bulk copy
-                ImpExpUtils.ImportCsvFileBulkCopy( dbConn, newPath, hasHeaderRow, tableName, mappings,
+                ImpExpUtils.ImportCsvFileBulkCopy(dbConn, newPath, hasHeaderRow, tableName, mappings,
                     fileLogParams, onErrorCallback
                 );
 
@@ -249,30 +252,33 @@ namespace EtlUtilities
         public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath)
         {
             //todo: FileChecker: @Luis: get specs record_types other than IB, IC, IH
-            string contents = FileUtils.GetFlatFileContents(srcFilePath, 2);
-            string[] lines = contents.Split('\n');
+            var csvDataReaderOptions =
+                new CsvDataReaderOptions
+                { // also take header row as  data in case there uis no file header
+                    HasHeaders = false
+                };
 
-            // if no lines, ignore
-            if (lines.Length < 1)
-            {
-                return HeaderType.NotApplicable;
-            }
+            using var csv = SylvanCsvDataReader.Create(srcFilePath, csvDataReaderOptions);
 
             int rowNo = 0;
-            foreach (string line in lines)
+            while (csv.Read())
             {
                 rowNo++;
-                var columns = line.Split(',');
-
-                // if blank line, go to next line
-                if (columns.Length < 1)
+                var firstColValue = csv.GetString(0);
+                var fileFormat = ImpExpUtils.GetAlegeusRowFormat(firstColValue);
+                var columnCount = csv.FieldCount;
+                
+                // todo: do we need to check col count without the extra ,,, we added while importing etc
+                //Object[] values = new Object[] { };
+                
+                //csv.GetValues(values);
+                //var line = String.Join()
+                if (columnCount < 1)
                 {
                     continue;
                 }
 
                 // get file format
-                var firstColValue = columns[0];
-                var fileFormat = ImpExpUtils.GetAlegeusRowFormat(firstColValue);
                 // note: we are also detecting header type from conettn for prev Own and NoChange header folders
                 switch (fileFormat)
                 {
@@ -283,7 +289,7 @@ namespace EtlUtilities
                         continue;
 
                     case EdiFileFormat.AlegeusDemographics:
-                        switch (columns.Length)
+                        switch (columnCount)
                         {
                             case 19:
                                 return HeaderType.Old;
@@ -296,7 +302,7 @@ namespace EtlUtilities
                                 return HeaderType.Old;
                         }
                     case EdiFileFormat.AlegeusEmployeeDeposit:
-                        switch (columns.Length)
+                        switch (columnCount)
                         {
                             case 11:
                                 // same cols for New and Segemented Funding!
@@ -307,7 +313,7 @@ namespace EtlUtilities
                                 return HeaderType.Old;
                         }
                     case EdiFileFormat.AlegeusEnrollment:
-                        switch (columns.Length)
+                        switch (columnCount)
                         {
                             case 14:
                                 return HeaderType.Old;
@@ -624,7 +630,7 @@ namespace EtlUtilities
                         //?? todo: to verify next column mapping
                         mappings.Add(new TypedCsvColumn("AddressLine1", "AddressLine1", FormatType.AlphaNumeric, null, 0, 0, 0,
                             0)); // Shipping Address Code
-                        //
+                                 //
                         mappings.Add(new TypedCsvColumn("error_code", "error_code", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("error_message", "error_message", FormatType.String, null, 0, 0, 0, 0));
                     }
@@ -768,7 +774,7 @@ namespace EtlUtilities
                 mappings.Add(new TypedCsvColumn("client_start_date", "client_start_date"));
 
                 //
-                ImpExpUtils.ImportCsvFileBulkCopy( dbConn, srcFilePath, hasHeaderRow, tableName, mappings,
+                ImpExpUtils.ImportCsvFileBulkCopy(dbConn, srcFilePath, hasHeaderRow, tableName, mappings,
                     fileLogParams,
                     (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                 );
