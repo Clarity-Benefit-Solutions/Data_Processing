@@ -12,6 +12,7 @@ using DataProcessing.DataModels.AlegeusErrorLog;
 using EtlUtilities;
 using MySqlConnector;
 using System.Runtime.Caching;
+using System.Text.RegularExpressions;
 
 // ReSharper disable All
 
@@ -19,7 +20,7 @@ using System.Runtime.Caching;
 namespace DataProcessing
 {
 
-    
+
     public class FileCheckResults : Dictionary<int, string>
     {
         internal Boolean markAsCompleteFail = false;
@@ -204,7 +205,7 @@ namespace DataProcessing
                 "CheckFile", $"Starting: Check {fileName}", "Starting");
 
             // split text fileinto multiple files
-            Dictionary<EdiFileFormat, Object[]> files = new Dictionary<EdiFileFormat, Object[]>();
+            Dictionary<EdiFileFormat, object[]> files = new Dictionary<EdiFileFormat, object[]>();
 
             //
             foreach (EdiFileFormat fileFormat in fileFormats.Keys)
@@ -340,6 +341,9 @@ namespace DataProcessing
             dbErrorLog.SaveChanges();
         }
 
+
+
+
         private void CheckFileData(EdiFileFormat fileFormat, mbi_file_table_stage dataRow, TypedCsvSchema mappings)
         {
             // don't check header dataRow
@@ -369,13 +373,18 @@ namespace DataProcessing
                         break;
                 }
 
+
+                // check and format value if possible
+                EnsureValueIsOfFormat(dataRow, column);
+
+
                 // specific column checking against DB
                 switch (column.SourceColumn?.ToLowerInvariant() ?? "")
                 {
-                    // tpa ID
-                    case "tpaid":
-                        skipRestOfRow = this.CheckTpaExists(dataRow, column, fileFormat);
-                        break;
+                    //// tpa ID
+                    //case "tpaid":
+                    //    skipRestOfRow = this.CheckTpaExists(dataRow, column, fileFormat);
+                    //    break;
 
                     // ER ID
                     case "employerid":
@@ -421,20 +430,25 @@ namespace DataProcessing
                         break;
                 }
 
+                // check and fix all columns
                 // skip checking other columns if a important column value is invalid
                 if (skipRestOfRow)
                 {
-                    return;
+                    // return;
                 }
 
-                // get value for the column
                 var value = dataRow.ColumnValue(column.SourceColumn) ?? "";
 
 
-                // check against column rules
+                // check against GENERAL rules
+                if (column.FixedValue != null && value != column.FixedValue)
+                {
+                    this.AddErrorForRow(dataRow, column.SourceColumn,
+                        $"{column.SourceColumn} must always be {column.FixedValue}");
+                }
 
-                // format
-                if (!Utils.IsValueOfFormat(value, column.FormatType))
+
+                if (!EnsureValueIsOfFormat(dataRow, column))
                 {
                     this.AddErrorForRow(dataRow, column.SourceColumn,
                         $"{column.SourceColumn} must formatted as {column.FormatType.ToDescription()}");
@@ -517,7 +531,7 @@ namespace DataProcessing
         }
         #endregion CheckFile
 
-       
+
         #region checkData
         public Boolean CheckTpaExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
         {
@@ -562,7 +576,7 @@ namespace DataProcessing
                 return false;
             }
         }
-        
+
         public Boolean CheckEmployerExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
         {
             var errorMessage = "";
@@ -737,26 +751,26 @@ namespace DataProcessing
 
 
                         //check plan dates match Alegeus
-                        if (!Utils.IsBlank(dataRow.PlanStartDate) && actualPlanStartDate > Utils.ToDateTime(dataRow.PlanStartDate))
+                        if (!Utils.IsBlank(dataRow.PlanStartDate) && actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
                         {
                             errorMessage +=
                                 $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
                         }
 
-                        if (!Utils.IsBlank(dataRow.PlanEndDate) && actualPlanEndDate < Utils.ToDateTime(dataRow.PlanEndDate))
+                        if (!Utils.IsBlank(dataRow.PlanEndDate) && actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate))
                         {
                             errorMessage =
                                 $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}";
                             ;
                         }
                         //check effectivedate is within plan dates
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanStartDate > Utils.ToDateTime(dataRow.EffectiveDate))
+                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage +=
                                 $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
                         }
 
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanEndDate < Utils.ToDateTime(dataRow.EffectiveDate))
+                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage =
                                 $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}";
@@ -837,29 +851,29 @@ namespace DataProcessing
                         DataRow dbData = dbRows[0];
                         DateTime actualPlanStartDate = (DateTime)dbData["planstart"];
                         DateTime actualPlanEndDate = (DateTime)dbData["planend"];
-                        DateTime actualGracePeriodEndDate = Utils.ToDateTime(dbData["actualGracePeriodEndDate"]?.ToString());
+                        DateTime actualGracePeriodEndDate = Utils.ToDate(dbData["actualGracePeriodEndDate"]?.ToString());
 
                         //check plan dates match Alegeus
-                        if (!Utils.IsBlank(dataRow.PlanStartDate) && actualPlanStartDate > Utils.ToDateTime(dataRow.PlanStartDate))
+                        if (!Utils.IsBlank(dataRow.PlanStartDate) && actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
                         {
                             errorMessage +=
                                 $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
                         }
 
-                        if (!Utils.IsBlank(dataRow.PlanEndDate) && actualPlanEndDate < Utils.ToDateTime(dataRow.PlanEndDate))
+                        if (!Utils.IsBlank(dataRow.PlanEndDate) && actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate))
                         {
                             errorMessage =
                                 $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}";
                             ;
                         }
                         //check effectivedate is within plan dates
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanStartDate > Utils.ToDateTime(dataRow.EffectiveDate))
+                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage +=
                                 $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
                         }
 
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanEndDate < Utils.ToDateTime(dataRow.EffectiveDate))
+                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage =
                                 $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}";
@@ -1075,7 +1089,129 @@ namespace DataProcessing
             return dbResults;
 
         }
-        #endregion cacheEmployerData        
+        #endregion cacheEmployerData
 
+        #region CheckUtils
+        private static readonly Regex regexInteger = new Regex(@"[^0-9]");
+        private static readonly Regex regexAlphaNumeric = new Regex(@"[^a-zA-Z0-9]");
+        private static readonly Regex regexAlphaOnly = new Regex(@"[^a-zA-Z]");
+        private static readonly Regex regexAlphaAndDashes = new Regex(@"[^a-zA-Z\-]");
+        private static readonly Regex regexDouble = new Regex(@"[^0-9\.]");
+
+        public void EnsureValueIsOfFormat(mbi_file_table_stage dataRow, TypedCsvColumn column)
+        {
+
+            // always trim
+            var orgValue = dataRow.ColumnValue(column.SourceColumn) ?? "";
+            var value = orgValue;
+
+            value = value.Trim();
+            if (Utils.IsBlank(value))
+            {
+                // if reached here we had no unfixable format error - fix 
+                dataRow.SetColumnValue(column.SourceColumn, value);
+                return;
+            }
+
+            // fix value if possible
+            switch (column.FormatType)
+            {
+                case FormatType.Any:
+                case FormatType.String:
+                    return;
+
+                case FormatType.Email:
+                    if (!Utils.IsValidEmail(value))
+                    {
+                        this.AddErrorForRow(dataRow, column.SourceColumn,
+                            $"{column.SourceColumn} must be a valid Email. {orgValue} is not valid.");
+                    }
+                    break;
+                case FormatType.AlphaNumeric:
+                    // replace all non alphanumeric
+                    value = regexAlphaNumeric.Replace(value, String.Empty);
+                    break;
+
+                case FormatType.AlphaOnly:
+                    // replace all non alphanumeric
+                    value = regexAlphaOnly.Replace(value, String.Empty);
+                    break;
+
+                case FormatType.AlphaAndDashes:
+                    // replace all non alphanumeric
+                    value = regexAlphaAndDashes.Replace(value, String.Empty);
+                    break;
+
+                case FormatType.Integer:
+                    // remove any non digits
+                    value = regexInteger.Replace(value, String.Empty);
+                    //
+                    if (!Utils.IsInteger(value))
+                    {
+                        this.AddErrorForRow(dataRow, column.SourceColumn,
+                            $"{column.SourceColumn} must be numbers only. {orgValue} is not valid.");
+                    }
+                    break;
+
+                case FormatType.Double:
+                    // remove any non digits and non . and non ,
+                    value = regexDouble.Replace(value, String.Empty);
+                    if (!Utils.IsDouble(value))
+                    {
+                        this.AddErrorForRow(dataRow, column.SourceColumn,
+                            $"{column.SourceColumn} must be a Currency Value. {orgValue} is not valid.");
+                    }
+                    break;
+
+                case FormatType.IsoDate:
+                    // remove any non digits
+                    value = regexInteger.Replace(value, String.Empty);
+                    if (!Utils.IsIsoDate(value))
+                    {
+                        this.AddErrorForRow(dataRow, column.SourceColumn,
+                            $"{column.SourceColumn} must be in format YYYYMMDD. {orgValue} is not valid.");
+                    }
+                    break;
+
+
+                case FormatType.IsoDateTime:
+                    // remove any non digits
+                    value = regexInteger.Replace(value, String.Empty);
+                    if (!Utils.IsIsoDateTime(value))
+                    {
+                        this.AddErrorForRow(dataRow, column.SourceColumn,
+                            $"{column.SourceColumn} must be in format YYYYMMDD. {orgValue} is not valid.");
+                    }
+                    break;
+
+
+                case FormatType.YesNo:
+                    if (!value.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) && !value.Equals("No", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        this.AddErrorForRow(dataRow, column.SourceColumn,
+                            $"{column.SourceColumn} must be be either Yes or No. {orgValue} is not valid.");
+                    }
+                    break;
+
+                case FormatType.TrueFalse:
+                    if (!value.Equals("True", StringComparison.InvariantCultureIgnoreCase) && !value.Equals("False", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        this.AddErrorForRow(dataRow, column.SourceColumn,
+                            $"{column.SourceColumn} must be be either Yes or No. {orgValue} is not valid.");
+                    }
+                    break;
+
+
+                default:
+                    break;
+            }
+
+            // if reached here we had no unfixable format error - fix 
+            dataRow.SetColumnValue(column.SourceColumn, value);
+
+        }
+        #endregion
+
+#endregion check Utils
     }
 }

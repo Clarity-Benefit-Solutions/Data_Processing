@@ -48,11 +48,11 @@ namespace CoreUtils.Classes
     {
         [Utils.DisplayText("")] Any = 0,
         [Utils.DisplayText("String")] String,
-        [Utils.DisplayText("StringNumbersOnly")] AlphaNumeric,
+        [Utils.DisplayText("Email")] Email,
+        [Utils.DisplayText("AlphaNumeric")] AlphaNumeric,
         [Utils.DisplayText("AlphaOnly")] AlphaOnly,
-        [Utils.DisplayText("AlphaOnly")] Email,
         [Utils.DisplayText("AlphaAndDashes")] AlphaAndDashes,
-        [Utils.DisplayText("Numeric")] Numeric,
+        [Utils.DisplayText("Integer")] Integer,
         [Utils.DisplayText("Double")] Double,
         [Utils.DisplayText("YYYYMMDD")] IsoDate,
 

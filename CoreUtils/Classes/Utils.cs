@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -42,8 +43,8 @@ namespace CoreUtils.Classes
         {
             return value.Replace("'", "''");
         }
-        
-     
+
+
 
         public static string CsvQuote(string value)
         {
@@ -114,7 +115,7 @@ namespace CoreUtils.Classes
         {
             return string.Join(joinWith, arr);
         }
-    
+
 
         public static bool TextMatchesPattern(string fileName, string pattern)
         {
@@ -130,17 +131,37 @@ namespace CoreUtils.Classes
             return item;
         }
 
-        public static bool IsValueOfFormat(string value, FormatType formatType)
-        {
-            if (formatType == FormatType.Any) return true;
 
-            return true;
+
+
+        public static bool IsInteger(string value)
+        {
+            var isNumeric = Int64.TryParse(value, out _);
+            return isNumeric;
+        }
+
+        public static bool IsDouble(string value)
+        {
+            var isNumeric = float.TryParse(value, out _);
+            return isNumeric;
+        }
+
+        public static bool IsValidEmail(string email)
+        {
+            try
+            {
+                var mail = new System.Net.Mail.MailAddress(email);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public static bool IsNumeric(string value)
         {
-            var isNumeric = float.TryParse(value, out _);
-            return isNumeric;
+            return IsDouble(value);
         }
 
         public static float ToNumber(string value)
@@ -149,9 +170,37 @@ namespace CoreUtils.Classes
             return number;
         }
 
-        public static DateTime ToDateTime(string value)
+        public static bool IsIsoDate(string value)
         {
             Boolean parsed = DateTime.TryParseExact(value, "yyyyMMdd", null, DateTimeStyles.None, out var aDate);
+            if (!parsed)
+            {
+                return false;
+            }
+            return true;
+        }
+        public static bool IsIsoDateTime(string value)
+        {
+            Boolean parsed = DateTime.TryParseExact(value, "yyyyMMdd HHmmss", null, DateTimeStyles.None, out var aDate);
+            if (!parsed)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static DateTime ToDate(string value)
+        {
+            Boolean parsed = DateTime.TryParseExact(value, "yyyyMMdd", null, DateTimeStyles.None, out var aDate);
+            if (!parsed)
+            {
+                return DateTime.MinValue; // throw new Exception($"Could Not Convert String {value} into a valid date using format yyyyMMdd");
+            }
+            return aDate;
+        }
+        public static DateTime ToDateTime(string value)
+        {
+            Boolean parsed = DateTime.TryParseExact(value, "yyyyMMdd HHmmss", null, DateTimeStyles.None, out var aDate);
             if (!parsed)
             {
                 return DateTime.MinValue; // throw new Exception($"Could Not Convert String {value} into a valid date using format yyyyMMdd");

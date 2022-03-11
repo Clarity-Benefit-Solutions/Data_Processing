@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 // ReSharper disable All
 
@@ -141,6 +143,63 @@ namespace DataProcessing.DataModels.AlegeusErrorLog
                 //
                 default:
                     return "";
+            }
+        }
+        public void SetColumnValue(string colName, string value)
+        {
+            switch (colName.ToLowerInvariant())
+            {
+                case "accountstatus": this.AccountStatus = (string)value; break;
+                case "accounttypecode": this.AccountTypeCode = (string)value; break;
+                case "addressline1": this.AddressLine1 = (string)value; break;
+                case "addressline2": this.AddressLine2 = (string)value; break;
+                case "birthdate": this.BirthDate = (string)value; break;
+                case "city": this.City = (string)value; break;
+                case "country": this.Country = (string)value; break;
+                case "data_row": this.data_row = (string)value; break;
+                case "deleteaccount": this.DeleteAccount = (string)value; break;
+                case "dependentid": this.DependentID = (string)value; break;
+                case "deposittype": this.DepositType = (string)value; break;
+                case "division": this.Division = (string)value; break;
+                case "effectivedate": this.EffectiveDate = (string)value; break;
+                case "eligibilitydate": this.EligibilityDate = (string)value; break;
+                case "email": this.Email = (string)value; break;
+                case "employeedepositamount": this.EmployeeDepositAmount = (string)value; break;
+                case "employeeid": this.EmployeeID = (string)value; break;
+                case "employeepayperiodelection": this.EmployeePayPeriodElection = (string)value; break;
+                case "employeesocialsecuritynumber": this.EmployeeSocialSecurityNumber = (string)value; break;
+                case "employeestatus": this.EmployeeStatus = (string)value; break;
+                case "employerdepositamount": this.EmployerDepositAmount = (string)value; break;
+                case "employerid": this.EmployerId = (string)value; break;
+                case "employerpayperiodelection": this.EmployerPayPeriodElection = (string)value; break;
+                case "error_code": this.error_code = (string)value; break;
+                case "error_message": this.error_message = (string)value; break;
+                case "error_message_calc": this.error_message_calc = (string)value; break;
+                //case "error_row":  this.error_row  = (string) value; break;
+                case "firstname": this.FirstName = (string)value; break;
+                case "lastname": this.LastName = (string)value; break;
+                case "mbi_file_name": this.mbi_file_name = (string)value; break;
+                case "middleinitial": this.MiddleInitial = (string)value; break;
+                case "mobilenumber": this.MobileNumber = (string)value; break;
+                case "originalprefunded": this.OriginalPrefunded = (string)value; break;
+                case "phone": this.Phone = (string)value; break;
+                case "planenddate": this.PlanEndDate = (string)value; break;
+                case "planid": this.PlanId = (string)value; break;
+                case "planstartdate": this.PlanStartDate = (string)value; break;
+                case "relationship": this.Relationship = (string)value; break;
+                //case "res_file_name":  this.res_file_name  = (string) value; break;
+                //case "result_template":  this.result_template  = (string) value; break;
+                case "row_num": this.row_num = Int32.Parse(value); break;
+                case "row_type": this.row_type = (string)value; break;
+                case "source_row_no": this.source_row_no = Int32.Parse(value); break;
+                case "state": this.State = (string)value; break;
+                case "terminationdate": this.TerminationDate = (string)value; break;
+                case "tpaid": this.TpaId = (string)value; break;
+                case "zip": this.Zip = (string)value; break;
+                //
+                default:
+                    string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : {colName} is Invalid";
+                    throw new Exception(message);
             }
         }
     }
