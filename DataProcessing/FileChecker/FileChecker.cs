@@ -374,11 +374,11 @@ namespace DataProcessing
                 }
 
 
-                // check and format value if possible
-                EnsureValueIsOfFormat(dataRow, column);
+                // 1. valid Format and general rules check
+                var value = EnsureValueIsOfFormatAndMatchesRules(dataRow, column);
 
 
-                // specific column checking against DB
+                // 2. specific column checking against business rules & DB
                 switch (column.SourceColumn?.ToLowerInvariant() ?? "")
                 {
                     //// tpa ID
@@ -437,58 +437,8 @@ namespace DataProcessing
                     // return;
                 }
 
-                var value = dataRow.ColumnValue(column.SourceColumn) ?? "";
 
 
-                // check against GENERAL rules
-                if (column.FixedValue != null && value != column.FixedValue)
-                {
-                    this.AddErrorForRow(dataRow, column.SourceColumn,
-                        $"{column.SourceColumn} must always be {column.FixedValue}");
-                }
-
-
-                if (!EnsureValueIsOfFormat(dataRow, column))
-                {
-                    this.AddErrorForRow(dataRow, column.SourceColumn,
-                        $"{column.SourceColumn} must formatted as {column.FormatType.ToDescription()}");
-                }
-
-                // minLength
-                if (column.MinLength > 0 && value.Length < column.MinLength)
-                {
-                    this.AddErrorForRow(dataRow, column.SourceColumn,
-                        $"{column.SourceColumn} must minimum {column.MinLength} characters long");
-                }
-
-                // maxLength
-                if (column.MinLength > 0 && value.Length < column.MinLength)
-                {
-                    this.AddErrorForRow(dataRow, column.SourceColumn,
-                        $"{column.SourceColumn} must minimum {column.MinLength} characters long");
-                }
-
-                // min/max value
-                if (column.MinValue != 0 || column.MaxValue != 0)
-                {
-                    if (!Utils.IsNumeric(value))
-                    {
-                        this.AddErrorForRow(dataRow, column.SourceColumn, $"{column.SourceColumn} must be a number");
-                    }
-
-                    float numValue = Utils.ToNumber(value);
-                    if (numValue < column.MinValue)
-                    {
-                        this.AddErrorForRow(dataRow, column.SourceColumn,
-                            $"{column.SourceColumn} must be a number with a value greater than ${column.MinValue}");
-                    }
-
-                    if (numValue > column.MaxValue)
-                    {
-                        this.AddErrorForRow(dataRow, column.SourceColumn,
-                            $"{column.SourceColumn} must be a number with a value less than ${column.MaxValue}");
-                    }
-                }
             }
         }
 
@@ -749,6 +699,12 @@ namespace DataProcessing
                         DateTime actualPlanEndDate = (DateTime)dbData["plan_year_end_date"];
                         DateTime actualGracePeriodEndDate = (DateTime)dbData["grace_period_end_date"];
 
+                        //check start and end dates 
+                        if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) && Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
+                        {
+                            errorMessage +=
+                                $"The Plan Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
+                        }
 
                         //check plan dates match Alegeus
                         if (!Utils.IsBlank(dataRow.PlanStartDate) && actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
@@ -852,6 +808,13 @@ namespace DataProcessing
                         DateTime actualPlanStartDate = (DateTime)dbData["planstart"];
                         DateTime actualPlanEndDate = (DateTime)dbData["planend"];
                         DateTime actualGracePeriodEndDate = Utils.ToDate(dbData["actualGracePeriodEndDate"]?.ToString());
+
+                        //check start and end dates 
+                        if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) && Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
+                        {
+                            errorMessage +=
+                                $"The Plan Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
+                        }
 
                         //check plan dates match Alegeus
                         if (!Utils.IsBlank(dataRow.PlanStartDate) && actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
@@ -1098,7 +1061,7 @@ namespace DataProcessing
         private static readonly Regex regexAlphaAndDashes = new Regex(@"[^a-zA-Z\-]");
         private static readonly Regex regexDouble = new Regex(@"[^0-9\.]");
 
-        public void EnsureValueIsOfFormat(mbi_file_table_stage dataRow, TypedCsvColumn column)
+        public string EnsureValueIsOfFormatAndMatchesRules(mbi_file_table_stage dataRow, TypedCsvColumn column)
         {
 
             // always trim
@@ -1106,112 +1069,168 @@ namespace DataProcessing
             var value = orgValue;
 
             value = value.Trim();
-            if (Utils.IsBlank(value))
+
+            //1. Check and fix format
+            if (!Utils.IsBlank(value))
             {
-                // if reached here we had no unfixable format error - fix 
-                dataRow.SetColumnValue(column.SourceColumn, value);
-                return;
+                // fix value if possible
+                switch (column.FormatType)
+                {
+                    case FormatType.Any:
+                    case FormatType.String:
+                        break;
+
+                    case FormatType.Email:
+                        if (!Utils.IsValidEmail(value))
+                        {
+                            this.AddErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be a valid Email. {orgValue} is not valid");
+                        }
+
+                        break;
+                    case FormatType.AlphaNumeric:
+                        // replace all non alphanumeric
+                        value = regexAlphaNumeric.Replace(value, String.Empty);
+                        break;
+
+                    case FormatType.AlphaOnly:
+                        // replace all non alphanumeric
+                        value = regexAlphaOnly.Replace(value, String.Empty);
+                        break;
+
+                    case FormatType.AlphaAndDashes:
+                        // replace all non alphanumeric
+                        value = regexAlphaAndDashes.Replace(value, String.Empty);
+                        break;
+
+                    case FormatType.Integer:
+                        // remove any non digits
+                        value = regexInteger.Replace(value, String.Empty);
+                        //
+                        if (!Utils.IsInteger(value))
+                        {
+                            this.AddErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be numbers only. {orgValue} is not valid");
+                        }
+
+                        break;
+
+                    case FormatType.Double:
+                        // remove any non digits and non . and non ,
+                        value = regexDouble.Replace(value, String.Empty);
+                        if (!Utils.IsDouble(value))
+                        {
+                            this.AddErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be a Currency Value. {orgValue} is not valid");
+                        }
+
+                        break;
+
+                    case FormatType.IsoDate:
+                        // remove any non digits
+                        value = regexInteger.Replace(value, String.Empty);
+                        if (!Utils.IsIsoDate(value))
+                        {
+                            this.AddErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be in format YYYYMMDD. {orgValue} is not valid");
+                        }
+
+                        break;
+
+
+                    case FormatType.IsoDateTime:
+                        // remove any non digits
+                        value = regexInteger.Replace(value, String.Empty);
+                        if (!Utils.IsIsoDateTime(value))
+                        {
+                            this.AddErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be in format YYYYMMDD. {orgValue} is not valid");
+                        }
+
+                        break;
+
+
+                    case FormatType.YesNo:
+                        if (!value.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) &&
+                            !value.Equals("No", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            this.AddErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be be either Yes or No. {orgValue} is not valid");
+                        }
+
+                        break;
+
+                    case FormatType.TrueFalse:
+                        if (!value.Equals("True", StringComparison.InvariantCultureIgnoreCase) &&
+                            !value.Equals("False", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            this.AddErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be be either Yes or No. {orgValue} is not valid");
+                        }
+
+                        break;
+
+
+                    default:
+                        break;
+                }
             }
 
-            // fix value if possible
-            switch (column.FormatType)
-            {
-                case FormatType.Any:
-                case FormatType.String:
-                    return;
 
-                case FormatType.Email:
-                    if (!Utils.IsValidEmail(value))
-                    {
-                        this.AddErrorForRow(dataRow, column.SourceColumn,
-                            $"{column.SourceColumn} must be a valid Email. {orgValue} is not valid.");
-                    }
-                    break;
-                case FormatType.AlphaNumeric:
-                    // replace all non alphanumeric
-                    value = regexAlphaNumeric.Replace(value, String.Empty);
-                    break;
-
-                case FormatType.AlphaOnly:
-                    // replace all non alphanumeric
-                    value = regexAlphaOnly.Replace(value, String.Empty);
-                    break;
-
-                case FormatType.AlphaAndDashes:
-                    // replace all non alphanumeric
-                    value = regexAlphaAndDashes.Replace(value, String.Empty);
-                    break;
-
-                case FormatType.Integer:
-                    // remove any non digits
-                    value = regexInteger.Replace(value, String.Empty);
-                    //
-                    if (!Utils.IsInteger(value))
-                    {
-                        this.AddErrorForRow(dataRow, column.SourceColumn,
-                            $"{column.SourceColumn} must be numbers only. {orgValue} is not valid.");
-                    }
-                    break;
-
-                case FormatType.Double:
-                    // remove any non digits and non . and non ,
-                    value = regexDouble.Replace(value, String.Empty);
-                    if (!Utils.IsDouble(value))
-                    {
-                        this.AddErrorForRow(dataRow, column.SourceColumn,
-                            $"{column.SourceColumn} must be a Currency Value. {orgValue} is not valid.");
-                    }
-                    break;
-
-                case FormatType.IsoDate:
-                    // remove any non digits
-                    value = regexInteger.Replace(value, String.Empty);
-                    if (!Utils.IsIsoDate(value))
-                    {
-                        this.AddErrorForRow(dataRow, column.SourceColumn,
-                            $"{column.SourceColumn} must be in format YYYYMMDD. {orgValue} is not valid.");
-                    }
-                    break;
-
-
-                case FormatType.IsoDateTime:
-                    // remove any non digits
-                    value = regexInteger.Replace(value, String.Empty);
-                    if (!Utils.IsIsoDateTime(value))
-                    {
-                        this.AddErrorForRow(dataRow, column.SourceColumn,
-                            $"{column.SourceColumn} must be in format YYYYMMDD. {orgValue} is not valid.");
-                    }
-                    break;
-
-
-                case FormatType.YesNo:
-                    if (!value.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) && !value.Equals("No", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        this.AddErrorForRow(dataRow, column.SourceColumn,
-                            $"{column.SourceColumn} must be be either Yes or No. {orgValue} is not valid.");
-                    }
-                    break;
-
-                case FormatType.TrueFalse:
-                    if (!value.Equals("True", StringComparison.InvariantCultureIgnoreCase) && !value.Equals("False", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        this.AddErrorForRow(dataRow, column.SourceColumn,
-                            $"{column.SourceColumn} must be be either Yes or No. {orgValue} is not valid.");
-                    }
-                    break;
-
-
-                default:
-                    break;
-            }
-
-            // if reached here we had no unfixable format error - fix 
+            // set row column value to the fixed value
             dataRow.SetColumnValue(column.SourceColumn, value);
+
+            // 2. check against GENERAL rules
+            if (column.FixedValue != null && value != column.FixedValue)
+            {
+                this.AddErrorForRow(dataRow, column.SourceColumn,
+                    $"{column.SourceColumn} must always be {column.FixedValue}. {orgValue} is not valid");
+            }
+
+
+            // minLength
+            if (column.MinLength > 0 && value.Length < column.MinLength)
+            {
+                this.AddErrorForRow(dataRow, column.SourceColumn,
+                    $"{column.SourceColumn} must minimum {column.MinLength} characters long. {orgValue} is not valid");
+            }
+
+            // maxLength
+            if (column.MinLength > 0 && value.Length < column.MinLength)
+            {
+                this.AddErrorForRow(dataRow, column.SourceColumn,
+                    $"{column.SourceColumn} must minimum {column.MinLength} characters long. {orgValue} is not valid");
+            }
+
+            // min/max value
+            if (column.MinValue != 0 || column.MaxValue != 0)
+            {
+                if (!Utils.IsNumeric(value))
+                {
+                    this.AddErrorForRow(dataRow, column.SourceColumn, $"{column.SourceColumn} must be a number. {orgValue} is not valid");
+                }
+
+                float numValue = Utils.ToNumber(value);
+                if (numValue < column.MinValue)
+                {
+                    this.AddErrorForRow(dataRow, column.SourceColumn,
+                        $"{column.SourceColumn} must be a number with a value greater than ${column.MinValue}. {orgValue} is not valid");
+                }
+
+                if (numValue > column.MaxValue)
+                {
+                    this.AddErrorForRow(dataRow, column.SourceColumn,
+                        $"{column.SourceColumn} must be a number with a value less than ${column.MaxValue}. {orgValue} is not valid");
+                }
+            }
+
+
+
+            return value;
 
         }
         #endregion
 
-#endregion check Utils
+
     }
 }
