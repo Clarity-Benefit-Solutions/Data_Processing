@@ -6,13 +6,11 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using CoreUtils;
 using CoreUtils.Classes;
 using DataProcessing.DataModels.AlegeusErrorLog;
 using EtlUtilities;
-using MySqlConnector;
-using System.Runtime.Caching;
-using System.Text.RegularExpressions;
 
 // ReSharper disable All
 
@@ -270,8 +268,11 @@ namespace DataProcessing
                 return;
             }
 
-            // get columns for file
-            TypedCsvSchema mappings = Import.GetAlegeusFileImportMappings(fileFormat, true);
+            // get header type from filename
+            var headerType = Import.GetAlegeusHeaderTypeFromFile(currentFilePath);
+
+            // get columns for file based on header type
+            TypedCsvSchema mappings = Import.GetAlegeusFileImportMappings(fileFormat, headerType);
 
             //
             string tableName = "[dbo].[mbi_file_table_stage]";
@@ -283,10 +284,10 @@ namespace DataProcessing
 
             // import the file with bulk copy
             var newPath =
-                Import.PrefixLineWithEntireLineAndFileName(headerType, currentFilePath, this.srcFilePath, fileLogParams);
+                Import.PrefixLineWithEntireLineAndFileName( currentFilePath, this.srcFilePath, fileLogParams);
 
             // import into table so we can manipulate the file
-            ImpExpUtils.ImportCsvFileBulkCopy(this.headerType, this.dbConn, newPath, this.hasHeaderRow, tableName,
+            ImpExpUtils.ImportCsvFileBulkCopy(this.dbConn, newPath, this.hasHeaderRow, tableName,
                 mappings, this.fileLogParams,
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
@@ -317,14 +318,8 @@ namespace DataProcessing
             // ensure previously cached data is not used so
             // so create a new db context to ensure stale data will NOT be used
             var dbErrorLog = Vars.dbCtxAlegeusErrorLogNew;
-            // get all dbRows
 
-            // ALTERNATE METHOD: refresh previous data - not working
-            /*
-                        //dbErrorLog.Entry(dbErrorLog.mbi_file_table_stage).Reload();
-                        //((IObjectContextAdapter) dbErrorLog).ObjectContext.Refresh(RefreshMode.StoreWins, dbErrorLog.mbi_file_table_stage);
-            */
-            // get all data
+            // get all dbRows without caching
             var dataRows = dbErrorLog.mbi_file_table_stage
                 .OrderBy(dataRow => dataRow.source_row_no)
                 .ToList();
@@ -340,8 +335,6 @@ namespace DataProcessing
             // save any changes
             dbErrorLog.SaveChanges();
         }
-
-
 
 
         private void CheckFileData(EdiFileFormat fileFormat, mbi_file_table_stage dataRow, TypedCsvSchema mappings)
@@ -373,19 +366,15 @@ namespace DataProcessing
                         break;
                 }
 
+                // save Org Column value before changes
+                var orgValue = dataRow.ColumnValue(column.SourceColumn) ?? "";
 
-                // 1. valid Format and general rules check
-                var value = EnsureValueIsOfFormatAndMatchesRules(dataRow, column);
-
+                // 1. valid Format and general rules check - save corrected value to row
+                var formattedValue = EnsureValueIsOfFormatAndMatchesRules(dataRow, column);
 
                 // 2. specific column checking against business rules & DB
                 switch (column.SourceColumn?.ToLowerInvariant() ?? "")
                 {
-                    //// tpa ID
-                    //case "tpaid":
-                    //    skipRestOfRow = this.CheckTpaExists(dataRow, column, fileFormat);
-                    //    break;
-
                     // ER ID
                     case "employerid":
                         //ER must exist before any Import files are sent
@@ -412,32 +401,19 @@ namespace DataProcessing
                             skipRestOfRow = this.CheckEmployerPlanExists(dataRow, column, fileFormat);
                         }
 
-                        //if (!Utils.IsBlank(dataRow.DependentID))
-                        //{
-                        //    skipRestOfRow = this.CheckDependentPlanExists(dataRow, column);
-                        //}
-                        //else if (!Utils.IsBlank(dataRow.EmployeeID))
-                        //{
-                        //    skipRestOfRow = this.CheckEmployeePlanExists(dataRow, column);
-                        //}
-                        //else
-                        //{
-                        //    skipRestOfRow = this.CheckEmployerPlanExists(dataRow, column);
-                        //}
                         break;
 
                     default:
                         break;
                 }
 
-                // check and fix all columns
+                
                 // skip checking other columns if a important column value is invalid
                 if (skipRestOfRow)
                 {
-                    // return;
+                    // do not skip so we can show errors for general rules also for all cols in row
+                    //return;
                 }
-
-
 
             }
         }
@@ -1063,11 +1039,10 @@ namespace DataProcessing
 
         public string EnsureValueIsOfFormatAndMatchesRules(mbi_file_table_stage dataRow, TypedCsvColumn column)
         {
-
-            // always trim
             var orgValue = dataRow.ColumnValue(column.SourceColumn) ?? "";
             var value = orgValue;
 
+            // always trim
             value = value.Trim();
 
             //1. Check and fix format
@@ -1177,8 +1152,10 @@ namespace DataProcessing
             }
 
 
-            // set row column value to the fixed value
-            dataRow.SetColumnValue(column.SourceColumn, value);
+            // set row column value to the fixed value if it has changed
+            if (value != orgValue)
+            { dataRow.SetColumnValue(column.SourceColumn, value); }
+
 
             // 2. check against GENERAL rules
             if (column.FixedValue != null && value != column.FixedValue)
@@ -1223,8 +1200,6 @@ namespace DataProcessing
                         $"{column.SourceColumn} must be a number with a value less than ${column.MaxValue}. {orgValue} is not valid");
                 }
             }
-
-
 
             return value;
 

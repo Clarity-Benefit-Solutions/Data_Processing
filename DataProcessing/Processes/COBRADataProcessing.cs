@@ -415,7 +415,7 @@ namespace DataProcessing
 
                     //2. import file
                     string procName = @"dbo.[Fix_COBRAQB_SSObollean]";
-                    ImpExpUtils.ImportSingleColumnFlatFile(headerType, dbConnCobra, srcFilePath, srcFilePath, tableName,
+                    ImpExpUtils. ImportSingleColumnFlatFile( dbConnCobra, srcFilePath, srcFilePath, tableName,
                         "folder_name",
                         "QB_data", fileLogParams,
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }

@@ -53,29 +53,28 @@ namespace DataProcessing
             var ftpConn = Vars.RemoteAlegeusFtpConnection;
 
             // 
-            var headerType = HeaderType.NotApplicable;
 
             //DeleteStagingFiles
-            DeleteStagingFiles(headerType, dbConn, fileLogParams);
+            DeleteStagingFiles(dbConn, fileLogParams);
 
             //GetFtpFilesFroMAlegeus
-            GetFtpFilesFromAlegeus(headerType, ftpConn, fileLogParams);
+            GetFtpFilesFromAlegeus(ftpConn, fileLogParams);
 
             ////GetCrmList
-            //Import.ImportCrmListFileBulkCopy(headerType, dbConn, $"{Vars.fromBoomiFtpRoot}/CRM_List.csv", false,
+            //Import.ImportCrmListFileBulkCopy(dbConn, $"{Vars.fromBoomiFtpRoot}/CRM_List.csv", false,
             //    "dbo.[CRM_List]", fileLogParams);
 
             //ImportAlegeusResultResFiles
-            ImportAlegeusFiles(headerType, dbConn, fileLogParams);
+            ImportAlegeusFiles(dbConn, fileLogParams);
 
             //TrackNewFtpFileErrors
-            TrackAllNewFtpFileErrors(headerType, dbConn, fileLogParams);
+            TrackAllNewFtpFileErrors(dbConn, fileLogParams);
 
             //MoveFilesToArchive
-            MoveFilesToArchive(headerType, dbConn, fileLogParams);
+            MoveFilesToArchive(dbConn, fileLogParams);
         }
 
-        protected void DeleteStagingFiles(HeaderType headerType, DbConnection dbConn,
+        protected void DeleteStagingFiles(DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             //1. Clear all files in AutomatedHeaderV1_Files
@@ -88,9 +87,9 @@ namespace DataProcessing
             DbUtils.LogFileOperation(fileLogParams);
             //
             //
-            FileUtils.DeleteFiles(new[] {Vars.alegeusErrorLogMbiFilesRoot, Vars.alegeusErrorLogResFilesRoot}
+            FileUtils.DeleteFiles(new[] { Vars.alegeusErrorLogMbiFilesRoot, Vars.alegeusErrorLogResFilesRoot }
                 , false
-                , new[] {"*.mbi", "*.dne", "*.txt", "*.res"},
+                , new[] { "*.mbi", "*.dne", "*.txt", "*.res" },
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // add to fileLog
@@ -110,7 +109,7 @@ namespace DataProcessing
             //
         }
 
-        protected void GetFtpFilesFromAlegeus(HeaderType headerType, SFtpConnection ftpConn,
+        protected void GetFtpFilesFromAlegeus(SFtpConnection ftpConn,
             FileOperationLogParams fileLogParams)
         {
             //
@@ -123,11 +122,13 @@ namespace DataProcessing
             // download mbi dir files
             ftpConn.CopyOrMoveFiles(
                 FtpFileOperation.DownloadAndDelete,
-                new string[] {Vars.remoteAlegeusFtpRootPath}, true,
-                new string[] {"*.mbi", "*.dne"},
+                new string[] { Vars.remoteAlegeusFtpRootPath }, true,
+                new string[] { "*.mbi", "*.dne" },
                 Vars.alegeusErrorLogMbiFilesRoot, "", "",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
+                    var headerType = Import.GetAlegeusHeaderTypeFromFile(destFilePath);
+
                     // add uniqueId to file so we can track it across folders and operations
                     var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(headerType, destFilePath, false,
                         fileLogParams);
@@ -144,12 +145,13 @@ namespace DataProcessing
             // download res dir files
             ftpConn.CopyOrMoveFiles(
                 FtpFileOperation.DownloadAndDelete,
-                new string[] {Vars.remoteAlegeusFtpRootPath}, true,
-                new string[] {"*.res"},
+                new string[] { Vars.remoteAlegeusFtpRootPath }, true,
+                new string[] { "*.res" },
                 Vars.alegeusErrorLogResFilesRoot, "", "",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
                     // add uniqueId to file so we can track it across folders and operations
+                    var headerType = Import.GetAlegeusHeaderTypeFromFile(destFilePath);
                     var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(headerType, destFilePath, true,
                         fileLogParams);
 
@@ -169,7 +171,7 @@ namespace DataProcessing
             //
         }
 
-        protected void ImportAlegeusFiles(HeaderType headerType, DbConnection dbConn,
+        protected void ImportAlegeusFiles(DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             //
@@ -179,8 +181,8 @@ namespace DataProcessing
 
             //
             FileUtils.IterateDirectory(
-                new[] {Vars.alegeusErrorLogResFilesRoot, Vars.alegeusErrorLogMbiFilesRoot}, DirectoryIterateType.Files
-                , false, new[] {"*.res", "*.dne", "*.txt", "*.mbi"},
+                new[] { Vars.alegeusErrorLogResFilesRoot, Vars.alegeusErrorLogMbiFilesRoot }, DirectoryIterateType.Files
+                , false, new[] { "*.res", "*.dne", "*.txt", "*.mbi" },
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     //
@@ -190,7 +192,7 @@ namespace DataProcessing
                     DbUtils.LogFileOperation(fileLogParams);
 
                     //2. import file
-                    Import.ImportAlegeusFile(headerType, dbConn, srcFilePath, false, fileLogParams,
+                    Import.ImportAlegeusFile(dbConn, srcFilePath, false, fileLogParams,
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                     );
 
@@ -210,7 +212,7 @@ namespace DataProcessing
         }
 
 
-        protected void TrackAllNewFtpFileErrors(HeaderType headerType, DbConnection dbConn,
+        protected void TrackAllNewFtpFileErrors(DbConnection dbConn,
             FileOperationLogParams fileLogParams)
 
         {
@@ -237,7 +239,7 @@ namespace DataProcessing
             //
         }
 
-        protected void MoveFilesToArchive(HeaderType headerType, DbConnection dbConn,
+        protected void MoveFilesToArchive(DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
             //

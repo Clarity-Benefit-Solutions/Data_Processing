@@ -336,7 +336,7 @@ namespace DataProcessing
                             throw new Exception(message);
                     }
 
-                    ImpExpUtils.ImportSingleColumnFlatFile(headerType, dbConn, srcFilePath, srcFilePath, tableName,
+                    ImpExpUtils. ImportSingleColumnFlatFile( dbConn, srcFilePath, srcFilePath, tableName,
                         "folder_name",
                         "data_row", fileLogParams,
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }

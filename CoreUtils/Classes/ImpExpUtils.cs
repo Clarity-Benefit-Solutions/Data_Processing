@@ -179,7 +179,7 @@ namespace CoreUtils.Classes
             return EdiFileFormat.Unknown;
         }
 
-        public static void ImportSingleColumnFlatFile(HeaderType headerType, DbConnection dbConn,
+        public static void ImportSingleColumnFlatFile(DbConnection dbConn,
             string srcFilePath, string srcFileName,
             string tableName, string fileColName, string contentsColName, FileOperationLogParams fileLogParams,
             OnErrorCallback onErrorCallback)
@@ -327,7 +327,7 @@ namespace CoreUtils.Classes
             }
         } // routine
 
-        public static void ImportCsvFileBulkCopy(HeaderType headerType, DbConnection dbConn,
+        public static void ImportCsvFileBulkCopy(DbConnection dbConn,
             string srcFilePath, bool hasHeaderRow, string tableName, TypedCsvSchema columnMappings,
             FileOperationLogParams fileLogParams, OnErrorCallback onErrorCallback)
         {
