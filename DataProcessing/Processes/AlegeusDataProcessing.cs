@@ -12,8 +12,6 @@ using EtlUtilities;
 
 namespace DataProcessing
 {
-    
-    
     public class AlegeusDataProcessing
     {
         private Vars Vars { get; } = new Vars();
@@ -45,7 +43,7 @@ namespace DataProcessing
             var fileLogParams = Vars.dbFileProcessingLogParams;
 
             // dbConn
-            var dbConn = Vars.dbConnAlegeusFileProcessing;
+            var dbConn = Vars.dbConnDataProcessing;
 
             // CreateHeaders
             CreateHeaders(dbConn, fileLogParams);
@@ -488,7 +486,7 @@ namespace DataProcessing
                 {
                     // check the file 
                     using var fileChecker = new FileChecker(srcFilePath, PlatformType.Alegeus,
-                        Vars.dbConnAlegeusErrorLog, fileLogParams,
+                        Vars.dbConnDataProcessing, fileLogParams,
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                     );
 

@@ -406,7 +406,7 @@ namespace DataProcessing
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // DB connecrtion for COBRA specific
-                    DbConnection dbConnCobra = Vars.dbConnCobraFileProcessing;
+                    DbConnection dbConnCobra = Vars.dbConnDataProcessing;
 
                     //1. truncate staging table
                     string tableName = @"[dbo].[QB_file_data_fixtbl]";

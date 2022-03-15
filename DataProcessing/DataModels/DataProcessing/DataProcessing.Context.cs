@@ -83,19 +83,19 @@ namespace DataProcessing.DataModels.DataProcessing
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<SplitStringsOrdered_Result>("[Data_ProcessingEntities].[SplitStringsOrdered](@List, @Delimiter)", listParameter, delimiterParameter);
         }
     
-        public virtual int Alegeus_ErrorLog_failure_alert()
+        public virtual int Data_Processing_failure_alert()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Alegeus_ErrorLog_failure_alert");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Data_Processing_failure_alert");
         }
     
-        public virtual int Alegeus_ErrorLog_refreshsuccess_alert()
+        public virtual int Data_Processing_refreshsuccess_alert()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Alegeus_ErrorLog_refreshsuccess_alert");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Data_Processing_refreshsuccess_alert");
         }
     
-        public virtual int alegeus_errorlog_track_new_ftp_errors()
+        public virtual int Data_Processing_track_new_ftp_errors()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("alegeus_errorlog_track_new_ftp_errors");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Data_Processing_track_new_ftp_errors");
         }
     
         public virtual int Alegeus_Header_n_success()

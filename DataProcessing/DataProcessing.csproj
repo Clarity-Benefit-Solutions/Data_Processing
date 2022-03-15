@@ -318,57 +318,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataModels\AlegeusErrorLog\Alegeus_ErrorLogEntities.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Alegeus_ErrorLogEntities.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusErrorLog\Alegeus_ErrorLogEntities.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Alegeus_ErrorLogEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusErrorLog\Alegeus_ErrorLogEntities.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Alegeus_ErrorLogEntities.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusErrorLog\CsvSplit1_Result.cs">
-      <DependentUpon>Alegeus_ErrorLogEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusErrorLog\dbo_error_log_results_workflow_local.cs">
-      <DependentUpon>Alegeus_ErrorLogEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusErrorLog\dbo_error_log_results_workflow_localBU.cs">
-      <DependentUpon>Alegeus_ErrorLogEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusErrorLog\dbo_error_log_results_workflow_local_AL.cs">
-      <DependentUpon>Alegeus_ErrorLogEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusErrorLog\dbo_tracked_errors_local.cs">
-      <DependentUpon>Alegeus_ErrorLogEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusErrorLog\mbi_file_table.cs">
-      <DependentUpon>Alegeus_ErrorLogEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusErrorLog\mbi_file_table_stage.cs">
-      <DependentUpon>Alegeus_ErrorLogEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusErrorLog\mbi_file_table_stage_prv.cs">
-      <DependentUpon>Alegeus_ErrorLogEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusErrorLog\res_file_table.cs">
-      <DependentUpon>Alegeus_ErrorLogEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusErrorLog\res_file_table_stage.cs">
-      <DependentUpon>Alegeus_ErrorLogEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusErrorLog\SplitErrorRowStringToFields_Result.cs">
-      <DependentUpon>Alegeus_ErrorLogEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusErrorLog\SplitStringsOrdered_Result.cs">
-      <DependentUpon>Alegeus_ErrorLogEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="DataModels\DataProcessing\alegeus_file_final.cs">
       <DependentUpon>DataProcessing.tt</DependentUpon>
     </Compile>
@@ -448,64 +397,7 @@
     <Compile Include="Processes\AlegeusErrorLog.cs" />
     <Compile Include="Processes\AlegeusDataProcessing.cs" />
     <Compile Include="Processes\COBRADataProcessing.cs" />
-    <Compile Include="DataModels\AlegeusFileProcessing\AlegeusFileProcessingEntities.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AlegeusFileProcessingEntities.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusFileProcessing\AlegeusFileProcessingEntities.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AlegeusFileProcessingEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusFileProcessing\AlegeusFileProcessingEntities.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AlegeusFileProcessingEntities.edmx</DependentUpon>
-    </Compile>
     <Compile Include="DataModels\EntitiesCustomCode.cs" />
-    <Compile Include="DataModels\AlegeusFileProcessing\alegeus_file_staging.cs">
-      <DependentUpon>AlegeusFileProcessingEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusFileProcessing\Automated_Header_list.cs">
-      <DependentUpon>AlegeusFileProcessingEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusFileProcessing\file_processing_log.cs">
-      <DependentUpon>AlegeusFileProcessingEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusFileProcessing\file_processing_tasks_log.cs">
-      <DependentUpon>AlegeusFileProcessingEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusFileProcessing\message_log.cs">
-      <DependentUpon>AlegeusFileProcessingEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\AlegeusFileProcessing\proc_alegeus_AlterHeadersNone_Result.cs">
-      <DependentUpon>AlegeusFileProcessingEntities.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\COBRA\Cobra.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Cobra.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\COBRA\Cobra.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Cobra.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\COBRA\Cobra.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Cobra.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\COBRA\COBRA_FRC.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\COBRA\COBRA_QB_demo.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DataModels\COBRA\COBRA_QB_plans.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
-    </Compile>
     <Compile Include="Vars.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -521,27 +413,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <EntityDeploy Include="DataModels\AlegeusFileProcessing\AlegeusFileProcessingEntities.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>AlegeusFileProcessingEntities.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <EntityDeploy Include="DataModels\AlegeusErrorLog\Alegeus_ErrorLogEntities.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Alegeus_ErrorLogEntities.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="DataModels\AlegeusErrorLog\Alegeus_ErrorLogEntities.edmx.diagram">
-      <DependentUpon>Alegeus_ErrorLogEntities.edmx</DependentUpon>
-    </None>
-    <None Include="DataModels\AlegeusFileProcessing\AlegeusFileProcessingEntities.edmx.diagram">
-      <DependentUpon>AlegeusFileProcessingEntities.edmx</DependentUpon>
-    </None>
-    <EntityDeploy Include="DataModels\COBRA\Cobra.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Cobra.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="DataModels\COBRA\Cobra.edmx.diagram">
-      <DependentUpon>Cobra.edmx</DependentUpon>
-    </None>
     <EntityDeploy Include="DataModels\DataProcessing\DataProcessing.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DataProcessing.Designer.cs</LastGenOutput>
@@ -555,36 +426,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DataModels\AlegeusErrorLog\Alegeus_ErrorLogEntities.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Alegeus_ErrorLogEntities.edmx</DependentUpon>
-      <LastGenOutput>Alegeus_ErrorLogEntities.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="DataModels\AlegeusErrorLog\Alegeus_ErrorLogEntities.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Alegeus_ErrorLogEntities.edmx</DependentUpon>
-      <LastGenOutput>Alegeus_ErrorLogEntities.cs</LastGenOutput>
-    </Content>
-    <Content Include="DataModels\AlegeusFileProcessing\AlegeusFileProcessingEntities.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AlegeusFileProcessingEntities.edmx</DependentUpon>
-      <LastGenOutput>AlegeusFileProcessingEntities.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="DataModels\AlegeusFileProcessing\AlegeusFileProcessingEntities.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>AlegeusFileProcessingEntities.edmx</DependentUpon>
-      <LastGenOutput>AlegeusFileProcessingEntities.cs</LastGenOutput>
-    </Content>
-    <Content Include="DataModels\COBRA\Cobra.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Cobra.edmx</DependentUpon>
-      <LastGenOutput>Cobra.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="DataModels\COBRA\Cobra.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Cobra.edmx</DependentUpon>
-      <LastGenOutput>Cobra.cs</LastGenOutput>
-    </Content>
     <Content Include="DataModels\DataProcessing\DataProcessing.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DataProcessing.edmx</DependentUpon>

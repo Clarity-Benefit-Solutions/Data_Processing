@@ -26,18 +26,18 @@ namespace DataProcessing
             (
                 () =>
                 {
-                    Thread.CurrentThread.Name = "AlegeusErrorLog";
-                    AlegeusErrorLog alegeusErrorLog = new AlegeusErrorLog();
-                    alegeusErrorLog.RetrieveErrorLogs();
+                    Thread.CurrentThread.Name = "DataProcessing";
+                    AlegeusErrorLog DataProcessing = new AlegeusErrorLog();
+                    DataProcessing.RetrieveErrorLogs();
                 }
             );
         }
         public void USERVERYCAUTIOUSLY_ClearAllTables()
         {
-            var dbConn = Vars.dbConnAlegeusErrorLog;
+            var dbConn = Vars.dbConnDataProcessing;
             var fileLogParams = Vars.dbFileProcessingLogParams;
 
-            var queryString = "exec [Alegeus_ErrorLog].dbo.zz_truncate_all;";
+            var queryString = "exec [Data_Processing].dbo.zz_truncate_all;";
 
             DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null, fileLogParams.DbMessageLogParams,
                 false, false);
@@ -49,7 +49,7 @@ namespace DataProcessing
 
             //
             var fileLogParams = Vars.dbFileProcessingLogParams;
-            var dbConn = Vars.dbConnAlegeusErrorLog;
+            var dbConn = Vars.dbConnDataProcessing;
             var ftpConn = Vars.RemoteAlegeusFtpConnection;
 
             // 
@@ -87,7 +87,7 @@ namespace DataProcessing
             DbUtils.LogFileOperation(fileLogParams);
             //
             //
-            FileUtils.DeleteFiles(new[] { Vars.alegeusErrorLogMbiFilesRoot, Vars.alegeusErrorLogResFilesRoot }
+            FileUtils.DeleteFiles(new[] { Vars.DataProcessingMbiFilesRoot, Vars.DataProcessingResFilesRoot }
                 , false
                 , new[] { "*.mbi", "*.dne", "*.txt", "*.res" },
                 (srcFilePath, destFilePath, dummy2) =>
@@ -124,7 +124,7 @@ namespace DataProcessing
                 FtpFileOperation.DownloadAndDelete,
                 new string[] { Vars.remoteAlegeusFtpRootPath }, true,
                 new string[] { "*.mbi", "*.dne" },
-                Vars.alegeusErrorLogMbiFilesRoot, "", "",
+                Vars.DataProcessingMbiFilesRoot, "", "",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
                     var headerType = Import.GetAlegeusHeaderTypeFromFile(destFilePath);
@@ -147,7 +147,7 @@ namespace DataProcessing
                 FtpFileOperation.DownloadAndDelete,
                 new string[] { Vars.remoteAlegeusFtpRootPath }, true,
                 new string[] { "*.res" },
-                Vars.alegeusErrorLogResFilesRoot, "", "",
+                Vars.DataProcessingResFilesRoot, "", "",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
                     // add uniqueId to file so we can track it across folders and operations
@@ -181,7 +181,7 @@ namespace DataProcessing
 
             //
             FileUtils.IterateDirectory(
-                new[] { Vars.alegeusErrorLogResFilesRoot, Vars.alegeusErrorLogMbiFilesRoot }, DirectoryIterateType.Files
+                new[] { Vars.DataProcessingResFilesRoot, Vars.DataProcessingMbiFilesRoot }, DirectoryIterateType.Files
                 , false, new[] { "*.res", "*.dne", "*.txt", "*.mbi" },
                 (srcFilePath, destFilePath, dummy2) =>
                 {
@@ -226,7 +226,7 @@ namespace DataProcessing
 
             // 1: insert into dbo_tracked_errors_local
             queryString = @" 
-                        exec [dbo].[alegeus_errorlog_track_new_ftp_errors]
+                        exec [dbo].[Data_Processing_track_new_ftp_errors]
                             ";
             // run query
             DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
@@ -251,8 +251,8 @@ namespace DataProcessing
 
             // move mbiFiles to Archive
             FileUtils.MoveFiles(
-                Vars.alegeusErrorLogMbiFilesRoot, false, "*.*",
-                Vars.alegeusErrorLogMbiFilesArchiveRoot, "", "",
+                Vars.DataProcessingMbiFilesRoot, false, "*.*",
+                Vars.DataProcessingMbiFilesArchiveRoot, "", "",
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // add to fileLog
@@ -266,8 +266,8 @@ namespace DataProcessing
             );
             // move resFiles to Archive
             FileUtils.MoveFiles(
-                Vars.alegeusErrorLogResFilesRoot, false, "*.*",
-                Vars.alegeusErrorLogResFilesArchiveRoot, "", "",
+                Vars.DataProcessingResFilesRoot, false, "*.*",
+                Vars.DataProcessingResFilesArchiveRoot, "", "",
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // add to fileLog

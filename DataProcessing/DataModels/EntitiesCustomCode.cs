@@ -4,24 +4,12 @@ using System.Reflection;
 
 // ReSharper disable All
 
-namespace DataProcessing.DataModels.AlegeusFileProcessing
+namespace DataProcessing.DataModels.DataProcessing
 {
     [SuppressMessage("ReSharper", "InconsistentNaming")]
-    public partial class Alegeus_File_ProcessingEntities
+    public partial class Data_ProcessingEntities
     {
-        public Alegeus_File_ProcessingEntities(string nameOrConnectionString)
-            : base(nameOrConnectionString)
-        {
-        }
-    }
-}
-
-namespace DataProcessing.DataModels.AlegeusErrorLog
-{
-    [SuppressMessage("ReSharper", "InconsistentNaming")]
-    public partial class Alegeus_ErrorLogEntities
-    {
-        public Alegeus_ErrorLogEntities(string nameOrConnectionString)
+        public Data_ProcessingEntities(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
         }
@@ -201,18 +189,6 @@ namespace DataProcessing.DataModels.AlegeusErrorLog
                     string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : {colName} is Invalid";
                     throw new Exception(message);
             }
-        }
-    }
-}
-
-namespace DataProcessing.DataModels.COBRA
-{
-    // ReSharper disable once InconsistentNaming
-    public partial class COBRAEntities
-    {
-        public COBRAEntities(string nameOrConnectionString)
-            : base(nameOrConnectionString)
-        {
         }
     }
 }

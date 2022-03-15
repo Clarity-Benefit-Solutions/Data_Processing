@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using CoreUtils;
 using CoreUtils.Classes;
-using DataProcessing.DataModels.AlegeusErrorLog;
+using DataProcessing.DataModels.DataProcessing;
 using EtlUtilities;
 
 // ReSharper disable All
@@ -317,7 +317,7 @@ namespace DataProcessing
         {
             // ensure previously cached data is not used so
             // so create a new db context to ensure stale data will NOT be used
-            var dbErrorLog = Vars.dbCtxAlegeusErrorLogNew;
+            var dbErrorLog = Vars.dbCtxDataProcessingNew;
 
             // get all dbRows without caching
             var dataRows = dbErrorLog.mbi_file_table_stage

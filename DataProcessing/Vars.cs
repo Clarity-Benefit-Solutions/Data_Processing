@@ -9,9 +9,9 @@ using System.IO;
 using System.Reflection;
 using CoreUtils;
 using CoreUtils.Classes;
-using DataProcessing.DataModels.AlegeusErrorLog;
-using DataProcessing.DataModels.AlegeusFileProcessing;
-using DataProcessing.DataModels.COBRA;
+using DataProcessing.DataModels.DataProcessing;
+
+
 using MySqlConnector;
 using StackExchange.Profiling;
 
@@ -21,198 +21,66 @@ namespace DataProcessing
 {
     public class Vars
     {
-        #region DbCobraFileProcessing
+     
+        #region DBDataProcessing
 
-        private string _connStrNameCobraFileProcessing;
+        private string _connStrNameDataProcessing;
 
-        public static bool IsRunningAsWebApp { get; set; }
-
-        private string connStrNameCobraFileProcessing
+        private string connStrNameDataProcessing
         {
             get
             {
-                if (Utils.IsBlank(_connStrNameCobraFileProcessing))
+                if (Utils.IsBlank(_connStrNameDataProcessing))
                 {
 #if (TEST)
-                    _connStrNameCobraFileProcessing = "COBRAEntitiesTEST";
+                    _connStrNameDataProcessing = "Data_ProcessingEntitiesTEST";
 #else
-                    _connStrNameCobraFileProcessing = "COBRAEntities";
+                    _connStrNameDataProcessing = "Data_ProcessingEntities";
 #endif
                 }
 
-                return _connStrNameCobraFileProcessing;
+                return _connStrNameDataProcessing;
             }
         }
 
-        private COBRAEntities _dbCtxCobraFileProcessingDefault;
+        private Data_ProcessingEntities _dbCtxDataProcessingDefault;
 
-        private COBRAEntities DbCtxCobraFileProcessingDefault
+        public Data_ProcessingEntities DbCtxDataProcessingDefault
         {
             get
             {
-                if (_dbCtxCobraFileProcessingDefault == null)
-                    _dbCtxCobraFileProcessingDefault = new COBRAEntities("name=" + connStrNameCobraFileProcessing);
-                return _dbCtxCobraFileProcessingDefault;
+                if (_dbCtxDataProcessingDefault == null)
+                    _dbCtxDataProcessingDefault = new Data_ProcessingEntities("name=" + connStrNameDataProcessing);
+                return _dbCtxDataProcessingDefault;
             }
         }
 
-        private COBRAEntities DbCtxCobraFileProcessingNew
+        public Data_ProcessingEntities dbCtxDataProcessingNew
         {
-            get { return new COBRAEntities("name=" + connStrNameCobraFileProcessing); }
+            get { return new Data_ProcessingEntities("name=" + connStrNameDataProcessing); }
         }
 
+        private DbConnection _dbConnDataProcessing;
 
-        private DbConnection _dbConnCobraFileProcessing;
-
-        public DbConnection dbConnCobraFileProcessing
+        public DbConnection dbConnDataProcessing
         {
             get
             {
-                if (_dbConnCobraFileProcessing == null)
-                {
-
-                    string connString =
-                        DbUtils.GetProviderConnString(connStrNameCobraFileProcessing);
-                    //
-                    _dbConnCobraFileProcessing = new SqlConnection(connString);
-                    // profiling
-#if PROFILE
-                    _dbConnCobraFileProcessing = new StackExchange.Profiling.Data.ProfiledDbConnection(_dbConnCobraFileProcessing, MiniProfiler.Current);
-#endif
-
-                    if (_dbConnCobraFileProcessing.State != ConnectionState.Open) _dbConnCobraFileProcessing.Open();
-                }
-
-                return _dbConnCobraFileProcessing;
-            }
-        }
-
-        #endregion
-
-        #region DbAlegeusCobraFileProcessing
-
-        private string _connStrNameAlegeusFileProcessing;
-
-        private string connStrNameAlegeusFileProcessing
-        {
-            get
-            {
-                if (Utils.IsBlank(_connStrNameAlegeusFileProcessing))
-                {
-#if (TEST)
-                    _connStrNameAlegeusFileProcessing = "Alegeus_File_ProcessingEntitiesTEST";
-#else
-                    _connStrNameAlegeusFileProcessing = "Alegeus_File_ProcessingEntities";
-#endif
-                }
-
-                return _connStrNameAlegeusFileProcessing;
-            }
-        }
-
-        private Alegeus_File_ProcessingEntities _dbCtxAlegeusFileProcessingDefault;
-
-        private Alegeus_File_ProcessingEntities DbCtxAlegeusFileProcessingDefault
-        {
-            get
-            {
-                if (_dbCtxAlegeusFileProcessingDefault == null)
-                    _dbCtxAlegeusFileProcessingDefault =
-                        new Alegeus_File_ProcessingEntities("name=" + connStrNameAlegeusFileProcessing);
-                return _dbCtxAlegeusFileProcessingDefault;
-            }
-        }
-
-        private Alegeus_File_ProcessingEntities DbCtxAlegeusFileProcessingNew
-        {
-            get { return new Alegeus_File_ProcessingEntities("name=" + connStrNameAlegeusFileProcessing); }
-        }
-
-        private DbConnection _dbConnAlegeusFileProcessing;
-
-        public DbConnection dbConnAlegeusFileProcessing
-        {
-            get
-            {
-                if (_dbConnAlegeusFileProcessing == null)
+                if (_dbConnDataProcessing == null)
                 {
                     string connString =
-                        DbUtils.GetProviderConnString(connStrNameAlegeusFileProcessing);
+                        DbUtils.GetProviderConnString(connStrNameDataProcessing);
                     //
-                    _dbConnAlegeusFileProcessing = new SqlConnection(connString);
+                    _dbConnDataProcessing = new SqlConnection(connString);
                     // profiling
 #if PROFILE
-                    _dbConnAlegeusFileProcessing = new StackExchange.Profiling.Data.ProfiledDbConnection(_dbConnAlegeusFileProcessing, MiniProfiler.Current);
+                    _dbConnDataProcessing = new StackExchange.Profiling.Data.ProfiledDbConnection(_dbConnDataProcessing, MiniProfiler.Current);
 #endif
 
-                    if (_dbConnAlegeusFileProcessing.State != ConnectionState.Open) _dbConnAlegeusFileProcessing.Open();
+                    if (_dbConnDataProcessing.State != ConnectionState.Open) _dbConnDataProcessing.Open();
                 }
 
-                return _dbConnAlegeusFileProcessing;
-            }
-        }
-
-        #endregion
-
-        #region DBAlegeusErroLog
-
-        private string _connStrNameAlegeusErrorLog;
-
-        private string connStrNameAlegeusErrorLog
-        {
-            get
-            {
-                if (Utils.IsBlank(_connStrNameAlegeusErrorLog))
-                {
-#if (TEST)
-                    _connStrNameAlegeusErrorLog = "Alegeus_ErrorLogEntitiesTEST";
-#else
-                    _connStrNameAlegeusErrorLog = "Alegeus_ErrorLogEntities";
-#endif
-                }
-
-                return _connStrNameAlegeusErrorLog;
-            }
-        }
-
-        private Alegeus_ErrorLogEntities _dbCtxAlegeusErrorLogDefault;
-
-        public Alegeus_ErrorLogEntities DbCtxAlegeusErrorLogDefault
-        {
-            get
-            {
-                if (_dbCtxAlegeusErrorLogDefault == null)
-                    _dbCtxAlegeusErrorLogDefault = new Alegeus_ErrorLogEntities("name=" + connStrNameAlegeusErrorLog);
-                return _dbCtxAlegeusErrorLogDefault;
-            }
-        }
-
-        public Alegeus_ErrorLogEntities dbCtxAlegeusErrorLogNew
-        {
-            get { return new Alegeus_ErrorLogEntities("name=" + connStrNameAlegeusErrorLog); }
-        }
-
-        private DbConnection _dbConnAlegeusErrorLog;
-
-        public DbConnection dbConnAlegeusErrorLog
-        {
-            get
-            {
-                if (_dbConnAlegeusErrorLog == null)
-                {
-                    string connString =
-                        DbUtils.GetProviderConnString(connStrNameAlegeusErrorLog);
-                    //
-                    _dbConnAlegeusErrorLog = new SqlConnection(connString);
-                    // profiling
-#if PROFILE
-                    _dbConnAlegeusErrorLog = new StackExchange.Profiling.Data.ProfiledDbConnection(_dbConnAlegeusErrorLog, MiniProfiler.Current);
-#endif
-
-                    if (_dbConnAlegeusErrorLog.State != ConnectionState.Open) _dbConnAlegeusErrorLog.Open();
-                }
-
-                return _dbConnAlegeusErrorLog;
+                return _dbConnDataProcessing;
             }
         }
 
@@ -292,7 +160,7 @@ namespace DataProcessing
                     _dbMessageLogParams = new MessageLogParams();
                     _dbMessageLogParams.With(w =>
                     {
-                        w.DbConnection = dbConnAlegeusFileProcessing;
+                        w.DbConnection = dbConnDataProcessing;
                         w.Platform = "Alegeus";
                         w.LogTableName = @"dbo.[message_log]";
                         w.ModuleName = "AlegeusFileProcessing";
@@ -315,7 +183,7 @@ namespace DataProcessing
                     _dbFileProcessingLogParams = new FileOperationLogParams();
                     _dbFileProcessingLogParams.With(w =>
                     {
-                        w.DbConnection = dbConnAlegeusFileProcessing;
+                        w.DbConnection = dbConnDataProcessing;
                         w.DbMessageLogParams = dbMessageLogParams;
 
                         w.Platform = "Alegeus";
@@ -330,9 +198,6 @@ namespace DataProcessing
         #endregion
 
         #region LocalRootPaths
-
-
-
 
 
 
@@ -430,7 +295,7 @@ namespace DataProcessing
         {
             if (appSettings == null)
             {
-                appSettings = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnAlegeusErrorLog,
+                appSettings = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnDataProcessing,
                     "select * from Alegeus_File_Processing.dbo.app_settings order by environment, setting_name", null, null, false, true);
 
                 if (appSettings == null)
@@ -513,13 +378,13 @@ namespace DataProcessing
 
         #region ErrorLogPaths
 
-        public string alegeusErrorLogMbiFilesRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogMbiFilesPath")}";
+        public string DataProcessingMbiFilesRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("DataProcessingMbiFilesPath")}";
 
-        public string alegeusErrorLogMbiFilesArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogMbiFilesArchivePath")}";
+        public string DataProcessingMbiFilesArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("DataProcessingMbiFilesArchivePath")}";
 
-        public string alegeusErrorLogResFilesRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogResFilesPath")}";
+        public string DataProcessingResFilesRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("DataProcessingResFilesPath")}";
 
-        public string alegeusErrorLogResFilesArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogResFilesArchivePath")}";
+        public string DataProcessingResFilesArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("DataProcessingResFilesArchivePath")}";
 
 
         public string[] cobraIgnoreFtpSourceDirs
