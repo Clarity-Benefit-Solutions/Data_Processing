@@ -1,0 +1,2007 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Data_ProcessingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.alegeus_file_final' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="alegeus_file_final">
+          <Key>
+            <PropertyRef Name="row_num" />
+          </Key>
+          <Property Name="file_row" Type="varchar(max)" />
+          <Property Name="folder_name" Type="varchar" MaxLength="200" />
+          <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.alegeus_file_staging' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="alegeus_file_staging">
+          <Key>
+            <PropertyRef Name="row_num" />
+          </Key>
+          <Property Name="data_row" Type="varchar(max)" />
+          <Property Name="folder_name" Type="varchar" MaxLength="200" />
+          <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.app_settings' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="app_settings">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="environment" Type="nvarchar" MaxLength="50" />
+          <Property Name="setting_name" Type="nvarchar" MaxLength="100" />
+          <Property Name="setting_value" Type="nvarchar" MaxLength="2000" />
+          <Property Name="created_at" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.Automated_Header_list' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Automated_Header_list">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Folder_name" Type="nvarchar(max)" />
+          <Property Name="template_type" Type="nvarchar(max)" />
+          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.bfx_broker_extract' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="bfx_broker_extract">
+          <Property Name="BrokerID" Type="varchar" MaxLength="50" />
+          <Property Name="ContactType" Type="varchar" MaxLength="250" />
+          <Property Name="FirstName" Type="varchar" MaxLength="250" />
+          <Property Name="LastName" Type="varchar" MaxLength="250" />
+          <Property Name="Email" Type="varchar" MaxLength="250" />
+          <Property Name="Title" Type="varchar" MaxLength="250" />
+          <Property Name="Department" Type="varchar" MaxLength="250" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="PhoneExtension" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2Extension" Type="varchar" MaxLength="50" />
+          <Property Name="Fax" Type="varchar" MaxLength="50" />
+          <Property Name="Address1" Type="varchar" MaxLength="250" />
+          <Property Name="Address2" Type="varchar" MaxLength="250" />
+          <Property Name="City" Type="varchar" MaxLength="250" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Active" Type="varchar" MaxLength="50" />
+          <Property Name="LoginStatus" Type="varchar" MaxLength="50" />
+          <Property Name="RegistrationCode" Type="varchar" MaxLength="50" />
+          <Property Name="RegistrationDate" Type="varchar" MaxLength="50" />
+          <Property Name="UserDisplayName" Type="varchar" MaxLength="250" />
+          <Property Name="AllowSSO" Type="varchar" MaxLength="50" />
+          <Property Name="SSOIdentifier" Type="varchar" MaxLength="250" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.ClarityStandardFileHeader2015' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="ClarityStandardFileHeader2015">
+          <Property Name="header_row" Type="varchar" MaxLength="154" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.ClarityStandardFileHeader2019' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="ClarityStandardFileHeader2019">
+          <Property Name="header_row" Type="varchar" MaxLength="154" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.CRM_fix09292020' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="CRM_fix09292020">
+          <Property Name="bencode" Type="nvarchar" MaxLength="255" />
+          <Property Name="crm" Type="nvarchar" MaxLength="255" />
+          <Property Name="correct_CRM" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.CRM_List' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="CRM_List">
+          <Property Name="BENCODE" Type="nvarchar" MaxLength="50" />
+          <Property Name="CRM" Type="nvarchar" MaxLength="100" />
+          <Property Name="CRM_email" Type="nvarchar" MaxLength="500" />
+          <Property Name="emp_services" Type="nvarchar" MaxLength="500" />
+          <Property Name="Primary_contact_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="Primary_contact_email" Type="nvarchar" MaxLength="500" />
+          <Property Name="client_start_date" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.CRM_List_BU' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="CRM_List_BU">
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="CRM" Type="varchar" MaxLength="50" />
+        </EntityType>-->
+        <EntityType Name="dbo_error_log_results_workflow_local">
+          <Key>
+            <PropertyRef Name="IDfield" />
+          </Key>
+          <Property Name="error_code" Type="int" />
+          <Property Name="error_row" Type="nvarchar" MaxLength="255" />
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="error_message" Type="nvarchar(max)" />
+          <Property Name="mbi_row_num" Type="int" />
+          <Property Name="mbi_line" Type="nvarchar" MaxLength="255" />
+          <Property Name="CRM_Check" Type="bit" Nullable="false" />
+          <Property Name="Proc_Check" Type="bit" Nullable="false" />
+          <Property Name="updated_by" Type="nvarchar" MaxLength="255" />
+          <Property Name="updated_timestamp" Type="datetime" />
+          <Property Name="BENCODE" Type="nvarchar" MaxLength="255" />
+          <Property Name="CRM" Type="nvarchar" MaxLength="255" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="Notes_CRM" Type="nvarchar(max)" />
+          <Property Name="row_type" Type="nvarchar" MaxLength="255" />
+          <Property Name="IDfield" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Archive_Check" Type="bit" Nullable="false" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_row_num" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.dbo_error_log_results_workflow_local_AL' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="dbo_error_log_results_workflow_local_AL">
+          <Key>
+            <PropertyRef Name="CRM_Check" />
+            <PropertyRef Name="Proc_Check" />
+            <PropertyRef Name="IDfield" />
+            <PropertyRef Name="Archive_Check" />
+          </Key>
+          <Property Name="error_code" Type="int" />
+          <Property Name="error_row" Type="nvarchar" MaxLength="255" />
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="error_message" Type="nvarchar(max)" />
+          <Property Name="mbi_row_num" Type="int" />
+          <Property Name="mbi_line" Type="nvarchar" MaxLength="255" />
+          <Property Name="CRM_Check" Type="bit" Nullable="false" />
+          <Property Name="Proc_Check" Type="bit" Nullable="false" />
+          <Property Name="updated_by" Type="nvarchar" MaxLength="255" />
+          <Property Name="updated_timestamp" Type="datetime" />
+          <Property Name="BENCODE" Type="nvarchar" MaxLength="255" />
+          <Property Name="CRM" Type="nvarchar" MaxLength="255" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="Notes_CRM" Type="nvarchar(max)" />
+          <Property Name="file_type" Type="nvarchar" MaxLength="255" />
+          <Property Name="IDfield" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Archive_Check" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.dbo_error_log_results_workflow_localBU' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="dbo_error_log_results_workflow_localBU">
+          <Key>
+            <PropertyRef Name="CRM_Check" />
+            <PropertyRef Name="Proc_Check" />
+            <PropertyRef Name="IDfield" />
+            <PropertyRef Name="Archive_Check" />
+          </Key>
+          <Property Name="error_code" Type="int" />
+          <Property Name="error_row" Type="nvarchar" MaxLength="255" />
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="255" />
+          <Property Name="error_message" Type="nvarchar(max)" />
+          <Property Name="mbi_row_num" Type="int" />
+          <Property Name="mbi_line" Type="nvarchar" MaxLength="255" />
+          <Property Name="CRM_Check" Type="bit" Nullable="false" />
+          <Property Name="Proc_Check" Type="bit" Nullable="false" />
+          <Property Name="updated_by" Type="nvarchar" MaxLength="255" />
+          <Property Name="updated_timestamp" Type="datetime" />
+          <Property Name="BENCODE" Type="nvarchar" MaxLength="255" />
+          <Property Name="CRM" Type="nvarchar" MaxLength="255" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+          <Property Name="Notes_CRM" Type="nvarchar(max)" />
+          <Property Name="file_type" Type="nvarchar" MaxLength="255" />
+          <Property Name="IDfield" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Archive_Check" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.dbo_ommited_errors' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="dbo_ommited_errors">
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_desc" Type="nvarchar(max)" />
+          <Property Name="user_desc" Type="nvarchar(max)" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.dbo_tracked_errors_local' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="dbo_tracked_errors_local">
+          <Key>
+            <PropertyRef Name="Error_code" />
+            <PropertyRef Name="crm" />
+            <PropertyRef Name="processing" />
+          </Key>
+          <Property Name="Error_code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="crm" Type="bit" Nullable="false" />
+          <Property Name="processing" Type="bit" Nullable="false" />
+          <Property Name="control" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.error_codes' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="error_codes">
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_desc" Type="nvarchar(max)" />
+          <Property Name="user_desc" Type="nvarchar(max)" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.file_processing_log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="file_processing_log">
+          <Key>
+            <PropertyRef Name="fileLogId" />
+          </Key>
+          <Property Name="fileLogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="platform" Type="nvarchar" MaxLength="50" />
+          <Property Name="fileId" Type="nvarchar" MaxLength="10" />
+          <Property Name="folderName" Type="nvarchar" MaxLength="400" />
+          <Property Name="templateType" Type="nvarchar" MaxLength="50" />
+          <Property Name="ICType" Type="nvarchar" MaxLength="50" />
+          <Property Name="toFTP" Type="nvarchar" MaxLength="10" />
+          <Property Name="bencode" Type="varchar" MaxLength="50" />
+          <Property Name="originalFileName" Type="varchar" MaxLength="500" />
+          <Property Name="originalFullPath" Type="varchar" MaxLength="500" />
+          <Property Name="newFileName" Type="varchar" MaxLength="500" />
+          <Property Name="newFileFullPath" Type="varchar" MaxLength="500" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="originalFileUploadedOn" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.file_processing_tasks_log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="file_processing_tasks_log">
+          <Key>
+            <PropertyRef Name="fileLogTaskId" />
+          </Key>
+          <Property Name="fileLogTaskId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fileLogId" Type="int" />
+          <Property Name="fileId" Type="nvarchar" MaxLength="10" />
+          <Property Name="processingTask" Type="nvarchar" MaxLength="50" />
+          <Property Name="processingTaskOutcome" Type="nvarchar" MaxLength="20" />
+          <Property Name="processingTaskOutcomeDetails" Type="varchar" MaxLength="500" />
+          <Property Name="originalFileName" Type="nvarchar" MaxLength="500" />
+          <Property Name="originalFullPath" Type="varchar" MaxLength="500" />
+          <Property Name="newFileName" Type="nvarchar" MaxLength="500" />
+          <Property Name="newFileFullPath" Type="nvarchar" MaxLength="500" />
+          <Property Name="created_at" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.ftp_autofile_list' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="ftp_autofile_list">
+          <Property Name="find_autoftp_file" Type="varchar(max)" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.IF_cardfile_Dep' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="IF_cardfile_Dep">
+          <Property Name="Status" Type="nvarchar" MaxLength="255" />
+          <Property Name="hire_date" Type="nvarchar" MaxLength="255" />
+          <Property Name="Dep_Last_Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Dep_First_Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Email" Type="nvarchar" MaxLength="255" />
+          <Property Name="depemp_id" Type="nvarchar" MaxLength="255" />
+          <Property Name="Dep_SSN" Type="nvarchar" MaxLength="255" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="255" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="255" />
+          <Property Name="City" Type="nvarchar" MaxLength="255" />
+          <Property Name="State" Type="nvarchar" MaxLength="255" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="255" />
+          <Property Name="Relationship" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.IF_cardfile_Emp' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="IF_cardfile_Emp">
+          <Property Name="Status" Type="nvarchar" MaxLength="255" />
+          <Property Name="HireDate" Type="nvarchar" MaxLength="255" />
+          <Property Name="Last_Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="First_Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Email" Type="nvarchar" MaxLength="255" />
+          <Property Name="EE_ID" Type="nvarchar" MaxLength="255" />
+          <Property Name="SSN" Type="nvarchar" MaxLength="255" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="255" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="255" />
+          <Property Name="City" Type="nvarchar" MaxLength="255" />
+          <Property Name="State" Type="nvarchar" MaxLength="255" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="255" />
+          <Property Name="benefit_status" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.IF_cardfile_staging' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="IF_cardfile_staging">
+          <Property Name="Record_ID" Type="nvarchar" MaxLength="255" />
+          <Property Name="TPA_ID" Type="nvarchar" MaxLength="255" />
+          <Property Name="Employer_ID" Type="nvarchar" MaxLength="255" />
+          <Property Name="Employee_ID" Type="nvarchar" MaxLength="255" />
+          <Property Name="Issue_Card" Type="nvarchar" MaxLength="255" />
+          <Property Name="Shipping_Address_Code" Type="nvarchar" MaxLength="255" />
+          <Property Name="Shipping_Method_Code" Type="nvarchar" MaxLength="255" />
+          <Property Name="Dependent_ID" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.IF_File' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="IF_File">
+          <Property Name="IF_line" Type="nvarchar(max)" />
+        </EntityType>-->
+        <EntityType Name="mbi_file_table">
+          <Key>
+            <PropertyRef Name="row_id" />
+          </Key>
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="data_row" Type="nvarchar(max)" />
+          <Property Name="row_num" Type="int" />
+          <Property Name="row_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="AddressLine1" Type="nvarchar" MaxLength="50" />
+          <Property Name="AddressLine2" Type="nvarchar" MaxLength="50" />
+          <Property Name="BirthDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="DeleteAccount" Type="nvarchar" MaxLength="50" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DepositType" Type="nvarchar" MaxLength="50" />
+          <Property Name="Division" Type="nvarchar" MaxLength="50" />
+          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="EligibilityDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="50" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="50" />
+          <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanEndDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanStartDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="Relationship" Type="nvarchar" MaxLength="50" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="TerminationDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="TpaId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="50" />
+          <Property Name="row_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="source_row_no" Type="int" />
+          <Property Name="check_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="error_message_calc" Type="nvarchar" MaxLength="500" />
+          <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="50" />
+          <Property Name="AlternateId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Class" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="mbi_file_table_stage">
+          <Key>
+            <PropertyRef Name="row_num" />
+          </Key>
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="data_row" Type="nvarchar(max)" />
+          <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="row_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="AddressLine1" Type="nvarchar" MaxLength="50" />
+          <Property Name="AddressLine2" Type="nvarchar" MaxLength="50" />
+          <Property Name="BirthDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="DeleteAccount" Type="nvarchar" MaxLength="50" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DepositType" Type="nvarchar" MaxLength="50" />
+          <Property Name="Division" Type="nvarchar" MaxLength="50" />
+          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="EligibilityDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="50" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="50" />
+          <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanEndDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanStartDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="Relationship" Type="nvarchar" MaxLength="50" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="TerminationDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="TpaId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="50" />
+          <Property Name="source_row_no" Type="int" />
+          <Property Name="check_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="error_message_calc" Type="nvarchar" MaxLength="500" />
+          <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="50" />
+          <Property Name="AlternateId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Class" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.message_log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="message_log">
+          <Key>
+            <PropertyRef Name="log_id" />
+          </Key>
+          <Property Name="log_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="module_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="submodule_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="step_type" Type="nvarchar" MaxLength="500" />
+          <Property Name="step_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="command" Type="nvarchar(max)" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="platform" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.Process_log' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Process_log">
+          <Property Name="header_ind" Type="nvarchar(max)" />
+          <Property Name="first_row" Type="varchar" MaxLength="50" />
+          <Property Name="date_stamp" Type="varchar" MaxLength="50" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.processing_script_tbl' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="processing_script_tbl">
+          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Property Name="script_txt" Type="nvarchar(max)" />
+          <Property Name="script_purpose" Type="nvarchar(max)" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.QB_file_data_fixtbl' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="QB_file_data_fixtbl">
+          <Key>
+            <PropertyRef Name="row_num" />
+          </Key>
+          <Property Name="QB_data" Type="nvarchar(max)" />
+          <Property Name="folder_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="res_file_table">
+          <Key>
+            <PropertyRef Name="row_id" />
+          </Key>
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="error_row" Type="nvarchar(max)" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="row_num" Type="int" />
+          <Property Name="AccountStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="AddressLine1" Type="nvarchar" MaxLength="50" />
+          <Property Name="AddressLine2" Type="nvarchar" MaxLength="50" />
+          <Property Name="BirthDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="DeleteAccount" Type="nvarchar" MaxLength="50" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DepositType" Type="nvarchar" MaxLength="50" />
+          <Property Name="Division" Type="nvarchar" MaxLength="50" />
+          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="EligibilityDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="50" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="50" />
+          <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanEndDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanStartDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="Relationship" Type="nvarchar" MaxLength="50" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="TerminationDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="TpaId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="50" />
+          <Property Name="row_type" Type="varchar" MaxLength="50" />
+          <Property Name="error_message_calc" Type="varchar" MaxLength="500" />
+          <Property Name="res_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="result_template" Type="nvarchar" MaxLength="100" />
+          <Property Name="row_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="source_row_no" Type="int" />
+          <Property Name="check_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="50" />
+          <Property Name="Class" Type="nvarchar" MaxLength="50" />
+          <Property Name="AlternateId" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="res_file_table_stage">
+          <Key>
+            <PropertyRef Name="row_num" />
+          </Key>
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="result_template" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_row" Type="nvarchar(max)" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="row_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="AddressLine1" Type="nvarchar" MaxLength="50" />
+          <Property Name="AddressLine2" Type="nvarchar" MaxLength="50" />
+          <Property Name="BirthDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="DeleteAccount" Type="nvarchar" MaxLength="50" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DepositType" Type="nvarchar" MaxLength="50" />
+          <Property Name="Division" Type="nvarchar" MaxLength="50" />
+          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="EligibilityDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="50" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
+          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="50" />
+          <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanEndDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanStartDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="Relationship" Type="nvarchar" MaxLength="50" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="TerminationDate" Type="nvarchar" MaxLength="50" />
+          <Property Name="TpaId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_message_calc" Type="varchar" MaxLength="500" />
+          <Property Name="res_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="data_row" Type="nvarchar(max)" />
+          <Property Name="source_row_no" Type="int" />
+          <Property Name="check_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="50" />
+          <Property Name="AlternateId" Type="nvarchar" MaxLength="50" />
+          <Property Name="Class" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.CRM_Listview' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="CRM_Listview">
+          <Property Name="BENCODE" Type="nvarchar" MaxLength="50" />
+          <Property Name="CRM" Type="nvarchar" MaxLength="100" />
+          <Property Name="CRM_email" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.DistinctErrors' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="DistinctErrors">
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.error_log_results' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="error_log_results">
+          <Property Name="error_row" Type="nvarchar(max)" />
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="res_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="row_num" Type="int" />
+          <Property Name="row_type" Type="varchar" MaxLength="50" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.error_log_results_withmbi' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="error_log_results_withmbi">
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="res_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="error_row_num" Type="int" />
+          <Property Name="mbi_row_num" Type="int" />
+          <Property Name="row_type" Type="varchar" MaxLength="50" />
+          <Property Name="mbi_line" Type="nvarchar(max)" />
+          <Property Name="error_row" Type="nvarchar(max)" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.error_log_results_withmbi_with_CRM' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="error_log_results_withmbi_with_CRM">
+          <Property Name="CRM" Type="nvarchar" MaxLength="100" />
+          <Property Name="CRM_email" Type="nvarchar" MaxLength="500" />
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="res_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="row_type" Type="varchar" MaxLength="50" />
+          <Property Name="error_row" Type="nvarchar(max)" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_row_num" Type="int" />
+          <Property Name="mbi_row_num" Type="int" />
+          <Property Name="mbi_line" Type="nvarchar(max)" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.Header_list_ALL' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Header_list_ALL">
+          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Property Name="template_type" Type="nvarchar(max)" />
+          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.Header_list_ALL_folders' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Header_list_ALL_folders">
+          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Property Name="template_type" Type="nvarchar(max)" />
+          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.Header_list_new' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Header_list_new">
+          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Property Name="template_type" Type="nvarchar(max)" />
+          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.Header_list_none' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Header_list_none">
+          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Property Name="template_type" Type="nvarchar(max)" />
+          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.Header_list_old' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Header_list_old">
+          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Property Name="template_type" Type="nvarchar(max)" />
+          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.Header_list_Own' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Header_list_Own">
+          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Property Name="template_type" Type="nvarchar(max)" />
+          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.mbi_errors' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="mbi_errors">
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.mbi_no_errors' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="mbi_no_errors">
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.RESwithnoMBIrecords' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="RESwithnoMBIrecords">
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vw_file_processing_log">
+          <Key>
+            <PropertyRef Name="fileLogId" />
+          </Key>
+          <Property Name="fileLogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="platform" Type="nvarchar" MaxLength="50" />
+          <Property Name="fileId" Type="nvarchar" MaxLength="10" />
+          <Property Name="folderName" Type="nvarchar" MaxLength="400" />
+          <Property Name="templateType" Type="nvarchar" MaxLength="50" />
+          <Property Name="ICType" Type="nvarchar" MaxLength="50" />
+          <Property Name="toFTP" Type="nvarchar" MaxLength="10" />
+          <Property Name="bencode" Type="varchar" MaxLength="50" />
+          <Property Name="originalFileName" Type="varchar" MaxLength="500" />
+          <Property Name="originalFullPath" Type="varchar" MaxLength="500" />
+          <Property Name="newFileName" Type="varchar" MaxLength="500" />
+          <Property Name="newFileFullPath" Type="varchar" MaxLength="500" />
+          <Property Name="created_at" Type="datetime" />
+          <Property Name="originalFileUploadedOn" Type="datetime" />
+          <Property Name="ProcessingErrorCount" Type="int" />
+        </EntityType>
+        <Function Name="Alegeus_ErrorLog_failure_alert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Alegeus_ErrorLog_refreshsuccess_alert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="alegeus_errorlog_track_new_ftp_errors" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Alegeus_Header_n_success" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="build_auto_ftp_batfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="check_imports_file" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="CsvSplit1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="delimited" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="delimiter" Type="nvarchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="id" Type="int" Nullable="false" />
+                <Property Name="val" Type="nvarchar(max)" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="fileLogHasError" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+          <Parameter Name="fileLogId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Fix_COBRA_brokerage_Contacts_SSObollean" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Fix_COBRA_Client_Contacts_SSObollean" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Fix_COBRAQB_SSObollean" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Get_COBRA_QBs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="getFileLogId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+          <Parameter Name="filePathWithoutExtension" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="insert_file_processing_log" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="platform" Type="nvarchar" Mode="In" />
+          <Parameter Name="fileLogId" Type="int" Mode="InOut" />
+          <Parameter Name="fileId" Type="nvarchar" Mode="In" />
+          <Parameter Name="folderName" Type="nvarchar" Mode="In" />
+          <Parameter Name="templateType" Type="nvarchar" Mode="In" />
+          <Parameter Name="ICType" Type="nvarchar" Mode="In" />
+          <Parameter Name="toFTP" Type="nvarchar" Mode="In" />
+          <Parameter Name="bencode" Type="varchar" Mode="In" />
+          <Parameter Name="originalFileName" Type="nvarchar" Mode="In" />
+          <Parameter Name="originalFullPath" Type="nvarchar" Mode="In" />
+          <Parameter Name="originalFileUploadedOn" Type="nvarchar" Mode="In" />
+          <Parameter Name="newFileName" Type="nvarchar" Mode="In" />
+          <Parameter Name="newFileFullPath" Type="nvarchar" Mode="In" />
+          <Parameter Name="fileLogTaskId" Type="int" Mode="InOut" />
+          <Parameter Name="processingTask" Type="nvarchar" Mode="In" />
+          <Parameter Name="processingTaskOutcome" Type="nvarchar" Mode="In" />
+          <Parameter Name="processingTaskOutcomeDetails" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="insert_to_auto_ftp_list" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="proc_alegeus_AlterHeaders2015" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="proc_alegeus_AlterHeaders2019" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="proc_alegeus_AlterHeadersNone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="proc_alegeus_AlterHeadersOwn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="process_mbi_file_table_stage_import" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="process_res_file_table_stage_import" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SplitAllErrorRowStringsToFields" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="tableName" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="SplitErrorRowStringToFields" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="csvString" Type="nvarchar(max)" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="row_type" Type="nvarchar" MaxLength="100" />
+                <Property Name="bencode" Type="nvarchar" MaxLength="100" />
+                <Property Name="employee_id" Type="nvarchar" MaxLength="100" />
+                <Property Name="plan_id" Type="nvarchar" MaxLength="100" />
+                <Property Name="start_date" Type="nvarchar" MaxLength="100" />
+                <Property Name="end_date" Type="nvarchar" MaxLength="100" />
+                <Property Name="error_code" Type="nvarchar" MaxLength="100" />
+                <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+                <Property Name="dummy" Type="nvarchar" MaxLength="100" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="SplitStringsOrdered" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="List" Type="nvarchar" Mode="In" />
+          <Parameter Name="Delimiter" Type="nvarchar" Mode="In" />
+          <ReturnType>
+            <CollectionType>
+              <RowType>
+                <Property Name="rn" Type="bigint" />
+                <Property Name="Item" Type="nvarchar" MaxLength="2000" />
+              </RowType>
+            </CollectionType>
+          </ReturnType>
+        </Function>
+        <Function Name="zz_truncate_all" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="Data_ProcessingModelStoreContainer">
+          <EntitySet Name="dbo_error_log_results_workflow_local" EntityType="Self.dbo_error_log_results_workflow_local" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mbi_file_table" EntityType="Self.mbi_file_table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="mbi_file_table_stage" EntityType="Self.mbi_file_table_stage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="res_file_table" EntityType="Self.res_file_table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="res_file_table_stage" EntityType="Self.res_file_table_stage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="alegeus_file_final" EntityType="Self.alegeus_file_final" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [alegeus_file_final].[file_row] AS [file_row], 
+    [alegeus_file_final].[folder_name] AS [folder_name], 
+    [alegeus_file_final].[row_num] AS [row_num]
+    FROM [dbo].[alegeus_file_final] AS [alegeus_file_final]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="alegeus_file_staging" EntityType="Self.alegeus_file_staging" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [alegeus_file_staging].[data_row] AS [data_row], 
+    [alegeus_file_staging].[folder_name] AS [folder_name], 
+    [alegeus_file_staging].[row_num] AS [row_num]
+    FROM [dbo].[alegeus_file_staging] AS [alegeus_file_staging]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="app_settings" EntityType="Self.app_settings" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [app_settings].[id] AS [id], 
+    [app_settings].[environment] AS [environment], 
+    [app_settings].[setting_name] AS [setting_name], 
+    [app_settings].[setting_value] AS [setting_value], 
+    [app_settings].[created_at] AS [created_at]
+    FROM [dbo].[app_settings] AS [app_settings]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Automated_Header_list" EntityType="Self.Automated_Header_list" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Automated_Header_list].[Folder_name] AS [Folder_name], 
+    [Automated_Header_list].[template_type] AS [template_type], 
+    [Automated_Header_list].[IC_type] AS [IC_type], 
+    [Automated_Header_list].[ID] AS [ID], 
+    [Automated_Header_list].[to_FTP] AS [to_FTP], 
+    [Automated_Header_list].[BENCODE] AS [BENCODE]
+    FROM [dbo].[Automated_Header_list] AS [Automated_Header_list]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="dbo_error_log_results_workflow_local_AL" EntityType="Self.dbo_error_log_results_workflow_local_AL" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [dbo_error_log_results_workflow_local_AL].[error_code] AS [error_code], 
+    [dbo_error_log_results_workflow_local_AL].[error_row] AS [error_row], 
+    [dbo_error_log_results_workflow_local_AL].[mbi_file_name] AS [mbi_file_name], 
+    [dbo_error_log_results_workflow_local_AL].[error_message] AS [error_message], 
+    [dbo_error_log_results_workflow_local_AL].[mbi_row_num] AS [mbi_row_num], 
+    [dbo_error_log_results_workflow_local_AL].[mbi_line] AS [mbi_line], 
+    [dbo_error_log_results_workflow_local_AL].[CRM_Check] AS [CRM_Check], 
+    [dbo_error_log_results_workflow_local_AL].[Proc_Check] AS [Proc_Check], 
+    [dbo_error_log_results_workflow_local_AL].[updated_by] AS [updated_by], 
+    [dbo_error_log_results_workflow_local_AL].[updated_timestamp] AS [updated_timestamp], 
+    [dbo_error_log_results_workflow_local_AL].[BENCODE] AS [BENCODE], 
+    [dbo_error_log_results_workflow_local_AL].[CRM] AS [CRM], 
+    [dbo_error_log_results_workflow_local_AL].[Notes] AS [Notes], 
+    [dbo_error_log_results_workflow_local_AL].[Notes_CRM] AS [Notes_CRM], 
+    [dbo_error_log_results_workflow_local_AL].[file_type] AS [file_type], 
+    [dbo_error_log_results_workflow_local_AL].[IDfield] AS [IDfield], 
+    [dbo_error_log_results_workflow_local_AL].[Archive_Check] AS [Archive_Check]
+    FROM [dbo].[dbo_error_log_results_workflow_local_AL] AS [dbo_error_log_results_workflow_local_AL]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="dbo_error_log_results_workflow_localBU" EntityType="Self.dbo_error_log_results_workflow_localBU" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [dbo_error_log_results_workflow_localBU].[error_code] AS [error_code], 
+    [dbo_error_log_results_workflow_localBU].[error_row] AS [error_row], 
+    [dbo_error_log_results_workflow_localBU].[mbi_file_name] AS [mbi_file_name], 
+    [dbo_error_log_results_workflow_localBU].[error_message] AS [error_message], 
+    [dbo_error_log_results_workflow_localBU].[mbi_row_num] AS [mbi_row_num], 
+    [dbo_error_log_results_workflow_localBU].[mbi_line] AS [mbi_line], 
+    [dbo_error_log_results_workflow_localBU].[CRM_Check] AS [CRM_Check], 
+    [dbo_error_log_results_workflow_localBU].[Proc_Check] AS [Proc_Check], 
+    [dbo_error_log_results_workflow_localBU].[updated_by] AS [updated_by], 
+    [dbo_error_log_results_workflow_localBU].[updated_timestamp] AS [updated_timestamp], 
+    [dbo_error_log_results_workflow_localBU].[BENCODE] AS [BENCODE], 
+    [dbo_error_log_results_workflow_localBU].[CRM] AS [CRM], 
+    [dbo_error_log_results_workflow_localBU].[Notes] AS [Notes], 
+    [dbo_error_log_results_workflow_localBU].[Notes_CRM] AS [Notes_CRM], 
+    [dbo_error_log_results_workflow_localBU].[file_type] AS [file_type], 
+    [dbo_error_log_results_workflow_localBU].[IDfield] AS [IDfield], 
+    [dbo_error_log_results_workflow_localBU].[Archive_Check] AS [Archive_Check]
+    FROM [dbo].[dbo_error_log_results_workflow_localBU] AS [dbo_error_log_results_workflow_localBU]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="dbo_tracked_errors_local" EntityType="Self.dbo_tracked_errors_local" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [dbo_tracked_errors_local].[Error_code] AS [Error_code], 
+    [dbo_tracked_errors_local].[error_message] AS [error_message], 
+    [dbo_tracked_errors_local].[crm] AS [crm], 
+    [dbo_tracked_errors_local].[processing] AS [processing], 
+    [dbo_tracked_errors_local].[control] AS [control]
+    FROM [dbo].[dbo_tracked_errors_local] AS [dbo_tracked_errors_local]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="file_processing_log" EntityType="Self.file_processing_log" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [file_processing_log].[fileLogId] AS [fileLogId], 
+    [file_processing_log].[platform] AS [platform], 
+    [file_processing_log].[fileId] AS [fileId], 
+    [file_processing_log].[folderName] AS [folderName], 
+    [file_processing_log].[templateType] AS [templateType], 
+    [file_processing_log].[ICType] AS [ICType], 
+    [file_processing_log].[toFTP] AS [toFTP], 
+    [file_processing_log].[bencode] AS [bencode], 
+    [file_processing_log].[originalFileName] AS [originalFileName], 
+    [file_processing_log].[originalFullPath] AS [originalFullPath], 
+    [file_processing_log].[newFileName] AS [newFileName], 
+    [file_processing_log].[newFileFullPath] AS [newFileFullPath], 
+    [file_processing_log].[created_at] AS [created_at], 
+    [file_processing_log].[originalFileUploadedOn] AS [originalFileUploadedOn]
+    FROM [dbo].[file_processing_log] AS [file_processing_log]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="file_processing_tasks_log" EntityType="Self.file_processing_tasks_log" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [file_processing_tasks_log].[fileLogTaskId] AS [fileLogTaskId], 
+    [file_processing_tasks_log].[fileLogId] AS [fileLogId], 
+    [file_processing_tasks_log].[fileId] AS [fileId], 
+    [file_processing_tasks_log].[processingTask] AS [processingTask], 
+    [file_processing_tasks_log].[processingTaskOutcome] AS [processingTaskOutcome], 
+    [file_processing_tasks_log].[processingTaskOutcomeDetails] AS [processingTaskOutcomeDetails], 
+    [file_processing_tasks_log].[originalFileName] AS [originalFileName], 
+    [file_processing_tasks_log].[originalFullPath] AS [originalFullPath], 
+    [file_processing_tasks_log].[newFileName] AS [newFileName], 
+    [file_processing_tasks_log].[newFileFullPath] AS [newFileFullPath], 
+    [file_processing_tasks_log].[created_at] AS [created_at]
+    FROM [dbo].[file_processing_tasks_log] AS [file_processing_tasks_log]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="message_log" EntityType="Self.message_log" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [message_log].[log_id] AS [log_id], 
+    [message_log].[module_name] AS [module_name], 
+    [message_log].[submodule_name] AS [submodule_name], 
+    [message_log].[step_type] AS [step_type], 
+    [message_log].[step_name] AS [step_name], 
+    [message_log].[command] AS [command], 
+    [message_log].[created_at] AS [created_at], 
+    [message_log].[platform] AS [platform]
+    FROM [dbo].[message_log] AS [message_log]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="QB_file_data_fixtbl" EntityType="Self.QB_file_data_fixtbl" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [QB_file_data_fixtbl].[QB_data] AS [QB_data], 
+    [QB_file_data_fixtbl].[folder_name] AS [folder_name], 
+    [QB_file_data_fixtbl].[row_num] AS [row_num]
+    FROM [dbo].[QB_file_data_fixtbl] AS [QB_file_data_fixtbl]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vw_file_processing_log" EntityType="Self.vw_file_processing_log" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vw_file_processing_log].[fileLogId] AS [fileLogId], 
+    [vw_file_processing_log].[platform] AS [platform], 
+    [vw_file_processing_log].[fileId] AS [fileId], 
+    [vw_file_processing_log].[folderName] AS [folderName], 
+    [vw_file_processing_log].[templateType] AS [templateType], 
+    [vw_file_processing_log].[ICType] AS [ICType], 
+    [vw_file_processing_log].[toFTP] AS [toFTP], 
+    [vw_file_processing_log].[bencode] AS [bencode], 
+    [vw_file_processing_log].[originalFileName] AS [originalFileName], 
+    [vw_file_processing_log].[originalFullPath] AS [originalFullPath], 
+    [vw_file_processing_log].[newFileName] AS [newFileName], 
+    [vw_file_processing_log].[newFileFullPath] AS [newFileFullPath], 
+    [vw_file_processing_log].[created_at] AS [created_at], 
+    [vw_file_processing_log].[originalFileUploadedOn] AS [originalFileUploadedOn], 
+    [vw_file_processing_log].[ProcessingErrorCount] AS [ProcessingErrorCount]
+    FROM [dbo].[vw_file_processing_log] AS [vw_file_processing_log]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Data_ProcessingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <ComplexType Name="CsvSplit1_Result">
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="val" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </ComplexType>
+        <ComplexType Name="SplitErrorRowStringToFields_Result">
+          <Property Name="row_type" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="bencode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="employee_id" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="plan_id" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="start_date" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="end_date" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="error_code" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="dummy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </ComplexType>
+        <ComplexType Name="SplitStringsOrdered_Result">
+          <Property Name="rn" Type="Int64" />
+          <Property Name="Item" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+        </ComplexType>
+        <EntityType Name="dbo_error_log_results_workflow_local">
+          <Key>
+            <PropertyRef Name="IDfield" />
+          </Key>
+          <Property Name="error_code" Type="Int32" />
+          <Property Name="error_row" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="mbi_file_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="mbi_row_num" Type="Int32" />
+          <Property Name="mbi_line" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CRM_Check" Type="Boolean" Nullable="false" />
+          <Property Name="Proc_Check" Type="Boolean" Nullable="false" />
+          <Property Name="updated_by" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="updated_timestamp" Type="DateTime" Precision="3" />
+          <Property Name="BENCODE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CRM" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Notes_CRM" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="row_type" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="IDfield" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Archive_Check" Type="Boolean" Nullable="false" />
+          <Property Name="EmployerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DependentID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="error_row_num" Type="Int32" />
+        </EntityType>
+        <EntityType Name="mbi_file_table">
+          <Key>
+            <PropertyRef Name="row_id" />
+          </Key>
+          <Property Name="mbi_file_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="data_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="row_num" Type="Int32" />
+          <Property Name="row_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountTypeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DeleteAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DependentID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepositType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Division" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EffectiveDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EligibilityDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeePayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerPayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OriginalPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanEndDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanStartDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Relationship" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TerminationDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TpaId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="row_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="source_row_no" Type="Int32" />
+          <Property Name="check_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="error_code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="error_message_calc" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="OngoingPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AlternateId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Class" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="mbi_file_table_stage">
+          <Key>
+            <PropertyRef Name="row_num" />
+          </Key>
+          <Property Name="mbi_file_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="data_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="row_num" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="row_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountTypeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DeleteAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DependentID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepositType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Division" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EffectiveDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EligibilityDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeePayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerPayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OriginalPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanEndDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanStartDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Relationship" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TerminationDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TpaId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="source_row_no" Type="Int32" />
+          <Property Name="check_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="error_code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="error_message_calc" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="OngoingPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AlternateId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Class" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="res_file_table">
+          <Key>
+            <PropertyRef Name="row_id" />
+          </Key>
+          <Property Name="mbi_file_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="error_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="error_code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="row_num" Type="Int32" />
+          <Property Name="AccountStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountTypeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DeleteAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DependentID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepositType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Division" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EffectiveDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EligibilityDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeePayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerPayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OriginalPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanEndDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanStartDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Relationship" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TerminationDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TpaId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="row_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="error_message_calc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="res_file_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="result_template" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="row_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="source_row_no" Type="Int32" />
+          <Property Name="check_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OngoingPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Class" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AlternateId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="res_file_table_stage">
+          <Key>
+            <PropertyRef Name="row_num" />
+          </Key>
+          <Property Name="mbi_file_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="result_template" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="error_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="error_code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="row_num" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="row_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountTypeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DeleteAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DependentID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepositType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Division" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EffectiveDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EligibilityDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeePayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerPayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OriginalPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanEndDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PlanStartDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Relationship" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TerminationDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TpaId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="error_message_calc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="res_file_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="data_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="source_row_no" Type="Int32" />
+          <Property Name="check_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OngoingPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AlternateId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Class" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="alegeus_file_final">
+          <Key>
+            <PropertyRef Name="row_num" />
+          </Key>
+          <Property Name="file_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="folder_name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="row_num" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="alegeus_file_staging">
+          <Key>
+            <PropertyRef Name="row_num" />
+          </Key>
+          <Property Name="data_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="folder_name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="row_num" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="app_settings">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="environment" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="setting_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="setting_value" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="Automated_Header_list">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="Folder_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="template_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IC_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="to_FTP" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="BENCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="dbo_error_log_results_workflow_local_AL">
+          <Key>
+            <PropertyRef Name="CRM_Check" />
+            <PropertyRef Name="Proc_Check" />
+            <PropertyRef Name="IDfield" />
+            <PropertyRef Name="Archive_Check" />
+          </Key>
+          <Property Name="error_code" Type="Int32" />
+          <Property Name="error_row" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="mbi_file_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="mbi_row_num" Type="Int32" />
+          <Property Name="mbi_line" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CRM_Check" Type="Boolean" Nullable="false" />
+          <Property Name="Proc_Check" Type="Boolean" Nullable="false" />
+          <Property Name="updated_by" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="updated_timestamp" Type="DateTime" Precision="3" />
+          <Property Name="BENCODE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CRM" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Notes_CRM" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="file_type" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="IDfield" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Archive_Check" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="dbo_error_log_results_workflow_localBU">
+          <Key>
+            <PropertyRef Name="CRM_Check" />
+            <PropertyRef Name="Proc_Check" />
+            <PropertyRef Name="IDfield" />
+            <PropertyRef Name="Archive_Check" />
+          </Key>
+          <Property Name="error_code" Type="Int32" />
+          <Property Name="error_row" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="mbi_file_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="mbi_row_num" Type="Int32" />
+          <Property Name="mbi_line" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CRM_Check" Type="Boolean" Nullable="false" />
+          <Property Name="Proc_Check" Type="Boolean" Nullable="false" />
+          <Property Name="updated_by" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="updated_timestamp" Type="DateTime" Precision="3" />
+          <Property Name="BENCODE" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CRM" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Notes_CRM" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="file_type" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="IDfield" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Archive_Check" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="dbo_tracked_errors_local">
+          <Key>
+            <PropertyRef Name="Error_code" />
+            <PropertyRef Name="crm" />
+            <PropertyRef Name="processing" />
+          </Key>
+          <Property Name="Error_code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="error_message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="crm" Type="Boolean" Nullable="false" />
+          <Property Name="processing" Type="Boolean" Nullable="false" />
+          <Property Name="control" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="file_processing_log">
+          <Key>
+            <PropertyRef Name="fileLogId" />
+          </Key>
+          <Property Name="fileLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="platform" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fileId" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="folderName" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="templateType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ICType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="toFTP" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="bencode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="originalFileName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="originalFullPath" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="newFileName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="newFileFullPath" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="originalFileUploadedOn" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="file_processing_tasks_log">
+          <Key>
+            <PropertyRef Name="fileLogTaskId" />
+          </Key>
+          <Property Name="fileLogTaskId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fileLogId" Type="Int32" />
+          <Property Name="fileId" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="processingTask" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="processingTaskOutcome" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="processingTaskOutcomeDetails" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="originalFileName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="originalFullPath" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="newFileName" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="newFileFullPath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="message_log">
+          <Key>
+            <PropertyRef Name="log_id" />
+          </Key>
+          <Property Name="log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="module_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="submodule_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="step_type" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="step_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="command" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="platform" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="QB_file_data_fixtbl">
+          <Key>
+            <PropertyRef Name="row_num" />
+          </Key>
+          <Property Name="QB_data" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="folder_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="row_num" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="vw_file_processing_log">
+          <Key>
+            <PropertyRef Name="fileLogId" />
+          </Key>
+          <Property Name="fileLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="platform" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="fileId" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="folderName" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="templateType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ICType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="toFTP" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="bencode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="originalFileName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="originalFullPath" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="newFileName" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="newFileFullPath" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="originalFileUploadedOn" Type="DateTime" Precision="3" />
+          <Property Name="ProcessingErrorCount" Type="Int32" />
+        </EntityType>
+        <EntityContainer Name="Data_ProcessingEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="dbo_error_log_results_workflow_local" EntityType="Self.dbo_error_log_results_workflow_local" />
+          <EntitySet Name="mbi_file_table" EntityType="Self.mbi_file_table" />
+          <EntitySet Name="mbi_file_table_stage" EntityType="Self.mbi_file_table_stage" />
+          <EntitySet Name="res_file_table" EntityType="Self.res_file_table" />
+          <EntitySet Name="res_file_table_stage" EntityType="Self.res_file_table_stage" />
+          <EntitySet Name="alegeus_file_final" EntityType="Self.alegeus_file_final" />
+          <EntitySet Name="alegeus_file_staging" EntityType="Self.alegeus_file_staging" />
+          <EntitySet Name="app_settings" EntityType="Self.app_settings" />
+          <EntitySet Name="Automated_Header_list" EntityType="Self.Automated_Header_list" />
+          <EntitySet Name="dbo_error_log_results_workflow_local_AL" EntityType="Self.dbo_error_log_results_workflow_local_AL" />
+          <EntitySet Name="dbo_error_log_results_workflow_localBU" EntityType="Self.dbo_error_log_results_workflow_localBU" />
+          <EntitySet Name="dbo_tracked_errors_local" EntityType="Self.dbo_tracked_errors_local" />
+          <EntitySet Name="file_processing_log" EntityType="Self.file_processing_log" />
+          <EntitySet Name="file_processing_tasks_log" EntityType="Self.file_processing_tasks_log" />
+          <EntitySet Name="message_log" EntityType="Self.message_log" />
+          <EntitySet Name="QB_file_data_fixtbl" EntityType="Self.QB_file_data_fixtbl" />
+          <EntitySet Name="vw_file_processing_log" EntityType="Self.vw_file_processing_log" />
+          <FunctionImport Name="CsvSplit1" IsComposable="true" ReturnType="Collection(Data_ProcessingModel.CsvSplit1_Result)">
+            <Parameter Name="delimited" Mode="In" Type="String" />
+            <Parameter Name="delimiter" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SplitErrorRowStringToFields" IsComposable="true" ReturnType="Collection(Data_ProcessingModel.SplitErrorRowStringToFields_Result)">
+            <Parameter Name="csvString" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SplitStringsOrdered" IsComposable="true" ReturnType="Collection(Data_ProcessingModel.SplitStringsOrdered_Result)">
+            <Parameter Name="List" Mode="In" Type="String" />
+            <Parameter Name="Delimiter" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Alegeus_ErrorLog_failure_alert" />
+          <FunctionImport Name="Alegeus_ErrorLog_refreshsuccess_alert" />
+          <FunctionImport Name="alegeus_errorlog_track_new_ftp_errors" />
+          <FunctionImport Name="Alegeus_Header_n_success" />
+          <FunctionImport Name="build_auto_ftp_batfile" />
+          <FunctionImport Name="check_imports_file" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="Fix_COBRA_brokerage_Contacts_SSObollean" />
+          <FunctionImport Name="Fix_COBRA_Client_Contacts_SSObollean" />
+          <FunctionImport Name="Fix_COBRAQB_SSObollean" />
+          <FunctionImport Name="Get_COBRA_QBs" />
+          <FunctionImport Name="insert_file_processing_log" ReturnType="Collection(Int32)">
+            <Parameter Name="platform" Mode="In" Type="String" />
+            <Parameter Name="fileLogId" Mode="InOut" Type="Int32" />
+            <Parameter Name="fileId" Mode="In" Type="String" />
+            <Parameter Name="folderName" Mode="In" Type="String" />
+            <Parameter Name="templateType" Mode="In" Type="String" />
+            <Parameter Name="ICType" Mode="In" Type="String" />
+            <Parameter Name="toFTP" Mode="In" Type="String" />
+            <Parameter Name="bencode" Mode="In" Type="String" />
+            <Parameter Name="originalFileName" Mode="In" Type="String" />
+            <Parameter Name="originalFullPath" Mode="In" Type="String" />
+            <Parameter Name="originalFileUploadedOn" Mode="In" Type="String" />
+            <Parameter Name="newFileName" Mode="In" Type="String" />
+            <Parameter Name="newFileFullPath" Mode="In" Type="String" />
+            <Parameter Name="fileLogTaskId" Mode="InOut" Type="Int32" />
+            <Parameter Name="processingTask" Mode="In" Type="String" />
+            <Parameter Name="processingTaskOutcome" Mode="In" Type="String" />
+            <Parameter Name="processingTaskOutcomeDetails" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="insert_to_auto_ftp_list" />
+          <FunctionImport Name="proc_alegeus_AlterHeaders2015" />
+          <FunctionImport Name="proc_alegeus_AlterHeaders2019" />
+          <FunctionImport Name="proc_alegeus_AlterHeadersNone" />
+          <FunctionImport Name="proc_alegeus_AlterHeadersOwn" />
+          <FunctionImport Name="process_mbi_file_table_stage_import" />
+          <FunctionImport Name="process_res_file_table_stage_import" />
+          <FunctionImport Name="SplitAllErrorRowStringsToFields">
+            <Parameter Name="tableName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="zz_truncate_all" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Data_ProcessingModelStoreContainer" CdmEntityContainer="Data_ProcessingEntities">
+          <EntitySetMapping Name="dbo_error_log_results_workflow_local">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.dbo_error_log_results_workflow_local">
+              <MappingFragment StoreEntitySet="dbo_error_log_results_workflow_local">
+                <ScalarProperty Name="error_code" ColumnName="error_code" />
+                <ScalarProperty Name="error_row" ColumnName="error_row" />
+                <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+                <ScalarProperty Name="error_message" ColumnName="error_message" />
+                <ScalarProperty Name="mbi_row_num" ColumnName="mbi_row_num" />
+                <ScalarProperty Name="mbi_line" ColumnName="mbi_line" />
+                <ScalarProperty Name="CRM_Check" ColumnName="CRM_Check" />
+                <ScalarProperty Name="Proc_Check" ColumnName="Proc_Check" />
+                <ScalarProperty Name="updated_by" ColumnName="updated_by" />
+                <ScalarProperty Name="updated_timestamp" ColumnName="updated_timestamp" />
+                <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+                <ScalarProperty Name="CRM" ColumnName="CRM" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Notes_CRM" ColumnName="Notes_CRM" />
+                <ScalarProperty Name="row_type" ColumnName="row_type" />
+                <ScalarProperty Name="IDfield" ColumnName="IDfield" />
+                <ScalarProperty Name="Archive_Check" ColumnName="Archive_Check" />
+                <ScalarProperty Name="EmployerId" ColumnName="EmployerId" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="DependentID" ColumnName="DependentID" />
+                <ScalarProperty Name="PlanId" ColumnName="PlanId" />
+                <ScalarProperty Name="error_row_num" ColumnName="error_row_num" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mbi_file_table">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.mbi_file_table">
+              <MappingFragment StoreEntitySet="mbi_file_table">
+                <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+                <ScalarProperty Name="data_row" ColumnName="data_row" />
+                <ScalarProperty Name="row_num" ColumnName="row_num" />
+                <ScalarProperty Name="row_type" ColumnName="row_type" />
+                <ScalarProperty Name="AccountStatus" ColumnName="AccountStatus" />
+                <ScalarProperty Name="AccountTypeCode" ColumnName="AccountTypeCode" />
+                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+                <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="DeleteAccount" ColumnName="DeleteAccount" />
+                <ScalarProperty Name="DependentID" ColumnName="DependentID" />
+                <ScalarProperty Name="DepositType" ColumnName="DepositType" />
+                <ScalarProperty Name="Division" ColumnName="Division" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="EligibilityDate" ColumnName="EligibilityDate" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EmployeeDepositAmount" ColumnName="EmployeeDepositAmount" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="EmployeePayPeriodElection" ColumnName="EmployeePayPeriodElection" />
+                <ScalarProperty Name="EmployeeSocialSecurityNumber" ColumnName="EmployeeSocialSecurityNumber" />
+                <ScalarProperty Name="EmployeeStatus" ColumnName="EmployeeStatus" />
+                <ScalarProperty Name="EmployerDepositAmount" ColumnName="EmployerDepositAmount" />
+                <ScalarProperty Name="EmployerId" ColumnName="EmployerId" />
+                <ScalarProperty Name="EmployerPayPeriodElection" ColumnName="EmployerPayPeriodElection" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="OriginalPrefunded" ColumnName="OriginalPrefunded" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
+                <ScalarProperty Name="PlanId" ColumnName="PlanId" />
+                <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+                <ScalarProperty Name="Relationship" ColumnName="Relationship" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="TerminationDate" ColumnName="TerminationDate" />
+                <ScalarProperty Name="TpaId" ColumnName="TpaId" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="row_id" ColumnName="row_id" />
+                <ScalarProperty Name="source_row_no" ColumnName="source_row_no" />
+                <ScalarProperty Name="check_type" ColumnName="check_type" />
+                <ScalarProperty Name="error_code" ColumnName="error_code" />
+                <ScalarProperty Name="error_message" ColumnName="error_message" />
+                <ScalarProperty Name="error_message_calc" ColumnName="error_message_calc" />
+                <ScalarProperty Name="OngoingPrefunded" ColumnName="OngoingPrefunded" />
+                <ScalarProperty Name="AlternateId" ColumnName="AlternateId" />
+                <ScalarProperty Name="Class" ColumnName="Class" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mbi_file_table_stage">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.mbi_file_table_stage">
+              <MappingFragment StoreEntitySet="mbi_file_table_stage">
+                <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+                <ScalarProperty Name="data_row" ColumnName="data_row" />
+                <ScalarProperty Name="row_num" ColumnName="row_num" />
+                <ScalarProperty Name="row_type" ColumnName="row_type" />
+                <ScalarProperty Name="AccountStatus" ColumnName="AccountStatus" />
+                <ScalarProperty Name="AccountTypeCode" ColumnName="AccountTypeCode" />
+                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+                <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="DeleteAccount" ColumnName="DeleteAccount" />
+                <ScalarProperty Name="DependentID" ColumnName="DependentID" />
+                <ScalarProperty Name="DepositType" ColumnName="DepositType" />
+                <ScalarProperty Name="Division" ColumnName="Division" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="EligibilityDate" ColumnName="EligibilityDate" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EmployeeDepositAmount" ColumnName="EmployeeDepositAmount" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="EmployeePayPeriodElection" ColumnName="EmployeePayPeriodElection" />
+                <ScalarProperty Name="EmployeeSocialSecurityNumber" ColumnName="EmployeeSocialSecurityNumber" />
+                <ScalarProperty Name="EmployeeStatus" ColumnName="EmployeeStatus" />
+                <ScalarProperty Name="EmployerDepositAmount" ColumnName="EmployerDepositAmount" />
+                <ScalarProperty Name="EmployerId" ColumnName="EmployerId" />
+                <ScalarProperty Name="EmployerPayPeriodElection" ColumnName="EmployerPayPeriodElection" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="OriginalPrefunded" ColumnName="OriginalPrefunded" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
+                <ScalarProperty Name="PlanId" ColumnName="PlanId" />
+                <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+                <ScalarProperty Name="Relationship" ColumnName="Relationship" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="TerminationDate" ColumnName="TerminationDate" />
+                <ScalarProperty Name="TpaId" ColumnName="TpaId" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="source_row_no" ColumnName="source_row_no" />
+                <ScalarProperty Name="check_type" ColumnName="check_type" />
+                <ScalarProperty Name="error_code" ColumnName="error_code" />
+                <ScalarProperty Name="error_message" ColumnName="error_message" />
+                <ScalarProperty Name="error_message_calc" ColumnName="error_message_calc" />
+                <ScalarProperty Name="OngoingPrefunded" ColumnName="OngoingPrefunded" />
+                <ScalarProperty Name="AlternateId" ColumnName="AlternateId" />
+                <ScalarProperty Name="Class" ColumnName="Class" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="res_file_table">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.res_file_table">
+              <MappingFragment StoreEntitySet="res_file_table">
+                <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+                <ScalarProperty Name="error_row" ColumnName="error_row" />
+                <ScalarProperty Name="error_code" ColumnName="error_code" />
+                <ScalarProperty Name="error_message" ColumnName="error_message" />
+                <ScalarProperty Name="row_num" ColumnName="row_num" />
+                <ScalarProperty Name="AccountStatus" ColumnName="AccountStatus" />
+                <ScalarProperty Name="AccountTypeCode" ColumnName="AccountTypeCode" />
+                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+                <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="DeleteAccount" ColumnName="DeleteAccount" />
+                <ScalarProperty Name="DependentID" ColumnName="DependentID" />
+                <ScalarProperty Name="DepositType" ColumnName="DepositType" />
+                <ScalarProperty Name="Division" ColumnName="Division" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="EligibilityDate" ColumnName="EligibilityDate" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EmployeeDepositAmount" ColumnName="EmployeeDepositAmount" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="EmployeePayPeriodElection" ColumnName="EmployeePayPeriodElection" />
+                <ScalarProperty Name="EmployeeSocialSecurityNumber" ColumnName="EmployeeSocialSecurityNumber" />
+                <ScalarProperty Name="EmployeeStatus" ColumnName="EmployeeStatus" />
+                <ScalarProperty Name="EmployerDepositAmount" ColumnName="EmployerDepositAmount" />
+                <ScalarProperty Name="EmployerId" ColumnName="EmployerId" />
+                <ScalarProperty Name="EmployerPayPeriodElection" ColumnName="EmployerPayPeriodElection" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="OriginalPrefunded" ColumnName="OriginalPrefunded" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
+                <ScalarProperty Name="PlanId" ColumnName="PlanId" />
+                <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+                <ScalarProperty Name="Relationship" ColumnName="Relationship" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="TerminationDate" ColumnName="TerminationDate" />
+                <ScalarProperty Name="TpaId" ColumnName="TpaId" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="row_type" ColumnName="row_type" />
+                <ScalarProperty Name="error_message_calc" ColumnName="error_message_calc" />
+                <ScalarProperty Name="res_file_name" ColumnName="res_file_name" />
+                <ScalarProperty Name="result_template" ColumnName="result_template" />
+                <ScalarProperty Name="row_id" ColumnName="row_id" />
+                <ScalarProperty Name="source_row_no" ColumnName="source_row_no" />
+                <ScalarProperty Name="check_type" ColumnName="check_type" />
+                <ScalarProperty Name="OngoingPrefunded" ColumnName="OngoingPrefunded" />
+                <ScalarProperty Name="Class" ColumnName="Class" />
+                <ScalarProperty Name="AlternateId" ColumnName="AlternateId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="res_file_table_stage">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.res_file_table_stage">
+              <MappingFragment StoreEntitySet="res_file_table_stage">
+                <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+                <ScalarProperty Name="result_template" ColumnName="result_template" />
+                <ScalarProperty Name="error_row" ColumnName="error_row" />
+                <ScalarProperty Name="error_code" ColumnName="error_code" />
+                <ScalarProperty Name="error_message" ColumnName="error_message" />
+                <ScalarProperty Name="row_num" ColumnName="row_num" />
+                <ScalarProperty Name="row_type" ColumnName="row_type" />
+                <ScalarProperty Name="AccountStatus" ColumnName="AccountStatus" />
+                <ScalarProperty Name="AccountTypeCode" ColumnName="AccountTypeCode" />
+                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+                <ScalarProperty Name="AddressLine2" ColumnName="AddressLine2" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="DeleteAccount" ColumnName="DeleteAccount" />
+                <ScalarProperty Name="DependentID" ColumnName="DependentID" />
+                <ScalarProperty Name="DepositType" ColumnName="DepositType" />
+                <ScalarProperty Name="Division" ColumnName="Division" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="EligibilityDate" ColumnName="EligibilityDate" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EmployeeDepositAmount" ColumnName="EmployeeDepositAmount" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="EmployeePayPeriodElection" ColumnName="EmployeePayPeriodElection" />
+                <ScalarProperty Name="EmployeeSocialSecurityNumber" ColumnName="EmployeeSocialSecurityNumber" />
+                <ScalarProperty Name="EmployeeStatus" ColumnName="EmployeeStatus" />
+                <ScalarProperty Name="EmployerDepositAmount" ColumnName="EmployerDepositAmount" />
+                <ScalarProperty Name="EmployerId" ColumnName="EmployerId" />
+                <ScalarProperty Name="EmployerPayPeriodElection" ColumnName="EmployerPayPeriodElection" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+                <ScalarProperty Name="MobileNumber" ColumnName="MobileNumber" />
+                <ScalarProperty Name="OriginalPrefunded" ColumnName="OriginalPrefunded" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PlanEndDate" ColumnName="PlanEndDate" />
+                <ScalarProperty Name="PlanId" ColumnName="PlanId" />
+                <ScalarProperty Name="PlanStartDate" ColumnName="PlanStartDate" />
+                <ScalarProperty Name="Relationship" ColumnName="Relationship" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="TerminationDate" ColumnName="TerminationDate" />
+                <ScalarProperty Name="TpaId" ColumnName="TpaId" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="error_message_calc" ColumnName="error_message_calc" />
+                <ScalarProperty Name="res_file_name" ColumnName="res_file_name" />
+                <ScalarProperty Name="data_row" ColumnName="data_row" />
+                <ScalarProperty Name="source_row_no" ColumnName="source_row_no" />
+                <ScalarProperty Name="check_type" ColumnName="check_type" />
+                <ScalarProperty Name="OngoingPrefunded" ColumnName="OngoingPrefunded" />
+                <ScalarProperty Name="AlternateId" ColumnName="AlternateId" />
+                <ScalarProperty Name="Class" ColumnName="Class" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="alegeus_file_final">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.alegeus_file_final">
+              <MappingFragment StoreEntitySet="alegeus_file_final">
+                <ScalarProperty Name="file_row" ColumnName="file_row" />
+                <ScalarProperty Name="folder_name" ColumnName="folder_name" />
+                <ScalarProperty Name="row_num" ColumnName="row_num" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="alegeus_file_staging">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.alegeus_file_staging">
+              <MappingFragment StoreEntitySet="alegeus_file_staging">
+                <ScalarProperty Name="data_row" ColumnName="data_row" />
+                <ScalarProperty Name="folder_name" ColumnName="folder_name" />
+                <ScalarProperty Name="row_num" ColumnName="row_num" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="app_settings">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.app_settings">
+              <MappingFragment StoreEntitySet="app_settings">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="environment" ColumnName="environment" />
+                <ScalarProperty Name="setting_name" ColumnName="setting_name" />
+                <ScalarProperty Name="setting_value" ColumnName="setting_value" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Automated_Header_list">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.Automated_Header_list">
+              <MappingFragment StoreEntitySet="Automated_Header_list">
+                <ScalarProperty Name="Folder_name" ColumnName="Folder_name" />
+                <ScalarProperty Name="template_type" ColumnName="template_type" />
+                <ScalarProperty Name="IC_type" ColumnName="IC_type" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="to_FTP" ColumnName="to_FTP" />
+                <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="dbo_error_log_results_workflow_local_AL">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.dbo_error_log_results_workflow_local_AL">
+              <MappingFragment StoreEntitySet="dbo_error_log_results_workflow_local_AL">
+                <ScalarProperty Name="error_code" ColumnName="error_code" />
+                <ScalarProperty Name="error_row" ColumnName="error_row" />
+                <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+                <ScalarProperty Name="error_message" ColumnName="error_message" />
+                <ScalarProperty Name="mbi_row_num" ColumnName="mbi_row_num" />
+                <ScalarProperty Name="mbi_line" ColumnName="mbi_line" />
+                <ScalarProperty Name="CRM_Check" ColumnName="CRM_Check" />
+                <ScalarProperty Name="Proc_Check" ColumnName="Proc_Check" />
+                <ScalarProperty Name="updated_by" ColumnName="updated_by" />
+                <ScalarProperty Name="updated_timestamp" ColumnName="updated_timestamp" />
+                <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+                <ScalarProperty Name="CRM" ColumnName="CRM" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Notes_CRM" ColumnName="Notes_CRM" />
+                <ScalarProperty Name="file_type" ColumnName="file_type" />
+                <ScalarProperty Name="IDfield" ColumnName="IDfield" />
+                <ScalarProperty Name="Archive_Check" ColumnName="Archive_Check" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="dbo_error_log_results_workflow_localBU">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.dbo_error_log_results_workflow_localBU">
+              <MappingFragment StoreEntitySet="dbo_error_log_results_workflow_localBU">
+                <ScalarProperty Name="error_code" ColumnName="error_code" />
+                <ScalarProperty Name="error_row" ColumnName="error_row" />
+                <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
+                <ScalarProperty Name="error_message" ColumnName="error_message" />
+                <ScalarProperty Name="mbi_row_num" ColumnName="mbi_row_num" />
+                <ScalarProperty Name="mbi_line" ColumnName="mbi_line" />
+                <ScalarProperty Name="CRM_Check" ColumnName="CRM_Check" />
+                <ScalarProperty Name="Proc_Check" ColumnName="Proc_Check" />
+                <ScalarProperty Name="updated_by" ColumnName="updated_by" />
+                <ScalarProperty Name="updated_timestamp" ColumnName="updated_timestamp" />
+                <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+                <ScalarProperty Name="CRM" ColumnName="CRM" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Notes_CRM" ColumnName="Notes_CRM" />
+                <ScalarProperty Name="file_type" ColumnName="file_type" />
+                <ScalarProperty Name="IDfield" ColumnName="IDfield" />
+                <ScalarProperty Name="Archive_Check" ColumnName="Archive_Check" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="dbo_tracked_errors_local">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.dbo_tracked_errors_local">
+              <MappingFragment StoreEntitySet="dbo_tracked_errors_local">
+                <ScalarProperty Name="Error_code" ColumnName="Error_code" />
+                <ScalarProperty Name="error_message" ColumnName="error_message" />
+                <ScalarProperty Name="crm" ColumnName="crm" />
+                <ScalarProperty Name="processing" ColumnName="processing" />
+                <ScalarProperty Name="control" ColumnName="control" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="file_processing_log">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.file_processing_log">
+              <MappingFragment StoreEntitySet="file_processing_log">
+                <ScalarProperty Name="fileLogId" ColumnName="fileLogId" />
+                <ScalarProperty Name="platform" ColumnName="platform" />
+                <ScalarProperty Name="fileId" ColumnName="fileId" />
+                <ScalarProperty Name="folderName" ColumnName="folderName" />
+                <ScalarProperty Name="templateType" ColumnName="templateType" />
+                <ScalarProperty Name="ICType" ColumnName="ICType" />
+                <ScalarProperty Name="toFTP" ColumnName="toFTP" />
+                <ScalarProperty Name="bencode" ColumnName="bencode" />
+                <ScalarProperty Name="originalFileName" ColumnName="originalFileName" />
+                <ScalarProperty Name="originalFullPath" ColumnName="originalFullPath" />
+                <ScalarProperty Name="newFileName" ColumnName="newFileName" />
+                <ScalarProperty Name="newFileFullPath" ColumnName="newFileFullPath" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="originalFileUploadedOn" ColumnName="originalFileUploadedOn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="file_processing_tasks_log">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.file_processing_tasks_log">
+              <MappingFragment StoreEntitySet="file_processing_tasks_log">
+                <ScalarProperty Name="fileLogTaskId" ColumnName="fileLogTaskId" />
+                <ScalarProperty Name="fileLogId" ColumnName="fileLogId" />
+                <ScalarProperty Name="fileId" ColumnName="fileId" />
+                <ScalarProperty Name="processingTask" ColumnName="processingTask" />
+                <ScalarProperty Name="processingTaskOutcome" ColumnName="processingTaskOutcome" />
+                <ScalarProperty Name="processingTaskOutcomeDetails" ColumnName="processingTaskOutcomeDetails" />
+                <ScalarProperty Name="originalFileName" ColumnName="originalFileName" />
+                <ScalarProperty Name="originalFullPath" ColumnName="originalFullPath" />
+                <ScalarProperty Name="newFileName" ColumnName="newFileName" />
+                <ScalarProperty Name="newFileFullPath" ColumnName="newFileFullPath" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="message_log">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.message_log">
+              <MappingFragment StoreEntitySet="message_log">
+                <ScalarProperty Name="log_id" ColumnName="log_id" />
+                <ScalarProperty Name="module_name" ColumnName="module_name" />
+                <ScalarProperty Name="submodule_name" ColumnName="submodule_name" />
+                <ScalarProperty Name="step_type" ColumnName="step_type" />
+                <ScalarProperty Name="step_name" ColumnName="step_name" />
+                <ScalarProperty Name="command" ColumnName="command" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="platform" ColumnName="platform" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QB_file_data_fixtbl">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.QB_file_data_fixtbl">
+              <MappingFragment StoreEntitySet="QB_file_data_fixtbl">
+                <ScalarProperty Name="QB_data" ColumnName="QB_data" />
+                <ScalarProperty Name="folder_name" ColumnName="folder_name" />
+                <ScalarProperty Name="row_num" ColumnName="row_num" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_file_processing_log">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.vw_file_processing_log">
+              <MappingFragment StoreEntitySet="vw_file_processing_log">
+                <ScalarProperty Name="fileLogId" ColumnName="fileLogId" />
+                <ScalarProperty Name="platform" ColumnName="platform" />
+                <ScalarProperty Name="fileId" ColumnName="fileId" />
+                <ScalarProperty Name="folderName" ColumnName="folderName" />
+                <ScalarProperty Name="templateType" ColumnName="templateType" />
+                <ScalarProperty Name="ICType" ColumnName="ICType" />
+                <ScalarProperty Name="toFTP" ColumnName="toFTP" />
+                <ScalarProperty Name="bencode" ColumnName="bencode" />
+                <ScalarProperty Name="originalFileName" ColumnName="originalFileName" />
+                <ScalarProperty Name="originalFullPath" ColumnName="originalFullPath" />
+                <ScalarProperty Name="newFileName" ColumnName="newFileName" />
+                <ScalarProperty Name="newFileFullPath" ColumnName="newFileFullPath" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="originalFileUploadedOn" ColumnName="originalFileUploadedOn" />
+                <ScalarProperty Name="ProcessingErrorCount" ColumnName="ProcessingErrorCount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionName="Data_ProcessingModel.Store.CsvSplit1" FunctionImportName="CsvSplit1">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Data_ProcessingModel.CsvSplit1_Result">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="val" ColumnName="val" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionName="Data_ProcessingModel.Store.SplitErrorRowStringToFields" FunctionImportName="SplitErrorRowStringToFields">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Data_ProcessingModel.SplitErrorRowStringToFields_Result">
+                <ScalarProperty Name="row_type" ColumnName="row_type" />
+                <ScalarProperty Name="bencode" ColumnName="bencode" />
+                <ScalarProperty Name="employee_id" ColumnName="employee_id" />
+                <ScalarProperty Name="plan_id" ColumnName="plan_id" />
+                <ScalarProperty Name="start_date" ColumnName="start_date" />
+                <ScalarProperty Name="end_date" ColumnName="end_date" />
+                <ScalarProperty Name="error_code" ColumnName="error_code" />
+                <ScalarProperty Name="error_message" ColumnName="error_message" />
+                <ScalarProperty Name="dummy" ColumnName="dummy" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionName="Data_ProcessingModel.Store.SplitStringsOrdered" FunctionImportName="SplitStringsOrdered">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Data_ProcessingModel.SplitStringsOrdered_Result">
+                <ScalarProperty Name="rn" ColumnName="rn" />
+                <ScalarProperty Name="Item" ColumnName="Item" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Alegeus_ErrorLog_failure_alert" FunctionName="Data_ProcessingModel.Store.Alegeus_ErrorLog_failure_alert" />
+          <FunctionImportMapping FunctionImportName="Alegeus_ErrorLog_refreshsuccess_alert" FunctionName="Data_ProcessingModel.Store.Alegeus_ErrorLog_refreshsuccess_alert" />
+          <FunctionImportMapping FunctionImportName="alegeus_errorlog_track_new_ftp_errors" FunctionName="Data_ProcessingModel.Store.alegeus_errorlog_track_new_ftp_errors" />
+          <FunctionImportMapping FunctionImportName="Alegeus_Header_n_success" FunctionName="Data_ProcessingModel.Store.Alegeus_Header_n_success" />
+          <FunctionImportMapping FunctionImportName="build_auto_ftp_batfile" FunctionName="Data_ProcessingModel.Store.build_auto_ftp_batfile" />
+          <FunctionImportMapping FunctionImportName="check_imports_file" FunctionName="Data_ProcessingModel.Store.check_imports_file" />
+          <FunctionImportMapping FunctionImportName="Fix_COBRA_brokerage_Contacts_SSObollean" FunctionName="Data_ProcessingModel.Store.Fix_COBRA_brokerage_Contacts_SSObollean" />
+          <FunctionImportMapping FunctionImportName="Fix_COBRA_Client_Contacts_SSObollean" FunctionName="Data_ProcessingModel.Store.Fix_COBRA_Client_Contacts_SSObollean" />
+          <FunctionImportMapping FunctionImportName="Fix_COBRAQB_SSObollean" FunctionName="Data_ProcessingModel.Store.Fix_COBRAQB_SSObollean" />
+          <FunctionImportMapping FunctionImportName="Get_COBRA_QBs" FunctionName="Data_ProcessingModel.Store.Get_COBRA_QBs" />
+          <FunctionImportMapping FunctionImportName="insert_file_processing_log" FunctionName="Data_ProcessingModel.Store.insert_file_processing_log" />
+          <FunctionImportMapping FunctionImportName="insert_to_auto_ftp_list" FunctionName="Data_ProcessingModel.Store.insert_to_auto_ftp_list" />
+          <FunctionImportMapping FunctionImportName="proc_alegeus_AlterHeaders2015" FunctionName="Data_ProcessingModel.Store.proc_alegeus_AlterHeaders2015" />
+          <FunctionImportMapping FunctionImportName="proc_alegeus_AlterHeaders2019" FunctionName="Data_ProcessingModel.Store.proc_alegeus_AlterHeaders2019" />
+          <FunctionImportMapping FunctionImportName="proc_alegeus_AlterHeadersNone" FunctionName="Data_ProcessingModel.Store.proc_alegeus_AlterHeadersNone" />
+          <FunctionImportMapping FunctionImportName="proc_alegeus_AlterHeadersOwn" FunctionName="Data_ProcessingModel.Store.proc_alegeus_AlterHeadersOwn" />
+          <FunctionImportMapping FunctionImportName="process_mbi_file_table_stage_import" FunctionName="Data_ProcessingModel.Store.process_mbi_file_table_stage_import" />
+          <FunctionImportMapping FunctionImportName="process_res_file_table_stage_import" FunctionName="Data_ProcessingModel.Store.process_res_file_table_stage_import" />
+          <FunctionImportMapping FunctionImportName="SplitAllErrorRowStringsToFields" FunctionName="Data_ProcessingModel.Store.SplitAllErrorRowStringsToFields" />
+          <FunctionImportMapping FunctionImportName="zz_truncate_all" FunctionName="Data_ProcessingModel.Store.zz_truncate_all" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

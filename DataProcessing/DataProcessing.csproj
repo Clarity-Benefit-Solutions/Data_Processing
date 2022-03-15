@@ -369,6 +369,81 @@
     <Compile Include="DataModels\AlegeusErrorLog\SplitStringsOrdered_Result.cs">
       <DependentUpon>Alegeus_ErrorLogEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataModels\DataProcessing\alegeus_file_final.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\alegeus_file_staging.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\app_settings.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\Automated_Header_list.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\CsvSplit1_Result.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\DataProcessing.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataProcessing.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\DataProcessing.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\DataProcessing.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataProcessing.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\dbo_error_log_results_workflow_local.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\dbo_error_log_results_workflow_localBU.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\dbo_error_log_results_workflow_local_AL.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\dbo_tracked_errors_local.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\file_processing_log.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\file_processing_tasks_log.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\mbi_file_table.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\mbi_file_table_stage.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\message_log.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\QB_file_data_fixtbl.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\res_file_table.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\res_file_table_stage.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\SplitErrorRowStringToFields_Result.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\SplitStringsOrdered_Result.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\vw_file_processing_log.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
     <Compile Include="FileChecker\FileChecker.cs" />
     <Compile Include="Processes\AlegeusErrorLog.cs" />
     <Compile Include="Processes\AlegeusDataProcessing.cs" />
@@ -467,6 +542,13 @@
     <None Include="DataModels\COBRA\Cobra.edmx.diagram">
       <DependentUpon>Cobra.edmx</DependentUpon>
     </None>
+    <EntityDeploy Include="DataModels\DataProcessing\DataProcessing.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DataProcessing.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="DataModels\DataProcessing\DataProcessing.edmx.diagram">
+      <DependentUpon>DataProcessing.edmx</DependentUpon>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -502,6 +584,16 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Cobra.edmx</DependentUpon>
       <LastGenOutput>Cobra.cs</LastGenOutput>
+    </Content>
+    <Content Include="DataModels\DataProcessing\DataProcessing.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DataProcessing.edmx</DependentUpon>
+      <LastGenOutput>DataProcessing.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="DataModels\DataProcessing\DataProcessing.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>DataProcessing.edmx</DependentUpon>
+      <LastGenOutput>DataProcessing.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>
