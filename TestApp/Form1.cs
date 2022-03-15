@@ -183,7 +183,7 @@ namespace TestApp
 
             try
             {
-                await DataProcessing.AlegeusDataProcessing.ProcessAll();
+                await DataProcessing.AlegeusErrorLog.ProcessAll();
             }
             catch (Exception ex)
             {

@@ -378,13 +378,13 @@ namespace DataProcessing
 
         #region ErrorLogPaths
 
-        public string DataProcessingMbiFilesRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("DataProcessingMbiFilesPath")}";
+        public string AlegeusErrorLogMbiFilesRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogMbiFilesPath")}";
 
-        public string DataProcessingMbiFilesArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("DataProcessingMbiFilesArchivePath")}";
+        public string AlegeusErrorLogMbiFilesArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogMbiFilesArchivePath")}";
 
-        public string DataProcessingResFilesRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("DataProcessingResFilesPath")}";
+        public string AlegeusErrorLogResFilesRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogResFilesPath")}";
 
-        public string DataProcessingResFilesArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("DataProcessingResFilesArchivePath")}";
+        public string AlegeusErrorLogResFilesArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogResFilesArchivePath")}";
 
 
         public string[] cobraIgnoreFtpSourceDirs
