@@ -1108,6 +1108,8 @@ namespace DataProcessing
                         break;
 
                     case FormatType.IsoDate:
+                        // todo: CheckDate: handle & fix 02-Jun-61 12:00:00 AM format
+                        // todo: CheckDate: handle & fix 02-Jun-61  formats
                         // remove any non digits
                         value = regexInteger.Replace(value, String.Empty);
                         if (!Utils.IsIsoDate(value))

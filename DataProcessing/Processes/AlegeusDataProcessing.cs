@@ -131,31 +131,7 @@ namespace DataProcessing
                     fileLogParams1.ToFtp = rowtoFtp;
                     fileLogParams1.SetSourceFolderName(rowFolderName);
 
-                    // do not log - gives too many lines
-                    //DbUtils.LogFileOperation(fileLogParams);
-
-                    //var headerType = HeaderType.NotApplicable;
-
-                    //// get folder header type
-                    //switch (rowTemplateType?.ToLower())
-                    //{
-                    //    case "new":
-                    //        headerType = HeaderType.New;
-                    //        break;
-                    //    case "old":
-                    //        headerType = HeaderType.Old;
-                    //        break;
-                    //    case "none":
-                    //        headerType = HeaderType.NoChange;
-                    //        break;
-                    //    case "own":
-                    //        headerType = HeaderType.Own;
-                    //        break;
-                    //    default:
-                    //        headerType = HeaderType.NotApplicable;
-                    //        break;
-                    //}
-
+               
                     // change from PROD source dir to Ctx source dir
                     rowFolderName = Vars.ConvertFilePathFromProdToCtx(rowFolderName);
                     //
@@ -311,7 +287,7 @@ namespace DataProcessing
                     DbUtils.TruncateTable(dbConn, tableName,
                         fileLogParams?.GetMessageLogParams());
 
-
+                    //todo: headers - remove old header line and put new line
                     //2. import file
                     string procName;
                     switch (headerType)
