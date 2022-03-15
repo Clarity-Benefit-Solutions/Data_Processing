@@ -244,7 +244,7 @@ namespace TestApp
             try
             {
                 var directoryPath = Utils.GetExeBaseDir();
-                Process.Start($"{directoryPath}/../../../_MsAccessFiles/DataProcessingSystemv4v_Control-New.accdb");
+                Process.Start($"{directoryPath}/../../../_MsAccessFiles/AlegeusErrorLogSystemv4v_Control-New.accdb");
             }
             catch (Exception ex)
             {
