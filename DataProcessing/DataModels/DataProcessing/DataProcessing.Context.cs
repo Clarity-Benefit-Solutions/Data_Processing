@@ -83,6 +83,21 @@ namespace DataProcessing.DataModels.DataProcessing
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<SplitStringsOrdered_Result>("[Data_ProcessingEntities].[SplitStringsOrdered](@List, @Delimiter)", listParameter, delimiterParameter);
         }
     
+        public virtual int Alegeus_Header_n_success()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Alegeus_Header_n_success");
+        }
+    
+        public virtual int build_auto_ftp_batfile()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("build_auto_ftp_batfile");
+        }
+    
+        public virtual ObjectResult<Nullable<int>> check_imports_file()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("check_imports_file");
+        }
+    
         public virtual int Data_Processing_failure_alert()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Data_Processing_failure_alert");
@@ -98,19 +113,9 @@ namespace DataProcessing.DataModels.DataProcessing
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Data_Processing_track_new_ftp_errors");
         }
     
-        public virtual int Alegeus_Header_n_success()
+        public virtual int Data_Processing_track_new_ftp_errors_____________________________()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Alegeus_Header_n_success");
-        }
-    
-        public virtual int build_auto_ftp_batfile()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("build_auto_ftp_batfile");
-        }
-    
-        public virtual ObjectResult<Nullable<int>> check_imports_file()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("check_imports_file");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Data_Processing_track_new_ftp_errors_____________________________");
         }
     
         public virtual int Fix_COBRA_brokerage_Contacts_SSObollean()

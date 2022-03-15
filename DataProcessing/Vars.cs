@@ -296,7 +296,7 @@ namespace DataProcessing
             if (appSettings == null)
             {
                 appSettings = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnDataProcessing,
-                    "select * from Alegeus_File_Processing.dbo.app_settings order by environment, setting_name", null, null, false, true);
+                    "select * from dbo.app_settings order by environment, setting_name", null, null, false, true);
 
                 if (appSettings == null)
                 {

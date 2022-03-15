@@ -160,7 +160,7 @@ namespace CoreUtils.Classes
         {
             //DbConnection dbConnection, string logTableName, string moduleName, string subModuleName,
             //string stepType, string stepName, string command
-            return new MessageLogParams(DbConnection, "Alegeus_File_Processing.dbo.message_log", Platform,
+            return new MessageLogParams(DbConnection, "dbo.message_log", Platform,
                 NewFileFullPath, ProcessingTask, ProcessingTaskOutcome, ProcessingTaskOutcomeDetails);
         }
 

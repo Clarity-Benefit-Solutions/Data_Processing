@@ -426,6 +426,10 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DataModels\Portal\WC\" />
+    <Folder Include="_SQLs\" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="DataModels\DataProcessing\DataProcessing.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DataProcessing.edmx</DependentUpon>
@@ -436,10 +440,6 @@
       <DependentUpon>DataProcessing.edmx</DependentUpon>
       <LastGenOutput>DataProcessing.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DataModels\Portal\WC\" />
-    <Folder Include="_SQLs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Data.SqlClient.SNI.3.0.0\build\net46\Microsoft.Data.SqlClient.SNI.targets" Condition="Exists('..\packages\Microsoft.Data.SqlClient.SNI.3.0.0\build\net46\Microsoft.Data.SqlClient.SNI.targets')" />

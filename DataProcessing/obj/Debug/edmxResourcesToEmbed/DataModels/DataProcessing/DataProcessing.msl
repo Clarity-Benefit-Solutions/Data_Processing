@@ -462,12 +462,13 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="Alegeus_ErrorLog_failure_alert" FunctionName="Data_ProcessingModel.Store.Alegeus_ErrorLog_failure_alert" />
-    <FunctionImportMapping FunctionImportName="Alegeus_ErrorLog_refreshsuccess_alert" FunctionName="Data_ProcessingModel.Store.Alegeus_ErrorLog_refreshsuccess_alert" />
-    <FunctionImportMapping FunctionImportName="alegeus_errorlog_track_new_ftp_errors" FunctionName="Data_ProcessingModel.Store.alegeus_errorlog_track_new_ftp_errors" />
     <FunctionImportMapping FunctionImportName="Alegeus_Header_n_success" FunctionName="Data_ProcessingModel.Store.Alegeus_Header_n_success" />
     <FunctionImportMapping FunctionImportName="build_auto_ftp_batfile" FunctionName="Data_ProcessingModel.Store.build_auto_ftp_batfile" />
     <FunctionImportMapping FunctionImportName="check_imports_file" FunctionName="Data_ProcessingModel.Store.check_imports_file" />
+    <FunctionImportMapping FunctionImportName="Data_Processing_failure_alert" FunctionName="Data_ProcessingModel.Store.Data_Processing_failure_alert" />
+    <FunctionImportMapping FunctionImportName="Data_Processing_refreshsuccess_alert" FunctionName="Data_ProcessingModel.Store.Data_Processing_refreshsuccess_alert" />
+    <FunctionImportMapping FunctionImportName="Data_Processing_track_new_ftp_errors" FunctionName="Data_ProcessingModel.Store.Data_Processing_track_new_ftp_errors" />
+    <FunctionImportMapping FunctionImportName="Data_Processing_track_new_ftp_errors_____________________________" FunctionName="Data_ProcessingModel.Store.Data_Processing_track_new_ftp_errors_____________________________" />
     <FunctionImportMapping FunctionImportName="Fix_COBRA_brokerage_Contacts_SSObollean" FunctionName="Data_ProcessingModel.Store.Fix_COBRA_brokerage_Contacts_SSObollean" />
     <FunctionImportMapping FunctionImportName="Fix_COBRA_Client_Contacts_SSObollean" FunctionName="Data_ProcessingModel.Store.Fix_COBRA_Client_Contacts_SSObollean" />
     <FunctionImportMapping FunctionImportName="Fix_COBRAQB_SSObollean" FunctionName="Data_ProcessingModel.Store.Fix_COBRAQB_SSObollean" />

@@ -321,108 +321,108 @@ warning 6013: The table/view 'Data_Processing.dbo.IF_File' does not have a prima
           <Key>
             <PropertyRef Name="row_id" />
           </Key>
-          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="2000" />
           <Property Name="data_row" Type="nvarchar(max)" />
           <Property Name="row_num" Type="int" />
-          <Property Name="row_type" Type="nvarchar" MaxLength="50" />
-          <Property Name="AccountStatus" Type="nvarchar" MaxLength="50" />
-          <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="AddressLine1" Type="nvarchar" MaxLength="50" />
-          <Property Name="AddressLine2" Type="nvarchar" MaxLength="50" />
-          <Property Name="BirthDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="City" Type="nvarchar" MaxLength="50" />
-          <Property Name="Country" Type="nvarchar" MaxLength="50" />
-          <Property Name="DeleteAccount" Type="nvarchar" MaxLength="50" />
-          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
-          <Property Name="DepositType" Type="nvarchar" MaxLength="50" />
-          <Property Name="Division" Type="nvarchar" MaxLength="50" />
-          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="EligibilityDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="Email" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="50" />
-          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
-          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
-          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="50" />
-          <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
-          <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="50" />
-          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-          <Property Name="PlanEndDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
-          <Property Name="PlanStartDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="Relationship" Type="nvarchar" MaxLength="50" />
-          <Property Name="State" Type="nvarchar" MaxLength="50" />
-          <Property Name="TerminationDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="TpaId" Type="nvarchar" MaxLength="50" />
-          <Property Name="Zip" Type="nvarchar" MaxLength="50" />
+          <Property Name="row_type" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountStatus" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="200" />
+          <Property Name="AddressLine1" Type="nvarchar" MaxLength="200" />
+          <Property Name="AddressLine2" Type="nvarchar" MaxLength="200" />
+          <Property Name="BirthDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="City" Type="nvarchar" MaxLength="200" />
+          <Property Name="Country" Type="nvarchar" MaxLength="200" />
+          <Property Name="DeleteAccount" Type="nvarchar" MaxLength="200" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="200" />
+          <Property Name="DepositType" Type="nvarchar" MaxLength="200" />
+          <Property Name="Division" Type="nvarchar" MaxLength="200" />
+          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EligibilityDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="Email" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="200" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="200" />
+          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="200" />
+          <Property Name="MobileNumber" Type="nvarchar" MaxLength="200" />
+          <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanEndDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanStartDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="Relationship" Type="nvarchar" MaxLength="200" />
+          <Property Name="State" Type="nvarchar" MaxLength="200" />
+          <Property Name="TerminationDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="TpaId" Type="nvarchar" MaxLength="200" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="200" />
           <Property Name="row_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="source_row_no" Type="int" />
-          <Property Name="check_type" Type="nvarchar" MaxLength="50" />
-          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
-          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
-          <Property Name="error_message_calc" Type="nvarchar" MaxLength="500" />
-          <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="50" />
-          <Property Name="AlternateId" Type="nvarchar" MaxLength="50" />
-          <Property Name="Class" Type="nvarchar" MaxLength="50" />
+          <Property Name="check_type" Type="nvarchar" MaxLength="200" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="200" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="2000" />
+          <Property Name="error_message_calc" Type="nvarchar" MaxLength="2000" />
+          <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="200" />
+          <Property Name="AlternateId" Type="nvarchar" MaxLength="200" />
+          <Property Name="Class" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="mbi_file_table_stage">
           <Key>
             <PropertyRef Name="row_num" />
           </Key>
-          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="2000" />
           <Property Name="data_row" Type="nvarchar(max)" />
           <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="row_type" Type="nvarchar" MaxLength="50" />
-          <Property Name="AccountStatus" Type="nvarchar" MaxLength="50" />
-          <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="AddressLine1" Type="nvarchar" MaxLength="50" />
-          <Property Name="AddressLine2" Type="nvarchar" MaxLength="50" />
-          <Property Name="BirthDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="City" Type="nvarchar" MaxLength="50" />
-          <Property Name="Country" Type="nvarchar" MaxLength="50" />
-          <Property Name="DeleteAccount" Type="nvarchar" MaxLength="50" />
-          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
-          <Property Name="DepositType" Type="nvarchar" MaxLength="50" />
-          <Property Name="Division" Type="nvarchar" MaxLength="50" />
-          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="EligibilityDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="Email" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="50" />
-          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
-          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
-          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="50" />
-          <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
-          <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="50" />
-          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-          <Property Name="PlanEndDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
-          <Property Name="PlanStartDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="Relationship" Type="nvarchar" MaxLength="50" />
-          <Property Name="State" Type="nvarchar" MaxLength="50" />
-          <Property Name="TerminationDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="TpaId" Type="nvarchar" MaxLength="50" />
-          <Property Name="Zip" Type="nvarchar" MaxLength="50" />
+          <Property Name="row_type" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountStatus" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="200" />
+          <Property Name="AddressLine1" Type="nvarchar" MaxLength="200" />
+          <Property Name="AddressLine2" Type="nvarchar" MaxLength="200" />
+          <Property Name="BirthDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="City" Type="nvarchar" MaxLength="200" />
+          <Property Name="Country" Type="nvarchar" MaxLength="200" />
+          <Property Name="DeleteAccount" Type="nvarchar" MaxLength="200" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="200" />
+          <Property Name="DepositType" Type="nvarchar" MaxLength="200" />
+          <Property Name="Division" Type="nvarchar" MaxLength="200" />
+          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EligibilityDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="Email" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="200" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="200" />
+          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="200" />
+          <Property Name="MobileNumber" Type="nvarchar" MaxLength="200" />
+          <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanEndDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanStartDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="Relationship" Type="nvarchar" MaxLength="200" />
+          <Property Name="State" Type="nvarchar" MaxLength="200" />
+          <Property Name="TerminationDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="TpaId" Type="nvarchar" MaxLength="200" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="200" />
           <Property Name="source_row_no" Type="int" />
-          <Property Name="check_type" Type="nvarchar" MaxLength="50" />
-          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
-          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
-          <Property Name="error_message_calc" Type="nvarchar" MaxLength="500" />
-          <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="50" />
-          <Property Name="AlternateId" Type="nvarchar" MaxLength="50" />
-          <Property Name="Class" Type="nvarchar" MaxLength="50" />
+          <Property Name="check_type" Type="nvarchar" MaxLength="200" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="200" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="2000" />
+          <Property Name="error_message_calc" Type="nvarchar" MaxLength="2000" />
+          <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="200" />
+          <Property Name="AlternateId" Type="nvarchar" MaxLength="200" />
+          <Property Name="Class" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Data_Processing.dbo.message_log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -467,113 +467,113 @@ warning 6002: The table/view 'Data_Processing.dbo.QB_file_data_fixtbl' does not 
           <Key>
             <PropertyRef Name="row_id" />
           </Key>
-          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="2000" />
           <Property Name="error_row" Type="nvarchar(max)" />
-          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
-          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="200" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="2000" />
           <Property Name="row_num" Type="int" />
-          <Property Name="AccountStatus" Type="nvarchar" MaxLength="50" />
-          <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="AddressLine1" Type="nvarchar" MaxLength="50" />
-          <Property Name="AddressLine2" Type="nvarchar" MaxLength="50" />
-          <Property Name="BirthDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="City" Type="nvarchar" MaxLength="50" />
-          <Property Name="Country" Type="nvarchar" MaxLength="50" />
-          <Property Name="DeleteAccount" Type="nvarchar" MaxLength="50" />
-          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
-          <Property Name="DepositType" Type="nvarchar" MaxLength="50" />
-          <Property Name="Division" Type="nvarchar" MaxLength="50" />
-          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="EligibilityDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="Email" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="50" />
-          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
-          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
-          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="50" />
-          <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
-          <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="50" />
-          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-          <Property Name="PlanEndDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
-          <Property Name="PlanStartDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="Relationship" Type="nvarchar" MaxLength="50" />
-          <Property Name="State" Type="nvarchar" MaxLength="50" />
-          <Property Name="TerminationDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="TpaId" Type="nvarchar" MaxLength="50" />
-          <Property Name="Zip" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountStatus" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="200" />
+          <Property Name="AddressLine1" Type="nvarchar" MaxLength="200" />
+          <Property Name="AddressLine2" Type="nvarchar" MaxLength="200" />
+          <Property Name="BirthDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="City" Type="nvarchar" MaxLength="200" />
+          <Property Name="Country" Type="nvarchar" MaxLength="200" />
+          <Property Name="DeleteAccount" Type="nvarchar" MaxLength="200" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="200" />
+          <Property Name="DepositType" Type="nvarchar" MaxLength="200" />
+          <Property Name="Division" Type="nvarchar" MaxLength="200" />
+          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EligibilityDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="Email" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="200" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="200" />
+          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="200" />
+          <Property Name="MobileNumber" Type="nvarchar" MaxLength="200" />
+          <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanEndDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanStartDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="Relationship" Type="nvarchar" MaxLength="200" />
+          <Property Name="State" Type="nvarchar" MaxLength="200" />
+          <Property Name="TerminationDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="TpaId" Type="nvarchar" MaxLength="200" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="200" />
           <Property Name="row_type" Type="varchar" MaxLength="50" />
           <Property Name="error_message_calc" Type="varchar" MaxLength="500" />
-          <Property Name="res_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="res_file_name" Type="nvarchar" MaxLength="2000" />
           <Property Name="result_template" Type="nvarchar" MaxLength="100" />
           <Property Name="row_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="source_row_no" Type="int" />
-          <Property Name="check_type" Type="nvarchar" MaxLength="50" />
-          <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="50" />
-          <Property Name="Class" Type="nvarchar" MaxLength="50" />
-          <Property Name="AlternateId" Type="nvarchar" MaxLength="50" />
+          <Property Name="check_type" Type="nvarchar" MaxLength="200" />
+          <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="200" />
+          <Property Name="Class" Type="nvarchar" MaxLength="200" />
+          <Property Name="AlternateId" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="res_file_table_stage">
           <Key>
             <PropertyRef Name="row_num" />
           </Key>
-          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
-          <Property Name="result_template" Type="nvarchar" MaxLength="50" />
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="2000" />
+          <Property Name="result_template" Type="nvarchar" MaxLength="200" />
           <Property Name="error_row" Type="nvarchar(max)" />
-          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
-          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="200" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="2000" />
           <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="row_type" Type="nvarchar" MaxLength="50" />
-          <Property Name="AccountStatus" Type="nvarchar" MaxLength="50" />
-          <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="50" />
-          <Property Name="AddressLine1" Type="nvarchar" MaxLength="50" />
-          <Property Name="AddressLine2" Type="nvarchar" MaxLength="50" />
-          <Property Name="BirthDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="City" Type="nvarchar" MaxLength="50" />
-          <Property Name="Country" Type="nvarchar" MaxLength="50" />
-          <Property Name="DeleteAccount" Type="nvarchar" MaxLength="50" />
-          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
-          <Property Name="DepositType" Type="nvarchar" MaxLength="50" />
-          <Property Name="Division" Type="nvarchar" MaxLength="50" />
-          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="EligibilityDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="Email" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="50" />
-          <Property Name="FirstName" Type="nvarchar" MaxLength="50" />
-          <Property Name="LastName" Type="nvarchar" MaxLength="50" />
-          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="50" />
-          <Property Name="MobileNumber" Type="nvarchar" MaxLength="50" />
-          <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="50" />
-          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-          <Property Name="PlanEndDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
-          <Property Name="PlanStartDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="Relationship" Type="nvarchar" MaxLength="50" />
-          <Property Name="State" Type="nvarchar" MaxLength="50" />
-          <Property Name="TerminationDate" Type="nvarchar" MaxLength="50" />
-          <Property Name="TpaId" Type="nvarchar" MaxLength="50" />
-          <Property Name="Zip" Type="nvarchar" MaxLength="50" />
+          <Property Name="row_type" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountStatus" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="200" />
+          <Property Name="AddressLine1" Type="nvarchar" MaxLength="200" />
+          <Property Name="AddressLine2" Type="nvarchar" MaxLength="200" />
+          <Property Name="BirthDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="City" Type="nvarchar" MaxLength="200" />
+          <Property Name="Country" Type="nvarchar" MaxLength="200" />
+          <Property Name="DeleteAccount" Type="nvarchar" MaxLength="200" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="200" />
+          <Property Name="DepositType" Type="nvarchar" MaxLength="200" />
+          <Property Name="Division" Type="nvarchar" MaxLength="200" />
+          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EligibilityDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="Email" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="200" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="200" />
+          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="200" />
+          <Property Name="MobileNumber" Type="nvarchar" MaxLength="200" />
+          <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanEndDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanStartDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="Relationship" Type="nvarchar" MaxLength="200" />
+          <Property Name="State" Type="nvarchar" MaxLength="200" />
+          <Property Name="TerminationDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="TpaId" Type="nvarchar" MaxLength="200" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="200" />
           <Property Name="error_message_calc" Type="varchar" MaxLength="500" />
-          <Property Name="res_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="res_file_name" Type="nvarchar" MaxLength="2000" />
           <Property Name="data_row" Type="nvarchar(max)" />
           <Property Name="source_row_no" Type="int" />
-          <Property Name="check_type" Type="nvarchar" MaxLength="50" />
-          <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="50" />
-          <Property Name="AlternateId" Type="nvarchar" MaxLength="50" />
-          <Property Name="Class" Type="nvarchar" MaxLength="50" />
+          <Property Name="check_type" Type="nvarchar" MaxLength="200" />
+          <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="200" />
+          <Property Name="AlternateId" Type="nvarchar" MaxLength="200" />
+          <Property Name="Class" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6013: The table/view 'Data_Processing.dbo.CRM_Listview' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
@@ -729,9 +729,6 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <Property Name="originalFileUploadedOn" Type="datetime" />
           <Property Name="ProcessingErrorCount" Type="int" />
         </EntityType>
-        <Function Name="Alegeus_ErrorLog_failure_alert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="Alegeus_ErrorLog_refreshsuccess_alert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <Function Name="alegeus_errorlog_track_new_ftp_errors" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="Alegeus_Header_n_success" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="build_auto_ftp_batfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="check_imports_file" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
@@ -747,6 +744,10 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
             </CollectionType>
           </ReturnType>
         </Function>
+        <Function Name="Data_Processing_failure_alert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Data_Processing_refreshsuccess_alert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Data_Processing_track_new_ftp_errors" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="Data_Processing_track_new_ftp_errors_____________________________" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" StoreFunctionName="Data_Processing_track_new_ftp_errors                            &quot;" />
         <Function Name="fileLogHasError" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
           <Parameter Name="fileLogId" Type="int" Mode="In" />
         </Function>
@@ -1034,220 +1035,220 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <Key>
             <PropertyRef Name="row_id" />
           </Key>
-          <Property Name="mbi_file_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="mbi_file_name" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
           <Property Name="data_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="row_num" Type="Int32" />
-          <Property Name="row_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AccountStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AccountTypeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AddressLine1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AddressLine2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BirthDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DeleteAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DependentID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DepositType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Division" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EffectiveDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EligibilityDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeePayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeSocialSecurityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployerDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployerPayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MiddleInitial" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MobileNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="OriginalPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PlanEndDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PlanId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PlanStartDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Relationship" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TerminationDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TpaId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="row_type" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountStatus" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountTypeCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DeleteAccount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DependentID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DepositType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Division" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EffectiveDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EligibilityDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeDepositAmount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeePayPeriodElection" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeStatus" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerDepositAmount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerPayPeriodElection" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OriginalPrefunded" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanEndDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanStartDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Relationship" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TerminationDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TpaId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Zip" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="row_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="source_row_no" Type="Int32" />
-          <Property Name="check_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="error_code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="error_message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="error_message_calc" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="OngoingPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AlternateId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Class" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="check_type" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="error_code" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="error_message_calc" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="OngoingPrefunded" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AlternateId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Class" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="mbi_file_table_stage">
           <Key>
             <PropertyRef Name="row_num" />
           </Key>
-          <Property Name="mbi_file_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="mbi_file_name" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
           <Property Name="data_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="row_num" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="row_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AccountStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AccountTypeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AddressLine1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AddressLine2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BirthDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DeleteAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DependentID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DepositType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Division" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EffectiveDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EligibilityDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeePayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeSocialSecurityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployerDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployerPayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MiddleInitial" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MobileNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="OriginalPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PlanEndDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PlanId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PlanStartDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Relationship" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TerminationDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TpaId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="row_type" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountStatus" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountTypeCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DeleteAccount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DependentID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DepositType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Division" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EffectiveDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EligibilityDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeDepositAmount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeePayPeriodElection" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeStatus" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerDepositAmount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerPayPeriodElection" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OriginalPrefunded" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanEndDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanStartDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Relationship" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TerminationDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TpaId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Zip" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="source_row_no" Type="Int32" />
-          <Property Name="check_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="error_code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="error_message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="error_message_calc" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="OngoingPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AlternateId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Class" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="check_type" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="error_code" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="error_message_calc" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="OngoingPrefunded" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AlternateId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Class" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="res_file_table">
           <Key>
             <PropertyRef Name="row_id" />
           </Key>
-          <Property Name="mbi_file_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="mbi_file_name" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
           <Property Name="error_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="error_code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="error_message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="error_code" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
           <Property Name="row_num" Type="Int32" />
-          <Property Name="AccountStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AccountTypeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AddressLine1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AddressLine2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BirthDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DeleteAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DependentID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DepositType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Division" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EffectiveDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EligibilityDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeePayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeSocialSecurityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployerDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployerPayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MiddleInitial" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MobileNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="OriginalPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PlanEndDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PlanId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PlanStartDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Relationship" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TerminationDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TpaId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountStatus" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountTypeCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DeleteAccount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DependentID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DepositType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Division" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EffectiveDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EligibilityDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeDepositAmount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeePayPeriodElection" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeStatus" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerDepositAmount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerPayPeriodElection" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OriginalPrefunded" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanEndDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanStartDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Relationship" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TerminationDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TpaId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Zip" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="row_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="error_message_calc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="res_file_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="res_file_name" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
           <Property Name="result_template" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="row_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="source_row_no" Type="Int32" />
-          <Property Name="check_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="OngoingPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Class" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AlternateId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="check_type" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OngoingPrefunded" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Class" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AlternateId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="res_file_table_stage">
           <Key>
             <PropertyRef Name="row_num" />
           </Key>
-          <Property Name="mbi_file_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="result_template" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="mbi_file_name" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="result_template" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="error_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="error_code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="error_message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="error_code" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
           <Property Name="row_num" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="row_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AccountStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AccountTypeCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AddressLine1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AddressLine2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BirthDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DeleteAccount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DependentID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DepositType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Division" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EffectiveDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EligibilityDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeePayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeSocialSecurityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployerDepositAmount" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployerId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="EmployerPayPeriodElection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MiddleInitial" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MobileNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="OriginalPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PlanEndDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PlanId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="PlanStartDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Relationship" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TerminationDate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TpaId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Zip" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="row_type" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountStatus" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountTypeCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="BirthDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DeleteAccount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DependentID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DepositType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Division" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EffectiveDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EligibilityDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeDepositAmount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeePayPeriodElection" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeSocialSecurityNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeStatus" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerDepositAmount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployerPayPeriodElection" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MobileNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OriginalPrefunded" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanEndDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanStartDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Relationship" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TerminationDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TpaId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Zip" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="error_message_calc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="res_file_name" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="res_file_name" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
           <Property Name="data_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="source_row_no" Type="Int32" />
-          <Property Name="check_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="OngoingPrefunded" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AlternateId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Class" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="check_type" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="OngoingPrefunded" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AlternateId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Class" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="alegeus_file_final">
           <Key>
@@ -1453,12 +1454,13 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
             <Parameter Name="List" Mode="In" Type="String" />
             <Parameter Name="Delimiter" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="Alegeus_ErrorLog_failure_alert" />
-          <FunctionImport Name="Alegeus_ErrorLog_refreshsuccess_alert" />
-          <FunctionImport Name="alegeus_errorlog_track_new_ftp_errors" />
           <FunctionImport Name="Alegeus_Header_n_success" />
           <FunctionImport Name="build_auto_ftp_batfile" />
           <FunctionImport Name="check_imports_file" ReturnType="Collection(Int32)" />
+          <FunctionImport Name="Data_Processing_failure_alert" />
+          <FunctionImport Name="Data_Processing_refreshsuccess_alert" />
+          <FunctionImport Name="Data_Processing_track_new_ftp_errors" />
+          <FunctionImport Name="Data_Processing_track_new_ftp_errors_____________________________" />
           <FunctionImport Name="Fix_COBRA_brokerage_Contacts_SSObollean" />
           <FunctionImport Name="Fix_COBRA_Client_Contacts_SSObollean" />
           <FunctionImport Name="Fix_COBRAQB_SSObollean" />
@@ -1961,12 +1963,13 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="Alegeus_ErrorLog_failure_alert" FunctionName="Data_ProcessingModel.Store.Alegeus_ErrorLog_failure_alert" />
-          <FunctionImportMapping FunctionImportName="Alegeus_ErrorLog_refreshsuccess_alert" FunctionName="Data_ProcessingModel.Store.Alegeus_ErrorLog_refreshsuccess_alert" />
-          <FunctionImportMapping FunctionImportName="alegeus_errorlog_track_new_ftp_errors" FunctionName="Data_ProcessingModel.Store.alegeus_errorlog_track_new_ftp_errors" />
           <FunctionImportMapping FunctionImportName="Alegeus_Header_n_success" FunctionName="Data_ProcessingModel.Store.Alegeus_Header_n_success" />
           <FunctionImportMapping FunctionImportName="build_auto_ftp_batfile" FunctionName="Data_ProcessingModel.Store.build_auto_ftp_batfile" />
           <FunctionImportMapping FunctionImportName="check_imports_file" FunctionName="Data_ProcessingModel.Store.check_imports_file" />
+          <FunctionImportMapping FunctionImportName="Data_Processing_failure_alert" FunctionName="Data_ProcessingModel.Store.Data_Processing_failure_alert" />
+          <FunctionImportMapping FunctionImportName="Data_Processing_refreshsuccess_alert" FunctionName="Data_ProcessingModel.Store.Data_Processing_refreshsuccess_alert" />
+          <FunctionImportMapping FunctionImportName="Data_Processing_track_new_ftp_errors" FunctionName="Data_ProcessingModel.Store.Data_Processing_track_new_ftp_errors" />
+          <FunctionImportMapping FunctionImportName="Data_Processing_track_new_ftp_errors_____________________________" FunctionName="Data_ProcessingModel.Store.Data_Processing_track_new_ftp_errors_____________________________" />
           <FunctionImportMapping FunctionImportName="Fix_COBRA_brokerage_Contacts_SSObollean" FunctionName="Data_ProcessingModel.Store.Fix_COBRA_brokerage_Contacts_SSObollean" />
           <FunctionImportMapping FunctionImportName="Fix_COBRA_Client_Contacts_SSObollean" FunctionName="Data_ProcessingModel.Store.Fix_COBRA_Client_Contacts_SSObollean" />
           <FunctionImportMapping FunctionImportName="Fix_COBRAQB_SSObollean" FunctionName="Data_ProcessingModel.Store.Fix_COBRAQB_SSObollean" />
