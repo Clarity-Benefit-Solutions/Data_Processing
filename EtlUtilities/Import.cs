@@ -254,6 +254,12 @@ namespace EtlUtilities
             string newPath = srcFilePath;
             var srcFileName = Path.GetFileName(srcFilePath);
 
+            string testMarker = "";
+
+            if (DbUtils.IsTestFile(srcFileName))
+            {
+                testMarker = $"_TEST_";
+            }
 
             string platformCode = "";
             if (platformType == PlatformType.Alegeus)
@@ -268,7 +274,7 @@ namespace EtlUtilities
             {
                 // we dont have bencodes! just return the filename
                 newPath = $"{Path.GetDirectoryName(srcFilePath)}/{DbUtils.GetUniqueIdFromFileName(srcFileName)}--";
-                newPath += $"{DbUtils.StripUniqueIdAndHeaderTypeFromFileName(Path.GetFileNameWithoutExtension(srcFileName))}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
+                newPath += $"{testMarker}{DbUtils.StripUniqueIdAndHeaderTypeFromFileName(Path.GetFileNameWithoutExtension(srcFileName))}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
                 newPath = FileUtils.FixPath(newPath);
 
                 return newPath;
@@ -342,7 +348,7 @@ namespace EtlUtilities
 
             //todo: ensure we detect all file formats
             newPath = $"{Path.GetDirectoryName(srcFilePath)}/{DbUtils.GetUniqueIdFromFileName(srcFileName)}--";
-            newPath += $"{ BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
+            newPath += $"{testMarker}{ BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
             newPath = FileUtils.FixPath(newPath);
 
             return newPath;
