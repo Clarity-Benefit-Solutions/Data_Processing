@@ -146,6 +146,10 @@ namespace DataProcessing
 
                             // make FilenameProperty uniform
                             var uniformFilePath = Import.GetUniformNameForFile(PlatformType.Alegeus, srcFilePath);
+                            if (srcFilePath != uniformFilePath)
+                            {
+                                FileUtils.MoveFile(srcFilePath, uniformFilePath, null, null);
+                            }
                             
                             // add uniqueId to file so we can track it across folders and operations
                             var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(uniformFilePath, true,

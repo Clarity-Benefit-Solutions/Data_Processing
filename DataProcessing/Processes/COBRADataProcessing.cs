@@ -197,8 +197,16 @@ namespace DataProcessing
 
                             if (processThisFile && !Utils.IsBlank((destDirPath)))
                             {
+                                // make FilenameProperty uniform
+                                var uniformFilePath = Import.GetUniformNameForFile(PlatformType.Cobra, srcFilePath);
+                                if (srcFilePath != uniformFilePath)
+                                {
+                                    FileUtils.MoveFile(srcFilePath, uniformFilePath, null, null);
+                                }
+
+
                                 // add uniqueId to file so we can track it across folders and operations
-                                var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb( srcFilePath,
+                                var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(uniformFilePath,
                                     true,
                                     fileLogParams1);
 

@@ -251,7 +251,29 @@ namespace EtlUtilities
 
         public static string GetUniformNameForFile(PlatformType platformType, string srcFilePath)
         {
+            string newPath = srcFilePath;
             var srcFileName = Path.GetFileName(srcFilePath);
+
+
+            string platformCode = "";
+            if (platformType == PlatformType.Alegeus)
+            {
+                platformCode = "AL";
+            }
+            else if (platformType == PlatformType.Cobra)
+            {
+                platformCode = "CO";
+            }
+            if (platformType == PlatformType.Cobra)
+            {
+                // we dont have bencodes! just return the filename
+                newPath = $"{Path.GetDirectoryName(srcFilePath)}/{DbUtils.GetUniqueIdFromFileName(srcFileName)}--";
+                newPath += $"{DbUtils.StripUniqueIdAndHeaderTypeFromFileName(Path.GetFileNameWithoutExtension(srcFileName))}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
+                newPath = FileUtils.FixPath(newPath);
+
+                return newPath;
+            }
+
             var useThisFilePath = srcFilePath;
 
             // convert excel files to csv to check
@@ -317,19 +339,10 @@ namespace EtlUtilities
             }
             //
 
-            string platformCode = "";
-            if (platformType == PlatformType.Alegeus)
-            {
-                platformCode = "AL";
-            }
-            else if (platformType == PlatformType.Cobra)
-            {
-                platformCode = "CO";
-            }
 
             //todo: ensure we detect all file formats
-            string newPath = $"{Path.GetDirectoryName(srcFilePath)}/{DbUtils.GetUniqueIdFromFileName(srcFileName)}--";
-            newPath += $"{ BenCode}_{recType}_{Utils.ToIsoDateString(DateTime.Now)}_{platformCode}{Path.GetExtension(srcFilePath)}";
+            newPath = $"{Path.GetDirectoryName(srcFilePath)}/{DbUtils.GetUniqueIdFromFileName(srcFileName)}--";
+            newPath += $"{ BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
             newPath = FileUtils.FixPath(newPath);
 
             return newPath;

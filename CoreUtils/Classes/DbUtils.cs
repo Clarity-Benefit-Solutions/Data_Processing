@@ -337,7 +337,7 @@ namespace CoreUtils
             string[] fileNameParts = fileName?.Split(new[] { FilePartsDelimiter }, StringSplitOptions.None);
 
             // return the last part of the fileName
-            return fileNameParts[fileNameParts.Length - 1];
+            return fileNameParts[fileNameParts.Length - 1]?? "";
 
             //int indexOfSep = fileName.IndexOf($"{FilePartsDelimiter}");
             //if (indexOfSep > 0)
