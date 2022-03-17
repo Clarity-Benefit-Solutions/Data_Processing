@@ -49,6 +49,7 @@ namespace CoreUtils.Classes
         [Utils.DisplayText("")] Any = 0,
         [Utils.DisplayText("String")] String,
         [Utils.DisplayText("Email")] Email,
+        [Utils.DisplayText("Zip")] Zip,
         [Utils.DisplayText("AlphaNumeric")] AlphaNumeric,
         [Utils.DisplayText("AlphaOnly")] AlphaOnly,
         [Utils.DisplayText("AlphaAndDashes")] AlphaAndDashes,

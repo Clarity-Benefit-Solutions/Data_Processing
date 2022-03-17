@@ -449,7 +449,7 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("AddressLine2", "AddressLine2", FormatType.AlphaNumeric, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("City", "City", FormatType.AlphaOnly, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("State", "State", FormatType.AlphaOnly, null, 2, 2, 0, 0));
-                        mappings.Add(new TypedCsvColumn("Zip", "Zip", FormatType.Integer, null, 0, 5, 0, 0));
+                        mappings.Add(new TypedCsvColumn("Zip", "Zip", FormatType.Zip, null, 0, 5, 0, 0));
                         mappings.Add(new TypedCsvColumn("Country", "Country", FormatType.AlphaOnly, "US", 2, 2, 0, 0));
                         mappings.Add(new TypedCsvColumn("Email", "Email", FormatType.Email, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("MobileNumber", "MobileNumber", FormatType.NumbersAndDashes, null, 0, 10, 0, 0));
@@ -561,7 +561,7 @@ namespace EtlUtilities
                         mappings.Add(new TypedCsvColumn("AddressLine2", "AddressLine2", FormatType.AlphaNumeric, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("City", "City", FormatType.AlphaOnly, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("State", "State", FormatType.AlphaOnly, null, 2, 2, 0, 0));
-                        mappings.Add(new TypedCsvColumn("Zip", "Zip", FormatType.Integer, null, 0, 5, 0, 0));
+                        mappings.Add(new TypedCsvColumn("Zip", "Zip", FormatType.Zip, null, 0, 5, 0, 0));
                         mappings.Add(new TypedCsvColumn("Country", "Country", FormatType.AlphaOnly, "US", 2, 2, 0, 0));
                         mappings.Add(new TypedCsvColumn("BirthDate", "BirthDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("Relationship", "Relationship", FormatType.String, null, 0, 0, 0, 0));

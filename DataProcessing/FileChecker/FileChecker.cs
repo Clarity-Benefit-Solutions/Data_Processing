@@ -1065,6 +1065,14 @@ namespace DataProcessing
                         }
 
                         break;
+                    case FormatType.Zip:
+                        value = regexInteger.Replace(value, String.Empty);
+                        if (!Utils.IsBlank(value) && value.Length > column.MaxLength)
+                        {
+                            value = value.Substring(0, column.MaxLength);
+                        }
+
+                        break;
                     case FormatType.AlphaNumeric:
                         // replace all non alphanumeric
                         value = regexAlphaNumeric.Replace(value, String.Empty);
@@ -1175,7 +1183,7 @@ namespace DataProcessing
 
 
             // 2. check against GENERAL rules
-            if (column.FixedValue != null && value != column.FixedValue && !column.FixedValue.Split('|').Contains(value))
+            if (column.FixedValue != null && value != column.FixedValue && !column.FixedValue.Split('|').Contains(value) && column.MinLength > 0)
             {
                 this.AddErrorForRow(dataRow, column.SourceColumn,
                     $"{column.SourceColumn} must always be {column.FixedValue}. {orgValue} is not valid");
