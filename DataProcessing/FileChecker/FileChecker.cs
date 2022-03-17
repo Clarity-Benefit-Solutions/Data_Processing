@@ -439,6 +439,15 @@ namespace DataProcessing
                 dataRow.error_message = ErrorSeparator + errMessage;
             }
 
+            if (dataRow.error_code.StartsWith(ErrorSeparator))
+            {
+                dataRow.error_code = dataRow.error_code.Substring(1);
+            }
+
+            if (dataRow.error_message.StartsWith(ErrorSeparator))
+            {
+                dataRow.error_message = dataRow.error_message.Substring(1);
+            }
             //
             int key = dataRow.source_row_no ?? 0;
             if (this.fileCheckResults.ContainsKey(key))
