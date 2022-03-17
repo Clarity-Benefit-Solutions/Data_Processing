@@ -10,13 +10,14 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using CoreUtils.Classes;
+using Microsoft.SqlServer.Server;
 
 // ReSharper disable All
 
 namespace CoreUtils
 {
-    
-    
+
+
     public class DbUtils
     {
         public delegate void OnLogOperationCallback(MessageLogParams logParams);
@@ -337,7 +338,7 @@ namespace CoreUtils
             string[] fileNameParts = fileName?.Split(new[] { FilePartsDelimiter }, StringSplitOptions.None);
 
             // return the last part of the fileName
-            return fileNameParts[fileNameParts.Length - 1]?? "";
+            return fileNameParts[fileNameParts.Length - 1] ?? "";
 
             //int indexOfSep = fileName.IndexOf($"{FilePartsDelimiter}");
             //if (indexOfSep > 0)
@@ -361,8 +362,8 @@ namespace CoreUtils
             fileName = fileName.Trim();
             //
             return fileName;
-        } 
-        
+        }
+
         public static string AddUniqueIdToFileName(string fileName)
         {
             fileName = StripUniqueIdAndHeaderTypeFromFileName(fileName);
@@ -396,12 +397,22 @@ namespace CoreUtils
             }
         }
 
-      
 
+        public static Boolean IsTestFile(string srcFilePath)
+        {
+            FileInfo fileInfo = new FileInfo(srcFilePath);
+
+            if (fileInfo.Name?.ToLower().IndexOf("test") >= 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
         public static string AddUniqueIdToFileAndLogToDb(string srcFilePath, Boolean fixFileNameLength, FileOperationLogParams fileLogParams)
         {
             // get filename without leading fileid
-           
+
             // ignore some files
             if (FileUtils.IgnoreFile(srcFilePath))
             {

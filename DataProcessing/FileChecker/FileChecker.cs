@@ -93,6 +93,7 @@ namespace DataProcessing
             var newFilePath = this.srcFilePath;
             var newErrorFilePath = "";
 
+
             // act on result
             switch (result)
             {
@@ -100,7 +101,14 @@ namespace DataProcessing
                 ///////////////////////////////////////
                 case OperationResult.Ok:
                     ///////////////////////////////////////
-                    newFilePath = $"{Vars.alegeusFilesPreCheckOKRoot}/{fileName}";
+                    if (DbUtils.IsTestFile(this.srcFilePath))
+                    {
+                        newFilePath = $"{Vars.alegeusFilesPreCheckTestRoot}/{fileName}";
+                    }
+                    else
+                    {
+                        newFilePath = $"{Vars.alegeusFilesPreCheckOKRoot}/{fileName}";
+                    }
                     FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
                     {
                         // add to fileLog
@@ -122,7 +130,14 @@ namespace DataProcessing
                     ///////////////////////////////////////
 
                     string srcFileName = Path.GetFileName(this.srcFilePath);
-                    newFilePath = $"{Vars.alegeusFilesPreCheckFailRoot}/{fileName}";
+                    if (DbUtils.IsTestFile(this.srcFilePath))
+                    {
+                        newFilePath = $"{Vars.alegeusFilesPreCheckTestRoot}/{fileName}";
+                    }
+                    else
+                    {
+                        newFilePath = $"{Vars.alegeusFilesPreCheckFailRoot}/{fileName}";
+                    }
                     newErrorFilePath = $"{newFilePath}.err";
 
                     // export error file
@@ -1086,7 +1101,7 @@ namespace DataProcessing
                         value = regexInteger.Replace(value, String.Empty);
                         if (!Utils.IsBlank(value) && value.Length > column.MaxLength)
                         {
-                            value = Utils.Right(value,column.MaxLength);
+                            value = Utils.Right(value, column.MaxLength);
                         }
 
                         break;
@@ -1197,7 +1212,7 @@ namespace DataProcessing
             // set row column value to the fixed value if it has changed
             if (value != orgValue)
             {
-                dataRow.SetColumnValue(column.SourceColumn, value); 
+                dataRow.SetColumnValue(column.SourceColumn, value);
             }
 
 
@@ -1219,8 +1234,8 @@ namespace DataProcessing
             // maxLength
             if (column.MaxLength > 0 && value.Length > column.MaxLength)
             {
-                    this.AddErrorForRow(dataRow, column.SourceColumn,
-                    $"{column.SourceColumn} must be maximum {column.MaxLength} characters long. {orgValue} is not valid");
+                this.AddErrorForRow(dataRow, column.SourceColumn,
+                $"{column.SourceColumn} must be maximum {column.MaxLength} characters long. {orgValue} is not valid");
             }
 
             // min/max value

@@ -370,6 +370,7 @@ namespace DataProcessing
         public string alegeusFilesPreCheckOKRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckOKPath")}";
         public string alegeusFilesPreCheckOKArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckOKArchivePath")}";
         public string alegeusFilesPreCheckFailRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckFailPath")}";
+        public string alegeusFilesPreCheckTestRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckTestPath")}";
         public string alegeusFilesReprocessRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesReprocessPath")}";
 
         public string alegeusFilesPreCheckHoldAllRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckHoldAllPath")}";

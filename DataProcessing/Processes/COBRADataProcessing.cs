@@ -494,7 +494,7 @@ namespace DataProcessing
                     Boolean processThisFile = false;
                     string destDirPath = "";
 
-                    if (fileInfo.Name.IndexOf("Test", StringComparison.CurrentCultureIgnoreCase) >= 0)
+                    if (DbUtils.IsTestFile(srcFilePath))
                     {
                         processThisFile = true;
                         destDirPath = $"{Vars.cobraImportTestFilesRoot}";
