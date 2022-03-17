@@ -1210,7 +1210,7 @@ namespace DataProcessing
             // maxLength
             if (column.MaxLength > 0 && value.Length > column.MaxLength)
             {
-                this.AddErrorForRow(dataRow, column.SourceColumn,
+                    this.AddErrorForRow(dataRow, column.SourceColumn,
                     $"{column.SourceColumn} must be maximum {column.MaxLength} characters long. {orgValue} is not valid");
             }
 
