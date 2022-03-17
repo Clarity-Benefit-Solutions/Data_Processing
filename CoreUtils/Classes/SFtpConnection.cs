@@ -10,8 +10,8 @@ namespace CoreUtils.Classes
     public delegate void FtpSingleFileCallback(string file1, string file2, string fileContents);
 
 
-    
-    
+
+
     public class SFtpConnection
     {
         // ReSharper disable once InconsistentNaming
@@ -164,17 +164,10 @@ namespace CoreUtils.Classes
                     {
                         // Console.WriteLine("Ignoring symbolic link {0}", ftpFile.FullName);
                     }
-                    else if (ftpFile.IsRegularFile && ftpFile.Name != "." && ftpFile.Name != ".." &&
+                    else if (ftpFile.IsRegularFile && !FileUtils.IgnoreFile(ftpFile.Name) &&
                              Utils.TextMatchesPattern(ftpFile.Name, fileMask))
                     {
-                        if (ftpFile.Name.StartsWith("."))
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            fileCallback(ftpFile.FullName, null, null);
-                        }
+                        fileCallback(ftpFile.FullName, null, null);
                     }
             }
             catch (Exception ex)

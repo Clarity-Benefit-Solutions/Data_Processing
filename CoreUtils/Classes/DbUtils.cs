@@ -361,6 +361,18 @@ namespace CoreUtils
             fileName = fileName.Trim();
             //
             return fileName;
+        } 
+        
+        public static string AddUniqueIdToFileName(string fileName)
+        {
+            fileName = StripUniqueIdAndHeaderTypeFromFileName(fileName);
+
+            string fileId = Utils.RandomString(3);
+            fileName = $"{fileId}{FilePartsDelimiter}{fileName}";
+            //
+            fileName = fileName.Trim();
+            //
+            return fileName;
         }
 
 
@@ -384,16 +396,16 @@ namespace CoreUtils
             }
         }
 
+      
+
         public static string AddUniqueIdToFileAndLogToDb(HeaderType headerType, string srcFilePath,
             Boolean fixFileNameLength,
             FileOperationLogParams fileLogParams)
         {
             // get filename without leading fileid
-            FileInfo srcFileInfo = new FileInfo(srcFilePath);
-            string oldFileName = srcFileInfo.Name;
-
+           
             // ignore some files
-            if (oldFileName.StartsWith("."))
+            if (FileUtils.IgnoreFile(srcFilePath))
             {
                 return srcFilePath;
             }
@@ -401,13 +413,16 @@ namespace CoreUtils
 
             // if file has uniqueID and headerttype already, nothing to do
             if (!Utils.IsBlank(GetUniqueIdFromFileName(srcFilePath))
-                && (GetHeaderTypeFromFileName(srcFilePath) == headerType || headerType == HeaderType.NotApplicable))
+               /* && (GetHeaderTypeFromFileName(srcFilePath) == headerType || headerType == HeaderType.NotApplicable)*/)
             {
                 return srcFilePath;
             }
 
+            FileInfo srcFileInfo = new FileInfo(srcFilePath);
+            string oldFileName = srcFileInfo.Name;
 
-            string newFileName = AddUniqueIdAndHeaderTypeToFileName(oldFileName, headerType);
+            //string newFileName = AddUniqueIdAndHeaderTypeToFileName(oldFileName, headerType);
+            string newFileName = AddUniqueIdToFileName(oldFileName);
 
             // fix for alegeus - max 30 chars incvluding extension
             string newFileNameFixed = newFileName;

@@ -251,6 +251,21 @@ namespace EtlUtilities
 
         public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath)
         {
+            // convert excel files to csv to check
+            string fileName = Path.GetFileName(srcFilePath);
+            string fileExt = Path.GetExtension(srcFilePath);
+            if (fileExt == ".xlsx" || fileExt == ".xls")
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
+            }
+
+
             //todo: FileChecker: @Luis: get specs record_types other than IB, IC, IH
             var csvDataReaderOptions =
                 new CsvDataReaderOptions
@@ -259,7 +274,7 @@ namespace EtlUtilities
                 };
 
             using var csv = SylvanCsvDataReader.Create(srcFilePath, csvDataReaderOptions);
-
+            // read till we match header type for line
             int rowNo = 0;
             while (csv.Read())
             {

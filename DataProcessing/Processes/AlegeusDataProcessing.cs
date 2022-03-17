@@ -140,6 +140,8 @@ namespace DataProcessing
                         rowFolderName, DirectoryIterateType.Files, false, "*.*",
                         (srcFilePath, destFilePath, dummy2) =>
                         {
+                            // convert xls* files  to csv
+                            
                             var headerType = Import.GetAlegeusHeaderTypeFromFile(srcFilePath);
 
                             // add uniqueId to file so we can track it across folders and operations

@@ -113,7 +113,7 @@ namespace CoreUtils.Classes
                 // callback for each file
                 foreach (var file in files)
                 {
-                    if (Path.GetFileName(file).StartsWith("."))
+                    if (IgnoreFile(file))
                     {
                         continue;
                     }
@@ -702,6 +702,19 @@ namespace CoreUtils.Classes
             {
                 //ignore
             }
+        }
+
+        public static Boolean IgnoreFile(string srcFilePath)
+        {
+            FileInfo srcFileInfo = new FileInfo(srcFilePath);
+            string fileName = srcFileInfo.Name;
+
+            if (fileName.StartsWith("."))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

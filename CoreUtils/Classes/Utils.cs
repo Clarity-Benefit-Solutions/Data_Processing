@@ -170,58 +170,157 @@ namespace CoreUtils.Classes
             return number;
         }
 
-        public static bool IsIsoDate(string value)
+        public static bool IsIsoDate(string value, Boolean checkNotNull = true)
         {
+            if (Utils.IsBlank(value))
+            {
+                if (checkNotNull)
+                {
+                    return false;
+                }
+                return true;
+            }
+
             Boolean parsed = DateTime.TryParseExact(value, "yyyyMMdd", null, DateTimeStyles.None, out var aDate);
             if (!parsed)
             {
                 return false;
             }
+
             return true;
         }
-        public static bool IsIsoDateTime(string value)
+        public static bool IsIsoDateTime(string value, Boolean checkNotNull = true)
         {
+            if (Utils.IsBlank(value))
+            {
+                if (checkNotNull)
+                {
+                    return false;
+                }
+                return true;
+            }
+
             Boolean parsed = DateTime.TryParseExact(value, "yyyyMMdd HHmmss", null, DateTimeStyles.None, out var aDate);
             if (!parsed)
             {
                 return false;
             }
+            if (aDate == DateTime.MinValue && checkNotNull)
+            {
+                return false;
+
+            }
             return true;
         }
 
-        public static DateTime ToDate(string value)
+        public static DateTime? ToDate(string value)
         {
-            Boolean parsed = DateTime.TryParseExact(value, "yyyyMMdd", null, DateTimeStyles.None, out var aDate);
-            if (!parsed)
-            {
-                return DateTime.MinValue; // throw new Exception($"Could Not Convert String {value} into a valid date using format yyyyMMdd");
-            }
+            DateTime? aDate = Utils.ToDateTime(value);
+
+            aDate = aDate?.Date;
             return aDate;
+
         }
-        public static DateTime ToDateTime(string value)
+        public static DateTime? ToDateTime(string value)
         {
-            Boolean parsed = DateTime.TryParseExact(value, "yyyyMMdd HHmmss", null, DateTimeStyles.None, out var aDate);
-            if (!parsed)
+            if (Utils.IsBlank(value))
             {
-                return DateTime.MinValue; // throw new Exception($"Could Not Convert String {value} into a valid date using format yyyyMMdd");
+                return null;
             }
-            return aDate;
+
+            Boolean parsed = false;
+
+            // ISODateTime
+            parsed = DateTime.TryParseExact(value, "yyyyMMdd HH:mm:ss", null, DateTimeStyles.None, out var aDateTimeIso);
+            if (parsed)
+            {
+                return aDateTimeIso;
+            }
+
+            // ISODate
+            parsed = DateTime.TryParseExact(value, "yyyyMMdd", null, DateTimeStyles.None, out var aDateIso);
+            if (parsed)
+            {
+                return aDateIso;
+            }
+
+            // US Long date Time
+            parsed = DateTime.TryParseExact(value, "dd-MMM-yyyy hh:mm:ss tt", null, DateTimeStyles.None, out var aDateTimeUs);
+            if (parsed)
+            {
+                return aDateTimeUs;
+            }
+
+            // US Long date 
+            parsed = DateTime.TryParseExact(value, "dd-MMM-yyyy", null, DateTimeStyles.None, out var aDateUs);
+            if (parsed)
+            {
+                return aDateUs;
+            }
+
+            // us long date time 2 yr
+            parsed = DateTime.TryParseExact(value, "dd-MMM-yy hh:mm:ss tt", null, DateTimeStyles.None, out var aDateTimeUs2);
+            if (parsed)
+            {
+                return aDateTimeUs2;
+            }
+
+            // us long date time 2 yr
+            parsed = DateTime.TryParseExact(value, "dd-MMM-yy", null, DateTimeStyles.None, out var aDateUs2);
+            if (parsed)
+            {
+                return aDateUs2;
+            }
+
+
+            return null;
         }
 
-        public static string ToDateString(DateTime value)
+        public static string ToDateString(DateTime? value)
         {
-            var str = value.ToShortDateString();
+            if (value == null)
+            {
+                return "";
+            }
+            var str = value?.ToShortDateString();
+            return str;
+        }
+        public static string ToIsoDateString(DateTime? value)
+        {
+            if (value == null)
+            {
+                return "";
+            }
+            var str = value?.ToString("yyyyMMdd");
+            return str;
+        }
+        public static string ToIsoDateTimeString(DateTime? value)
+        {
+            if (value == null)
+            {
+                return "";
+            }
+
+            var str = value?.ToString("yyyyMMdd HH:mm:ss");
             return str;
         }
 
-        public static string ToTimeString(DateTime value)
+        public static string ToTimeString(DateTime? value)
         {
-            var str = value.ToShortTimeString();
+            if (value == null)
+            {
+                return "";
+            }
+            var str = value?.ToShortTimeString();
             return str;
         }
 
-        public static string ToDateTimeString(DateTime value)
+        public static string ToDateTimeString(DateTime? value)
         {
+            if (value == null)
+            {
+                return "";
+            }
             var str = $"{ToDateString(value)} {ToTimeString(value)} ";
             return str;
         }

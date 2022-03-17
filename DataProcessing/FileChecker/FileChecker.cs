@@ -783,7 +783,7 @@ namespace DataProcessing
                         DataRow dbData = dbRows[0];
                         DateTime actualPlanStartDate = (DateTime)dbData["planstart"];
                         DateTime actualPlanEndDate = (DateTime)dbData["planend"];
-                        DateTime actualGracePeriodEndDate = Utils.ToDate(dbData["actualGracePeriodEndDate"]?.ToString());
+                        //DateTime? actualGracePeriodEndDate = Utils.ToDate(dbData["actualGracePeriodEndDate"]?.ToString());
 
                         //check start and end dates 
                         if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) && Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
@@ -1032,10 +1032,11 @@ namespace DataProcessing
 
         #region CheckUtils
         private static readonly Regex regexInteger = new Regex("[^0-9]");
+        private static readonly Regex regexDate = new Regex(@"[^a-zA-Z0-9\s:\-\//]");
         private static readonly Regex regexAlphaNumeric = new Regex(@"[^a-zA-Z0-9\s]");
-        private static readonly Regex regexAlphaOnly = new Regex("[^a-zA-Z]");
-        private static readonly Regex regexAlphaAndDashes = new Regex("[^a-zA-Z-]");
-        private static readonly Regex regexNumericAndDashes = new Regex("[^0-9-]");
+        private static readonly Regex regexAlphaOnly = new Regex(@"[^a-zA-Z]");
+        private static readonly Regex regexAlphaAndDashes = new Regex(@"[^a-zA-Z\-]");
+        private static readonly Regex regexNumericAndDashes = new Regex(@"[^0-9\-]");
         private static readonly Regex regexDouble = new Regex("[^0-9.]");
 
         public string EnsureValueIsOfFormatAndMatchesRules(mbi_file_table_stage dataRow, TypedCsvColumn column)
@@ -1111,8 +1112,9 @@ namespace DataProcessing
                         // todo: CheckDate: handle & fix 02-Jun-61 12:00:00 AM format
                         // todo: CheckDate: handle & fix 02-Jun-61  formats
                         // remove any non digits
-                        value = regexInteger.Replace(value, String.Empty);
-                        if (!Utils.IsIsoDate(value))
+                        value = regexDate.Replace(value, String.Empty);
+                        value = Utils.ToIsoDateString(Utils.ToDate(value));
+                        if (!Utils.IsIsoDate(value, column.MaxLength > 0))
                         {
                             this.AddErrorForRow(dataRow, column.SourceColumn,
                                 $"{column.SourceColumn} must be in format YYYYMMDD. {orgValue} is not valid");
@@ -1123,8 +1125,10 @@ namespace DataProcessing
 
                     case FormatType.IsoDateTime:
                         // remove any non digits
-                        value = regexInteger.Replace(value, String.Empty);
-                        if (!Utils.IsIsoDateTime(value))
+                        value = regexDate.Replace(value, String.Empty);
+                        value = Utils.ToDateTimeString(Utils.ToDateTime(value));
+
+                        if (!Utils.IsIsoDateTime(value, column.MaxLength > 0))
                         {
                             this.AddErrorForRow(dataRow, column.SourceColumn,
                                 $"{column.SourceColumn} must be in format YYYYMMDD. {orgValue} is not valid");
