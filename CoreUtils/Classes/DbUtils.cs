@@ -367,7 +367,7 @@ namespace CoreUtils
         {
             fileName = StripUniqueIdAndHeaderTypeFromFileName(fileName);
 
-            string fileId = Utils.RandomString(3);
+            string fileId = Utils.RandomStringNumbers(3);
             fileName = $"{fileId}{FilePartsDelimiter}{fileName}";
             //
             fileName = fileName.Trim();
@@ -398,9 +398,7 @@ namespace CoreUtils
 
       
 
-        public static string AddUniqueIdToFileAndLogToDb(HeaderType headerType, string srcFilePath,
-            Boolean fixFileNameLength,
-            FileOperationLogParams fileLogParams)
+        public static string AddUniqueIdToFileAndLogToDb(string srcFilePath, Boolean fixFileNameLength, FileOperationLogParams fileLogParams)
         {
             // get filename without leading fileid
            

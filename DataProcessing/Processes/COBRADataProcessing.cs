@@ -198,7 +198,7 @@ namespace DataProcessing
                             if (processThisFile && !Utils.IsBlank((destDirPath)))
                             {
                                 // add uniqueId to file so we can track it across folders and operations
-                                var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(headerType, srcFilePath,
+                                var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb( srcFilePath,
                                     true,
                                     fileLogParams1);
 

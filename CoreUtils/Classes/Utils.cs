@@ -82,6 +82,12 @@ namespace CoreUtils.Classes
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[Random.Next(s.Length)]).ToArray());
         }
+          public static string RandomStringNumbers(int length)
+        {
+            const string chars = "0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[Random.Next(s.Length)]).ToArray());
+        }
 
         //extension method to get desc of enum item
         public static string ToDescription(this Enum en)

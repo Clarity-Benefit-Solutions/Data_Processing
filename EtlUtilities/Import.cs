@@ -249,6 +249,93 @@ namespace EtlUtilities
             return tempFileName;
         }
 
+        public static string GetUniformNameForFile(PlatformType platformType, string srcFilePath)
+        {
+            var srcFileName = Path.GetFileName(srcFilePath);
+            var useThisFilePath = srcFilePath;
+
+            // convert excel files to csv to check
+            string fileName = Path.GetFileName(srcFilePath);
+            string fileExt = Path.GetExtension(srcFilePath);
+            if (fileExt == ".xlsx" || fileExt == ".xls")
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    null,
+                    null);
+
+                useThisFilePath = csvFilePath;
+            }
+
+            string BenCode = "";
+            string recType = "";
+
+
+            //todo: FileChecker: @Luis: get specs record_types other than IB, IC, IH
+            var csvDataReaderOptions =
+                new CsvDataReaderOptions
+                {
+                    // also take header row as  data in case there uis no file header
+                    HasHeaders = false
+                };
+
+            using var csv = SylvanCsvDataReader.Create(useThisFilePath, csvDataReaderOptions);
+            // read till we match header type for line
+            int rowNo = 0;
+            while (csv.Read())
+            {
+                rowNo++;
+                //
+                var firstColValue = csv.GetString(0);
+                if (!Utils.IsBlank(firstColValue) && firstColValue.Length == 2
+                                                  && firstColValue.StartsWith("I",
+                                                      StringComparison.InvariantCultureIgnoreCase)
+                                                  && !firstColValue.Equals("IA",
+                                                      StringComparison.InvariantCultureIgnoreCase)
+                   )
+                {
+                    recType = firstColValue;
+
+                    //
+                    var secondColValue = csv.GetString(1);
+                    var thirdColValue = csv.GetString(2);
+                    if (thirdColValue.StartsWith("BEN", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        BenCode = thirdColValue;
+                    }
+
+
+
+                    // exit when we have both
+                    if (!Utils.IsBlank(BenCode) && !Utils.IsBlank(recType))
+                    {
+                        break;
+                    }
+
+                }
+            }
+            //
+
+            string platformCode = "";
+            if (platformType == PlatformType.Alegeus)
+            {
+                platformCode = "AL";
+            }
+            else if (platformType == PlatformType.Cobra)
+            {
+                platformCode = "CO";
+            }
+
+            //todo: ensure we detect all file formats
+            string newPath = $"{Path.GetDirectoryName(srcFilePath)}/{DbUtils.GetUniqueIdFromFileName(srcFileName)}--";
+            newPath += $"{ BenCode}_{recType}_{Utils.ToIsoDateString(DateTime.Now)}_{platformCode}{Path.GetExtension(srcFilePath)}";
+            newPath = FileUtils.FixPath(newPath);
+
+            return newPath;
+        }
+
+
         public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath)
         {
             // convert excel files to csv to check
@@ -282,10 +369,10 @@ namespace EtlUtilities
                 var firstColValue = csv.GetString(0);
                 var fileFormat = ImpExpUtils.GetAlegeusRowFormat(firstColValue);
                 var columnCount = csv.FieldCount;
-                
+
                 // todo: do we need to check col count without the extra ,,, we added while importing etc
                 //Object[] values = new Object[] { };
-                
+
                 //csv.GetValues(values);
                 //var line = String.Join()
                 if (columnCount < 1)
@@ -351,6 +438,7 @@ namespace EtlUtilities
             return HeaderType.NotApplicable;
 
         }
+
         public static Boolean IsCobraImportFile(string srcFilePath)
         {
             // COBRA files, first line starts with [VERSION],

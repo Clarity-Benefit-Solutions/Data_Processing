@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
 using CoreUtils;
 using CoreUtils.Classes;
 using EtlUtilities;
@@ -15,7 +16,7 @@ namespace DataProcessing
     public class AlegeusDataProcessing
     {
         private Vars Vars { get; } = new Vars();
-       
+
         public static async Task ProcessAll()
         {
             // ensure cobra files are moved
@@ -26,7 +27,7 @@ namespace DataProcessing
             (
                 () =>
                 {
-                    
+
                     Thread.CurrentThread.Name = "ProcessAlegeusFiles";
                     AlegeusDataProcessing alegeusDataProcessing = new AlegeusDataProcessing();
                     alegeusDataProcessing.ProcessAllFiles();
@@ -35,8 +36,8 @@ namespace DataProcessing
         }
 
         public void ProcessAllFiles()
-        {   
-           
+        {
+
 
 
             //
@@ -101,7 +102,7 @@ namespace DataProcessing
             //2. Get list of folders for header from DB
             //decide table name
             var tableName = "dbo.[Header_list_ALL]";
-            
+
             //run query
             var queryString = $"Select * from {tableName} order by template_type, folder_name;";
             var dtHeaderFolders = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null);
@@ -131,7 +132,7 @@ namespace DataProcessing
                     fileLogParams1.ToFtp = rowtoFtp;
                     fileLogParams1.SetSourceFolderName(rowFolderName);
 
-               
+
                     // change from PROD source dir to Ctx source dir
                     rowFolderName = Vars.ConvertFilePathFromProdToCtx(rowFolderName);
                     //
@@ -140,12 +141,14 @@ namespace DataProcessing
                         rowFolderName, DirectoryIterateType.Files, false, "*.*",
                         (srcFilePath, destFilePath, dummy2) =>
                         {
-                            // convert xls* files  to csv
-                            
-                            var headerType = Import.GetAlegeusHeaderTypeFromFile(srcFilePath);
+                            // fix path
+                            srcFilePath = FileUtils.FixPath(srcFilePath);
 
+                            // make FilenameProperty uniform
+                            var uniformFilePath = Import.GetUniformNameForFile(PlatformType.Alegeus, srcFilePath);
+                            
                             // add uniqueId to file so we can track it across folders and operations
-                            var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(headerType, srcFilePath, true,
+                            var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(uniformFilePath, true,
                                 fileLogParams1);
 
                             fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
@@ -312,7 +315,7 @@ namespace DataProcessing
                             throw new Exception(message);
                     }
 
-                    ImpExpUtils. ImportSingleColumnFlatFile( dbConn, srcFilePath, srcFilePath, tableName,
+                    ImpExpUtils.ImportSingleColumnFlatFile(dbConn, srcFilePath, srcFilePath, tableName,
                         "folder_name",
                         "data_row", fileLogParams,
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
@@ -473,7 +476,7 @@ namespace DataProcessing
                         $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
                         "Starting", "Starting PreCheck");
                     DbUtils.LogFileOperation(fileLogParams);
-                    
+
                     //
                     fileChecker.CheckFileAndMove(FileCheckType.AllData);
 
