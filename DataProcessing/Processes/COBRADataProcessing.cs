@@ -366,7 +366,7 @@ namespace DataProcessing
                     FileInfo fileInfo = new FileInfo(srcFilePath);
 
                     // rename txt and mbi files to csv
-                    if (fileInfo.Length <= 10)
+                    if (fileInfo.Length <= 30)
                     {
                         string destFilePath =
                             $"{Vars.cobraImportArchiveEmptyRoot}/{fileInfo.Name}";

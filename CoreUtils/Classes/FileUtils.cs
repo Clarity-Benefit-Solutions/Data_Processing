@@ -14,8 +14,8 @@ namespace CoreUtils.Classes
     public delegate void OnErrorCallback(string arg1, string arg2, Exception ex);
 
 
-    
-    
+
+
     public class FileUtils
     {
         #region IOOperations
@@ -535,19 +535,25 @@ namespace CoreUtils.Classes
                 // do operation
                 if (fileOperation == FileOperation.Move)
                 {
-                    var destFile = new FileInfo(destFilePath);
-                    if (destFile.Exists)
+                    if (FileUtils.FixPath(destFilePath) != FileUtils.FixPath(sourceFilePath))
                     {
-                        destFile.Delete();
-                        fileContents = "";
-                    }
+                        var destFile = new FileInfo(destFilePath);
+                        if (destFile.Exists)
+                        {
+                            destFile.Delete();
+                            fileContents = "";
+                        }
 
-                    srcFileInfo.MoveTo(destFilePath);
+                        srcFileInfo.MoveTo(destFilePath);
+                    }
                 }
                 else if (fileOperation == FileOperation.Copy)
                 {
-                    srcFileInfo.CopyTo(destFilePath, true);
-                    fileContents = "";
+                    if (FileUtils.FixPath(destFilePath) != FileUtils.FixPath(sourceFilePath))
+                    {
+                        srcFileInfo.CopyTo(destFilePath, true);
+                        fileContents = "";
+                    }
                 }
                 else if (fileOperation == FileOperation.Delete || fileOperation == FileOperation.DeleteIfExists)
                 {

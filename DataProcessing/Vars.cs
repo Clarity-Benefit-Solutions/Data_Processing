@@ -345,9 +345,9 @@ namespace DataProcessing
 
         public string salesForceCrmListPath => $"{GetAppSetting("FtpPath")}{GetAppSetting("SalesForceCrmListPath")}";
 
-        public string cobraImportRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("SalesForceCrmListPath")}";
+        public string cobraImportRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("CobraImportPath")}";
 
-        public string cobraImportHoldingRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("CobraImportPath")}";
+        public string cobraImportHoldingRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("CobraImportHoldingPath")}";
 
         public string cobraImportTestFilesRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("CobraImportTestFilesPath")}";
 
