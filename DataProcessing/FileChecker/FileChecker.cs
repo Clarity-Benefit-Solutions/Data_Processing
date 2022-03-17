@@ -1073,6 +1073,14 @@ namespace DataProcessing
                         }
 
                         break;
+                    case FormatType.Phone:
+                        value = regexInteger.Replace(value, String.Empty);
+                        if (!Utils.IsBlank(value) && value.Length > column.MaxLength)
+                        {
+                            value = Utils.Right(value,column.MaxLength);
+                        }
+
+                        break;
                     case FormatType.AlphaNumeric:
                         // replace all non alphanumeric
                         value = regexAlphaNumeric.Replace(value, String.Empty);
@@ -1179,7 +1187,9 @@ namespace DataProcessing
 
             // set row column value to the fixed value if it has changed
             if (value != orgValue)
-            { dataRow.SetColumnValue(column.SourceColumn, value); }
+            {
+                dataRow.SetColumnValue(column.SourceColumn, value); 
+            }
 
 
             // 2. check against GENERAL rules

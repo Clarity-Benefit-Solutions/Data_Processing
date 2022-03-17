@@ -50,6 +50,7 @@ namespace CoreUtils.Classes
         [Utils.DisplayText("String")] String,
         [Utils.DisplayText("Email")] Email,
         [Utils.DisplayText("Zip")] Zip,
+        [Utils.DisplayText("Phone")] Phone,
         [Utils.DisplayText("AlphaNumeric")] AlphaNumeric,
         [Utils.DisplayText("AlphaOnly")] AlphaOnly,
         [Utils.DisplayText("AlphaAndDashes")] AlphaAndDashes,
