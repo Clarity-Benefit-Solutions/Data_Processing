@@ -15,7 +15,6 @@ namespace CoreUtils.Classes
 
 
 
-
     public class FileUtils
     {
         #region IOOperations
@@ -650,6 +649,7 @@ namespace CoreUtils.Classes
             {
                 using (var stream = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
+                    ExcelReaderConfiguration config = new ExcelReaderConfiguration();
                     IExcelDataReader reader = null;
                     if (sourceFilePath.EndsWith(".xls"))
                         reader = ExcelReaderFactory.CreateBinaryReader(stream);
@@ -671,9 +671,22 @@ namespace CoreUtils.Classes
                     {
                         var arr = new List<string>();
                         for (var i = 0; i < ds.Tables[0].Columns.Count; i++)
-                            arr.Add(ds.Tables[0].Rows[rowNo][i].ToString());
+                        {
+                            var fieldValue = ds.Tables[0].Rows[rowNo][i];
+                            string strFieldValue;
+                            if (fieldValue.GetType().Name == "DateTime")
+                            {
+                                strFieldValue = Utils.ToIsoDateTimeString((DateTime) fieldValue);
+                            }
+                            else
+                            {
+                                strFieldValue = fieldValue.ToString() ?? "";
+                            }
+                            arr.Add(strFieldValue);
+                        }
                         rowNo++;
-                        csvContent += string.Join(",", arr) + "\n";
+                        string line = string.Join(",", arr) + "\n";
+                        csvContent += line;
                     }
 
                     //
