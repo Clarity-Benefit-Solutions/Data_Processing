@@ -399,21 +399,19 @@ namespace DataProcessing
                     // EE ID
                     case "employeeid":
                         //ER must exist before any Import files are sent. But for IB files, employee need not exist - he is being added
-                        if (fileFormat != EdiFileFormat.AlegeusDemographics)
-                        {
-                            checkOtherColumns = this.CheckEmployeeExists(dataRow, column, fileFormat);
-                        }
+                        checkOtherColumns = this.CheckEmployeeExists(dataRow, column, fileFormat);
 
                         break;
                     // plan related
                     case "planid":
+                    case "accounttypecode":
                         //case "planstartdate":
                         //case "planenddate":
                         // note: employee need not exist for IC files but employer must have a plan and EE must exist for the ER already via ann IB file load
-                        checkOtherColumns = this.CheckEmployeeExists(dataRow, column);
+                        checkOtherColumns = this.CheckEmployerPlanExists(dataRow, column, fileFormat); 
                         if (checkOtherColumns)
                         {
-                            checkOtherColumns = this.CheckEmployerPlanExists(dataRow, column, fileFormat);
+                            checkOtherColumns = this.CheckEmployeePlanExists(dataRow, column, fileFormat);
                         }
 
                         break;
@@ -618,6 +616,12 @@ namespace DataProcessing
                             newRow["employerid"] = dataRow.EmployerId;
                             newRow["employeeid"] = dataRow.EmployeeID;
                             newRow["is_active"] = dataRow.EmployeeStatus == "2" ? 1 : 0;
+                            dbResults.Rows.Add(newRow);
+
+                            var cacheKey2 =
+                                $"GetAllEmployeesForEmployer-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-AllEmployees";
+                            _cache.Add(cacheKey2, dbResults);
+
                             //
                             return true;
                         }

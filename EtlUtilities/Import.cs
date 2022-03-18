@@ -301,7 +301,7 @@ namespace EtlUtilities
             string recType = "";
 
 
-            //todo: FileChecker: @Luis: get specs record_types other than IB, IC, IH
+            //todo: FileChecker: @Luis: get specs record_types other than IB, IC, 
             var csvDataReaderOptions =
                 new CsvDataReaderOptions
                 {
@@ -370,7 +370,7 @@ namespace EtlUtilities
             }
 
 
-            //todo: FileChecker: @Luis: get specs record_types other than IB, IC, IH
+            //todo: FileChecker: @Luis: get specs record_types other than IB, IC, 
             var csvDataReaderOptions =
                 new CsvDataReaderOptions
                 { // also take header row as  data in case there uis no file header
@@ -757,7 +757,7 @@ namespace EtlUtilities
                     break;
 
                 /////////////////////////////////////////////////////
-                //  IH, RH
+                //  iH, RH
                 case EdiFileFormat.AlegeusEmployeeDeposit:
                 case EdiFileFormat.AlegeusResultsEmployeeDeposit:
                     //
