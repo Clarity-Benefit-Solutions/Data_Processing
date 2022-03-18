@@ -360,7 +360,7 @@ namespace DataProcessing
                 return;
             }
 
-            Boolean checkOtherColumns = false;
+            Boolean hasError = false;
 
             foreach (var column in mappings.Columns)
             {
@@ -393,39 +393,28 @@ namespace DataProcessing
                     // ER ID
                     case "employerid":
                         //ER must exist before any Import files are sent
-                        checkOtherColumns = this.CheckEmployerExists(dataRow, column, fileFormat);
+                        hasError = this.CheckEmployerExists(dataRow, column, fileFormat);
                         break;
 
                     // EE ID
                     case "employeeid":
                         //ER must exist before any Import files are sent. But for IB files, employee need not exist - he is being added
-                        checkOtherColumns = this.CheckEmployeeExists(dataRow, column, fileFormat);
+                        hasError = this.CheckEmployeeExists(dataRow, column, fileFormat);
 
                         break;
                     // plan related
                     case "planid":
-                    case "accounttypecode":
+                    case @"accounttypecode":
                         //case "planstartdate":
                         //case "planenddate":
                         // note: employee need not exist for IC files but employer must have a plan and EE must exist for the ER already via ann IB file load
-                        checkOtherColumns = this.CheckEmployerPlanExists(dataRow, column, fileFormat); 
-                        if (checkOtherColumns)
-                        {
-                            checkOtherColumns = this.CheckEmployeePlanExists(dataRow, column, fileFormat);
-                        }
+                        hasError = this.CheckEmployerPlanExists(dataRow, column, fileFormat);
+                        hasError = this.CheckEmployeePlanExists(dataRow, column, fileFormat);
 
                         break;
 
                     default:
                         break;
-                }
-
-
-                // skip checking other columns if a important column value is invalid
-                if (!checkOtherColumns)
-                {
-                    // do not skip so we can show errors for general rules also for all cols in row
-                    //return;
                 }
 
             }
@@ -521,7 +510,7 @@ namespace DataProcessing
             }
             else
             {
-                return true;
+                return false;
             }
         }
 
@@ -578,7 +567,7 @@ namespace DataProcessing
             }
             else
             {
-                return true;
+                return false;
             }
         }
 
@@ -623,7 +612,7 @@ namespace DataProcessing
                             _cache.Add(cacheKey2, dbResults);
 
                             //
-                            return true;
+                            return false;
                         }
 
                         errorMessage +=
@@ -655,7 +644,7 @@ namespace DataProcessing
             }
             else
             {
-                return true;
+                return false;
             }
         }
 
@@ -700,7 +689,7 @@ namespace DataProcessing
                     if (dbRows.Length == 0)
                     {
                         errorMessage +=
-                            $"The Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId}";
+                            $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId}";
                         ;
                     }
                     else
@@ -714,33 +703,33 @@ namespace DataProcessing
                         if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) && Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
                         {
                             errorMessage +=
-                                $"The Plan Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
                         }
 
                         //check plan dates match Alegeus
                         if (!Utils.IsBlank(dataRow.PlanStartDate) && actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
                         {
                             errorMessage +=
-                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
                         }
 
                         if (!Utils.IsBlank(dataRow.PlanEndDate) && actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate))
                         {
                             errorMessage =
-                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}";
                             ;
                         }
                         //check effectivedate is within plan dates
                         if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage +=
-                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
                         }
 
                         if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage =
-                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}";
                             ;
                         }
 
@@ -760,7 +749,7 @@ namespace DataProcessing
             }
             else
             {
-                return true;
+                return false;
             }
 
         }
@@ -786,20 +775,20 @@ namespace DataProcessing
                     errorMessage += $"The Employer ID cannot be blank";
                     ;
                 }
-                else if (Utils.IsBlank(dataRow.PlanId))
+                else if (Utils.IsBlank(dataRow.AccountTypeCode))
                 {
                     errorMessage += $"The Plan ID cannot be blank";
                     ;
                 }
                 else
                 {
-                    // if we are enrolling an employee in a plan, only check if ER has this EE
-                    if (fileFormat == EdiFileFormat.AlegeusEnrollment)
-                    {
-                        //todo: as it is an enrollment file, it is enlought to chcek the ER has this EE
-                        var result = this.CheckEmployeeExists(dataRow, column, fileFormat);
-                        return result;
-                    }
+                    //// if we are enrolling an employee in a plan, only check if ER has this EE
+                    //if (fileFormat == EdiFileFormat.AlegeusEnrollment)
+                    //{
+                    //    //as it is an enrollment file, check the EE exists and enroll in the plan
+                    //    var hasError = this.CheckEmployeeExists(dataRow, column, fileFormat);
+                    //    //return hasError;
+                    //}
 
                     DataTable dbResults = GetAllEmployeePlansForEmployer(dataRow.EmployerId);
 
@@ -817,13 +806,37 @@ namespace DataProcessing
 
                     if (dbRows.Length == 0)
                     {
+                        if (fileFormat == EdiFileFormat.AlegeusEnrollment)
+                        {
+                            // as it is an enrollment, enroll the EE in this plan demographics file, 
+                            DataRow newRow = dbResults.NewRow();
+                            newRow["employerid"] = dataRow.EmployerId;
+                            newRow["employeeid"] = dataRow.EmployeeID;
+                            newRow["plancode"] = dataRow.AccountTypeCode;
+                            newRow["plandesc"] = dataRow.PlanId;
+                            newRow["planstart"] = Utils.ToDateTime( dataRow.PlanStartDate);
+                            newRow["planend"] = Utils.ToDateTime(dataRow.PlanEndDate);
+
+                            dbResults.Rows.Add(newRow);
+
+                            var cacheKey2 =
+                                $"GetAllEmployeePlansForEmployer-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-AllEmployeePlans";
+                            _cache.Add(cacheKey2, dbResults);
+
+                            //
+                            return false;
+                        }
+
                         errorMessage +=
-                            $"The Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId} and Employee Id {dataRow.EmployeeID}";
+                            $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId} and Employee Id {dataRow.EmployeeID}";
                         ;
                     }
                     else
                     {
                         DataRow dbData = dbRows[0];
+
+                        // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
+
                         DateTime actualPlanStartDate = (DateTime)dbData["planstart"];
                         DateTime actualPlanEndDate = (DateTime)dbData["planend"];
                         //DateTime? actualGracePeriodEndDate = Utils.ToDate(dbData["actualGracePeriodEndDate"]?.ToString());
@@ -832,33 +845,33 @@ namespace DataProcessing
                         if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) && Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
                         {
                             errorMessage +=
-                                $"The Plan Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
                         }
 
                         //check plan dates match Alegeus
                         if (!Utils.IsBlank(dataRow.PlanStartDate) && actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
                         {
                             errorMessage +=
-                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode} and PlanID {dataRow.PlanId} and Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
                         }
 
                         if (!Utils.IsBlank(dataRow.PlanEndDate) && actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate))
                         {
                             errorMessage =
-                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}";
                             ;
                         }
                         //check effectivedate is within plan dates
                         if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage +=
-                                $"The Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
                         }
 
                         if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage =
-                                $"The Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}";
                             ;
                         }
 
@@ -879,7 +892,7 @@ namespace DataProcessing
             }
             else
             {
-                return true;
+                return false;
             }
         }
 

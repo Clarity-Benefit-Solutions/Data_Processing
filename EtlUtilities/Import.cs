@@ -757,7 +757,7 @@ namespace EtlUtilities
                     break;
 
                 /////////////////////////////////////////////////////
-                //  iH, RH
+                //  IH, RH
                 case EdiFileFormat.AlegeusEmployeeDeposit:
                 case EdiFileFormat.AlegeusResultsEmployeeDeposit:
                     //
