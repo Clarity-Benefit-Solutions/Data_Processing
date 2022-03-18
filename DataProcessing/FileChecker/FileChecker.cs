@@ -360,7 +360,7 @@ namespace DataProcessing
                 return;
             }
 
-            Boolean skipRestOfRow = false;
+            Boolean checkOtherColumns = false;
 
             foreach (var column in mappings.Columns)
             {
@@ -393,7 +393,7 @@ namespace DataProcessing
                     // ER ID
                     case "employerid":
                         //ER must exist before any Import files are sent
-                        skipRestOfRow = this.CheckEmployerExists(dataRow, column, fileFormat);
+                        checkOtherColumns = this.CheckEmployerExists(dataRow, column, fileFormat);
                         break;
 
                     // EE ID
@@ -401,7 +401,7 @@ namespace DataProcessing
                         //ER must exist before any Import files are sent. But for IB files, employee need not exist - he is being added
                         if (fileFormat != EdiFileFormat.AlegeusDemographics)
                         {
-                            skipRestOfRow = this.CheckEmployeeExists(dataRow, column, fileFormat);
+                            checkOtherColumns = this.CheckEmployeeExists(dataRow, column, fileFormat);
                         }
 
                         break;
@@ -410,10 +410,10 @@ namespace DataProcessing
                         //case "planstartdate":
                         //case "planenddate":
                         // note: employee need not exist for IC files but employer must have a plan and EE must exist for the ER already via ann IB file load
-                        skipRestOfRow = this.CheckEmployeeExists(dataRow, column);
-                        if (!skipRestOfRow)
+                        checkOtherColumns = this.CheckEmployeeExists(dataRow, column);
+                        if (checkOtherColumns)
                         {
-                            skipRestOfRow = this.CheckEmployerPlanExists(dataRow, column, fileFormat);
+                            checkOtherColumns = this.CheckEmployerPlanExists(dataRow, column, fileFormat);
                         }
 
                         break;
@@ -424,7 +424,7 @@ namespace DataProcessing
 
 
                 // skip checking other columns if a important column value is invalid
-                if (skipRestOfRow)
+                if (!checkOtherColumns)
                 {
                     // do not skip so we can show errors for general rules also for all cols in row
                     //return;
@@ -523,7 +523,7 @@ namespace DataProcessing
             }
             else
             {
-                return false;
+                return true;
             }
         }
 
@@ -580,7 +580,7 @@ namespace DataProcessing
             }
             else
             {
-                return false;
+                return true;
             }
         }
 
@@ -606,16 +606,22 @@ namespace DataProcessing
                 }
                 else
                 {
-                    // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
-                    if (fileFormat == EdiFileFormat.AlegeusDemographics)
-                    {
-                        return false;
-                    }
-
                     DataTable dbResults = GetAllEmployeesForEmployer(dataRow.EmployerId);
                     DataRow[] dbRows = dbResults.Select($"employerid = '{dataRow.EmployerId}' and employeeid = '{dataRow.EmployeeID}'");
                     if (dbRows.Length == 0)
                     {
+                        // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
+                        if (fileFormat == EdiFileFormat.AlegeusDemographics)
+                        {
+                            // as it is an demographics file, add this employee to the ER-EE table so a check for plan enrollemnt within same run or before reaggregation from Alegeus will suceed
+                            DataRow newRow = dbResults.NewRow();
+                            newRow["employerid"] = dataRow.EmployerId;
+                            newRow["employeeid"] = dataRow.EmployeeID;
+                            newRow["is_active"] = dataRow.EmployeeStatus == "2" ? 1 : 0;
+                            //
+                            return true;
+                        }
+
                         errorMessage +=
                             $"The Employee ID {dataRow.EmployeeID} could not be found for Employer Id {dataRow.EmployerId}";
                         ;
@@ -645,7 +651,7 @@ namespace DataProcessing
             }
             else
             {
-                return false;
+                return true;
             }
         }
 
@@ -674,6 +680,7 @@ namespace DataProcessing
                 else
                 {
                     DataTable dbResults = GetAllPlansForEmployer(dataRow.EmployerId);
+
                     // planid is not always present e.g. in deposit file
                     string filter = $"employer_id = '{dataRow.EmployerId}'";
                     if (!Utils.IsBlank(dataRow.AccountTypeCode))
@@ -749,7 +756,7 @@ namespace DataProcessing
             }
             else
             {
-                return false;
+                return true;
             }
 
         }
@@ -782,6 +789,14 @@ namespace DataProcessing
                 }
                 else
                 {
+                    // if we are enrolling an employee in a plan, only check if ER has this EE
+                    if (fileFormat == EdiFileFormat.AlegeusEnrollment)
+                    {
+                        //todo: as it is an enrollment file, it is enlought to chcek the ER has this EE
+                        var result = this.CheckEmployeeExists(dataRow, column, fileFormat);
+                        return result;
+                    }
+
                     DataTable dbResults = GetAllEmployeePlansForEmployer(dataRow.EmployerId);
 
                     // planid is not always present e.g. in deposit file
@@ -860,7 +875,7 @@ namespace DataProcessing
             }
             else
             {
-                return false;
+                return true;
             }
         }
 
@@ -1149,8 +1164,6 @@ namespace DataProcessing
                         break;
 
                     case FormatType.IsoDate:
-                        // todo: CheckDate: handle & fix 02-Jun-61 12:00:00 AM format
-                        // todo: CheckDate: handle & fix 02-Jun-61  formats
                         // remove any non digits
                         value = regexDate.Replace(value, String.Empty);
                         value = Utils.ToIsoDateString(Utils.ToDate(value));

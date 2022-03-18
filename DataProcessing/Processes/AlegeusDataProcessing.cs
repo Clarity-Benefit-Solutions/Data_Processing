@@ -296,7 +296,6 @@ namespace DataProcessing
                     DbUtils.TruncateTable(dbConn, tableName,
                         fileLogParams?.GetMessageLogParams());
 
-                    //todo: headers - remove old header line and put new line
                     //2. import file
                     string procName;
                     switch (headerType)

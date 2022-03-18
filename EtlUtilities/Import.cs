@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using CoreUtils;
 using CoreUtils.Classes;
 using CsvHelper;
@@ -344,9 +345,6 @@ namespace EtlUtilities
                 }
             }
             //
-
-
-            //todo: ensure we detect all file formats
             newPath = $"{Path.GetDirectoryName(srcFilePath)}/{DbUtils.GetUniqueIdFromFileName(srcFileName)}--";
             newPath += $"{testMarker}{ BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
             newPath = FileUtils.FixPath(newPath);
@@ -389,11 +387,6 @@ namespace EtlUtilities
                 var fileFormat = ImpExpUtils.GetAlegeusRowFormat(firstColValue);
                 var columnCount = csv.FieldCount;
 
-                // todo: do we need to check col count without the extra ,,, we added while importing etc
-                //Object[] values = new Object[] { };
-
-                //csv.GetValues(values);
-                //var line = String.Join()
                 if (columnCount < 1)
                 {
                     continue;
@@ -450,11 +443,14 @@ namespace EtlUtilities
                         }
                     default:
                         return HeaderType.Old;
+                        // todo: determine header type for ALL files instead of defaulting to Old
+                        //string message1 = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Could Not Determine Header Type for {srcFilePath}";
+                        //throw new Exception(message1);
                 }
             }
 
-            //todo: ensure we detect all file formats
-            return HeaderType.NotApplicable;
+            string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Could Not Determine Header Type for {srcFilePath}";
+            throw new Exception(message);
 
         }
 
