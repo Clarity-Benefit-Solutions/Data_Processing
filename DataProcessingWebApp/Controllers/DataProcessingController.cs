@@ -40,7 +40,6 @@ namespace DataProcessingWebApp.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        //todo: how does a webapp access local files
         // GET api/<controller>/5
         public async Task<HttpResponseMessage> Get(string id)
         {

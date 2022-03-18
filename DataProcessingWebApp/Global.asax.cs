@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Permissions;
 using System.Web;
@@ -21,6 +22,7 @@ namespace DataProcessingWebApp
             //DataProcessing.Vars.IsRunningAsWebApp = true;
             //DataProcessing.Vars.WebAppRootPath = System.Web.Hosting.HostingEnvironment.MapPath("~/"); ;
             //
+            Debug.Assert(false);
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

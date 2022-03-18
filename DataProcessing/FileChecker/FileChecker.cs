@@ -405,10 +405,11 @@ namespace DataProcessing
                     // plan related
                     case "planid":
                     case @"accounttypecode":
-                        //case "planstartdate":
-                        //case "planenddate":
-                        // note: employee need not exist for IC files but employer must have a plan and EE must exist for the ER already via ann IB file load
-                        hasError = this.CheckEmployerPlanExists(dataRow, column, fileFormat);
+                        if (fileFormat == EdiFileFormat.AlegeusEnrollment)
+                        {
+                            hasError = this.CheckEmployerPlanExists(dataRow, column, fileFormat);
+                        }
+
                         hasError = this.CheckEmployeePlanExists(dataRow, column, fileFormat);
 
                         break;
@@ -665,9 +666,9 @@ namespace DataProcessing
                     errorMessage += $"The Employer ID cannot be blank";
                     ;
                 }
-                else if (Utils.IsBlank(dataRow.PlanId))
+                else if (Utils.IsBlank(dataRow.AccountTypeCode))
                 {
-                    errorMessage += $"The Plan ID cannot be blank";
+                    errorMessage += $"The AccountTypeCode cannot be blank";
                     ;
                 }
                 else
@@ -777,7 +778,7 @@ namespace DataProcessing
                 }
                 else if (Utils.IsBlank(dataRow.AccountTypeCode))
                 {
-                    errorMessage += $"The Plan ID cannot be blank";
+                    errorMessage += $"The AccountTypeCode cannot be blank";
                     ;
                 }
                 else
@@ -814,7 +815,7 @@ namespace DataProcessing
                             newRow["employeeid"] = dataRow.EmployeeID;
                             newRow["plancode"] = dataRow.AccountTypeCode;
                             newRow["plandesc"] = dataRow.PlanId;
-                            newRow["planstart"] = Utils.ToDateTime( dataRow.PlanStartDate);
+                            newRow["planstart"] = Utils.ToDateTime(dataRow.PlanStartDate);
                             newRow["planend"] = Utils.ToDateTime(dataRow.PlanEndDate);
 
                             dbResults.Rows.Add(newRow);
