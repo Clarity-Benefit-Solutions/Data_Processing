@@ -12,7 +12,7 @@ using EtlUtilities;
 
 // ReSharper disable StringLiteralTypo
 
-//todo: FTPErrors: how to avoid reprocessing the same result file over and over again: shall we move all files older than 2 days?
+//todo: FTPErrors: how to avoid reprocessing the same result file over and over again: shall we move all files older than 2 days? does Alegeus ever move them?
 namespace DataProcessing
 {
     public class AlegeusErrorLog

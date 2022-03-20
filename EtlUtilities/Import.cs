@@ -301,7 +301,6 @@ namespace EtlUtilities
             string recType = "";
 
 
-            //todo: FileChecker: @Luis: get specs record_types other than IB, IC, 
             var csvDataReaderOptions =
                 new CsvDataReaderOptions
                 {
@@ -316,6 +315,7 @@ namespace EtlUtilities
             {
                 rowNo++;
                 //
+                // col1: Record Type
                 var firstColValue = csv.GetString(0);
                 if (!Utils.IsBlank(firstColValue) && firstColValue.Length == 2
                                                   && firstColValue.StartsWith("I",
@@ -327,21 +327,21 @@ namespace EtlUtilities
                     recType = firstColValue;
 
                     //
+                    // col2: tpaid
                     var secondColValue = csv.GetString(1);
+
+                    // col3: employerid
                     var thirdColValue = csv.GetString(2);
                     if (thirdColValue.StartsWith("BEN", StringComparison.InvariantCultureIgnoreCase))
                     {
                         BenCode = thirdColValue;
                     }
 
-
-
                     // exit when we have both
                     if (!Utils.IsBlank(BenCode) && !Utils.IsBlank(recType))
                     {
                         break;
                     }
-
                 }
             }
             //
@@ -369,8 +369,6 @@ namespace EtlUtilities
                 srcFilePath = csvFilePath;
             }
 
-
-            //todo: FileChecker: @Luis: get specs record_types other than IB, IC, 
             var csvDataReaderOptions =
                 new CsvDataReaderOptions
                 { // also take header row as  data in case there uis no file header
@@ -443,7 +441,7 @@ namespace EtlUtilities
                         }
                     default:
                         return HeaderType.Old;
-                        // todo: determine header type for ALL files instead of defaulting to Old
+                        // todo: do we need to determine header type for files other than IB, IC and IH - or can we just deault to old/new as they are the same
                         //string message1 = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Could Not Determine Header Type for {srcFilePath}";
                         //throw new Exception(message1);
                 }

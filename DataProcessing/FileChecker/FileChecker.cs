@@ -409,8 +409,10 @@ namespace DataProcessing
                         {
                             hasError = this.CheckEmployerPlanExists(dataRow, column, fileFormat);
                         }
-
-                        hasError = this.CheckEmployeePlanExists(dataRow, column, fileFormat);
+                        else if (fileFormat == EdiFileFormat.AlegeusEmployeeDeposit)
+                        {
+                            hasError = this.CheckEmployeePlanExists(dataRow, column, fileFormat);
+                        }
 
                         break;
 
