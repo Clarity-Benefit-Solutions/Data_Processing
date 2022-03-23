@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using DataProcessingWebApp.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DataProcessingWebApp
 {
@@ -14,17 +16,13 @@ namespace DataProcessingWebApp
             // Web API routes
             config.MapHttpAttributeRoutes();
 
-            config.Routes.MapHttpRoute(
-                name: "DataProcessingApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = ""}
-            );
+            //config.Routes.MapHttpRoute(
+            //    name: "DefaultApi",
+            //    routeTemplate: "api/{controller}/{id}",
+            //    defaults: new { id = RouteParameter.Optional }
+            //);
 
-            config.Routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
-            );
-        }
+            }
+
     }
 }

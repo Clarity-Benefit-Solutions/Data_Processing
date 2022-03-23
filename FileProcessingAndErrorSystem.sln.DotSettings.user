@@ -2,4 +2,5 @@
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\___Clarity\clarity_dev\r1_Data_Processing\packages\NeoSmart.Caching.Sqlite.6.0.1\lib\netstandard2.0\NeoSmart.Caching.Sqlite.dll" /&gt;&#xD;
   &lt;Assembly Path="C:\___Clarity\clarity_dev\r1_Data_Processing\packages\EasyCaching.SQLite.1.5.0\lib\netstandard2.0\EasyCaching.SQLite.dll" /&gt;&#xD;
+  &lt;Assembly Path="C:\___Clarity\clarity_dev\r1_Data_Processing\DataProcessingWebApp\Bin\Hangfire.Console.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>

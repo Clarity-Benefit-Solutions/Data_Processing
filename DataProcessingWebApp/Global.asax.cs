@@ -1,33 +1,42 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Security.Permissions;
 using System.Web;
-using System.Web.Http;
-using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
+using System.Web.Http;
 
 namespace DataProcessingWebApp
 {
-    [AspNetHostingPermission(SecurityAction.Demand, Level = AspNetHostingPermissionLevel.Unrestricted)]
-    public class WebApiApplication : System.Web.HttpApplication
+    public class Global : HttpApplication
     {
-        protected void Application_Start()
+        void Application_Start(object sender, EventArgs e)
         {
-            //
-            //DataProcessing.Vars.IsRunningAsWebApp = true;
-            //DataProcessing.Vars.WebAppRootPath = System.Web.Hosting.HostingEnvironment.MapPath("~/"); ;
-            //
-            Debug.Assert(false);
-            AreaRegistration.RegisterAllAreas();
+            // Code that runs on application startup
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            //ServicesConfig.ConfigureServices();
+            //
+            StackExchange.Profiling.MiniProfiler.StartNew("DataProcessingWebApp");
+        }
+
+        void Application_End(object sender, EventArgs e)
+        {
+           // Debug.Assert(true);
+        }
+
+        protected void Application_BeginRequest()
+        {
+            
+        }
+
+        protected void Application_EndRequest()
+        {
+          
         }
     }
 }
