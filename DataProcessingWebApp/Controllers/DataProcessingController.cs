@@ -21,13 +21,30 @@ using Hangfire.Console;
 
 namespace DataProcessingWebApp.Controllers
 {
+
+    public class Job
+    {
+        public Job(string jobName, string jobId, string jobResult = "")
+        {
+            JobName = jobName;
+            JobId = jobId;
+            JobResult = jobResult;
+        }
+        public string JobName;
+        public string JobId;
+        public string JobResult;
+
+        public override string ToString()
+        {
+            return $"JobName: {JobName}\n<br>JobId: {JobId}\n<br>JobResult: {JobResult}<br>";
+        }
+    }
     public class DataProcessingController : Controller
     {
 
-      
 
         // GET api/<controller>/5
-        public string Get(string id)
+        public Job StartJob(string id)
         {
             try
             {
@@ -35,11 +52,26 @@ namespace DataProcessingWebApp.Controllers
                 // do job in background
                 string jobId = BackgroundJob.Enqueue(() => DataProcessingJob.ProcessAsync(null, id));
 
-                return $"Job ID {jobId} Queued for {id}";
+                return new Job(id, $"[Job ID {jobId} Queued for {id}", "STARTED");
             }
             catch (Exception ex)
             {
-                return $"ERROR: Job Queuing Job for {id} as {ex.ToString()}";
+                return new Job(id, $"[Job Could Not Be Queued as {ex.ToString()}", "FAILED");
+            }
+        }
+        public Job GetJobResult(string jobId)
+        {
+            try
+            {
+                //jobManager.Start<SampleJob>(x => x.RunAsync());
+                // do job in background
+                //string jobId = BackgroundJob.Enqueue(() => DataProcessingJob.ProcessAsync(null, id));
+
+                return new Job("", jobId, "OK");
+            }
+            catch (Exception ex)
+            {
+                return new Job("", $"[Job Id {jobId} Results Could Not Be Queried as {ex.ToString()}", "FAILED");
             }
         }
 

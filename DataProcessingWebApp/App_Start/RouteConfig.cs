@@ -12,7 +12,7 @@ namespace DataProcessingWebApp
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
-            
+
 
             var settings = new FriendlyUrlSettings();
             settings.AutoRedirectMode = RedirectMode.Permanent;
@@ -20,12 +20,18 @@ namespace DataProcessingWebApp
             routes.EnableFriendlyUrls(settings);
 
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
             routes.MapRoute(
-                "DataProcessing",                                           // Route name
-                "DataProcessing/{id}",                            // URL with parameters
-                new { controller = "DataProcessing", action = "Get", id="" }  // Parameter defaults
+                "DataProcessingStartJob",                                           // Route name
+                "DataProcessing/StartJob/{id}",                            // URL with parameters
+                new { controller = "DataProcessing", action = "StartJob", id = "" }  // Parameter defaults
             );
-          
+            routes.MapRoute(
+                  "DataProcessingGetJobResult",                                           // Route name
+                  "DataProcessing/GetJobResult/{jobId}",                            // URL with parameters
+                  new { controller = "DataProcessing", action = "GetJobResult", jobId = "" }  // Parameter defaults
+              );
+
 
         }
     }
