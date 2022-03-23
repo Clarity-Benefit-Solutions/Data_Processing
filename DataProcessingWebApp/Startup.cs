@@ -8,7 +8,6 @@ using DataProcessingWebApp.Jobs;
 using Hangfire;
 using Hangfire.Common;
 using Hangfire.Console;
-using Hangfire.Console.Extensions;
 using Hangfire.SqlServer;
 using Hangfire.States;
 using Hangfire.Storage;

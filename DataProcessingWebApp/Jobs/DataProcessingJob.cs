@@ -12,7 +12,6 @@ using DataProcessing;
 using Hangfire;
 using Hangfire;
 using Hangfire.Console;
-using Hangfire.Console.Extensions;
 using Hangfire.Server;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Extensions.Logging;
