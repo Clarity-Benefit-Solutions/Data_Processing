@@ -45,7 +45,8 @@ namespace DataProcessingWebApp
         public static IEnumerable<IDisposable> GetHangfireConfiguration()
         {
             var vars = new DataProcessing.Vars();
-            //
+            
+            // create seri logger
             Log.Logger = new LoggerConfiguration()
                 .Enrich.WithProperty("App", "DataProcessingWebApp")
                 .Enrich.WithMachineName()
@@ -59,7 +60,8 @@ namespace DataProcessingWebApp
                 .CreateLogger();
 
             Log.Warning("Starting Hangfire Configuration");
-            
+
+            // hangfire Configuration
             GlobalConfiguration.Configuration
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSerilogLogProvider()
@@ -76,7 +78,11 @@ namespace DataProcessingWebApp
                     EnableHeavyMigrations = true
                 });
 
+            // set job retention timeout
             GlobalJobFilters.Filters.Add(new ProlongExpirationTimeAttribute());
+
+            // no job retries
+            GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 1 });
 
             Log.Warning("Completed Hangfire Configuration");
 
@@ -90,7 +96,8 @@ namespace DataProcessingWebApp
         public void Configuration(IAppBuilder app)
         {
             app.MapSignalR();
-
+            
+            // add hangfire defaults and set up dashboard
             app.UseHangfireAspNet(GetHangfireConfiguration);
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {

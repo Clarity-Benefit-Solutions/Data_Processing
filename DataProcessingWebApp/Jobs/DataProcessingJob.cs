@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Transactions;
+using System.Web;
 using CoreUtils;
 using CoreUtils.Classes;
 using DataProcessing;
@@ -48,7 +49,7 @@ namespace DataProcessingWebApp.Jobs
             listLogs.Add(logItem);
         }
 
-        public static async Task ProcessAsync(PerformContext context, string id)
+        public static async Task<string> StartJob(PerformContext context, string id)
         {
             List<string> listLogs = new List<string>();
 
@@ -84,15 +85,13 @@ namespace DataProcessingWebApp.Jobs
                         break;
                     default:
                         var message =
-                            $"ERROR: DataProcessingJob:ProcessAsync : {id} is not a valid operation";
+                            $"ERROR: DataProcessingJob:StartJob : {id} is not a valid operation";
                         throw new Exception(message);
 
                 }
 
                 //
-                string[] arr = listLogs.ToArray();
-                string strArr = String.Join("\n", arr);
-                //context.Write(strArr);
+                return "Completed";
 
             }
             catch (Exception ex)
@@ -100,7 +99,64 @@ namespace DataProcessingWebApp.Jobs
                 context.SetTextColor(ConsoleTextColor.Red);
                 context.WriteLine(ex.ToString());
                 context.SetTextColor(ConsoleTextColor.Black);
-                throw;
+
+                //
+                return $"Failed: {ex.ToString()}";
+            }
+        }
+        public static async Task<string> CheckFile(PerformContext context, HttpPostedFileBase file, string id = "")
+        {
+            List<string> listLogs = new List<string>();
+
+            try
+            {
+                DbUtils.eventOnLogFileOperationCallback += (sender, logParams) =>
+                {
+                    HandleOnFileLogOperationCallback(context, listLogs, logParams);
+                };
+
+                switch (id.ToString().ToLower())
+                {
+                    case @"processcobrafiles":
+                        await CobraDataProcessing.ProcessAll();
+                        break;
+
+                    case @"processalegeusfiles":
+                        await AlegeusDataProcessing.ProcessAll();
+                        break;
+
+                    case @"retrieveftperrorlogs":
+                        await AlegeusErrorLog.ProcessAll();
+                        break;
+
+                    case @"copytestfiles":
+                        var directoryPath = Vars.GetProcessBaseDir();
+                        Process.Start($"{directoryPath}/../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
+                        Process.Start(
+                            $"{directoryPath}/../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
+                        Process.Start(
+                            $"{directoryPath}/../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
+
+                        break;
+                    default:
+                        var message =
+                            $"ERROR: DataProcessingJob:StartJob : {id} is not a valid operation";
+                        throw new Exception(message);
+
+                }
+
+                //
+                return "Completed";
+
+            }
+            catch (Exception ex)
+            {
+                context.SetTextColor(ConsoleTextColor.Red);
+                context.WriteLine(ex.ToString());
+                context.SetTextColor(ConsoleTextColor.Black);
+
+                //
+                return $"Failed: {ex.ToString()}";
             }
         }
 

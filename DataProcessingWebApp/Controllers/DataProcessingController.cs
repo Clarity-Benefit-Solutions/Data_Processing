@@ -47,28 +47,6 @@ namespace DataProcessingWebApp.Controllers
     }
     public class DataProcessingController : Controller
     {
-
-
-        // GET api/<controller>/5
-        public JobDetails StartJob(string id)
-        {
-            try
-            {
-                if (Utils.IsBlank(id))
-                {
-                    return new JobDetails("", id, "Job ID MUST BE PASSED");
-                }
-                //jobManager.Start<SampleJob>(x => x.RunAsync());
-                // do job in background
-                string jobId = BackgroundJob.Enqueue(() => DataProcessingJob.ProcessAsync(null, id));
-
-                return new JobDetails(id, $"[JobDetails ID {jobId} Queued for {id}", "STARTED");
-            }
-            catch (Exception ex)
-            {
-                return new JobDetails(id, $"[JobDetails Could Not Be Queued as {ex.ToString()}", "FAILED");
-            }
-        } 
         public string Index()
         {
             try
@@ -79,24 +57,49 @@ namespace DataProcessingWebApp.Controllers
             {
                 throw;
             }
-        } 
-        
-        public JobDetails CheckFile(HttpPostedFileBase file)
+        }
+
+        // GET api/<controller>/5
+        public JobDetails StartJob(string id)
         {
             try
             {
-                //jobManager.Start<SampleJob>(x => x.RunAsync());
-                // do job in background
-                //string jobId = BackgroundJob.Enqueue(() => DataProcessingJob.ProcessAsync(null, id));
+                if (Utils.IsBlank(id))
+                {
+                    return new JobDetails("", id, "Job ID MUST BE PASSED");
+                }
 
-                //return new JobDetails(id, $"[JobDetails ID {jobId} Queued for {id}", "STARTED");
-               
+                // do job in background
+                string jobId = BackgroundJob.Enqueue(() => DataProcessingJob.StartJob(null, id));
+
+                return new JobDetails(id, $"[JobDetails ID {jobId} Queued for {id}", "STARTED");
             }
             catch (Exception ex)
             {
-                //return new JobDetails(id, $"[JobDetails Could Not Be Queued as {ex.ToString()}", "FAILED");
+                return new JobDetails(id, $"[Job Could Not Be Queued as {ex.ToString()}", "FAILED");
             }
-            return new JobDetails("", $"", "STARTED"); ;
+        }
+
+
+        public JobDetails CheckFile(HttpPostedFileBase file)
+        {
+            string id = "CheckFile";
+
+            try
+            {
+                if (file == null || Utils.IsBlank(file.FileName))
+                {
+                    return new JobDetails(file != null ? file.FileName : "", "{id}", "Valid File MUST BE PASSED");
+                }
+                // do job in background
+                string jobId = BackgroundJob.Enqueue(() => DataProcessingJob.CheckFile(null, file));
+                //
+                return new JobDetails(id, $"[JobDetails ID {jobId} Queued for {id} and File {file.FileName}", "STARTED");
+            }
+            catch (Exception ex)
+            {
+                return new JobDetails(id, $"[Job Could Not Be Queued as {ex.ToString()}", "FAILED");
+            }
         }
         public JobDetails JobResults(string jobId)
         {
