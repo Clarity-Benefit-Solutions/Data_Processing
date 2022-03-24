@@ -84,7 +84,7 @@ namespace DataProcessingWebApp.Jobs
                         break;
                     default:
                         var message =
-                            $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : {id} is not a valid operation";
+                            $"ERROR: DataProcessingJob:ProcessAsync : {id} is not a valid operation";
                         throw new Exception(message);
 
                 }

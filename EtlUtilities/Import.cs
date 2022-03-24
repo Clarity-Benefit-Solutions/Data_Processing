@@ -441,9 +441,6 @@ namespace EtlUtilities
                         }
                     default:
                         return HeaderType.Old;
-                        // todo: do we need to determine header type for files other than IB, IC and IH - or can we just deault to old/new as they are the same
-                        //string message1 = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Could Not Determine Header Type for {srcFilePath}";
-                        //throw new Exception(message1);
                 }
             }
 

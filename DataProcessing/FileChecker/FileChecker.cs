@@ -548,7 +548,7 @@ namespace DataProcessing
                     {
                         DataRow dbData = dbRows[0];
 
-                        //todo: FileChecker: verify if employer status need to be checked
+                        //note: FileChecker: verify if employer status need to be checked
                         //string status = dbData["employer_status"]?.ToString();
                         //if (status != "Active" && status != "New")
                         //{
