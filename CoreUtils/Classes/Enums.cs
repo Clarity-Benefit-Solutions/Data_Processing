@@ -2,8 +2,8 @@
 
 namespace CoreUtils.Classes
 {
-    
-    
+
+
     public enum FileOperation
     {
         Move = 1,
@@ -13,8 +13,8 @@ namespace CoreUtils.Classes
         Read
     }
 
-    
-    
+
+
     public enum FtpFileOperation
     {
         Download,
@@ -26,8 +26,8 @@ namespace CoreUtils.Classes
     }
 
 
-    
-    
+
+
     public enum DbOperation
     {
         ExecuteScalar = 1,
@@ -98,18 +98,30 @@ namespace CoreUtils.Classes
         AllData
         //
     }
-    public enum OperationResult
+    public enum FileCheckProcessType
     {
-        [Utils.DisplayText("OperationResult.Ok")]
+        [Utils.DisplayText("FileCheckProcessType.MoveToDestDirectories")]
+        MoveToDestDirectories = 1,
+
+        [Utils.DisplayText("FileCheckProcessType.ReturnResults")]
+        ReturnResults
+        //
+    }
+    public enum OperationResultType
+    {
+        [Utils.DisplayText("OperationResultType.Unknown")]
+        Unknown = 0,
+
+        [Utils.DisplayText("OperationResultType.Ok")]
         Ok = 1,
 
-        [Utils.DisplayText("OperationResult.PartialFail")]
+        [Utils.DisplayText("OperationResultType.PartialFail")]
         PartialFail,
-        
-        [Utils.DisplayText("OperationResult.CompleteFail")]
+
+        [Utils.DisplayText("OperationResultType.CompleteFail")]
         CompleteFail,
 
-        [Utils.DisplayText("OperationResult.ProcessingError")]
+        [Utils.DisplayText("OperationResultType.ProcessingError")]
         ProcessingError,
 
 

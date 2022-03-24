@@ -7,11 +7,59 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.Text.RegularExpressions;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
+using Newtonsoft.Json;
 
 namespace CoreUtils.Classes
 {
+
+    public class JobDetails
+    {
+        public JobDetails(string jobName, string jobId, string jobState = "", string jobHistory = "", string jobResult = "")
+        {
+            JobName = jobName;
+            JobId = jobId;
+            JobState = jobState;
+            JobHistory = jobHistory;
+            JobResult = Utils.DeserializeJson<OperationResult>(jobResult);
+        }
+        public string JobName;
+        public string JobId;
+        public string JobState;
+        public string JobHistory;
+        public dynamic JobResult;
+
+        public override string ToString()
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, Formatting.Indented);
+            //return $"Success: {JobName}\n<br>Code: {JobId}\n<br>Result: {JobState}\n<br>Details: {JobHistory}\n<br>Error: {JobResult}";
+        }
+    }
+
+    public class OperationResult
+    {
+        public OperationResult(Boolean success, int code, string result = "", string details = "", string error = "")
+        {
+            Success = success;
+            Code = code;
+            Error = error;
+            Result = result;
+            Details = details;
+        }
+        public Boolean Success;
+        public int Code;
+        public string Result;
+        public string Details;
+        public string Error;
+
+        public override string ToString()
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, Formatting.Indented);
+            //return $"Success: {Success}\n<br>Code: {Code}\n<br>Result: {Result}\n<br>Details: {Details}\n<br>Error: {Error}";
+        }
+    }
     public class LogFields
     {
         public string LogTime { get; }
@@ -47,7 +95,26 @@ namespace CoreUtils.Classes
             return value.Replace("'", "''");
         }
 
+        // thjios deserializes doubly escaped json also!
+        public static object DeserializeJson<T>(string value)
+        {
+            if (Utils.IsBlank(value))
+            {
+                return null;
+            }
 
+            // try to unescape doubly quoted json
+            object try1 = JsonConvert.DeserializeObject(value);
+            if (try1 is string)
+            {
+                value = (string)try1;
+            }
+
+            object deserializeObject = JsonConvert.DeserializeObject<T>(value);
+
+            return deserializeObject;
+
+        }
 
         public static string CsvQuote(string value)
         {
@@ -85,7 +152,7 @@ namespace CoreUtils.Classes
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[Random.Next(s.Length)]).ToArray());
         }
-          public static string RandomStringNumbers(int length)
+        public static string RandomStringNumbers(int length)
         {
             const string chars = "0123456789";
             return new string(Enumerable.Repeat(chars, length)
@@ -334,7 +401,7 @@ namespace CoreUtils.Classes
             return str;
         }
 
-      
+
         //extension method to add desc attribute to enum item
         public class DisplayText : Attribute
         {

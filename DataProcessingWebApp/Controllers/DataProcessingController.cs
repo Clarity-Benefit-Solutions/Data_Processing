@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
@@ -24,27 +25,7 @@ using Hangfire.Storage.Monitoring;
 namespace DataProcessingWebApp.Controllers
 {
 
-    public class JobDetails
-    {
-        public JobDetails(string jobName, string jobId, string jobState = "", string jobHistory = "", string jobResult = "")
-        {
-            JobName = jobName;
-            JobId = jobId;
-            JobResult = jobResult;
-            JobState = jobState;
-            JobHistory = jobHistory;
-        }
-        public string JobName;
-        public string JobId;
-        public string JobState;
-        public string JobHistory;
-        public string JobResult;
 
-        public override string ToString()
-        {
-            return $"JobName: {JobName}\n<br>JobId: {JobId}\n<br>JobState: {JobState}\n<br>JobHistory: {JobHistory}\n<br>JobResult: {JobResult}";
-        }
-    }
     public class DataProcessingController : Controller
     {
         public string Index()
@@ -81,9 +62,9 @@ namespace DataProcessingWebApp.Controllers
         }
 
 
-        public JobDetails CheckFile(HttpPostedFileBase file)
+        public JobDetails CheckFileAlegeus(HttpPostedFileBase file)
         {
-            string id = "CheckFile";
+            string id = "CheckFileAlegeus";
 
             try
             {
@@ -92,7 +73,27 @@ namespace DataProcessingWebApp.Controllers
                     return new JobDetails(file != null ? file.FileName : "", "{id}", "Valid File MUST BE PASSED");
                 }
                 // do job in background
-                string jobId = BackgroundJob.Enqueue(() => DataProcessingJob.CheckFile(null, file));
+                string jobId = BackgroundJob.Enqueue(() => DataProcessingJob.CheckFile(null, file, PlatformType.Alegeus));
+                //
+                return new JobDetails(id, $"[JobDetails ID {jobId} Queued for {id} and File {file.FileName}", "STARTED");
+            }
+            catch (Exception ex)
+            {
+                return new JobDetails(id, $"[Job Could Not Be Queued as {ex.ToString()}", "FAILED");
+            }
+        }
+        public JobDetails CheckFileCobra(HttpPostedFileBase file)
+        {
+            string id = "CheckFileCobra";
+
+            try
+            {
+                if (file == null || Utils.IsBlank(file.FileName))
+                {
+                    return new JobDetails(file != null ? file.FileName : "", "{id}", "Valid File MUST BE PASSED");
+                }
+                // do job in background
+                string jobId = BackgroundJob.Enqueue(() => DataProcessingJob.CheckFile(null, file, PlatformType.Cobra));
                 //
                 return new JobDetails(id, $"[JobDetails ID {jobId} Queued for {id} and File {file.FileName}", "STARTED");
             }
@@ -125,10 +126,13 @@ namespace DataProcessingWebApp.Controllers
                 var jobState = hMonitoringApi.JobDetails(jobId);
                 if (jobState != null)
                 {
-                    var keyValuePairs = jobState.History.First()?.Data;
-                    if (keyValuePairs != null)
-                        history =
-                            $"CreatedAt: {jobState.CreatedAt}, Last History: {String.Join(",", keyValuePairs)}";
+                    var historyData = jobState.History.First()?.Data;
+                    if (historyData != null)
+                    {
+                        var jobResultKeyPair = historyData.Last();
+                        result = jobResultKeyPair.Value;
+                        history = $"CreatedAt: {jobState.CreatedAt}";
+                    }
                 }
 
                 return new JobDetails(jobKey, jobId, jobData.State, history, result);

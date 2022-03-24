@@ -36,6 +36,25 @@ namespace DataProcessing
         {
             get { return this.markAsCompleteFail; }
         }
+
+        public OperationResultType operationResultType
+        {
+            get
+            {
+                if (this.IsCompleteFail)
+                {
+                    return OperationResultType.CompleteFail;
+                }
+                else if (this.HasErrors)
+                {
+                    return OperationResultType.PartialFail;
+                }
+                else
+                {
+                    return OperationResultType.Ok;
+                }
+            }
+        }
     }
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -83,70 +102,91 @@ namespace DataProcessing
         }
         #region CheckFile
 
-        public OperationResult CheckFileAndMove(FileCheckType fileCheckType)
+
+        public OperationResult CheckFileAndProcess(FileCheckType fileCheckType, FileCheckProcessType fileCheckProcessType)
         {
             // check file
-            OperationResult result = CheckFile(fileCheckType);
+            OperationResultType resultType = CheckFile(fileCheckType);
 
             // move file
             var fileName = Path.GetFileName(this.srcFilePath);
             var newFilePath = this.srcFilePath;
             var newErrorFilePath = "";
 
-
-            // act on result
-            switch (result)
+            // act on resultType
+            switch (resultType)
             {
 
                 ///////////////////////////////////////
-                case OperationResult.Ok:
+                case OperationResultType.Ok:
                     ///////////////////////////////////////
-                    if (Utils.IsTestFile(this.srcFilePath))
+                    if (fileCheckProcessType == FileCheckProcessType.MoveToDestDirectories)
                     {
-                        newFilePath = $"{Vars.alegeusFilesPreCheckTestRoot}/{fileName}";
+                        if (Utils.IsTestFile(this.srcFilePath))
+                        {
+                            newFilePath = $"{Vars.alegeusFilesPreCheckTestRoot}/{fileName}";
+                        }
+                        else
+                        {
+                            newFilePath = $"{Vars.alegeusFilesPreCheckOKRoot}/{fileName}";
+                        }
+
+                        FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
+                            {
+                                // add to fileLog
+                                fileLogParams.SetFileNames("", fileName, srcFilePath,
+                                    Path.GetFileName(newFilePath), newFilePath,
+                                    $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                                    "Success", "PreCheck OK. Moved File to PreCheck OK Directory");
+                                //
+                                DbUtils.LogFileOperation(fileLogParams);
+                            },
+                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                        );
                     }
-                    else
+                    else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
                     {
-                        newFilePath = $"{Vars.alegeusFilesPreCheckOKRoot}/{fileName}";
+
                     }
-                    FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
-                    {
-                        // add to fileLog
-                        fileLogParams.SetFileNames("", fileName, srcFilePath,
-                                Path.GetFileName(newFilePath), newFilePath,
-                                $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                                "Success", "PreCheck OK. Moved File to PreCheck OK Directory");
-                        //
-                        DbUtils.LogFileOperation(fileLogParams);
-                    },
-                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-                    );
-                    break;
+                    // OK result
+                    return new OperationResult(true, 200, "Completed", "", "");
 
                 ///////////////////////////////////////
-                case OperationResult.CompleteFail:
-                case OperationResult.ProcessingError:
-                case OperationResult.PartialFail:
+                case OperationResultType.CompleteFail:
+                case OperationResultType.ProcessingError:
+                case OperationResultType.PartialFail:
+                default:
                     ///////////////////////////////////////
 
                     string srcFileName = Path.GetFileName(this.srcFilePath);
-                    if (Utils.IsTestFile(this.srcFilePath))
-                    {
-                        newFilePath = $"{Vars.alegeusFilesPreCheckTestRoot}/{fileName}";
-                    }
-                    else
-                    {
-                        newFilePath = $"{Vars.alegeusFilesPreCheckFailRoot}/{fileName}";
-                    }
-                    newErrorFilePath = $"{newFilePath}.err";
+                    //
 
+                    if (fileCheckProcessType == FileCheckProcessType.MoveToDestDirectories)
+                    {
+                        if (Utils.IsTestFile(this.srcFilePath))
+                        {
+                            newFilePath = $"{Vars.alegeusFilesPreCheckTestRoot}/{fileName}";
+                        }
+                        else
+                        {
+                            newFilePath = $"{Vars.alegeusFilesPreCheckFailRoot}/{fileName}";
+                        }
+
+                        newErrorFilePath = $"{newFilePath}.err";
+
+                    }
+                    else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
+                    {
+                        newFilePath = $"{srcFilePath}.err";
+                    }
                     // export error file
                     var outputTableName = "[dbo].[mbi_file_table]";
                     //
-                    var queryStringExp = $" select concat(data_row, ',', case when len(error_message) > 0 then concat( 'PreCheck Errors: ' , error_message ) else 'PreCheck: OK' end ) as file_row" +
-                                         $" from {outputTableName} " +
-                                         $" where mbi_file_name = '{srcFileName}'" +
-                                         $" order by mbi_file_table.source_row_no; ";
+                    var queryStringExp =
+                        $" select concat(data_row, ',', case when len(error_message) > 0 then concat( 'PreCheck Errors: ' , error_message ) else 'PreCheck: OK' end ) as file_row" +
+                        $" from {outputTableName} " +
+                        $" where mbi_file_name = '{srcFileName}'" +
+                        $" order by mbi_file_table.source_row_no; ";
 
                     ImpExpUtils.ExportSingleColumnFlatFile(newErrorFilePath, dbConn, queryStringExp,
                         "file_row", null, fileLogParams,
@@ -155,57 +195,34 @@ namespace DataProcessing
 
                     //
                     FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
-                    {
-                        // add to fileLog
-                        fileLogParams.SetFileNames("", fileName, srcFilePath,
-                                Path.GetFileName(newFilePath), newFilePath,
-                                $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                                "Fail", "PreCheck FAIL. Moved File to PreCheck FAIL Directory");
-                        //
-                        DbUtils.LogFileOperation(fileLogParams);
-                    },
-                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-                    );
+                            {
+                                // add to fileLog
+                                fileLogParams.SetFileNames("", fileName, srcFilePath,
+                                        Path.GetFileName(newFilePath), newFilePath,
+                                        $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                                        "Fail", "PreCheck FAIL. Moved File to PreCheck FAIL Directory");
+                                //
+                                DbUtils.LogFileOperation(fileLogParams);
+                            },
+                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                        );
 
-                    break;
+                    string strCheckResults = File.ReadAllText(newErrorFilePath);
+
+                    // OK result
+                    return new OperationResult(false, 200, "Completed", "", strCheckResults);
             }
-            //
-            return result;
+
         }
-        private OperationResult CheckFile(FileCheckType fileCheckType)
+        //
+
+        private OperationResultType CheckFile(FileCheckType fileCheckType)
         {
             //
             Dictionary<EdiFileFormat, List<int>> fileFormats =
                 ImpExpUtils.GetAlegeusFileFormats(this.srcFilePath, false, this.fileLogParams);
 
-            var result = OperationResult.Ok;
-
-            // file may contain only a header...
-            if (fileFormats.Count == 0)
-            {
-                this.fileCheckResults.Add(0, "File Is Empty");
-                result = OperationResult.CompleteFail;
-            }
-            else
-            {
-                // check the file
-                this.CheckFile(fileFormats);
-
-                //
-                if (this.fileCheckResults.IsCompleteFail)
-                {
-                    result = OperationResult.CompleteFail;
-                }
-                else if (this.fileCheckResults.HasErrors)
-                {
-                    result = OperationResult.PartialFail;
-                }
-                else
-                {
-                    result = OperationResult.Ok;
-                }
-
-            }
+            var result = this.fileCheckResults.operationResultType;
 
             return result;
         }

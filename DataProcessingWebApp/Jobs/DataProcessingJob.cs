@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using System.Web;
 using CoreUtils;
 using CoreUtils.Classes;
 using DataProcessing;
+using EtlUtilities;
 using Hangfire;
 using Hangfire;
 using Hangfire.Console;
@@ -83,15 +85,16 @@ namespace DataProcessingWebApp.Jobs
                             $"{directoryPath}/../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
 
                         break;
+
                     default:
                         var message =
                             $"ERROR: DataProcessingJob:StartJob : {id} is not a valid operation";
                         throw new Exception(message);
 
                 }
-
                 //
-                return "Completed";
+                string logs = String.Join("\n", listLogs.ToArray());
+                return new OperationResult(true, 200, "Completed", logs, "").ToString();
 
             }
             catch (Exception ex)
@@ -101,10 +104,13 @@ namespace DataProcessingWebApp.Jobs
                 context.SetTextColor(ConsoleTextColor.Black);
 
                 //
-                return $"Failed: {ex.ToString()}";
+                string logs = String.Join("\n", listLogs.ToArray());
+                return new OperationResult(false, 400, "Error", logs, ex.ToString()).ToString();
             }
         }
-        public static async Task<string> CheckFile(PerformContext context, HttpPostedFileBase file, string id = "")
+#pragma warning disable CS1998
+        public static async Task<string> CheckFile(PerformContext context, HttpPostedFileBase file, PlatformType platformType)
+#pragma warning restore CS1998
         {
             List<string> listLogs = new List<string>();
 
@@ -115,38 +121,56 @@ namespace DataProcessingWebApp.Jobs
                     HandleOnFileLogOperationCallback(context, listLogs, logParams);
                 };
 
-                switch (id.ToString().ToLower())
+                Vars vars = new Vars();
+
+                var fileLogParams = vars.dbFileProcessingLogParams;
+
+                // Get local temp file with UniqueID Added
+                var srcFileName = DbUtils.AddUniqueIdToFileAndLogToDb(file.FileName, true, fileLogParams);
+                var srcFilePath = $" {Path.GetFileNameWithoutExtension(Path.GetTempFileName())}_{srcFileName}";
+
+                // save file to temp path
+                file.SaveAs(srcFilePath);
+
+                // convert from xl is needed
+                string fileName = Path.GetFileName(srcFilePath);
+                string fileExt = Path.GetExtension(srcFilePath);
+                if (fileExt == ".xlsx" || fileExt == ".xls")
                 {
-                    case @"processcobrafiles":
-                        await CobraDataProcessing.ProcessAll();
-                        break;
+                    var csvFilePath = Path.GetTempFileName() + ".csv";
+                    FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                        null,
+                        null);
 
-                    case @"processalegeusfiles":
-                        await AlegeusDataProcessing.ProcessAll();
-                        break;
-
-                    case @"retrieveftperrorlogs":
-                        await AlegeusErrorLog.ProcessAll();
-                        break;
-
-                    case @"copytestfiles":
-                        var directoryPath = Vars.GetProcessBaseDir();
-                        Process.Start($"{directoryPath}/../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
-                        Process.Start(
-                            $"{directoryPath}/../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
-                        Process.Start(
-                            $"{directoryPath}/../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
-
-                        break;
-                    default:
-                        var message =
-                            $"ERROR: DataProcessingJob:StartJob : {id} is not a valid operation";
-                        throw new Exception(message);
-
+                    srcFilePath = csvFilePath;
                 }
 
+                // if COBRA file, treat as such!
+                if (Import.IsCobraImportFile(srcFilePath))
+                {
+                    platformType = PlatformType.Cobra;
+                }
+
+                //  log operation
+                fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                    Path.GetFileName(srcFilePath), srcFilePath,
+                    $"DataProcessingWebApp-{MethodBase.GetCurrentMethod()?.Name}",
+                    "Starting", "Starting PreCheck");
+                DbUtils.LogFileOperation(fileLogParams);
+
+                // init checker
+                using FileChecker fileChecker = new FileChecker(
+                    srcFilePath, platformType, vars.dbConnDataProcessing, fileLogParams,
+                    (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); });
+
+                // check file
+                var results = fileChecker.CheckFileAndProcess(FileCheckType.AllData, FileCheckProcessType.ReturnResults);
+
                 //
-                return "Completed";
+                //string logs = String.Join("\n", listLogs.ToArray());
+                //return new OperationResult(true, 200, "Completed", logs, "").ToString();
+
+                return results.ToString();
 
             }
             catch (Exception ex)
@@ -156,7 +180,8 @@ namespace DataProcessingWebApp.Jobs
                 context.SetTextColor(ConsoleTextColor.Black);
 
                 //
-                return $"Failed: {ex.ToString()}";
+                string logs = String.Join("\n", listLogs.ToArray());
+                return new OperationResult(false, 400, "Error", logs, ex.ToString()).ToString();
             }
         }
 

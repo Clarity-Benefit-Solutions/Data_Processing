@@ -481,7 +481,7 @@ namespace DataProcessing
                     DbUtils.LogFileOperation(fileLogParams);
 
                     //
-                    fileChecker.CheckFileAndMove(FileCheckType.AllData);
+                    fileChecker.CheckFileAndProcess(FileCheckType.AllData, FileCheckProcessType.MoveToDestDirectories);
 
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }

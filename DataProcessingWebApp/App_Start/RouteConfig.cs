@@ -23,9 +23,14 @@ namespace DataProcessingWebApp
 
 
             routes.MapRoute(
-                "DataProcessingCheckFile",                                           // Route name
-                "DataProcessing/CheckFile",                            // URL with parameters
-                new { controller = "DataProcessing", action = "CheckFile" }  // Parameter defaults
+                "DataProcessingCheckFileAlegeus",                                           // Route name
+                "DataProcessing/CheckFileAlegeus",                            // URL with parameters
+                new { controller = "DataProcessing", action = "CheckFileAlegeus" }  // Parameter defaults
+            );
+               routes.MapRoute(
+                "DataProcessingCheckFileCobra",                                           // Route name
+                "DataProcessing/CheckFileCobra",                            // URL with parameters
+                new { controller = "DataProcessing", action = "CheckFileCobra" }  // Parameter defaults
             );
 
             routes.MapRoute(
