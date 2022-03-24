@@ -484,7 +484,6 @@
     </Compile>
     <Compile Include="Jobs\DataProcessingJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\DataControllerService.cs" />
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -511,6 +510,7 @@
     <Folder Include="Hubs\" />
     <Folder Include="Migrations\" />
     <Folder Include="Models\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

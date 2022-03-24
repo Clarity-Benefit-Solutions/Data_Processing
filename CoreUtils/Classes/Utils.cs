@@ -98,22 +98,28 @@ namespace CoreUtils.Classes
         // thjios deserializes doubly escaped json also!
         public static object DeserializeJson<T>(string value)
         {
-            if (Utils.IsBlank(value))
+            try
+            {
+                if (Utils.IsBlank(value))
+                {
+                    return null;
+                }
+
+                // try to unescape doubly quoted json
+                object try1 = JsonConvert.DeserializeObject(value);
+                if (try1 is string)
+                {
+                    value = (string) try1;
+                }
+
+                object deserializeObject = JsonConvert.DeserializeObject<T>(value);
+
+                return deserializeObject;
+            }
+            catch (Exception ex)
             {
                 return null;
             }
-
-            // try to unescape doubly quoted json
-            object try1 = JsonConvert.DeserializeObject(value);
-            if (try1 is string)
-            {
-                value = (string)try1;
-            }
-
-            object deserializeObject = JsonConvert.DeserializeObject<T>(value);
-
-            return deserializeObject;
-
         }
 
         public static string CsvQuote(string value)
@@ -215,7 +221,6 @@ namespace CoreUtils.Classes
             var isNumeric = Int64.TryParse(value, out _);
             return isNumeric;
         }
-
         public static bool IsDouble(string value)
         {
             var isNumeric = float.TryParse(value, out _);

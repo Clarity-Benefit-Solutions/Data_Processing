@@ -82,7 +82,7 @@ namespace DataProcessingWebApp
             GlobalJobFilters.Filters.Add(new ProlongExpirationTimeAttribute());
 
             // no job retries
-            GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 1 });
+            GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 });
 
             Log.Warning("Completed Hangfire Configuration");
 

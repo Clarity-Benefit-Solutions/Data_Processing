@@ -172,12 +172,24 @@ namespace DataProcessing
                             newFilePath = $"{Vars.alegeusFilesPreCheckFailRoot}/{fileName}";
                         }
 
-                        newErrorFilePath = $"{newFilePath}.err";
+                        FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
+                            {
+                                // add to fileLog
+                                fileLogParams.SetFileNames("", fileName, srcFilePath,
+                                    Path.GetFileName(newFilePath), newFilePath,
+                                    $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                                    "Fail", "PreCheck FAIL. Moved File to PreCheck FAIL Directory");
+                                //
+                                DbUtils.LogFileOperation(fileLogParams);
+                            },
+                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                        );
 
+                        newErrorFilePath = $"{newFilePath}.err";
                     }
                     else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
                     {
-                        newFilePath = $"{srcFilePath}.err";
+                        newErrorFilePath = $"{srcFilePath}.err";
                     }
                     // export error file
                     var outputTableName = "[dbo].[mbi_file_table]";
@@ -194,19 +206,6 @@ namespace DataProcessing
                     );
 
                     //
-                    FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
-                            {
-                                // add to fileLog
-                                fileLogParams.SetFileNames("", fileName, srcFilePath,
-                                        Path.GetFileName(newFilePath), newFilePath,
-                                        $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                                        "Fail", "PreCheck FAIL. Moved File to PreCheck FAIL Directory");
-                                //
-                                DbUtils.LogFileOperation(fileLogParams);
-                            },
-                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-                        );
-
                     string strCheckResults = File.ReadAllText(newErrorFilePath);
 
                     // OK result
@@ -221,6 +220,8 @@ namespace DataProcessing
             //
             Dictionary<EdiFileFormat, List<int>> fileFormats =
                 ImpExpUtils.GetAlegeusFileFormats(this.srcFilePath, false, this.fileLogParams);
+
+            CheckFile(fileFormats);
 
             var result = this.fileCheckResults.operationResultType;
 
@@ -407,6 +408,11 @@ namespace DataProcessing
                 // 2. specific column checking against business rules & DB
                 switch (column.SourceColumn?.ToLowerInvariant() ?? "")
                 {
+                    // ER ID
+                    case "tpaid":
+                        hasError = this.CheckTpaExists(dataRow, column, fileFormat);
+                        break;
+
                     // ER ID
                     case "employerid":
                         //ER must exist before any Import files are sent

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using DataProcessingWebApp.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DataProcessingWebApp

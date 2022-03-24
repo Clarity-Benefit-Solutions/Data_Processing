@@ -109,7 +109,7 @@ namespace DataProcessingWebApp.Jobs
             }
         }
 #pragma warning disable CS1998
-        public static async Task<string> CheckFile(PerformContext context, HttpPostedFileBase file, PlatformType platformType)
+        public static async Task<string> CheckFile(PerformContext context, string srcFilePath, string platform)
 #pragma warning restore CS1998
         {
             List<string> listLogs = new List<string>();
@@ -123,14 +123,20 @@ namespace DataProcessingWebApp.Jobs
 
                 Vars vars = new Vars();
 
+                PlatformType platformType = PlatformType.Unknown;
+                if (platform?.ToLower() == "alegeus")
+                {
+                    platformType = PlatformType.Alegeus;
+                }
+                else if (platform?.ToLower() == "cobra")
+                {
+                    platformType = PlatformType.Cobra;
+                }
+
                 var fileLogParams = vars.dbFileProcessingLogParams;
 
                 // Get local temp file with UniqueID Added
-                var srcFileName = DbUtils.AddUniqueIdToFileAndLogToDb(file.FileName, true, fileLogParams);
-                var srcFilePath = $" {Path.GetFileNameWithoutExtension(Path.GetTempFileName())}_{srcFileName}";
-
-                // save file to temp path
-                file.SaveAs(srcFilePath);
+                srcFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(srcFilePath, true, fileLogParams);
 
                 // convert from xl is needed
                 string fileName = Path.GetFileName(srcFilePath);
