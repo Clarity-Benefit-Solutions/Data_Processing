@@ -344,6 +344,12 @@ namespace CoreUtils.Classes
         public static string FixPath(string filePath, bool makeLowerCase = false)
         {
             filePath = filePath.Replace("\\", "/");
+            filePath = filePath.Replace("//", "/");
+            // remove last slash
+            if (Utils.Right(filePath, 1) == "/")
+            {
+                filePath = filePath.Remove(filePath.Length - 1, 1);
+            }
             if (makeLowerCase) filePath = filePath.ToLower();
             return filePath;
         }

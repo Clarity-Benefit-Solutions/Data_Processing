@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Net.Http;
 using System.Reflection;
@@ -47,7 +48,7 @@ namespace DataProcessingWebApp.Jobs
             listLogs.Add(logItem);
         }
 
-        public static  async Task ProcessAsync(PerformContext context, string id)
+        public static async Task ProcessAsync(PerformContext context, string id)
         {
             List<string> listLogs = new List<string>();
 
@@ -55,7 +56,7 @@ namespace DataProcessingWebApp.Jobs
             {
                 DbUtils.eventOnLogFileOperationCallback += (sender, logParams) =>
                 {
-                    HandleOnFileLogOperationCallback(context,listLogs, logParams);
+                    HandleOnFileLogOperationCallback(context, listLogs, logParams);
                 };
 
                 switch (id.ToString().ToLower())
@@ -70,6 +71,16 @@ namespace DataProcessingWebApp.Jobs
 
                     case @"retrieveftperrorlogs":
                         await AlegeusErrorLog.ProcessAll();
+                        break;
+
+                    case @"copytestfiles":
+                        var directoryPath = Vars.GetProcessBaseDir();
+                        Process.Start($"{directoryPath}/../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
+                        Process.Start(
+                            $"{directoryPath}/../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
+                        Process.Start(
+                            $"{directoryPath}/../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
+
                         break;
                     default:
                         var message =
@@ -98,6 +109,6 @@ namespace DataProcessingWebApp.Jobs
             //_dbContext.Dispose();
         }
 
-     
+
     }
 }

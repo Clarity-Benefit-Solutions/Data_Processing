@@ -240,8 +240,8 @@ namespace CoreUtils.Classes
                 else if (!Utils.IsBlank(Platform)) OriginalFileName = Platform;
             }
 
-            var orgFileId = DbUtils.GetUniqueIdFromFileName(OriginalFileName);
-            var newFileId = DbUtils.GetUniqueIdFromFileName(NewFileName);
+            var orgFileId = Utils.GetUniqueIdFromFileName(OriginalFileName);
+            var newFileId = Utils.GetUniqueIdFromFileName(NewFileName);
             if (!Utils.IsBlank(newFileId))
             {
                 FileId = newFileId;

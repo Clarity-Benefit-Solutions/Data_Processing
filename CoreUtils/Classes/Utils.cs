@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Configuration;
 using System.Data;
+using System.Data.Entity.Core.EntityClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 
@@ -156,7 +159,7 @@ namespace CoreUtils.Classes
         {
             try
             {
-                var mail = new System.Net.Mail.MailAddress(email);
+                var mail = new MailAddress(email);
                 return true;
             }
             catch
@@ -331,19 +334,7 @@ namespace CoreUtils.Classes
             return str;
         }
 
-        public static string GetExeBaseDir()
-        {
-            var processModule = Process.GetCurrentProcess().MainModule;
-            if (processModule != null)
-            {
-                var exePath = processModule.FileName;
-                var directoryPath = Path.GetDirectoryName(exePath);
-                return directoryPath;
-            }
-
-            return "";
-        }
-
+      
         //extension method to add desc attribute to enum item
         public class DisplayText : Attribute
         {
@@ -353,6 +344,140 @@ namespace CoreUtils.Classes
             }
 
             public string text { get; set; }
+        }
+
+
+        public static string GetConnString(string connStringName)
+        {
+            string entityConnectionString = ConfigurationManager.ConnectionStrings[connStringName].ConnectionString;
+            return entityConnectionString;
+
+        }
+
+        public static string GetProviderConnString(string connStringName)
+        {
+            string entityConnectionString = GetConnString(connStringName);
+            if ((entityConnectionString.ToLower()).IndexOf(@"provider connection string=", StringComparison.Ordinal) > 0)
+                return new EntityConnectionStringBuilder(entityConnectionString).ProviderConnectionString;
+            else
+            {
+                return entityConnectionString;
+            }
+        }
+
+        public static string FilePartsDelimiter = "--";
+
+        public static int MaxFilenameLengthFtp = 60;
+
+        public static Boolean IsTestFile(string srcFilePath)
+        {
+            FileInfo fileInfo = new FileInfo(srcFilePath);
+
+            if ((fileInfo.Name?.ToLower()).IndexOf("test", StringComparison.Ordinal) >= 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+
+        public static string GetUniqueIdFromFileName(string fileName)
+        {
+            int indexOfSep = fileName.IndexOf($"{FilePartsDelimiter}", StringComparison.Ordinal);
+            if (indexOfSep > 0)
+            {
+                return fileName.Substring(0, indexOfSep).Trim();
+            }
+
+            return "";
+        }
+
+        public static HeaderType GetHeaderTypeFromFileName(string fileName)
+        {
+            string[] fileNameParts = fileName?.Split(new[] { FilePartsDelimiter }, StringSplitOptions.None);
+            if (fileNameParts != null && fileNameParts.Length < 3)
+            {
+                return HeaderType.NotApplicable;
+            }
+            else
+            {
+                if (fileNameParts != null)
+                {
+                    string strHeaderType = fileNameParts[1];
+                    if (strHeaderType == HeaderType.NotApplicable.ToNumberString())
+                    {
+                        return HeaderType.NotApplicable;
+                    }
+                    else if (strHeaderType == HeaderType.New.ToNumberString())
+                    {
+                        return HeaderType.New;
+                    }
+                    else if (strHeaderType == HeaderType.Old.ToNumberString())
+                    {
+                        return HeaderType.Old;
+                    }
+                    else if (strHeaderType == HeaderType.NoChange.ToNumberString())
+                    {
+                        return HeaderType.NoChange;
+                    }
+                    else if (strHeaderType == HeaderType.Own.ToNumberString())
+                    {
+                        return HeaderType.Own;
+                    }
+                    else
+                    {
+                        return HeaderType.NotApplicable;
+                    }
+                }
+            }
+
+            return HeaderType.NotApplicable;
+        }
+
+        public static string StripUniqueIdAndHeaderTypeFromFileName(string fileName)
+        {
+            string[] fileNameParts = fileName?.Split(new[] { FilePartsDelimiter }, StringSplitOptions.None);
+
+            // return the last part of the fileName
+            if (fileNameParts != null) return fileNameParts[fileNameParts.Length - 1] ?? "";
+
+            return "";
+
+            //int indexOfSep = fileName.IndexOf($"{FilePartsDelimiter}");
+            //if (indexOfSep > 0)
+            //{
+            //    fileName = fileName.Substring(indexOfSep + 2);
+            //}
+
+            //fileName = fileName.Trim();
+
+            //return fileName;
+        }
+
+        public static string AddUniqueIdAndHeaderTypeToFileName(string fileName,
+            HeaderType headerType = HeaderType.NotApplicable)
+        {
+            fileName = StripUniqueIdAndHeaderTypeFromFileName(fileName);
+
+            string fileId = Utils.RandomString(3);
+            fileName = $"{fileId}{FilePartsDelimiter}{headerType.ToNumberString()}{FilePartsDelimiter}{fileName}";
+            //
+            fileName = fileName.Trim();
+            //
+            return fileName;
+        }
+
+        public static string AddUniqueIdToFileName(string fileName)
+        {
+            fileName = StripUniqueIdAndHeaderTypeFromFileName(fileName);
+
+            string fileId = Utils.RandomStringNumbers(3);
+            fileName = $"{fileId}{FilePartsDelimiter}{fileName}";
+            //
+            fileName = fileName.Trim();
+            //
+            return fileName;
         }
     }
 }

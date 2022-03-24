@@ -5,8 +5,11 @@ using System.Data;
 using System.Data.Common;
 using System.Data.Entity.Core.EntityClient;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Web;
+using System.Web.Hosting;
 using CoreUtils;
 using CoreUtils.Classes;
 using DataProcessing.DataModels.DataProcessing;
@@ -21,25 +24,47 @@ namespace DataProcessing
 {
     public class Vars
     {
-     
+
         #region DBDataProcessing
 
-        private string _connStrNameDataProcessing;
+        public static Boolean IsRunningAsWebApp()
+        {
+            return HostingEnvironment.IsHosted;
+        }
 
-        private string connStrNameDataProcessing
+        public static string GetProcessBaseDir()
+        {
+            if (IsRunningAsWebApp())
+            {
+                return FileUtils.FixPath(AppDomain.CurrentDomain.BaseDirectory);
+            }
+            else
+            {
+                var processModule = Process.GetCurrentProcess().MainModule;
+                if (processModule != null)
+                {
+                    var exePath = processModule.FileName;
+                    var directoryPath = $"{Path.GetDirectoryName(exePath)}/..";
+                    return FileUtils.FixPath(directoryPath);
+                }
+            }
+
+            return "";
+        }
+
+
+
+        public string ConnStrNameDataProcessing
         {
             get
             {
-                if (Utils.IsBlank(_connStrNameDataProcessing))
-                {
-#if (TEST)
-                    _connStrNameDataProcessing = "Data_ProcessingEntitiesTEST";
-#else
-                    _connStrNameDataProcessing = "Data_ProcessingEntities";
-#endif
-                }
 
-                return _connStrNameDataProcessing;
+#if (TEST)
+                return "Data_ProcessingEntitiesTEST";
+#else
+                return "Data_ProcessingEntities";
+#endif
+
             }
         }
 
@@ -50,14 +75,14 @@ namespace DataProcessing
             get
             {
                 if (_dbCtxDataProcessingDefault == null)
-                    _dbCtxDataProcessingDefault = new Data_ProcessingEntities("name=" + connStrNameDataProcessing);
+                    _dbCtxDataProcessingDefault = new Data_ProcessingEntities("name=" + ConnStrNameDataProcessing);
                 return _dbCtxDataProcessingDefault;
             }
         }
 
         public Data_ProcessingEntities dbCtxDataProcessingNew
         {
-            get { return new Data_ProcessingEntities("name=" + connStrNameDataProcessing); }
+            get { return new Data_ProcessingEntities("name=" + ConnStrNameDataProcessing); }
         }
 
         private DbConnection _dbConnDataProcessing;
@@ -69,7 +94,7 @@ namespace DataProcessing
                 if (_dbConnDataProcessing == null)
                 {
                     string connString =
-                        DbUtils.GetProviderConnString(connStrNameDataProcessing);
+                        Utils.GetProviderConnString(ConnStrNameDataProcessing);
                     //
                     _dbConnDataProcessing = new SqlConnection(connString);
                     // profiling
@@ -88,22 +113,27 @@ namespace DataProcessing
 
         #region DbConnPortalWc
 
-        private string _connStrNamePortalWc;
 
-        private string connStrNamePortalWc
+        public string ConnStrNamePortalWc
         {
             get
             {
-                if (Utils.IsBlank(_connStrNamePortalWc))
-                {
 #if (TEST)
-                    _connStrNamePortalWc = "PortalWcTEST";
+                return "PortalWcTEST";
 #else
-                    _connStrNamePortalWc = "PortalWc";
+                   return "PortalWc";
 #endif
-                }
-
-                return _connStrNamePortalWc;
+            }
+        }
+        public string ConnStrNameHangfire
+        {
+            get
+            {
+#if (TEST)
+                return "HangfireTEST";
+#else
+                   return "Hangfire";
+#endif
             }
         }
 
@@ -114,7 +144,7 @@ namespace DataProcessing
         //    get
         //    {
         //        if (_dbCtxPortalWcDefault == null)
-        //            _dbCtxPortalWcDefault = new PortalWc(connStrNamePortalWc);
+        //            _dbCtxPortalWcDefault = new PortalWc(ConnStrNamePortalWc);
         //        return _dbCtxPortalWcDefault;
         //    }
         //}
@@ -128,7 +158,7 @@ namespace DataProcessing
                 if (_dbConnPortalWc == null)
                 {
                     string connString =
-                        DbUtils.GetProviderConnString(connStrNamePortalWc);
+                        Utils.GetProviderConnString(ConnStrNamePortalWc);
                     //
                     _dbConnPortalWc = new MySqlConnection(connString);
 
@@ -334,58 +364,58 @@ namespace DataProcessing
             }
         }
 
-        public string localFtpRoot => $"{GetAppSetting("FtpPath")}";
-        public string localFtpItRoot => $"{GetAppSetting("FtpItPath")}";
+        public string localFtpRoot => FileUtils.FixPath($"{GetProcessBaseDir()}/{GetAppSetting("FtpPath")}");
+        public string localFtpItRoot => FileUtils.FixPath($"{GetProcessBaseDir()}/{localFtpItRoot}/");
 
-        public string paylocityFtpRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("paylocityFtpPath")}";
+        public string paylocityFtpRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("paylocityFtpPath")}");
 
-        public string fromBoomiFtpRoot => $"{GetAppSetting("FtpItPath")}{GetAppSetting("FromBoomiFtpItPath")}";
+        public string fromBoomiFtpRoot => FileUtils.FixPath($"{localFtpItRoot}/{GetAppSetting("FromBoomiFtpItPath")}");
 
-        public string toBoomiFtpRoot => $"{GetAppSetting("FtpItPath")}{GetAppSetting("ToBoomiFtpItPath")}";
+        public string toBoomiFtpRoot => FileUtils.FixPath($"{localFtpItRoot}/{GetAppSetting("ToBoomiFtpItPath")}");
 
-        public string salesForceCrmListPath => $"{GetAppSetting("FtpPath")}{GetAppSetting("SalesForceCrmListPath")}";
+        public string salesForceCrmListPath => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("SalesForceCrmListPath")}");
 
-        public string cobraImportRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("CobraImportPath")}";
+        public string cobraImportRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("CobraImportPath")}");
 
-        public string cobraImportHoldingRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("CobraImportHoldingPath")}";
+        public string cobraImportHoldingRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("CobraImportHoldingPath")}");
 
-        public string cobraImportTestFilesRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("CobraImportTestFilesPath")}";
+        public string cobraImportTestFilesRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("CobraImportTestFilesPath")}");
 
-        public string cobraImportHoldingPreparedQbRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("cobraImportHoldingPreparedQbPath")}";
+        public string cobraImportHoldingPreparedQbRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraImportHoldingPreparedQbPath")}");
 
-        public string cobraImportArchiveDoneRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("cobraImportArchiveDonePath")}";
+        public string cobraImportArchiveDoneRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraImportArchiveDonePath")}");
 
-        public string cobraImportArchiveEmptyRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("cobraImportArchiveEmptyPath")}";
+        public string cobraImportArchiveEmptyRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraImportArchiveEmptyPath")}");
 
-        public string cobraImportArchiveErrorRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("cobraImportArchiveErrorPath")}";
+        public string cobraImportArchiveErrorRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraImportArchiveErrorPath")}");
 
-        public string cobraImportHoldingDecryptRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("cobraImportHoldingDecryptPath")}";
+        public string cobraImportHoldingDecryptRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraImportHoldingDecryptPath")}");
 
 
-        public string alegeusFileHeadersRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFileHeadersPath")}";
+        public string alegeusFileHeadersRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFileHeadersPath")}");
 
-        public string alegeusFileHeadersArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFileHeadersArchivePath")}";
+        public string alegeusFileHeadersArchiveRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFileHeadersArchivePath")}");
 
-        public string alegeusFilesPreCheckRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckPath")}";
-        public string alegeusFilesPreCheckOKRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckOKPath")}";
-        public string alegeusFilesPreCheckOKArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckOKArchivePath")}";
-        public string alegeusFilesPreCheckFailRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckFailPath")}";
-        public string alegeusFilesPreCheckTestRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckTestPath")}";
-        public string alegeusFilesReprocessRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesReprocessPath")}";
+        public string alegeusFilesPreCheckRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckPath")}");
+        public string alegeusFilesPreCheckOKRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckOKPath")}");
+        public string alegeusFilesPreCheckOKArchiveRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckOKArchivePath")}");
+        public string alegeusFilesPreCheckFailRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckFailPath")}");
+        public string alegeusFilesPreCheckTestRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckTestPath")}");
+        public string alegeusFilesReprocessRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesReprocessPath")}");
 
-        public string alegeusFilesPreCheckHoldAllRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusFilesPreCheckHoldAllPath")}";
+        public string alegeusFilesPreCheckHoldAllRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckHoldAllPath")}");
 
         #endregion
 
         #region ErrorLogPaths
 
-        public string AlegeusErrorLogMbiFilesRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogMbiFilesPath")}";
+        public string AlegeusErrorLogMbiFilesRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusErrorLogMbiFilesPath")}");
 
-        public string AlegeusErrorLogMbiFilesArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogMbiFilesArchivePath")}";
+        public string AlegeusErrorLogMbiFilesArchiveRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusErrorLogMbiFilesArchivePath")}");
 
-        public string AlegeusErrorLogResFilesRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogResFilesPath")}";
+        public string AlegeusErrorLogResFilesRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusErrorLogResFilesPath")}");
 
-        public string AlegeusErrorLogResFilesArchiveRoot => $"{GetAppSetting("FtpPath")}{GetAppSetting("alegeusErrorLogResFilesArchivePath")}";
+        public string AlegeusErrorLogResFilesArchiveRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusErrorLogResFilesArchivePath")}");
 
 
         public string[] cobraIgnoreFtpSourceDirs
@@ -429,7 +459,7 @@ namespace DataProcessing
                         {"G:/FTP/To_Alegeus_FTP_Holding/HoldALL", alegeusFilesPreCheckHoldAllRoot},
                         {"G:/FTP/To_Alegeus_FTP_Holding", alegeusFilesPreCheckRoot},
                         {"G:/FTP/AutomatedHeaderV1_Files", alegeusFileHeadersRoot},
-                        {"G:/FTP", GetAppSetting("FtpPath")}
+                        {"G:/FTP", localFtpRoot}
                     };
                 return _prodToRunningCtxPathReplacePatterns;
             }

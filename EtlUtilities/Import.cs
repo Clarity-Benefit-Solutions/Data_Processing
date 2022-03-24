@@ -87,7 +87,7 @@ namespace EtlUtilities
             try
             {
                 string fileName = Path.GetFileName(srcFilePath);
-                fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, "", "",
+                fileLogParams?.SetFileNames(Utils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, "", "",
                     "ImportAlegeusFile", $"Starting: Import {fileName}", "Starting");
 
                 // split text fileinto multiple files
@@ -214,7 +214,7 @@ namespace EtlUtilities
         public static string PrefixLineWithEntireLineAndFileName(string srcFilePath, string orgSrcFilePath, FileOperationLogParams fileLogParams)
         {
             string fileName = Path.GetFileName(orgSrcFilePath);
-            //fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, orgSrcFilePath, "", "", $"{ MethodBase.GetCurrentMethod()?.Name}", $"Adding Entire Line as Last Column", "Starting");
+            //fileLogParams?.SetFileNames(Utils.GetUniqueIdFromFileName(fileName), fileName, orgSrcFilePath, "", "", $"{ MethodBase.GetCurrentMethod()?.Name}", $"Adding Entire Line as Last Column", "Starting");
 
             //
             string tempFileName = Path.GetTempFileName();
@@ -257,7 +257,7 @@ namespace EtlUtilities
 
             string testMarker = "";
 
-            if (DbUtils.IsTestFile(srcFileName))
+            if (Utils.IsTestFile(srcFileName))
             {
                 testMarker = $"_TEST_";
             }
@@ -274,8 +274,8 @@ namespace EtlUtilities
             if (platformType == PlatformType.Cobra)
             {
                 // we dont have bencodes! just return the filename
-                newPath = $"{Path.GetDirectoryName(srcFilePath)}/{DbUtils.GetUniqueIdFromFileName(srcFileName)}--";
-                newPath += $"{testMarker}{DbUtils.StripUniqueIdAndHeaderTypeFromFileName(Path.GetFileNameWithoutExtension(srcFileName))}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
+                newPath = $"{Path.GetDirectoryName(srcFilePath)}/{Utils.GetUniqueIdFromFileName(srcFileName)}--";
+                newPath += $"{testMarker}{Utils.StripUniqueIdAndHeaderTypeFromFileName(Path.GetFileNameWithoutExtension(srcFileName))}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
                 newPath = FileUtils.FixPath(newPath);
 
                 return newPath;
@@ -345,7 +345,7 @@ namespace EtlUtilities
                 }
             }
             //
-            newPath = $"{Path.GetDirectoryName(srcFilePath)}/{DbUtils.GetUniqueIdFromFileName(srcFileName)}--";
+            newPath = $"{Path.GetDirectoryName(srcFilePath)}/{Utils.GetUniqueIdFromFileName(srcFileName)}--";
             newPath += $"{testMarker}{ BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
             newPath = FileUtils.FixPath(newPath);
 
@@ -876,7 +876,7 @@ namespace EtlUtilities
             try
             {
                 string fileName = Path.GetFileName(srcFilePath);
-                fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, tableName,
+                fileLogParams?.SetFileNames(Utils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, tableName,
                     tableName, "ImportCrmListFileBulkCopy", $"Starting: Import {fileName}", "Starting");
 
                 //

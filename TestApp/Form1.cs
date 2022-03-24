@@ -243,7 +243,7 @@ namespace TestApp
 
             try
             {
-                var directoryPath = Utils.GetExeBaseDir();
+                var directoryPath = Vars.GetProcessBaseDir();
                 Process.Start($"{directoryPath}/../../../_MsAccessFiles/AlegeusErrorLogSystemv4v_Control-New.accdb");
             }
             catch (Exception ex)
@@ -272,12 +272,12 @@ namespace TestApp
 
             try
             {
-                var directoryPath = Utils.GetExeBaseDir();
-                Process.Start($"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
+                var directoryPath = Vars.GetProcessBaseDir();
+                Process.Start($"{directoryPath}/../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
                 Process.Start(
-                    $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
+                    $"{directoryPath}/../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
                 Process.Start(
-                    $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
+                    $"{directoryPath}/../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
             }
             catch (Exception ex)
             {

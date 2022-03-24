@@ -22,10 +22,7 @@ namespace CoreUtils
     {
         public delegate void OnLogOperationCallback(MessageLogParams logParams);
 
-        private static string FilePartsDelimiter = "--";
-
-        public static int MAX_FILENAME_LENGTH_FTP = 60;
-
+        
         public static event EventHandler<MessageLogParams> EventOnLogOperationCallback;
 
         public static void RaiseOnLogOperationCallback(MessageLogParams logParams)
@@ -285,96 +282,6 @@ namespace CoreUtils
         }
 
 
-        public static string GetUniqueIdFromFileName(string fileName)
-        {
-            int indexOfSep = fileName.IndexOf($"{FilePartsDelimiter}");
-            if (indexOfSep > 0)
-            {
-                return fileName.Substring(0, indexOfSep).Trim();
-            }
-
-            return "";
-        }
-
-        public static HeaderType GetHeaderTypeFromFileName(string fileName)
-        {
-            string[] fileNameParts = fileName?.Split(new[] { FilePartsDelimiter }, StringSplitOptions.None);
-            if (fileNameParts.Length < 3)
-            {
-                return HeaderType.NotApplicable;
-            }
-            else
-            {
-                string strHeaderType = fileNameParts[1];
-                if (strHeaderType == HeaderType.NotApplicable.ToNumberString())
-                {
-                    return HeaderType.NotApplicable;
-                }
-                else if (strHeaderType == HeaderType.New.ToNumberString())
-                {
-                    return HeaderType.New;
-                }
-                else if (strHeaderType == HeaderType.Old.ToNumberString())
-                {
-                    return HeaderType.Old;
-                }
-                else if (strHeaderType == HeaderType.NoChange.ToNumberString())
-                {
-                    return HeaderType.NoChange;
-                }
-                else if (strHeaderType == HeaderType.Own.ToNumberString())
-                {
-                    return HeaderType.Own;
-                }
-                else
-                {
-                    return HeaderType.NotApplicable;
-                }
-            }
-        }
-
-        public static string StripUniqueIdAndHeaderTypeFromFileName(string fileName)
-        {
-            string[] fileNameParts = fileName?.Split(new[] { FilePartsDelimiter }, StringSplitOptions.None);
-
-            // return the last part of the fileName
-            return fileNameParts[fileNameParts.Length - 1] ?? "";
-
-            //int indexOfSep = fileName.IndexOf($"{FilePartsDelimiter}");
-            //if (indexOfSep > 0)
-            //{
-            //    fileName = fileName.Substring(indexOfSep + 2);
-            //}
-
-            //fileName = fileName.Trim();
-
-            //return fileName;
-        }
-
-        public static string AddUniqueIdAndHeaderTypeToFileName(string fileName,
-            HeaderType headerType = HeaderType.NotApplicable)
-        {
-            fileName = StripUniqueIdAndHeaderTypeFromFileName(fileName);
-
-            string fileId = Utils.RandomString(3);
-            fileName = $"{fileId}{FilePartsDelimiter}{headerType.ToNumberString()}{FilePartsDelimiter}{fileName}";
-            //
-            fileName = fileName.Trim();
-            //
-            return fileName;
-        }
-
-        public static string AddUniqueIdToFileName(string fileName)
-        {
-            fileName = StripUniqueIdAndHeaderTypeFromFileName(fileName);
-
-            string fileId = Utils.RandomStringNumbers(3);
-            fileName = $"{fileId}{FilePartsDelimiter}{fileName}";
-            //
-            fileName = fileName.Trim();
-            //
-            return fileName;
-        }
 
 
         // return last fileLogId from file_processing_log for old or new filename equal to picked up filename so the file can be tracked across operations
@@ -398,17 +305,7 @@ namespace CoreUtils
         }
 
 
-        public static Boolean IsTestFile(string srcFilePath)
-        {
-            FileInfo fileInfo = new FileInfo(srcFilePath);
-
-            if (fileInfo.Name?.ToLower().IndexOf("test") >= 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
+       
         public static string AddUniqueIdToFileAndLogToDb(string srcFilePath, Boolean fixFileNameLength, FileOperationLogParams fileLogParams)
         {
             // get filename without leading fileid
@@ -421,7 +318,7 @@ namespace CoreUtils
 
 
             // if file has uniqueID and headerttype already, nothing to do
-            if (!Utils.IsBlank(GetUniqueIdFromFileName(srcFilePath))
+            if (!Utils.IsBlank(Utils.GetUniqueIdFromFileName(srcFilePath))
                /* && (GetHeaderTypeFromFileName(srcFilePath) == headerType || headerType == HeaderType.NotApplicable)*/)
             {
                 return srcFilePath;
@@ -431,18 +328,18 @@ namespace CoreUtils
             string oldFileName = srcFileInfo.Name;
 
             //string newFileName = AddUniqueIdAndHeaderTypeToFileName(oldFileName, headerType);
-            string newFileName = AddUniqueIdToFileName(oldFileName);
+            string newFileName = Utils.AddUniqueIdToFileName(oldFileName);
 
             // fix for alegeus - max 30 chars incvluding extension
             string newFileNameFixed = newFileName;
             if (fixFileNameLength)
             {
                 newFileNameFixed =
-                    $" {Utils.Left(Path.GetFileNameWithoutExtension(newFileName), MAX_FILENAME_LENGTH_FTP - 4)}{Path.GetExtension(newFileName)}";
+                    $" {Utils.Left(Path.GetFileNameWithoutExtension(newFileName), Utils.MaxFilenameLengthFtp - 4)}{Path.GetExtension(newFileName)}";
             }
 
             //
-            string newFileId = GetUniqueIdFromFileName(newFileName);
+            string newFileId = Utils.GetUniqueIdFromFileName(newFileName);
 
             //get full path of dest file with uniqueID
             string newFilePath = $"{srcFileInfo.Directory}/{newFileName}";
@@ -472,24 +369,6 @@ namespace CoreUtils
             //
             return srcFilePath;
 
-        }
-
-        public static string GetConnString(string connStringName)
-        {
-            string entityConnectionString = ConfigurationManager.ConnectionStrings[connStringName].ConnectionString;
-            return entityConnectionString;
-
-        }
-
-        public static string GetProviderConnString(string connStringName)
-        {
-            string entityConnectionString = GetConnString(connStringName);
-            if (entityConnectionString.IndexOf("provider connection string=") > 0)
-                return new EntityConnectionStringBuilder(entityConnectionString).ProviderConnectionString;
-            else
-            {
-                return entityConnectionString;
-            }
         }
 
         public class DbParameters : List<SqlParameter>

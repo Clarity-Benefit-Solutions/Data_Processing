@@ -101,7 +101,7 @@ namespace DataProcessing
                 ///////////////////////////////////////
                 case OperationResult.Ok:
                     ///////////////////////////////////////
-                    if (DbUtils.IsTestFile(this.srcFilePath))
+                    if (Utils.IsTestFile(this.srcFilePath))
                     {
                         newFilePath = $"{Vars.alegeusFilesPreCheckTestRoot}/{fileName}";
                     }
@@ -130,7 +130,7 @@ namespace DataProcessing
                     ///////////////////////////////////////
 
                     string srcFileName = Path.GetFileName(this.srcFilePath);
-                    if (DbUtils.IsTestFile(this.srcFilePath))
+                    if (Utils.IsTestFile(this.srcFilePath))
                     {
                         newFilePath = $"{Vars.alegeusFilesPreCheckTestRoot}/{fileName}";
                     }
@@ -214,7 +214,7 @@ namespace DataProcessing
         {
             // 2. import the file
             string fileName = Path.GetFileName(srcFilePath) ?? string.Empty;
-            fileLogParams?.SetFileNames(DbUtils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, "", "",
+            fileLogParams?.SetFileNames(Utils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, "", "",
                 "CheckFile", $"Starting: Check {fileName}", "Starting");
 
             // split text fileinto multiple files
@@ -1237,7 +1237,7 @@ namespace DataProcessing
             }
 
             // pad ssn to 9 digits with leading zeros
-            if (column.SourceColumn == "EmployeeSocialSecurityNumber" && value.Length < column.MinLength)
+            if (column.SourceColumn == "EmployeeSocialSecurityNumber" && !Utils.IsBlank(value) && value.Length < column.MinLength)
             {
                 value = value.PadLeft(column.MinLength, '0');
             }

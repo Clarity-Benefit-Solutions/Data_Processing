@@ -9,7 +9,6 @@ namespace DataProcessingWebApp
     {
         public void Preload(string[] parameters)
         {
-            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<HighlighterDbContext, Configuration>());
             HangfireAspNet.Use(Startup.GetHangfireConfiguration);
         }
     }
