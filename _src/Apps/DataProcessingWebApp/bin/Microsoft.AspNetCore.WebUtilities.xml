@@ -9,9 +9,19 @@
             Invalid {0}, {1} or {2} length.
             </summary>
         </member>
+        <member name="F:Microsoft.Extensions.WebEncoders.Sources.EncoderResources.WebEncoders_MalformedInput">
+            <summary>
+            Malformed input: {0} is an invalid input length.
+            </summary>
+        </member>
         <member name="M:Microsoft.Extensions.WebEncoders.Sources.EncoderResources.FormatWebEncoders_InvalidCountOffsetOrLength(System.Object,System.Object,System.Object)">
             <summary>
             Invalid {0}, {1} or {2} length.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.WebEncoders.Sources.EncoderResources.FormatWebEncoders_MalformedInput(System.Object)">
+            <summary>
+            Malformed input: {0} is an invalid input length.
             </summary>
         </member>
         <member name="T:Microsoft.AspNetCore.WebUtilities.WebEncoders">
@@ -135,6 +145,124 @@
             </summary>
             <param name="text">The string to be decoded.</param>
             <returns>The decoded data.</returns>
+        </member>
+        <member name="T:Microsoft.AspNetCore.WebUtilities.BufferedReadStream">
+            <summary>
+            A Stream that wraps another stream and allows reading lines.
+            The data is buffered in memory.
+            </summary>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.#ctor(System.IO.Stream,System.Int32)">
+            <summary>
+            Creates a new stream.
+            </summary>
+            <param name="inner">The stream to wrap.</param>
+            <param name="bufferSize">Size of buffer in bytes.</param>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.#ctor(System.IO.Stream,System.Int32,System.Buffers.ArrayPool{System.Byte})">
+            <summary>
+            Creates a new stream.
+            </summary>
+            <param name="inner">The stream to wrap.</param>
+            <param name="bufferSize">Size of buffer in bytes.</param>
+            <param name="bytePool">ArrayPool for the buffer.</param>
+        </member>
+        <member name="P:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.BufferedData">
+            <summary>
+            The currently buffered data.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.CanRead">
+            <inheritdoc/>
+        </member>
+        <member name="P:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.CanSeek">
+            <inheritdoc/>
+        </member>
+        <member name="P:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.CanTimeout">
+            <inheritdoc/>
+        </member>
+        <member name="P:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.CanWrite">
+            <inheritdoc/>
+        </member>
+        <member name="P:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.Length">
+            <inheritdoc/>
+        </member>
+        <member name="P:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.Position">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.Seek(System.Int64,System.IO.SeekOrigin)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.SetLength(System.Int64)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.Dispose(System.Boolean)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.Flush">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.FlushAsync(System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.Write(System.Byte[],System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.WriteAsync(System.Byte[],System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.Read(System.Byte[],System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.ReadAsync(System.Byte[],System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.EnsureBuffered">
+            <summary>
+            Ensures that the buffer is not empty.
+            </summary>
+            <returns>Returns <c>true</c> if the buffer is not empty; <c>false</c> otherwise.</returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.EnsureBufferedAsync(System.Threading.CancellationToken)">
+            <summary>
+            Ensures that the buffer is not empty.
+            </summary>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>Returns <c>true</c> if the buffer is not empty; <c>false</c> otherwise.</returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.EnsureBuffered(System.Int32)">
+            <summary>
+            Ensures that a minimum amount of buffered data is available.
+            </summary>
+            <param name="minCount">Minimum amount of buffered data.</param>
+            <returns>Returns <c>true</c> if the minimum amount of buffered data is available; <c>false</c> otherwise.</returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.EnsureBufferedAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Ensures that a minimum amount of buffered data is available.
+            </summary>
+            <param name="minCount">Minimum amount of buffered data.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>Returns <c>true</c> if the minimum amount of buffered data is available; <c>false</c> otherwise.</returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.ReadLine(System.Int32)">
+            <summary>
+            Reads a line. A line is defined as a sequence of characters followed by
+            a carriage return immediately followed by a line feed. The resulting string does not
+            contain the terminating carriage return and line feed.
+            </summary>
+            <param name="lengthLimit">Maximum allowed line length.</param>
+            <returns>A line.</returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.WebUtilities.BufferedReadStream.ReadLineAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Reads a line. A line is defined as a sequence of characters followed by
+            a carriage return immediately followed by a line feed. The resulting string does not
+            contain the terminating carriage return and line feed.
+            </summary>
+            <param name="lengthLimit">Maximum allowed line length.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>A line.</returns>
         </member>
         <member name="T:Microsoft.AspNetCore.WebUtilities.FileBufferingReadStream">
             <summary>

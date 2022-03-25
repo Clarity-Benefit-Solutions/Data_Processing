@@ -4,6 +4,72 @@
         <name>Microsoft.AspNetCore.Http.Abstractions</name>
     </assembly>
     <members>
+        <member name="T:Microsoft.Extensions.Internal.ActivatorUtilities">
+            <summary>
+            Helper code for the various activator services.
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.Internal.ActivatorUtilities.CreateInstance(System.IServiceProvider,System.Type,System.Object[])">
+            <summary>
+            Instantiate a type with constructor arguments provided directly and/or from an <see cref="T:System.IServiceProvider"/>.
+            </summary>
+            <param name="provider">The service provider used to resolve dependencies</param>
+            <param name="instanceType">The type to activate</param>
+            <param name="parameters">Constructor arguments not provided by the <paramref name="provider"/>.</param>
+            <returns>An activated object of type instanceType</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.Internal.ActivatorUtilities.CreateFactory(System.Type,System.Type[])">
+            <summary>
+            Create a delegate that will instantiate a type with constructor arguments provided directly
+            and/or from an <see cref="T:System.IServiceProvider"/>.
+            </summary>
+            <param name="instanceType">The type to activate</param>
+            <param name="argumentTypes">
+            The types of objects, in order, that will be passed to the returned function as its second parameter
+            </param>
+            <returns>
+            A factory that will instantiate instanceType using an <see cref="T:System.IServiceProvider"/>
+            and an argument array containing objects matching the types defined in argumentTypes
+            </returns>
+        </member>
+        <member name="M:Microsoft.Extensions.Internal.ActivatorUtilities.CreateInstance``1(System.IServiceProvider,System.Object[])">
+            <summary>
+            Instantiate a type with constructor arguments provided directly and/or from an <see cref="T:System.IServiceProvider"/>.
+            </summary>
+            <typeparam name="T">The type to activate</typeparam>
+            <param name="provider">The service provider used to resolve dependencies</param>
+            <param name="parameters">Constructor arguments not provided by the <paramref name="provider"/>.</param>
+            <returns>An activated object of type T</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.Internal.ActivatorUtilities.GetServiceOrCreateInstance``1(System.IServiceProvider)">
+            <summary>
+            Retrieve an instance of the given type from the service provider. If one is not found then instantiate it directly.
+            </summary>
+            <typeparam name="T">The type of the service</typeparam>
+            <param name="provider">The service provider used to resolve dependencies</param>
+            <returns>The resolved service or created instance</returns>
+        </member>
+        <member name="M:Microsoft.Extensions.Internal.ActivatorUtilities.GetServiceOrCreateInstance(System.IServiceProvider,System.Type)">
+            <summary>
+            Retrieve an instance of the given type from the service provider. If one is not found then instantiate it directly.
+            </summary>
+            <param name="provider">The service provider</param>
+            <param name="type">The type of the service</param>
+            <returns>The resolved service or created instance</returns>
+        </member>
+        <member name="T:Microsoft.Extensions.Internal.ActivatorUtilitiesConstructorAttribute">
+            <summary>
+            Marks the constructor to be used when activating type using <see cref="T:Microsoft.Extensions.Internal.ActivatorUtilities"/>.
+            </summary>
+        </member>
+        <member name="T:Microsoft.Extensions.Internal.ObjectFactory">
+            <summary>
+            The result of <see cref="M:Microsoft.Extensions.Internal.ActivatorUtilities.CreateFactory(System.Type,System.Type[])"/>.
+            </summary>
+            <param name="serviceProvider">The <see cref="T:System.IServiceProvider"/> to get service arguments from.</param>
+            <param name="arguments">Additional constructor arguments.</param>
+            <returns>The instantiated type.</returns>
+        </member>
         <member name="T:Microsoft.AspNetCore.Http.Authentication.AuthenticateInfo">
             <summary>
             Used to store the results of an Authenticate call.
@@ -101,7 +167,7 @@
         </member>
         <member name="P:Microsoft.AspNetCore.Http.Authentication.AuthenticationProperties.RedirectUri">
             <summary>
-            Gets or sets the full path or absolute URI to be used as an http redirect response value.
+            Gets or sets the full path or absolute URI to be used as an HTTP redirect response value.
             </summary>
         </member>
         <member name="P:Microsoft.AspNetCore.Http.Authentication.AuthenticationProperties.IssuedUtc">
@@ -177,6 +243,17 @@
             Gets or sets the lifespan of a cookie.
             </summary>
         </member>
+        <member name="P:Microsoft.AspNetCore.Http.CookieBuilder.MaxAge">
+            <summary>
+            Gets or sets the max-age for the cookie.
+            </summary>
+        </member>
+        <member name="P:Microsoft.AspNetCore.Http.CookieBuilder.IsEssential">
+            <summary>
+            Indicates if this cookie is essential for the application to function correctly. If true then
+            consent policy checks may be bypassed. The default value is false.
+            </summary>
+        </member>
         <member name="M:Microsoft.AspNetCore.Http.CookieBuilder.Build(Microsoft.AspNetCore.Http.HttpContext)">
             <summary>
             Creates the cookie options from the given <paramref name="context"/>.
@@ -230,7 +307,7 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Http.HeaderDictionaryExtensions.AppendCommaSeparatedValues(Microsoft.AspNetCore.Http.IHeaderDictionary,System.String,System.String[])">
             <summary>
-            Quotes any values containing comas, and then coma joins all of the values with any existing values.
+            Quotes any values containing commas, and then comma joins all of the values with any existing values.
             </summary>
             <param name="headers">The <see cref="T:Microsoft.AspNetCore.Http.IHeaderDictionary"/> to use.</param>
             <param name="key">The header name.</param>
@@ -247,7 +324,7 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Http.HeaderDictionaryExtensions.SetCommaSeparatedValues(Microsoft.AspNetCore.Http.IHeaderDictionary,System.String,System.String[])">
             <summary>
-            Quotes any values containing comas, and then coma joins all of the values.
+            Quotes any values containing commas, and then comma joins all of the values.
             </summary>
             <param name="headers">The <see cref="T:Microsoft.AspNetCore.Http.IHeaderDictionary"/> to use.</param>
             <param name="key">The header name.</param>
@@ -276,6 +353,29 @@
             <param name="encoding">The encoding to use.</param>
             <param name="cancellationToken">Notifies when request operations should be cancelled.</param>
             <returns>A task that represents the completion of the write operation.</returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Http.ResponseTrailerExtensions.DeclareTrailer(Microsoft.AspNetCore.Http.HttpResponse,System.String)">
+            <summary>
+            Adds the given trailer name to the 'Trailer' response header. This must happen before the response headers are sent.
+            </summary>
+            <param name="response"></param>
+            <param name="trailerName"></param>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Http.ResponseTrailerExtensions.SupportsTrailers(Microsoft.AspNetCore.Http.HttpResponse)">
+            <summary>
+            Indicates if the server supports sending trailer headers for this response.
+            </summary>
+            <param name="response"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Http.ResponseTrailerExtensions.AppendTrailer(Microsoft.AspNetCore.Http.HttpResponse,System.String,Microsoft.Extensions.Primitives.StringValues)">
+            <summary>
+            Adds the given trailer header to the trailers collection to be sent at the end of the response body.
+            Check <see cref="M:Microsoft.AspNetCore.Http.ResponseTrailerExtensions.SupportsTrailers(Microsoft.AspNetCore.Http.HttpResponse)" /> or an InvalidOperationException may be thrown.
+            </summary>
+            <param name="response"></param>
+            <param name="trailerName"></param>
+            <param name="trailerValues"></param>
         </member>
         <member name="T:Microsoft.AspNetCore.Http.FragmentString">
             <summary>
@@ -402,6 +502,23 @@
             <param name="uri"></param>
             <returns></returns>
         </member>
+        <member name="M:Microsoft.AspNetCore.Http.HostString.MatchesAny(Microsoft.Extensions.Primitives.StringSegment,System.Collections.Generic.IList{Microsoft.Extensions.Primitives.StringSegment})">
+            <summary>
+            Matches the host portion of a host header value against a list of patterns.
+            The host may be the encoded punycode or decoded unicode form so long as the pattern
+            uses the same format.
+            </summary>
+            <param name="value">Host header value with or without a port.</param>
+            <param name="patterns">A set of pattern to match, without ports.</param>
+            <remarks>
+            The port on the given value is ignored. The patterns should not have ports.
+            The patterns may be exact matches like "example.com", a top level wildcard "*"
+            that matches all hosts, or a subdomain wildcard like "*.example.com" that matches
+            "abc.example.com:443" but not "example.com:443".
+            Matching is case insensitive.
+            </remarks>
+            <returns></returns>
+        </member>
         <member name="M:Microsoft.AspNetCore.Http.HostString.Equals(Microsoft.AspNetCore.Http.HostString)">
             <summary>
             Compares the equality of the Value property, ignoring case.
@@ -438,7 +555,7 @@
             <param name="right"></param>
             <returns></returns>
         </member>
-        <member name="M:Microsoft.AspNetCore.Http.HostString.GetParts(System.String@,System.String@)">
+        <member name="M:Microsoft.AspNetCore.Http.HostString.GetParts(Microsoft.Extensions.Primitives.StringSegment,Microsoft.Extensions.Primitives.StringSegment@,Microsoft.Extensions.Primitives.StringSegment@)">
             <summary>
             Parses the current value. IPv6 addresses will have brackets added if they are missing.
             </summary>
@@ -528,13 +645,13 @@
         </member>
         <member name="P:Microsoft.AspNetCore.Http.HttpRequest.Method">
             <summary>
-            Gets or set the HTTP method.
+            Gets or sets the HTTP method.
             </summary>
             <returns>The HTTP method.</returns>
         </member>
         <member name="P:Microsoft.AspNetCore.Http.HttpRequest.Scheme">
             <summary>
-            Gets or set the HTTP request scheme.
+            Gets or sets the HTTP request scheme.
             </summary>
             <returns>The HTTP request scheme.</returns>
         </member>
@@ -546,25 +663,25 @@
         </member>
         <member name="P:Microsoft.AspNetCore.Http.HttpRequest.Host">
             <summary>
-            Gets or set the Host header. May include the port.
+            Gets or sets the Host header. May include the port.
             </summary>
             <return>The Host header.</return>
         </member>
         <member name="P:Microsoft.AspNetCore.Http.HttpRequest.PathBase">
             <summary>
-            Gets or set the RequestPathBase.
+            Gets or sets the RequestPathBase.
             </summary>
             <returns>The RequestPathBase.</returns>
         </member>
         <member name="P:Microsoft.AspNetCore.Http.HttpRequest.Path">
             <summary>
-            Gets or set the request path from RequestPath.
+            Gets or sets the request path from RequestPath.
             </summary>
             <returns>The request path from RequestPath.</returns>
         </member>
         <member name="P:Microsoft.AspNetCore.Http.HttpRequest.QueryString">
             <summary>
-            Gets or set the raw query string used to create the query collection in Request.Query.
+            Gets or sets the raw query string used to create the query collection in Request.Query.
             </summary>
             <returns>The raw query string.</returns>
         </member>
@@ -576,7 +693,7 @@
         </member>
         <member name="P:Microsoft.AspNetCore.Http.HttpRequest.Protocol">
             <summary>
-            Gets or set the RequestProtocol.
+            Gets or sets the RequestProtocol.
             </summary>
             <returns>The RequestProtocol.</returns>
         </member>
@@ -594,8 +711,9 @@
         </member>
         <member name="P:Microsoft.AspNetCore.Http.HttpRequest.ContentLength">
             <summary>
-            Gets or sets the Content-Length header
+            Gets or sets the Content-Length header.
             </summary>
+            <returns>The value of the Content-Length header, if any.</returns>
         </member>
         <member name="P:Microsoft.AspNetCore.Http.HttpRequest.ContentType">
             <summary>
@@ -605,14 +723,15 @@
         </member>
         <member name="P:Microsoft.AspNetCore.Http.HttpRequest.Body">
             <summary>
-            Gets or set the RequestBody Stream.
+            Gets or sets the RequestBody Stream.
             </summary>
             <returns>The RequestBody Stream.</returns>
         </member>
         <member name="P:Microsoft.AspNetCore.Http.HttpRequest.HasFormContentType">
             <summary>
-            Checks the content-type header for form types.
+            Checks the Content-Type header for form types.
             </summary>
+            <returns>true if the Content-Type header represents a form content type; otherwise, false.</returns>
         </member>
         <member name="P:Microsoft.AspNetCore.Http.HttpRequest.Form">
             <summary>
@@ -706,13 +825,15 @@
             <summary>
             Returns a temporary redirect response (HTTP 302) to the client.
             </summary>
-            <param name="location">The URL to redirect the client to.</param>
+            <param name="location">The URL to redirect the client to. This must be properly encoded for use in http headers
+            where only ASCII characters are allowed.</param>
         </member>
         <member name="M:Microsoft.AspNetCore.Http.HttpResponse.Redirect(System.String,System.Boolean)">
             <summary>
             Returns a redirect response (HTTP 301 or HTTP 302) to the client.
             </summary>
-            <param name="location">The URL to redirect the client to.</param>
+            <param name="location">The URL to redirect the client to. This must be properly encoded for use in http headers
+            where only ASCII characters are allowed.</param>
             <param name="permanent"><c>True</c> if the redirect is permanent (301), otherwise <c>false</c> (302).</param>
         </member>
         <member name="T:Microsoft.AspNetCore.Http.IMiddleware">
@@ -730,7 +851,7 @@
         </member>
         <member name="T:Microsoft.AspNetCore.Http.IMiddlewareFactory">
             <summary>
-            Provides methods to create middlware.
+            Provides methods to create middleware.
             </summary>
         </member>
         <member name="M:Microsoft.AspNetCore.Http.IMiddlewareFactory.Create(System.Type)">
@@ -758,7 +879,7 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Http.PathString.#ctor(System.String)">
             <summary>
-            Initalize the path string with a given value. This value must be in unescaped format. Use
+            Initialize the path string with a given value. This value must be in unescaped format. Use
             PathString.FromUriComponent(value) if you have a path value which is in an escaped format.
             </summary>
             <param name="value">The unescaped path to be assigned to the Value property.</param>
@@ -966,12 +1087,12 @@
         </member>
         <member name="P:Microsoft.AspNetCore.Http.Abstractions.Resources.Exception_UseMiddlewareNoInvokeMethod">
             <summary>
-            No public '{0}' or '{1}' method found.
+            No public '{0}' or '{1}' method found for middleware of type '{2}'.
             </summary>
         </member>
-        <member name="M:Microsoft.AspNetCore.Http.Abstractions.Resources.FormatException_UseMiddlewareNoInvokeMethod(System.Object,System.Object)">
+        <member name="M:Microsoft.AspNetCore.Http.Abstractions.Resources.FormatException_UseMiddlewareNoInvokeMethod(System.Object,System.Object,System.Object)">
             <summary>
-            No public '{0}' or '{1}' method found.
+            No public '{0}' or '{1}' method found for middleware of type '{2}'.
             </summary>
         </member>
         <member name="P:Microsoft.AspNetCore.Http.Abstractions.Resources.Exception_UseMiddlewareNonTaskReturnType">
@@ -1216,12 +1337,12 @@
         </member>
         <member name="T:Microsoft.AspNetCore.Builder.Extensions.MapMiddleware">
             <summary>
-            Respresents a middleware that maps a request path to a sub-request pipeline.
+            Represents a middleware that maps a request path to a sub-request pipeline.
             </summary>
         </member>
         <member name="M:Microsoft.AspNetCore.Builder.Extensions.MapMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Microsoft.AspNetCore.Builder.Extensions.MapOptions)">
             <summary>
-            Creates a new instace of <see cref="T:Microsoft.AspNetCore.Builder.Extensions.MapMiddleware"/>.
+            Creates a new instance of <see cref="T:Microsoft.AspNetCore.Builder.Extensions.MapMiddleware"/>.
             </summary>
             <param name="next">The delegate representing the next middleware in the request pipeline.</param>
             <param name="options">The middleware options.</param>
@@ -1250,7 +1371,7 @@
         </member>
         <member name="T:Microsoft.AspNetCore.Builder.Extensions.MapWhenMiddleware">
             <summary>
-            Respresents a middleware that runs a sub-request pipeline when a given predicate is matched.
+            Represents a middleware that runs a sub-request pipeline when a given predicate is matched.
             </summary>
         </member>
         <member name="M:Microsoft.AspNetCore.Builder.Extensions.MapWhenMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Microsoft.AspNetCore.Builder.Extensions.MapWhenOptions)">
@@ -1289,7 +1410,7 @@
         </member>
         <member name="M:Microsoft.AspNetCore.Builder.Extensions.UsePathBaseMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Microsoft.AspNetCore.Http.PathString)">
             <summary>
-            Creates a new instace of <see cref="T:Microsoft.AspNetCore.Builder.Extensions.UsePathBaseMiddleware"/>.
+            Creates a new instance of <see cref="T:Microsoft.AspNetCore.Builder.Extensions.UsePathBaseMiddleware"/>.
             </summary>
             <param name="next">The delegate representing the next middleware in the request pipeline.</param>
             <param name="pathBase">The path base to extract.</param>
@@ -1414,7 +1535,7 @@
             <summary>
             Adds a middleware delegate to the application's request pipeline.
             </summary>
-            <param name="middleware">The middleware delgate.</param>
+            <param name="middleware">The middleware delegate.</param>
             <returns>The <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/>.</returns>
         </member>
         <member name="M:Microsoft.AspNetCore.Builder.IApplicationBuilder.New">

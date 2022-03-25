@@ -26,6 +26,10 @@
             <para>
             <see cref="P:Microsoft.AspNetCore.Http.CookieBuilder.SameSite"/> defaults to <see cref="F:Microsoft.AspNetCore.Http.SameSiteMode.Strict"/>.
             <see cref="P:Microsoft.AspNetCore.Http.CookieBuilder.HttpOnly"/> defaults to <c>true</c>.
+            <see cref="P:Microsoft.AspNetCore.Http.CookieBuilder.IsEssential"/> defaults to <c>true</c>. The cookie used by the antiforgery system
+            is part of a security system that is necessary when using cookie-based authentication. It should be
+            considered required for the application to function.
+            <see cref="P:Microsoft.AspNetCore.Http.CookieBuilder.SecurePolicy"/> defaults to <see cref="F:Microsoft.AspNetCore.Http.CookieSecurePolicy.None"/>.
             </para>
             </remarks>
         </member>
@@ -143,9 +147,17 @@
         <member name="M:Microsoft.AspNetCore.Antiforgery.AntiforgeryValidationException.#ctor(System.String)">
             <summary>
             Creates a new instance of <see cref="T:Microsoft.AspNetCore.Antiforgery.AntiforgeryValidationException"/> with the specified
-            exception <paramref name="message"/>.
+            exception message.
             </summary>
             <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="M:Microsoft.AspNetCore.Antiforgery.AntiforgeryValidationException.#ctor(System.String,System.Exception)">
+            <summary>
+            Creates a new instance of <see cref="T:Microsoft.AspNetCore.Antiforgery.AntiforgeryValidationException"/> with the specified
+            exception message and inner exception.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+            <param name="innerException">The inner <see cref="T:System.Exception"/>.</param>
         </member>
         <member name="T:Microsoft.AspNetCore.Antiforgery.IAntiforgery">
             <summary>
