@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CoreUtils;
 using CoreUtils.Classes;
-using EtlUtilities;
+using DataProcessing;
 
 // ReSharper disable All
 
@@ -61,8 +61,8 @@ namespace DataProcessing
             GetFtpFilesFromAlegeus(ftpConn, fileLogParams);
 
             ////GetCrmList
-            //Import.ImportCrmListFileBulkCopy(dbConn, $"{Vars.fromBoomiFtpRoot}/CRM_List.csv", false,
-            //    "dbo.[CRM_List]", fileLogParams);
+            //Import.ImportCrmListFileBulkCopy(DbConn, $"{Vars.fromBoomiFtpRoot}/CRM_List.csv", false,
+            //    "dbo.[CRM_List]", FileLogParams);
 
             //ImportAlegeusResultResFiles
             ImportAlegeusFiles(dbConn, fileLogParams);
@@ -97,7 +97,7 @@ namespace DataProcessing
                         Path.GetFileName(destFilePath), destFilePath, "ErrorLog-DeleteStagingFiles", "Success",
                         "Delete File in Dir");
                     // do not log - gives too many lines
-                    //DbUtils.LogFileOperation(fileLogParams);
+                    //DbUtils.LogFileOperation(FileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
@@ -260,7 +260,7 @@ namespace DataProcessing
                         Path.GetFileName(destFilePath), destFilePath, $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                         "Success", "Moved File to Archive");
                     // do not log - gives too many lines
-                    // DbUtils.LogFileOperation(fileLogParams);
+                    // DbUtils.LogFileOperation(FileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
@@ -277,7 +277,7 @@ namespace DataProcessing
                         "Success", "Moved File to Archive");
 
                     // do not log - gives too many lines
-                    // DbUtils.LogFileOperation(fileLogParams);
+                    // DbUtils.LogFileOperation(FileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );

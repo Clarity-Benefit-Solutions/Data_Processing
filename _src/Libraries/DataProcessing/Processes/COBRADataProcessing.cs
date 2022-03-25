@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using CoreUtils;
 using CoreUtils.Classes;
-using EtlUtilities;
+using DataProcessing;
 
 // ReSharper disable All
 
@@ -46,7 +46,7 @@ namespace DataProcessing
             //
             FileOperationLogParams fileLogParams = Vars.dbFileProcessingLogParams;
 
-            // dbConn for logging
+            // DbConn for logging
             DbConnection dbConn = fileLogParams.DbConnection;
 
             //MoveSourceFilesToCobraDirs
@@ -112,7 +112,7 @@ namespace DataProcessing
                         fileLogParams.SetSourceFolderName(srcDirPath);
 
                         // do not log - gives too many lines
-                        //DbUtils.LogFileOperation(fileLogParams);
+                        //DbUtils.LogFileOperation(FileLogParams);
                     }
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
@@ -217,7 +217,7 @@ namespace DataProcessing
                                     $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                                     "Starting", $"Started Processing File");
 
-                                //DbUtils.LogFileOperation(fileLogParams);
+                                //DbUtils.LogFileOperation(FileLogParams);
                                 //
                                 string uniqueIdFileName = Path.GetFileName(uniqueIdFilePath);
                                 string destFilePath = $"{destDirPath}/{uniqueIdFileName}";
@@ -232,7 +232,7 @@ namespace DataProcessing
                                             "CobraProcessing-MoveFilesToCobraFolders", "Success",
                                             $"Moved file to COBRA folder");
 
-                                        //DbUtils.LogFileOperation(fileLogParams);
+                                        //DbUtils.LogFileOperation(FileLogParams);
                                     },
                                     (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                                 );

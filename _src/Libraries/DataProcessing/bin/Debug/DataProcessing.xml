@@ -4,5 +4,8 @@
         <name>DataProcessing</name>
     </assembly>
     <members>
+        <member name="T:DataProcessing.FileCheckResults">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

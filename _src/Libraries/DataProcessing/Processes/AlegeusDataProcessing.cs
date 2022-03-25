@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
 using CoreUtils;
 using CoreUtils.Classes;
-using EtlUtilities;
+using DataProcessing;
 
 namespace DataProcessing
 {
@@ -43,7 +43,7 @@ namespace DataProcessing
             //
             var fileLogParams = Vars.dbFileProcessingLogParams;
 
-            // dbConn
+            // DbConn
             var dbConn = Vars.dbConnDataProcessing;
 
             // CreateHeaders
@@ -93,7 +93,7 @@ namespace DataProcessing
                         Path.GetFileName(destFilePath), destFilePath, "AutomatedHeaders-ClearAllFiles", "Success",
                         "Deleted File in Header Dir");
                     // do not log - gives too many lines
-                    // DbUtils.LogFileOperation(fileLogParams);
+                    // DbUtils.LogFileOperation(FileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
@@ -159,7 +159,7 @@ namespace DataProcessing
                                 Path.GetFileName(uniqueIdFilePath), "",
                                 $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
                                 "Success", $"Found Source File");
-                            //DbUtils.LogFileOperation(fileLogParams);
+                            //DbUtils.LogFileOperation(FileLogParams);
                         },
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                     );
@@ -194,7 +194,7 @@ namespace DataProcessing
                         "Copied File to Archive Directory");
 
                     // do not log - gives too many lines
-                    // DbUtils.LogFileOperation(fileLogParams);
+                    // DbUtils.LogFileOperation(FileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
@@ -210,7 +210,7 @@ namespace DataProcessing
                         Path.GetFileName(destFilePath), destFilePath, "AutomatedHeaders-DeleteAllFilesInHoldAll",
                         "Success", "Deleted File In HoldAll Directory");
                     // do not log - gives too many lines
-                    // DbUtils.LogFileOperation(fileLogParams);
+                    // DbUtils.LogFileOperation(FileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
@@ -226,7 +226,7 @@ namespace DataProcessing
                         Path.GetFileName(destFilePath), destFilePath, "AutomatedHeaders-CopyFilesToHoldAll", "Success",
                         "Copied File to HoldAll Directory");
                     // do not log - gives too many lines
-                    // DbUtils.LogFileOperation(fileLogParams);
+                    // DbUtils.LogFileOperation(FileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
@@ -376,7 +376,7 @@ namespace DataProcessing
                         Path.GetFileName(destFilePath), destFilePath, "AutomatedHeaders-CopyHoldAllFilesToProcessing",
                         "Success", "Copied HoldAll File to Processing");
                     // do not log - gives too many lines
-                    // DbUtils.LogFileOperation(fileLogParams);
+                    // DbUtils.LogFileOperation(FileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );
@@ -408,7 +408,7 @@ namespace DataProcessing
                         Path.GetFileName(destFilePath), destFilePath, "AutomatedHeaders-renameHeaderDirTxtFilesToMbi",
                         "Success", "Renamed txt file to mbi");
                     // do not log - gives too many lines
-                    // DbUtils.LogFileOperation(fileLogParams);
+                    // DbUtils.LogFileOperation(FileLogParams);
                 },
                 (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
             );

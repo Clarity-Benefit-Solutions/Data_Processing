@@ -10,53 +10,13 @@ using System.Text.RegularExpressions;
 using CoreUtils;
 using CoreUtils.Classes;
 using DataProcessing.DataModels.DataProcessing;
-using EtlUtilities;
+using DataProcessing;
 
 // ReSharper disable All
 
 // ReSharper disable once CheckNamespace
 namespace DataProcessing
 {
-
-
-    public class FileCheckResults : Dictionary<int, string>
-    {
-        internal Boolean markAsCompleteFail = false;
-
-        public FileCheckResults() : base()
-        {
-        }
-
-        public Boolean HasErrors
-        {
-            get { return this.Count > 0; }
-        }
-
-        public Boolean IsCompleteFail
-        {
-            get { return this.markAsCompleteFail; }
-        }
-
-        public OperationResultType operationResultType
-        {
-            get
-            {
-                if (this.IsCompleteFail)
-                {
-                    return OperationResultType.CompleteFail;
-                }
-                else if (this.HasErrors)
-                {
-                    return OperationResultType.PartialFail;
-                }
-                else
-                {
-                    return OperationResultType.Ok;
-                }
-            }
-        }
-    }
-
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class FileChecker : IDisposable
     {
@@ -78,20 +38,20 @@ namespace DataProcessing
         public FileChecker(string _srcFilePath, PlatformType _platformType, DbConnection _dbConn,
             FileOperationLogParams _fileLogParams, OnErrorCallback _onErrorCallback) : base()
         {
-            this.srcFilePath = _srcFilePath;
+            this.SrcFilePath = _srcFilePath;
             this.PlatformType = _platformType;
-            this.fileLogParams = _fileLogParams;
-            this.dbConn = _dbConn;
+            this.FileLogParams = _fileLogParams;
+            this.DbConn = _dbConn;
             this.dbConnPortalWc = Vars.dbConnPortalWc;
             this.OnErrorCallback = _onErrorCallback;
         }
 
-        public string srcFilePath { get; set; }
+        public string SrcFilePath { get; set; }
         public PlatformType PlatformType { get; set; }
         public EdiFileFormat EdiFileFormat { get; set; }
-        public FileOperationLogParams fileLogParams { get; set; }
+        public FileOperationLogParams FileLogParams { get; set; }
 
-        public DbConnection dbConn { get; set; }
+        public DbConnection DbConn { get; set; }
 
         //
         public OnErrorCallback OnErrorCallback { get; }
@@ -109,8 +69,8 @@ namespace DataProcessing
             OperationResultType resultType = CheckFile(fileCheckType);
 
             // move file
-            var fileName = Path.GetFileName(this.srcFilePath);
-            var newFilePath = this.srcFilePath;
+            var fileName = Path.GetFileName(this.SrcFilePath);
+            var newFilePath = this.SrcFilePath;
             var newErrorFilePath = "";
 
             // act on resultType
@@ -122,7 +82,7 @@ namespace DataProcessing
                     ///////////////////////////////////////
                     if (fileCheckProcessType == FileCheckProcessType.MoveToDestDirectories)
                     {
-                        if (Utils.IsTestFile(this.srcFilePath))
+                        if (Utils.IsTestFile(this.SrcFilePath))
                         {
                             newFilePath = $"{Vars.alegeusFilesPreCheckTestRoot}/{fileName}";
                         }
@@ -131,17 +91,17 @@ namespace DataProcessing
                             newFilePath = $"{Vars.alegeusFilesPreCheckOKRoot}/{fileName}";
                         }
 
-                        FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
+                        FileUtils.MoveFile(SrcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
                             {
                                 // add to fileLog
-                                fileLogParams.SetFileNames("", fileName, srcFilePath,
+                                FileLogParams.SetFileNames("", fileName, SrcFilePath,
                                     Path.GetFileName(newFilePath), newFilePath,
                                     $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
                                     "Success", "PreCheck OK. Moved File to PreCheck OK Directory");
                                 //
-                                DbUtils.LogFileOperation(fileLogParams);
+                                DbUtils.LogFileOperation(FileLogParams);
                             },
-                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, FileLogParams); }
                         );
                     }
                     else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
@@ -158,12 +118,12 @@ namespace DataProcessing
                 default:
                     ///////////////////////////////////////
 
-                    string srcFileName = Path.GetFileName(this.srcFilePath);
+                    string srcFileName = Path.GetFileName(this.SrcFilePath);
                     //
 
                     if (fileCheckProcessType == FileCheckProcessType.MoveToDestDirectories)
                     {
-                        if (Utils.IsTestFile(this.srcFilePath))
+                        if (Utils.IsTestFile(this.SrcFilePath))
                         {
                             newFilePath = $"{Vars.alegeusFilesPreCheckTestRoot}/{fileName}";
                         }
@@ -172,24 +132,24 @@ namespace DataProcessing
                             newFilePath = $"{Vars.alegeusFilesPreCheckFailRoot}/{fileName}";
                         }
 
-                        FileUtils.MoveFile(srcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
+                        FileUtils.MoveFile(SrcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
                             {
                                 // add to fileLog
-                                fileLogParams.SetFileNames("", fileName, srcFilePath,
+                                FileLogParams.SetFileNames("", fileName, SrcFilePath,
                                     Path.GetFileName(newFilePath), newFilePath,
                                     $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
                                     "Fail", "PreCheck FAIL. Moved File to PreCheck FAIL Directory");
                                 //
-                                DbUtils.LogFileOperation(fileLogParams);
+                                DbUtils.LogFileOperation(FileLogParams);
                             },
-                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, FileLogParams); }
                         );
 
                         newErrorFilePath = $"{newFilePath}.err";
                     }
                     else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
                     {
-                        newErrorFilePath = $"{srcFilePath}.err";
+                        newErrorFilePath = $"{SrcFilePath}.err";
                     }
                     // export error file
                     var outputTableName = "[dbo].[mbi_file_table]";
@@ -200,9 +160,9 @@ namespace DataProcessing
                         $" where mbi_file_name = '{srcFileName}'" +
                         $" order by mbi_file_table.source_row_no; ";
 
-                    ImpExpUtils.ExportSingleColumnFlatFile(newErrorFilePath, dbConn, queryStringExp,
-                        "file_row", null, fileLogParams,
-                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                    ImpExpUtils.ExportSingleColumnFlatFile(newErrorFilePath, DbConn, queryStringExp,
+                        "file_row", null, FileLogParams,
+                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, FileLogParams); }
                     );
 
                     //
@@ -219,11 +179,11 @@ namespace DataProcessing
         {
             //
             Dictionary<EdiFileFormat, List<int>> fileFormats =
-                ImpExpUtils.GetAlegeusFileFormats(this.srcFilePath, false, this.fileLogParams);
+                ImpExpUtils.GetAlegeusFileFormats(this.SrcFilePath, false, this.FileLogParams);
 
             CheckFile(fileFormats);
 
-            var result = this.fileCheckResults.operationResultType;
+            var result = this.fileCheckResults.OperationResultType;
 
             return result;
         }
@@ -231,8 +191,8 @@ namespace DataProcessing
         private void CheckFile(Dictionary<EdiFileFormat, List<int>> fileFormats)
         {
             // 2. import the file
-            string fileName = Path.GetFileName(srcFilePath) ?? string.Empty;
-            fileLogParams?.SetFileNames(Utils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, "", "",
+            string fileName = Path.GetFileName(SrcFilePath) ?? string.Empty;
+            FileLogParams?.SetFileNames(Utils.GetUniqueIdFromFileName(fileName), fileName, SrcFilePath, "", "",
                 "CheckFile", $"Starting: Check {fileName}", "Starting");
 
             // split text fileinto multiple files
@@ -251,7 +211,7 @@ namespace DataProcessing
 
             // open file for reading
             // read each line and insert
-            using (var inputFile = new StreamReader(this.srcFilePath))
+            using (var inputFile = new StreamReader(this.SrcFilePath))
             {
                 int rowNo = 0;
                 string line;
@@ -311,18 +271,18 @@ namespace DataProcessing
             string tableName = "[dbo].[mbi_file_table_stage]";
 
             // truncate staging table
-            DbUtils.TruncateTable(dbConn, tableName,
-                fileLogParams?.GetMessageLogParams());
+            DbUtils.TruncateTable(DbConn, tableName,
+                FileLogParams?.GetMessageLogParams());
 
 
             // import the file with bulk copy
             var newPath =
-                Import.PrefixLineWithEntireLineAndFileName(currentFilePath, this.srcFilePath, fileLogParams);
+                Import.PrefixLineWithEntireLineAndFileName(currentFilePath, this.SrcFilePath, FileLogParams);
 
             // import into table so we can manipulate the file
-            ImpExpUtils.ImportCsvFileBulkCopy(this.dbConn, newPath, this.hasHeaderRow, tableName,
-                mappings, this.fileLogParams,
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+            ImpExpUtils.ImportCsvFileBulkCopy(this.DbConn, newPath, this.hasHeaderRow, tableName,
+                mappings, this.FileLogParams,
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, FileLogParams); }
             );
 
             // update check type for table
@@ -330,8 +290,8 @@ namespace DataProcessing
                                   $" /* set check type */check_type = 'PreCheck', " +
                                   $" /* remove extra csv commas added to line */ data_row = replace(data_row, ',,,,,,,,,,,,,,,,,,,,', '') " +
                                   $" where 1 = 1;";
-            DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString1, null,
-                fileLogParams?.GetMessageLogParams()
+            DbUtils.DbQuery(DbOperation.ExecuteNonQuery, DbConn, queryString1, null,
+                FileLogParams?.GetMessageLogParams()
             );
 
             // check file data
@@ -341,8 +301,8 @@ namespace DataProcessing
             string postImportProc = "[dbo].[process_mbi_file_table_stage_import]";
             string queryString = $"exec {postImportProc};";
             //
-            DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
-                fileLogParams?.GetMessageLogParams()
+            DbUtils.DbQuery(DbOperation.ExecuteNonQuery, DbConn, queryString, null,
+                FileLogParams?.GetMessageLogParams()
             );
         }
 
@@ -378,7 +338,7 @@ namespace DataProcessing
                 return;
             }
 
-            Boolean hasError = false;
+            Boolean hasError;
 
             foreach (var column in mappings.Columns)
             {
@@ -489,7 +449,7 @@ namespace DataProcessing
             //
             if (markAsCompleteFail)
             {
-                this.fileCheckResults.markAsCompleteFail = true;
+                this.fileCheckResults.MarkAsCompleteFail = true;
             }
         }
         #endregion CheckFile
@@ -569,7 +529,7 @@ namespace DataProcessing
                     }
                     else
                     {
-                        DataRow dbData = dbRows[0];
+                        //DataRow dbData = dbRows[0];
 
                         //note: FileChecker: verify if employer status need to be checked
                         //string status = dbData["employer_status"]?.ToString();
@@ -723,7 +683,7 @@ namespace DataProcessing
                         DataRow dbData = dbRows[0];
                         DateTime actualPlanStartDate = (DateTime)dbData["plan_year_start_date"];
                         DateTime actualPlanEndDate = (DateTime)dbData["plan_year_end_date"];
-                        DateTime actualGracePeriodEndDate = (DateTime)dbData["grace_period_end_date"];
+                        //DateTime actualGracePeriodEndDate = (DateTime)dbData["grace_period_end_date"];
 
                         //check start and end dates 
                         if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) && Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
@@ -956,7 +916,7 @@ namespace DataProcessing
                     //
                     dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         queryString, null,
-                        fileLogParams?.GetMessageLogParams());
+                        FileLogParams?.GetMessageLogParams());
 
                     // create index on EmployeeID
 
@@ -999,7 +959,7 @@ namespace DataProcessing
                     //
                     dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         queryString, null,
-                        fileLogParams?.GetMessageLogParams());
+                        FileLogParams?.GetMessageLogParams());
 
                     // create index on EmployeeID
 
@@ -1043,7 +1003,7 @@ namespace DataProcessing
                     //
                     dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         queryString, null,
-                        fileLogParams?.GetMessageLogParams());
+                        FileLogParams?.GetMessageLogParams());
 
                     // create index on EmployeeID
 
@@ -1088,7 +1048,7 @@ namespace DataProcessing
                     //
                     dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         queryString, null,
-                        fileLogParams?.GetMessageLogParams());
+                        FileLogParams?.GetMessageLogParams());
 
                     // create index on EmployeeID
 

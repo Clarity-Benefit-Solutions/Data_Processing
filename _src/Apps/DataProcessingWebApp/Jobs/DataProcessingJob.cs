@@ -12,7 +12,7 @@ using System.Web;
 using CoreUtils;
 using CoreUtils.Classes;
 using DataProcessing;
-using EtlUtilities;
+using DataProcessing;
 using Hangfire;
 using Hangfire;
 using Hangfire.Console;
@@ -78,11 +78,11 @@ namespace DataProcessingWebApp.Jobs
 
                     case @"copytestfiles":
                         var directoryPath = Vars.GetProcessBaseDir();
-                        Process.Start($"{directoryPath}/../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
+                        Process.Start($"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
                         Process.Start(
-                            $"{directoryPath}/../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
+                            $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
                         Process.Start(
-                            $"{directoryPath}/../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
+                            $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
 
                         break;
 
