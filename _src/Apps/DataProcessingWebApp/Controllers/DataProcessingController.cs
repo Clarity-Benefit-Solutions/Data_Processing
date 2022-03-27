@@ -27,8 +27,10 @@ namespace DataProcessingWebApp.Controllers
 {
 
 
+    [System.Web.Http.Authorize]
     public class DataProcessingController : Controller
     {
+        [System.Web.Http.Authorize]
         public string Index()
         {
             try
@@ -42,6 +44,7 @@ namespace DataProcessingWebApp.Controllers
         }
 
         // GET api/<controller>/5
+        [System.Web.Http.Authorize]
         public JobDetails StartJob(string id)
         {
             try
@@ -63,11 +66,13 @@ namespace DataProcessingWebApp.Controllers
         }
 
 
+        [System.Web.Http.Authorize]
         public JobDetails CheckFileAlegeus(HttpPostedFileBase file)
         {
                 return CheckFile(file, "alegeus");
          
         }
+        [System.Web.Http.Authorize]
         public JobDetails CheckFile(HttpPostedFileBase file, string platform)
         {
             string id = "CheckFile: " + platform;
@@ -96,10 +101,12 @@ namespace DataProcessingWebApp.Controllers
                 return new JobDetails(id, $"[Job Could Not Be Queued as {ex.ToString()}", "FAILED");
             }
         }
+        [System.Web.Http.Authorize]
         public JobDetails CheckFileCobra(HttpPostedFileBase file)
         {
             return CheckFile(file, "cobra");
         }
+        [System.Web.Http.Authorize]
         public JobDetails JobResults(string jobId)
         {
             try

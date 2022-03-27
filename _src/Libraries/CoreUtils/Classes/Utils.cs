@@ -424,6 +424,22 @@ namespace CoreUtils.Classes
             string entityConnectionString = ConfigurationManager.ConnectionStrings[connStringName].ConnectionString;
             return entityConnectionString;
 
+        }   
+        
+        public static string GetAppSetting(string settingName)
+        {
+           dynamic section = ConfigurationManager.GetSection("AppSettings");
+           dynamic keys = section.Keys;
+           foreach (dynamic key in keys)
+           {
+               if (key == settingName)
+               {
+                   return section[key];
+               }
+           }
+            
+            return "";
+
         }
 
         public static string GetProviderConnString(string connStringName)
