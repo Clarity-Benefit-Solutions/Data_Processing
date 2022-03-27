@@ -790,7 +790,7 @@ namespace DataProcessing
 
                     break;
                 /////////////////////////////////////////////////////
-                // todo: FileChecker: mapping for II,RI
+                // todo: FileChecker: mapping for II,RI: take from FinanceApp?
                 //  II, RI
                 case EdiFileFormat.AlegeusEmployeeCardFees:
                 case EdiFileFormat.AlegeusResultsEmployeeCardFees:
