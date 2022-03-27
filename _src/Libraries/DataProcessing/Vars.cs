@@ -279,7 +279,7 @@ namespace DataProcessing
             get
             {
 #if (TEST)
-                return "/" + FileUtils.FixPath($"{GetAppSetting("localTestFilesPath")}/_local_FTP_Server_Server/Alegeus");
+                return FileUtils.FixPath($"{GetAppSetting("alegeusRemoteFTPPath")}");
 #else
                 return "/";
 #endif
@@ -291,7 +291,7 @@ namespace DataProcessing
             get
             {
 #if (TEST)
-                return $"{GetAppSetting("localTestFilesPath")}/_local_FTP_Server_Server/COBRA";
+                return "/" + FileUtils.FixPath($"{GetAppSetting("cobraRemoteFTPPath")}");
 #else
                 return "/";
 #endif
