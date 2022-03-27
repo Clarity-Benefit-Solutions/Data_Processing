@@ -239,6 +239,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="_Misc\DecryptAppConfig.bat" />
+    <None Include="_Misc\EncryptAppConfig.bat" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
