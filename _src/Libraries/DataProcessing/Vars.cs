@@ -391,16 +391,20 @@ namespace DataProcessing
 
         public string cobraImportHoldingDecryptRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraImportHoldingDecryptPath")}");
 
-
         public string alegeusFileHeadersRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFileHeadersPath")}");
 
         public string alegeusFileHeadersArchiveRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFileHeadersArchivePath")}");
 
         public string alegeusFilesPreCheckRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckPath")}");
+
         public string alegeusFilesPreCheckOKRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckOKPath")}");
+
         public string alegeusFilesPreCheckOKArchiveRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckOKArchivePath")}");
+
         public string alegeusFilesPreCheckFailRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckFailPath")}");
+
         public string alegeusFilesPreCheckTestRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckTestPath")}");
+
         public string alegeusFilesReprocessRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesReprocessPath")}");
 
         public string alegeusFilesPreCheckHoldAllRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckHoldAllPath")}");
