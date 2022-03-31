@@ -119,9 +119,13 @@ namespace DataProcessing
             get
             {
 #if (TEST)
-                return "PortalWcTEST";
+#if (EXTIP)
+    return "PortalWcTESTEXTIP";
 #else
-                   return "PortalWc";
+                return "PortalWcTEST";
+#endif
+#else
+                return "PortalWc";
 #endif
             }
         }
