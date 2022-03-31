@@ -1,0 +1,1 @@
+xcopy %~dp0..\bin\*.* \\fs009\USER_FILES_D\BENEFLEX\Public\App_FileAndDataProcessing\ /s /y
