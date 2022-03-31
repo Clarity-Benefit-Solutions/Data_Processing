@@ -1,4 +1,5 @@
 use Data_Processing;
+go
 drop view Header_list_ALL
 go
 
@@ -17,7 +18,8 @@ go
 drop view Header_list_old
 go
 
-
+exec sp_rename 'Automated_Header_list', FTP_Source_Folders, 'OBJECT'
+go
 
 alter table Data_Processing..FTP_Source_Folders add environment varchar(50) default 'PROD';
 update Data_Processing..FTP_Source_Folders
@@ -29,7 +31,7 @@ go
 
 
 
-UPDATE Data_Processing.dbo.FTP_Source_Folders SET environment = N'TEST' where so
+UPDATE Data_Processing.dbo.FTP_Source_Folders SET environment = N'TEST' where folder_name like '__%';
 
 alter table FTP_Source_Folders alter column Folder_name nvarchar(200) not null
 go
@@ -46,8 +48,7 @@ INSERT INTO Data_Processing.dbo.FTP_Source_Folders (Folder_name,template_type,IC
 
 update  Data_Processing..FTP_Source_Folders set Folder_name = concat('\\Fs009\user_files_d\BENEFLEX\DEPTS\FTP\', Folder_name);
 go
-exec sp_rename 'Automated_Header_list', FTP_Source_Folders, 'OBJECT'
-go
+
 
 alter PROCEDURE [dbo].[insert_to_auto_ftp_list]
 
