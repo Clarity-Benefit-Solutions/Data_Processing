@@ -50,7 +50,7 @@ namespace DataProcessing
             DbConnection dbConn = fileLogParams.DbConnection;
 
             //MoveSourceFilesToCobraDirs
-            MakeListOfCobraFtpSourceFolders(HeaderType.NotApplicable, "*.*", dbConn, fileLogParams);
+            //MakeListOfCobraFtpSourceFolders(HeaderType.NotApplicable, "*.*", dbConn, fileLogParams);
 
             //MoveSourceFilesToCobraDirs
             MoveSourceFilesToCobraDirs(HeaderType.NotApplicable, "*.*", dbConn, fileLogParams);
@@ -139,40 +139,56 @@ namespace DataProcessing
             //
 
             //2. Get list of folders for header from DB
-            //decide table name
-            string tableName = "[dbo].[processing_script_tbl]";
 
-            //run query
-            string queryString = $"Select * from {tableName} ;";
-            DataTable folders =
-                (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null,
-                    fileLogParams.DbMessageLogParams);
+            // sumeet: we will only iterate the folders from ther master table
+            /*   string tableName = "[dbo].[processing_script_tbl]";
+               //run query
+               string queryString = $"Select * from {tableName} ;";
+               DataTable folders =
+                   (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null,
+                       fileLogParams.DbMessageLogParams);
 
+
+               //3. for each header folder, get file and move to header1 folder
+               foreach (DataRow row in folders.Rows)*/
+
+            var tableName = "dbo.[FTP_Source_Folders]";
+
+            // run query - we take only by environment so we can test 
+            var queryString = $"Select * from {tableName} where environment = '{Vars.GetEnvironment()}' order by folder_name;";
+            var dtHeaderFolders = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null);
 
             //3. for each header folder, get file and move to header1 folder
-            foreach (DataRow row in folders.Rows)
+            foreach (DataRow row in dtHeaderFolders.Rows)
+
             {
                 //Move / y "%_sourcepath%"  G:\FTP\AutomatedHeaderV1_Files
-                string rowFolderName = row["folder_name"].ToString();
-                string rowBenCode = "";
-                string rowTemplateType = "";
-                string rowIcType = "";
-                string rowToFtp = "";
+                var rowFolderName = row["folder_name"].ToString();
+                var rowBenCode = row["BENCODE"].ToString();
+                var rowTemplateType = row["template_type"].ToString();
+                var rowIcType = row["IC_type"].ToString();
+                var rowtoFtp = row["to_FTP"].ToString();
 
-                // 
-                FileOperationLogParams fileLogParams1 = Vars.dbFileProcessingLogParams;
-                fileLogParams1.FolderName = rowFolderName;
-                fileLogParams1.Bencode = rowBenCode;
-                fileLogParams1.TemplateType = rowTemplateType;
-                fileLogParams1.IcType = rowIcType;
-                fileLogParams1.ToFtp = rowToFtp;
-
-
+                // 3. for each source folder
                 if (!Utils.IsBlank(rowFolderName))
                 {
                     // change from PROD source dir to Ctx source dir
                     rowFolderName = Vars.ConvertFilePathFromProdToCtx(rowFolderName);
 
+                    // we need to set these first before setting folderName
+                    var fileLogParams1 = Vars.dbFileProcessingLogParams;
+
+                    fileLogParams.SetFileNames("", Path.GetFileName(rowFolderName), rowFolderName,
+                        Path.GetFileName(rowFolderName), "",
+                        $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                        "Starting", $"Started Iterating Directory");
+                    //
+                    fileLogParams1.Bencode = rowBenCode;
+                    fileLogParams1.TemplateType = rowTemplateType;
+                    fileLogParams1.IcType = rowIcType;
+                    fileLogParams1.ToFtp = rowtoFtp;
+                    fileLogParams1.SetSourceFolderName(rowFolderName);
+                    DbUtils.LogFileOperation(fileLogParams);
 
                     FileUtils.IterateDirectory(
                         rowFolderName, DirectoryIterateType.Files, false, "*.*",
@@ -423,7 +439,7 @@ namespace DataProcessing
 
                     //2. import file
                     string procName = @"dbo.[Fix_COBRAQB_SSObollean]";
-                    ImpExpUtils. ImportSingleColumnFlatFile( dbConnCobra, srcFilePath, srcFilePath, tableName,
+                    ImpExpUtils.ImportSingleColumnFlatFile(dbConnCobra, srcFilePath, srcFilePath, tableName,
                         "folder_name",
                         "QB_data", fileLogParams,
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }

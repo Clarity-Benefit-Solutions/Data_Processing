@@ -35,7 +35,7 @@ namespace DataProcessing.DataModels.DataProcessing
         public virtual DbSet<alegeus_file_final> alegeus_file_final { get; set; }
         public virtual DbSet<alegeus_file_staging> alegeus_file_staging { get; set; }
         public virtual DbSet<app_settings> app_settings { get; set; }
-        public virtual DbSet<Automated_Header_list> Automated_Header_list { get; set; }
+        public virtual DbSet<FTP_Source_Folders> FTP_Source_Folders { get; set; }
         public virtual DbSet<dbo_error_log_results_workflow_local_AL> dbo_error_log_results_workflow_local_AL { get; set; }
         public virtual DbSet<dbo_error_log_results_workflow_localBU> dbo_error_log_results_workflow_localBU { get; set; }
         public virtual DbSet<dbo_tracked_errors_local> dbo_tracked_errors_local { get; set; }

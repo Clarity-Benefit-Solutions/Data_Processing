@@ -234,17 +234,26 @@ namespace DataProcessing
         public string ConvertFilePathFromProdToCtx(string prodFilePath)
         {
             if (Utils.IsBlank(prodFilePath)) return prodFilePath;
+            if (GetEnvironment() == "PROD")
+            {
+                return prodFilePath;
+            }
 
-            prodFilePath = FileUtils.FixPath(prodFilePath, false);
+            // we cannot fix path as we are using windows style remote computer unc...
+            /*prodFilePath = FileUtils.FixPath(prodFilePath, false);
             var matchProdFilePath = FileUtils.FixPath(prodFilePath, true);
+            var fixedPath = prodFilePath;
+            */
+            var matchProdFilePath = prodFilePath.ToLower();
             var fixedPath = prodFilePath;
             //
             var replacements = prodToRunningCtxPathReplacePatterns;
             foreach (var entry in replacements)
             {
-                var entryKey = FileUtils.FixPath(entry.Key, true);
+                //var entryKey = FileUtils.FixPath(entry.Key, true);
+                var entryKey = entry.Key.ToLower();
                 // compare lower to lower and standardized slashes
-                if (matchProdFilePath.StartsWith(entryKey))
+                if (prodFilePath.ToLower().StartsWith(entryKey))
                     fixedPath = entry.Value + prodFilePath.Substring(entry.Key.Length);
             }
 
@@ -321,7 +330,17 @@ namespace DataProcessing
 
         private static DataTable appSettings;
 
-        private string GetAppSetting(string settingName)
+        public static string GetEnvironment()
+        {
+
+#if TEST
+            return "TEST";
+#else
+          return "PROD";
+#endif
+        }
+
+        public string GetAppSetting(string settingName)
         {
             if (appSettings == null)
             {
@@ -334,14 +353,9 @@ namespace DataProcessing
                     throw new Exception(message);
                 }
             }
-            string environment = "";
-# if TEST
-            environment = "TEST";
-#else
-          environment = "PROD";
-#endif
+
             // try exact environment
-            string filter = $"environment In ('{environment}') and setting_name = '{settingName}' ";
+            string filter = $"environment In ('{GetEnvironment()}') and setting_name = '{settingName}' ";
 
             DataRow[] dbRows = appSettings.Select(filter);
             if (dbRows.Length == 0)
@@ -354,7 +368,7 @@ namespace DataProcessing
 
             if (dbRows.Length == 0)
             {
-                string message = $"The App Setting {settingName} could not be found for environments ({environment}, 'PROD')";
+                string message = $"The App Setting {settingName} could not be found for environments ({GetEnvironment()}, 'PROD')";
                 throw new Exception(message);
             }
             else
@@ -459,11 +473,11 @@ namespace DataProcessing
                 if (_prodToRunningCtxPathReplacePatterns == null)
                     _prodToRunningCtxPathReplacePatterns = new Dictionary<string, string>
                     {
-                        {"G:/FTP/To_Alegeus_FTP_Holding/Archive", alegeusFileHeadersArchiveRoot},
-                        {"G:/FTP/To_Alegeus_FTP_Holding/HoldALL", alegeusFilesPreCheckHoldAllRoot},
-                        {"G:/FTP/To_Alegeus_FTP_Holding", alegeusFilesPreCheckRoot},
-                        {"G:/FTP/AutomatedHeaderV1_Files", alegeusFileHeadersRoot},
-                        {"G:/FTP", localFtpRoot}
+                        {"\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP\\To_Alegeus_FTP_Holding\\Archive", alegeusFileHeadersArchiveRoot},
+                        {"\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP\\To_Alegeus_FTP_Holding\\HoldALL", alegeusFilesPreCheckHoldAllRoot},
+                        {"\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP\\To_Alegeus_FTP_Holding", alegeusFilesPreCheckRoot},
+                        {"\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP\\AutomatedHeaderV1_Files", alegeusFileHeadersRoot},
+                        {"\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP", localFtpRoot}
                     };
                 return _prodToRunningCtxPathReplacePatterns;
             }

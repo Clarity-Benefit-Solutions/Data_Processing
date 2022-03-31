@@ -343,6 +343,12 @@ namespace CoreUtils.Classes
 
         public static string FixPath(string filePath, bool makeLowerCase = false)
         {
+            // do not fix path is starts with // i.e. is a UNC path
+            if (filePath.StartsWith("\\\\"))
+            {
+                return filePath;
+            }
+
             filePath = filePath.Replace("\\", "/");
             filePath = filePath.Replace("//", "/");
             // remove last slash
