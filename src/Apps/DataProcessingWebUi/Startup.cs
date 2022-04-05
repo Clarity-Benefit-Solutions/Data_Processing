@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using DataProcessingWebUi.Data;
+using Syncfusion.Blazor;
 
 namespace DataProcessingWebUi
 {
@@ -28,7 +28,9 @@ namespace DataProcessingWebUi
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
+#pragma warning disable CS0618
+            services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
+#pragma warning restore CS0618
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

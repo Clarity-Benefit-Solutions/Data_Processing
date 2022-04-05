@@ -1,12 +1,18 @@
 ﻿@page "/"
+@using Utils = CoreUtils.Classes.Utils
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Converters
 @using System.Web
 @using System
+@using System.Dynamic
 @using System.Globalization
 @using System.Net.Http.Headers
 @using System.Threading
 @using CoreUtils.Classes
 @using Microsoft.VisualBasic.CompilerServices
-@using DataProcessingWebUi:
+@using Syncfusion.Blazor
+@using Syncfusion.Blazor.Grids
+
 
 <h1>File And Data Processing App</h1>
 
@@ -70,8 +76,7 @@
     </p>
 </div>
 <div class="">
-    <asp:GridView id="listLogs" Width="1434px" AllowPaging="True" AllowSorting="True">
-    </asp:GridView>
+    <SfGrid @ref="Grid" DataSource="@Logs" Height="400px" />
 </div>
 
 @code {
@@ -80,9 +85,9 @@
     private string _password = "#gjgB0AXG^940";
     @*Utils.GetAppSetting("BasicAuthPassword");*@
 
-    @*private BindingSource _bindingSource1 = new BindingSource();*@
+    SfGrid<LogFields> Grid { get; set; }
 
-    @*private List<LogFields> _logs = new List<LogFields> { };*@
+    private List<LogFields> Logs = new List<LogFields> { };
 
     private void addAuthHeader(HttpClient client)
     {
@@ -95,54 +100,58 @@
     public object SendRequest(string path, string arg)
     {
 
-        string strUrl = "https://localhost:44320";
-        @*string strUrl = "http://be015:81";*@
+        @*string strUrl = "https://localhost:44320";*@
+        string strUrl = "http://be015:81";
 
-HttpClient client = new HttpClient { BaseAddress = new Uri($"{strUrl}"), Timeout = TimeSpan.FromSeconds(600) };
+        HttpClient client = new HttpClient { BaseAddress = new Uri($"{strUrl}"), Timeout = TimeSpan.FromSeconds(600) };
 
-// add auth header
-this.addAuthHeader(client);
+        // add auth header
+        this.addAuthHeader(client);
 
-//HTTP GET Async
-var result = client.GetAsync($"/DataProcessing/{path}/{arg}").Result;
+        //HTTP GET Async
+        var result = client.GetAsync($"/DataProcessing/{path}/{arg}").Result;
 
-if (!result.IsSuccessStatusCode)
-{
-    //log response status here..
-    throw new Exception($"{result.ReasonPhrase} {result.RequestMessage}");
-}
-
-// parse job ID
-var content = result.Content.ReadAsStringAsync().Result;
-
-//
-if (path.ToLower() != "JobResults".ToLower())
-{
-
-    JobDetails taskJobDetails = System.Text.Json.JsonSerializer.Deserialize<JobDetails>(content);
-    string jobId = (string)taskJobDetails.JobId;
-
-    // get jobResult
-    Boolean jobIsProcessing = true;
-
-    // loop till job is processing - write to log : processing
-
-    while (jobIsProcessing)
-    {
-        // get result of the job started by the request
-        dynamic jobDetailsRequestResult = this.SendRequest("JobResults", $"{jobId}");
-        var jobDetailsContent = jobDetailsRequestResult.Content.ReadAsStringAsync().Result;
-        JobDetails jobDetails = System.Text.Json.JsonSerializer.Deserialize<JobDetails>(jobDetailsContent);
-        //
-        string jobState = jobDetails != null ? jobDetails.JobState : "error";
-
-        // check job state
-
-        switch (jobState.ToLower())
+        if (!result.IsSuccessStatusCode)
         {
-            case @"processing":
-            case @"started":
-                        @*var logItem = new LogFields(
+            //log response status here..
+            throw new Exception($"{result.ReasonPhrase} {result.RequestMessage}");
+        }
+
+        // parse job ID
+        var content = result.Content.ReadAsStringAsync().Result;
+
+        //
+        if (path.ToLower() != "JobResults".ToLower())
+        {
+
+            var converter = new ExpandoObjectConverter();
+            dynamic taskJobDetails = JsonConvert.DeserializeObject<ExpandoObject>(content, converter);
+
+            string jobId = (string)taskJobDetails.JobId;
+
+            // get jobResult
+            Boolean jobIsProcessing = true;
+
+            // loop till job is processing - write to log : processing
+
+            while (jobIsProcessing)
+            {
+                // get result of the job started by the request
+                dynamic jobDetailsRequestResult = this.SendRequest("JobResults", $"{jobId}");
+                var jobDetailsContent = jobDetailsRequestResult.Content.ReadAsStringAsync().Result;
+                //
+                dynamic jobDetails = JsonConvert.DeserializeObject<ExpandoObject>(jobDetailsContent, converter);
+                //
+                string jobState = jobDetails != null ? jobDetails.JobState : "error";
+
+                // check job state
+
+                switch (jobState.ToLower())
+                {
+                    case @"processing":
+                    case @"started":
+                    case @"enqueued":
+                        var logItem = new LogFields(
                                 DateTime.Now.ToString(CultureInfo.InvariantCulture),
                                 "",
                                 arg,
@@ -151,15 +160,15 @@ if (path.ToLower() != "JobResults".ToLower())
                                 jobState
                             );
 
-                            this._logs.Add(logItem);
-                            this.listLogs.DataBind();*@
+                        this.Log(logItem);
+                        //
                         Thread.Sleep(500);
                         break;
 
                     default:
                         jobIsProcessing = false;
 
-                        @*var logItem2 = new LogFields(
+                        var logItem2 = new LogFields(
                                 DateTime.Now.ToString(CultureInfo.InvariantCulture),
                                 "",
                                 arg,
@@ -168,8 +177,7 @@ if (path.ToLower() != "JobResults".ToLower())
                                 Utils.IsBlank(jobDetails?.JobErrorDetails) ? jobDetails?.JobResultDetails : jobDetails?.JobErrorDetails
                             );
 
-                            this._logs.Add(logItem2);
-                            this.listLogs.DataBind();*@
+                        this.Log(logItem2);
                         result = jobDetailsRequestResult;
                         break;
                 }
@@ -182,47 +190,61 @@ if (path.ToLower() != "JobResults".ToLower())
 
     void cmdCopyTestFiles()
     {
-        @*this._logs.Clear();
-            this.listLogs.DataBind();*@
+        this.Clear();
+
+        this.Grid.Refresh();
+        //
         dynamic result = this.SendRequest("StartJob", "copytestfiles");
 
     }
 
     void cmdProcessCobraFiles()
     {
-        @*this._logs.Clear();
-            this.listLogs.DataBind();*@
+        this.Clear();
+
+        //
         dynamic result = this.SendRequest("StartJob", "processcobrafiles");
     }
 
     void cmdProcessAlegeusFiles()
     {
-        @*this._logs.Clear();
-            this.listLogs.DataBind();*@
+        this.Clear();
+
+        //
         dynamic result = this.SendRequest("StartJob", "processalegeusfiles");
     }
 
     void cmdRetrieveFtpErrorLogs()
     {
-        @*this._logs.Clear();
-            this.listLogs.DataBind();*@
+        this.Clear();
+        //
         dynamic result = this.SendRequest("StartJob", "retrieveftperrorlogs");
     }
 
     void cmdOpenAccessDB()
     {
-        @*this._logs.Clear();
-            this.listLogs.DataBind();*@
+        this.Clear();
 
-        //
     }
 
     void cmdDoALL()
     {
-        @*this._logs.Clear();
-            this.listLogs.DataBind();*@
+        this.Clear();
+
 
         //
+    }
+
+    void Clear()
+    {
+        this.Logs.Clear();
+        this.Grid.Refresh();
+    }
+    void Log(LogFields logItem)
+    {
+        this.Logs.Add(logItem);
+        this.Grid.Refresh();
+        this.Grid.SelectedRowIndex = this.Logs.Count;
     }
 
 

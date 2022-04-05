@@ -17,6 +17,10 @@ namespace CoreUtils.Classes
 
     public class JobDetails
     {
+        public JobDetails()
+        {
+
+        }
         public JobDetails(string jobName, string jobId, string jobMessage, string jobState = "", string jobHistory = "", string jobResultDetails = "", string jobErrorDetails = "")
         {
             JobName = jobName;
