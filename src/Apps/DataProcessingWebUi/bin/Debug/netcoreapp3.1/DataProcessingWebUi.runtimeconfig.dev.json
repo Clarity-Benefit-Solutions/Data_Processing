@@ -1,9 +1,10 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
-      "C:\\Users\\sumeet\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\sumeet\\.nuget\\packages",
-      "C:\\Microsoft\\Xamarin\\NuGet"
+      "C:\\Users\\SKumar_BENEFLEX\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\SKumar_BENEFLEX\\.nuget\\packages",
+      "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\Offline Packages",
+      "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet"
     ]
   }
 }

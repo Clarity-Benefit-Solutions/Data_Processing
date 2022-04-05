@@ -1,23 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj": {}
+    "E:\\FileAndDataProcessingAndErrorLog\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj": {}
   },
   "projects": {
-    "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj": {
+    "E:\\FileAndDataProcessingAndErrorLog\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj",
+        "projectUniqueName": "E:\\FileAndDataProcessingAndErrorLog\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj",
         "projectName": "DataProcessingWebUi",
-        "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj",
-        "packagesPath": "C:\\Users\\sumeet\\.nuget\\packages\\",
-        "outputPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\obj\\",
+        "projectPath": "E:\\FileAndDataProcessingAndErrorLog\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj",
+        "packagesPath": "C:\\Users\\SKumar_BENEFLEX\\.nuget\\packages\\",
+        "outputPath": "E:\\FileAndDataProcessingAndErrorLog\\src\\Apps\\DataProcessingWebUi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\Offline Packages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "C:\\Users\\sumeet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\SKumar_BENEFLEX\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 21.2.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -25,14 +27,16 @@
           "netcoreapp3.1"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj": {
-                "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj"
+              "E:\\FileAndDataProcessingAndErrorLog\\src\\Libraries\\CoreUtils\\CoreUtils.csproj": {
+                "projectPath": "E:\\FileAndDataProcessingAndErrorLog\\src\\Libraries\\CoreUtils\\CoreUtils.csproj"
               }
             }
           }
@@ -45,6 +49,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "Newtonsoft.Json": {
               "target": "Package",
@@ -69,12 +74,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[3.1.2, 3.1.2]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -83,15 +82,20 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.103\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj": {
+    "E:\\FileAndDataProcessingAndErrorLog\\src\\Libraries\\CoreUtils\\CoreUtils.csproj": {
       "restore": {
-        "projectUniqueName": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj",
+        "projectUniqueName": "E:\\FileAndDataProcessingAndErrorLog\\src\\Libraries\\CoreUtils\\CoreUtils.csproj",
         "projectName": "CoreUtils",
-        "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj"
+        "projectPath": "E:\\FileAndDataProcessingAndErrorLog\\src\\Libraries\\CoreUtils\\CoreUtils.csproj",
+        "frameworks": {
+          "net472": {
+            "projectReferences": {}
+          }
+        }
       },
       "frameworks": {
         "net472": {}

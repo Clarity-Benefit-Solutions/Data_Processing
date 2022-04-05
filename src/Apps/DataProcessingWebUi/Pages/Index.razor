@@ -136,92 +136,109 @@
 
     public object SendRequest(string path, string arg)
     {
-
-        StateHasChanged();
-
-        HttpClient client = new HttpClient { BaseAddress = new Uri($"{strBaseUrl}"), Timeout = TimeSpan.FromSeconds(600) };
-
-        // add auth header
-        this.addAuthHeader(client);
-
-        //HTTP GET Async
-        var result = client.GetAsync($"/DataProcessing/{path}/{arg}").Result;
-
-        if (!result.IsSuccessStatusCode)
-        {
-            //log response status here..
-            throw new Exception($"{result.ReasonPhrase} {result.RequestMessage}");
-        }
-
-        // parse job ID
-        var content = result.Content.ReadAsStringAsync().Result;
-
-        //
-        if (path.ToLower() != "JobResults".ToLower())
+        try
         {
 
-            var converter = new ExpandoObjectConverter();
-            dynamic taskJobDetails = JsonConvert.DeserializeObject<ExpandoObject>(content, converter);
+            StateHasChanged();
 
-            string jobId = (string)taskJobDetails.JobId;
+            HttpClient client = new HttpClient { BaseAddress = new Uri($"{strBaseUrl}"), Timeout = TimeSpan.FromSeconds(600) };
 
-            // get jobResult
-            Boolean jobIsProcessing = true;
+            // add auth header
+            this.addAuthHeader(client);
 
-            // loop till job is processing - write to log : processing
+            //HTTP GET Async
+            var result = client.GetAsync($"/DataProcessing/{path}/{arg}").Result;
 
-            while (jobIsProcessing)
+            if (!result.IsSuccessStatusCode)
             {
-                // get result of the job started by the request
-                dynamic jobDetailsRequestResult = this.SendRequest("JobResults", $"{jobId}");
-                var jobDetailsContent = jobDetailsRequestResult.Content.ReadAsStringAsync().Result;
-                //
-                dynamic jobDetails = JsonConvert.DeserializeObject<ExpandoObject>(jobDetailsContent, converter);
-                //
-                string jobState = jobDetails != null ? jobDetails.JobState : "error";
+                //log response status here..
+                throw new Exception($"{result.ReasonPhrase} {result.RequestMessage}");
+            }
 
-                // check job state
+            // parse job ID
+            var content = result.Content.ReadAsStringAsync().Result;
 
-                switch (jobState.ToLower())
+            //
+            if (path.ToLower() != "JobResults".ToLower())
+            {
+
+                var converter = new ExpandoObjectConverter();
+                dynamic taskJobDetails = JsonConvert.DeserializeObject<ExpandoObject>(content, converter);
+
+                string jobId = (string)taskJobDetails.JobId;
+
+                // get jobResult
+                Boolean jobIsProcessing = true;
+
+                // loop till job is processing - write to log : processing
+
+                while (jobIsProcessing)
                 {
-                    case @"processing":
-                    case @"started":
-                    case @"enqueued":
-                        var logItem = new LogFields(
-                            DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                            "",
-                            arg,
-                            jobState,
-                            "",
-                            ""
-                            );
+                    // get result of the job started by the request
+                    dynamic jobDetailsRequestResult = this.SendRequest("JobResults", $"{jobId}");
+                    var jobDetailsContent = jobDetailsRequestResult.Content.ReadAsStringAsync().Result;
+                    //
+                    dynamic jobDetails = JsonConvert.DeserializeObject<ExpandoObject>(jobDetailsContent, converter);
+                    //
+                    string jobState = jobDetails != null ? jobDetails.JobState : "error";
 
-                        this.Log(logItem);
-                        //
-                        Thread.Sleep(1000);
-                        break;
+                    // check job state
 
-                    default:
-                        jobIsProcessing = false;
+                    switch (jobState.ToLower())
+                    {
+                        case @"processing":
+                        case @"started":
+                        case @"enqueued":
+                            var logItem = new LogFields(
+                                DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                                "",
+                                arg,
+                                jobState,
+                                "",
+                                ""
+                                );
 
-                        var logItem2 = new LogFields(
-                            DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                            "",
-                            arg,
-                            jobState,
-                            "",
-                            Utils.IsBlank(jobDetails?.JobErrorDetails) ? jobDetails?.JobResultDetails : jobDetails?.JobErrorDetails
-                            );
+                            this.Log(logItem);
+                            //
+                            Thread.Sleep(1000);
+                            break;
 
-                        this.Log(logItem2);
-                        result = jobDetailsRequestResult;
-                        break;
+                        default:
+                            jobIsProcessing = false;
+
+                            var logItem2 = new LogFields(
+                                DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                                "",
+                                arg,
+                                jobState,
+                                "",
+                                Utils.IsBlank(jobDetails?.JobErrorDetails) ? jobDetails?.JobResultDetails : jobDetails?.JobErrorDetails
+                                );
+
+                            this.Log(logItem2);
+                            result = jobDetailsRequestResult;
+                            break;
+                    }
+
                 }
 
             }
-
+            return result;
         }
-        return result;
+        catch (Exception ex)
+        {
+            var logItem2 = new LogFields(
+                DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                "",
+                arg,
+                "ERROR",
+                "",
+                new OperationResult("0", "200","ERROPR", "", ex.ToString()).ToString()
+                );
+
+            this.Log(logItem2);
+            return null;
+        }
     }
 
     void cmdCopyTestFiles()
