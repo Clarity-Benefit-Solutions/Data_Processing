@@ -51,17 +51,17 @@ namespace DataProcessingWebApp.Controllers
             {
                 if (Utils.IsBlank(id))
                 {
-                    return new JobDetails("", id, "Job ID MUST BE PASSED");
+                    return new JobDetails("", id, "", "Job ID MUST BE PASSED");
                 }
 
                 // do job in background
                 string jobId = BackgroundJob.Enqueue(() => DataProcessingJob.StartJob(null, id));
 
-                return new JobDetails(id, $"[JobDetails ID {jobId} Queued for {id}", "STARTED");
+                return new JobDetails(id, jobId, $"[JobDetails ID {jobId} Queued for {id}", "STARTED");
             }
             catch (Exception ex)
             {
-                return new JobDetails(id, $"[Job Could Not Be Queued as {ex.ToString()}", "FAILED");
+                return new JobDetails(id, "", $"[Job Could Not Be Queued as {ex.ToString()}", "FAILED");
             }
         }
 
@@ -69,8 +69,8 @@ namespace DataProcessingWebApp.Controllers
         [System.Web.Http.Authorize]
         public JobDetails CheckFileAlegeus(HttpPostedFileBase file)
         {
-                return CheckFile(file, "alegeus");
-         
+            return CheckFile(file, "alegeus");
+
         }
         [System.Web.Http.Authorize]
         public JobDetails CheckFile(HttpPostedFileBase file, string platform)
@@ -81,7 +81,7 @@ namespace DataProcessingWebApp.Controllers
             {
                 if (file == null || Utils.IsBlank(file.FileName))
                 {
-                    return new JobDetails(file != null ? file.FileName : "", "{id}", "Valid File MUST BE PASSED");
+                    return new JobDetails(file != null ? file.FileName : "", "", "{id}", "Valid File MUST BE PASSED");
                 }
 
                 // Get local temp file with UniqueID Added
@@ -94,7 +94,7 @@ namespace DataProcessingWebApp.Controllers
                 // do job in background
                 string jobId = BackgroundJob.Enqueue(() => DataProcessingJob.CheckFile(null, srcFilePath, "Alegeus"));
                 //
-                return new JobDetails(id, $"[JobDetails ID {jobId} Queued for {id} and File {file.FileName}", "STARTED");
+                return new JobDetails(id, jobId, jobId, $"[JobDetails ID {jobId} Queued for {id} and File {file.FileName}", "STARTED");
             }
             catch (Exception ex)
             {
@@ -113,13 +113,13 @@ namespace DataProcessingWebApp.Controllers
             {
                 if (Utils.IsBlank(jobId))
                 {
-                    return new JobDetails("", jobId, "Not Found");
+                    return new JobDetails("", jobId, $"{jobId} Not Found", "Not Found");
                 }
 
                 var jobData = JobStorage.Current.GetConnection().GetJobData(jobId);
                 if (jobData == null || jobData.Job == null)
                 {
-                    return new JobDetails("", jobId, "Not Found");
+                    return new JobDetails("", jobId, $"{jobId} Not Found", "Not Found");
                 }
 
                 string history = "";
@@ -129,7 +129,7 @@ namespace DataProcessingWebApp.Controllers
 
                 var hMonitoringApi = JobStorage.Current.GetMonitoringApi();
                 var jobState = hMonitoringApi.JobDetails(jobId);
-                if (jobState != null )
+                if (jobState != null)
                 {
                     var historyData = jobState.History.First()?.Data;
                     if (historyData != null)
@@ -143,12 +143,12 @@ namespace DataProcessingWebApp.Controllers
                     }
                 }
 
-                return new JobDetails(jobKey, jobId, jobData.State, history, result);
+                return new JobDetails(jobKey, jobId, jobId, jobData.State, history, result);
 
             }
             catch (Exception ex)
             {
-                return new JobDetails("", $"[JobDetails jobId {jobId} Results Could Not Be Queried as {ex.ToString()}", "FAILED");
+                return new JobDetails("", jobId, jobId, $"[JobDetails jobId {jobId} Results Could Not Be Queried as {ex.ToString()}", "FAILED", "FAILED", "FAILED");
             }
         }
 

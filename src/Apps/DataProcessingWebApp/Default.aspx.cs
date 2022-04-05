@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -33,7 +34,7 @@ namespace DataProcessingWebApp
             this.listLogs.DataBind();
         }
 
-        private string SendRequest(string path, string arg)
+        private object SendRequest(string path, string arg)
         {
             using var client = new HttpClient();
 
@@ -55,36 +56,62 @@ namespace DataProcessingWebApp
             var result = responseTask.Result;
             if (result.IsSuccessStatusCode)
             {
-                dynamic taskResult;
+                // parse job ID
+                var content = result.Content.ReadAsStringAsync().Result;
+
+                //
                 if (path.ToLower() != "JobResults".ToLower())
                 {
-                    // parse job ID
-                    var content = result.Content.ReadAsStringAsync().Result;
-                    
-                    dynamic jobDetails = responseTask.Result;
-                    string jobId = jobDetails.jobId;
 
-                    // get jobDetails
-                    dynamic jobResult = this.SendRequest("JobResults", $"{jobId}");
+                    JobDetails taskJobDetails = (JobDetails)Utils.DeserializeJson<JobDetails>(content);
+                    string jobId = (string)taskJobDetails.JobId;
+
+                    // get jobResult
+                    Boolean jobIsProcessing = true;
 
                     // loop till job is processing - write to log : processing
 
+                    while (jobIsProcessing)
+                    {
+                        // get result of the job started by the request
+                        dynamic jobDetailsRequestResult = this.SendRequest("JobResults", $"{jobId}");
+                        var jobDetailsContent = jobDetailsRequestResult.Content.ReadAsStringAsync().Result;
+                        JobDetails jobDetails = (JobDetails)Utils.DeserializeJson<JobDetails>(jobDetailsContent);
+                        //
+                        string jobState = jobDetails != null ? jobDetails.JobState : "error";
+                  
+                        // check job state
+
+                        switch (jobState.ToLower())
+                        {
+                            case @"processing":
+                            case @"started":
+                                Thread.Sleep(2000);
+                                break;
+
+                            default:
+                                jobIsProcessing = false;
+                                
+                                result = jobDetailsRequestResult;
+                                break;
+                        }
+
+                    }
+
                     // when job finished, log job result
 
-                    taskResult = jobResult.Content;
+                    return result;
                 }
                 else
                 {
-                    taskResult = result.Content;
+                    return result;
                 }
 
-                return taskResult.ToString();
             }
             else //web api sent error response 
             {
                 //log response status here..
                 throw new Exception($"{result.ReasonPhrase} {result.RequestMessage}");
-
             }
         }
 

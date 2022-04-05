@@ -17,30 +17,33 @@ namespace CoreUtils.Classes
 
     public class JobDetails
     {
-        public JobDetails(string jobName, string jobId, string jobState = "", string jobHistory = "", string jobResult = "")
+        public JobDetails(string jobName, string jobId, string jobMessage, string jobState = "", string jobHistory = "", string jobResultDetails = "", string jobErrorDetails = "")
         {
             JobName = jobName;
+            JobMessage = jobMessage;
             JobId = jobId;
             JobState = jobState;
             JobHistory = jobHistory;
-            JobResult = Utils.DeserializeJson<OperationResult>(jobResult);
+            JobResultDetails = jobResultDetails;
+            JobErrorDetails = jobErrorDetails;
         }
         public string JobName;
+        public string JobMessage;
         public string JobId;
         public string JobState;
         public string JobHistory;
-        public dynamic JobResult;
+        public string JobResultDetails;
+        public string JobErrorDetails;
 
         public override string ToString()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this, Formatting.Indented);
-            //return $"Success: {JobName}\n<br>Code: {JobId}\n<br>Result: {JobState}\n<br>Details: {JobHistory}\n<br>Error: {JobResult}";
         }
     }
 
     public class OperationResult
     {
-        public OperationResult(Boolean success, int code, string result = "", string details = "", string error = "")
+        public OperationResult(string success, string code, string result = "", string details = "", string error = "")
         {
             Success = success;
             Code = code;
@@ -48,8 +51,8 @@ namespace CoreUtils.Classes
             Result = result;
             Details = details;
         }
-        public Boolean Success;
-        public int Code;
+        public string Success;
+        public string Code;
         public string Result;
         public string Details;
         public string Error;
@@ -109,7 +112,7 @@ namespace CoreUtils.Classes
                 object try1 = JsonConvert.DeserializeObject(value);
                 if (try1 is string)
                 {
-                    value = (string) try1;
+                    value = (string)try1;
                 }
 
                 object deserializeObject = JsonConvert.DeserializeObject<T>(value);
@@ -424,20 +427,20 @@ namespace CoreUtils.Classes
             string entityConnectionString = ConfigurationManager.ConnectionStrings[connStringName].ConnectionString;
             return entityConnectionString;
 
-        }   
-        
+        }
+
         public static string GetAppSetting(string settingName)
         {
-           dynamic section = ConfigurationManager.GetSection("AppSettings");
-           dynamic keys = section.Keys;
-           foreach (dynamic key in keys)
-           {
-               if (key == settingName)
-               {
-                   return section[key];
-               }
-           }
-            
+            dynamic section = ConfigurationManager.GetSection("AppSettings");
+            dynamic keys = section.Keys;
+            foreach (dynamic key in keys)
+            {
+                if (key == settingName)
+                {
+                    return section[key];
+                }
+            }
+
             return "";
 
         }

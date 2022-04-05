@@ -94,7 +94,7 @@ namespace DataProcessingWebApp.Jobs
                 }
                 //
                 string logs = String.Join("\n", listLogs.ToArray());
-                return new OperationResult(true, 200, "Completed", logs, "").ToString();
+                return new OperationResult("1", "200", "Completed", logs, "").ToString();
 
             }
             catch (Exception ex)
@@ -105,7 +105,7 @@ namespace DataProcessingWebApp.Jobs
 
                 //
                 string logs = String.Join("\n", listLogs.ToArray());
-                return new OperationResult(false, 400, "Error", logs, ex.ToString()).ToString();
+                return new OperationResult("0", "400", "Error", logs, ex.ToString()).ToString();
             }
         }
 #pragma warning disable CS1998
@@ -187,7 +187,7 @@ namespace DataProcessingWebApp.Jobs
 
                 //
                 string logs = String.Join("\n", listLogs.ToArray());
-                return new OperationResult(false, 400, "Error", logs, ex.ToString()).ToString();
+                return new OperationResult("0", "400", "Error", logs, ex.ToString()).ToString();
             }
         }
 
