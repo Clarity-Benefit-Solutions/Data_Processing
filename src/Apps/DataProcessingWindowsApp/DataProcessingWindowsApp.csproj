@@ -23,7 +23,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>binTEST\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;TEST;NOPROFILE;VPN</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;TEST;NOPROFILE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
