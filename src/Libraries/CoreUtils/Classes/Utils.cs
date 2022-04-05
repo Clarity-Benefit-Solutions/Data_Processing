@@ -69,12 +69,12 @@ namespace CoreUtils.Classes
     }
     public class LogFields
     {
-        public string LogTime { get; }
-        public string FileId { get; }
-        public string Task { get; }
-        public string Status { get; }
-        public string FileName { get; }
-        public string OutcomeDetails { get; }
+        public string LogTime { get; set; }
+        public string FileId { get; set; }
+        public string Task { get; set; }
+        public string Status { get; set; }
+        public string FileName { get; set; }
+        public string OutcomeDetails { get; set; }
 
         public LogFields(string logTime, string fileId, string task, string status, string fileName, string outcomeDetails)
         {

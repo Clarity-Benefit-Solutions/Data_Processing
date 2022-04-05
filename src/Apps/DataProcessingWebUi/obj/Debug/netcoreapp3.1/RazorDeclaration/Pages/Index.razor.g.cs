@@ -195,210 +195,219 @@ using Syncfusion.Blazor.Grids;
 #line 117 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
                                                  
 
-    SfGrid<LogFields> Grid { get; set; }
-    public string ResultTextAreaValue { get; set; } = String.Empty;
+SfGrid<LogFields> Grid { get; set; }
+public string ResultTextAreaValue { get; set; } = String.Empty;
 
-    private Boolean needsRefresh = false;
+private Boolean needsRefresh = false;
 
-    private string strBaseUrl = "http://be015:81";
+private string strBaseUrl = "http://be015:81";
 
 
-    private List<LogFields> Logs = new List<LogFields> { };
+private List<LogFields> Logs = new List<LogFields> { };
 
-    private void addAuthHeader(HttpClient client)
+private void addAuthHeader(HttpClient client)
+{
+    string creds = $"{_username}:{_password}";
+    AuthenticationHeaderValue authHeaderValue = new AuthenticationHeaderValue("basic", creds);
+    client.DefaultRequestHeaders.Authorization = authHeaderValue;
+}
+
+
+public object SendRequest(string path, string arg)
+{
+    try
     {
-        string creds = $"{_username}:{_password}";
-        AuthenticationHeaderValue authHeaderValue = new AuthenticationHeaderValue("basic", creds);
-        client.DefaultRequestHeaders.Authorization = authHeaderValue;
-    }
 
+        StateHasChanged();
 
-    public object SendRequest(string path, string arg)
-    {
-        try
+        HttpClient client = new HttpClient { BaseAddress = new Uri($"{strBaseUrl}"), Timeout = TimeSpan.FromSeconds(600) };
+
+        // add auth header
+        this.addAuthHeader(client);
+
+        //HTTP GET Async
+        var result = client.GetAsync($"/DataProcessing/{path}/{arg}").Result;
+
+        if (!result.IsSuccessStatusCode)
         {
+            //log response status here..
+            throw new Exception($"{result.ReasonPhrase} {result.RequestMessage}");
+        }
 
-            StateHasChanged();
+        // parse job ID
+        var content = result.Content.ReadAsStringAsync().Result;
 
-            HttpClient client = new HttpClient { BaseAddress = new Uri($"{strBaseUrl}"), Timeout = TimeSpan.FromSeconds(600) };
+        //
+        if (path.ToLower() != "JobResults".ToLower())
+        {
+            JobDetails taskJobDetails = JsonConvert.DeserializeObject<JobDetails>(content);
 
-            // add auth header
-            this.addAuthHeader(client);
+            string jobId = (string)taskJobDetails.JobId;
 
-            //HTTP GET Async
-            var result = client.GetAsync($"/DataProcessing/{path}/{arg}").Result;
+            // get jobResult
+            Boolean jobIsProcessing = true;
 
-            if (!result.IsSuccessStatusCode)
+            // loop till job is processing - write to log : processing
+
+            while (jobIsProcessing)
             {
-                //log response status here..
-                throw new Exception($"{result.ReasonPhrase} {result.RequestMessage}");
-            }
+                // get result of the job started by the request
+                dynamic jobDetailsRequestResult = this.SendRequest("JobResults", $"{jobId}");
+                var jobDetailsContent = jobDetailsRequestResult.Content.ReadAsStringAsync().Result;
+                //
+                JobDetails jobDetails = JsonConvert.DeserializeObject<JobDetails>(jobDetailsContent);
+                //
+                string jobState = jobDetails != null ? jobDetails.JobState : "error";
+                //
 
-            // parse job ID
-            var content = result.Content.ReadAsStringAsync().Result;
 
-            //
-            if (path.ToLower() != "JobResults".ToLower())
-            {
+                // check job state
 
-                var converter = new ExpandoObjectConverter();
-                dynamic taskJobDetails = JsonConvert.DeserializeObject<ExpandoObject>(content, converter);
-
-                string jobId = (string)taskJobDetails.JobId;
-
-                // get jobResult
-                Boolean jobIsProcessing = true;
-
-                // loop till job is processing - write to log : processing
-
-                while (jobIsProcessing)
+                switch (jobState.ToLower())
                 {
-                    // get result of the job started by the request
-                    dynamic jobDetailsRequestResult = this.SendRequest("JobResults", $"{jobId}");
-                    var jobDetailsContent = jobDetailsRequestResult.Content.ReadAsStringAsync().Result;
-                    //
-                    dynamic jobDetails = JsonConvert.DeserializeObject<ExpandoObject>(jobDetailsContent, converter);
-                    //
-                    string jobState = jobDetails != null ? jobDetails.JobState : "error";
+                    case @"processing":
+                    case @"started":
+                    case @"enqueued":
+                        var logItem = new LogFields(
+                            DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                            "",
+                            arg,
+                            jobState,
+                            "",
+                            ""
+                            );
 
-                    // check job state
+                        this.Log(logItem);
+                        //
+                        Thread.Sleep(1000);
+                        break;
 
-                    switch (jobState.ToLower())
-                    {
-                        case @"processing":
-                        case @"started":
-                        case @"enqueued":
-                            var logItem = new LogFields(
-                                DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                                "",
-                                arg,
-                                jobState,
-                                "",
-                                ""
-                                );
+                    default:
+                        jobIsProcessing = false;
+                        OperationResult jobDetailsOutcome = (OperationResult)Utils.DeserializeJson<OperationResult>(jobDetails?.JobResultDetails);
 
-                            this.Log(logItem);
-                            //
-                            Thread.Sleep(1000);
-                            break;
+                        if (jobDetailsOutcome.Code != "200")
+                        {
+                            jobState = "ERROR";
+                        }
 
-                        default:
-                            jobIsProcessing = false;
+                        var logItem2 = new LogFields(
+                            DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                            "",
+                            arg,
+                            jobState,
+                            "",
+                            jobDetailsOutcome.ToString()
+                            );
 
-                            var logItem2 = new LogFields(
-                                DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                                "",
-                                arg,
-                                jobState,
-                                "",
-                                Utils.IsBlank(jobDetails?.JobErrorDetails) ? jobDetails?.JobResultDetails : jobDetails?.JobErrorDetails
-                                );
-
-                            this.Log(logItem2);
-                            result = jobDetailsRequestResult;
-                            break;
-                    }
-
+                        this.Log(logItem2);
+                        result = jobDetailsRequestResult;
+                        break;
                 }
 
             }
-            return result;
+
         }
-        catch (Exception ex)
+        return result;
+    }
+    catch (Exception ex)
+    {
+        var logItem2 = new LogFields(
+            DateTime.Now.ToString(CultureInfo.InvariantCulture),
+            "",
+            arg,
+            "ERROR",
+            "",
+            new OperationResult("0", "200", "ERROPR", "", ex.ToString()).ToString()
+            );
+
+        this.Log(logItem2);
+        return null;
+    }
+}
+
+void cmdCopyTestFiles()
+{
+    this.Clear();
+
+    this.Grid.Refresh();
+    //
+    dynamic result = this.SendRequest("StartJob", "copytestfiles");
+
+}
+
+void cmdProcessCobraFiles()
+{
+    this.Clear();
+
+    //
+    dynamic result = this.SendRequest("StartJob", "processcobrafiles");
+}
+
+void cmdProcessAlegeusFiles()
+{
+    this.Clear();
+
+    //
+    dynamic result = this.SendRequest("StartJob", "processalegeusfiles");
+}
+
+void cmdRetrieveFtpErrorLogs()
+{
+    this.Clear();
+    //
+    dynamic result = this.SendRequest("StartJob", "retrieveftperrorlogs");
+}
+
+void cmdOpenAccessDB()
+{
+    this.Clear();
+
+}
+
+void cmdShowJobStatus()
+{
+    jsRuntime.InvokeAsync<object>("open", $"{strBaseUrl}/hangfire/jobs/processing", "_blank");
+}
+
+void Clear()
+{
+    this.Logs.Clear();
+    this.ResultTextAreaValue = "";
+    this.Grid.Refresh();
+    //
+    this.needsRefresh = true;
+    //
+    StateHasChanged();
+    //
+    this.needsRefresh = false;
+}
+
+void Log(LogFields logItem)
+{
+
+    if (!Utils.IsBlank(logItem.OutcomeDetails))
+    {
+        OperationResult details = (OperationResult)Utils.DeserializeJson<OperationResult>(logItem.OutcomeDetails);
+        if (!Utils.IsBlank(details.Error))
         {
-            var logItem2 = new LogFields(
-                DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                "",
-                arg,
-                "ERROR",
-                "",
-                new OperationResult("0", "200","ERROPR", "", ex.ToString()).ToString()
-                );
-
-            this.Log(logItem2);
-            return null;
+            this.ResultTextAreaValue = details.Error + "\n\n\n\n------------------------------------\n\n\n\n" + details.Details;
         }
-    }
-
-    void cmdCopyTestFiles()
-    {
-        this.Clear();
-
-        this.Grid.Refresh();
-        //
-        dynamic result = this.SendRequest("StartJob", "copytestfiles");
-
-    }
-
-    void cmdProcessCobraFiles()
-    {
-        this.Clear();
-
-        //
-        dynamic result = this.SendRequest("StartJob", "processcobrafiles");
-    }
-
-    void cmdProcessAlegeusFiles()
-    {
-        this.Clear();
-
-        //
-        dynamic result = this.SendRequest("StartJob", "processalegeusfiles");
-    }
-
-    void cmdRetrieveFtpErrorLogs()
-    {
-        this.Clear();
-        //
-        dynamic result = this.SendRequest("StartJob", "retrieveftperrorlogs");
-    }
-
-    void cmdOpenAccessDB()
-    {
-        this.Clear();
-
-    }
-
-    void cmdShowJobStatus()
-    {
-        jsRuntime.InvokeAsync<object>("open", $"{strBaseUrl}/hangfire/jobs/processing", "_blank");
-    }
-
-    void Clear()
-    {
-        this.Logs.Clear();
-        this.ResultTextAreaValue = "";
-        this.Grid.Refresh();
-        //
-        this.needsRefresh = true;
-        //
-        StateHasChanged();
-        //
-        this.needsRefresh = false;
-    }
-
-    void Log(LogFields logItem)
-    {
-        this.Logs.Add(logItem);
-        this.Grid.Refresh();
-
-        if (!Utils.IsBlank(logItem.OutcomeDetails))
+        else
         {
-            var converter = new ExpandoObjectConverter();
-            OperationResult details = (OperationResult)Utils.DeserializeJson<OperationResult>(logItem.OutcomeDetails);
-            if (!Utils.IsBlank(details.Error))
-            {
-                this.ResultTextAreaValue = details.Error;
-            }
-            else
-            {
-                this.ResultTextAreaValue = details.Details;
-            }
+            this.ResultTextAreaValue = details.Details;
         }
-        this.needsRefresh = true;
-        StateHasChanged();
-
     }
+
+    //
+    logItem.OutcomeDetails = logItem.Status;
+    this.Logs.Add(logItem);
+    this.Grid.Refresh();
+
+    this.needsRefresh = true;
+    StateHasChanged();
+
+}
 
 
 #line default

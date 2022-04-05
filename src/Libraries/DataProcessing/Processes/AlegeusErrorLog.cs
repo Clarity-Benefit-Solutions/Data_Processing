@@ -138,7 +138,7 @@ namespace DataProcessing
                         "Success", $"Got MBI/DNE File from FTP");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); throw ex; }
             );
 
 
@@ -161,7 +161,7 @@ namespace DataProcessing
                         "Success", $"Got Res File from FTP");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); throw ex; }
             );
 
             //
