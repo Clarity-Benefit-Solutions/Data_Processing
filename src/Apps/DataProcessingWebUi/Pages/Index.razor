@@ -76,7 +76,36 @@
     </p>
 </div>
 <div class="">
-    <SfGrid @ref="Grid" DataSource="@Logs" Height="400px" />
+    <SfGrid @ref="Grid" DataSource="@Logs" Height="300px" />
+</div>
+<div class="">
+    <p>
+
+
+    </p>
+</div>
+<div class="">
+    <p>
+
+
+    </p>
+</div>
+<div class="">
+    <p>
+        <textarea @bind="ResultTextAreaValue"
+                  @bind:event="oninput"
+                  Id="ResultTextArea"
+                  Name="ResultTextArea"
+                  AutoSize="true"
+                  style="width: 100%; max-width: 100%; height: 400px;max-height: 600px">
+        </textarea>
+    </p>
+</div>
+<div class="">
+    <p>
+
+
+    </p>
 </div>
 
 @code {
@@ -86,6 +115,10 @@
     @*Utils.GetAppSetting("BasicAuthPassword");*@
 
     SfGrid<LogFields> Grid { get; set; }
+    public string ResultTextAreaValue { get; set; } = String.Empty;
+
+    private Boolean needsRefresh = false;
+
 
     private List<LogFields> Logs = new List<LogFields> { };
 
@@ -99,6 +132,8 @@
 
     public object SendRequest(string path, string arg)
     {
+
+        StateHasChanged();
 
         @*string strUrl = "https://localhost:44320";*@
         string strUrl = "http://be015:81";
@@ -152,29 +187,29 @@
                     case @"started":
                     case @"enqueued":
                         var logItem = new LogFields(
-                                DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                                "",
-                                arg,
-                                jobState,
-                                "",
-                                jobState
+                            DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                            "",
+                            arg,
+                            jobState,
+                            "",
+                            ""
                             );
 
                         this.Log(logItem);
                         //
-                        Thread.Sleep(500);
+                        Thread.Sleep(1000);
                         break;
 
                     default:
                         jobIsProcessing = false;
 
                         var logItem2 = new LogFields(
-                                DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                                "",
-                                arg,
-                                jobState,
-                                "",
-                                Utils.IsBlank(jobDetails?.JobErrorDetails) ? jobDetails?.JobResultDetails : jobDetails?.JobErrorDetails
+                            DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                            "",
+                            arg,
+                            jobState,
+                            "",
+                            Utils.IsBlank(jobDetails?.JobErrorDetails) ? jobDetails?.JobResultDetails : jobDetails?.JobErrorDetails
                             );
 
                         this.Log(logItem2);
@@ -238,13 +273,43 @@
     void Clear()
     {
         this.Logs.Clear();
+        this.ResultTextAreaValue = "";
         this.Grid.Refresh();
+        //
+        this.needsRefresh = true;
+        //
+        StateHasChanged();
+        //
+        this.needsRefresh = false;
     }
+
     void Log(LogFields logItem)
     {
         this.Logs.Add(logItem);
         this.Grid.Refresh();
-        this.Grid.SelectedRowIndex = this.Logs.Count;
+
+        if (!Utils.IsBlank(logItem.OutcomeDetails))
+        {
+            var converter = new ExpandoObjectConverter();
+            OperationResult details = (OperationResult)Utils.DeserializeJson<OperationResult>(logItem.OutcomeDetails);
+            if (!Utils.IsBlank(details.Error))
+            {
+                this.ResultTextAreaValue = details.Error;
+            }
+            else
+            {
+                this.ResultTextAreaValue = details.Details;
+            }
+        }
+        this.needsRefresh = true;
+        StateHasChanged();
+
+    }
+
+
+    protected override bool ShouldRender()
+    {
+        return base.ShouldRender() || this.needsRefresh;
     }
 
 
