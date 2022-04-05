@@ -67,8 +67,8 @@
         <p>
 
             &nbsp;
-            <button id="cmdDoALL" @onclick="cmdDoALL">Do All Above</button>
-            &nbsp;&nbsp;&nbsp;&nbsp; Do All Above in Sequence
+            <button id="cmdShowJobs" @onclick="cmdShowJobStatus">Show Job Status</button>
+            &nbsp;&nbsp;&nbsp;&nbsp; Show Job Status
         </p>
     </div>
     <p>
@@ -109,6 +109,8 @@
 </div>
 
 @code {
+    @inject IJSRuntime jsRuntime
+
     private string _username = "dataprocessinguser";
     @*Utils.GetAppSetting("BasicAuthUserName");*@
     private string _password = "#gjgB0AXG^940";
@@ -118,6 +120,8 @@
     public string ResultTextAreaValue { get; set; } = String.Empty;
 
     private Boolean needsRefresh = false;
+
+    private string strBaseUrl = "http://be015:81";
 
 
     private List<LogFields> Logs = new List<LogFields> { };
@@ -135,10 +139,7 @@
 
         StateHasChanged();
 
-        @*string strUrl = "https://localhost:44320";*@
-        string strUrl = "http://be015:81";
-
-        HttpClient client = new HttpClient { BaseAddress = new Uri($"{strUrl}"), Timeout = TimeSpan.FromSeconds(600) };
+        HttpClient client = new HttpClient { BaseAddress = new Uri($"{strBaseUrl}"), Timeout = TimeSpan.FromSeconds(600) };
 
         // add auth header
         this.addAuthHeader(client);
@@ -262,12 +263,9 @@
 
     }
 
-    void cmdDoALL()
+    void cmdShowJobStatus()
     {
-        this.Clear();
-
-
-        //
+        jsRuntime.InvokeAsync<object>("open", $"{strBaseUrl}/hangfire/jobs/processing", "_blank");
     }
 
     void Clear()
@@ -305,12 +303,5 @@
         StateHasChanged();
 
     }
-
-
-    protected override bool ShouldRender()
-    {
-        return base.ShouldRender() || this.needsRefresh;
-    }
-
 
 }
