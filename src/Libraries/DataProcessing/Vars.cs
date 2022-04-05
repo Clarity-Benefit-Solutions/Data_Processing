@@ -277,7 +277,7 @@ namespace DataProcessing
                 if (_remoteAlegeusFtpConnection == null)
                 {
 #if (TEST)
-                    _remoteAlegeusFtpConnection = new SFtpConnection("localhost", 22, "alegeus", "3214@Clarity");
+                    _remoteAlegeusFtpConnection = new SFtpConnection("BE015", 22, "alegeus", "3214@Clarity");
 #else
                     _remoteAlegeusFtpConnection = new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
 #endif
@@ -318,7 +318,7 @@ namespace DataProcessing
             get
             {
 #if (TEST)
-                _remoteCobraFtpConnection = new SFtpConnection("localhost", 21, "alegeus", "a");
+                _remoteCobraFtpConnection = new SFtpConnection("BE015", 21, "alegeus", "a");
 #else
                 _remoteCobraFtpConnection = new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
 #endif
