@@ -6,37 +6,86 @@
         <h1>File And Data Processing App</h1>
         <p class="lead">This App automates File and Data Processing for Alegeus and COBRA Source Files.</p>
         <p class="lead">It also fetches Result &amp; Error Files from Alegeus and allows easy tracking </p>
-        <p><a href="http://www.asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
     </div>
 
     <div class="row">
         <div class="col-md-4">
-            <h2>Getting started</h2>
             <p>
-                ASP.NET Web Forms lets you build dynamic websites using a familiar drag-and-drop, event-driven model.
-            A design surface and hundreds of controls and components let you rapidly build sophisticated, powerful UI-driven sites with data access.
-            </p>
+                &nbsp;<asp:Button ID="cmdCopyTestFiles" runat="server" Text="CopyTestFiles" OnClick="cmdCopyTestFiles_Click" />
+&nbsp;&nbsp;&nbsp;&nbsp; Copy test files BEFORE starting a new process</p>
+        </div>
+        <div class="col-md-4">
             <p>
-                <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301948">Learn more &raquo;</a>
+           
             </p>
         </div>
         <div class="col-md-4">
-            <h2>Get more libraries</h2>
             <p>
-                NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.
-            </p>
+                &nbsp;
+                <asp:Button ID="cmdProcessCobraFiles" runat="server" Text="ProcessCobraFiles" />
+&nbsp;&nbsp;&nbsp;&nbsp; Process COBRA Source Files</p>
+        </div>
+        <div class="col-md-4">
             <p>
-                <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301949">Learn more &raquo;</a>
+           
             </p>
         </div>
         <div class="col-md-4">
-            <h2>Web Hosting</h2>
             <p>
-                You can easily find a web hosting company that offers the right mix of features and price for your applications.
+               
+                &nbsp;
+                <asp:Button ID="cmdProcessAlegeusFiles" runat="server" Text="ProcessAlegeusFiles" />
+&nbsp;&nbsp;&nbsp;&nbsp; Process Alegeus Source Files</p>
+        </div>
+        <div class="col-md-4">
+            <p>
+           
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+               
+                &nbsp;
+                <asp:Button ID="cmdRetrieveFtpErrorLogs" runat="server" Text="RetrieveFtpErrorLogs" />
+                &nbsp;&nbsp;&nbsp;&nbsp;Get Alegeus Upload Results
+               
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+           
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+               
+                &nbsp;
+                <asp:Button ID="cmdOpenAccessDB" runat="server" Text="Open Access UI" />
+&nbsp;&nbsp;&nbsp;&nbsp; Open MS Access User Interface</p>
+        </div>
+        <div class="col-md-4">
+            <p>
+           
+            </p>
+        </div>
+        <div class="col-md-4">
+            <p>
+               
+                &nbsp;
+                <asp:Button ID="cmdDoALL" runat="server" Text="Do All Above" />
+&nbsp;&nbsp;&nbsp;&nbsp; Do All Above in Sequence</p>
+        </div>
+        <div class="col-md-4">
+            <p>
+           
             </p>
             <p>
-                <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301950">Learn more &raquo;</a>
-            </p>
+           
+                Logs</p>
+        </div>
+        <div class="col-md-4">
+            <asp:GridView ID="listLogs" runat="server" Width="1434px">
+            </asp:GridView>
         </div>
     </div>
 
