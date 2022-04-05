@@ -9,84 +9,58 @@
     </div>
 
     <div class="row">
-        <div class="col-md-4">
+        <div class="">
             <p>
                 &nbsp;<asp:Button ID="cmdCopyTestFiles" runat="server" Text="CopyTestFiles" OnClick="cmdCopyTestFiles_Click" />
 &nbsp;&nbsp;&nbsp;&nbsp; Copy test files BEFORE starting a new process</p>
         </div>
-        <div class="col-md-4">
+        <div class="">
             <p>
            
             </p>
         </div>
-        <div class="col-md-4">
+        <div class="">
             <p>
                 &nbsp;
-                <asp:Button ID="cmdProcessCobraFiles" runat="server" Text="ProcessCobraFiles" />
+                <asp:Button ID="cmdProcessCobraFiles" runat="server" Text="ProcessCobraFiles" OnClick="cmdProcessCobraFiles_Click" />
 &nbsp;&nbsp;&nbsp;&nbsp; Process COBRA Source Files</p>
         </div>
-        <div class="col-md-4">
-            <p>
-           
-            </p>
-        </div>
-        <div class="col-md-4">
+        <div class="">
             <p>
                
                 &nbsp;
-                <asp:Button ID="cmdProcessAlegeusFiles" runat="server" Text="ProcessAlegeusFiles" />
+                <asp:Button ID="cmdProcessAlegeusFiles" runat="server" Text="ProcessAlegeusFiles" OnClick="cmdProcessAlegeusFiles_Click" />
 &nbsp;&nbsp;&nbsp;&nbsp; Process Alegeus Source Files</p>
         </div>
-        <div class="col-md-4">
-            <p>
-           
-            </p>
-        </div>
-        <div class="col-md-4">
+        <div class="">
             <p>
                
                 &nbsp;
-                <asp:Button ID="cmdRetrieveFtpErrorLogs" runat="server" Text="RetrieveFtpErrorLogs" />
+                <asp:Button ID="cmdRetrieveFtpErrorLogs" runat="server" Text="RetrieveFtpErrorLogs" OnClick="cmdRetrieveFtpErrorLogs_Click" />
                 &nbsp;&nbsp;&nbsp;&nbsp;Get Alegeus Upload Results
                
             </p>
         </div>
-        <div class="col-md-4">
-            <p>
-           
-            </p>
-        </div>
-        <div class="col-md-4">
+        <div class="">
             <p>
                
                 &nbsp;
-                <asp:Button ID="cmdOpenAccessDB" runat="server" Text="Open Access UI" />
+                <asp:Button ID="cmdOpenAccessDB" runat="server" Text="Open Access UI" OnClick="cmdOpenAccessDB_Click" />
 &nbsp;&nbsp;&nbsp;&nbsp; Open MS Access User Interface</p>
         </div>
-        <div class="col-md-4">
-            <p>
-           
-            </p>
-        </div>
-        <div class="col-md-4">
+         <div class="">
             <p>
                
                 &nbsp;
                 <asp:Button ID="cmdDoALL" runat="server" Text="Do All Above" />
 &nbsp;&nbsp;&nbsp;&nbsp; Do All Above in Sequence</p>
         </div>
-        <div class="col-md-4">
-            <p>
-           
-            </p>
-            <p>
-           
+             <p>
                 Logs</p>
         </div>
-        <div class="col-md-4">
-            <asp:GridView ID="listLogs" runat="server" Width="1434px">
+        <div class="">
+            <asp:GridView ID="listLogs" runat="server" Width="1434px" AllowPaging="True" AllowSorting="True">
             </asp:GridView>
         </div>
-    </div>
 
 </asp:Content>

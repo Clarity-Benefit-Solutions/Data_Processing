@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -79,19 +80,41 @@ namespace DataProcessingWebApp
                         JobDetails jobDetails = (JobDetails)Utils.DeserializeJson<JobDetails>(jobDetailsContent);
                         //
                         string jobState = jobDetails != null ? jobDetails.JobState : "error";
-                  
+
                         // check job state
 
                         switch (jobState.ToLower())
                         {
                             case @"processing":
                             case @"started":
-                                Thread.Sleep(2000);
+                                var logItem = new LogFields(
+                                    DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                                    "",
+                                    arg,
+                                    jobState,
+                                    "",
+                                    jobState
+                                );
+
+                                this._logs.Add(logItem);
+                                this.listLogs.DataBind();
+                                Thread.Sleep(500);
                                 break;
 
                             default:
                                 jobIsProcessing = false;
-                                
+
+                                var logItem2 = new LogFields(
+                                    DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                                    "",
+                                    arg,
+                                    jobState,
+                                    "",
+                                    Utils.IsBlank(jobDetails?.JobErrorDetails) ? jobDetails?.JobResultDetails : jobDetails?.JobErrorDetails
+                                );
+
+                                this._logs.Add(logItem2);
+                                this.listLogs.DataBind();
                                 result = jobDetailsRequestResult;
                                 break;
                         }
@@ -117,8 +140,39 @@ namespace DataProcessingWebApp
 
         protected void cmdCopyTestFiles_Click(object sender, EventArgs e)
         {
+            this._logs.Clear();
+            this.listLogs.DataBind();
             dynamic result = this.SendRequest("StartJob", "copytestfiles");
 
+        }
+
+        protected void cmdProcessCobraFiles_Click(object sender, EventArgs e)
+        {
+            this._logs.Clear();
+            this.listLogs.DataBind();
+            dynamic result = this.SendRequest("StartJob", "processcobrafiles");
+        }
+
+        protected void cmdProcessAlegeusFiles_Click(object sender, EventArgs e)
+        {
+            this._logs.Clear();
+            this.listLogs.DataBind();
+            dynamic result = this.SendRequest("StartJob", "processalegeusfiles");
+        }
+
+        protected void cmdRetrieveFtpErrorLogs_Click(object sender, EventArgs e)
+        {
+            this._logs.Clear();
+            this.listLogs.DataBind();
+            dynamic result = this.SendRequest("StartJob", "retrieveftperrorlogs");
+        }
+
+        protected void cmdOpenAccessDB_Click(object sender, EventArgs e)
+        {
+            this._logs.Clear();
+            this.listLogs.DataBind();
+
+            //
         }
     }
 }

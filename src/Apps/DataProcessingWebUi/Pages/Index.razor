@@ -1,0 +1,229 @@
+﻿@page "/"
+@using System.Web
+@using System
+@using System.Globalization
+@using System.Net.Http.Headers
+@using System.Threading
+@using CoreUtils.Classes
+@using Microsoft.VisualBasic.CompilerServices
+@using DataProcessingWebUi:
+
+<h1>File And Data Processing App</h1>
+
+<p class="lead">This App automates File and Data Processing for Alegeus and COBRA Source Files.</p>
+<p class="lead">It also fetches Result &amp; Error Files from Alegeus and allows easy tracking </p>
+
+<div class="">
+    <div class="">
+        <p>
+            &nbsp;<button id="cmdCopyTestFiles" @onclick="cmdCopyTestFiles">CopyTestFiles</button>
+            &nbsp;&nbsp;&nbsp;&nbsp; Copy test files BEFORE starting a new process
+        </p>
+    </div>
+    <div class="">
+        <p>
+
+        </p>
+    </div>
+    <div class="">
+        <p>
+            &nbsp;
+            <button id="cmdProcessCobraFiles" @onclick="cmdProcessCobraFiles">ProcessCobraFiles</button>
+            &nbsp;&nbsp;&nbsp;&nbsp; Process COBRA Source Files
+        </p>
+    </div>
+    <div class="">
+        <p>
+
+            &nbsp;
+            <button id="cmdProcessAlegeusFiles" @onclick="cmdProcessAlegeusFiles">ProcessAlegeusFiles</button>
+            &nbsp;&nbsp;&nbsp;&nbsp; Process Alegeus Source Files
+        </p>
+    </div>
+    <div class="">
+        <p>
+
+            &nbsp;
+            <button id="cmdRetrieveFtpErrorLogs" @onclick="cmdRetrieveFtpErrorLogs">RetrieveFtpErrorLogs</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;Get Alegeus Upload Results
+
+        </p>
+    </div>
+    <div class="">
+        <p>
+
+            &nbsp;
+            <button id="cmdOpenAccessDB" @onclick="cmdOpenAccessDB">Open Access UI</button>
+            &nbsp;&nbsp;&nbsp;&nbsp; Open MS Access User Interface
+        </p>
+    </div>
+    <div class="">
+        <p>
+
+            &nbsp;
+            <button id="cmdDoALL" @onclick="cmdDoALL">Do All Above</button>
+            &nbsp;&nbsp;&nbsp;&nbsp; Do All Above in Sequence
+        </p>
+    </div>
+    <p>
+        Logs
+    </p>
+</div>
+<div class="">
+    <asp:GridView id="listLogs" Width="1434px" AllowPaging="True" AllowSorting="True">
+    </asp:GridView>
+</div>
+
+@code {
+    private string _username = "dataprocessinguser";
+    @*Utils.GetAppSetting("BasicAuthUserName");*@
+    private string _password = "#gjgB0AXG^940";
+    @*Utils.GetAppSetting("BasicAuthPassword");*@
+
+    @*private BindingSource _bindingSource1 = new BindingSource();*@
+
+    @*private List<LogFields> _logs = new List<LogFields> { };*@
+
+    private void addAuthHeader(HttpClient client)
+    {
+        string creds = $"{_username}:{_password}";
+        AuthenticationHeaderValue authHeaderValue = new AuthenticationHeaderValue("basic", creds);
+        client.DefaultRequestHeaders.Authorization = authHeaderValue;
+    }
+
+
+    public object SendRequest(string path, string arg)
+    {
+
+        string strUrl = "https://localhost:44320";
+        @*string strUrl = "http://be015:81";*@
+
+HttpClient client = new HttpClient { BaseAddress = new Uri($"{strUrl}"), Timeout = TimeSpan.FromSeconds(600) };
+
+// add auth header
+this.addAuthHeader(client);
+
+//HTTP GET Async
+var result = client.GetAsync($"/DataProcessing/{path}/{arg}").Result;
+
+if (!result.IsSuccessStatusCode)
+{
+    //log response status here..
+    throw new Exception($"{result.ReasonPhrase} {result.RequestMessage}");
+}
+
+// parse job ID
+var content = result.Content.ReadAsStringAsync().Result;
+
+//
+if (path.ToLower() != "JobResults".ToLower())
+{
+
+    JobDetails taskJobDetails = System.Text.Json.JsonSerializer.Deserialize<JobDetails>(content);
+    string jobId = (string)taskJobDetails.JobId;
+
+    // get jobResult
+    Boolean jobIsProcessing = true;
+
+    // loop till job is processing - write to log : processing
+
+    while (jobIsProcessing)
+    {
+        // get result of the job started by the request
+        dynamic jobDetailsRequestResult = this.SendRequest("JobResults", $"{jobId}");
+        var jobDetailsContent = jobDetailsRequestResult.Content.ReadAsStringAsync().Result;
+        JobDetails jobDetails = System.Text.Json.JsonSerializer.Deserialize<JobDetails>(jobDetailsContent);
+        //
+        string jobState = jobDetails != null ? jobDetails.JobState : "error";
+
+        // check job state
+
+        switch (jobState.ToLower())
+        {
+            case @"processing":
+            case @"started":
+                        @*var logItem = new LogFields(
+                                DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                                "",
+                                arg,
+                                jobState,
+                                "",
+                                jobState
+                            );
+
+                            this._logs.Add(logItem);
+                            this.listLogs.DataBind();*@
+                        Thread.Sleep(500);
+                        break;
+
+                    default:
+                        jobIsProcessing = false;
+
+                        @*var logItem2 = new LogFields(
+                                DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                                "",
+                                arg,
+                                jobState,
+                                "",
+                                Utils.IsBlank(jobDetails?.JobErrorDetails) ? jobDetails?.JobResultDetails : jobDetails?.JobErrorDetails
+                            );
+
+                            this._logs.Add(logItem2);
+                            this.listLogs.DataBind();*@
+                        result = jobDetailsRequestResult;
+                        break;
+                }
+
+            }
+
+        }
+        return result;
+    }
+
+    void cmdCopyTestFiles()
+    {
+        @*this._logs.Clear();
+            this.listLogs.DataBind();*@
+        dynamic result = this.SendRequest("StartJob", "copytestfiles");
+
+    }
+
+    void cmdProcessCobraFiles()
+    {
+        @*this._logs.Clear();
+            this.listLogs.DataBind();*@
+        dynamic result = this.SendRequest("StartJob", "processcobrafiles");
+    }
+
+    void cmdProcessAlegeusFiles()
+    {
+        @*this._logs.Clear();
+            this.listLogs.DataBind();*@
+        dynamic result = this.SendRequest("StartJob", "processalegeusfiles");
+    }
+
+    void cmdRetrieveFtpErrorLogs()
+    {
+        @*this._logs.Clear();
+            this.listLogs.DataBind();*@
+        dynamic result = this.SendRequest("StartJob", "retrieveftperrorlogs");
+    }
+
+    void cmdOpenAccessDB()
+    {
+        @*this._logs.Clear();
+            this.listLogs.DataBind();*@
+
+        //
+    }
+
+    void cmdDoALL()
+    {
+        @*this._logs.Clear();
+            this.listLogs.DataBind();*@
+
+        //
+    }
+
+
+}
