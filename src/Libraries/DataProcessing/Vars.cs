@@ -59,11 +59,7 @@ namespace DataProcessing
             get
             {
 
-#if (TEST)
-                return "Data_ProcessingEntitiesTEST";
-#else
                 return "Data_ProcessingEntities";
-#endif
 
             }
         }
@@ -118,12 +114,9 @@ namespace DataProcessing
         {
             get
             {
-#if (TEST)
-#if (EXTIP)
-    return "PortalWcTESTEXTIP";
-#else
-                return "PortalWcTEST";
-#endif
+
+#if (VPN)
+                return "PortalWcVPN";
 #else
                 return "PortalWc";
 #endif
@@ -133,11 +126,7 @@ namespace DataProcessing
         {
             get
             {
-#if (TEST)
-                return "HangfireTEST";
-#else
-                   return "Hangfire";
-#endif
+                return "Hangfire";
             }
         }
 
@@ -276,11 +265,8 @@ namespace DataProcessing
             {
                 if (_remoteAlegeusFtpConnection == null)
                 {
-#if (TEST)
                     _remoteAlegeusFtpConnection = new SFtpConnection("BE015", 22, "alegeus", "3214@Clarity");
-#else
-                    _remoteAlegeusFtpConnection = new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
-#endif
+                    //_remoteAlegeusFtpConnection = new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
                 }
 
                 return _remoteAlegeusFtpConnection;
@@ -291,11 +277,8 @@ namespace DataProcessing
         {
             get
             {
-#if (TEST)
                 return FileUtils.FixPath($"{GetAppSetting("alegeusRemoteFTPPath")}");
-#else
-                return "/";
-#endif
+                //return "/";
             }
         }
 
@@ -303,11 +286,9 @@ namespace DataProcessing
         {
             get
             {
-#if (TEST)
-                return "/" + FileUtils.FixPath($"{GetAppSetting("cobraRemoteFTPPath")}");
-#else
+
+                //return "/" + FileUtils.FixPath($"{GetAppSetting("cobraRemoteFTPPath")}");
                 return "/";
-#endif
             }
         }
 
@@ -317,11 +298,8 @@ namespace DataProcessing
         {
             get
             {
-#if (TEST)
                 _remoteCobraFtpConnection = new SFtpConnection("BE015", 21, "alegeus", "a");
-#else
-                _remoteCobraFtpConnection = new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
-#endif
+                //_remoteCobraFtpConnection = new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
 
                 return _remoteCobraFtpConnection;
             }
@@ -336,12 +314,9 @@ namespace DataProcessing
 
         public static string GetEnvironment()
         {
-
-#if TEST
             return "TEST";
-#else
-          return "PROD";
-#endif
+            //return "PROD";
+
         }
 
         public string GetAppSetting(string settingName)
@@ -436,6 +411,7 @@ namespace DataProcessing
         public string AlegeusErrorLogMbiFilesArchiveRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusErrorLogMbiFilesArchivePath")}");
 
         public string AlegeusErrorLogResFilesRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusErrorLogResFilesPath")}");
+
 
         public string AlegeusErrorLogResFilesArchiveRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusErrorLogResFilesArchivePath")}");
 

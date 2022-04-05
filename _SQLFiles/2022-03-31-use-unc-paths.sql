@@ -71,3 +71,10 @@ END
 go
 
 
+create view Automated_Header_list as select * from FTP_Source_Folders;
+create view Header_list_all as select * from FTP_Source_Folders;
+create view Header_list_all_folders as select * from FTP_Source_Folders;
+create view Header_list_new as select * from FTP_Source_Folders;
+create view Header_list_old as select * from FTP_Source_Folders;
+create view Header_list_own as select * from FTP_Source_Folders;
+create view Header_list_none as select * from FTP_Source_Folders;
