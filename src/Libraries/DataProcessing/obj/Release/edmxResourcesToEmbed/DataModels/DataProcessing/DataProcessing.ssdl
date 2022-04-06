@@ -1,0 +1,978 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Data_ProcessingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.alegeus_file_final' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="alegeus_file_final">
+    <Key>
+      <PropertyRef Name="row_num" />
+    </Key>
+    <Property Name="file_row" Type="varchar(max)" />
+    <Property Name="folder_name" Type="varchar" MaxLength="200" />
+    <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.alegeus_file_staging' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="alegeus_file_staging">
+    <Key>
+      <PropertyRef Name="row_num" />
+    </Key>
+    <Property Name="data_row" Type="varchar(max)" />
+    <Property Name="folder_name" Type="varchar" MaxLength="200" />
+    <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.app_settings' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="app_settings">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="environment" Type="nvarchar" MaxLength="50" />
+    <Property Name="setting_name" Type="nvarchar" MaxLength="100" />
+    <Property Name="setting_value" Type="nvarchar" MaxLength="2000" />
+    <Property Name="created_at" Type="datetime" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.Automated_Header_list' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="Automated_Header_list">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="Folder_name" Type="nvarchar(max)" />
+    <Property Name="template_type" Type="nvarchar(max)" />
+    <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+    <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.bfx_broker_extract' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="bfx_broker_extract">
+          <Property Name="BrokerID" Type="varchar" MaxLength="50" />
+          <Property Name="ContactType" Type="varchar" MaxLength="250" />
+          <Property Name="FirstName" Type="varchar" MaxLength="250" />
+          <Property Name="LastName" Type="varchar" MaxLength="250" />
+          <Property Name="Email" Type="varchar" MaxLength="250" />
+          <Property Name="Title" Type="varchar" MaxLength="250" />
+          <Property Name="Department" Type="varchar" MaxLength="250" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="PhoneExtension" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2Extension" Type="varchar" MaxLength="50" />
+          <Property Name="Fax" Type="varchar" MaxLength="50" />
+          <Property Name="Address1" Type="varchar" MaxLength="250" />
+          <Property Name="Address2" Type="varchar" MaxLength="250" />
+          <Property Name="City" Type="varchar" MaxLength="250" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Active" Type="varchar" MaxLength="50" />
+          <Property Name="LoginStatus" Type="varchar" MaxLength="50" />
+          <Property Name="RegistrationCode" Type="varchar" MaxLength="50" />
+          <Property Name="RegistrationDate" Type="varchar" MaxLength="50" />
+          <Property Name="UserDisplayName" Type="varchar" MaxLength="250" />
+          <Property Name="AllowSSO" Type="varchar" MaxLength="50" />
+          <Property Name="SSOIdentifier" Type="varchar" MaxLength="250" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.ClarityStandardFileHeader2015' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="ClarityStandardFileHeader2015">
+          <Property Name="header_row" Type="varchar" MaxLength="154" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.ClarityStandardFileHeader2019' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="ClarityStandardFileHeader2019">
+          <Property Name="header_row" Type="varchar" MaxLength="154" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.CRM_fix09292020' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="CRM_fix09292020">
+          <Property Name="bencode" Type="nvarchar" MaxLength="255" />
+          <Property Name="crm" Type="nvarchar" MaxLength="255" />
+          <Property Name="correct_CRM" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.CRM_List' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="CRM_List">
+          <Property Name="BENCODE" Type="nvarchar" MaxLength="50" />
+          <Property Name="CRM" Type="nvarchar" MaxLength="100" />
+          <Property Name="CRM_email" Type="nvarchar" MaxLength="500" />
+          <Property Name="emp_services" Type="nvarchar" MaxLength="500" />
+          <Property Name="Primary_contact_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="Primary_contact_email" Type="nvarchar" MaxLength="500" />
+          <Property Name="client_start_date" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.CRM_List_BU' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="CRM_List_BU">
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="CRM" Type="varchar" MaxLength="50" />
+        </EntityType>-->
+  <EntityType Name="dbo_error_log_results_workflow_local">
+    <Key>
+      <PropertyRef Name="IDfield" />
+    </Key>
+    <Property Name="error_code" Type="int" />
+    <Property Name="error_row" Type="nvarchar" MaxLength="255" />
+    <Property Name="mbi_file_name" Type="nvarchar" MaxLength="255" />
+    <Property Name="error_message" Type="nvarchar(max)" />
+    <Property Name="mbi_row_num" Type="int" />
+    <Property Name="mbi_line" Type="nvarchar" MaxLength="255" />
+    <Property Name="CRM_Check" Type="bit" Nullable="false" />
+    <Property Name="Proc_Check" Type="bit" Nullable="false" />
+    <Property Name="updated_by" Type="nvarchar" MaxLength="255" />
+    <Property Name="updated_timestamp" Type="datetime" />
+    <Property Name="BENCODE" Type="nvarchar" MaxLength="255" />
+    <Property Name="CRM" Type="nvarchar" MaxLength="255" />
+    <Property Name="Notes" Type="nvarchar(max)" />
+    <Property Name="Notes_CRM" Type="nvarchar(max)" />
+    <Property Name="row_type" Type="nvarchar" MaxLength="255" />
+    <Property Name="IDfield" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Archive_Check" Type="bit" Nullable="false" />
+    <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+    <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+    <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+    <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+    <Property Name="error_row_num" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.dbo_error_log_results_workflow_local_AL' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="dbo_error_log_results_workflow_local_AL">
+    <Key>
+      <PropertyRef Name="CRM_Check" />
+      <PropertyRef Name="Proc_Check" />
+      <PropertyRef Name="IDfield" />
+      <PropertyRef Name="Archive_Check" />
+    </Key>
+    <Property Name="error_code" Type="int" />
+    <Property Name="error_row" Type="nvarchar" MaxLength="255" />
+    <Property Name="mbi_file_name" Type="nvarchar" MaxLength="255" />
+    <Property Name="error_message" Type="nvarchar(max)" />
+    <Property Name="mbi_row_num" Type="int" />
+    <Property Name="mbi_line" Type="nvarchar" MaxLength="255" />
+    <Property Name="CRM_Check" Type="bit" Nullable="false" />
+    <Property Name="Proc_Check" Type="bit" Nullable="false" />
+    <Property Name="updated_by" Type="nvarchar" MaxLength="255" />
+    <Property Name="updated_timestamp" Type="datetime" />
+    <Property Name="BENCODE" Type="nvarchar" MaxLength="255" />
+    <Property Name="CRM" Type="nvarchar" MaxLength="255" />
+    <Property Name="Notes" Type="nvarchar(max)" />
+    <Property Name="Notes_CRM" Type="nvarchar(max)" />
+    <Property Name="file_type" Type="nvarchar" MaxLength="255" />
+    <Property Name="IDfield" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Archive_Check" Type="bit" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.dbo_error_log_results_workflow_localBU' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="dbo_error_log_results_workflow_localBU">
+    <Key>
+      <PropertyRef Name="CRM_Check" />
+      <PropertyRef Name="Proc_Check" />
+      <PropertyRef Name="IDfield" />
+      <PropertyRef Name="Archive_Check" />
+    </Key>
+    <Property Name="error_code" Type="int" />
+    <Property Name="error_row" Type="nvarchar" MaxLength="255" />
+    <Property Name="mbi_file_name" Type="nvarchar" MaxLength="255" />
+    <Property Name="error_message" Type="nvarchar(max)" />
+    <Property Name="mbi_row_num" Type="int" />
+    <Property Name="mbi_line" Type="nvarchar" MaxLength="255" />
+    <Property Name="CRM_Check" Type="bit" Nullable="false" />
+    <Property Name="Proc_Check" Type="bit" Nullable="false" />
+    <Property Name="updated_by" Type="nvarchar" MaxLength="255" />
+    <Property Name="updated_timestamp" Type="datetime" />
+    <Property Name="BENCODE" Type="nvarchar" MaxLength="255" />
+    <Property Name="CRM" Type="nvarchar" MaxLength="255" />
+    <Property Name="Notes" Type="nvarchar(max)" />
+    <Property Name="Notes_CRM" Type="nvarchar(max)" />
+    <Property Name="file_type" Type="nvarchar" MaxLength="255" />
+    <Property Name="IDfield" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Archive_Check" Type="bit" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.dbo_ommited_errors' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="dbo_ommited_errors">
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_desc" Type="nvarchar(max)" />
+          <Property Name="user_desc" Type="nvarchar(max)" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.dbo_tracked_errors_local' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="dbo_tracked_errors_local">
+    <Key>
+      <PropertyRef Name="Error_code" />
+      <PropertyRef Name="crm" />
+      <PropertyRef Name="processing" />
+    </Key>
+    <Property Name="Error_code" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+    <Property Name="crm" Type="bit" Nullable="false" />
+    <Property Name="processing" Type="bit" Nullable="false" />
+    <Property Name="control" Type="bit" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.error_codes' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="error_codes">
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_desc" Type="nvarchar(max)" />
+          <Property Name="user_desc" Type="nvarchar(max)" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.file_processing_log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="file_processing_log">
+    <Key>
+      <PropertyRef Name="fileLogId" />
+    </Key>
+    <Property Name="fileLogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="platform" Type="nvarchar" MaxLength="50" />
+    <Property Name="fileId" Type="nvarchar" MaxLength="10" />
+    <Property Name="folderName" Type="nvarchar" MaxLength="400" />
+    <Property Name="templateType" Type="nvarchar" MaxLength="50" />
+    <Property Name="ICType" Type="nvarchar" MaxLength="50" />
+    <Property Name="toFTP" Type="nvarchar" MaxLength="10" />
+    <Property Name="bencode" Type="varchar" MaxLength="50" />
+    <Property Name="originalFileName" Type="varchar" MaxLength="500" />
+    <Property Name="originalFullPath" Type="varchar" MaxLength="500" />
+    <Property Name="newFileName" Type="varchar" MaxLength="500" />
+    <Property Name="newFileFullPath" Type="varchar" MaxLength="500" />
+    <Property Name="created_at" Type="datetime" />
+    <Property Name="originalFileUploadedOn" Type="datetime" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.file_processing_tasks_log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="file_processing_tasks_log">
+    <Key>
+      <PropertyRef Name="fileLogTaskId" />
+    </Key>
+    <Property Name="fileLogTaskId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fileLogId" Type="int" />
+    <Property Name="fileId" Type="nvarchar" MaxLength="10" />
+    <Property Name="processingTask" Type="nvarchar" MaxLength="50" />
+    <Property Name="processingTaskOutcome" Type="nvarchar" MaxLength="20" />
+    <Property Name="processingTaskOutcomeDetails" Type="varchar" MaxLength="500" />
+    <Property Name="originalFileName" Type="nvarchar" MaxLength="500" />
+    <Property Name="originalFullPath" Type="varchar" MaxLength="500" />
+    <Property Name="newFileName" Type="nvarchar" MaxLength="500" />
+    <Property Name="newFileFullPath" Type="nvarchar" MaxLength="500" />
+    <Property Name="created_at" Type="datetime" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.ftp_autofile_list' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="ftp_autofile_list">
+          <Property Name="find_autoftp_file" Type="varchar(max)" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.IF_cardfile_Dep' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="IF_cardfile_Dep">
+          <Property Name="Status" Type="nvarchar" MaxLength="255" />
+          <Property Name="hire_date" Type="nvarchar" MaxLength="255" />
+          <Property Name="Dep_Last_Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Dep_First_Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Email" Type="nvarchar" MaxLength="255" />
+          <Property Name="depemp_id" Type="nvarchar" MaxLength="255" />
+          <Property Name="Dep_SSN" Type="nvarchar" MaxLength="255" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="255" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="255" />
+          <Property Name="City" Type="nvarchar" MaxLength="255" />
+          <Property Name="State" Type="nvarchar" MaxLength="255" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="255" />
+          <Property Name="Relationship" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.IF_cardfile_Emp' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="IF_cardfile_Emp">
+          <Property Name="Status" Type="nvarchar" MaxLength="255" />
+          <Property Name="HireDate" Type="nvarchar" MaxLength="255" />
+          <Property Name="Last_Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="First_Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Email" Type="nvarchar" MaxLength="255" />
+          <Property Name="EE_ID" Type="nvarchar" MaxLength="255" />
+          <Property Name="SSN" Type="nvarchar" MaxLength="255" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="255" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="255" />
+          <Property Name="City" Type="nvarchar" MaxLength="255" />
+          <Property Name="State" Type="nvarchar" MaxLength="255" />
+          <Property Name="Zip" Type="nvarchar" MaxLength="255" />
+          <Property Name="benefit_status" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.IF_cardfile_staging' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="IF_cardfile_staging">
+          <Property Name="Record_ID" Type="nvarchar" MaxLength="255" />
+          <Property Name="TPA_ID" Type="nvarchar" MaxLength="255" />
+          <Property Name="Employer_ID" Type="nvarchar" MaxLength="255" />
+          <Property Name="Employee_ID" Type="nvarchar" MaxLength="255" />
+          <Property Name="Issue_Card" Type="nvarchar" MaxLength="255" />
+          <Property Name="Shipping_Address_Code" Type="nvarchar" MaxLength="255" />
+          <Property Name="Shipping_Method_Code" Type="nvarchar" MaxLength="255" />
+          <Property Name="Dependent_ID" Type="nvarchar" MaxLength="255" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.IF_File' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="IF_File">
+          <Property Name="IF_line" Type="nvarchar(max)" />
+        </EntityType>-->
+  <EntityType Name="mbi_file_table">
+    <Key>
+      <PropertyRef Name="row_id" />
+    </Key>
+    <Property Name="mbi_file_name" Type="nvarchar" MaxLength="2000" />
+    <Property Name="data_row" Type="nvarchar(max)" />
+    <Property Name="row_num" Type="int" />
+    <Property Name="row_type" Type="nvarchar" MaxLength="200" />
+    <Property Name="AccountStatus" Type="nvarchar" MaxLength="200" />
+    <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="200" />
+    <Property Name="AddressLine1" Type="nvarchar" MaxLength="200" />
+    <Property Name="AddressLine2" Type="nvarchar" MaxLength="200" />
+    <Property Name="BirthDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="City" Type="nvarchar" MaxLength="200" />
+    <Property Name="Country" Type="nvarchar" MaxLength="200" />
+    <Property Name="DeleteAccount" Type="nvarchar" MaxLength="200" />
+    <Property Name="DependentID" Type="nvarchar" MaxLength="200" />
+    <Property Name="DepositType" Type="nvarchar" MaxLength="200" />
+    <Property Name="Division" Type="nvarchar" MaxLength="200" />
+    <Property Name="EffectiveDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="EligibilityDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="Email" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeID" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployerId" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="200" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="200" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="200" />
+    <Property Name="MiddleInitial" Type="nvarchar" MaxLength="200" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="200" />
+    <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="200" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="200" />
+    <Property Name="PlanEndDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="PlanId" Type="nvarchar" MaxLength="200" />
+    <Property Name="PlanStartDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="Relationship" Type="nvarchar" MaxLength="200" />
+    <Property Name="State" Type="nvarchar" MaxLength="200" />
+    <Property Name="TerminationDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="TpaId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Zip" Type="nvarchar" MaxLength="200" />
+    <Property Name="row_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="source_row_no" Type="int" />
+    <Property Name="check_type" Type="nvarchar" MaxLength="200" />
+    <Property Name="error_code" Type="nvarchar" MaxLength="200" />
+    <Property Name="error_message" Type="nvarchar" MaxLength="2000" />
+    <Property Name="error_message_calc" Type="nvarchar" MaxLength="2000" />
+    <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="200" />
+    <Property Name="AlternateId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Class" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="mbi_file_table_stage">
+    <Key>
+      <PropertyRef Name="row_num" />
+    </Key>
+    <Property Name="mbi_file_name" Type="nvarchar" MaxLength="2000" />
+    <Property Name="data_row" Type="nvarchar(max)" />
+    <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="row_type" Type="nvarchar" MaxLength="200" />
+    <Property Name="AccountStatus" Type="nvarchar" MaxLength="200" />
+    <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="200" />
+    <Property Name="AddressLine1" Type="nvarchar" MaxLength="200" />
+    <Property Name="AddressLine2" Type="nvarchar" MaxLength="200" />
+    <Property Name="BirthDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="City" Type="nvarchar" MaxLength="200" />
+    <Property Name="Country" Type="nvarchar" MaxLength="200" />
+    <Property Name="DeleteAccount" Type="nvarchar" MaxLength="200" />
+    <Property Name="DependentID" Type="nvarchar" MaxLength="200" />
+    <Property Name="DepositType" Type="nvarchar" MaxLength="200" />
+    <Property Name="Division" Type="nvarchar" MaxLength="200" />
+    <Property Name="EffectiveDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="EligibilityDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="Email" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeID" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployerId" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="200" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="200" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="200" />
+    <Property Name="MiddleInitial" Type="nvarchar" MaxLength="200" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="200" />
+    <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="200" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="200" />
+    <Property Name="PlanEndDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="PlanId" Type="nvarchar" MaxLength="200" />
+    <Property Name="PlanStartDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="Relationship" Type="nvarchar" MaxLength="200" />
+    <Property Name="State" Type="nvarchar" MaxLength="200" />
+    <Property Name="TerminationDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="TpaId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Zip" Type="nvarchar" MaxLength="200" />
+    <Property Name="source_row_no" Type="int" />
+    <Property Name="check_type" Type="nvarchar" MaxLength="200" />
+    <Property Name="error_code" Type="nvarchar" MaxLength="200" />
+    <Property Name="error_message" Type="nvarchar" MaxLength="2000" />
+    <Property Name="error_message_calc" Type="nvarchar" MaxLength="2000" />
+    <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="200" />
+    <Property Name="AlternateId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Class" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.message_log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="message_log">
+    <Key>
+      <PropertyRef Name="log_id" />
+    </Key>
+    <Property Name="log_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="module_name" Type="nvarchar" MaxLength="500" />
+    <Property Name="submodule_name" Type="nvarchar" MaxLength="500" />
+    <Property Name="step_type" Type="nvarchar" MaxLength="500" />
+    <Property Name="step_name" Type="nvarchar" MaxLength="500" />
+    <Property Name="command" Type="nvarchar(max)" />
+    <Property Name="created_at" Type="datetime" />
+    <Property Name="platform" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.Process_log' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Process_log">
+          <Property Name="header_ind" Type="nvarchar(max)" />
+          <Property Name="first_row" Type="varchar" MaxLength="50" />
+          <Property Name="date_stamp" Type="varchar" MaxLength="50" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.processing_script_tbl' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="processing_script_tbl">
+          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Property Name="script_txt" Type="nvarchar(max)" />
+          <Property Name="script_purpose" Type="nvarchar(max)" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.QB_file_data_fixtbl' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="QB_file_data_fixtbl">
+    <Key>
+      <PropertyRef Name="row_num" />
+    </Key>
+    <Property Name="QB_data" Type="nvarchar(max)" />
+    <Property Name="folder_name" Type="nvarchar" MaxLength="500" />
+    <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+  </EntityType>
+  <EntityType Name="res_file_table">
+    <Key>
+      <PropertyRef Name="row_id" />
+    </Key>
+    <Property Name="mbi_file_name" Type="nvarchar" MaxLength="2000" />
+    <Property Name="error_row" Type="nvarchar(max)" />
+    <Property Name="error_code" Type="nvarchar" MaxLength="200" />
+    <Property Name="error_message" Type="nvarchar" MaxLength="2000" />
+    <Property Name="row_num" Type="int" />
+    <Property Name="AccountStatus" Type="nvarchar" MaxLength="200" />
+    <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="200" />
+    <Property Name="AddressLine1" Type="nvarchar" MaxLength="200" />
+    <Property Name="AddressLine2" Type="nvarchar" MaxLength="200" />
+    <Property Name="BirthDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="City" Type="nvarchar" MaxLength="200" />
+    <Property Name="Country" Type="nvarchar" MaxLength="200" />
+    <Property Name="DeleteAccount" Type="nvarchar" MaxLength="200" />
+    <Property Name="DependentID" Type="nvarchar" MaxLength="200" />
+    <Property Name="DepositType" Type="nvarchar" MaxLength="200" />
+    <Property Name="Division" Type="nvarchar" MaxLength="200" />
+    <Property Name="EffectiveDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="EligibilityDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="Email" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeID" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployerId" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="200" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="200" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="200" />
+    <Property Name="MiddleInitial" Type="nvarchar" MaxLength="200" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="200" />
+    <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="200" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="200" />
+    <Property Name="PlanEndDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="PlanId" Type="nvarchar" MaxLength="200" />
+    <Property Name="PlanStartDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="Relationship" Type="nvarchar" MaxLength="200" />
+    <Property Name="State" Type="nvarchar" MaxLength="200" />
+    <Property Name="TerminationDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="TpaId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Zip" Type="nvarchar" MaxLength="200" />
+    <Property Name="row_type" Type="varchar" MaxLength="50" />
+    <Property Name="error_message_calc" Type="varchar" MaxLength="500" />
+    <Property Name="res_file_name" Type="nvarchar" MaxLength="2000" />
+    <Property Name="result_template" Type="nvarchar" MaxLength="100" />
+    <Property Name="row_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="source_row_no" Type="int" />
+    <Property Name="check_type" Type="nvarchar" MaxLength="200" />
+    <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="200" />
+    <Property Name="Class" Type="nvarchar" MaxLength="200" />
+    <Property Name="AlternateId" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="res_file_table_stage">
+    <Key>
+      <PropertyRef Name="row_num" />
+    </Key>
+    <Property Name="mbi_file_name" Type="nvarchar" MaxLength="2000" />
+    <Property Name="result_template" Type="nvarchar" MaxLength="200" />
+    <Property Name="error_row" Type="nvarchar(max)" />
+    <Property Name="error_code" Type="nvarchar" MaxLength="200" />
+    <Property Name="error_message" Type="nvarchar" MaxLength="2000" />
+    <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="row_type" Type="nvarchar" MaxLength="200" />
+    <Property Name="AccountStatus" Type="nvarchar" MaxLength="200" />
+    <Property Name="AccountTypeCode" Type="nvarchar" MaxLength="200" />
+    <Property Name="AddressLine1" Type="nvarchar" MaxLength="200" />
+    <Property Name="AddressLine2" Type="nvarchar" MaxLength="200" />
+    <Property Name="BirthDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="City" Type="nvarchar" MaxLength="200" />
+    <Property Name="Country" Type="nvarchar" MaxLength="200" />
+    <Property Name="DeleteAccount" Type="nvarchar" MaxLength="200" />
+    <Property Name="DependentID" Type="nvarchar" MaxLength="200" />
+    <Property Name="DepositType" Type="nvarchar" MaxLength="200" />
+    <Property Name="Division" Type="nvarchar" MaxLength="200" />
+    <Property Name="EffectiveDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="EligibilityDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="Email" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeDepositAmount" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeID" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeePayPeriodElection" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeSocialSecurityNumber" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployeeStatus" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployerDepositAmount" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployerId" Type="nvarchar" MaxLength="200" />
+    <Property Name="EmployerPayPeriodElection" Type="nvarchar" MaxLength="200" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="200" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="200" />
+    <Property Name="MiddleInitial" Type="nvarchar" MaxLength="200" />
+    <Property Name="MobileNumber" Type="nvarchar" MaxLength="200" />
+    <Property Name="OriginalPrefunded" Type="nvarchar" MaxLength="200" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="200" />
+    <Property Name="PlanEndDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="PlanId" Type="nvarchar" MaxLength="200" />
+    <Property Name="PlanStartDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="Relationship" Type="nvarchar" MaxLength="200" />
+    <Property Name="State" Type="nvarchar" MaxLength="200" />
+    <Property Name="TerminationDate" Type="nvarchar" MaxLength="200" />
+    <Property Name="TpaId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Zip" Type="nvarchar" MaxLength="200" />
+    <Property Name="error_message_calc" Type="varchar" MaxLength="500" />
+    <Property Name="res_file_name" Type="nvarchar" MaxLength="2000" />
+    <Property Name="data_row" Type="nvarchar(max)" />
+    <Property Name="source_row_no" Type="int" />
+    <Property Name="check_type" Type="nvarchar" MaxLength="200" />
+    <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="200" />
+    <Property Name="AlternateId" Type="nvarchar" MaxLength="200" />
+    <Property Name="Class" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.CRM_Listview' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="CRM_Listview">
+          <Property Name="BENCODE" Type="nvarchar" MaxLength="50" />
+          <Property Name="CRM" Type="nvarchar" MaxLength="100" />
+          <Property Name="CRM_email" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.DistinctErrors' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="DistinctErrors">
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.error_log_results' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="error_log_results">
+          <Property Name="error_row" Type="nvarchar(max)" />
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="res_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="row_num" Type="int" />
+          <Property Name="row_type" Type="varchar" MaxLength="50" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.error_log_results_withmbi' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="error_log_results_withmbi">
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="res_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="error_row_num" Type="int" />
+          <Property Name="mbi_row_num" Type="int" />
+          <Property Name="row_type" Type="varchar" MaxLength="50" />
+          <Property Name="mbi_line" Type="nvarchar(max)" />
+          <Property Name="error_row" Type="nvarchar(max)" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.error_log_results_withmbi_with_CRM' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="error_log_results_withmbi_with_CRM">
+          <Property Name="CRM" Type="nvarchar" MaxLength="100" />
+          <Property Name="CRM_email" Type="nvarchar" MaxLength="500" />
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="res_file_name" Type="nvarchar" MaxLength="500" />
+          <Property Name="row_type" Type="varchar" MaxLength="50" />
+          <Property Name="error_row" Type="nvarchar(max)" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="EmployerId" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="nvarchar" MaxLength="50" />
+          <Property Name="DependentID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PlanId" Type="nvarchar" MaxLength="50" />
+          <Property Name="error_row_num" Type="int" />
+          <Property Name="mbi_row_num" Type="int" />
+          <Property Name="mbi_line" Type="nvarchar(max)" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.Header_list_ALL' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Header_list_ALL">
+          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Property Name="template_type" Type="nvarchar(max)" />
+          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.Header_list_ALL_folders' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Header_list_ALL_folders">
+          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Property Name="template_type" Type="nvarchar(max)" />
+          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.Header_list_new' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Header_list_new">
+          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Property Name="template_type" Type="nvarchar(max)" />
+          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.Header_list_none' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Header_list_none">
+          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Property Name="template_type" Type="nvarchar(max)" />
+          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.Header_list_old' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Header_list_old">
+          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Property Name="template_type" Type="nvarchar(max)" />
+          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.Header_list_Own' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Header_list_Own">
+          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Property Name="template_type" Type="nvarchar(max)" />
+          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.mbi_errors' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="mbi_errors">
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.mbi_no_errors' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="mbi_no_errors">
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'Data_Processing.dbo.RESwithnoMBIrecords' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="RESwithnoMBIrecords">
+          <Property Name="mbi_file_name" Type="nvarchar" MaxLength="500" />
+        </EntityType>-->
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="vw_file_processing_log">
+    <Key>
+      <PropertyRef Name="fileLogId" />
+    </Key>
+    <Property Name="fileLogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="platform" Type="nvarchar" MaxLength="50" />
+    <Property Name="fileId" Type="nvarchar" MaxLength="10" />
+    <Property Name="folderName" Type="nvarchar" MaxLength="400" />
+    <Property Name="templateType" Type="nvarchar" MaxLength="50" />
+    <Property Name="ICType" Type="nvarchar" MaxLength="50" />
+    <Property Name="toFTP" Type="nvarchar" MaxLength="10" />
+    <Property Name="bencode" Type="varchar" MaxLength="50" />
+    <Property Name="originalFileName" Type="varchar" MaxLength="500" />
+    <Property Name="originalFullPath" Type="varchar" MaxLength="500" />
+    <Property Name="newFileName" Type="varchar" MaxLength="500" />
+    <Property Name="newFileFullPath" Type="varchar" MaxLength="500" />
+    <Property Name="created_at" Type="datetime" />
+    <Property Name="originalFileUploadedOn" Type="datetime" />
+    <Property Name="ProcessingErrorCount" Type="int" />
+  </EntityType>
+  <Function Name="Alegeus_Header_n_success" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="build_auto_ftp_batfile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="check_imports_file" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="CsvSplit1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="delimited" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="delimiter" Type="nvarchar" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="val" Type="nvarchar(max)" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
+  <Function Name="Data_Processing_failure_alert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Data_Processing_refreshsuccess_alert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Data_Processing_track_new_ftp_errors" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Data_Processing_track_new_ftp_errors_____________________________" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" StoreFunctionName="Data_Processing_track_new_ftp_errors                            &quot;" />
+  <Function Name="fileLogHasError" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+    <Parameter Name="fileLogId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="Fix_COBRA_brokerage_Contacts_SSObollean" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Fix_COBRA_Client_Contacts_SSObollean" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Fix_COBRAQB_SSObollean" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="Get_COBRA_QBs" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="getFileLogId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+    <Parameter Name="filePathWithoutExtension" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="insert_file_processing_log" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="platform" Type="nvarchar" Mode="In" />
+    <Parameter Name="fileLogId" Type="int" Mode="InOut" />
+    <Parameter Name="fileId" Type="nvarchar" Mode="In" />
+    <Parameter Name="folderName" Type="nvarchar" Mode="In" />
+    <Parameter Name="templateType" Type="nvarchar" Mode="In" />
+    <Parameter Name="ICType" Type="nvarchar" Mode="In" />
+    <Parameter Name="toFTP" Type="nvarchar" Mode="In" />
+    <Parameter Name="bencode" Type="varchar" Mode="In" />
+    <Parameter Name="originalFileName" Type="nvarchar" Mode="In" />
+    <Parameter Name="originalFullPath" Type="nvarchar" Mode="In" />
+    <Parameter Name="originalFileUploadedOn" Type="nvarchar" Mode="In" />
+    <Parameter Name="newFileName" Type="nvarchar" Mode="In" />
+    <Parameter Name="newFileFullPath" Type="nvarchar" Mode="In" />
+    <Parameter Name="fileLogTaskId" Type="int" Mode="InOut" />
+    <Parameter Name="processingTask" Type="nvarchar" Mode="In" />
+    <Parameter Name="processingTaskOutcome" Type="nvarchar" Mode="In" />
+    <Parameter Name="processingTaskOutcomeDetails" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="insert_to_auto_ftp_list" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="proc_alegeus_AlterHeaders2015" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="proc_alegeus_AlterHeaders2019" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="proc_alegeus_AlterHeadersNone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="proc_alegeus_AlterHeadersOwn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="process_mbi_file_table_stage_import" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="process_res_file_table_stage_import" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SplitAllErrorRowStringsToFields" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="tableName" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="SplitErrorRowStringToFields" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="csvString" Type="nvarchar(max)" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="row_type" Type="nvarchar" MaxLength="100" />
+          <Property Name="bencode" Type="nvarchar" MaxLength="100" />
+          <Property Name="employee_id" Type="nvarchar" MaxLength="100" />
+          <Property Name="plan_id" Type="nvarchar" MaxLength="100" />
+          <Property Name="start_date" Type="nvarchar" MaxLength="100" />
+          <Property Name="end_date" Type="nvarchar" MaxLength="100" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="100" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="500" />
+          <Property Name="dummy" Type="nvarchar" MaxLength="100" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
+  <Function Name="SplitStringsOrdered" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="List" Type="nvarchar" Mode="In" />
+    <Parameter Name="Delimiter" Type="nvarchar" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="rn" Type="bigint" />
+          <Property Name="Item" Type="nvarchar" MaxLength="2000" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
+  <Function Name="zz_truncate_all" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="Data_ProcessingModelStoreContainer">
+    <EntitySet Name="dbo_error_log_results_workflow_local" EntityType="Self.dbo_error_log_results_workflow_local" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="mbi_file_table" EntityType="Self.mbi_file_table" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="mbi_file_table_stage" EntityType="Self.mbi_file_table_stage" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="res_file_table" EntityType="Self.res_file_table" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="res_file_table_stage" EntityType="Self.res_file_table_stage" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="alegeus_file_final" EntityType="Self.alegeus_file_final" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [alegeus_file_final].[file_row] AS [file_row], 
+    [alegeus_file_final].[folder_name] AS [folder_name], 
+    [alegeus_file_final].[row_num] AS [row_num]
+    FROM [dbo].[alegeus_file_final] AS [alegeus_file_final]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="alegeus_file_staging" EntityType="Self.alegeus_file_staging" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [alegeus_file_staging].[data_row] AS [data_row], 
+    [alegeus_file_staging].[folder_name] AS [folder_name], 
+    [alegeus_file_staging].[row_num] AS [row_num]
+    FROM [dbo].[alegeus_file_staging] AS [alegeus_file_staging]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="app_settings" EntityType="Self.app_settings" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [app_settings].[id] AS [id], 
+    [app_settings].[environment] AS [environment], 
+    [app_settings].[setting_name] AS [setting_name], 
+    [app_settings].[setting_value] AS [setting_value], 
+    [app_settings].[created_at] AS [created_at]
+    FROM [dbo].[app_settings] AS [app_settings]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="Automated_Header_list" EntityType="Self.Automated_Header_list" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [Automated_Header_list].[Folder_name] AS [Folder_name], 
+    [Automated_Header_list].[template_type] AS [template_type], 
+    [Automated_Header_list].[IC_type] AS [IC_type], 
+    [Automated_Header_list].[ID] AS [ID], 
+    [Automated_Header_list].[to_FTP] AS [to_FTP], 
+    [Automated_Header_list].[BENCODE] AS [BENCODE]
+    FROM [dbo].[Automated_Header_list] AS [Automated_Header_list]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="dbo_error_log_results_workflow_local_AL" EntityType="Self.dbo_error_log_results_workflow_local_AL" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [dbo_error_log_results_workflow_local_AL].[error_code] AS [error_code], 
+    [dbo_error_log_results_workflow_local_AL].[error_row] AS [error_row], 
+    [dbo_error_log_results_workflow_local_AL].[mbi_file_name] AS [mbi_file_name], 
+    [dbo_error_log_results_workflow_local_AL].[error_message] AS [error_message], 
+    [dbo_error_log_results_workflow_local_AL].[mbi_row_num] AS [mbi_row_num], 
+    [dbo_error_log_results_workflow_local_AL].[mbi_line] AS [mbi_line], 
+    [dbo_error_log_results_workflow_local_AL].[CRM_Check] AS [CRM_Check], 
+    [dbo_error_log_results_workflow_local_AL].[Proc_Check] AS [Proc_Check], 
+    [dbo_error_log_results_workflow_local_AL].[updated_by] AS [updated_by], 
+    [dbo_error_log_results_workflow_local_AL].[updated_timestamp] AS [updated_timestamp], 
+    [dbo_error_log_results_workflow_local_AL].[BENCODE] AS [BENCODE], 
+    [dbo_error_log_results_workflow_local_AL].[CRM] AS [CRM], 
+    [dbo_error_log_results_workflow_local_AL].[Notes] AS [Notes], 
+    [dbo_error_log_results_workflow_local_AL].[Notes_CRM] AS [Notes_CRM], 
+    [dbo_error_log_results_workflow_local_AL].[file_type] AS [file_type], 
+    [dbo_error_log_results_workflow_local_AL].[IDfield] AS [IDfield], 
+    [dbo_error_log_results_workflow_local_AL].[Archive_Check] AS [Archive_Check]
+    FROM [dbo].[dbo_error_log_results_workflow_local_AL] AS [dbo_error_log_results_workflow_local_AL]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="dbo_error_log_results_workflow_localBU" EntityType="Self.dbo_error_log_results_workflow_localBU" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [dbo_error_log_results_workflow_localBU].[error_code] AS [error_code], 
+    [dbo_error_log_results_workflow_localBU].[error_row] AS [error_row], 
+    [dbo_error_log_results_workflow_localBU].[mbi_file_name] AS [mbi_file_name], 
+    [dbo_error_log_results_workflow_localBU].[error_message] AS [error_message], 
+    [dbo_error_log_results_workflow_localBU].[mbi_row_num] AS [mbi_row_num], 
+    [dbo_error_log_results_workflow_localBU].[mbi_line] AS [mbi_line], 
+    [dbo_error_log_results_workflow_localBU].[CRM_Check] AS [CRM_Check], 
+    [dbo_error_log_results_workflow_localBU].[Proc_Check] AS [Proc_Check], 
+    [dbo_error_log_results_workflow_localBU].[updated_by] AS [updated_by], 
+    [dbo_error_log_results_workflow_localBU].[updated_timestamp] AS [updated_timestamp], 
+    [dbo_error_log_results_workflow_localBU].[BENCODE] AS [BENCODE], 
+    [dbo_error_log_results_workflow_localBU].[CRM] AS [CRM], 
+    [dbo_error_log_results_workflow_localBU].[Notes] AS [Notes], 
+    [dbo_error_log_results_workflow_localBU].[Notes_CRM] AS [Notes_CRM], 
+    [dbo_error_log_results_workflow_localBU].[file_type] AS [file_type], 
+    [dbo_error_log_results_workflow_localBU].[IDfield] AS [IDfield], 
+    [dbo_error_log_results_workflow_localBU].[Archive_Check] AS [Archive_Check]
+    FROM [dbo].[dbo_error_log_results_workflow_localBU] AS [dbo_error_log_results_workflow_localBU]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="dbo_tracked_errors_local" EntityType="Self.dbo_tracked_errors_local" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [dbo_tracked_errors_local].[Error_code] AS [Error_code], 
+    [dbo_tracked_errors_local].[error_message] AS [error_message], 
+    [dbo_tracked_errors_local].[crm] AS [crm], 
+    [dbo_tracked_errors_local].[processing] AS [processing], 
+    [dbo_tracked_errors_local].[control] AS [control]
+    FROM [dbo].[dbo_tracked_errors_local] AS [dbo_tracked_errors_local]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="file_processing_log" EntityType="Self.file_processing_log" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [file_processing_log].[fileLogId] AS [fileLogId], 
+    [file_processing_log].[platform] AS [platform], 
+    [file_processing_log].[fileId] AS [fileId], 
+    [file_processing_log].[folderName] AS [folderName], 
+    [file_processing_log].[templateType] AS [templateType], 
+    [file_processing_log].[ICType] AS [ICType], 
+    [file_processing_log].[toFTP] AS [toFTP], 
+    [file_processing_log].[bencode] AS [bencode], 
+    [file_processing_log].[originalFileName] AS [originalFileName], 
+    [file_processing_log].[originalFullPath] AS [originalFullPath], 
+    [file_processing_log].[newFileName] AS [newFileName], 
+    [file_processing_log].[newFileFullPath] AS [newFileFullPath], 
+    [file_processing_log].[created_at] AS [created_at], 
+    [file_processing_log].[originalFileUploadedOn] AS [originalFileUploadedOn]
+    FROM [dbo].[file_processing_log] AS [file_processing_log]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="file_processing_tasks_log" EntityType="Self.file_processing_tasks_log" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [file_processing_tasks_log].[fileLogTaskId] AS [fileLogTaskId], 
+    [file_processing_tasks_log].[fileLogId] AS [fileLogId], 
+    [file_processing_tasks_log].[fileId] AS [fileId], 
+    [file_processing_tasks_log].[processingTask] AS [processingTask], 
+    [file_processing_tasks_log].[processingTaskOutcome] AS [processingTaskOutcome], 
+    [file_processing_tasks_log].[processingTaskOutcomeDetails] AS [processingTaskOutcomeDetails], 
+    [file_processing_tasks_log].[originalFileName] AS [originalFileName], 
+    [file_processing_tasks_log].[originalFullPath] AS [originalFullPath], 
+    [file_processing_tasks_log].[newFileName] AS [newFileName], 
+    [file_processing_tasks_log].[newFileFullPath] AS [newFileFullPath], 
+    [file_processing_tasks_log].[created_at] AS [created_at]
+    FROM [dbo].[file_processing_tasks_log] AS [file_processing_tasks_log]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="message_log" EntityType="Self.message_log" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [message_log].[log_id] AS [log_id], 
+    [message_log].[module_name] AS [module_name], 
+    [message_log].[submodule_name] AS [submodule_name], 
+    [message_log].[step_type] AS [step_type], 
+    [message_log].[step_name] AS [step_name], 
+    [message_log].[command] AS [command], 
+    [message_log].[created_at] AS [created_at], 
+    [message_log].[platform] AS [platform]
+    FROM [dbo].[message_log] AS [message_log]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="QB_file_data_fixtbl" EntityType="Self.QB_file_data_fixtbl" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [QB_file_data_fixtbl].[QB_data] AS [QB_data], 
+    [QB_file_data_fixtbl].[folder_name] AS [folder_name], 
+    [QB_file_data_fixtbl].[row_num] AS [row_num]
+    FROM [dbo].[QB_file_data_fixtbl] AS [QB_file_data_fixtbl]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="vw_file_processing_log" EntityType="Self.vw_file_processing_log" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [vw_file_processing_log].[fileLogId] AS [fileLogId], 
+    [vw_file_processing_log].[platform] AS [platform], 
+    [vw_file_processing_log].[fileId] AS [fileId], 
+    [vw_file_processing_log].[folderName] AS [folderName], 
+    [vw_file_processing_log].[templateType] AS [templateType], 
+    [vw_file_processing_log].[ICType] AS [ICType], 
+    [vw_file_processing_log].[toFTP] AS [toFTP], 
+    [vw_file_processing_log].[bencode] AS [bencode], 
+    [vw_file_processing_log].[originalFileName] AS [originalFileName], 
+    [vw_file_processing_log].[originalFullPath] AS [originalFullPath], 
+    [vw_file_processing_log].[newFileName] AS [newFileName], 
+    [vw_file_processing_log].[newFileFullPath] AS [newFileFullPath], 
+    [vw_file_processing_log].[created_at] AS [created_at], 
+    [vw_file_processing_log].[originalFileUploadedOn] AS [originalFileUploadedOn], 
+    [vw_file_processing_log].[ProcessingErrorCount] AS [ProcessingErrorCount]
+    FROM [dbo].[vw_file_processing_log] AS [vw_file_processing_log]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>
