@@ -1,0 +1,102 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUIv6\\DataProcessingWebUIv6.csproj": {}
+  },
+  "projects": {
+    "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUIv6\\DataProcessingWebUIv6.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUIv6\\DataProcessingWebUIv6.csproj",
+        "projectName": "DataProcessingWebUIv6",
+        "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUIv6\\DataProcessingWebUIv6.csproj",
+        "packagesPath": "C:\\Users\\sumeet\\.nuget\\packages\\",
+        "outputPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUIv6\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\sumeet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj": {
+                "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.14.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
+            "Radzen.Blazor": {
+              "target": "Package",
+              "version": "[3.17.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj": {
+      "restore": {
+        "projectUniqueName": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj",
+        "projectName": "CoreUtils",
+        "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj",
+        "frameworks": {
+          "net472": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net472": {}
+      }
+    }
+  }
+}

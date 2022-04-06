@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj": {}
+    "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUI\\DataProcessingWebUI.csproj": {}
   },
   "projects": {
-    "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj": {
+    "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUI\\DataProcessingWebUI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj",
-        "projectName": "DataProcessingWebUi",
-        "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj",
+        "projectUniqueName": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUI\\DataProcessingWebUI.csproj",
+        "projectName": "DataProcessingWebUI",
+        "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUI\\DataProcessingWebUI.csproj",
         "packagesPath": "C:\\Users\\sumeet\\.nuget\\packages\\",
-        "outputPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\obj\\",
+        "outputPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"
@@ -22,14 +22,15 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "netcoreapp3.1"
+          "net6.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "netcoreapp3.1": {
+          "net6.0": {
+            "targetAlias": "net6.0",
             "projectReferences": {
               "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj": {
                 "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj"
@@ -44,8 +45,13 @@
         }
       },
       "frameworks": {
-        "netcoreapp3.1": {
+        "net6.0": {
+          "targetAlias": "net6.0",
           "dependencies": {
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.14.0, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.1, )"
@@ -53,10 +59,6 @@
             "Radzen.Blazor": {
               "target": "Package",
               "version": "[3.17.3, )"
-            },
-            "WestWind.AspnetCore.LiveReload": {
-              "target": "Package",
-              "version": "[0.3.6, )"
             }
           },
           "imports": [
@@ -69,12 +71,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[3.1.2, 3.1.2]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -83,7 +79,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     },
@@ -91,7 +87,12 @@
       "restore": {
         "projectUniqueName": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj",
         "projectName": "CoreUtils",
-        "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj"
+        "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj",
+        "frameworks": {
+          "net472": {
+            "projectReferences": {}
+          }
+        }
       },
       "frameworks": {
         "net472": {}
