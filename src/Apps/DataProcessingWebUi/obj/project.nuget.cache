@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "+Ht8+hbXKRMlXuFz33PB42ex1QmSIpFgjsaxq92kwmaF/kuxiYwn08FYMxeEyp3lQlw2ekyU0mMiLbgbfVRrbw==",
+  "dgSpecHash": "gHl0Al7xaT+iMQWpsairUNMiTT+ElRSNcnEtVipYe7NjFKZ1KkdIU6gA8KYwnmtBFxEqj3knXQ2tAFNyDjcTiA==",
   "success": true,
   "projectFilePath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj",
   "expectedPackageFiles": [
@@ -21,7 +21,8 @@
     "C:\\Users\\sumeet\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\sumeet\\.nuget\\packages\\radzen.blazor\\3.17.3\\radzen.blazor.3.17.3.nupkg.sha512",
     "C:\\Users\\sumeet\\.nuget\\packages\\system.linq.dynamic.core\\1.2.12\\system.linq.dynamic.core.1.2.12.nupkg.sha512",
-    "C:\\Users\\sumeet\\.nuget\\packages\\westwind.aspnetcore.livereload\\0.3.6\\westwind.aspnetcore.livereload.0.3.6.nupkg.sha512"
+    "C:\\Users\\sumeet\\.nuget\\packages\\westwind.aspnetcore.livereload\\0.3.6\\westwind.aspnetcore.livereload.0.3.6.nupkg.sha512",
+    "C:\\Users\\sumeet\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.2\\microsoft.aspnetcore.app.ref.3.1.2.nupkg.sha512"
   ],
   "logs": []
 }
