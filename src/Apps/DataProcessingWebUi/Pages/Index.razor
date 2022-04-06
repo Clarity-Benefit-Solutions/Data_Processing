@@ -1,4 +1,8 @@
-﻿@page "/"
+﻿@*For live reload, please see https://weblog.west-wind.com/posts/2019/Jun/03/Building-Live-Reload-Middleware-for-ASPNET-Core
+    1) Go to root folder and type dotnet watch run
+    2) for debugging, attach to exe in VS
+*@
+@page "/"
 @using Utils = CoreUtils.Classes.Utils
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Converters
@@ -79,7 +83,7 @@
         <button id="cmdClear" @onclick="Clear">Clear Logs</button>
         &nbsp;&nbsp;&nbsp;&nbsp; Show Job Status
     </p>
-    <RadzenDataGrid @ref="Grid" Data="@Logs" TItem="LogFields" AllowColumnResize="true" Style="height:200px;max-height:400px" >
+    <RadzenDataGrid @ref="Grid" Data="@Logs" TItem="LogFields" AllowColumnResize="true" Style="height:200px;max-height:400px">
         <Columns>
             <RadzenDataGridColumn TItem="LogFields" Property="LogTime" Title="LogTime" Width="150px" />
             <RadzenDataGridColumn TItem="LogFields" Property="Task" Title="Task" Width="150px" />
