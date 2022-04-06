@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Syncfusion.Blazor;
 
 namespace DataProcessingWebUi
 {
@@ -24,8 +23,6 @@ namespace DataProcessingWebUi
             var builder = Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
 
-            //builder.Services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
-            
             return builder;
         }
     }

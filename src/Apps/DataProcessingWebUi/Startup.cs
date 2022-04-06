@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Syncfusion.Blazor;
+using Westwind.AspNetCore.LiveReload;
 
 namespace DataProcessingWebUi
 {
@@ -28,14 +28,26 @@ namespace DataProcessingWebUi
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-#pragma warning disable CS0618
-            services.AddSyncfusionBlazor(options => { options.IgnoreScriptIsolation = true; });
-#pragma warning restore CS0618
+
+            services.AddLiveReload(config =>
+            {
+                // optional - use config instead
+                //config.LiveReloadEnabled = true;
+                //config.FolderToMonitor = Path.GetFullname(Path.Combine(Env.ContentRootPath,"..")) ;
+            });
+
+            // for ASP.NET Core 3.0 add Runtime Razor Compilation
+            // services.AddRazorPages().AddRazorRuntimeCompilation();
+            // services.AddMvc().AddRazorRuntimeCompilation();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // must be first
+            app.UseLiveReload();
+
+            //
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -57,6 +69,8 @@ namespace DataProcessingWebUi
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+       
         }
     }
 }

@@ -12,155 +12,155 @@ namespace DataProcessingWebUi.Pages
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Components;
 #nullable restore
-#line 1 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\_Imports.razor"
+#line 1 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\_Imports.razor"
 using System.Net.Http;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\_Imports.razor"
+#line 2 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\_Imports.razor"
 using Microsoft.AspNetCore.Authorization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\_Imports.razor"
+#line 3 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\_Imports.razor"
 using Microsoft.AspNetCore.Components.Authorization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\_Imports.razor"
+#line 4 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\_Imports.razor"
 using Microsoft.AspNetCore.Components.Forms;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 5 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\_Imports.razor"
+#line 5 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\_Imports.razor"
 using Microsoft.AspNetCore.Components.Routing;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\_Imports.razor"
+#line 6 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\_Imports.razor"
 using Microsoft.AspNetCore.Components.Web;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 7 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\_Imports.razor"
+#line 7 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\_Imports.razor"
 using Microsoft.JSInterop;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\_Imports.razor"
+#line 8 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\_Imports.razor"
 using DataProcessingWebUi;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 9 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\_Imports.razor"
+#line 9 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\_Imports.razor"
 using DataProcessingWebUi.Shared;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 2 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
+#line 10 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\_Imports.razor"
+using Radzen;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 11 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\_Imports.razor"
+using Radzen.Blazor;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 2 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\Pages\Index.razor"
 using Utils = CoreUtils.Classes.Utils;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 3 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
+#line 3 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\Pages\Index.razor"
 using Newtonsoft.Json;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 4 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
+#line 4 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\Pages\Index.razor"
 using Newtonsoft.Json.Converters;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 5 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
+#line 5 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\Pages\Index.razor"
 using System.Web;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 6 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
+#line 6 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\Pages\Index.razor"
 using System;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 7 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
+#line 7 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\Pages\Index.razor"
 using System.Dynamic;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 8 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
+#line 8 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\Pages\Index.razor"
 using System.Globalization;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 9 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
+#line 9 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\Pages\Index.razor"
 using System.Net.Http.Headers;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 10 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
+#line 10 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\Pages\Index.razor"
 using System.Threading;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 11 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
+#line 11 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\Pages\Index.razor"
 using CoreUtils.Classes;
 
 #line default
 #line hidden
 #nullable disable
 #nullable restore
-#line 12 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
+#line 12 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\Pages\Index.razor"
 using Microsoft.VisualBasic.CompilerServices;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 13 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
-using Syncfusion.Blazor;
-
-#line default
-#line hidden
-#nullable disable
-#nullable restore
-#line 14 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
-using Syncfusion.Blazor.Grids;
 
 #line default
 #line hidden
@@ -174,7 +174,7 @@ using Syncfusion.Blazor.Grids;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 113 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
+#line 123 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\Pages\Index.razor"
 
     private string _username = "dataprocessinguser";
     
@@ -183,7 +183,7 @@ using Syncfusion.Blazor.Grids;
 #line hidden
 #nullable disable
 #nullable restore
-#line 115 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
+#line 125 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\Pages\Index.razor"
                                                  
     private string _password = "#gjgB0AXG^940";
     
@@ -192,222 +192,212 @@ using Syncfusion.Blazor.Grids;
 #line hidden
 #nullable disable
 #nullable restore
-#line 117 "E:\FileAndDataProcessingAndErrorLog\src\Apps\DataProcessingWebUi\Pages\Index.razor"
+#line 127 "C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\Pages\Index.razor"
                                                  
 
-SfGrid<LogFields> Grid { get; set; }
-public string ResultTextAreaValue { get; set; } = String.Empty;
+    RadzenDataGrid<LogFields> Grid { get; set; }
+    public string ResultTextAreaValue { get; set; } = String.Empty;
 
-private Boolean needsRefresh = false;
+    private Boolean needsRefresh = false;
 
-private string strBaseUrl = "http://be015:81";
-
-
-private List<LogFields> Logs = new List<LogFields> { };
-
-private void addAuthHeader(HttpClient client)
-{
-    string creds = $"{_username}:{_password}";
-    AuthenticationHeaderValue authHeaderValue = new AuthenticationHeaderValue("basic", creds);
-    client.DefaultRequestHeaders.Authorization = authHeaderValue;
-}
+    private string strBaseUrl = "http://be015:81";
 
 
-public object SendRequest(string path, string arg)
-{
-    try
+    private List<LogFields> Logs = new List<LogFields> { };
+
+    private void addAuthHeader(HttpClient client)
+    {
+        string creds = $"{_username}:{_password}";
+        AuthenticationHeaderValue authHeaderValue = new AuthenticationHeaderValue("basic", creds);
+        client.DefaultRequestHeaders.Authorization = authHeaderValue;
+    }
+
+    private void LogJobResult(string jobId)
     {
 
-        StateHasChanged();
-
-        HttpClient client = new HttpClient { BaseAddress = new Uri($"{strBaseUrl}"), Timeout = TimeSpan.FromSeconds(600) };
-
-        // add auth header
-        this.addAuthHeader(client);
-
-        //HTTP GET Async
-        var result = client.GetAsync($"/DataProcessing/{path}/{arg}").Result;
-
-        if (!result.IsSuccessStatusCode)
-        {
-            //log response status here..
-            throw new Exception($"{result.ReasonPhrase} {result.RequestMessage}");
-        }
-
-        // parse job ID
-        var content = result.Content.ReadAsStringAsync().Result;
-
+        // get result of the job started by the request
+        dynamic jobDetailsRequestResult = this.SendRequest("JobResults", $"{jobId}");
         //
-        if (path.ToLower() != "JobResults".ToLower())
+        var jobDetailsContent = jobDetailsRequestResult.Content.ReadAsStringAsync().Result;
+        //
+        JobDetails jobDetails = JsonConvert.DeserializeObject<JobDetails>(jobDetailsContent);
+        //
+        string jobState = jobDetails != null ? jobDetails.JobState : "error";
+
+        // check job state
+        switch (jobState.ToLower())
         {
-            JobDetails taskJobDetails = JsonConvert.DeserializeObject<JobDetails>(content);
+            case @"processing":
+            case @"started":
+            case @"enqueued":
+                var logItem = new LogFields(
+                    DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                    "",
+                    jobDetails?.JobName,
+                    jobState,
+                    "",
+                    ""
+                    );
 
-            string jobId = (string)taskJobDetails.JobId;
+                this.Log(logItem);
 
-            // get jobResult
-            Boolean jobIsProcessing = true;
-
-            // loop till job is processing - write to log : processing
-
-            while (jobIsProcessing)
-            {
-                // get result of the job started by the request
-                dynamic jobDetailsRequestResult = this.SendRequest("JobResults", $"{jobId}");
-                var jobDetailsContent = jobDetailsRequestResult.Content.ReadAsStringAsync().Result;
-                //
-                JobDetails jobDetails = JsonConvert.DeserializeObject<JobDetails>(jobDetailsContent);
-                //
-                string jobState = jobDetails != null ? jobDetails.JobState : "error";
-                //
-
-
-                // check job state
-
-                switch (jobState.ToLower())
+                // schedule new check in N ms
+                var timer = new System.Threading.Timer((_) =>
                 {
-                    case @"processing":
-                    case @"started":
-                    case @"enqueued":
-                        var logItem = new LogFields(
-                            DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                            "",
-                            arg,
-                            jobState,
-                            "",
-                            ""
-                            );
+                    InvokeAsync(async () =>
+                    {
+                        LogJobResult(jobId);
+                    });
+                }, null, 1000, 0);
 
-                        this.Log(logItem);
-                        //
-                        Thread.Sleep(1000);
-                        break;
+                return;
 
-                    default:
-                        jobIsProcessing = false;
-                        OperationResult jobDetailsOutcome = (OperationResult)Utils.DeserializeJson<OperationResult>(jobDetails?.JobResultDetails);
+            default:
+                OperationResult jobDetailsOutcome = (OperationResult)Utils.DeserializeJson<OperationResult>(jobDetails?.JobResultDetails);
 
-                        if (jobDetailsOutcome.Code != "200")
-                        {
-                            jobState = "ERROR";
-                        }
-
-                        var logItem2 = new LogFields(
-                            DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                            "",
-                            arg,
-                            jobState,
-                            "",
-                            jobDetailsOutcome.ToString()
-                            );
-
-                        this.Log(logItem2);
-                        result = jobDetailsRequestResult;
-                        break;
+                if (jobDetailsOutcome.Code != "200")
+                {
+                    jobState = "ERROR";
                 }
 
+                var logItem2 = new LogFields(
+                    DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                    "",
+                    jobDetails?.JobName,
+                    jobState,
+                    "",
+                    jobDetailsOutcome.ToString()
+                    );
+
+                this.Log(logItem2);
+                //
+                return;
+        }
+
+
+    }
+
+    public object SendRequest(string path, string arg)
+    {
+        try
+        {
+
+            StateHasChanged();
+
+            HttpClient client = new HttpClient { BaseAddress = new Uri($"{strBaseUrl}"), Timeout = TimeSpan.FromSeconds(600) };
+
+            // add auth header
+            this.addAuthHeader(client);
+
+            //HTTP GET Async
+            var result = client.GetAsync($"/DataProcessing/{path}/{arg}").Result;
+
+            if (!result.IsSuccessStatusCode)
+            {
+                //log response status here..
+                throw new Exception($"{result.ReasonPhrase} {result.RequestMessage}");
             }
 
+            // parse job ID
+            var content = result.Content.ReadAsStringAsync().Result;
+
+            //
+            if (path.ToLower() != "JobResults".ToLower())
+            {
+                JobDetails taskJobDetails = JsonConvert.DeserializeObject<JobDetails>(content);
+
+                string jobId = (string)taskJobDetails?.JobId;
+                //
+                LogJobResult(jobId);
+
+            }
+            return result;
         }
-        return result;
-    }
-    catch (Exception ex)
-    {
-        var logItem2 = new LogFields(
-            DateTime.Now.ToString(CultureInfo.InvariantCulture),
-            "",
-            arg,
-            "ERROR",
-            "",
-            new OperationResult("0", "200", "ERROPR", "", ex.ToString()).ToString()
-            );
-
-        this.Log(logItem2);
-        return null;
-    }
-}
-
-void cmdCopyTestFiles()
-{
-    this.Clear();
-
-    this.Grid.Refresh();
-    //
-    dynamic result = this.SendRequest("StartJob", "copytestfiles");
-
-}
-
-void cmdProcessCobraFiles()
-{
-    this.Clear();
-
-    //
-    dynamic result = this.SendRequest("StartJob", "processcobrafiles");
-}
-
-void cmdProcessAlegeusFiles()
-{
-    this.Clear();
-
-    //
-    dynamic result = this.SendRequest("StartJob", "processalegeusfiles");
-}
-
-void cmdRetrieveFtpErrorLogs()
-{
-    this.Clear();
-    //
-    dynamic result = this.SendRequest("StartJob", "retrieveftperrorlogs");
-}
-
-void cmdOpenAccessDB()
-{
-    this.Clear();
-
-}
-
-void cmdShowJobStatus()
-{
-    jsRuntime.InvokeAsync<object>("open", $"{strBaseUrl}/hangfire/jobs/processing", "_blank");
-}
-
-void Clear()
-{
-    this.Logs.Clear();
-    this.ResultTextAreaValue = "";
-    this.Grid.Refresh();
-    //
-    this.needsRefresh = true;
-    //
-    StateHasChanged();
-    //
-    this.needsRefresh = false;
-}
-
-void Log(LogFields logItem)
-{
-
-    if (!Utils.IsBlank(logItem.OutcomeDetails))
-    {
-        OperationResult details = (OperationResult)Utils.DeserializeJson<OperationResult>(logItem.OutcomeDetails);
-        if (!Utils.IsBlank(details.Error))
+        catch (Exception ex)
         {
-            this.ResultTextAreaValue = details.Error + "\n\n\n\n------------------------------------\n\n\n\n" + details.Details;
-        }
-        else
-        {
-            this.ResultTextAreaValue = details.Details;
+            var logItem2 = new LogFields(
+                DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                "",
+                arg,
+                "ERROR",
+                "",
+                new OperationResult("0", "200", "ERROPR", "", ex.ToString()).ToString()
+                );
+
+            this.Log(logItem2);
+            return null;
         }
     }
 
-    //
-    logItem.OutcomeDetails = logItem.Status;
-    this.Logs.Add(logItem);
-    this.Grid.Refresh();
+    void cmdCopyTestFiles()
+    {
+        dynamic result = this.SendRequest("StartJob", "copytestfiles");
+    }
 
-    this.needsRefresh = true;
-    StateHasChanged();
+    void cmdProcessCobraFiles()
+    {
+        dynamic result = this.SendRequest("StartJob", "processcobrafiles");
+    }
 
-}
+    void cmdProcessAlegeusFiles()
+    {
+        dynamic result = this.SendRequest("StartJob", "processalegeusfiles");
+    }
+
+    void cmdRetrieveFtpErrorLogs()
+    {
+        dynamic result = this.SendRequest("StartJob", "retrieveftperrorlogs");
+    }
+
+    void cmdOpenAccessDB()
+    {
+        this.Clear();
+
+    }
+
+    void cmdShowJobStatus()
+    {
+        jsRuntime.InvokeAsync<object>("open", $"{strBaseUrl}/hangfire/jobs/processing", "_blank");
+    }
+
+    void Clear()
+    {
+        this.Logs.Clear();
+        this.ResultTextAreaValue = "";
+        this.Grid.Reload();
+        //
+        this.needsRefresh = true;
+        //
+        StateHasChanged();
+        //
+        this.needsRefresh = false;
+    }
+
+    void Log(LogFields logItem)
+    {
+
+        if (!Utils.IsBlank(logItem.OutcomeDetails))
+        {
+            OperationResult details = (OperationResult)Utils.DeserializeJson<OperationResult>(logItem.OutcomeDetails);
+            if (!Utils.IsBlank(details.Error))
+            {
+                this.ResultTextAreaValue = details.Error + "\n\n\n\n------------------------------------\n\n\n\n" + details.Details;
+            }
+            else
+            {
+                this.ResultTextAreaValue = details.Details;
+            }
+        }
+
+        //
+        logItem.OutcomeDetails = logItem.Status;
+        this.Logs.Add(logItem);
+        this.Grid.Reload();
+
+        this.needsRefresh = true;
+        StateHasChanged();
+
+    }
 
 
 #line default

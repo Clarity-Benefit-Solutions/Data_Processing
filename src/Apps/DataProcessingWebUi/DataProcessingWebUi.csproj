@@ -6,8 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Syncfusion.Blazor.Grid" Version="20.1.0.47" />
-    <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.1.0.47" />
+    <PackageReference Include="Radzen.Blazor" Version="3.17.3" />
+    <PackageReference Include="WestWind.AspnetCore.LiveReload" Version="0.3.6" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,25 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "E:\\FileAndDataProcessingAndErrorLog\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj": {}
+    "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj": {}
   },
   "projects": {
-    "E:\\FileAndDataProcessingAndErrorLog\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj": {
+    "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\FileAndDataProcessingAndErrorLog\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj",
+        "projectUniqueName": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj",
         "projectName": "DataProcessingWebUi",
-        "projectPath": "E:\\FileAndDataProcessingAndErrorLog\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj",
-        "packagesPath": "C:\\Users\\SKumar_BENEFLEX\\.nuget\\packages\\",
-        "outputPath": "E:\\FileAndDataProcessingAndErrorLog\\src\\Apps\\DataProcessingWebUi\\obj\\",
+        "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\DataProcessingWebUi.csproj",
+        "packagesPath": "C:\\Users\\sumeet\\.nuget\\packages\\",
+        "outputPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUi\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\Offline Packages",
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "C:\\Users\\SKumar_BENEFLEX\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 21.2.config",
+          "C:\\Users\\sumeet\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -27,7 +25,6 @@
           "netcoreapp3.1"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\System\\Components\\Packages": {},
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -35,8 +32,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "E:\\FileAndDataProcessingAndErrorLog\\src\\Libraries\\CoreUtils\\CoreUtils.csproj": {
-                "projectPath": "E:\\FileAndDataProcessingAndErrorLog\\src\\Libraries\\CoreUtils\\CoreUtils.csproj"
+              "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj": {
+                "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj"
               }
             }
           }
@@ -55,13 +52,13 @@
               "target": "Package",
               "version": "[13.0.1, )"
             },
-            "Syncfusion.Blazor.Grid": {
+            "Radzen.Blazor": {
               "target": "Package",
-              "version": "[20.1.0.47, )"
+              "version": "[3.17.3, )"
             },
-            "Syncfusion.Blazor.Themes": {
+            "WestWind.AspnetCore.LiveReload": {
               "target": "Package",
-              "version": "[20.1.0.47, )"
+              "version": "[0.3.6, )"
             }
           },
           "imports": [
@@ -82,20 +79,32 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.103\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.406\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "E:\\FileAndDataProcessingAndErrorLog\\src\\Libraries\\CoreUtils\\CoreUtils.csproj": {
+    "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj": {
       "restore": {
-        "projectUniqueName": "E:\\FileAndDataProcessingAndErrorLog\\src\\Libraries\\CoreUtils\\CoreUtils.csproj",
+        "projectUniqueName": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj",
         "projectName": "CoreUtils",
-        "projectPath": "E:\\FileAndDataProcessingAndErrorLog\\src\\Libraries\\CoreUtils\\CoreUtils.csproj",
+        "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj",
+        "packagesPath": "C:\\Users\\sumeet\\.nuget\\packages\\",
+        "projectStyle": "PackagesConfig",
+        "configFilePaths": [
+          "C:\\Users\\sumeet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
         "frameworks": {
           "net472": {
             "projectReferences": {}
           }
-        }
+        },
+        "packagesConfigPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\packages.config"
       },
       "frameworks": {
         "net472": {}
