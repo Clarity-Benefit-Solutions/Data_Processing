@@ -4,6 +4,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
   <PropertyGroup>
-    <History>False|2022-04-06T06:41:50.3843594Z;</History>
+    <History>True|2022-04-06T09:54:52.5509422Z;False|2022-04-06T12:11:50.3843594+05:30;</History>
+    <_PublishTargetUrl>C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUI\bin\Debug\net6.0\publish\</_PublishTargetUrl>
   </PropertyGroup>
 </Project>
