@@ -2,11 +2,11 @@ version: '3.4'
 
 services:
   dataprocessingwebui:
-    container_name: DataProcessingWebUi
+    container_name: DataProcessingWebUI
     build:
       labels:
         com.microsoft.created-by: "visual-studio"
-        com.microsoft.visual-studio.project-name: "DataProcessingWebUi"
+        com.microsoft.visual-studio.project-name: "DataProcessingWebUI"
     volumes:
       - C:\Users\sumeet\onecoremsvsmon\17.1.1414.0:C:\remote_debugger:ro
       - ${APPDATA}/ASP.NET/Https:C:\Users\ContainerUser\AppData\Roaming\ASP.NET\Https:ro
@@ -18,4 +18,4 @@ services:
       com.microsoft.visualstudio.debuggee.arguments: " --additionalProbingPath c:\\.nuget\\packages --additionalProbingPath c:\\.nuget\\fallbackpackages  \"\""
       com.microsoft.visualstudio.debuggee.workingdirectory: "C:\\app"
       com.microsoft.visualstudio.debuggee.killprogram: "C:\\remote_debugger\\x64\\utils\\KillProcess.exe dotnet.exe"
-      com.microsoft.visual-studio.project-name: "DataProcessingWebUi"
+      com.microsoft.visual-studio.project-name: "DataProcessingWebUI"

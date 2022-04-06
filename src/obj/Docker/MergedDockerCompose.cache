@@ -1,8 +1,9 @@
+name: dockercompose12542343142758784063
 services:
   dataprocessingwebui:
     build:
       context: C:\___Clarity\clarity_dev\r1_Data_Processing\src
-      dockerfile: C:\___Clarity\clarity_dev\r1_Data_Processing\src\Apps\DataProcessingWebUi\Dockerfile
+      dockerfile: Apps\DataProcessingWebUi\Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: https://+:443;http://+:80

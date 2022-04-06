@@ -3,11 +3,12 @@ version: '3.4'
 services:
   dataprocessingwebui:
     image: dataprocessingwebui:dev
-    container_name: DataProcessingWebUi
+    container_name: DataProcessingWebUI
     build:
+      target: base
       labels:
         com.microsoft.created-by: "visual-studio"
-        com.microsoft.visual-studio.project-name: "DataProcessingWebUi"
+        com.microsoft.visual-studio.project-name: "DataProcessingWebUI"
     environment:
       - DOTNET_USE_POLLING_FILE_WATCHER=1
       - NUGET_PACKAGES=C:\.nuget\packages
