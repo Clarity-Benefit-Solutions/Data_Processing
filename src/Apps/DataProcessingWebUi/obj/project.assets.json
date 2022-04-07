@@ -774,26 +774,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\SKumar_BENEFLEX\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\Offline Packages": {},
-    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
+    "C:\\Users\\sumeet\\.nuget\\packages\\": {},
+    "C:\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\FileAndDataProcessingAndErrorLog\\src\\Apps\\DataProcessingWebUI\\DataProcessingWebUI.csproj",
+      "projectUniqueName": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUI\\DataProcessingWebUI.csproj",
       "projectName": "DataProcessingWebUI",
-      "projectPath": "E:\\FileAndDataProcessingAndErrorLog\\src\\Apps\\DataProcessingWebUI\\DataProcessingWebUI.csproj",
-      "packagesPath": "C:\\Users\\SKumar_BENEFLEX\\.nuget\\packages\\",
-      "outputPath": "E:\\FileAndDataProcessingAndErrorLog\\src\\Apps\\DataProcessingWebUI\\obj\\",
+      "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUI\\DataProcessingWebUI.csproj",
+      "packagesPath": "C:\\Users\\sumeet\\.nuget\\packages\\",
+      "outputPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUI\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\Offline Packages",
-        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+        "C:\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\SKumar_BENEFLEX\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 21.2.config",
+        "C:\\Users\\sumeet\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
@@ -801,7 +798,6 @@
         "net6.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\DevExpress 21.2\\Components\\System\\Components\\Packages": {},
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
@@ -809,8 +805,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "E:\\FileAndDataProcessingAndErrorLog\\src\\Libraries\\CoreUtils\\CoreUtils.csproj": {
-              "projectPath": "E:\\FileAndDataProcessingAndErrorLog\\src\\Libraries\\CoreUtils\\CoreUtils.csproj"
+            "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj": {
+              "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj"
             }
           }
         }

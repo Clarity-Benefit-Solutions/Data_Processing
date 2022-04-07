@@ -128,6 +128,24 @@ namespace CoreUtils.Classes
                 return null;
             }
         }
+        public static string SerializeJson(object value)
+        {
+            try
+            {
+                if (value == null)
+                {
+                    return "";
+                }
+
+                string serializedvalue = JsonConvert.SerializeObject(value);
+
+                return serializedvalue;
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+        }
 
         public static string CsvQuote(string value)
         {
