@@ -122,7 +122,7 @@ namespace DataProcessing
             // download mbi dir files
             ftpConn.CopyOrMoveFiles(
                 FtpFileOperation.DownloadAndDelete,
-                new string[] { Vars.remoteAlegeusFtpRootPath }, true,
+                new string[] { Vars.remoteAlegeusFtpRootPath }, false,
                 new string[] { "*.mbi", "*.dne" },
                 Vars.AlegeusErrorLogMbiFilesRoot, "", "",
                 (srcFilePath, destFilePath, fileContents) =>
@@ -145,7 +145,7 @@ namespace DataProcessing
             // download res dir files
             ftpConn.CopyOrMoveFiles(
                 FtpFileOperation.DownloadAndDelete,
-                new string[] { Vars.remoteAlegeusFtpRootPath }, true,
+                new string[] { Vars.remoteAlegeusFtpRootPath }, false,
                 new string[] { "*.res" },
                 Vars.AlegeusErrorLogResFilesRoot, "", "",
                 (srcFilePath, destFilePath, fileContents) =>
