@@ -250,7 +250,7 @@
 
     }
 
-    public object SendRequest(string path, string arg, MultipartFormDataContent?  objContent = null)
+    public object SendRequest(string path, string arg, MultipartFormDataContent? objContent = null)
     {
         try
         {
@@ -431,7 +431,7 @@
                 multiContent.Add(bytes, "file", file.Name);
 
                 // send file for checking
-                var jobId = (string) this.SendRequest("CheckFileAlegeus", "", multiContent);
+                var jobId = (string)this.SendRequest("CheckFileAlegeus", "", multiContent);
 
                 // loop till job is complete
                 Boolean isProcessing = true;
@@ -441,7 +441,35 @@
                     if (IsJobComplete(jobDetails))
                     {
                         // display the result
+                        OperationResult? result =(OperationResult) Utils.DeserializeJson<OperationResult>(jobDetails.JobResultDetails);
+                        if (Utils.IsBlank(result?.Error) )
+                        {
+                            var logItem2 = new LogFields(
+                                DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                                "",
+                                "Check File",
+                                "Succeeded",
+                                file.Name,
 
+                                new OperationResult("1", "200", "Success", "", result?.Result.ToString()).ToString()
+                                );
+
+                            this.Log(logItem2);
+                        }
+                        else
+                        {
+                            var logItem2 = new LogFields(
+                                DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                                "",
+                                "Check File",
+                                "Fail",
+                                file.Name,
+
+                                new OperationResult("0", "400", "ERROR", "", result?.Error.ToString()).ToString()
+                                );
+
+                            this.Log(logItem2);
+                        }
                         // exit loop
                         isProcessing = false;
                     }
