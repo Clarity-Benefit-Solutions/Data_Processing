@@ -882,7 +882,7 @@ namespace DataProcessing
                             actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
                         {
                             errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode} and PlanID {dataRow.PlanId} and Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode} and PlanID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
                         }
 
                         if (!Utils.IsBlank(dataRow.PlanEndDate) &&
