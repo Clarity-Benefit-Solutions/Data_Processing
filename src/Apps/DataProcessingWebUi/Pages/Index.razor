@@ -387,21 +387,17 @@
 
     }
 
-    private List<IBrowserFile> loadedFiles = new();
-    private long maxFileSize = 1024 * 1024 * 15;
-    private int maxAllowedFiles = 3;
-    private bool isLoading;
+
 
     private async Task UploadFiles(InputFileChangeEventArgs e)
     {
-        isLoading = true;
-        loadedFiles.Clear();
+        long maxFileSize = 1024 * 1024 * 15;
+        int maxAllowedFiles = 1;
 
         foreach (IBrowserFile file in e.GetMultipleFiles(maxAllowedFiles))
         {
             try
             {
-                loadedFiles.Add(file);
 
                 var path = Path.GetTempFileName();
                 //var path = Path.Combine(Environment.ContentRootPath,
@@ -436,6 +432,7 @@
                 // send file for checking
                 var jobId = (string)this.SendRequest("CheckFileAlegeus", "", multiContent);
 
+                ////// code needed for php / api client to wait till job is complete and show results to user
                 //// loop till job is complete
                 //Boolean isProcessing = true;
                 //while (isProcessing)
@@ -491,7 +488,6 @@
                     "Upload File",
                     "Error",
                      file.Name,
-
                     new OperationResult(0, "400", "ERROR", "", ex.ToString()).ToString()
                     );
 
@@ -499,8 +495,9 @@
             }
         }
 
-        isLoading = false;
     }
-    }
+
+    // @code end
+}
 
 
