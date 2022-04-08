@@ -101,11 +101,13 @@ namespace DataProcessingWebApp.Controllers
                 return new JobDetails(id, $"[Job Could Not Be Queued as {ex.ToString()}", "FAILED");
             }
         }
+
         [System.Web.Http.Authorize]
         public JobDetails CheckFileCobra(HttpPostedFileBase file)
         {
             return CheckFile(file, "cobra");
         }
+
         [System.Web.Http.Authorize]
         public JobDetails JobResults(string jobId)
         {

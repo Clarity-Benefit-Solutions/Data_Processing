@@ -94,7 +94,7 @@ namespace DataProcessingWebApp.Jobs
                 }
                 //
                 string logs = String.Join("\n", listLogs.ToArray());
-                return new OperationResult("1", "200", "Completed", logs, "").ToString();
+                return new OperationResult(1, "200", "Completed", logs, "").ToString();
 
             }
             catch (Exception ex)
@@ -105,9 +105,10 @@ namespace DataProcessingWebApp.Jobs
 
                 //
                 string logs = String.Join("\n", listLogs.ToArray());
-                return new OperationResult("0", "400", "Error", logs, ex.ToString()).ToString();
+                return new OperationResult(0, "400", "Error", logs, ex.ToString()).ToString();
             }
         }
+
 #pragma warning disable CS1998
         public static async Task<string> CheckFile(PerformContext context, string srcFilePath, string platform)
 #pragma warning restore CS1998
@@ -172,11 +173,16 @@ namespace DataProcessingWebApp.Jobs
                 // check file
                 var results = fileChecker.CheckFileAndProcess(FileCheckType.AllData, FileCheckProcessType.ReturnResults);
 
-                //
-                //string logs = String.Join("\n", listLogs.ToArray());
-                //return new OperationResult(true, 200, "Completed", logs, "").ToString();
-
+                // if success, save as result
+                /*if (results.Success == "1")
+                {*/
                 return results.ToString();
+                /*}
+                else
+                {
+                    // throw error - will be saved as error
+                    throw new Exception(results.ToString());
+                }*/
 
             }
             catch (Exception ex)
@@ -187,7 +193,7 @@ namespace DataProcessingWebApp.Jobs
 
                 //
                 string logs = String.Join("\n", listLogs.ToArray());
-                return new OperationResult("0", "400", "Error", logs, ex.ToString()).ToString();
+                return new OperationResult(0, "400", "Error", logs, ex.ToString()).ToString();
             }
         }
 

@@ -109,7 +109,7 @@ namespace DataProcessing
 
                     }
                     // OK result
-                    return new OperationResult("1", "200", "Completed", "", "");
+                    return new OperationResult(1, "200", "Completed", "", "");
 
                 ///////////////////////////////////////
                 case OperationResultType.CompleteFail:
@@ -169,7 +169,7 @@ namespace DataProcessing
                     string strCheckResults = File.ReadAllText(newErrorFilePath);
 
                     // OK result
-                    return new OperationResult("0", "200", "Completed", "", strCheckResults);
+                    return new OperationResult(0, "300", "Completed", "", strCheckResults);
             }
 
         }

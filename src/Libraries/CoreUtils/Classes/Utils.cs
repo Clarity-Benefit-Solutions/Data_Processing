@@ -47,7 +47,7 @@ namespace CoreUtils.Classes
 
     public class OperationResult
     {
-        public OperationResult(string success, string code, string result = "", string details = "", string error = "")
+        public OperationResult(int success, string code, string result = "", string details = "", string error = "")
         {
             Success = success;
             Code = code;
@@ -55,7 +55,7 @@ namespace CoreUtils.Classes
             Result = result;
             Details = details;
         }
-        public string Success;
+        public int Success;
         public string Code;
         public string Result;
         public string Details;

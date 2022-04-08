@@ -228,7 +228,7 @@
             case true:
                 OperationResult jobDetailsOutcome = (OperationResult)Utils.DeserializeJson<OperationResult>(jobDetails?.JobResultDetails);
 
-                if (jobDetailsOutcome.Code != "200")
+                if (jobDetailsOutcome.Success != 1)
                 {
                     jobState = "ERROR";
                 }
@@ -309,7 +309,7 @@
                 arg,
                 "ERROR",
                 "",
-                new OperationResult("0", "200", "ERROPR", "", ex.ToString()).ToString()
+                new OperationResult(0, "200", "ERROPR", "", ex.ToString()).ToString()
                 );
 
             this.Log(logItem2);
@@ -361,12 +361,14 @@
 
     void Log(LogFields logItem)
     {
+        string status = logItem.Status;
 
         if (!Utils.IsBlank(logItem.OutcomeDetails))
         {
             OperationResult details = (OperationResult)Utils.DeserializeJson<OperationResult>(logItem.OutcomeDetails);
-            if (!Utils.IsBlank(details.Error))
+            if (!Utils.IsBlank(details.Error) || details.Success != 1)
             {
+                status = "ERROR";
                 this.ResultTextAreaValue = details.Error + "\n\n\n\n------------------------------------\n\n\n\n" + details.Details;
             }
             else
@@ -376,7 +378,8 @@
         }
 
         //
-        logItem.OutcomeDetails = logItem.Status;
+        logItem.OutcomeDetails = status;
+
         this.Logs.Add(logItem);
         this.Grid.Reload();
 
@@ -415,7 +418,7 @@
                     "Upload File",
                     "Saved On Server",
                     file.Name,
-                    new OperationResult("1", "200", "Saved On Server", $"Saved On Server as {file.Name}", "").ToString()
+                    new OperationResult(1, "200", "Saved On Server", $"Saved On Server as {file.Name}", "").ToString()
                     );
 
                 this.Log(logItem);
@@ -433,51 +436,51 @@
                 // send file for checking
                 var jobId = (string)this.SendRequest("CheckFileAlegeus", "", multiContent);
 
-                // loop till job is complete
-                Boolean isProcessing = true;
-                while (isProcessing)
-                {
-                    JobDetails jobDetails = GetJobResult(jobId);
-                    if (IsJobComplete(jobDetails))
-                    {
-                        // display the result
-                        OperationResult? result =(OperationResult) Utils.DeserializeJson<OperationResult>(jobDetails.JobResultDetails);
-                        if (Utils.IsBlank(result?.Error) )
-                        {
-                            var logItem2 = new LogFields(
-                                DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                                "",
-                                "Check File",
-                                "Succeeded",
-                                file.Name,
+                //// loop till job is complete
+                //Boolean isProcessing = true;
+                //while (isProcessing)
+                //{
+                //    JobDetails jobDetails = GetJobResult(jobId);
+                //    if (IsJobComplete(jobDetails))
+                //    {
+                ////         display the result
+                //        OperationResult? result =(OperationResult) Utils.DeserializeJson<OperationResult>(jobDetails.JobResultDetails);
+                //        if (Utils.IsBlank(result?.Error) )
+                //        {
+                //            var logItem2 = new LogFields(
+                //                DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                //                "",
+                //                "Check File",
+                //                "Succeeded",
+                //                file.Name,
 
-                                new OperationResult("1", "200", "Success", "", result?.Result.ToString()).ToString()
-                                );
+                //                new OperationResult(1, "200", "Success", "", result?.Result.ToString()).ToString()
+                //                );
 
-                            this.Log(logItem2);
-                        }
-                        else
-                        {
-                            var logItem2 = new LogFields(
-                                DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                                "",
-                                "Check File",
-                                "Fail",
-                                file.Name,
+                //            this.Log(logItem2);
+                //        }
+                //        else
+                //        {
+                //            var logItem2 = new LogFields(
+                //                DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                //                "",
+                //                "Check File",
+                //                "Fail",
+                //                file.Name,
 
-                                new OperationResult("0", "400", "ERROR", "", result?.Error.ToString()).ToString()
-                                );
+                //                new OperationResult(0, "400", "ERROR", "", result?.Error.ToString()).ToString()
+                //                );
 
-                            this.Log(logItem2);
-                        }
-                        // exit loop
-                        isProcessing = false;
-                    }
-                    else
-                    {
-                        Thread.Sleep(200);
-                    }
-                }
+                //            this.Log(logItem2);
+                //        }
+                //         exit loop
+                //        isProcessing = false;
+                //    }
+                //    else
+                //    {
+                //        Thread.Sleep(200);
+                //    }
+                //}
 
             }
             catch (Exception ex)
@@ -489,7 +492,7 @@
                     "Error",
                      file.Name,
 
-                    new OperationResult("0", "400", "ERROR", "", ex.ToString()).ToString()
+                    new OperationResult(0, "400", "ERROR", "", ex.ToString()).ToString()
                     );
 
                 this.Log(logItem);
