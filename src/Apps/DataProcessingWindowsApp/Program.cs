@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using CoreUtils.Classes;
+using DataProcessing;
 using StackExchange.Profiling;
 
 namespace TestApp
@@ -29,7 +33,67 @@ namespace TestApp
             //            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            // handle startup args for scheduled processing
+
+            List<Task> tasks = new List<Task> { };
+            string[] args = Environment.GetCommandLineArgs();
+
+            Boolean showUI = true;
+            foreach (string arg in args)
+            {
+                switch (arg.ToString().ToLower())
+                {
+                    case @"processcobrafiles":
+                        tasks.Add(CobraDataProcessing.ProcessAll());
+                        break;
+
+                    case @"processalegeusfiles":
+                        tasks.Add(AlegeusDataProcessing.ProcessAll());
+                        break;
+
+                    case @"retrieveftperrorlogs":
+                        tasks.Add(AlegeusErrorLog.ProcessAll());
+                        break;
+
+                    case @"copytestfiles":
+                        tasks.Add(AlegeusDataProcessing.CopyTestFiles());
+                        break;
+
+                    case @"noui":
+                        showUI = false;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            if (tasks.Count > 0)
+            {
+                // init form so we can view the logs
+                Form1 mainForm = new Form1();
+                if (showUI)
+                {
+                    mainForm.Show();
+                    Application.Run();
+                   
+                }
+
+                foreach (var task in tasks)
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        Application.DoEvents();
+                    }
+                    task.Wait();
+                }
+            }
+            else
+            {
+                Application.Run(new Form1());
+            }
+
 
             //
 #if PROFILE
@@ -38,7 +102,7 @@ namespace TestApp
 #endif
         }
 
-      
+
 
         public static void UIThreadException(object sender, ThreadExceptionEventArgs t)
         {

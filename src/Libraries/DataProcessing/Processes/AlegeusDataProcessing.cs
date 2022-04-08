@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -31,6 +32,23 @@ namespace DataProcessing
                     Thread.CurrentThread.Name = "ProcessAlegeusFiles";
                     AlegeusDataProcessing alegeusDataProcessing = new AlegeusDataProcessing();
                     alegeusDataProcessing.ProcessAllFiles();
+                }
+            );
+        }
+        public static async Task CopyTestFiles()
+        {
+            //
+            await Task.Factory.StartNew
+            (
+                () =>
+                {
+                    var directoryPath = Vars.GetProcessBaseDir();
+                    Process.Start($"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
+                    Process.Start(
+                        $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
+                    Process.Start(
+                        $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
+
                 }
             );
         }

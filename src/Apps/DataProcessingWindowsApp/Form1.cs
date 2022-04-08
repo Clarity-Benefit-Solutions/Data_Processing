@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Windows.Threading;
 using CoreUtils;
@@ -19,11 +20,13 @@ namespace TestApp
         private BindingSource _bindingSource1 = new BindingSource();
         Vars vars = new Vars();
 
-
+        
         public Form1()
         {
             SubscribeToUnhandledExceptions();
             InitializeComponent();
+
+            this.Closed += new System.EventHandler(this.Form1_Closed);
 
             this.listLogs.AutoGenerateColumns = true;
             this.listLogs.AutoSize = true;
@@ -33,6 +36,12 @@ namespace TestApp
             SubscribeToEvents();
 
 
+        }
+
+        private void Form1_Closed(object sender, EventArgs e)
+        {
+           Application.Exit();
+           Environment.Exit(1);
         }
 
         private void SubscribeToUnhandledExceptions()

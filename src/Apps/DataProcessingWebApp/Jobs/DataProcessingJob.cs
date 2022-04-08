@@ -78,11 +78,7 @@ namespace DataProcessingWebApp.Jobs
 
                     case @"copytestfiles":
                         var directoryPath = Vars.GetProcessBaseDir();
-                        Process.Start($"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
-                        Process.Start(
-                            $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
-                        Process.Start(
-                            $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
+                        await AlegeusDataProcessing.CopyTestFiles();
 
                         break;
 
