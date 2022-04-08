@@ -1,1 +1,1 @@
-"%~dp0..\bin\DataProcessingWindowsApp.exe" copytestfiles  processalegeusfiles retrieveftperrorlogs noui
+"%~dp0..\bin\DataProcessingWindowsApp.exe" copytestfiles processalegeusfiles retrieveftperrorlogs nouix
