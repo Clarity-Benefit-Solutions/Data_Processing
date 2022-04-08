@@ -29,8 +29,7 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net6.0": {
-            "targetAlias": "net6.0",
+          "net60": {
             "projectReferences": {
               "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj": {
                 "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj"
@@ -45,8 +44,7 @@
         }
       },
       "frameworks": {
-        "net6.0": {
-          "targetAlias": "net6.0",
+        "net60": {
           "dependencies": {
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",
@@ -61,25 +59,12 @@
               "version": "[3.17.3, )"
             }
           },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "win7-x86": {
+          "#import": []
         }
       }
     },
@@ -87,12 +72,7 @@
       "restore": {
         "projectUniqueName": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj",
         "projectName": "CoreUtils",
-        "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj",
-        "frameworks": {
-          "net472": {
-            "projectReferences": {}
-          }
-        }
+        "projectPath": "C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Libraries\\CoreUtils\\CoreUtils.csproj"
       },
       "frameworks": {
         "net472": {}

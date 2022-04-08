@@ -243,11 +243,14 @@ namespace CoreUtils.Classes
 
         public static bool IsInteger(string value)
         {
+            value = value?.Trim();
+
             var isNumeric = Int64.TryParse(value, out _);
             return isNumeric;
         }
         public static bool IsDouble(string value)
         {
+            value = value?.Trim();
             var isNumeric = float.TryParse(value, out _);
             return isNumeric;
         }
@@ -256,6 +259,7 @@ namespace CoreUtils.Classes
         {
             try
             {
+                email = email?.Trim();
                 var mail = new MailAddress(email);
                 return true;
             }
@@ -272,6 +276,7 @@ namespace CoreUtils.Classes
 
         public static float ToNumber(string value)
         {
+            value = value?.Trim();
             var isNumeric = float.TryParse(value, out var number);
             return number;
         }
@@ -297,6 +302,7 @@ namespace CoreUtils.Classes
         }
         public static bool IsIsoDateTime(string value, Boolean checkNotNull = true)
         {
+            value = value?.Trim();
             if (Utils.IsBlank(value))
             {
                 if (checkNotNull)
@@ -329,6 +335,7 @@ namespace CoreUtils.Classes
         }
         public static DateTime? ToDateTime(string value)
         {
+            value = value?.Trim(); 
             if (Utils.IsBlank(value))
             {
                 return null;

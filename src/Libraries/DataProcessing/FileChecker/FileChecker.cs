@@ -17,11 +17,13 @@ using DataProcessing;
 // ReSharper disable once CheckNamespace
 namespace DataProcessing
 {
+
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class FileChecker : IDisposable
     {
         //
         public static readonly string ErrorSeparator = ";";
+
         //
         private static ExtendedCache _cache = new ExtendedCache(TimeSpan.FromHours(1), TimeSpan.FromHours(5), null);
 
@@ -60,10 +62,12 @@ namespace DataProcessing
         {
             //
         }
+
         #region CheckFile
 
 
-        public OperationResult CheckFileAndProcess(FileCheckType fileCheckType, FileCheckProcessType fileCheckProcessType)
+        public OperationResult CheckFileAndProcess(FileCheckType fileCheckType,
+            FileCheckProcessType fileCheckProcessType)
         {
             // check file
             OperationResultType resultType = CheckFile(fileCheckType);
@@ -108,6 +112,7 @@ namespace DataProcessing
                     {
 
                     }
+
                     // OK result
                     return new OperationResult(1, "200", "Completed", "", "");
 
@@ -151,6 +156,7 @@ namespace DataProcessing
                     {
                         newErrorFilePath = $"{SrcFilePath}.err";
                     }
+
                     // export error file
                     var outputTableName = "[dbo].[mbi_file_table]";
                     //
@@ -406,7 +412,8 @@ namespace DataProcessing
             }
         }
 
-        private void AddErrorForRow(mbi_file_table_stage dataRow, string errCode, string errMessage, Boolean markAsCompleteFail = false)
+        private void AddErrorForRow(mbi_file_table_stage dataRow, string errCode, string errMessage,
+            Boolean markAsCompleteFail = false)
         {
             // add to dataRow so it will be saved back to DB for dataRow by dataRow data
 
@@ -418,6 +425,7 @@ namespace DataProcessing
             {
                 dataRow.error_code = ErrorSeparator + errCode;
             }
+
             if (Utils.IsBlank(dataRow.error_message))
             {
                 dataRow.error_message = errMessage;
@@ -436,6 +444,7 @@ namespace DataProcessing
             {
                 dataRow.error_message = dataRow.error_message.Substring(1);
             }
+
             //
             int key = dataRow.source_row_no ?? 0;
             if (this.fileCheckResults.ContainsKey(key))
@@ -446,16 +455,19 @@ namespace DataProcessing
             {
                 this.fileCheckResults.Add(key, $"{dataRow.source_row_no}: {errCode} : {errMessage}");
             }
+
             //
             if (markAsCompleteFail)
             {
                 this.fileCheckResults.MarkAsCompleteFail = true;
             }
         }
+
         #endregion CheckFile
 
 
         #region checkData
+
         public Boolean CheckTpaExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
         {
             var errorMessage = "";
@@ -500,7 +512,8 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckEmployerExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
+        public Boolean CheckEmployerExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
+            EdiFileFormat fileFormat)
         {
             var errorMessage = "";
             var cacheKey =
@@ -540,6 +553,7 @@ namespace DataProcessing
                         //}
                     }
                 }
+
                 //
                 _cache.Add(cacheKey, errorMessage);
             }
@@ -557,7 +571,8 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckEmployeeExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat = EdiFileFormat.Unknown)
+        public Boolean CheckEmployeeExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
+            EdiFileFormat fileFormat = EdiFileFormat.Unknown)
         {
             var errorMessage = "";
             var cacheKey =
@@ -580,7 +595,9 @@ namespace DataProcessing
                 else
                 {
                     DataTable dbResults = GetAllEmployeesForEmployer(dataRow.EmployerId);
-                    DataRow[] dbRows = dbResults.Select($"employerid = '{dataRow.EmployerId}' and employeeid = '{dataRow.EmployeeID}'");
+                    DataRow[] dbRows =
+                        dbResults.Select(
+                            $"employerid = '{dataRow.EmployerId}' and employeeid = '{dataRow.EmployeeID}'");
                     if (dbRows.Length == 0)
                     {
                         // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
@@ -634,7 +651,8 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckEmployerPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
+        public Boolean CheckEmployerPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
+            EdiFileFormat fileFormat)
         {
             var errorMessage = "";
             var cacheKey =
@@ -664,12 +682,14 @@ namespace DataProcessing
                     string filter = $"employer_id = '{dataRow.EmployerId}'";
                     if (!Utils.IsBlank(dataRow.AccountTypeCode))
                     {
-                        filter += $"and account_type_code = '{dataRow.AccountTypeCode}' ";
+                        filter += $" and account_type_code = '{dataRow.AccountTypeCode}' ";
                     }
+
                     if (!Utils.IsBlank(dataRow.PlanId))
                     {
-                        filter += $"and plan_id = '{dataRow.PlanId}' ";
+                        filter += $" and plan_id = '{dataRow.PlanId}' ";
                     }
+
                     DataRow[] dbRows = dbResults.Select(filter);
 
                     if (dbRows.Length == 0)
@@ -686,33 +706,39 @@ namespace DataProcessing
                         //DateTime actualGracePeriodEndDate = (DateTime)dbData["grace_period_end_date"];
 
                         //check start and end dates 
-                        if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) && Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
+                        if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) &&
+                            Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
                         {
                             errorMessage +=
                                 $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
                         }
 
                         //check plan dates match Alegeus
-                        if (!Utils.IsBlank(dataRow.PlanStartDate) && actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
+                        if (!Utils.IsBlank(dataRow.PlanStartDate) &&
+                            actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
                         {
                             errorMessage +=
                                 $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
                         }
 
-                        if (!Utils.IsBlank(dataRow.PlanEndDate) && actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate))
+                        if (!Utils.IsBlank(dataRow.PlanEndDate) &&
+                            actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate))
                         {
                             errorMessage =
                                 $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}";
                             ;
                         }
+
                         //check effectivedate is within plan dates
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
+                        if (!Utils.IsBlank(dataRow.EffectiveDate) &&
+                            actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage +=
                                 $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
                         }
 
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
+                        if (!Utils.IsBlank(dataRow.EffectiveDate) &&
+                            actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage =
                                 $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}";
@@ -739,7 +765,9 @@ namespace DataProcessing
             }
 
         }
-        public Boolean CheckEmployeePlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
+
+        public Boolean CheckEmployeePlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
+            EdiFileFormat fileFormat)
         {
             var errorMessage = "";
             var cacheKey =
@@ -779,15 +807,17 @@ namespace DataProcessing
                     DataTable dbResults = GetAllEmployeePlansForEmployer(dataRow.EmployerId);
 
                     // planid is not always present e.g. in deposit file
-                    string filter = $"employeeid = '{dataRow.EmployeeID}' ";
+                    string filter = $" employeeid = '{dataRow.EmployeeID}' ";
                     if (!Utils.IsBlank(dataRow.AccountTypeCode))
                     {
-                        filter += $"and plancode = '{dataRow.AccountTypeCode}' ";
+                        filter += $" and plancode = '{dataRow.AccountTypeCode}' ";
                     }
+
                     if (!Utils.IsBlank(dataRow.PlanId))
                     {
-                        filter += $"and plandesc = '{dataRow.PlanId}' ";
+                        filter += $" and plandesc = '{dataRow.PlanId}' ";
                     }
+
                     DataRow[] dbRows = dbResults.Select(filter);
 
                     if (dbRows.Length == 0)
@@ -827,34 +857,41 @@ namespace DataProcessing
                         DateTime actualPlanEndDate = (DateTime)dbData["planend"];
                         //DateTime? actualGracePeriodEndDate = Utils.ToDate(dbData["actualGracePeriodEndDate"]?.ToString());
 
+                        //todo: we need to get all alegeus plans going back many years
                         //check start and end dates 
-                        if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) && Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
+                        if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) &&
+                            Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
                         {
                             errorMessage +=
                                 $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
                         }
 
                         //check plan dates match Alegeus
-                        if (!Utils.IsBlank(dataRow.PlanStartDate) && actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
+                        if (!Utils.IsBlank(dataRow.PlanStartDate) &&
+                            actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
                         {
                             errorMessage +=
                                 $"The AccountTypeID {dataRow.AccountTypeCode} and PlanID {dataRow.PlanId} and Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
                         }
 
-                        if (!Utils.IsBlank(dataRow.PlanEndDate) && actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate))
+                        if (!Utils.IsBlank(dataRow.PlanEndDate) &&
+                            actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate))
                         {
                             errorMessage =
                                 $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}";
                             ;
                         }
+
                         //check effectivedate is within plan dates
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
+                        if (!Utils.IsBlank(dataRow.EffectiveDate) &&
+                            actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage +=
                                 $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
                         }
 
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) && actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
+                        if (!Utils.IsBlank(dataRow.EffectiveDate) &&
+                            actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage =
                                 $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}";
@@ -882,21 +919,25 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckDependentExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
+        public Boolean CheckDependentExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
+            EdiFileFormat fileFormat)
         {
             // dependent plans are linked to the employee
             return CheckEmployeeExists(dataRow, column, fileFormat);
 
         }
 
-        public Boolean CheckDependentPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
+        public Boolean CheckDependentPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
+            EdiFileFormat fileFormat)
         {
             // dependent plans are linked to the employee
             return CheckEmployeePlanExists(dataRow, column, fileFormat);
         }
+
         #endregion checkData
 
         #region cacheEmployerData
+
         private DataTable GetAllEmployers()
         {
             DataTable dbResults = new DataTable();
@@ -978,8 +1019,8 @@ namespace DataProcessing
 
             return dbResults;
 
-        }  // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
-           // cache all plans for ER to reduce number of queries to database - each query for a single plan takes around 150 ms so we aree saving significant time esp for ER witjh many EE
+        } // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
+        // cache all plans for ER to reduce number of queries to database - each query for a single plan takes around 150 ms so we aree saving significant time esp for ER witjh many EE
 
         private DataTable GetAllPlansForEmployer(string employerId)
         {
@@ -995,10 +1036,10 @@ namespace DataProcessing
                 if (PlatformType == PlatformType.Alegeus)
                 {
                     string queryString =
-                        $"select employer_id, account_type_code, plan_id, min(plan_year_start_date) as plan_year_start_date, max(plan_year_end_date) as plan_year_end_date, max(grace_period_end_date) grace_period_end_date " +
-                        $" from wc.wc_employer_plans " +
-                        $" where employer_id = '{Utils.DbQuote(employerId)}' " +
-                        $" order by employer_id, plan_id, account_type_code "
+                            $"select employer_id, account_type_code, plan_id, min(plan_year_start_date) as plan_year_start_date, max(plan_year_end_date) as plan_year_end_date, max(grace_period_end_date) grace_period_end_date " +
+                            $" from wc.wc_employer_plans " +
+                            $" where employer_id = '{Utils.DbQuote(employerId)}' " +
+                            $" order by employer_id, plan_id, account_type_code "
                         ;
                     //
                     dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
@@ -1038,27 +1079,31 @@ namespace DataProcessing
             {
                 if (PlatformType == PlatformType.Alegeus)
                 {
-                    string queryString =
+                    // get ALL plans
+                    string queryString1 =
                             $" select employerid, employeeid, plancode, plandesc, min(planstart) as planstart, max(planend) as planend " +
-                            $" from wc.wc_participant_plans " +
+                            $" from wc.vw_wc_participant_plans_combined " +
                             $" where employerid = '{Utils.DbQuote(employerId)}' " +
+                            $" group by employerid, employeeid, plancode, plandesc" +
                             $" order by employerid, employeeid, plancode, plandesc"
                         ;
                     ;
                     //
-                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
-                        queryString, null,
+
+                    DataTable dt1 = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        queryString1, null,
                         FileLogParams?.GetMessageLogParams());
 
                     // create index on EmployeeID
 
                     DataColumn[] indices = new DataColumn[3];
-                    indices[0] = (DataColumn)dbResults.Columns["employeeid"];
-                    indices[1] = (DataColumn)dbResults.Columns["plancode"];
-                    indices[2] = (DataColumn)dbResults.Columns["plandesc"];
-                    dbResults.PrimaryKey = indices;
+                    indices[0] = (DataColumn)dt1.Columns["employeeid"];
+                    indices[1] = (DataColumn)dt1.Columns["plancode"];
+                    indices[2] = (DataColumn)dt1.Columns["plandesc"];
+                    dt1.PrimaryKey = indices;
 
                     //
+                    dbResults = dt1;
                     _cache.Add(cacheKey, dbResults);
                 }
                 else
@@ -1070,6 +1115,8 @@ namespace DataProcessing
             return dbResults;
 
         }
+
+
         #endregion cacheEmployerData
 
         #region CheckUtils
@@ -1087,7 +1134,7 @@ namespace DataProcessing
             var value = orgValue;
 
             // always trim
-            value = value.Trim();
+            value = value?.Trim();
 
             //1. Check and fix format
             if (!Utils.IsBlank(value))
