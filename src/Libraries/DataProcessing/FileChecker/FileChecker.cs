@@ -30,6 +30,15 @@ namespace DataProcessing
         //
         private readonly DbConnection dbConnPortalWc;
 
+        public void ClearCache()
+        {
+            if (_cache != null)
+            {
+
+            }
+            _cache = new ExtendedCache(TimeSpan.FromHours(1), TimeSpan.FromHours(5), null);
+        }
+
         //
         public readonly FileCheckResults fileCheckResults = new FileCheckResults();
         public Boolean hasHeaderRow = false;
@@ -625,12 +634,14 @@ namespace DataProcessing
                     else
                     {
                         DataRow dbData = dbRows[0];
-                        float status = Utils.ToNumber(dbData["is_active"]?.ToString());
-                        if (status <= 0 && Utils.ToNumber(dataRow.EmployeeStatus) > 1)
-                        {
-                            errorMessage +=
-                                $"The Employee ID {dataRow.EmployeeID} has status {status} which is not valid";
-                        }
+                        // if employee exists as per our data, that is fine
+                        // do not check the file EmployeeStatus against what we havwe in the db
+                        //float status = Utils.ToNumber(dbData["is_active"]?.ToString());
+                        //if (status <= 0 && Utils.ToNumber(dataRow.EmployeeStatus) > 1)
+                        //{
+                        //    errorMessage +=
+                        //        $"The Employee ID {dataRow.EmployeeID} has status {status} which is not valid";
+                        //}
                     }
                 }
 
@@ -1036,9 +1047,10 @@ namespace DataProcessing
                 if (PlatformType == PlatformType.Alegeus)
                 {
                     string queryString =
-                            $"select employer_id, account_type_code, plan_id, min(plan_year_start_date) as plan_year_start_date, max(plan_year_end_date) as plan_year_end_date, max(grace_period_end_date) grace_period_end_date " +
-                            $" from wc.wc_employer_plans " +
+                            $"select employer_id, account_type_code, plan_id, min(plan_year_start_date) as plan_year_start_date, max(plan_year_end_date) as plan_year_end_date /* , max(grace_period_end_date) grace_period_end_date*/ " +
+                            $" from wc.vw_wc_employer_plans_combined " +
                             $" where employer_id = '{Utils.DbQuote(employerId)}' " +
+                            $" group by employer_id, account_type_code, plan_id " +
                             $" order by employer_id, plan_id, account_type_code "
                         ;
                     //
