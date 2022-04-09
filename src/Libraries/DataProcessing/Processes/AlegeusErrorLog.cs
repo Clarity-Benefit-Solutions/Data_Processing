@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -34,6 +35,10 @@ namespace DataProcessing
         }
         public void USERVERYCAUTIOUSLY_ClearAllTables()
         {
+            if (Vars.GetEnvironment() != "TEST")
+            {
+                throw new Exception($"Clear All Tables is available only in TEST Environment");
+            }
             var dbConn = Vars.dbConnDataProcessing;
             var fileLogParams = Vars.dbFileProcessingLogParams;
 
@@ -130,7 +135,7 @@ namespace DataProcessing
                     var headerType = Import.GetAlegeusHeaderTypeFromFile(destFilePath);
 
                     // add uniqueId to file so we can track it across folders and operations
-                    var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb( destFilePath, false,
+                    var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(destFilePath, false,
                         fileLogParams);
 
                     fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
@@ -152,7 +157,7 @@ namespace DataProcessing
                 {
                     // add uniqueId to file so we can track it across folders and operations
                     var headerType = Import.GetAlegeusHeaderTypeFromFile(destFilePath);
-                    var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb( destFilePath, true,
+                    var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(destFilePath, true,
                         fileLogParams);
 
                     fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,

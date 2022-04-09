@@ -20,7 +20,7 @@ namespace TestApp
         private BindingSource _bindingSource1 = new BindingSource();
         Vars vars = new Vars();
 
-        
+
         public Form1()
         {
             SubscribeToUnhandledExceptions();
@@ -35,13 +35,18 @@ namespace TestApp
             //
             SubscribeToEvents();
 
+            //
+            if (Vars.GetEnvironment() != "TEST")
+            {
+                this.cmdClearAll.Enabled = false;
+            }
 
         }
 
         private void Form1_Closed(object sender, EventArgs e)
         {
-           Application.Exit();
-           Environment.Exit(1);
+            Application.Exit();
+            Environment.Exit(1);
         }
 
         private void SubscribeToUnhandledExceptions()
@@ -81,7 +86,7 @@ namespace TestApp
             this.HandleOnFileLogOperationCallback(sender, logItem, null);
         }
 
-        private void HandleOnFileLogOperationCallback(object sender, LogFields logItem, Exception ex )
+        private void HandleOnFileLogOperationCallback(object sender, LogFields logItem, Exception ex)
         {
             if (listLogs.InvokeRequired)
             {
@@ -104,7 +109,7 @@ namespace TestApp
                 // thread - safe equivalent 
                 _bindingSource1.Add(logItem);
                 _bindingSource1.MoveLast();
-                
+
                 if (ex != null)
                 {
                     ShowThreadExceptionDialog("Unhandled Error", ex);
