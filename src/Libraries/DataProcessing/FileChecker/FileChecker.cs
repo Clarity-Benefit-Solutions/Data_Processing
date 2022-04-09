@@ -632,10 +632,11 @@ namespace DataProcessing
                             //
                             return false;
                         }
-
-                        errorMessage +=
-                            $"The Employee ID {dataRow.EmployeeID} could not be found for Employer Id {dataRow.EmployerId}";
-                        ;
+                        else
+                        {
+                            errorMessage +=
+                                $"The Employee ID {dataRow.EmployeeID} could not be found for Employer Id {dataRow.EmployerId}";
+                        }
                     }
                     else
                     {
