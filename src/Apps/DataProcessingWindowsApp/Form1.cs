@@ -323,7 +323,10 @@ namespace TestApp
                 var eventArgs = EventArgs.Empty;
                 cmdCopyTestFiles_Click(this, eventArgs);
                 cmdClearLog_Click(this, eventArgs);
-                cmdClearAll_Click(this, eventArgs);
+                if (Vars.GetEnvironment() != "TEST")
+                {
+                    this.cmdClearAll.Enabled = false;
+                }
                 await CobraDataProcessing.ProcessAll();
                 await AlegeusDataProcessing.ProcessAll();
                 await AlegeusErrorLog.ProcessAll();
