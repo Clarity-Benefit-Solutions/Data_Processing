@@ -56,8 +56,6 @@ namespace DataProcessing
         public void ProcessAllFiles()
         {
 
-
-
             //
             var fileLogParams = Vars.dbFileProcessingLogParams;
 

@@ -403,6 +403,8 @@ namespace DataProcessing
 
         public string alegeusFilesPreCheckHoldAllRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckHoldAllPath")}");
 
+        public string alegeusFilesPreCheckHoldAllOriginalRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckHoldAllPath")}");
+
         #endregion
 
         #region ErrorLogPaths

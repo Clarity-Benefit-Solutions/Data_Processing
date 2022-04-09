@@ -50,6 +50,7 @@ namespace DataProcessing
             FileOperationLogParams _fileLogParams, OnErrorCallback _onErrorCallback) : base()
         {
             this.SrcFilePath = _srcFilePath;
+            this.OriginalSrcFilePath = _srcFilePath;
             this.PlatformType = _platformType;
             this.FileLogParams = _fileLogParams;
             this.DbConn = _dbConn;
@@ -58,6 +59,7 @@ namespace DataProcessing
         }
 
         public string SrcFilePath { get; set; }
+        public string OriginalSrcFilePath { get; set; }
         public PlatformType PlatformType { get; set; }
         public EdiFileFormat EdiFileFormat { get; set; }
         public FileOperationLogParams FileLogParams { get; set; }
@@ -81,7 +83,11 @@ namespace DataProcessing
             // check file
             OperationResultType resultType = CheckFile(fileCheckType);
 
-            // move file
+            // 1. ?? export corrected data to this.SrcFilePath
+
+
+
+            // 2. move source mbi file
             var fileName = Path.GetFileName(this.SrcFilePath);
             var newFilePath = this.SrcFilePath;
             var newErrorFilePath = "";
@@ -166,7 +172,7 @@ namespace DataProcessing
                         newErrorFilePath = $"{SrcFilePath}.err";
                     }
 
-                    // export error file
+                    // 2. export error file
                     var outputTableName = "[dbo].[mbi_file_table]";
                     //
                     var queryStringExp =
@@ -378,7 +384,7 @@ namespace DataProcessing
                 var orgValue = dataRow.ColumnValue(column.SourceColumn) ?? "";
 
                 // 1. valid Format and general rules check - save corrected value to row
-                var formattedValue = EnsureValueIsOfFormatAndMatchesRules(dataRow, column);
+                var formattedValue = EnsureValueIsOfFormatAndMatchesRules(dataRow, column, mappings);
 
                 // 2. specific column checking against business rules & DB
                 switch (column.SourceColumn?.ToLowerInvariant() ?? "")
@@ -1141,7 +1147,7 @@ namespace DataProcessing
         private static readonly Regex regexNumericAndDashes = new Regex(@"[^0-9\-]");
         private static readonly Regex regexDouble = new Regex("[^0-9.]");
 
-        public string EnsureValueIsOfFormatAndMatchesRules(mbi_file_table_stage dataRow, TypedCsvColumn column)
+        public string EnsureValueIsOfFormatAndMatchesRules(mbi_file_table_stage dataRow, TypedCsvColumn column, TypedCsvSchema mappings)
         {
             var orgValue = dataRow.ColumnValue(column.SourceColumn) ?? "";
             var value = orgValue;
@@ -1289,6 +1295,7 @@ namespace DataProcessing
             if (value != orgValue)
             {
                 dataRow.SetColumnValue(column.SourceColumn, value);
+                dataRow.data_row = GetDelimitedDataRow(dataRow, mappings);
             }
 
 
@@ -1338,6 +1345,42 @@ namespace DataProcessing
 
             return value;
 
+        }
+
+        private string GetDelimitedDataRow(mbi_file_table_stage dataRow, TypedCsvSchema mappings)
+        {
+            //todo: verify: return delimited values by modified columns
+            string value = "";
+
+            foreach (TypedCsvColumn column in mappings)
+            {
+                switch (column.SourceColumn?.ToLowerInvariant() ?? "")
+                {
+                    case "":
+                    case "source_row_no":
+                    case "error_row":
+                    case "data_row":
+                    case "res_file_name":
+                    case "mbi_file_name":
+                    case "check_type":
+                        continue;
+                    //
+                    default:
+                        break;
+                }
+
+                string fieldValue = dataRow.ColumnValue(column.SourceColumn);
+                if (fieldValue?.IndexOf(",", StringComparison.InvariantCulture) > 0)
+                {
+                    fieldValue = $"\"{fieldValue}\"";
+                }
+                value += $",{fieldValue}";
+            }
+
+            // remove first char
+            value = value.Substring(1);
+            //
+            return value;
         }
         #endregion
 
