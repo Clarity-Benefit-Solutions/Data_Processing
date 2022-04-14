@@ -125,16 +125,23 @@ namespace DataProcessing
             fileLogParams.SetSourceFolderName(Vars.remoteAlegeusFtpRootPath);
             //
             DbUtils.LogFileOperation(fileLogParams);
+            string tempDownLoadPath = "/" + Path.GetTempPath().Replace("\\", "/");
 
             // todo: delete the file after download?
             ftpConn.CopyOrMoveFiles(
                 //FtpFileOperation.DownloadAndDelete,
                 FtpFileOperation.Download,
                 new string[] { Vars.remoteAlegeusFtpRootPath }, false,
-                new string[] { "Enrolled Participant Report.csv.pgp" },
-                Vars.alegeusParticipantEnrollmentFilesDownloadPath, "", "",
+                new string[] { "Enrolled_Participant_Report_*.csv.pgp"},
+                tempDownLoadPath, "", "",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
+
+                    // move to final path
+                    string downloadedFilePath =
+                        $"{Vars.alegeusParticipantEnrollmentFilesDownloadPath}/{Path.GetFileName(destFilePath)}";
+                    //
+                    FileUtils.MoveFile(destFilePath,downloadedFilePath, null, null);
 
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                         Path.GetFileName(destFilePath), destFilePath, $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
@@ -171,7 +178,7 @@ namespace DataProcessing
                 new string[] { Vars.alegeusParticipantEnrollmentFilesDownloadPath },
                 DirectoryIterateType.Files,
                 false,
-                new string[] { "Enrolled Participant Report.csv.pgp" },
+                new string[] { "Enrolled_Participant_Report*.csv.pgp" },
                 (srcFilePath, destFilePath, fileContents) =>
                 {
                     // just remove the last .pgp

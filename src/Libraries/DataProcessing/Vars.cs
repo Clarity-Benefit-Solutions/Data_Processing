@@ -305,7 +305,7 @@ namespace DataProcessing
                     }
                     else if (Environment == "PROD")
                     {
-                        _remoteAlegeusFtpConnection = new SFtpConnection("ftp.wealthcareadmin.com", 22, "benefledi", "VzVR4s4y@");
+                        _remoteAlegeusFtpConnection = new SFtpConnection("ftp.wealthcareadmin.com", 22, "benefledi", "VzVR4s4y");
                     }
                     else
                     {

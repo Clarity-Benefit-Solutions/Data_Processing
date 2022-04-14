@@ -352,7 +352,7 @@ namespace CoreUtils.Classes
             filePath = filePath.Replace("\\", "/");
             filePath = filePath.Replace("//", "/");
             // remove last slash
-            if (Utils.Right(filePath, 1) == "/")
+            if (filePath.Length > 1 && Utils.Right(filePath, 1) == "/")
             {
                 filePath = filePath.Remove(filePath.Length - 1, 1);
             }
