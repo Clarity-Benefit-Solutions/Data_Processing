@@ -143,6 +143,9 @@ namespace CoreUtils.Classes
                 EnsureConnection();
                 //
                 if (client.Exists(directory) == false) client.CreateDirectory(directory);
+
+                client.ChangeDirectory(directory);
+
                 // get all files in dir
                 var ftpFiles = client.ListDirectory(directory);
 

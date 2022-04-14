@@ -125,14 +125,14 @@ namespace DataProcessing
             fileLogParams.SetSourceFolderName(Vars.remoteAlegeusFtpRootPath);
             //
             DbUtils.LogFileOperation(fileLogParams);
-            string tempDownLoadPath = "/" + Path.GetTempPath().Replace("\\", "/");
+            string tempDownLoadPath = FileUtils.FixPath( Path.GetTempPath());
 
             // todo: delete the file after download?
             ftpConn.CopyOrMoveFiles(
                 //FtpFileOperation.DownloadAndDelete,
                 FtpFileOperation.Download,
                 new string[] { Vars.remoteAlegeusFtpRootPath }, false,
-                new string[] { "Enrolled_Participant_Report_*.csv.pgp"},
+                new string[] { "Enrolled_Participant_Report_*.csv.pgp" },
                 tempDownLoadPath, "", "",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
@@ -141,7 +141,7 @@ namespace DataProcessing
                     string downloadedFilePath =
                         $"{Vars.alegeusParticipantEnrollmentFilesDownloadPath}/{Path.GetFileName(destFilePath)}";
                     //
-                    FileUtils.MoveFile(destFilePath,downloadedFilePath, null, null);
+                    FileUtils.MoveFile(destFilePath, downloadedFilePath, null, null);
 
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                         Path.GetFileName(destFilePath), destFilePath, $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
