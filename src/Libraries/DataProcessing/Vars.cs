@@ -452,6 +452,9 @@ namespace DataProcessing
         public string alegeusFilesPreCheckHoldAllRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckHoldAllPath")}");
 
         public string alegeusFilesPreCheckHoldAllOriginalRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckHoldAllPath")}");
+        public string alegeusParticipantEnrollmentFilesDownloadPath => FileUtils.FixPath($"{GetAppSetting("alegeusParticipantEnrollmentFilesDownloadPath")}");
+        public string alegeusParticipantEnrollmentFilesDecryptedPath => FileUtils.FixPath($"{GetAppSetting("alegeusParticipantEnrollmentFilesDecryptedPath")}");
+
 
         #endregion
 
