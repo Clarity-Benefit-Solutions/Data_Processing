@@ -24,6 +24,35 @@ namespace DataProcessing
 {
     public class Vars
     {
+        private static string _Environment = null;
+        public static string Environment
+        {
+            get
+            {
+                return _Environment ?? "TEST";
+            }
+            set
+            {
+                if (_Environment != null)
+                {
+                    throw new Exception($"Environment can be set only once. It is currently {_Environment}");
+                }
+
+                _Environment = value;
+            }
+        }
+        private static Boolean _UseVPNToConnectToPortal = false;
+        public static Boolean UseVPNToConnectToPortal
+        {
+            get
+            {
+                return _UseVPNToConnectToPortal;
+            }
+            set
+            {
+                _UseVPNToConnectToPortal = value;
+            }
+        }
 
         #region DBDataProcessing
 
@@ -39,7 +68,7 @@ namespace DataProcessing
                 return FileUtils.FixPath(AppDomain.CurrentDomain.BaseDirectory);
             }
             else
-            {   
+            {
                 //todo: modify for PROD
                 var processModule = Process.GetCurrentProcess().MainModule;
                 if (processModule != null)
@@ -116,11 +145,15 @@ namespace DataProcessing
             get
             {
 
-#if (VPN)
-                return "PortalWcVPN";
-#else
-                return "PortalWc";
-#endif
+                if (UseVPNToConnectToPortal)
+                {
+                    return "PortalWcVPN";
+                }
+                else
+                {
+                    return "PortalWc";
+                }
+
             }
         }
         public string ConnStrNameHangfire
@@ -228,7 +261,7 @@ namespace DataProcessing
         public string ConvertFilePathFromProdToCtx(string prodFilePath)
         {
             if (Utils.IsBlank(prodFilePath)) return prodFilePath;
-            if (GetEnvironment() == "PROD")
+            if (Environment == "PROD")
             {
                 return prodFilePath;
             }
@@ -266,8 +299,18 @@ namespace DataProcessing
             {
                 if (_remoteAlegeusFtpConnection == null)
                 {
-                    _remoteAlegeusFtpConnection = new SFtpConnection("BE015", 22, "alegeus", "3214@Clarity");
-                    //_remoteAlegeusFtpConnection = new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
+                    if (Environment == "TEST")
+                    {
+                        _remoteAlegeusFtpConnection = new SFtpConnection("BE015", 22, "alegeus", "3214@Clarity");
+                    }
+                    else if (Environment == "PROD")
+                    {
+                        _remoteAlegeusFtpConnection = new SFtpConnection("ftp.wealthcareadmin.com", 22, "benefledi", "VzVR4s4y@");
+                    }
+                    else
+                    {
+                        throw new Exception($"Sorry, Current Environemtn {Environment} is Not valid ");
+                    }
                 }
 
                 return _remoteAlegeusFtpConnection;
@@ -299,8 +342,19 @@ namespace DataProcessing
         {
             get
             {
-                _remoteCobraFtpConnection = new SFtpConnection("BE015", 21, "alegeus", "a");
-                //_remoteCobraFtpConnection = new SFtpConnection("ftp.wealthcareadmin.com", 21, "benefledi", "VzVR4s4y");;
+                if (Environment == "TEST")
+                {
+                    _remoteCobraFtpConnection = new SFtpConnection("BE015", 22, "cobra", "3214@Clarity");
+                }
+                else if (Environment == "PROD")
+                {
+                    _remoteCobraFtpConnection = new SFtpConnection("xxx", 22, "xx", "xx@");
+                }
+                else
+                {
+                    throw new Exception($"Sorry, Current Environemtn {Environment} is Not valid ");
+                }
+
 
                 return _remoteCobraFtpConnection;
             }
@@ -313,19 +367,13 @@ namespace DataProcessing
 
         private static DataTable appSettings;
 
-        public static string GetEnvironment()
-        {
-            return "TEST";
-            //return "PROD";
-
-        }
 
         public string GetAppSetting(string settingName)
         {
             if (appSettings == null)
             {
                 appSettings = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnDataProcessing,
-                    "select * from dbo.app_settings order by environment, setting_name", null, null, false, true);
+                    "select * from dbo.app_settings where is_active = 1 order by environment, setting_name", null, null, false, true);
 
                 if (appSettings == null)
                 {
@@ -335,7 +383,7 @@ namespace DataProcessing
             }
 
             // try exact environment
-            string filter = $"environment In ('{GetEnvironment()}') and setting_name = '{settingName}' ";
+            string filter = $"environment In ('{Environment}') and setting_name = '{settingName}' ";
 
             DataRow[] dbRows = appSettings.Select(filter);
             if (dbRows.Length == 0)
@@ -348,7 +396,7 @@ namespace DataProcessing
 
             if (dbRows.Length == 0)
             {
-                string message = $"The App Setting {settingName} could not be found for environments ({GetEnvironment()}, 'PROD')";
+                string message = $"The App Setting {settingName} could not be found for environments ({Environment}, 'PROD')";
                 throw new Exception(message);
             }
             else

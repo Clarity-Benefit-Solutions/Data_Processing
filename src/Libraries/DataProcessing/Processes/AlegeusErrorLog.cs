@@ -35,7 +35,7 @@ namespace DataProcessing
         }
         public void USERVERYCAUTIOUSLY_ClearAllTables()
         {
-            if (Vars.GetEnvironment() != "TEST")
+            if (Vars.Environment != "TEST")
             {
                 throw new Exception($"Clear All Tables is available only in TEST Environment");
             }

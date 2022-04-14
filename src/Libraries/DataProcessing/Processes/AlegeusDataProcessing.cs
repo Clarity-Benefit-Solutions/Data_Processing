@@ -120,7 +120,7 @@ namespace DataProcessing
             var tableName = "dbo.[FTP_Source_Folders]";
 
             // run query - we take only by environment so we can test 
-            var queryString = $"Select * from {tableName} where environment = '{Vars.GetEnvironment()}' order by folder_name;";
+            var queryString = $"Select * from {tableName} where environment = '{Vars.Environment}' and is_active = 1  order by folder_name;";
             var dtHeaderFolders = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null);
             
             //3. for each header folder, get file and move to header1 folder

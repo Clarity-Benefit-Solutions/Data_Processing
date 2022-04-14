@@ -36,7 +36,7 @@ namespace TestApp
             SubscribeToEvents();
 
             //
-            if (Vars.GetEnvironment() != "TEST")
+            if (Vars.Environment != "TEST")
             {
                 this.cmdClearAll.Enabled = false;
             }
@@ -323,7 +323,7 @@ namespace TestApp
                 var eventArgs = EventArgs.Empty;
                 cmdCopyTestFiles_Click(this, eventArgs);
                 cmdClearLog_Click(this, eventArgs);
-                if (Vars.GetEnvironment() != "TEST")
+                if (Vars.Environment != "TEST")
                 {
                     this.cmdClearAll.Enabled = false;
                 }

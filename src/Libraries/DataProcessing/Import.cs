@@ -259,7 +259,7 @@ namespace DataProcessing
 
             if (Utils.IsTestFile(srcFileName))
             {
-                testMarker = $"_TEST_";
+                testMarker = $"TEST_";
             }
 
             string platformCode = "";

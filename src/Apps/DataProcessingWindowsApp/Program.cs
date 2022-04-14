@@ -44,6 +44,22 @@ namespace TestApp
             {
                 switch (arg.ToString().ToLower())
                 {
+                    case @"test":
+                        Vars.Environment = "TEST";
+                        break;
+
+                    case @"prod":
+                        Vars.Environment = "PROD";
+                        break;
+
+                    case @"usevpntoconnecttoportal":
+                        Vars.UseVPNToConnectToPortal = true;
+                        break;
+
+                    case @"":
+                        tasks.Add(CobraDataProcessing.ProcessAll());
+                        break;
+
                     case @"processcobrafiles":
                         tasks.Add(CobraDataProcessing.ProcessAll());
                         break;
@@ -77,7 +93,7 @@ namespace TestApp
                 {
                     mainForm.Show();
                     Application.Run();
-                   
+
                 }
 
                 foreach (var task in tasks)
