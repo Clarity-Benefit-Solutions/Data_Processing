@@ -1,2 +1,14 @@
 # do not ignore this dir i.e. add even if empty
+**/bin/
+**/bin*/
+**/obj/
+**/dist/
 
+# Applications
+**/*.app
+**/*.exe
+**/*.war
+**/*.pdb
+**/*.obj
+**/*.dll
+**/*.cache
