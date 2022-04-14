@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,6 +34,11 @@ namespace TestApp
             //            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // write output to logfile
+            StreamWriter swConsoleOut = new StreamWriter($"{Vars.GetProcessBaseDir()}/_Output.log", true);
+            swConsoleOut.AutoFlush = true;
+            Console.SetOut(swConsoleOut);
 
             // handle startup args for scheduled processing
 
@@ -109,7 +115,6 @@ namespace TestApp
             {
                 Application.Run(new Form1());
             }
-
 
             //
 #if PROFILE

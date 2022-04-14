@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using System.IO;
 using CoreUtils;
 using CoreUtils.Classes;
 using DataProcessing;
@@ -11,13 +12,11 @@ using DataProcessing;
 namespace TestApp
 {
 
-
-
-
     public partial class Form1 : Form
     {
         private Dispatcher _uiDispatcher = Dispatcher.CurrentDispatcher;
         private BindingSource _bindingSource1 = new BindingSource();
+
         Vars vars = new Vars();
 
 
@@ -31,6 +30,7 @@ namespace TestApp
             this.listLogs.AutoGenerateColumns = true;
             this.listLogs.AutoSize = true;
             this.listLogs.DataSource = _bindingSource1;
+
 
             //
             SubscribeToEvents();
@@ -120,7 +120,7 @@ namespace TestApp
             }
             else
             {
-                Console.WriteLine(logItem.ToString());
+                Console.Out.WriteLine(logItem.ToString());
             }
 
         }
