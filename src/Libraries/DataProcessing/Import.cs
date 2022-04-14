@@ -413,17 +413,6 @@ namespace DataProcessing
                             default:
                                 return HeaderType.Old;
                         }
-                    case EdiFileFormat.AlegeusEmployeeDeposit:
-                        switch (columnCount)
-                        {
-                            case 11:
-                                // same cols for New and Segemented Funding!
-                                return HeaderType.Old;
-
-                            // default is Old
-                            default:
-                                return HeaderType.Old;
-                        }
                     case EdiFileFormat.AlegeusEnrollment:
                         switch (columnCount)
                         {
@@ -439,8 +428,19 @@ namespace DataProcessing
                             default:
                                 return HeaderType.Old;
                         }
+                    //case EdiFileFormat.AlegeusEmployeeDeposit:
+                    //    switch (columnCount)
+                    //    {
+                    //        case 11:
+                    //            // same cols for New and Segemented Funding!
+                    //            return HeaderType.Old;
+
+                    //        // default is Old
+                    //        default:
+                    //            return HeaderType.Old;
+                    //    }
                     default:
-                        return HeaderType.Old;
+                        return HeaderType.New;
                 }
             }
 

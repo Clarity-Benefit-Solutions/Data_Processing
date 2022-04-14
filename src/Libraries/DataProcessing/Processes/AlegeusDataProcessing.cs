@@ -122,7 +122,7 @@ namespace DataProcessing
             // run query - we take only by environment so we can test 
             var queryString = $"Select * from {tableName} where environment = '{Vars.Environment}' and is_active = 1  order by folder_name;";
             var dtHeaderFolders = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null);
-            
+
             //3. for each header folder, get file and move to header1 folder
             foreach (DataRow row in dtHeaderFolders.Rows)
             {
@@ -137,7 +137,7 @@ namespace DataProcessing
                 {
                     // change from PROD source dir to Ctx source dir
                     rowFolderName = Vars.ConvertFilePathFromProdToCtx(rowFolderName);
-                   
+
                     // we need to set these first before setting folderName
                     var fileLogParams1 = Vars.dbFileProcessingLogParams;
 
@@ -154,7 +154,7 @@ namespace DataProcessing
                     DbUtils.LogFileOperation(fileLogParams);
 
 
-                   //
+                    //
                     // 3a. set unique fileNames for each file in source folder and add to file Log
                     FileUtils.IterateDirectory(
                         rowFolderName, DirectoryIterateType.Files, false, "*.*",
@@ -169,16 +169,17 @@ namespace DataProcessing
                             {
                                 FileUtils.MoveFile(srcFilePath, uniformFilePath, null, null);
                             }
-                            
+
                             // add uniqueId to file so we can track it across folders and operations
                             var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(uniformFilePath, true,
                                 fileLogParams1);
 
-                            fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
-                                Path.GetFileName(uniqueIdFilePath), "",
+                            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                                Path.GetFileName(uniqueIdFilePath), uniqueIdFilePath,
                                 $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                                 "Success", $"Found Source File");
-                            //DbUtils.LogFileOperation(FileLogParams);
+                            DbUtils.LogFileOperation(fileLogParams);
+
                         },
                         (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
                     );

@@ -199,6 +199,7 @@ namespace DataProcessing
 
                             Boolean processThisFile = false;
                             string destDirPath = "";
+                            
                             // look inside file to dtermine if it is a COBRA file
                             if (fileInfo.Extension == ".pgp")
                             {

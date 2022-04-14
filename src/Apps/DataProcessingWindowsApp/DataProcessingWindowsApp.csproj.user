@@ -4,6 +4,6 @@
     <ProjectView>ShowAllFiles</ProjectView>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>PRODx ProcessParticipantEnrollmentFilesx nouix</StartArguments>
+    <StartArguments>TEST UsevpntoconnecttoPortalx PRODx ProcessParticipantEnrollmentFilesx nouix</StartArguments>
   </PropertyGroup>
 </Project>
