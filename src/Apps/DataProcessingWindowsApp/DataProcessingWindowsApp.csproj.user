@@ -4,6 +4,6 @@
     <ProjectView>ShowAllFiles</ProjectView>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>PROD ProcessParticipantEnrollmentFiles</StartArguments>
+    <StartArguments>TEST ProcessParticipantEnrollmentFilesxx</StartArguments>
   </PropertyGroup>
 </Project>
