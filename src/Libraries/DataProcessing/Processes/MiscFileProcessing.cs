@@ -57,7 +57,7 @@ namespace DataProcessing
 
             //ParticipantEnrollmentGetFtpFilesFromAlegeus
             ParticipantEnrollmentGetFtpFilesFromAlegeus(ftpConn, fileLogParams);
-            
+
             //ParticipantEnrollmentDecryptFiles
             ParticipantEnrollmentDecryptFiles(ftpConn, fileLogParams);
 
@@ -114,7 +114,7 @@ namespace DataProcessing
 
             //decrypt all files
             FileUtils.IterateDirectory(
-                new string[] { Vars.alegeusParticipantEnrollmentFilesDownloadPath }, 
+                new string[] { Vars.alegeusParticipantEnrollmentFilesDownloadPath },
                 DirectoryIterateType.Files,
                 false,
                 new string[] { "Enrolled Participant Report.csv.pgp" },
@@ -123,14 +123,34 @@ namespace DataProcessing
                     // just remove the last .pgp
                     destFilePath = Path.GetFileNameWithoutExtension(srcFilePath);
 
+                    //
+                    string[] keyDetails = new string[] { };
+
                     // decrypt the file and copy decrypted file to destPath
+                    PgpUtils.PgpDecryptFile(srcFilePath, destFilePath, keyDetails,
+                        (srcFilePath, destFilePath, dummy2) =>
+                        {
+                            // log
+                            fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), srcFilePath,
+                                Path.GetFileName(destFilePath), destFilePath, $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+                                "Success", $"Decrypted Downloaded File");
+
+                            DbUtils.LogFileOperation(fileLogParams);
+
+                        },
+                        (arg1, arg2, ex) =>
+                        {
+                            // log
+                            fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), srcFilePath,
+                                Path.GetFileName(destFilePath), destFilePath, $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+                                "ERROR", $"Error ion Decrypting Downloaded File");
+
+                            DbUtils.LogFileOperation(fileLogParams);
+                            DbUtils.LogError(arg1, arg2, ex, fileLogParams);
+                        }
+                    );
 
 
-                    // log
-                    fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), srcFilePath,
-                        Path.GetFileName(destFilePath), destFilePath, $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                        "Success", $"Decrypted Downloaded File");
-                    DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) =>
                 {
@@ -139,7 +159,7 @@ namespace DataProcessing
                 }
             );
 
-            
+
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
@@ -184,7 +204,7 @@ namespace DataProcessing
                 }
             );
 
-            
+
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
