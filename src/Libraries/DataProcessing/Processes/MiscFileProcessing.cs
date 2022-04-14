@@ -184,7 +184,7 @@ namespace DataProcessing
                 {
                     FileUtils.EnsurePathExists(Vars.alegeusParticipantEnrollmentFilesDecryptedPath);
                     // just remove the last .pgp
-                    destFilePath = $" {Vars.alegeusParticipantEnrollmentFilesDecryptedPath}/{Path.GetFileNameWithoutExtension(srcFilePath)}";
+                    destFilePath = $"{Vars.alegeusParticipantEnrollmentFilesDecryptedPath}/{Path.GetFileNameWithoutExtension(srcFilePath)}";
                     FileUtils.DeleteFileIfExists(destFilePath, null, null);
                     //
                     string privateKeyFileName = Utils.GetAppSetting("AlegeusPgpKey1Filepath");
@@ -195,11 +195,22 @@ namespace DataProcessing
                         (srcFilePath, destFilePath, dummy2) =>
                         {
                             // log
-                            fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), srcFilePath,
+                            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                                 Path.GetFileName(destFilePath), destFilePath, $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                                "Success", $"Decrypted Downloaded File");
+                                "Success", $"Decrypted Downloaded Encrypted File");
 
                             DbUtils.LogFileOperation(fileLogParams);
+
+                            // move processed encrypted file to archive
+                            string archiveFilePath = $"{Path.GetDirectoryName(srcFilePath)}/Archive/{Path.GetFileName(srcFilePath)}";
+                            FileUtils.MoveFile(srcFilePath, archiveFilePath, null, null);
+                            // log
+                            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                                Path.GetFileName(archiveFilePath), archiveFilePath, $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+                                "Success", $"Archived Downloaded Encrypted File");
+
+                            DbUtils.LogFileOperation(fileLogParams);
+
 
                         },
                         (arg1, arg2, ex) =>
