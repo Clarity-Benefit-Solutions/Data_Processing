@@ -125,7 +125,7 @@ namespace DataProcessing
             fileLogParams.SetSourceFolderName(Vars.remoteAlegeusFtpRootPath);
             //
             DbUtils.LogFileOperation(fileLogParams);
-            string tempDownLoadPath = FileUtils.FixPath( Path.GetTempPath());
+            string tempDownLoadPath = FileUtils.FixPath(Path.GetTempPath());
 
             // todo: delete the file after download?
             ftpConn.CopyOrMoveFiles(
@@ -169,9 +169,10 @@ namespace DataProcessing
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            fileLogParams.SetSourceFolderName(Vars.remoteAlegeusFtpRootPath);
+            fileLogParams.SetSourceFolderName(Vars.alegeusParticipantEnrollmentFilesDownloadPath);
             //
             DbUtils.LogFileOperation(fileLogParams);
+            FileUtils.EnsurePathExists(Vars.alegeusParticipantEnrollmentFilesDownloadPath);
 
             //decrypt all files
             FileUtils.IterateDirectory(
@@ -181,9 +182,10 @@ namespace DataProcessing
                 new string[] { "Enrolled_Participant_Report*.csv.pgp" },
                 (srcFilePath, destFilePath, fileContents) =>
                 {
+                    FileUtils.EnsurePathExists(Vars.alegeusParticipantEnrollmentFilesDecryptedPath);
                     // just remove the last .pgp
-                    destFilePath = Path.GetFileNameWithoutExtension(srcFilePath);
-
+                    destFilePath = $" {Vars.alegeusParticipantEnrollmentFilesDecryptedPath}/{Path.GetFileNameWithoutExtension(srcFilePath)}";
+                    FileUtils.DeleteFileIfExists(destFilePath, null, null);
                     //
                     string privateKeyFileName = Utils.GetAppSetting("AlegeusPgpKey1Filepath");
                     string passPhrase = Utils.GetAppSetting("AlegeusPgpKey1Passphrase"); ;
