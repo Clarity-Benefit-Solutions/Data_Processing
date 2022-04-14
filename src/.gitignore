@@ -1,3 +1,4 @@
 # do not ignore this dir i.e. add even if empty
-*
-!.gitignore
+**/bin/*
+**/bin*/*
+**/obj/*
