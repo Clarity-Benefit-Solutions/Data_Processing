@@ -60,6 +60,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\..\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="CsvHelper, Version=27.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.27.2.1\lib\net47\CsvHelper.dll</HintPath>
     </Reference>
@@ -268,6 +271,7 @@
   <ItemGroup>
     <Compile Include="Classes\ExtendedCache.cs" />
     <Compile Include="Classes\JsonUtils.cs" />
+    <Compile Include="Classes\PgpHelpers.cs" />
     <Compile Include="Classes\PgpUtils.cs" />
     <Compile Include="Classes\SFtpConnection.cs" />
     <Compile Include="Classes\TypedCsvSchema.cs" />

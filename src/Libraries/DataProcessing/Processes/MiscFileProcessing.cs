@@ -30,14 +30,28 @@ namespace DataProcessing
             (
                 () =>
                 {
-                    Thread.CurrentThread.Name = "ProcessCobraFiles";
+                    Thread.CurrentThread.Name = "ProcessMiscFiles";
                     MiscFileProcessing fileProcessing = new MiscFileProcessing();
-                    fileProcessing.ProcessParticipantEnrollmentFiles();
+                    fileProcessing.ProcessParticipantEnrollmentFilesInternal();
                 }
             );
         }
 
-        public void ProcessParticipantEnrollmentFiles()
+        public static async Task ProcessParticipantEnrollmentFiles()
+        {
+            //
+            await Task.Factory.StartNew
+            (
+                () =>
+                {
+                    Thread.CurrentThread.Name = "ProcessMiscFiles";
+                    MiscFileProcessing fileProcessing = new MiscFileProcessing();
+                    fileProcessing.ProcessParticipantEnrollmentFilesInternal();
+                }
+            );
+        }
+
+        public void ProcessParticipantEnrollmentFilesInternal()
         {
             // init logParams
             MessageLogParams logParams = Vars.dbMessageLogParams;
@@ -61,39 +75,79 @@ namespace DataProcessing
             //ParticipantEnrollmentDecryptFiles
             ParticipantEnrollmentDecryptFiles(ftpConn, fileLogParams);
 
-            //ParticipantEnrollmentImportFiles
-            ParticipantEnrollmentImportFiles(dbConn, fileLogParams);
+            ////ParticipantEnrollmentImportFiles
+            //ParticipantEnrollmentImportFiles(dbConn, fileLogParams);
         }
 
         protected void ParticipantEnrollmentDeleteStagingFiles(DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
-            return;
 
-            //1. Clear all files in AutomatedHeaderV1_Files
-            //echo y| del  G:\FTP\AutomatedHeaderV1_Files\*.*
-            //
+            ////1. Clear all files in AutomatedHeaderV1_Files
+            ////echo y| del  G:\FTP\AutomatedHeaderV1_Files\*.*
+            ////
 
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
+            ////
+            //FileUtils.DeleteFiles(new[] { Vars.AlegeusErrorLogMbiFilesRoot, Vars.AlegeusErrorLogResFilesRoot }
+            //    , false
+            //    , new[] { "*.mbi", "*.dne", "*.txt", "*.res" },
+            //    (srcFilePath, destFilePath, dummy2) =>
+            //    {
+            //        // add to fileLog
+            //        fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+            //            Path.GetFileName(destFilePath), destFilePath, "ErrorLog-DeleteStagingFiles", "Success",
+            //            "Delete File in Dir");
+            //        // do not log - gives too many lines
+            //        //DbUtils.LogFileOperation(FileLogParams);
+            //    },
+            //    (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+            //);
+
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
+        }
+
+
+        protected void ParticipantEnrollmentGetFtpFilesFromAlegeus(SFtpConnection ftpConn,
+            FileOperationLogParams fileLogParams)
+        {
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetSourceFolderName(Vars.remoteAlegeusFtpRootPath);
+            //
             DbUtils.LogFileOperation(fileLogParams);
-            //
-            //
-            FileUtils.DeleteFiles(new[] { Vars.AlegeusErrorLogMbiFilesRoot, Vars.AlegeusErrorLogResFilesRoot }
-                , false
-                , new[] { "*.mbi", "*.dne", "*.txt", "*.res" },
-                (srcFilePath, destFilePath, dummy2) =>
+
+            // todo: delete the file after download?
+            ftpConn.CopyOrMoveFiles(
+                //FtpFileOperation.DownloadAndDelete,
+                FtpFileOperation.Download,
+                new string[] { Vars.remoteAlegeusFtpRootPath }, false,
+                new string[] { "Enrolled Participant Report.csv.pgp" },
+                Vars.alegeusParticipantEnrollmentFilesDownloadPath, "", "",
+                (srcFilePath, destFilePath, fileContents) =>
                 {
-                    // add to fileLog
+
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                        Path.GetFileName(destFilePath), destFilePath, "ErrorLog-DeleteStagingFiles", "Success",
-                        "Delete File in Dir");
-                    // do not log - gives too many lines
-                    //DbUtils.LogFileOperation(FileLogParams);
+                        Path.GetFileName(destFilePath), destFilePath, $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+                        "Success", $"Got Participant Enrollment File from FTP");
+                    DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (arg1, arg2, ex) =>
+                {
+                    DbUtils.LogError(arg1, arg2, ex, fileLogParams);
+                    throw ex;
+                }
             );
+
 
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
@@ -124,10 +178,11 @@ namespace DataProcessing
                     destFilePath = Path.GetFileNameWithoutExtension(srcFilePath);
 
                     //
-                    string[] keyDetails = new string[] { };
+                    string privateKeyFileName = Utils.GetAppSetting("AlegeusPgpKey1Filepath");
+                    string passPhrase = Utils.GetAppSetting("AlegeusPgpKey1Passphrase"); ;
 
                     // decrypt the file and copy decrypted file to destPath
-                    PgpUtils.PgpDecryptFile(srcFilePath, destFilePath, keyDetails,
+                    PgpUtils.PgpDecryptFile(srcFilePath, destFilePath, privateKeyFileName, passPhrase,
                         (srcFilePath, destFilePath, dummy2) =>
                         {
                             // log
@@ -150,52 +205,6 @@ namespace DataProcessing
                         }
                     );
 
-
-                },
-                (arg1, arg2, ex) =>
-                {
-                    DbUtils.LogError(arg1, arg2, ex, fileLogParams);
-                    throw ex;
-                }
-            );
-
-
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
-            //
-        }
-        protected void ParticipantEnrollmentGetFtpFilesFromAlegeus(SFtpConnection ftpConn,
-            FileOperationLogParams fileLogParams)
-        {
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            fileLogParams.SetSourceFolderName(Vars.remoteAlegeusFtpRootPath);
-            //
-            DbUtils.LogFileOperation(fileLogParams);
-
-            // download mbi dir files
-            // todo: delete the file after download?
-            ftpConn.CopyOrMoveFiles(
-                //FtpFileOperation.DownloadAndDelete,
-                FtpFileOperation.Download,
-                new string[] { Vars.remoteAlegeusFtpRootPath }, false,
-                new string[] { "Enrolled Participant Report.csv.pgp" },
-                Vars.alegeusParticipantEnrollmentFilesDownloadPath, "", "",
-                (srcFilePath, destFilePath, fileContents) =>
-                {
-                    var headerType = Import.GetAlegeusHeaderTypeFromFile(destFilePath);
-
-                    // add uniqueId to file so we can track it across folders and operations
-                    var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(destFilePath, false,
-                        fileLogParams);
-
-                    fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
-                        Path.GetFileName(uniqueIdFilePath), "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                        "Success", $"Got MBI/DNE File from FTP");
-                    DbUtils.LogFileOperation(fileLogParams);
                 },
                 (arg1, arg2, ex) =>
                 {
@@ -215,41 +224,41 @@ namespace DataProcessing
         protected void ParticipantEnrollmentImportFiles(DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
 
-            //
-            FileUtils.IterateDirectory(
-                new[] { Vars.AlegeusErrorLogResFilesRoot, Vars.AlegeusErrorLogMbiFilesRoot }, DirectoryIterateType.Files
-                , false, new[] { "*.res", "*.dne", "*.txt", "*.mbi" },
-                (srcFilePath, destFilePath, dummy2) =>
-                {
-                    //
-                    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                        Path.GetFileName(destFilePath), destFilePath, "ErrorLog-ImportAlegeusFiles", "Starting",
-                        "Starting: Import Alegeus File");
-                    DbUtils.LogFileOperation(fileLogParams);
+            ////
+            //FileUtils.IterateDirectory(
+            //    new[] { Vars.AlegeusErrorLogResFilesRoot, Vars.AlegeusErrorLogMbiFilesRoot }, DirectoryIterateType.Files
+            //    , false, new[] { "*.res", "*.dne", "*.txt", "*.mbi" },
+            //    (srcFilePath, destFilePath, dummy2) =>
+            //    {
+            //        //
+            //        fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+            //            Path.GetFileName(destFilePath), destFilePath, "ErrorLog-ImportAlegeusFiles", "Starting",
+            //            "Starting: Import Alegeus File");
+            //        DbUtils.LogFileOperation(fileLogParams);
 
-                    //2. import file
-                    Import.ImportAlegeusFile(dbConn, srcFilePath, false, fileLogParams,
-                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
-                    );
+            //        //2. import file
+            //        Import.ImportAlegeusFile(dbConn, srcFilePath, false, fileLogParams,
+            //            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+            //        );
 
-                    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                        Path.GetFileName(destFilePath), destFilePath, "ErrorLog-ImportAlegeusFiles", "Success",
-                        "Completed: Import Alegeus File");
-                    DbUtils.LogFileOperation(fileLogParams);
-                }
-                , null
-            );
+            //        fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+            //            Path.GetFileName(destFilePath), destFilePath, "ErrorLog-ImportAlegeusFiles", "Success",
+            //            "Completed: Import Alegeus File");
+            //        DbUtils.LogFileOperation(fileLogParams);
+            //    }
+            //    , null
+            //);
 
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
-            //
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
         }
 
     }

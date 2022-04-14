@@ -56,8 +56,8 @@ namespace TestApp
                         Vars.UseVPNToConnectToPortal = true;
                         break;
 
-                    case @"":
-                        tasks.Add(CobraDataProcessing.ProcessAll());
+                    case @"processparticipantenrollmentfiles":
+                        tasks.Add(MiscFileProcessing.ProcessAll());
                         break;
 
                     case @"processcobrafiles":
