@@ -118,11 +118,8 @@ namespace TestApp
                     }
                 }
             }
-            else
-            {
-                Console.Out.WriteLine(logItem.ToString());
-            }
 
+            Console.Out.WriteLine(logItem.ToString());
         }
 
         public static DialogResult ShowThreadExceptionDialog(string title, Exception e)
