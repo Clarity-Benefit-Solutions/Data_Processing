@@ -1,1 +1,1 @@
-"%~dp0..\binPROD\DataProcessingWindowsApp.exe" PROD ProcessParticipantEnrollmentFiles
+"%~dp0..\binPROD\DataProcessingWindowsApp.exe" PROD ProcessParticipantEnrollmentFiles noui

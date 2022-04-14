@@ -88,34 +88,43 @@ namespace TestApp
 
         private void HandleOnFileLogOperationCallback(object sender, LogFields logItem, Exception ex)
         {
-            if (listLogs.InvokeRequired)
+            if (this.Visible)
             {
-                listLogs.Invoke(
-                    (Action)(() =>
-                    {
-                        _bindingSource1.Add(logItem);
-                        _bindingSource1.MoveLast();
-
-                        if (ex != null)
+                if (listLogs.InvokeRequired)
+                {
+                    listLogs.Invoke(
+                        (Action)(() =>
                         {
-                            ShowThreadExceptionDialog("Unhandled Error", ex);
+                            _bindingSource1.Add(logItem);
+                            _bindingSource1.MoveLast();
+
+                            if (ex != null)
+                            {
+                                ShowThreadExceptionDialog("Unhandled Error", ex);
+                            }
                         }
+                    )
+                        );
+                }
+                else
+                {
+                    // thread - safe equivalent 
+                    _bindingSource1.Add(logItem);
+                    _bindingSource1.MoveLast();
+
+                    if (ex != null)
+                    {
+                        ShowThreadExceptionDialog("Unhandled Error", ex);
                     }
-                )
-                    );
+                }
             }
             else
             {
-                // thread - safe equivalent 
-                _bindingSource1.Add(logItem);
-                _bindingSource1.MoveLast();
-
-                if (ex != null)
-                {
-                    ShowThreadExceptionDialog("Unhandled Error", ex);
-                }
+                Console.WriteLine(logItem.ToString());
             }
+
         }
+
         public static DialogResult ShowThreadExceptionDialog(string title, Exception e)
         {
             string errorMsg = "An application error occurred. Please contact the adminstrator " +
