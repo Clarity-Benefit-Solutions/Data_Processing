@@ -516,6 +516,7 @@ namespace CoreUtils.Classes
                 else
                     throw;
             }
+
         }
 
         public static void DoSingleFileOperation(FileOperation fileOperation, string sourceFilePath,
