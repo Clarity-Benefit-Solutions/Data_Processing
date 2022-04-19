@@ -345,6 +345,9 @@ namespace DataProcessing
                 }
             }
             //
+            // remove single quotes
+            srcFileName = srcFileName.Replace("'", "");
+            //
             newPath = $"{Path.GetDirectoryName(srcFilePath)}/{Utils.GetUniqueIdFromFileName(srcFileName)}--";
             newPath += $"{testMarker}{ BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
             newPath = FileUtils.FixPath(newPath);

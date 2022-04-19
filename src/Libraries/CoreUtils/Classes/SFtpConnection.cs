@@ -151,26 +151,37 @@ namespace CoreUtils.Classes
 
                 // ReSharper disable once PossibleMultipleEnumeration
                 foreach (var ftpFile in ftpFiles)
-                    // isDirectory?
-                    if (ftpFile.IsDirectory)
+                    try
                     {
-                        if (iterateType == DirectoryIterateType.Directories &&
-                            Utils.TextMatchesPattern(ftpFile.Name, fileMask))
-                            fileCallback(ftpFile.FullName, null, null);
+                        // isDirectory?
+                        if (ftpFile.IsDirectory)
+                        {
+                            if (iterateType == DirectoryIterateType.Directories &&
+                                Utils.TextMatchesPattern(ftpFile.Name, fileMask))
+                                fileCallback(ftpFile.FullName, null, null);
 
-                        // iterate subDir if asked
-                        if (subDirsAlso)
-                            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-                            IterateDirectory(ftpFile.FullName, iterateType, subDirsAlso, fileMask, fileCallback, null);
+                            // iterate subDir if asked
+                            if (subDirsAlso)
+                                // ReSharper disable once ConditionIsAlwaysTrueOrFalse
+                                IterateDirectory(ftpFile.FullName, iterateType, subDirsAlso, fileMask, fileCallback, null);
+                        }
+                        else if (ftpFile.IsSymbolicLink)
+                        {
+                            // Console.WriteLine("Ignoring symbolic link {0}", ftpFile.FullName);
+                        }
+                        else if (ftpFile.IsRegularFile && !FileUtils.IgnoreFile(ftpFile.Name) &&
+                                 Utils.TextMatchesPattern(ftpFile.Name, fileMask))
+                        {
+                            fileCallback(ftpFile.FullName, null, null);
+                        }
                     }
-                    else if (ftpFile.IsSymbolicLink)
+                    catch (Exception ex)
                     {
-                        // Console.WriteLine("Ignoring symbolic link {0}", ftpFile.FullName);
-                    }
-                    else if (ftpFile.IsRegularFile && !FileUtils.IgnoreFile(ftpFile.Name) &&
-                             Utils.TextMatchesPattern(ftpFile.Name, fileMask))
-                    {
-                        fileCallback(ftpFile.FullName, null, null);
+                        // callback for complete
+                        if (onErrorCallback != null)
+                            onErrorCallback(directory, fileMask, ex);
+                        else
+                            throw;
                     }
             }
             catch (Exception ex)

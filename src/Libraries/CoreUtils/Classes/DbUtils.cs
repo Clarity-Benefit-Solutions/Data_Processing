@@ -22,7 +22,7 @@ namespace CoreUtils
     {
         public delegate void OnLogOperationCallback(MessageLogParams logParams);
 
-        
+
         public static event EventHandler<MessageLogParams> EventOnLogOperationCallback;
 
         public static void RaiseOnLogOperationCallback(MessageLogParams logParams)
@@ -305,7 +305,7 @@ namespace CoreUtils
         }
 
 
-       
+
         public static string AddUniqueIdToFileAndLogToDb(string srcFilePath, Boolean fixFileNameLength, FileOperationLogParams fileLogParams)
         {
             // get filename without leading fileid
@@ -316,9 +316,9 @@ namespace CoreUtils
                 return srcFilePath;
             }
 
-
+            var srcFileName = Path.GetFileName(srcFilePath);
             // if file has uniqueID and headerttype already, nothing to do
-            if (!Utils.IsBlank(Utils.GetUniqueIdFromFileName(srcFilePath))
+            if (!Utils.IsBlank(Utils.GetUniqueIdFromFileName(srcFileName))
                /* && (GetHeaderTypeFromFileName(srcFilePath) == headerType || headerType == HeaderType.NotApplicable)*/)
             {
                 return srcFilePath;

@@ -114,11 +114,22 @@ namespace CoreUtils.Classes
                 {
                     if (IgnoreFile(file))
                     {
-                        continue;
+                        // dont call back
                     }
                     else
                     {
-                        fileCallback(file, "", "");
+                        try
+                        {
+                            fileCallback(file, "", "");
+                        }
+                        catch (Exception ex)
+                        {
+                            // callback for complete
+                            if (onErrorCallback != null)
+                                onErrorCallback(directory, fileMask, ex);
+                            else
+                                throw;
+                        }
                     }
                 };
             }
