@@ -395,7 +395,7 @@ namespace CoreUtils.Classes
             {
                 return "";
             }
-            var str = value?.ToShortDateString();
+            var str = ToIsoDateString(value);
             return str;
         }
         public static string ToIsoDateString(DateTime? value)

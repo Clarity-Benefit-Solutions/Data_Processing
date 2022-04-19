@@ -291,7 +291,7 @@ namespace CoreUtils
 
             if (!Utils.IsBlank(fileName))
             {
-                string logQuery = $"select dbo.getFileLogId('{fileName}');";
+                string logQuery = $"select dbo.getFileLogId('{Utils.DbQuote(fileName)}');";
 
                 // pass new dbLogParams() to ensure no recursion of logging!
                 int fileLogId = (int)DbQuery(DbOperation.ExecuteScalar, logParams.DbConnection, logQuery, null, null,

@@ -270,7 +270,14 @@ namespace DataProcessing
             // Iterate and convert all Excel files in fileProcessingHeadersRoot - no subDirs
             FileUtils.ConvertAllExcelFilesToCsv(Vars.alegeusFileHeadersRoot, false, Vars.alegeusFileHeadersRoot, dbConn,
                 fileLogParams,
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (srcFilePath, destFilePath, dummy2) =>
+                {
+                    // delete the excel file!
+                    FileUtils.DeleteFile(srcFilePath,null, null);
+                },
+                (arg1, arg2, ex) => {
+                    DbUtils.LogError(arg1, arg2, ex, fileLogParams); 
+                }
             );
 
             // Log

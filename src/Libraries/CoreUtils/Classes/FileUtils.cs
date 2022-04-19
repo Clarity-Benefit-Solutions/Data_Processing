@@ -631,7 +631,7 @@ namespace CoreUtils.Classes
         #region FileConversions
 
         public static void ConvertAllExcelFilesToCsv(string sourceDir, bool subDirsAlso, string destDir,
-            DbConnection dbConn, FileOperationLogParams fileLogParams, OnErrorCallback onErrorCallback)
+            DbConnection dbConn, FileOperationLogParams fileLogParams, SingleFileCallback singleFileCallback, OnErrorCallback onErrorCallback)
         {
             IterateDirectory(
                 sourceDir, DirectoryIterateType.Files, subDirsAlso, "*.xls*"
@@ -647,6 +647,9 @@ namespace CoreUtils.Classes
                                 Path.GetFileName(destFilePath), destFilePath, "CreateHeaders-ConvertExcelFile",
                                 "Success", "Converted Excel File to Csv");
                             DbUtils.LogFileOperation(fileLogParams);
+
+                            //
+                            singleFileCallback(srcFilePath, csvFilePath, "");
                         },
                         onErrorCallback);
                 } /*end fileCallBack*/
