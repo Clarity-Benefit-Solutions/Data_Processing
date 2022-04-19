@@ -110,7 +110,7 @@
     </schema>
     <schema id="30" parent="6" name="dbo">
       <ObjectId>1</ObjectId>
-      <IntrospectionTimestamp>2022-04-13.22:20:16.307</IntrospectionTimestamp>
+      <IntrospectionTimestamp>2022-04-19.06:58:31.713</IntrospectionTimestamp>
       <Current>1</Current>
       <DescriptionsCheckSum>9994863168</DescriptionsCheckSum>
     </schema>
@@ -148,7 +148,7 @@
     <table id="38" parent="30" name="FTP_Source_Folders">
       <ObjectId>836198029</ObjectId>
       <CreatedTimestamp>2022-03-15.16:48:23.500</CreatedTimestamp>
-      <ModifiedTimestamp>2022-04-13.22:20:15.847</ModifiedTimestamp>
+      <ModifiedTimestamp>2022-04-19.06:56:43.443</ModifiedTimestamp>
     </table>
     <table id="39" parent="30" name="IF_File">
       <ObjectId>1140199112</ObjectId>
@@ -183,12 +183,12 @@
     <table id="45" parent="30" name="alegeus_file_final">
       <ObjectId>708197573</ObjectId>
       <CreatedTimestamp>2022-03-15.16:24:48.510</CreatedTimestamp>
-      <ModifiedTimestamp>2022-03-15.16:24:48.510</ModifiedTimestamp>
+      <ModifiedTimestamp>2022-04-19.06:58:13.290</ModifiedTimestamp>
     </table>
     <table id="46" parent="30" name="alegeus_file_staging">
       <ObjectId>740197687</ObjectId>
       <CreatedTimestamp>2022-03-15.16:27:12.247</CreatedTimestamp>
-      <ModifiedTimestamp>2022-03-15.16:27:12.247</ModifiedTimestamp>
+      <ModifiedTimestamp>2022-04-19.06:58:04.920</ModifiedTimestamp>
     </table>
     <table id="47" parent="30" name="app_settings">
       <ObjectId>772197801</ObjectId>
@@ -1394,7 +1394,7 @@ int</ExtendedProperties>
     </column>
     <column id="120" parent="38" name="Folder_name">
       <Position>1</Position>
-      <DataType>nvarchar(200 char)|0s</DataType>
+      <DataType>nvarchar(2000 char)|0s</DataType>
       <NotNull>1</NotNull>
     </column>
     <column id="121" parent="38" name="template_type">
@@ -1637,7 +1637,7 @@ int</ExtendedProperties>
     </column>
     <column id="175" parent="45" name="folder_name">
       <Position>2</Position>
-      <DataType>varchar(200 char)|0s</DataType>
+      <DataType>varchar(2000 char)|0s</DataType>
     </column>
     <column id="176" parent="45" name="row_num">
       <Position>3</Position>
@@ -1651,7 +1651,7 @@ int</ExtendedProperties>
     </column>
     <column id="178" parent="46" name="folder_name">
       <Position>2</Position>
-      <DataType>varchar(200 char)|0s</DataType>
+      <DataType>varchar(2000 char)|0s</DataType>
     </column>
     <column id="179" parent="46" name="row_num">
       <Position>3</Position>

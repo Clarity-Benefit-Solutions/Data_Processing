@@ -536,8 +536,8 @@ namespace DataProcessing
                         // for all
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.String, "BENEFL", 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeSocialSecurityNumber", "EmployeeSocialSecurityNumber", FormatType.Integer, null, 9, 9, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeSocialSecurityNumber", "EmployeeSocialSecurityNumber", FormatType.String, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("LastName", "LastName", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("FirstName", "FirstName", FormatType.AlphaOnly, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("MiddleInitial", "MiddleInitial", FormatType.String, null, 0, 0, 0, 0));
@@ -570,7 +570,7 @@ namespace DataProcessing
                     if (fileFormat == EdiFileFormat.AlegeusResultsDemographics)
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
                         //
                         mappings.Add(new TypedCsvColumn("error_code", "error_code", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("error_message", "error_message", FormatType.String, null, 0, 0, 0, 0));
@@ -590,7 +590,7 @@ namespace DataProcessing
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.String, "BENEFL", 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanId", "PlanId", FormatType.AlphaNumeric, null, 3, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.AlphaNumeric, null, 3, 15, 0,
                             0));
                         mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
@@ -628,7 +628,7 @@ namespace DataProcessing
                     if (fileFormat == EdiFileFormat.AlegeusResultsEnrollment)
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanId", "PlanId", FormatType.AlphaNumeric, null, 3, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
@@ -649,7 +649,7 @@ namespace DataProcessing
                     {
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.String, "BENEFL", 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("DependentID", "DependentID", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("LastName", "LastName", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("FirstName", "FirstName", FormatType.AlphaOnly, null, 0, 0, 0, 0));
@@ -670,7 +670,7 @@ namespace DataProcessing
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("DependentID", "DependentID", FormatType.String, null, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
 
                         //
                         mappings.Add(new TypedCsvColumn("error_code", "error_code", FormatType.String, null, 0, 0, 0, 0));
@@ -689,7 +689,7 @@ namespace DataProcessing
                     {
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.String, "BENEFL", 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("DependentID", "DependentID", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.AlphaNumeric, null, 3, 15, 0,
                             0));
@@ -702,7 +702,7 @@ namespace DataProcessing
                     if (fileFormat == EdiFileFormat.AlegeusResultsDependentLink)
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("DependentID", "DependentID", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanId", "PlanId", FormatType.AlphaNumeric, null, 3, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
@@ -724,7 +724,7 @@ namespace DataProcessing
                     {
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.String, "BENEFL", 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("IssueCard", "IssueCard", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("AddressLine1",
                             "AddressLine1", FormatType.AlphaNumeric, null, 0, 0, 0, 0)); // Shipping Address Code
@@ -737,7 +737,7 @@ namespace DataProcessing
                     if (fileFormat == EdiFileFormat.AlegeusResultsDependentLink)
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("DependentID", "DependentID", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("IssueCard", "IssueCard", FormatType.String, null, 0, 0, 0, 0));
 
@@ -764,7 +764,7 @@ namespace DataProcessing
                             0));
                         mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount", FormatType.Double, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount", FormatType.Double, null, 0, 0, 0, 0));
@@ -779,7 +779,7 @@ namespace DataProcessing
                         mappings.Add(new TypedCsvColumn("PlanId", "PlanId", FormatType.AlphaNumeric, null, 3, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount", FormatType.Double, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount", FormatType.Double, null, 0, 0, 0, 0));
@@ -804,7 +804,7 @@ namespace DataProcessing
                             0));
                         mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount", FormatType.Double, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount", FormatType.Double, null, 0, 0, 0, 0));
@@ -819,7 +819,7 @@ namespace DataProcessing
                         mappings.Add(new TypedCsvColumn("PlanId", "PlanId", FormatType.AlphaNumeric, null, 3, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount", FormatType.Double, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount", FormatType.Double, null, 0, 0, 0, 0));
@@ -840,7 +840,7 @@ namespace DataProcessing
                     {
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.String, "BENEFL", 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("EligibilityDate", "EligibilityDate", FormatType.IsoDate, null, 0, 0, 0,
                             0));
                         mappings.Add(new TypedCsvColumn("TerminationDate", "TerminationDate", FormatType.IsoDate, null, 0, 0, 0,
@@ -852,7 +852,7 @@ namespace DataProcessing
                     if (fileFormat == EdiFileFormat.AlegeusResultsEmployeeDeposit)
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 3, 15, 0, 0));
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.String, null, 9, 9, 0, 0));
                         //
                         mappings.Add(new TypedCsvColumn("error_code", "error_code", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("error_message", "error_message", FormatType.String, null, 0, 0, 0, 0));

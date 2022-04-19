@@ -406,8 +406,8 @@ namespace DataProcessing
             }
         }
 
-        public string localFtpRoot => FileUtils.FixPath($"{GetProcessBaseDir()}/{GetAppSetting("FtpPath")}");
-        public string localFtpItRoot => FileUtils.FixPath($"{GetProcessBaseDir()}/{localFtpItRoot}/");
+        public string localFtpRoot => FileUtils.FixPath($"{GetAppSetting("FtpPath")}");
+        public string localFtpItRoot => FileUtils.FixPath($"{localFtpItRoot}/");
 
         public string paylocityFtpRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("paylocityFtpPath")}");
 

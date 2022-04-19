@@ -6,4 +6,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartArguments>TEST UsevpntoconnecttoPortalx PRODx ProcessParticipantEnrollmentFilesx nouix</StartArguments>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <StartArguments>TEST</StartArguments>
+  </PropertyGroup>
 </Project>

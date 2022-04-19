@@ -361,6 +361,7 @@ namespace DataProcessing
 
             Boolean hasError;
 
+            // first fix all columns
             foreach (var column in mappings.Columns)
             {
                 // skip some columns
@@ -383,8 +384,30 @@ namespace DataProcessing
                 // save Org Column value before changes
                 var orgValue = dataRow.ColumnValue(column.SourceColumn) ?? "";
 
+
                 // 1. valid Format and general rules check - save corrected value to row
                 var formattedValue = EnsureValueIsOfFormatAndMatchesRules(dataRow, column, mappings);
+            }
+
+            // then check data for each column
+            foreach (var column in mappings.Columns)
+            {
+                // skip some columns
+                switch (column.SourceColumn?.ToLowerInvariant() ?? "")
+                {
+                    case "":
+                    case "source_row_no":
+                    case "error_row":
+                    case "data_row":
+                    case "res_file_name":
+                    case "mbi_file_name":
+                    case "row_type":
+                    case "check_type":
+                        continue;
+                    //
+                    default:
+                        break;
+                }
 
                 // 2. specific column checking against business rules & DB
                 switch (column.SourceColumn?.ToLowerInvariant() ?? "")
@@ -601,11 +624,11 @@ namespace DataProcessing
                 // check DB
                 if (Utils.IsBlank(dataRow.EmployerId))
                 {
-                    throw new Exception($"The Employer ID cannot be blank");
+                    AddErrorForRow(dataRow, "EmployerId", $"The Employer ID cannot be blank");
                 }
                 else if (Utils.IsBlank(dataRow.EmployeeID))
                 {
-                    throw new Exception($"The Employee ID cannot be blank");
+                    AddErrorForRow(dataRow, "EmployeeId", $"The Employee ID cannot be blank");
                 }
                 else
                 {
@@ -1287,7 +1310,7 @@ namespace DataProcessing
             }
 
             // pad ssn to 9 digits with leading zeros
-            if (column.SourceColumn == "EmployeeSocialSecurityNumber" && !Utils.IsBlank(value) && value.Length < column.MinLength)
+            if ((column.SourceColumn == "EmployeeSocialSecurityNumber" || column.SourceColumn == "EmployeeID") && !Utils.IsBlank(value) && value.Length < column.MinLength)
             {
                 value = value.PadLeft(column.MinLength, '0');
             }
