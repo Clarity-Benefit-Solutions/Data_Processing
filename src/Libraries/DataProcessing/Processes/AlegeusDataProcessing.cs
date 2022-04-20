@@ -372,7 +372,7 @@ namespace DataProcessing
                         {
                             if (Utils.IsBlank(line))
                             {
-                                return true;
+                                return false;
                             }
                             if (
                                 //ToDo: do we skip all non valid lines that do not start with record type? 
@@ -384,9 +384,9 @@ namespace DataProcessing
                                     || !Utils.TextMatchesPattern(line, "I*,"))
                                 )
                             {
-                                return true;
+                                return false;
                             }
-                            return false;
+                            return true;
                         },
                         fileLogParams,
                         (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }

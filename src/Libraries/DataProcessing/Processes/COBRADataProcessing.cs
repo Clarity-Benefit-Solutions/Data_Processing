@@ -443,9 +443,15 @@ namespace DataProcessing
                     ImpExpUtils.ImportSingleColumnFlatFile(dbConnCobra, srcFilePath, srcFilePath, tableName,
                         "folder_name",
                         "QB_data",
-                         (filePath1, rowNo, line) => { return false; },
+                         (filePath1, rowNo, line) =>
+                         {
+                             return true;
+                         },
                          fileLogParams,
-                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+                        (directory, file, ex) =>
+                        {
+                            DbUtils.LogError(directory, file, ex, fileLogParams);
+                        }
                     );
 
                     //3. run script to fix data

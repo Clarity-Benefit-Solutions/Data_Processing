@@ -83,11 +83,7 @@ namespace DataProcessing
             // check file
             OperationResultType resultType = CheckFile(fileCheckType);
 
-            // 1. ?? export corrected data to this.SrcFilePath
-
-
-
-            // 2. move source mbi file
+            // move source mbi file
             var fileName = Path.GetFileName(this.SrcFilePath);
             var newFilePath = this.SrcFilePath;
             var newErrorFilePath = "";
