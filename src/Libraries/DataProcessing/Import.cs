@@ -494,7 +494,7 @@ namespace DataProcessing
                     expectedMappingColumnsCount = mappings.Count /*subtract the extra columns we add before iomport to csv files*/ - 3;
                     if (columnCount != expectedMappingColumnsCount)
                     {
-                        string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source file with format {fileFormat.ToDescription()} has {columnCount} instead of expected {expectedMappingColumnsCount}. Could Not Determine Header Type for {srcFilePath}";
+                        string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source file with format {fileFormat.ToDescription()} has {columnCount} columns instead of the expected {expectedMappingColumnsCount}. Could Not Determine Header Type for {srcFilePath}";
                         throw new Exception(message);
                     }
                 }

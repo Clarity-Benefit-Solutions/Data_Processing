@@ -781,7 +781,7 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                    onErrorCallback(filePath, queryString, ex);
+                    onErrorCallback(filePath, text, ex);
                 else
                     throw;
             }
