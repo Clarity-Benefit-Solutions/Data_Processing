@@ -164,7 +164,6 @@ namespace DataProcessing
                             try
                             {
 
-
                                 // fix path
                                 srcFilePath = FileUtils.FixPath(srcFilePath);
 
@@ -176,11 +175,15 @@ namespace DataProcessing
                                     currentFilePath = uniformFilePath;
 
                                 }
+                                // check if we can get the header typ[e - if not it is an invalid file - do not rename
+
+                                var headerType = Import.GetAlegeusHeaderTypeFromFile(currentFilePath);
 
                                 // add uniqueId to file so we can track it across folders and operations
                                 var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(uniformFilePath, true,
                                     fileLogParams1);
                                 currentFilePath = uniqueIdFilePath;
+
 
                                 fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                                     Path.GetFileName(uniqueIdFilePath), uniqueIdFilePath,
@@ -190,13 +193,25 @@ namespace DataProcessing
                             }
                             catch (Exception ex2)
                             {
-                                Import.MoveFileToAlegeusRejectsFolder(srcFilePath, ex2.ToString());;
+                                fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                                   Path.GetFileName(srcFilePath), srcFilePath,
+                                   $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                                   "ERROR", ex2.ToString());
+                                DbUtils.LogFileOperation(fileLogParams);
+                                //
+                                string completeFilePath = currentFilePath;
+                                if (Path.GetFileName(srcFilePath) != Path.GetFileName(currentFilePath))
+                                {
+                                    completeFilePath = $"{Path.GetDirectoryName(currentFilePath)}/{Path.GetFileName(srcFilePath)}---{Path.GetFileName(currentFilePath)}";
+                                    FileUtils.MoveFile(currentFilePath, completeFilePath, null, null);
+                                }
+                                Import.MoveFileToAlegeusRejectsFolder(completeFilePath, ex2.ToString()); ;
                             }
 
                         },
                         (directory, file, ex) =>
                         {
-                             Import.MoveFileToAlegeusRejectsFolder(file, ex.ToString());
+                            Import.MoveFileToAlegeusRejectsFolder(file, ex.ToString());
                         }
                     );
 
