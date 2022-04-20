@@ -385,8 +385,12 @@ namespace DataProcessing
                 (directory, file, ex) =>
                 {
                     DbUtils.LogError(directory, file, ex, fileLogParams);
-                    string errorFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}";
-                    FileUtils.MoveFile(file, errorFilePath, null, null);
+                    string rejectFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}";
+                    FileUtils.MoveFile(file, rejectFilePath, null, null);
+
+                    /*export .err file */
+                    string errorFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}.err";
+                    FileUtils.WriteToFile(errorFilePath, ex.ToString(), null);
                 }
             );
         }
@@ -517,7 +521,18 @@ namespace DataProcessing
                     fileChecker.CheckFileAndProcess(FileCheckType.AllData, FileCheckProcessType.MoveToDestDirectories);
 
                 },
-                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+                (directory, file, ex) =>
+                {
+                    DbUtils.LogError(directory, file, ex, fileLogParams);
+                    string rejectFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}";
+                    FileUtils.MoveFile(file, rejectFilePath, null, null);
+
+                    /*export .err file */
+                    string errorFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}.err";
+                    FileUtils.WriteToFile(errorFilePath, ex.ToString(), null);
+
+
+                }
             );
 
             //

@@ -763,5 +763,29 @@ namespace CoreUtils.Classes
             return false;
         }
 
+        public static void WriteToFile(string filePath, string text, OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                //
+                FileUtils.EnsurePathExists(filePath);
+
+                using var writer = new StreamWriter(filePath, false);
+                writer.WriteLine(text);
+
+                // close
+                if (writer != null) writer.Close();
+
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                    onErrorCallback(filePath, queryString, ex);
+                else
+                    throw;
+            }
+        }
+
     }
 }

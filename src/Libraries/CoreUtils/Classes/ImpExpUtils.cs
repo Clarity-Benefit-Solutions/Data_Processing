@@ -263,7 +263,7 @@ namespace CoreUtils.Classes
                 else
                     throw;
             }
-        }
+        } 
         private static Regex RegexCSVParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
 
         public static String[] GetCsvColumnsFromText(string text)

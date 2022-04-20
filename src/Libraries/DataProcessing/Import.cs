@@ -359,122 +359,147 @@ namespace DataProcessing
         public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath)
         {
             var headerType = HeaderType.NotApplicable;
-            try
+            // convert excel files to csv to check
+            string fileName = Path.GetFileName(srcFilePath);
+            string fileExt = Path.GetExtension(srcFilePath);
+            if (fileExt == ".xlsx" || fileExt == ".xls")
             {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
 
-                // convert excel files to csv to check
-                string fileName = Path.GetFileName(srcFilePath);
-                string fileExt = Path.GetExtension(srcFilePath);
-                if (fileExt == ".xlsx" || fileExt == ".xls")
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
+            }
+
+
+            int rowNo = 0;
+            using var inputFile = new StreamReader(srcFilePath);
+            while (true)
+            {
+                string line = inputFile.ReadLine()!;
+                rowNo++;
+
+                if (line == null)
                 {
-                    var csvFilePath = Path.GetTempFileName() + ".csv";
-
-                    FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
-                        null,
-                        null);
-
-                    srcFilePath = csvFilePath;
+                    if (headerType == HeaderType.NotApplicable)
+                    {
+                        string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Could Not Determine Header Type for  {srcFilePath}";
+                        throw new Exception(message);
+                    }
+                    return headerType;
                 }
 
-
-                int rowNo = 0;
-                using var inputFile = new StreamReader(srcFilePath);
-                while (true)
+                string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
+                var columnCount = columns.Length;
+                if (columnCount == 0)
                 {
-                    string line = inputFile.ReadLine()!;
-                    rowNo++;
+                    continue;
+                }
+                var expectedMappingColumnsCount = 0;
+                var firstColValue = columns[0];
+                var fileFormat = ImpExpUtils.GetAlegeusRowFormat(firstColValue);
 
-                    if (line == null)
-                    {
-                        return headerType;
-                    }
-
-                    string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
-                    var columnCount = columns.Length;
-                    if (columnCount == 0)
-                    {
+                // get file format
+                // note: we are also detecting header type from conettn for prev Own and NoChange header folders
+                switch (fileFormat)
+                {
+                    // ignore unknown and header lines
+                    case EdiFileFormat.Unknown:
+                    case EdiFileFormat.AlegeusHeader:
+                    case EdiFileFormat.AlegeusResultsHeader:
                         continue;
-                    }
-                    var firstColValue = columns[0];
-                    var fileFormat = ImpExpUtils.GetAlegeusRowFormat(firstColValue);
 
-                    // get file format
-                    // note: we are also detecting header type from conettn for prev Own and NoChange header folders
-                    switch (fileFormat)
-                    {
-                        // ignore unknown and header lines
-                        case EdiFileFormat.Unknown:
-                        case EdiFileFormat.AlegeusHeader:
-                        case EdiFileFormat.AlegeusResultsHeader:
-                            continue;
+                    case EdiFileFormat.AlegeusDemographics:
+                        switch (columnCount)
+                        {
+                            case 19:
+                                headerType = HeaderType.Old;
+                                expectedMappingColumnsCount = columnCount;
+                                break;
 
-                        case EdiFileFormat.AlegeusDemographics:
-                            switch (columnCount)
-                            {
-                                case 19:
-                                    headerType = HeaderType.Old;
-                                    break;
+                            case 24:
+                                headerType = HeaderType.New; ;
+                                expectedMappingColumnsCount = columnCount;
+                                break;
+                            // can also be segmented header!
 
-                                case 24:
-                                    headerType = HeaderType.New; ;
-                                    break;
-                                // can also be segmented header!
+                            default:
+                                headerType = HeaderType.Old;
+                                break;
+                        };
+                        break;
 
-                                default:
-                                    headerType = HeaderType.Old; ;
-                                    break;
-                            };
-                            break;
+                    case EdiFileFormat.AlegeusEnrollment:
+                        switch (columnCount)
+                        {
+                            case 14:
+                                headerType = HeaderType.Old;
+                                expectedMappingColumnsCount = columnCount;
+                                break;
 
-                        case EdiFileFormat.AlegeusEnrollment:
-                            switch (columnCount)
-                            {
-                                case 14:
-                                    headerType = HeaderType.Old; ;
-                                    break;
+                            case 15:
+                                headerType = HeaderType.New;
+                                expectedMappingColumnsCount = columnCount;
+                                break;
 
-                                case 15:
-                                    headerType = HeaderType.New; ;
-                                    break;
+                            case 16:
+                                headerType = HeaderType.SegmentedFunding;
+                                expectedMappingColumnsCount = columnCount;
+                                break;
 
-                                case 16:
-                                    headerType = HeaderType.SegmentedFunding; ;
-                                    break;
+                            default:
+                                headerType = HeaderType.Old;
+                                break;
 
-                                default:
-                                    headerType = HeaderType.Old; ;
-                                    break;
+                        };
+                        break;
 
-                            };
-                            break;
+                    case EdiFileFormat.AlegeusEmployeeDeposit:
+                        switch (columnCount)
+                        {
+                            case 11:
+                                headerType = HeaderType.Old;
+                                expectedMappingColumnsCount = columnCount;
+                                break;
 
-                        default:
-                            headerType = HeaderType.New; ;
-                            break;
-                    }
+                            case 14:
+                                /*todo: some employers are sending IH files with 14 columns in format - how to handle
+                                 * Record ID,TPA ID,Employer ID,Acct Type Code,Plan Start date,Plan End Date,SS#,Deposit Type,Employee Deposit,Employer Deposit,Payroll Date,,Name,
+                                  */
+                                headerType = HeaderType.Old;
+                                expectedMappingColumnsCount = columnCount;
+                                break;
 
+                            default:
+                                headerType = HeaderType.Old;
+                                break;
+
+                        };
+                        break;
+
+                    default:
+                        headerType = HeaderType.New;
+                        break;
+                }
+
+                if (expectedMappingColumnsCount <= 0)
+                {
                     // what mappings do we expect for this format
                     var mappings = Import.GetAlegeusFileImportMappings(fileFormat, HeaderType.NotApplicable, true);
 
+
                     // check we have the exact columns that we expected
-                    var expectedMappingColumnsCount = mappings.Count /*subtract the extra columns we add before iomport to csv files*/ - 4;
+                    expectedMappingColumnsCount = mappings.Count /*subtract the extra columns we add before iomport to csv files*/ - 3;
                     if (columnCount != expectedMappingColumnsCount)
                     {
                         string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source file with format {fileFormat.ToDescription()} has {columnCount} instead of expected {expectedMappingColumnsCount}. Could Not Determine Header Type for {srcFilePath}";
                         throw new Exception(message);
                     }
-                    return headerType;
                 }
+                return headerType;
             }
-            finally
-            {
-                if (headerType == HeaderType.NotApplicable)
-                {
-                    string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Could Not Determine Header Type for  {srcFilePath}";
-                    throw new Exception(message);
-                }
-            }
-
 
         }
 
