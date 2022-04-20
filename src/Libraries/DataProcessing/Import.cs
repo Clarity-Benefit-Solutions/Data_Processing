@@ -296,7 +296,8 @@ namespace DataProcessing
             {
                 var csvFilePath = Path.GetTempFileName() + ".csv";
 
-                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                string password = "";
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath, password,
                     null,
                     null);
 
@@ -392,7 +393,8 @@ namespace DataProcessing
             {
                 var csvFilePath = Path.GetTempFileName() + ".csv";
 
-                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                string password = "";
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath, password,
                     null,
                     null);
 

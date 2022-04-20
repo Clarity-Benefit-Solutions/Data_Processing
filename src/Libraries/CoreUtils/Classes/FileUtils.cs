@@ -650,8 +650,9 @@ namespace CoreUtils.Classes
                 , /*fileCallBack*/ (foundFile, dummy, dummy2) =>
                 {
                     var csvFilePath = GetDestFilePath(foundFile, destDir, "", "", ".csv");
-                    //
-                    ConvertExcelFileToCsv(foundFile, csvFilePath,
+                //
+                    string password = "";
+                    ConvertExcelFileToCsv(foundFile, csvFilePath,password,
                         (srcFilePath, destFilePath, dummy4) =>
                         {
                             // add to fileLog
@@ -670,14 +671,14 @@ namespace CoreUtils.Classes
             ); //FileUtils.IterateDirectory;
         } //end method
 
-        public static void ConvertExcelFileToCsv(string sourceFilePath, string destFilePath,
+        public static void ConvertExcelFileToCsv(string sourceFilePath, string destFilePath, string password,
             SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
             try
             {
                 using (var stream = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    ExcelReaderConfiguration config = new ExcelReaderConfiguration();
+                    ExcelReaderConfiguration config = new ExcelReaderConfiguration { Password = password };
                     IExcelDataReader reader = null;
                     if (sourceFilePath.EndsWith(".xls"))
                         reader = ExcelReaderFactory.CreateBinaryReader(stream);

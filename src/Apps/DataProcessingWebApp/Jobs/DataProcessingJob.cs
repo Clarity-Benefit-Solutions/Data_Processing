@@ -141,7 +141,8 @@ namespace DataProcessingWebApp.Jobs
                 if (fileExt == ".xlsx" || fileExt == ".xls")
                 {
                     var csvFilePath = Path.GetTempFileName() + ".csv";
-                    FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    string password = "";
+                    FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,password,
                         null,
                         null);
 
