@@ -4,8 +4,8 @@ using System.Runtime.InteropServices;
 
 namespace CoreUtils.Classes
 {
-    
-    
+
+
     public class MessageLogParams : EventArgs
     {
         public string Command = "";
@@ -42,7 +42,7 @@ namespace CoreUtils.Classes
 
         public MessageLogParams Clone()
         {
-            var cloned = (MessageLogParams) MemberwiseClone();
+            var cloned = (MessageLogParams)MemberwiseClone();
             //
             return cloned;
         }
@@ -63,7 +63,7 @@ namespace CoreUtils.Classes
 
         public MessageLogParams SetStepAndCommand(string stepName, string command)
         {
-            var cloned = (MessageLogParams) MemberwiseClone();
+            var cloned = (MessageLogParams)MemberwiseClone();
             //
             cloned.StepName = stepName;
             cloned.Command = command;
@@ -82,8 +82,8 @@ namespace CoreUtils.Classes
         }
     }
 
-    
-    
+
+
     public class FileOperationLogParams : EventArgs
     {
         public string Bencode = "";
@@ -137,7 +137,7 @@ namespace CoreUtils.Classes
 
         public FileOperationLogParams Clone()
         {
-            var cloned = (FileOperationLogParams) MemberwiseClone();
+            var cloned = (FileOperationLogParams)MemberwiseClone();
             cloned.DbMessageLogParams = DbMessageLogParams;
             //
             return cloned;
@@ -225,8 +225,15 @@ namespace CoreUtils.Classes
 
         public void setOriginalFileUploadedOn(DateTime originalFileUploadedOn)
         {
-            if (originalFileUploadedOn > DateTime.MinValue)
+            // add if > then sql server min date
+            if (originalFileUploadedOn > Utils.ToDate("1753-01-01"))
+            {
                 OriginalFileUploadedOn = originalFileUploadedOn.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+            else
+            {
+                OriginalFileUploadedOn = "";
+            }
         }
 
         public void CalculateIds()

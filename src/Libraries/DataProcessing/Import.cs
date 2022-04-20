@@ -302,8 +302,8 @@ namespace DataProcessing
                 useThisFilePath = csvFilePath;
             }
 
-            string BenCode = "";
-            string recType = "";
+            string BenCode = "UNKNOWN";
+            string recType = "XX";
 
 
             var csvDataReaderOptions =
@@ -391,7 +391,7 @@ namespace DataProcessing
                     if (headerType == HeaderType.NotApplicable)
                     {
                         string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Could Not Determine Header Type for  {srcFilePath}";
-                        throw new Exception(message);
+                        throw new IncorrectFileFormatException(message);
                     }
                     return headerType;
                 }
@@ -500,7 +500,7 @@ namespace DataProcessing
                     if (columnCount != expectedMappingColumnsCount)
                     {
                         string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source file with format {fileFormat.ToDescription()} has {columnCount} columns instead of the expected {expectedMappingColumnsCount}. Could Not Determine Header Type for {srcFilePath}";
-                        throw new Exception(message);
+                        throw new IncorrectFileFormatException(message);
                     }
                 }
                 return headerType;

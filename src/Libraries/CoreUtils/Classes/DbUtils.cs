@@ -349,7 +349,8 @@ namespace CoreUtils
             newFilePath = FileUtils.FixPath(newFilePath);
             if (!srcFilePath.Equals(newFilePath))
             {
-                srcFileInfo.MoveTo(newFilePath);
+                FileUtils.MoveFile(srcFilePath, newFilePath, null, null);
+                //srcFileInfo.MoveTo(newFilePath);
 
                 //
                 fileLogParams.SetFileNames(newFileId, newFileName, srcFilePath, newFileName, newFilePath,

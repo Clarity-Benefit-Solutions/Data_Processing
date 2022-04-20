@@ -14,6 +14,21 @@ using Newtonsoft.Json;
 
 namespace CoreUtils.Classes
 {
+    public class IncorrectFileFormatException : Exception
+    {
+        public IncorrectFileFormatException(string message) : base(message)
+        {
+
+        }
+    }
+
+    public class OpenExcelFileException : Exception
+    {
+        public OpenExcelFileException(string message) : base(message)
+        {
+
+        }
+    }
 
     public class JobDetails
     {
@@ -335,7 +350,7 @@ namespace CoreUtils.Classes
         }
         public static DateTime? ToDateTime(string value)
         {
-            value = value?.Trim(); 
+            value = value?.Trim();
             if (Utils.IsBlank(value))
             {
                 return null;

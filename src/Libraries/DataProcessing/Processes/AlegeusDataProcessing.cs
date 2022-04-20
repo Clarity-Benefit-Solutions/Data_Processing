@@ -390,6 +390,10 @@ namespace DataProcessing
                         "data_row",
                         (filePath1, rowNo, line) =>
                         {
+                            if (Utils.IsBlank(line))
+                            {
+                                return true;
+                            }
                             if (
                                 //ToDo: do we skip all non valid lines that do not start with record type? 
                                 rowNo == 1
