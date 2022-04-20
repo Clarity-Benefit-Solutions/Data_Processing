@@ -160,28 +160,57 @@ namespace DataProcessing
                         rowFolderName, DirectoryIterateType.Files, false, "*.*",
                         (srcFilePath, destFilePath, dummy2) =>
                         {
-                            // fix path
-                            srcFilePath = FileUtils.FixPath(srcFilePath);
-
-                            // make FilenameProperty uniform
-                            var uniformFilePath = Import.GetUniformNameForFile(PlatformType.Alegeus, srcFilePath);
-                            if (srcFilePath != uniformFilePath)
+                            string currentFilePath = srcFilePath;
+                            try
                             {
-                                FileUtils.MoveFile(srcFilePath, uniformFilePath, null, null);
+
+
+                                // fix path
+                                srcFilePath = FileUtils.FixPath(srcFilePath);
+
+                                // make FilenameProperty uniform
+                                var uniformFilePath = Import.GetUniformNameForFile(PlatformType.Alegeus, srcFilePath);
+                                if (Path.GetFileName(srcFilePath) != Path.GetFileName(uniformFilePath))
+                                {
+                                    FileUtils.MoveFile(srcFilePath, uniformFilePath, null, null);
+                                    currentFilePath = uniformFilePath;
+
+                                }
+
+                                // add uniqueId to file so we can track it across folders and operations
+                                var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(uniformFilePath, true,
+                                    fileLogParams1);
+                                currentFilePath = uniqueIdFilePath;
+
+                                fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                                    Path.GetFileName(uniqueIdFilePath), uniqueIdFilePath,
+                                    $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                                    "Success", $"Found Source File");
+                                DbUtils.LogFileOperation(fileLogParams);
+                            }
+                            catch (Exception ex2)
+                            {
+                                var file = currentFilePath;
+                                DbUtils.LogError(Path.GetFileName(file), file, ex2, fileLogParams);
+                                string rejectFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}";
+                                FileUtils.MoveFile(file, rejectFilePath, null, null);
+
+                                /*export .err file */
+                                string errorFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}.err";
+                                FileUtils.WriteToFile(errorFilePath, ex2.ToString(), null);
                             }
 
-                            // add uniqueId to file so we can track it across folders and operations
-                            var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(uniformFilePath, true,
-                                fileLogParams1);
-
-                            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                                Path.GetFileName(uniqueIdFilePath), uniqueIdFilePath,
-                                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                                "Success", $"Found Source File");
-                            DbUtils.LogFileOperation(fileLogParams);
-
                         },
-                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+                        (directory, file, ex) =>
+                        {
+                            DbUtils.LogError(directory, file, ex, fileLogParams);
+                            string rejectFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}";
+                            FileUtils.MoveFile(file, rejectFilePath, null, null);
+
+                            /*export .err file */
+                            string errorFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}.err";
+                            FileUtils.WriteToFile(errorFilePath, ex.ToString(), null);
+                        }
                     );
 
                     // 3b. move all source files (with new names) to Headers dir

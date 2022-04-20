@@ -137,7 +137,7 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                    onErrorCallback(directory, fileMask, ex);
+                    onErrorCallback(directory, directory, ex);
                 else
                     throw;
             }
@@ -730,7 +730,7 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
-                    onErrorCallback(sourceFilePath, destFilePath, ex);
+                    onErrorCallback(sourceFilePath, sourceFilePath, ex);
                 else
                     throw;
             }
