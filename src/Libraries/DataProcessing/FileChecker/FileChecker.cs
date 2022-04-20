@@ -1306,9 +1306,18 @@ namespace DataProcessing
             }
 
             // pad ssn to 9 digits with leading zeros
-            if ((column.SourceColumn == "EmployeeSocialSecurityNumber" || column.SourceColumn == "EmployeeID") && !Utils.IsBlank(value) && value.Length < column.MinLength)
+            if ((column.SourceColumn == "EmployeeSocialSecurityNumber" || column.SourceColumn == "EmployeeID"))
+
             {
-                value = value.PadLeft(column.MinLength, '0');
+                if (!Utils.IsBlank(value))
+                {
+                    value = regexAlphaNumeric.Replace(value, String.Empty);
+                    if (value.Length < column.MinLength)
+                    {
+                        value = value.PadLeft(column.MinLength, '0');
+                    }
+
+                }
             }
 
             // set row column value to the fixed value if it has changed
