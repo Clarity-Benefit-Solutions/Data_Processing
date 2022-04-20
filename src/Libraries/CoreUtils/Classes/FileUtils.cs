@@ -126,7 +126,7 @@ namespace CoreUtils.Classes
                         {
                             // callback for complete
                             if (onErrorCallback != null)
-                                onErrorCallback(directory, fileMask, ex);
+                                onErrorCallback(directory, file, ex);
                             else
                                 throw;
                         }
@@ -512,10 +512,10 @@ namespace CoreUtils.Classes
                             onErrorCallback);
                     },
                     // at end 
-                    (arg1, arg2, ex) =>
+                    (directory, file, ex) =>
                     {
                         if (onErrorCallback == null) throw ex;
-                        onErrorCallback(arg1, arg2, ex);
+                        onErrorCallback(directory, file, ex);
                     }
                 );
             }
@@ -665,7 +665,7 @@ namespace CoreUtils.Classes
                         onErrorCallback);
                 } /*end fileCallBack*/
                 , /*onErrorCallback*/ // at end 
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); } /*end onErrorCallback*/
+                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); } /*end onErrorCallback*/
             ); //FileUtils.IterateDirectory;
         } //end method
 

@@ -120,7 +120,7 @@ namespace DataProcessing
                                 //
                                 DbUtils.LogFileOperation(FileLogParams);
                             },
-                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, FileLogParams); }
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                         );
                     }
                     else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
@@ -162,7 +162,7 @@ namespace DataProcessing
                                 //
                                 DbUtils.LogFileOperation(FileLogParams);
                             },
-                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, FileLogParams); }
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                         );
 
                         newErrorFilePath = $"{newFilePath}.err";
@@ -183,7 +183,7 @@ namespace DataProcessing
 
                     ImpExpUtils.ExportSingleColumnFlatFile(newErrorFilePath, DbConn, queryStringExp,
                         "file_row", null, FileLogParams,
-                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, FileLogParams); }
+                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                     );
 
                     //
@@ -303,7 +303,7 @@ namespace DataProcessing
             // import into table so we can manipulate the file
             ImpExpUtils.ImportCsvFileBulkCopy(this.DbConn, newPath, this.hasHeaderRow, tableName,
                 mappings, this.FileLogParams,
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, FileLogParams); }
+                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
             );
 
             // update check type for table

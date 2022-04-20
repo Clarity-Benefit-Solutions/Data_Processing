@@ -358,97 +358,123 @@ namespace DataProcessing
 
         public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath)
         {
-            // convert excel files to csv to check
-            string fileName = Path.GetFileName(srcFilePath);
-            string fileExt = Path.GetExtension(srcFilePath);
-            if (fileExt == ".xlsx" || fileExt == ".xls")
+            var headerType = HeaderType.NotApplicable;
+            try
             {
-                var csvFilePath = Path.GetTempFileName() + ".csv";
 
-                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
-                    null,
-                    null);
-
-                srcFilePath = csvFilePath;
-            }
-
-            var csvDataReaderOptions =
-                new CsvDataReaderOptions
-                { // also take header row as  data in case there uis no file header
-                    HasHeaders = false
-                };
-
-            using var csv = SylvanCsvDataReader.Create(srcFilePath, csvDataReaderOptions);
-            // read till we match header type for line
-            int rowNo = 0;
-            while (csv.Read())
-            {
-                rowNo++;
-                var firstColValue = csv.GetString(0);
-                var fileFormat = ImpExpUtils.GetAlegeusRowFormat(firstColValue);
-                var columnCount = csv.FieldCount;
-
-                if (columnCount < 1)
+                // convert excel files to csv to check
+                string fileName = Path.GetFileName(srcFilePath);
+                string fileExt = Path.GetExtension(srcFilePath);
+                if (fileExt == ".xlsx" || fileExt == ".xls")
                 {
-                    continue;
+                    var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                    FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                        null,
+                        null);
+
+                    srcFilePath = csvFilePath;
                 }
 
-                // get file format
-                // note: we are also detecting header type from conettn for prev Own and NoChange header folders
-                switch (fileFormat)
+
+                int rowNo = 0;
+                using var inputFile = new StreamReader(srcFilePath);
+                while (true)
                 {
-                    // ignore unknown and header lines
-                    case EdiFileFormat.Unknown:
-                    case EdiFileFormat.AlegeusHeader:
-                    case EdiFileFormat.AlegeusResultsHeader:
+                    string line = inputFile.ReadLine()!;
+                    rowNo++;
+
+                    if (line == null)
+                    {
+                        return headerType;
+                    }
+
+                    string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
+                    var columnCount = columns.Length;
+                    if (columnCount == 0)
+                    {
                         continue;
+                    }
+                    var firstColValue = columns[0];
+                    var fileFormat = ImpExpUtils.GetAlegeusRowFormat(firstColValue);
 
-                    case EdiFileFormat.AlegeusDemographics:
-                        switch (columnCount)
-                        {
-                            case 19:
-                                return HeaderType.Old;
+                    // get file format
+                    // note: we are also detecting header type from conettn for prev Own and NoChange header folders
+                    switch (fileFormat)
+                    {
+                        // ignore unknown and header lines
+                        case EdiFileFormat.Unknown:
+                        case EdiFileFormat.AlegeusHeader:
+                        case EdiFileFormat.AlegeusResultsHeader:
+                            continue;
 
-                            case 24:
-                                return HeaderType.New;
-                            // can also be segmented header!
+                        case EdiFileFormat.AlegeusDemographics:
+                            switch (columnCount)
+                            {
+                                case 19:
+                                    headerType = HeaderType.Old;
+                                    break;
 
-                            default:
-                                return HeaderType.Old;
-                        }
-                    case EdiFileFormat.AlegeusEnrollment:
-                        switch (columnCount)
-                        {
-                            case 14:
-                                return HeaderType.Old;
+                                case 24:
+                                    headerType = HeaderType.New; ;
+                                    break;
+                                // can also be segmented header!
 
-                            case 15:
-                                return HeaderType.New;
+                                default:
+                                    headerType = HeaderType.Old; ;
+                                    break;
+                            };
+                            break;
 
-                            case 16:
-                                return HeaderType.SegmentedFunding;
+                        case EdiFileFormat.AlegeusEnrollment:
+                            switch (columnCount)
+                            {
+                                case 14:
+                                    headerType = HeaderType.Old; ;
+                                    break;
 
-                            default:
-                                return HeaderType.Old;
-                        }
-                    //case EdiFileFormat.AlegeusEmployeeDeposit:
-                    //    switch (columnCount)
-                    //    {
-                    //        case 11:
-                    //            // same cols for New and Segemented Funding!
-                    //            return HeaderType.Old;
+                                case 15:
+                                    headerType = HeaderType.New; ;
+                                    break;
 
-                    //        // default is Old
-                    //        default:
-                    //            return HeaderType.Old;
-                    //    }
-                    default:
-                        return HeaderType.New;
+                                case 16:
+                                    headerType = HeaderType.SegmentedFunding; ;
+                                    break;
+
+                                default:
+                                    headerType = HeaderType.Old; ;
+                                    break;
+
+                            };
+                            break;
+
+                        default:
+                            headerType = HeaderType.New; ;
+                            break;
+                    }
+
+                    // what mappings do we expect for this format
+                    var mappings = Import.GetAlegeusFileImportMappings(fileFormat, HeaderType.NotApplicable, true);
+
+                    // check we have the exact columns that we expected
+                    var expectedMappingColumnsCount = mappings.Count /*subtract the extra columns we add before iomport to csv files*/ - 4;
+                    if (columnCount != expectedMappingColumnsCount)
+                    {
+                        string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source file with format {fileFormat.ToDescription()} has {columnCount} instead of expected {expectedMappingColumnsCount}. Could Not Determine Header Type for {srcFilePath}";
+                        throw new Exception(message);
+                    }
+                    return headerType;
+                }
+            }
+            finally
+            {
+                if (headerType == HeaderType.NotApplicable)
+                {
+                    string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Could Not Determine Header Type for  {srcFilePath}";
+                    throw new Exception(message);
                 }
             }
 
-            string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Could Not Determine Header Type for {srcFilePath}";
-            throw new Exception(message);
 
         }
 
@@ -893,7 +919,7 @@ namespace DataProcessing
                 //
                 ImpExpUtils.ImportCsvFileBulkCopy(dbConn, srcFilePath, hasHeaderRow, tableName, mappings,
                     fileLogParams,
-                    (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                    (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                 );
             }
             catch (Exception ex)

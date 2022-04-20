@@ -13,6 +13,7 @@ using Sylvan.Data.Csv;
 using static CoreUtils.DbUtils;
 using SylvanCsvDataReader = Sylvan.Data.Csv.CsvDataReader;
 using CsvHelperCsvDataReader = CsvHelper.CsvDataReader;
+using System.Text.RegularExpressions;
 
 namespace CoreUtils.Classes
 {
@@ -262,6 +263,17 @@ namespace CoreUtils.Classes
                 else
                     throw;
             }
+        }
+        private static Regex RegexCSVParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
+
+        public static String[] GetCsvColumnsFromText(string text)
+        {
+            if (Utils.IsBlank(text))
+            {
+                return new string[] { };
+            }
+            String[] Fields = RegexCSVParser.Split(text);
+            return Fields;
         }
 
         public static void ImportCsvFile<T>(string filePath, DbConnection dbConn, string tableName,

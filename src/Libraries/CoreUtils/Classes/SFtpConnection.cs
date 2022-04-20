@@ -315,10 +315,10 @@ namespace CoreUtils.Classes
                     DoSingleFtpFileOperation(fileOperation, foundFile, destFullFilePath, fileCallback, onErrorCallback);
                 },
                 // at end 
-                (arg1, arg2, ex) =>
+                (directory, file, ex) =>
                 {
                     if (onErrorCallback == null) throw ex;
-                    onErrorCallback(arg1, arg2, ex);
+                    onErrorCallback(directory, file, ex);
                 }
             );
         }

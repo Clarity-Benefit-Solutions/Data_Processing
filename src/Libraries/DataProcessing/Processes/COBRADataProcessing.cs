@@ -115,7 +115,7 @@ namespace DataProcessing
                         //DbUtils.LogFileOperation(FileLogParams);
                     }
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             );
 
             //
@@ -251,11 +251,11 @@ namespace DataProcessing
 
                                         //DbUtils.LogFileOperation(FileLogParams);
                                     },
-                                    (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                                    (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                                 );
                             }
                         },
-                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                     );
                 } //iterateDir
             } //foreach (DataRow row in folders.Rows)
@@ -303,7 +303,7 @@ namespace DataProcessing
 
                                 DbUtils.LogFileOperation(fileLogParams);
                             },
-                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                         );
                     }
                 }, null
@@ -343,7 +343,7 @@ namespace DataProcessing
 
                                 DbUtils.LogFileOperation(fileLogParams);
                             },
-                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                         );
                     }
                 }, null
@@ -399,7 +399,7 @@ namespace DataProcessing
 
                                 DbUtils.LogFileOperation(fileLogParams);
                             },
-                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                         );
                     }
                 }, null
@@ -443,7 +443,7 @@ namespace DataProcessing
                     ImpExpUtils.ImportSingleColumnFlatFile(dbConnCobra, srcFilePath, srcFilePath, tableName,
                         "folder_name",
                         "QB_data", fileLogParams,
-                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                     );
 
                     //3. run script to fix data
@@ -467,7 +467,7 @@ namespace DataProcessing
                     //
                     ImpExpUtils.ExportSingleColumnFlatFile(expFilePath, dbConnCobra, queryStringExp,
                         "QB_data", null, fileLogParams,
-                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                     );
 
                     // add to fileLog
@@ -477,7 +477,7 @@ namespace DataProcessing
                         $"Prepared Flat File for COBRA");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             );
 
             //
@@ -529,11 +529,11 @@ namespace DataProcessing
                                     "Success", $"Moved File");
                                 DbUtils.LogFileOperation(fileLogParams);
                             },
-                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                         );
                     }
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             );
 
             // 2. move all holding and prepared files
@@ -550,7 +550,7 @@ namespace DataProcessing
                         "Success", $"Moved File");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             );
 
             //3. move out blank files

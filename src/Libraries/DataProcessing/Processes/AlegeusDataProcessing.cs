@@ -111,7 +111,7 @@ namespace DataProcessing
                     // do not log - gives too many lines
                     // DbUtils.LogFileOperation(FileLogParams);
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             );
 
 
@@ -181,7 +181,7 @@ namespace DataProcessing
                             DbUtils.LogFileOperation(fileLogParams);
 
                         },
-                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                     );
 
                     // 3b. move all source files (with new names) to Headers dir
@@ -196,7 +196,7 @@ namespace DataProcessing
                                 "Success", "Copied Source File to Header Directory");
                             DbUtils.LogFileOperation(fileLogParams1);
                         },
-                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                     );
                 }
             } // each dr
@@ -216,7 +216,7 @@ namespace DataProcessing
                     // do not log - gives too many lines
                     // DbUtils.LogFileOperation(FileLogParams);
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             );
 
 
@@ -232,7 +232,7 @@ namespace DataProcessing
                     // do not log - gives too many lines
                     // DbUtils.LogFileOperation(FileLogParams);
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             );
 
             //5b: copy all header files to HoldAll
@@ -248,7 +248,7 @@ namespace DataProcessing
                     // do not log - gives too many lines
                     // DbUtils.LogFileOperation(FileLogParams);
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             );
 
             //
@@ -273,10 +273,11 @@ namespace DataProcessing
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // delete the excel file!
-                    FileUtils.DeleteFile(srcFilePath,null, null);
+                    FileUtils.DeleteFile(srcFilePath, null, null);
                 },
-                (arg1, arg2, ex) => {
-                    DbUtils.LogError(arg1, arg2, ex, fileLogParams); 
+                (directory, file, ex) =>
+                {
+                    DbUtils.LogError(directory, file, ex, fileLogParams);
                 }
             );
 
@@ -348,7 +349,7 @@ namespace DataProcessing
                     ImpExpUtils.ImportSingleColumnFlatFile(dbConn, srcFilePath, srcFilePath, tableName,
                         "folder_name",
                         "data_row", fileLogParams,
-                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                     );
 
                     //3. run script to fix data
@@ -372,7 +373,7 @@ namespace DataProcessing
                     var queryStringExp = $"Select * from {outputTableName} order by row_num asc";
                     ImpExpUtils.ExportSingleColumnFlatFile(expFilePath, dbConn, queryStringExp,
                          "file_row", null, fileLogParams,
-                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                     );
 
                     // add to fileLog
@@ -381,7 +382,12 @@ namespace DataProcessing
                         "Added Header to File");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (directory, file, ex) =>
+                {
+                    DbUtils.LogError(directory, file, ex, fileLogParams);
+                    string errorFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}";
+                    FileUtils.MoveFile(file, errorFilePath, null, null);
+                }
             );
         }
 
@@ -405,7 +411,7 @@ namespace DataProcessing
                     // do not log - gives too many lines
                     // DbUtils.LogFileOperation(FileLogParams);
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             );
 
             //
@@ -437,7 +443,7 @@ namespace DataProcessing
                     // do not log - gives too many lines
                     // DbUtils.LogFileOperation(FileLogParams);
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             );
 
             //
@@ -468,11 +474,11 @@ namespace DataProcessing
                     {
                         var delFilePath = FileUtils.GetDestFilePath(srcFilePath, fileExt);
                         FileUtils.DeleteFileIfExists(delFilePath, null,
-                            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                         );
                     }
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             );
 
             //
@@ -498,7 +504,7 @@ namespace DataProcessing
                     // check the file 
                     using var fileChecker = new FileChecker(srcFilePath, PlatformType.Alegeus,
                         Vars.dbConnDataProcessing, fileLogParams,
-                        (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                     );
 
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
@@ -511,7 +517,7 @@ namespace DataProcessing
                     fileChecker.CheckFileAndProcess(FileCheckType.AllData, FileCheckProcessType.MoveToDestDirectories);
 
                 },
-                (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             );
 
             //

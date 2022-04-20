@@ -164,7 +164,7 @@ namespace DataProcessingWebApp.Jobs
                 // init checker
                 using FileChecker fileChecker = new FileChecker(
                     srcFilePath, platformType, vars.dbConnDataProcessing, fileLogParams,
-                    (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); });
+                    (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); });
 
                 // check file
                 var results = fileChecker.CheckFileAndProcess(FileCheckType.AllData, FileCheckProcessType.ReturnResults);

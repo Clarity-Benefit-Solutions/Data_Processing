@@ -105,7 +105,7 @@ namespace DataProcessing
             //        // do not log - gives too many lines
             //        //DbUtils.LogFileOperation(FileLogParams);
             //    },
-            //    (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+            //    (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             //);
 
             ////
@@ -148,9 +148,9 @@ namespace DataProcessing
                         "Success", $"Got Participant Enrollment File from FTP");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (arg1, arg2, ex) =>
+                (directory, file, ex) =>
                 {
-                    DbUtils.LogError(arg1, arg2, ex, fileLogParams);
+                    DbUtils.LogError(directory, file, ex, fileLogParams);
                     throw ex;
                 }
             );
@@ -213,7 +213,7 @@ namespace DataProcessing
 
 
                         },
-                        (arg1, arg2, ex) =>
+                        (directory, file, ex) =>
                         {
                             // log
                             fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), srcFilePath,
@@ -221,14 +221,14 @@ namespace DataProcessing
                                 "ERROR", $"Error ion Decrypting Downloaded File");
 
                             DbUtils.LogFileOperation(fileLogParams);
-                            DbUtils.LogError(arg1, arg2, ex, fileLogParams);
+                            DbUtils.LogError(directory, file, ex, fileLogParams);
                         }
                     );
 
                 },
-                (arg1, arg2, ex) =>
+                (directory, file, ex) =>
                 {
-                    DbUtils.LogError(arg1, arg2, ex, fileLogParams);
+                    DbUtils.LogError(directory, file, ex, fileLogParams);
                     throw ex;
                 }
             );
@@ -263,7 +263,7 @@ namespace DataProcessing
 
             //        //2. import file
             //        Import.ImportAlegeusFile(dbConn, srcFilePath, false, fileLogParams,
-            //            (arg1, arg2, ex) => { DbUtils.LogError(arg1, arg2, ex, fileLogParams); }
+            //            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             //        );
 
             //        fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
