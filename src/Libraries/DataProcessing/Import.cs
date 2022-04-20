@@ -67,7 +67,8 @@ namespace DataProcessing
                     isResultFile ? "res_file_table_stage" : "mbi_file_table_stage",
                     isResultFile ? "res_file_name" : "mbi_file_name",
                     isResultFile ? "error_row" : "data_row",
-                    (filePath1,rowNo, line) => {
+                    (filePath1, rowNo, line) =>
+                    {
                         // we only import valid import lines 
                         Boolean import = true;
                         return import;
@@ -360,7 +361,27 @@ namespace DataProcessing
             return newPath;
         }
 
+        public static void MoveFileToAlegeusRejectsFolder(string srcFilePath, string rejectMessage)
+        {
+            Vars Vars = new Vars();
+            MoveFileToRejectsFolder(srcFilePath, rejectMessage, Vars.alegeusFilesPreCheckFailRoot);
+        }
+        public static void MoveFileToRejectsFolder(string srcFilePath, string rejectMessage, string destFolder)
+        {
+            var file = srcFilePath;
+            //
+            if (Utils.IsBlank(destFolder))
+            {
+                destFolder = Path.GetDirectoryName(file);
+            }
 
+            string rejectFilePath = $"{destFolder}/{Path.GetFileName(file)}";
+            FileUtils.MoveFile(file, rejectFilePath, null, null);
+
+            /*export .err file */
+            string errorFilePath = $"{destFolder}/{Path.GetFileName(file)}.err";
+            FileUtils.WriteToFile(errorFilePath, rejectMessage, null);
+        }
         public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath)
         {
             var headerType = HeaderType.NotApplicable;

@@ -190,26 +190,13 @@ namespace DataProcessing
                             }
                             catch (Exception ex2)
                             {
-                                var file = currentFilePath;
-                                DbUtils.LogError(Path.GetFileName(file), file, ex2, fileLogParams);
-                                string rejectFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}";
-                                FileUtils.MoveFile(file, rejectFilePath, null, null);
-
-                                /*export .err file */
-                                string errorFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}.err";
-                                FileUtils.WriteToFile(errorFilePath, ex2.ToString(), null);
+                                Import.MoveFileToAlegeusRejectsFolder(srcFilePath, ex2.ToString());;
                             }
 
                         },
                         (directory, file, ex) =>
                         {
-                            DbUtils.LogError(directory, file, ex, fileLogParams);
-                            string rejectFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}";
-                            FileUtils.MoveFile(file, rejectFilePath, null, null);
-
-                            /*export .err file */
-                            string errorFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}.err";
-                            FileUtils.WriteToFile(errorFilePath, ex.ToString(), null);
+                             Import.MoveFileToAlegeusRejectsFolder(file, ex.ToString());
                         }
                     );
 
@@ -309,14 +296,7 @@ namespace DataProcessing
                 },
                 (directory, file, ex) =>
                 {
-                    DbUtils.LogError(directory, file, ex, fileLogParams);
-                    // move the excel file to rejects
-                    string rejectFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}";
-                    FileUtils.MoveFile(file, rejectFilePath, null, null);
-
-                    /*export .err file */
-                    string errorFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}.err";
-                    FileUtils.WriteToFile(errorFilePath, ex.ToString(), null);
+                    Import.MoveFileToAlegeusRejectsFolder(file, ex.ToString());
                 }
             );
 
@@ -449,13 +429,7 @@ namespace DataProcessing
                 },
                 (directory, file, ex) =>
                 {
-                    DbUtils.LogError(directory, file, ex, fileLogParams);
-                    string rejectFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}";
-                    FileUtils.MoveFile(file, rejectFilePath, null, null);
-
-                    /*export .err file */
-                    string errorFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}.err";
-                    FileUtils.WriteToFile(errorFilePath, ex.ToString(), null);
+                    Import.MoveFileToAlegeusRejectsFolder(file, ex.ToString());
                 }
             );
         }
@@ -588,15 +562,7 @@ namespace DataProcessing
                 },
                 (directory, file, ex) =>
                 {
-                    DbUtils.LogError(directory, file, ex, fileLogParams);
-                    string rejectFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}";
-                    FileUtils.MoveFile(file, rejectFilePath, null, null);
-
-                    /*export .err file */
-                    string errorFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}.err";
-                    FileUtils.WriteToFile(errorFilePath, ex.ToString(), null);
-
-
+                    Import.MoveFileToAlegeusRejectsFolder(file, ex.ToString());
                 }
             );
 
