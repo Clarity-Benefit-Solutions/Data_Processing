@@ -352,7 +352,7 @@ namespace CoreUtils
                 srcFileInfo.MoveTo(newFilePath);
 
                 //
-                fileLogParams.SetFileNames(newFileId, oldFileName, srcFilePath, newFileName, newFilePath,
+                fileLogParams.SetFileNames(newFileId, newFileName, srcFilePath, newFileName, newFilePath,
                     "New UniqueID created for Source File", "Success",
                     $"Set {newFileId} for Source File: {oldFileName} and copied to {newFilePath}");
                 fileLogParams.setOriginalFileUploadedOn(srcFileInfo.CreationTime);

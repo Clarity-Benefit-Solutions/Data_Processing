@@ -182,7 +182,9 @@ namespace CoreUtils.Classes
 
         public static void ImportSingleColumnFlatFile(DbConnection dbConn,
             string srcFilePath, string srcFileName,
-            string tableName, string fileColName, string contentsColName, FileOperationLogParams fileLogParams,
+            string tableName, string fileColName, string contentsColName,
+            ImportThisLineCallback importThisLineCallback,
+            FileOperationLogParams fileLogParams,
             OnErrorCallback onErrorCallback)
         {
             try
@@ -191,10 +193,15 @@ namespace CoreUtils.Classes
                 //LogFileOperation(fileLogParams);
 
                 // read each line and insert
-                using (var inputFile = new StreamReader(srcFilePath))
+                using var inputFile = new StreamReader(srcFilePath);
+
+                string line;
+                int rowNo = 0;
+                while ((line = inputFile.ReadLine()!) != null)
                 {
-                    string line;
-                    while ((line = inputFile.ReadLine()!) != null)
+
+                    rowNo++;
+                    if (importThisLineCallback == null || importThisLineCallback(srcFilePath, rowNo, line))
                     {
                         // insert each line into table
                         var query = $"INSERT INTO {tableName} " +
@@ -263,7 +270,7 @@ namespace CoreUtils.Classes
                 else
                     throw;
             }
-        } 
+        }
         private static Regex RegexCSVParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
 
         public static String[] GetCsvColumnsFromText(string text)

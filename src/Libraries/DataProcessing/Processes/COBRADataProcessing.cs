@@ -199,7 +199,7 @@ namespace DataProcessing
 
                             Boolean processThisFile = false;
                             string destDirPath = "";
-                            
+
                             // look inside file to dtermine if it is a COBRA file
                             if (fileInfo.Extension == ".pgp")
                             {
@@ -442,7 +442,9 @@ namespace DataProcessing
                     string procName = @"dbo.[Fix_COBRAQB_SSObollean]";
                     ImpExpUtils.ImportSingleColumnFlatFile(dbConnCobra, srcFilePath, srcFilePath, tableName,
                         "folder_name",
-                        "QB_data", fileLogParams,
+                        "QB_data",
+                         (filePath1, rowNo, line) => { return false; },
+                         fileLogParams,
                         (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                     );
 

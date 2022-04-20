@@ -67,6 +67,11 @@ namespace DataProcessing
                     isResultFile ? "res_file_table_stage" : "mbi_file_table_stage",
                     isResultFile ? "res_file_name" : "mbi_file_name",
                     isResultFile ? "error_row" : "data_row",
+                    (filePath1,rowNo, line) => {
+                        // we only import valid import lines 
+                        Boolean import = true;
+                        return import;
+                    },
                     fileLogParams,
                     onErrorCallback
                 );

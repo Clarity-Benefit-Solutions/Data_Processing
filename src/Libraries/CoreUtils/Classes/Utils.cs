@@ -224,9 +224,9 @@ namespace CoreUtils.Classes
         }
 
 
-        public static bool TextMatchesPattern(string fileName, string pattern)
+        public static bool TextMatchesPattern(string text, string pattern)
         {
-            if (Operators.LikeString(fileName, pattern, CompareMethod.Text)) return true;
+            if (Operators.LikeString(text, pattern, CompareMethod.Text)) return true;
 
             return false;
         }

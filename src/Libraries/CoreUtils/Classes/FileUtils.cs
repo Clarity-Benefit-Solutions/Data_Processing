@@ -10,6 +10,7 @@ using ExcelDataReader;
 namespace CoreUtils.Classes
 {
     public delegate void SingleFileCallback(string filePath1, string filePath2, string fileContents);
+    public delegate Boolean ImportThisLineCallback(string filePath1, int rowNo, string line);
 
     public delegate void OnErrorCallback(string arg1, string arg2, Exception ex);
 

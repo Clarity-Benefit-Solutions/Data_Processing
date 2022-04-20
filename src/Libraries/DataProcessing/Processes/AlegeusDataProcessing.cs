@@ -79,8 +79,8 @@ namespace DataProcessing
 
             AddHeaderToAllHeaderDirFiles(dbConn, fileLogParams);
 
-            //CopyHoldAllFilesToPreCheckDir
-            CopyHoldAllFilesToPreCheckDir(dbConn, fileLogParams);
+            ////CopyHoldAllFilesToPreCheckDir
+            //CopyHoldAllFilesToPreCheckDir(dbConn, fileLogParams);
 
             //RenamePreCheckDirFilesToMbi
             MoveHeaderDirFilesToPreCheck(dbConn, fileLogParams);
@@ -301,12 +301,16 @@ namespace DataProcessing
                 fileLogParams,
                 (srcFilePath, destFilePath, dummy2) =>
                 {
-                    // delete the excel file!
-                    FileUtils.DeleteFile(srcFilePath, null, null);
+                    // archive the source excel file
+                    string file = srcFilePath;
+                    string archiveFilePath = $"{Path.GetDirectoryName(file)}/Archive/{Path.GetFileName(file)}";
+                    FileUtils.MoveFile(file, archiveFilePath, null, null);
+
                 },
                 (directory, file, ex) =>
                 {
                     DbUtils.LogError(directory, file, ex, fileLogParams);
+                    // move the excel file to rejects
                     string rejectFilePath = $"{Path.GetDirectoryName(file)}/Rejects/{Path.GetFileName(file)}";
                     FileUtils.MoveFile(file, rejectFilePath, null, null);
 
@@ -383,7 +387,24 @@ namespace DataProcessing
 
                     ImpExpUtils.ImportSingleColumnFlatFile(dbConn, srcFilePath, srcFilePath, tableName,
                         "folder_name",
-                        "data_row", fileLogParams,
+                        "data_row",
+                        (filePath1, rowNo, line) =>
+                        {
+                            if (
+                                //ToDo: do we skip all non valid lines that do not start with record type? 
+                                rowNo == 1
+                                && (
+                                    // skip header line
+                                    Utils.TextMatchesPattern(line, "IA,")
+                                    // skip if line is not of a import row Type
+                                    || !Utils.TextMatchesPattern(line, "I*,"))
+                                )
+                            {
+                                return true;
+                            }
+                            return false;
+                        },
+                        fileLogParams,
                         (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                     );
 
@@ -416,6 +437,11 @@ namespace DataProcessing
                         Path.GetFileName(expFilePath), expFilePath, "AlegeusFileProcessing-AddHeaderToFile", "Success",
                         "Added Header to File");
                     DbUtils.LogFileOperation(fileLogParams);
+
+                    // archive source excel file
+                    string file = srcFilePath;
+                    string archiveFilePath = $"{Path.GetDirectoryName(file)}/Archive/{Path.GetFileName(file)}";
+                    FileUtils.MoveFile(file, archiveFilePath, null, null);
                 },
                 (directory, file, ex) =>
                 {
@@ -471,7 +497,7 @@ namespace DataProcessing
             //1. Copy / y G:\FTP\AutomatedHeaderV1_Files\*.* G:\FTP\AutomatedHeaderV1_Files\Archive
             //
             FileUtils.MoveFiles(
-                new[] { Vars.alegeusFileHeadersRoot }, false, new[] { "*.txt", "*.csv", "*.mbi" },
+                new[] { Vars.alegeusFileHeadersRoot }, false, new[] { /*"*.txt", "*.csv",*/ "*.mbi" },
                 Vars.alegeusFilesPreCheckRoot, "", ".mbi",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
