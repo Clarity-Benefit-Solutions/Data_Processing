@@ -390,7 +390,7 @@ namespace DataProcessing
                                 return false;
                             }
                             if (
-                                //ToDo: do we skip all non valid lines that do not start with record type? 
+                                //confirmed: do we skip all non valid lines that do not start with record type? 
                                 rowNo == 1
                                 && (
                                     // skip header line
