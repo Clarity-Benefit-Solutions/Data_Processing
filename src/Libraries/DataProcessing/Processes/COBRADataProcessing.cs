@@ -319,7 +319,7 @@ namespace DataProcessing
                 new string[] { Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingDecryptRoot, Vars.cobraImportRoot },
                 DirectoryIterateType.Files,
                 false,
-                // TODO: CobraFiles do we need to move *.* files from decrypt? not clear
+                // TODO: How are pgop filkes created or processed? CobraFiles do we need to move *.* files from decrypt? not clear
                 new string[] { "*.csv" },
                 (srcFilePath, dummy1, dummy2) =>
                 {

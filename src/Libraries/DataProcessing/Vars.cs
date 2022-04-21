@@ -69,7 +69,7 @@ namespace DataProcessing
             }
             else
             {
-                //todo: modify for PROD
+                //todo: GetProcessBaseDir: modify for PROD?
                 var processModule = Process.GetCurrentProcess().MainModule;
                 if (processModule != null)
                 {

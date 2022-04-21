@@ -895,7 +895,7 @@ namespace DataProcessing
                         DateTime actualPlanEndDate = (DateTime)dbData["planend"];
                         //DateTime? actualGracePeriodEndDate = Utils.ToDate(dbData["actualGracePeriodEndDate"]?.ToString());
 
-                        //todo: we need to get all alegeus plans going back many years
+                        //note: we need to ensure we got alegeus plans going back many years properly. we have data from 2004 onwards in the portal
                         //check start and end dates 
                         if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) &&
                             Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
@@ -1243,6 +1243,7 @@ namespace DataProcessing
 
                     case FormatType.Double:
                         // remove any non digits and non . and non ,
+                        // todo: format with 2 decimal spaces, NO commas or spaces
                         value = regexDouble.Replace(value, String.Empty);
                         if (!Utils.IsDouble(value))
                         {
@@ -1330,7 +1331,7 @@ namespace DataProcessing
 
                 }
             }
-                    
+
 
             // set row column value to the fixed value if it has changed
             if (value != orgValue)
@@ -1390,7 +1391,6 @@ namespace DataProcessing
 
         private string GetDelimitedDataRow(mbi_file_table_stage dataRow, TypedCsvSchema mappings)
         {
-            //todo: verify: return delimited values by modified columns
             string value = "";
 
             foreach (TypedCsvColumn column in mappings)
