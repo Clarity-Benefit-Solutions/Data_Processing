@@ -762,7 +762,7 @@ namespace DataProcessing
                             actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate))
                         {
                             errorMessage =
-                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanStartDate}";
                             ;
                         }
 
@@ -916,7 +916,7 @@ namespace DataProcessing
                             actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate))
                         {
                             errorMessage =
-                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no linger active on {dataRow.PlanStartDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanStartDate}";
                             ;
                         }
 

@@ -839,6 +839,7 @@ namespace DataProcessing
 
                 /////////////////////////////////////////////////////
                 //  IH, RH
+                // todo: how to handle IH files with 10, 12 or 14 columns?
                 case EdiFileFormat.AlegeusEmployeeDeposit:
                 case EdiFileFormat.AlegeusResultsEmployeeDeposit:
                     //
