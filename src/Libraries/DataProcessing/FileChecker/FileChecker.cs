@@ -1305,6 +1305,17 @@ namespace DataProcessing
                 }
             }
 
+            if (!Utils.IsBlank(value))
+            {
+                value.Trim();
+            }
+
+            //set default value
+            if (Utils.IsBlank(value) && !Utils.IsBlank(column.DefaultValue))
+            {
+                value = column.DefaultValue;
+            }
+
             // pad ssn to 9 digits with leading zeros
             if ((column.SourceColumn == "EmployeeSocialSecurityNumber" || column.SourceColumn == "EmployeeID"))
 
@@ -1319,6 +1330,7 @@ namespace DataProcessing
 
                 }
             }
+                    
 
             // set row column value to the fixed value if it has changed
             if (value != orgValue)

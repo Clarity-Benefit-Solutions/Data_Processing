@@ -635,8 +635,9 @@ namespace DataProcessing
                         mappings.Add(new TypedCsvColumn("Country", "Country", FormatType.AlphaOnly, "US", 2, 2, 0, 0));
                         mappings.Add(new TypedCsvColumn("Email", "Email", FormatType.Email, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("MobileNumber", "MobileNumber", FormatType.Phone, null, 0, 10, 0, 0));
+                        // ToDo: EmployeeStatus: Check if we should default values for all clients? 
                         mappings.Add(new TypedCsvColumn("EmployeeStatus", "EmployeeStatus", FormatType.Integer, "2|5", 1, 1, 0,
-                            0));
+                            0, "2"));
 
                         // for New & Segmented
                         mappings.Add(new TypedCsvColumn("EligibilityDate", "EligibilityDate", FormatType.IsoDate, null, 0, 0, 0,
@@ -679,7 +680,8 @@ namespace DataProcessing
                             0));
                         mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
-                        mappings.Add(new TypedCsvColumn("AccountStatus", "AccountStatus", FormatType.Integer, "2|5", 1, 1, 0, 0));
+                        // ToDo: AccountStatus: Check if we should default values for all clients? 
+                        mappings.Add(new TypedCsvColumn("AccountStatus", "AccountStatus", FormatType.Integer, "2|5", 1, 1, 0, 0, "2"));
                         mappings.Add(new TypedCsvColumn("OriginalPrefunded", "OriginalPrefunded", FormatType.Double, null, 0, 0,
                             0, 0));
 
@@ -849,7 +851,8 @@ namespace DataProcessing
                         mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9, 0, 0));
-                        mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0, 0));
+                        // ToDo: DepositType: Check if we should default values for all clients? 
+                        mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0, 0, "1"));
                         mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount", FormatType.Double, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount", FormatType.Double, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EffectiveDate", "EffectiveDate", FormatType.IsoDate, null, 0, 0, 0, 0));
@@ -864,7 +867,7 @@ namespace DataProcessing
                         mappings.Add(new TypedCsvColumn("PlanStartDate", "PlanStartDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9, 0, 0));
-                        mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0, 0));
+                        mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0, 0, "1"));
                         mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount", FormatType.Double, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerDepositAmount", "EmployerDepositAmount", FormatType.Double, null, 0, 0, 0, 0));
                         //

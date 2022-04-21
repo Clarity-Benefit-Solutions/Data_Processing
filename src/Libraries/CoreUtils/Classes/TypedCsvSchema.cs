@@ -10,7 +10,7 @@ namespace CoreUtils.Classes
     public class TypedCsvColumn : DbColumn
     {
         public TypedCsvColumn(int sourceOrdinal, int destinationOrdinal, FormatType formatType = FormatType.Any,
-            int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0)
+            int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0, string defaultValue = "")
         {
             ColumnOrdinal = sourceOrdinal;
             DestinationOrdinal = destinationOrdinal;
@@ -19,6 +19,7 @@ namespace CoreUtils.Classes
             MaxLength = maxLength;
             MinValue = minValue;
             MaxValue = maxValue;
+            DefaultValue = defaultValue;
 
             //
             AllowDBNull = true;
@@ -26,7 +27,7 @@ namespace CoreUtils.Classes
         }
 
         public TypedCsvColumn(string sourceColumn, string destinationColumn, FormatType formatType = FormatType.Any,
-            string fixedValue="", int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0)
+            string fixedValue="", int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0,  string defaultValue = "")
         {
             ColumnName = sourceColumn;
             DestinationColumn = destinationColumn;
@@ -36,6 +37,7 @@ namespace CoreUtils.Classes
             MaxLength = maxLength;
             MinValue = minValue;
             MaxValue = maxValue;
+            DefaultValue = defaultValue;
 
             //
             AllowDBNull = true;
@@ -54,6 +56,7 @@ namespace CoreUtils.Classes
         public int SourceOrdinal => ColumnOrdinal ?? -1;
 
         public int MaxValue { get; set; }
+        public string DefaultValue { get; set; }
 
         public int MinValue { get; set; }
     }
