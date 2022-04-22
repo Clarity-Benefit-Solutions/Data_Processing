@@ -913,10 +913,11 @@ namespace DataProcessing
                         }
 
                         if (!Utils.IsBlank(dataRow.PlanEndDate) &&
-                            actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate))
+                            actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate)
+                            && dataRow.PlanEndDate != "20991231")
                         {
                             errorMessage =
-                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanStartDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanEndDate}";
                             ;
                         }
 
@@ -1074,7 +1075,7 @@ namespace DataProcessing
                 if (PlatformType == PlatformType.Alegeus)
                 {
                     string queryString =
-                            $"select employer_id, account_type_code, plan_id, min(plan_year_start_date) as plan_year_start_date, max(plan_year_end_date) as plan_year_end_date /* , max(grace_period_end_date) grace_period_end_date*/ " +
+                            $"select employer_id, account_type_code, plan_id, date(min(plan_year_start_date)) as plan_year_start_date, date(max(plan_year_end_date)) as plan_year_end_date /* , max(grace_period_end_date) grace_period_end_date*/ " +
                             $" from wc.vw_wc_employer_plans_combined " +
                             $" where employer_id = '{Utils.DbQuote(employerId)}' " +
                             $" group by employer_id, account_type_code, plan_id " +
@@ -1120,7 +1121,7 @@ namespace DataProcessing
                 {
                     // get ALL plans
                     string queryString1 =
-                            $" select employerid, employeeid, plancode, plandesc, min(planstart) as planstart, max(planend) as planend " +
+                            $" select employerid, employeeid, plancode, plandesc, date(min(planstart)) as planstart, date(max(planend)) as planend " +
                             $" from wc.vw_wc_participant_plans_combined " +
                             $" where employerid = '{Utils.DbQuote(employerId)}' " +
                             $" group by employerid, employeeid, plancode, plandesc" +
@@ -1217,6 +1218,11 @@ namespace DataProcessing
                     case FormatType.AlphaOnly:
                         // replace all non alphanumeric
                         value = regexAlphaOnly.Replace(value, String.Empty);
+                        break;
+
+                    case FormatType.FixedConstant:
+                        // default to fixed value always!
+                        value = column.FixedValue;
                         break;
 
                     case FormatType.AlphaAndDashes:

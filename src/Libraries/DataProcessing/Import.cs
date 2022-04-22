@@ -603,7 +603,7 @@ namespace DataProcessing
                     if (fileFormat == EdiFileFormat.AlegeusDemographics)
                     {
                         // for all
-                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.String, "BENEFL", 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeSocialSecurityNumber", "EmployeeSocialSecurityNumber", FormatType.AlphaNumeric, null, 9, 9, 0, 0));
@@ -657,7 +657,7 @@ namespace DataProcessing
                     if (fileFormat == EdiFileFormat.AlegeusEnrollment)
                     {
 
-                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.String, "BENEFL", 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanId", "PlanId", FormatType.AlphaNumeric, null, 3, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9, 0, 0));
@@ -719,7 +719,7 @@ namespace DataProcessing
                     //
                     if (fileFormat == EdiFileFormat.AlegeusDependentDemographics)
                     {
-                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.String, "BENEFL", 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("DependentID", "DependentID", FormatType.String, null, 0, 0, 0, 0));
@@ -759,7 +759,7 @@ namespace DataProcessing
                     //
                     if (fileFormat == EdiFileFormat.AlegeusDependentLink)
                     {
-                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.String, "BENEFL", 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("DependentID", "DependentID", FormatType.String, null, 0, 0, 0, 0));
@@ -794,7 +794,7 @@ namespace DataProcessing
                     //
                     if (fileFormat == EdiFileFormat.AlegeusCardCreation)
                     {
-                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.String, "BENEFL", 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("IssueCard", "IssueCard", FormatType.String, null, 0, 0, 0, 0));
@@ -830,7 +830,7 @@ namespace DataProcessing
                     //
                     if (fileFormat == EdiFileFormat.AlegeusEmployeeDeposit)
                     {
-                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.String, "BENEFL", 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.AlphaNumeric, null, 3, 15, 0,
                             0));
@@ -870,7 +870,7 @@ namespace DataProcessing
                     //
                     if (fileFormat == EdiFileFormat.AlegeusEmployeeDeposit)
                     {
-                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.String, "BENEFL", 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
                         // ? planid??
                         mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.AlphaNumeric, null, 3, 15, 0,
@@ -911,7 +911,7 @@ namespace DataProcessing
                     //
                     if (fileFormat == EdiFileFormat.AlegeusEmployeeHrInfo)
                     {
-                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.String, "BENEFL", 0, 0, 0, 0));
+                        mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("EligibilityDate", "EligibilityDate", FormatType.IsoDate, null, 0, 0, 0,

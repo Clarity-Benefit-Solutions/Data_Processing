@@ -57,6 +57,7 @@ namespace CoreUtils.Classes
         [Utils.DisplayText("NumbersAndDashes")] NumbersAndDashes,
         [Utils.DisplayText("Integer")] Integer,
         [Utils.DisplayText("Double")] Double,
+        [Utils.DisplayText("FixedConstant")] FixedConstant,
         [Utils.DisplayText("YYYYMMDD")] IsoDate,
 
         [Utils.DisplayText("YYYYMMDD HHMMNNSS")]
