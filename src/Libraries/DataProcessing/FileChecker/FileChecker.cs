@@ -508,13 +508,16 @@ namespace DataProcessing
                 if (PlatformType == PlatformType.Alegeus)
                 {
                     // check DB
-                    if (Utils.IsBlank(dataRow.TpaId))
+                    if (Utils.IsBlank(column.FixedValue))
                     {
-                        errorMessage = "TPA ID cannot be blank. It must always be BENEFL";
-                    }
-                    else if (dataRow.TpaId != "BENEFL")
-                    {
-                        errorMessage = $"TPA ID {dataRow.TpaId} is invalid. It must always be BENEFL";
+                        if (Utils.IsBlank(dataRow.TpaId))
+                        {
+                            errorMessage = "TPA ID cannot be blank. It must always be BENEFL";
+                        }
+                        else if (dataRow.TpaId != "BENEFL")
+                        {
+                            errorMessage = $"TPA ID {dataRow.TpaId} is invalid. It must always be BENEFL";
+                        }
                     }
                 }
                 else
@@ -908,7 +911,7 @@ namespace DataProcessing
                             errorMessage +=
                                 $"The AccountTypeID {dataRow.AccountTypeCode}" +
                                 (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
+                                $" Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate} for Employee Id {dataRow.EmployeeID}";
                         }
 
                         //check plan dates match Alegeus
@@ -918,7 +921,7 @@ namespace DataProcessing
                             errorMessage +=
                                 $"The AccountTypeID {dataRow.AccountTypeCode}" +
                                 (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
+                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate} for Employee Id {dataRow.EmployeeID}";
                         }
 
                         if (!Utils.IsBlank(dataRow.PlanEndDate) &&
@@ -928,7 +931,7 @@ namespace DataProcessing
                             errorMessage =
                                 $"The AccountTypeID {dataRow.AccountTypeCode}" +
                                 (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanEndDate}";
+                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanEndDate} for Employee Id {dataRow.EmployeeID}";
                             ;
                         }
 
@@ -939,7 +942,7 @@ namespace DataProcessing
                             errorMessage +=
                                 $"The AccountTypeID {dataRow.AccountTypeCode}" +
                                 (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
+                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate} for Employee Id {dataRow.EmployeeID}";
                         }
 
                         if (!Utils.IsBlank(dataRow.EffectiveDate) &&
@@ -948,7 +951,7 @@ namespace DataProcessing
                             errorMessage =
                                 $"The AccountTypeID {dataRow.AccountTypeCode}" +
                                 (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.EffectiveDate}";
+                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.EffectiveDate} for Employee Id {dataRow.EmployeeID}";
                             ;
                         }
                     }
