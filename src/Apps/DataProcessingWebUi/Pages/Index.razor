@@ -5,6 +5,9 @@
 @page "/"
 @using CoreUtils.Classes
 @using System
+@using System.Globalization
+@using System.Net.Http.Headers
+@using Newtonsoft.Json
 
 <h1>File And Data Processing App</h1>
 
@@ -123,12 +126,8 @@
 
 @code {
 
-    inject IJSRuntime
-
-    jsRuntime
-        inject
-
-    NavigationManager navManager
+    @inject IJSRuntime jsRuntime 
+    @inject NavigationManager navManager
 
     private readonly string _username = "dataprocessinguser";
         @*Utils.GetAppSetting("BasicAuthUserName");*@
