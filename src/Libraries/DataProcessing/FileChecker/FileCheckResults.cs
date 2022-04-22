@@ -1,45 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CoreUtils.Classes;
 
 namespace DataProcessing
 {
+
     /// <inheritdoc />
     public class FileCheckResults : Dictionary<int, string>
     {
-        internal Boolean MarkAsCompleteFail = false;
+        internal bool MarkAsCompleteFail = false;
 
-        public FileCheckResults() : base()
-        {
-        }
+        public bool HasErrors => Count > 0;
 
-        public Boolean HasErrors
-        {
-            get { return this.Count > 0; }
-        }
-
-        public Boolean IsCompleteFail
-        {
-            get { return this.MarkAsCompleteFail; }
-        }
+        public bool IsCompleteFail => MarkAsCompleteFail;
 
         public OperationResultType OperationResultType
         {
             get
             {
-                if (this.IsCompleteFail)
-                {
+                if (IsCompleteFail)
                     return OperationResultType.CompleteFail;
-                }
-                else if (this.HasErrors)
-                {
+                if (HasErrors)
                     return OperationResultType.PartialFail;
-                }
-                else
-                {
-                    return OperationResultType.Ok;
-                }
+                return OperationResultType.Ok;
             }
         }
     }
+
 }

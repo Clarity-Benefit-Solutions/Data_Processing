@@ -3,21 +3,66 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using ExcelDataReader;
 
 namespace CoreUtils.Classes
 {
+
     public delegate void SingleFileCallback(string filePath1, string filePath2, string fileContents);
-    public delegate Boolean ImportThisLineCallback(string filePath1, int rowNo, string line);
+
+    public delegate bool ImportThisLineCallback(string filePath1, int rowNo, string line);
 
     public delegate void OnErrorCallback(string arg1, string arg2, Exception ex);
 
 
-
     public class FileUtils
     {
+        public static void EnsurePathExists(string fullFilePath)
+        {
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(fullFilePath)!);
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
+        }
+
+        public static bool IgnoreFile(string srcFilePath)
+        {
+            var srcFileInfo = new FileInfo(srcFilePath);
+            var fileName = srcFileInfo.Name;
+
+            if (fileName.StartsWith(".")) return true;
+
+            return false;
+        }
+
+        public static void WriteToFile(string filePath, string text, OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                //
+                EnsurePathExists(filePath);
+
+                using var writer = new StreamWriter(filePath, false);
+                writer.WriteLine(text);
+
+                // close
+                if (writer != null) writer.Close();
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                    onErrorCallback(filePath, text, ex);
+                else
+                    throw;
+            }
+        }
+
         #region IOOperations
 
         public static void IterateDirectory(string[] sourceDirectories, DirectoryIterateType iterateType,
@@ -50,7 +95,7 @@ namespace CoreUtils.Classes
         public static void IterateDirectory(string directory, DirectoryIterateType iterateType, bool subDirsAlso,
             string[] fileMasks, SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] { "*.*" };
+            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] {"*.*"};
 
             try
             {
@@ -92,7 +137,6 @@ namespace CoreUtils.Classes
                     throw new Exception(message);
                 }
 
-
                 // check dir exists
                 var dirInfo = new DirectoryInfo(directory);
                 if (dirInfo.Exists == false) Directory.CreateDirectory(directory);
@@ -109,10 +153,8 @@ namespace CoreUtils.Classes
                         subDirsAlso ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly
                     );
 
-
                 // callback for each file
                 foreach (var file in files)
-                {
                     if (IgnoreFile(file))
                     {
                         // dont call back
@@ -132,7 +174,8 @@ namespace CoreUtils.Classes
                                 throw;
                         }
                     }
-                };
+
+                ;
             }
             catch (Exception ex)
             {
@@ -155,7 +198,6 @@ namespace CoreUtils.Classes
                     var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : sourceDirectories should be set";
                     throw new Exception(message);
                 }
-
 
                 // iterate for each fileMask
                 foreach (var sourceDirectory in sourceDirectories)
@@ -356,18 +398,13 @@ namespace CoreUtils.Classes
         public static string FixPath(string filePath, bool makeLowerCase = false)
         {
             // do not fix path is starts with // i.e. is a UNC path
-            if (filePath.StartsWith("\\\\"))
-            {
-                return filePath;
-            }
+            if (filePath.StartsWith("\\\\")) return filePath;
 
             filePath = filePath.Replace("\\", "/");
             filePath = filePath.Replace("//", "/");
             // remove last slash
             if (filePath.Length > 1 && Utils.Right(filePath, 1) == "/")
-            {
                 filePath = filePath.Remove(filePath.Length - 1, 1);
-            }
             if (makeLowerCase) filePath = filePath.ToLower();
             return filePath;
         }
@@ -471,7 +508,7 @@ namespace CoreUtils.Classes
             bool subDirsAlso, string[] fileMasks, string destDirectory, string destFileName, string destFileExt,
             SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] { "*.*" };
+            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] {"*.*"};
             try
             {
                 // iterate for each fileMask
@@ -528,7 +565,6 @@ namespace CoreUtils.Classes
                 else
                     throw;
             }
-
         }
 
         public static void DoSingleFileOperation(FileOperation fileOperation, string sourceFilePath,
@@ -559,7 +595,7 @@ namespace CoreUtils.Classes
                 // do operation
                 if (fileOperation == FileOperation.Move)
                 {
-                    if (FileUtils.FixPath(destFilePath) != FileUtils.FixPath(sourceFilePath))
+                    if (FixPath(destFilePath) != FixPath(sourceFilePath))
                     {
                         var destFile = new FileInfo(destFilePath);
                         if (destFile.Exists)
@@ -573,7 +609,7 @@ namespace CoreUtils.Classes
                 }
                 else if (fileOperation == FileOperation.Copy)
                 {
-                    if (FileUtils.FixPath(destFilePath) != FileUtils.FixPath(sourceFilePath))
+                    if (FixPath(destFilePath) != FixPath(sourceFilePath))
                     {
                         srcFileInfo.CopyTo(destFilePath, true);
                         fileContents = "";
@@ -643,16 +679,17 @@ namespace CoreUtils.Classes
         #region FileConversions
 
         public static void ConvertAllExcelFilesToCsv(string sourceDir, bool subDirsAlso, string destDir,
-            DbConnection dbConn, FileOperationLogParams fileLogParams, SingleFileCallback singleFileCallback, OnErrorCallback onErrorCallback)
+            DbConnection dbConn, FileOperationLogParams fileLogParams, SingleFileCallback singleFileCallback,
+            OnErrorCallback onErrorCallback)
         {
             IterateDirectory(
                 sourceDir, DirectoryIterateType.Files, subDirsAlso, "*.xls*"
                 , /*fileCallBack*/ (foundFile, dummy, dummy2) =>
                 {
                     var csvFilePath = GetDestFilePath(foundFile, destDir, "", "", ".csv");
-                //
-                    string password = "";
-                    ConvertExcelFileToCsv(foundFile, csvFilePath,password,
+                    //
+                    var password = "";
+                    ConvertExcelFileToCsv(foundFile, csvFilePath, password,
                         (srcFilePath, destFilePath, dummy4) =>
                         {
                             // add to fileLog
@@ -667,7 +704,10 @@ namespace CoreUtils.Classes
                         onErrorCallback);
                 } /*end fileCallBack*/
                 , /*onErrorCallback*/ // at end 
-                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); } /*end onErrorCallback*/
+                (directory, file, ex) =>
+                {
+                    DbUtils.LogError(directory, file, ex, fileLogParams);
+                } /*end onErrorCallback*/
             ); //FileUtils.IterateDirectory;
         } //end method
 
@@ -678,7 +718,7 @@ namespace CoreUtils.Classes
             {
                 using (var stream = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    ExcelReaderConfiguration config = new ExcelReaderConfiguration { Password = password };
+                    var config = new ExcelReaderConfiguration {Password = password};
                     IExcelDataReader reader = null;
                     if (sourceFilePath.EndsWith(".xls"))
                         reader = ExcelReaderFactory.CreateBinaryReader(stream);
@@ -704,22 +744,19 @@ namespace CoreUtils.Classes
                             var fieldValue = ds.Tables[0].Rows[rowNo][i];
                             string strFieldValue;
                             if (fieldValue.GetType().Name == "DateTime")
-                            {
-                                strFieldValue = Utils.ToIsoDateTimeString((DateTime)fieldValue);
-                            }
+                                strFieldValue = Utils.ToIsoDateTimeString((DateTime) fieldValue);
                             else
-                            {
                                 strFieldValue = fieldValue.ToString() ?? "";
-                            }
                             arr.Add(strFieldValue);
                         }
+
                         rowNo++;
-                        string line = string.Join(",", arr) + "\n";
+                        var line = string.Join(",", arr) + "\n";
                         csvContent += line;
                     }
 
                     //
-                    FileUtils.EnsurePathExists(destFilePath);
+                    EnsurePathExists(destFilePath);
                     var csv = new StreamWriter(destFilePath, false);
                     csv.Write(csvContent);
                     csv.Close();
@@ -739,55 +776,6 @@ namespace CoreUtils.Classes
         }
 
         #endregion
-
-        public static void EnsurePathExists(string fullFilePath)
-        {
-            try
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(fullFilePath)!);
-            }
-            catch (Exception)
-            {
-                //ignore
-            }
-        }
-
-        public static Boolean IgnoreFile(string srcFilePath)
-        {
-            FileInfo srcFileInfo = new FileInfo(srcFilePath);
-            string fileName = srcFileInfo.Name;
-
-            if (fileName.StartsWith("."))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static void WriteToFile(string filePath, string text, OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                //
-                FileUtils.EnsurePathExists(filePath);
-
-                using var writer = new StreamWriter(filePath, false);
-                writer.WriteLine(text);
-
-                // close
-                if (writer != null) writer.Close();
-
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                    onErrorCallback(filePath, text, ex);
-                else
-                    throw;
-            }
-        }
-
     }
+
 }

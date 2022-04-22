@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Data.Common;
-using System.Runtime.InteropServices;
 
 namespace CoreUtils.Classes
 {
 
-
     public class MessageLogParams : EventArgs
     {
         public string Command = "";
-        public DbConnection DbConnection = null;
+        public DbConnection DbConnection;
         public string LogTableName = "";
         public string ModuleName = "";
         public string Platform = "";
@@ -42,7 +40,7 @@ namespace CoreUtils.Classes
 
         public MessageLogParams Clone()
         {
-            var cloned = (MessageLogParams)MemberwiseClone();
+            var cloned = (MessageLogParams) MemberwiseClone();
             //
             return cloned;
         }
@@ -63,7 +61,7 @@ namespace CoreUtils.Classes
 
         public MessageLogParams SetStepAndCommand(string stepName, string command)
         {
-            var cloned = (MessageLogParams)MemberwiseClone();
+            var cloned = (MessageLogParams) MemberwiseClone();
             //
             cloned.StepName = stepName;
             cloned.Command = command;
@@ -83,17 +81,16 @@ namespace CoreUtils.Classes
     }
 
 
-
     public class FileOperationLogParams : EventArgs
     {
         public string Bencode = "";
-        public DbConnection DbConnection = null;
+        public DbConnection DbConnection;
 
         public MessageLogParams DbMessageLogParams;
         public string FileId = "";
-        public int FileLogId = 0;
+        public int FileLogId;
 
-        public int FileLogTaskId = 0;
+        public int FileLogTaskId;
         public string FolderName = "";
         public string IcType = "";
         public string LogTableName = "";
@@ -137,7 +134,7 @@ namespace CoreUtils.Classes
 
         public FileOperationLogParams Clone()
         {
-            var cloned = (FileOperationLogParams)MemberwiseClone();
+            var cloned = (FileOperationLogParams) MemberwiseClone();
             cloned.DbMessageLogParams = DbMessageLogParams;
             //
             return cloned;
@@ -178,7 +175,6 @@ namespace CoreUtils.Classes
             FolderName = "";
             Bencode = "";
             TemplateType = "";
-
 
             ProcessingTask = processingTask;
             ProcessingTaskOutcome = processingTaskOutcome;
@@ -227,13 +223,9 @@ namespace CoreUtils.Classes
         {
             // add if > then sql server min date
             if (originalFileUploadedOn > Utils.ToDate("1753-01-01"))
-            {
                 OriginalFileUploadedOn = originalFileUploadedOn.ToString("yyyy-MM-dd HH:mm:ss");
-            }
             else
-            {
                 OriginalFileUploadedOn = "";
-            }
         }
 
         public void CalculateIds()
@@ -270,7 +262,8 @@ namespace CoreUtils.Classes
         public override string ToString()
         {
             return
-                $"'{FileId}' -  '{ProcessingTask}' - '{OriginalFileName}' - '{NewFileName}' - '{ProcessingTaskOutcome}' - '{ProcessingTaskOutcomeDetails}'";
+                $"'{FileId}' - '{ProcessingTask}' - '{OriginalFileName}' - '{NewFileName}' - '{ProcessingTaskOutcome}' - '{ProcessingTaskOutcomeDetails}'";
         }
     }
+
 }

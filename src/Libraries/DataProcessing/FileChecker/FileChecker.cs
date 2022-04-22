@@ -10,7 +10,6 @@ using System.Text.RegularExpressions;
 using CoreUtils;
 using CoreUtils.Classes;
 using DataProcessing.DataModels.DataProcessing;
-using DataProcessing;
 
 // ReSharper disable All
 
@@ -30,20 +29,10 @@ namespace DataProcessing
         //
         private readonly DbConnection dbConnPortalWc;
 
-        public void ClearCache()
-        {
-            if (_cache != null)
-            {
-
-            }
-            _cache = new ExtendedCache(TimeSpan.FromHours(1), TimeSpan.FromHours(5), null);
-        }
-
         //
         public readonly FileCheckResults fileCheckResults = new FileCheckResults();
         public Boolean hasHeaderRow = false;
         public HeaderType headerType = HeaderType.NotApplicable;
-        private Vars Vars { get; } = new Vars();
 
 
         public FileChecker(string _srcFilePath, PlatformType _platformType, DbConnection _dbConn,
@@ -57,6 +46,8 @@ namespace DataProcessing
             this.dbConnPortalWc = Vars.dbConnPortalWc;
             this.OnErrorCallback = _onErrorCallback;
         }
+
+        private Vars Vars { get; } = new Vars();
 
         public string SrcFilePath { get; set; }
         public string OriginalSrcFilePath { get; set; }
@@ -74,8 +65,16 @@ namespace DataProcessing
             //
         }
 
-        #region CheckFile
+        public void ClearCache()
+        {
+            if (_cache != null)
+            {
+            }
 
+            _cache = new ExtendedCache(TimeSpan.FromHours(1), TimeSpan.FromHours(5), null);
+        }
+
+        #region CheckFile
 
         public OperationResult CheckFileAndProcess(FileCheckType fileCheckType,
             FileCheckProcessType fileCheckProcessType)
@@ -91,7 +90,6 @@ namespace DataProcessing
             // act on resultType
             switch (resultType)
             {
-
                 ///////////////////////////////////////
                 case OperationResultType.Ok:
                     ///////////////////////////////////////
@@ -121,7 +119,6 @@ namespace DataProcessing
                     }
                     else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
                     {
-
                     }
 
                     // OK result
@@ -188,7 +185,6 @@ namespace DataProcessing
                     // OK result
                     return new OperationResult(0, "300", "Completed", "", strCheckResults);
             }
-
         }
         //
 
@@ -223,7 +219,7 @@ namespace DataProcessing
                 FileUtils.EnsurePathExists(splitFileName);
                 //
                 var splitFileWriter = new StreamWriter(splitFileName, false);
-                files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
+                files.Add(fileFormat, new Object[] {splitFileWriter, splitFileName});
             }
 
             // open file for reading
@@ -244,7 +240,7 @@ namespace DataProcessing
                         )
                         {
                             // get temp file for each format
-                            var splitFileWriter = (StreamWriter)files[fileFormat2][0];
+                            var splitFileWriter = (StreamWriter) files[fileFormat2][0];
                             // if there is prvUnwrittenLine it was probably a header line - write to the file that 
 
                             splitFileWriter.WriteLine(line);
@@ -261,11 +257,11 @@ namespace DataProcessing
             foreach (var fileFormat3 in files.Keys)
             {
                 // get temp file for each format
-                var writer = (StreamWriter)files[fileFormat3][0];
+                var writer = (StreamWriter) files[fileFormat3][0];
                 writer.Close();
 
                 // import and check the file
-                CheckFile(fileFormat3, (string)files[fileFormat3][1]);
+                CheckFile(fileFormat3, (string) files[fileFormat3][1]);
             }
         }
 
@@ -290,7 +286,6 @@ namespace DataProcessing
             // truncate staging table
             DbUtils.TruncateTable(DbConn, tableName,
                 FileLogParams?.GetMessageLogParams());
-
 
             // import the file with bulk copy
             var newPath =
@@ -380,7 +375,6 @@ namespace DataProcessing
                 // save Org Column value before changes
                 var orgValue = dataRow.ColumnValue(column.SourceColumn) ?? "";
 
-
                 // 1. valid Format and general rules check - save corrected value to row
                 var formattedValue = EnsureValueIsOfFormatAndMatchesRules(dataRow, column, mappings);
             }
@@ -442,7 +436,6 @@ namespace DataProcessing
                     default:
                         break;
                 }
-
             }
         }
 
@@ -582,8 +575,8 @@ namespace DataProcessing
                         //string status = dbData["employer_status"]?.ToString();
                         //if (status != "Active" && status != "New")
                         //{
-                        //    errorMessage =
-                        //        $"The Employer ID {dataRow.EmployerId} has status {status} which is not valid";
+                        //  errorMessage =
+                        //    $"The Employer ID {dataRow.EmployerId} has status {status} which is not valid";
                         //}
                     }
                 }
@@ -665,8 +658,8 @@ namespace DataProcessing
                         //float status = Utils.ToNumber(dbData["is_active"]?.ToString());
                         //if (status <= 0 && Utils.ToNumber(dataRow.EmployeeStatus) > 1)
                         //{
-                        //    errorMessage +=
-                        //        $"The Employee ID {dataRow.EmployeeID} has status {status} which is not valid";
+                        //  errorMessage +=
+                        //    $"The Employee ID {dataRow.EmployeeID} has status {status} which is not valid";
                         //}
                     }
                 }
@@ -732,14 +725,16 @@ namespace DataProcessing
                     if (dbRows.Length == 0)
                     {
                         errorMessage +=
-                            $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId}";
+                            $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                            (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                            $" could not be found for Employer Id {dataRow.EmployerId}";
                         ;
                     }
                     else
                     {
                         DataRow dbData = dbRows[0];
-                        DateTime actualPlanStartDate = (DateTime)dbData["plan_year_start_date"];
-                        DateTime actualPlanEndDate = (DateTime)dbData["plan_year_end_date"];
+                        DateTime actualPlanStartDate = (DateTime) dbData["plan_year_start_date"];
+                        DateTime actualPlanEndDate = (DateTime) dbData["plan_year_end_date"];
                         //DateTime actualGracePeriodEndDate = (DateTime)dbData["grace_period_end_date"];
 
                         //check start and end dates 
@@ -747,7 +742,9 @@ namespace DataProcessing
                             Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
                         {
                             errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                $" Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
                         }
 
                         //check plan dates match Alegeus
@@ -755,14 +752,18 @@ namespace DataProcessing
                             actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
                         {
                             errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
                         }
 
                         if (!Utils.IsBlank(dataRow.PlanEndDate) &&
                             actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate))
                         {
                             errorMessage =
-                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanStartDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanStartDate}";
                             ;
                         }
 
@@ -771,17 +772,20 @@ namespace DataProcessing
                             actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
                         }
 
                         if (!Utils.IsBlank(dataRow.EffectiveDate) &&
                             actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage =
-                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.EffectiveDate}";
                             ;
                         }
-
                     }
 
                     //
@@ -800,7 +804,6 @@ namespace DataProcessing
             {
                 return false;
             }
-
         }
 
         public Boolean CheckEmployeePlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
@@ -836,9 +839,9 @@ namespace DataProcessing
                     //// if we are enrolling an employee in a plan, only check if ER has this EE
                     //if (fileFormat == EdiFileFormat.AlegeusEnrollment)
                     //{
-                    //    //as it is an enrollment file, check the EE exists and enroll in the plan
-                    //    var hasError = this.CheckEmployeeExists(dataRow, column, fileFormat);
-                    //    //return hasError;
+                    //  //as it is an enrollment file, check the EE exists and enroll in the plan
+                    //  var hasError = this.CheckEmployeeExists(dataRow, column, fileFormat);
+                    //  //return hasError;
                     //}
 
                     DataTable dbResults = GetAllEmployeePlansForEmployer(dataRow.EmployerId);
@@ -882,7 +885,9 @@ namespace DataProcessing
                         }
 
                         errorMessage +=
-                            $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} could not be found for Employer Id {dataRow.EmployerId} and Employee Id {dataRow.EmployeeID}";
+                            $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                            (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                            $" could not be found for Employee Id {dataRow.EmployeeID}";
                         ;
                     }
                     else
@@ -891,8 +896,8 @@ namespace DataProcessing
 
                         // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
 
-                        DateTime actualPlanStartDate = (DateTime)dbData["planstart"];
-                        DateTime actualPlanEndDate = (DateTime)dbData["planend"];
+                        DateTime actualPlanStartDate = (DateTime) dbData["planstart"];
+                        DateTime actualPlanEndDate = (DateTime) dbData["planend"];
                         //DateTime? actualGracePeriodEndDate = Utils.ToDate(dbData["actualGracePeriodEndDate"]?.ToString());
 
                         //note: we need to ensure we got alegeus plans going back many years properly. we have data from 2004 onwards in the portal
@@ -901,7 +906,9 @@ namespace DataProcessing
                             Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
                         {
                             errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                $" Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
                         }
 
                         //check plan dates match Alegeus
@@ -909,7 +916,9 @@ namespace DataProcessing
                             actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
                         {
                             errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode} and PlanID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
                         }
 
                         if (!Utils.IsBlank(dataRow.PlanEndDate) &&
@@ -917,7 +926,9 @@ namespace DataProcessing
                             && dataRow.PlanEndDate != "20991231")
                         {
                             errorMessage =
-                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanEndDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanEndDate}";
                             ;
                         }
 
@@ -926,19 +937,21 @@ namespace DataProcessing
                             actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
                         }
 
                         if (!Utils.IsBlank(dataRow.EffectiveDate) &&
                             actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
                         {
                             errorMessage =
-                                $"The AccountTypeID {dataRow.AccountTypeCode} and Plan ID {dataRow.PlanId} ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on  {dataRow.EffectiveDate}";
+                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.EffectiveDate}";
                             ;
                         }
-
                     }
-
                 }
 
                 //
@@ -963,7 +976,6 @@ namespace DataProcessing
         {
             // dependent plans are linked to the employee
             return CheckEmployeeExists(dataRow, column, fileFormat);
-
         }
 
         public Boolean CheckDependentPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
@@ -984,7 +996,7 @@ namespace DataProcessing
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-AllEmployers";
             if (_cache.ContainsKey(cacheKey))
             {
-                dbResults = (DataTable)_cache.Get(cacheKey);
+                dbResults = (DataTable) _cache.Get(cacheKey);
             }
             else
             {
@@ -994,14 +1006,14 @@ namespace DataProcessing
                         $"select employer_id, employer_name, employer_status from wc.wc_employers " +
                         $" order by employer_id ;";
                     //
-                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                    dbResults = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         queryString, null,
                         FileLogParams?.GetMessageLogParams());
 
                     // create index on EmployeeID
 
                     DataColumn[] indices = new DataColumn[1];
-                    indices[0] = (DataColumn)dbResults.Columns["employerid"];
+                    indices[0] = (DataColumn) dbResults.Columns["employerid"];
                     dbResults.PrimaryKey = indices;
 
                     //
@@ -1014,7 +1026,6 @@ namespace DataProcessing
             }
 
             return dbResults;
-
         }
 
         // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
@@ -1025,7 +1036,7 @@ namespace DataProcessing
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployees";
             if (_cache.ContainsKey(cacheKey))
             {
-                dbResults = (DataTable)_cache.Get(cacheKey);
+                dbResults = (DataTable) _cache.Get(cacheKey);
             }
             else
             {
@@ -1033,18 +1044,18 @@ namespace DataProcessing
                 {
                     string queryString =
                         $"SELECT employerid, employeeid, wc.wc_is_active_status(employeestatus, employeeid,employerid) is_active " +
-                        $" FROM wc.wc_participants  " +
+                        $" FROM wc.wc_participants " +
                         $" where employerid = '{Utils.DbQuote(employerId)}' " +
                         $" ORDER by employeeid ";
                     //
-                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                    dbResults = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         queryString, null,
                         FileLogParams?.GetMessageLogParams());
 
                     // create index on EmployeeID
 
                     DataColumn[] indices = new DataColumn[1];
-                    indices[0] = (DataColumn)dbResults.Columns["employeeid"];
+                    indices[0] = (DataColumn) dbResults.Columns["employeeid"];
                     dbResults.PrimaryKey = indices;
 
                     //
@@ -1057,7 +1068,6 @@ namespace DataProcessing
             }
 
             return dbResults;
-
         } // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
         // cache all plans for ER to reduce number of queries to database - each query for a single plan takes around 150 ms so we aree saving significant time esp for ER witjh many EE
 
@@ -1068,7 +1078,7 @@ namespace DataProcessing
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployerPlans";
             if (_cache.ContainsKey(cacheKey))
             {
-                dbResults = (DataTable)_cache.Get(cacheKey);
+                dbResults = (DataTable) _cache.Get(cacheKey);
             }
             else
             {
@@ -1082,15 +1092,15 @@ namespace DataProcessing
                             $" order by employer_id, plan_id, account_type_code "
                         ;
                     //
-                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                    dbResults = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         queryString, null,
                         FileLogParams?.GetMessageLogParams());
 
                     // create index on EmployeeID
 
                     DataColumn[] indices = new DataColumn[2];
-                    indices[0] = (DataColumn)dbResults.Columns["account_type_code"];
-                    indices[1] = (DataColumn)dbResults.Columns["plan_id"];
+                    indices[0] = (DataColumn) dbResults.Columns["account_type_code"];
+                    indices[1] = (DataColumn) dbResults.Columns["plan_id"];
                     dbResults.PrimaryKey = indices;
 
                     //
@@ -1103,7 +1113,6 @@ namespace DataProcessing
             }
 
             return dbResults;
-
         }
 
         private DataTable GetAllEmployeePlansForEmployer(string employerId)
@@ -1113,7 +1122,7 @@ namespace DataProcessing
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployeePlans";
             if (_cache.ContainsKey(cacheKey))
             {
-                dbResults = (DataTable)_cache.Get(cacheKey);
+                dbResults = (DataTable) _cache.Get(cacheKey);
             }
             else
             {
@@ -1130,16 +1139,16 @@ namespace DataProcessing
                     ;
                     //
 
-                    DataTable dt1 = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                    DataTable dt1 = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         queryString1, null,
                         FileLogParams?.GetMessageLogParams());
 
                     // create index on EmployeeID
 
                     DataColumn[] indices = new DataColumn[3];
-                    indices[0] = (DataColumn)dt1.Columns["employeeid"];
-                    indices[1] = (DataColumn)dt1.Columns["plancode"];
-                    indices[2] = (DataColumn)dt1.Columns["plandesc"];
+                    indices[0] = (DataColumn) dt1.Columns["employeeid"];
+                    indices[1] = (DataColumn) dt1.Columns["plancode"];
+                    indices[2] = (DataColumn) dt1.Columns["plandesc"];
                     dt1.PrimaryKey = indices;
 
                     //
@@ -1153,13 +1162,12 @@ namespace DataProcessing
             }
 
             return dbResults;
-
         }
-
 
         #endregion cacheEmployerData
 
         #region CheckUtils
+
         private static readonly Regex regexInteger = new Regex("[^0-9]");
         private static readonly Regex regexDate = new Regex(@"[^a-zA-Z0-9\s:\-\//]");
         private static readonly Regex regexAlphaNumeric = new Regex(@"[^a-zA-Z0-9\s]");
@@ -1168,7 +1176,8 @@ namespace DataProcessing
         private static readonly Regex regexNumericAndDashes = new Regex(@"[^0-9\-]");
         private static readonly Regex regexDouble = new Regex("[^0-9.]");
 
-        public string EnsureValueIsOfFormatAndMatchesRules(mbi_file_table_stage dataRow, TypedCsvColumn column, TypedCsvSchema mappings)
+        public string EnsureValueIsOfFormatAndMatchesRules(mbi_file_table_stage dataRow, TypedCsvColumn column,
+            TypedCsvSchema mappings)
         {
             var orgValue = dataRow.ColumnValue(column.SourceColumn) ?? "";
             var value = orgValue;
@@ -1249,13 +1258,16 @@ namespace DataProcessing
 
                     case FormatType.Double:
                         // remove any non digits and non . and non ,
-                        // todo: format with 2 decimal spaces, NO commas or spaces
                         value = regexDouble.Replace(value, String.Empty);
                         if (!Utils.IsDouble(value))
                         {
                             this.AddErrorForRow(dataRow, column.SourceColumn,
                                 $"{column.SourceColumn} must be a Currency Value. {orgValue} is not valid");
                         }
+
+                        // format as 0.00
+                        var dblValue = Utils.ToDouble(value);
+                        value = dblValue.ToString("0.00");
 
                         break;
 
@@ -1271,7 +1283,6 @@ namespace DataProcessing
 
                         break;
 
-
                     case FormatType.IsoDateTime:
                         // remove any non digits
                         value = regexDate.Replace(value, String.Empty);
@@ -1284,7 +1295,6 @@ namespace DataProcessing
                         }
 
                         break;
-
 
                     case FormatType.YesNo:
                         if (!value.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) &&
@@ -1305,7 +1315,6 @@ namespace DataProcessing
                         }
 
                         break;
-
 
                     default:
                         break;
@@ -1334,10 +1343,8 @@ namespace DataProcessing
                     {
                         value = value.PadLeft(column.MinLength, '0');
                     }
-
                 }
             }
-
 
             // set row column value to the fixed value if it has changed
             if (value != orgValue)
@@ -1346,14 +1353,13 @@ namespace DataProcessing
                 dataRow.data_row = GetDelimitedDataRow(dataRow, mappings);
             }
 
-
             // 2. check against GENERAL rules
-            if (column.FixedValue != null && value != column.FixedValue && !column.FixedValue.Split('|').Contains(value) && column.MinLength > 0)
+            if (column.FixedValue != null && value != column.FixedValue &&
+                !column.FixedValue.Split('|').Contains(value) && column.MinLength > 0)
             {
                 this.AddErrorForRow(dataRow, column.SourceColumn,
                     $"{column.SourceColumn} must always be {column.FixedValue}. {orgValue} is not valid");
             }
-
 
             // minLength
             if (column.MinLength > 0 && value.Length < column.MinLength)
@@ -1366,7 +1372,7 @@ namespace DataProcessing
             if (column.MaxLength > 0 && value.Length > column.MaxLength)
             {
                 this.AddErrorForRow(dataRow, column.SourceColumn,
-                $"{column.SourceColumn} must be maximum {column.MaxLength} characters long. {orgValue} is not valid");
+                    $"{column.SourceColumn} must be maximum {column.MaxLength} characters long. {orgValue} is not valid");
             }
 
             // min/max value
@@ -1374,7 +1380,8 @@ namespace DataProcessing
             {
                 if (!Utils.IsNumeric(value))
                 {
-                    this.AddErrorForRow(dataRow, column.SourceColumn, $"{column.SourceColumn} must be a number. {orgValue} is not valid");
+                    this.AddErrorForRow(dataRow, column.SourceColumn,
+                        $"{column.SourceColumn} must be a number. {orgValue} is not valid");
                 }
 
                 float numValue = Utils.ToNumber(value);
@@ -1392,7 +1399,6 @@ namespace DataProcessing
             }
 
             return value;
-
         }
 
         private string GetDelimitedDataRow(mbi_file_table_stage dataRow, TypedCsvSchema mappings)
@@ -1421,6 +1427,7 @@ namespace DataProcessing
                 {
                     fieldValue = $"\"{fieldValue}\"";
                 }
+
                 value += $",{fieldValue}";
             }
 
@@ -1429,8 +1436,8 @@ namespace DataProcessing
             //
             return value;
         }
+
         #endregion
-
-
     }
+
 }

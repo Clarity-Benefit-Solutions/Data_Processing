@@ -6,6 +6,7 @@ using Sylvan.Data.Csv;
 
 namespace CoreUtils.Classes
 {
+
     // utility class that wraps DbColumn (to use with Sylvan.CsvReader) and adds props needed for fileCheck and bulkCopy to DB
     public class TypedCsvColumn : DbColumn
     {
@@ -27,7 +28,8 @@ namespace CoreUtils.Classes
         }
 
         public TypedCsvColumn(string sourceColumn, string destinationColumn, FormatType formatType = FormatType.Any,
-            string fixedValue="", int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0,  string defaultValue = "")
+            string fixedValue = "", int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0,
+            string defaultValue = "")
         {
             ColumnName = sourceColumn;
             DestinationColumn = destinationColumn;
@@ -114,8 +116,9 @@ namespace CoreUtils.Classes
         public TypedCsvSchema Add(string sourceColumn, string destinationColumn, FormatType formatType = FormatType.Any,
             int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0)
         {
-            Columns.Add(new TypedCsvColumn(sourceColumn, destinationColumn, formatType, null,minLength, maxLength));
+            Columns.Add(new TypedCsvColumn(sourceColumn, destinationColumn, formatType, null, minLength, maxLength));
             return this;
         }
     }
+
 }

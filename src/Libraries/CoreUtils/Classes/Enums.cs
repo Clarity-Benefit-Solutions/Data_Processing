@@ -1,8 +1,5 @@
-﻿using System.Runtime.InteropServices;
-
-namespace CoreUtils.Classes
+﻿namespace CoreUtils.Classes
 {
-
 
     public enum FileOperation
     {
@@ -14,7 +11,6 @@ namespace CoreUtils.Classes
     }
 
 
-
     public enum FtpFileOperation
     {
         Download,
@@ -24,8 +20,6 @@ namespace CoreUtils.Classes
         DeleteRemoteFileIfExists,
         ReadRemoteFile
     }
-
-
 
 
     public enum DbOperation
@@ -54,7 +48,9 @@ namespace CoreUtils.Classes
         [Utils.DisplayText("AlphaNumeric")] AlphaNumeric,
         [Utils.DisplayText("AlphaOnly")] AlphaOnly,
         [Utils.DisplayText("AlphaAndDashes")] AlphaAndDashes,
-        [Utils.DisplayText("NumbersAndDashes")] NumbersAndDashes,
+
+        [Utils.DisplayText("NumbersAndDashes")]
+        NumbersAndDashes,
         [Utils.DisplayText("Integer")] Integer,
         [Utils.DisplayText("Double")] Double,
         [Utils.DisplayText("FixedConstant")] FixedConstant,
@@ -73,7 +69,9 @@ namespace CoreUtils.Classes
         [Utils.DisplayText("HeaderType.Own")] Own,
         [Utils.DisplayText("HeaderType.Old")] Old,
         [Utils.DisplayText("HeaderType.New")] New,
-        [Utils.DisplayText("HeaderType.SegmentedFunding")] SegmentedFunding,
+
+        [Utils.DisplayText("HeaderType.SegmentedFunding")]
+        SegmentedFunding,
 
         [Utils.DisplayText("HeaderType.NoChange")]
         NoChange
@@ -99,6 +97,7 @@ namespace CoreUtils.Classes
         AllData
         //
     }
+
     public enum FileCheckProcessType
     {
         [Utils.DisplayText("FileCheckProcessType.MoveToDestDirectories")]
@@ -108,6 +107,7 @@ namespace CoreUtils.Classes
         ReturnResults
         //
     }
+
     public enum OperationResultType
     {
         [Utils.DisplayText("OperationResultType.Unknown")]
@@ -123,10 +123,7 @@ namespace CoreUtils.Classes
         CompleteFail,
 
         [Utils.DisplayText("OperationResultType.ProcessingError")]
-        ProcessingError,
-
-
-
+        ProcessingError
     }
 
     public enum EdiFileFormat
@@ -239,4 +236,5 @@ namespace CoreUtils.Classes
         AlegeusEmployeeCardFees,
         AlegeusResultsEmployeeCardFees
     }
+
 }

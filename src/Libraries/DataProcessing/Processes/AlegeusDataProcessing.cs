@@ -4,16 +4,14 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms.VisualStyles;
 using CoreUtils;
 using CoreUtils.Classes;
-using DataProcessing;
 
 namespace DataProcessing
 {
+
     public class AlegeusDataProcessing
     {
         private Vars Vars { get; } = new Vars();
@@ -28,13 +26,13 @@ namespace DataProcessing
             (
                 () =>
                 {
-
                     Thread.CurrentThread.Name = "ProcessAlegeusFiles";
-                    AlegeusDataProcessing alegeusDataProcessing = new AlegeusDataProcessing();
+                    var alegeusDataProcessing = new AlegeusDataProcessing();
                     alegeusDataProcessing.ProcessAllFiles();
                 }
             );
         }
+
         public static async Task CopyTestFiles()
         {
             //
@@ -43,19 +41,18 @@ namespace DataProcessing
                 () =>
                 {
                     var directoryPath = Vars.GetProcessBaseDir();
-                    Process.Start($"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
+                    Process.Start(
+                        $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_mbi+res_to_export_ftp.bat");
                     Process.Start(
                         $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
                     Process.Start(
                         $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
-
                 }
             );
         }
 
         public void ProcessAllFiles()
         {
-
             //
             var fileLogParams = Vars.dbFileProcessingLogParams;
 
@@ -93,10 +90,10 @@ namespace DataProcessing
             FileOperationLogParams fileLogParams)
         {
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
-
 
             //1. Clear all files in AutomatedHeaderV1_Files
             //echo y| del  G:\FTP\AutomatedHeaderV1_Files\*.*
@@ -114,14 +111,14 @@ namespace DataProcessing
                 (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             );
 
-
             //2. Get list of folders for header from DB
             //decide table name
             var tableName = "dbo.[FTP_Source_Folders]";
 
             // run query - we take only by environment so we can test 
-            var queryString = $"Select * from {tableName} where environment = '{Vars.Environment}' and is_active = 1  order by folder_name;";
-            var dtHeaderFolders = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null);
+            var queryString =
+                $"Select * from {tableName} where environment = '{Vars.Environment}' and is_active = 1  order by folder_name;";
+            var dtHeaderFolders = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString);
 
             //3. for each header folder, get file and move to header1 folder
             foreach (DataRow row in dtHeaderFolders.Rows)
@@ -144,7 +141,7 @@ namespace DataProcessing
                     fileLogParams.SetFileNames("", Path.GetFileName(rowFolderName), rowFolderName,
                         Path.GetFileName(rowFolderName), "",
                         $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                        "Starting", $"Started Iterating Directory");
+                        "Starting", "Started Iterating Directory");
                     //
                     fileLogParams1.Bencode = rowBenCode;
                     fileLogParams1.TemplateType = rowTemplateType;
@@ -153,17 +150,15 @@ namespace DataProcessing
                     fileLogParams1.SetSourceFolderName(rowFolderName);
                     DbUtils.LogFileOperation(fileLogParams);
 
-
                     //
                     // 3a. set unique fileNames for each file in source folder and add to file Log
                     FileUtils.IterateDirectory(
                         rowFolderName, DirectoryIterateType.Files, false, "*.*",
                         (srcFilePath, destFilePath, dummy2) =>
                         {
-                            string currentFilePath = srcFilePath;
+                            var currentFilePath = srcFilePath;
                             try
                             {
-
                                 // fix path
                                 srcFilePath = FileUtils.FixPath(srcFilePath);
 
@@ -173,7 +168,6 @@ namespace DataProcessing
                                 {
                                     FileUtils.MoveFile(srcFilePath, uniformFilePath, null, null);
                                     currentFilePath = uniformFilePath;
-
                                 }
                                 // check if we can get the header typ[e - if not it is an invalid file - do not rename
 
@@ -184,35 +178,33 @@ namespace DataProcessing
                                     fileLogParams1);
                                 currentFilePath = uniqueIdFilePath;
 
-
                                 fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                                     Path.GetFileName(uniqueIdFilePath), uniqueIdFilePath,
                                     $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                                    "Success", $"Found Source File");
+                                    "Success", "Found Source File");
                                 DbUtils.LogFileOperation(fileLogParams);
                             }
                             catch (Exception ex2)
                             {
                                 fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                                   Path.GetFileName(srcFilePath), srcFilePath,
-                                   $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                                   "ERROR", ex2.ToString());
+                                    Path.GetFileName(srcFilePath), srcFilePath,
+                                    $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                                    "ERROR", ex2.ToString());
                                 DbUtils.LogFileOperation(fileLogParams);
                                 //
-                                string completeFilePath = currentFilePath;
+                                var completeFilePath = currentFilePath;
                                 if (Path.GetFileName(srcFilePath) != Path.GetFileName(currentFilePath))
                                 {
-                                    completeFilePath = $"{Path.GetDirectoryName(currentFilePath)}/{Path.GetFileName(srcFilePath)}---{Path.GetFileName(currentFilePath)}";
+                                    completeFilePath =
+                                        $"{Path.GetDirectoryName(currentFilePath)}/{Path.GetFileName(srcFilePath)}---{Path.GetFileName(currentFilePath)}";
                                     FileUtils.MoveFile(currentFilePath, completeFilePath, null, null);
                                 }
-                                Import.MoveFileToAlegeusRejectsFolder(completeFilePath, ex2.ToString()); ;
-                            }
 
+                                Import.MoveFileToAlegeusRejectsFolder(completeFilePath, ex2.ToString());
+                                ;
+                            }
                         },
-                        (directory, file, ex) =>
-                        {
-                            Import.MoveFileToAlegeusRejectsFolder(file, ex.ToString());
-                        }
+                        (directory, file, ex) => { Import.MoveFileToAlegeusRejectsFolder(file, ex.ToString()); }
                     );
 
                     // 3b. move all source files (with new names) to Headers dir
@@ -232,7 +224,6 @@ namespace DataProcessing
                 }
             } // each dr
 
-
             //4. copy all header files to Archive root
             FileUtils.CopyFiles(
                 Vars.alegeusFileHeadersRoot, false, "*.*",
@@ -249,7 +240,6 @@ namespace DataProcessing
                 },
                 (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             );
-
 
             //5a. delete all remnant HoldAll files 
             FileUtils.DeleteFiles(
@@ -274,7 +264,8 @@ namespace DataProcessing
                 {
                     // add to fileLog
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                        Path.GetFileName(destFilePath), destFilePath, "AlegeusFileProcessing-CopyFilesToHoldAll", "Success",
+                        Path.GetFileName(destFilePath), destFilePath, "AlegeusFileProcessing-CopyFilesToHoldAll",
+                        "Success",
                         "Copied File to HoldAll Directory");
                     // do not log - gives too many lines
                     // DbUtils.LogFileOperation(FileLogParams);
@@ -283,7 +274,8 @@ namespace DataProcessing
             );
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
@@ -293,7 +285,8 @@ namespace DataProcessing
             FileOperationLogParams fileLogParams)
         {
             // Log
-            fileLogParams.SetFileNames("", "", "", "", "", $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
@@ -304,19 +297,16 @@ namespace DataProcessing
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // archive the source excel file
-                    string file = srcFilePath;
-                    string archiveFilePath = $"{Path.GetDirectoryName(file)}/Archive/{Path.GetFileName(file)}";
+                    var file = srcFilePath;
+                    var archiveFilePath = $"{Path.GetDirectoryName(file)}/Archive/{Path.GetFileName(file)}";
                     FileUtils.MoveFile(file, archiveFilePath, null, null);
-
                 },
-                (directory, file, ex) =>
-                {
-                    Import.MoveFileToAlegeusRejectsFolder(file, ex.ToString());
-                }
+                (directory, file, ex) => { Import.MoveFileToAlegeusRejectsFolder(file, ex.ToString()); }
             );
 
             // Log
-            fileLogParams.SetFileNames("", "", "", "", "", $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
@@ -327,7 +317,8 @@ namespace DataProcessing
 
         {
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
@@ -335,7 +326,8 @@ namespace DataProcessing
             AddHeaderToAllHeaderDirFilesForExt("*.csv", dbConn, fileLogParams);
             AddHeaderToAllHeaderDirFilesForExt("*.txt", dbConn, fileLogParams);
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
@@ -385,22 +377,15 @@ namespace DataProcessing
                         "data_row",
                         (filePath1, rowNo, line) =>
                         {
-                            if (Utils.IsBlank(line))
-                            {
-                                return false;
-                            }
+                            if (Utils.IsBlank(line)) return false;
                             if (
-                                //confirmed: do we skip all non valid lines that do not start with record type? 
-                                rowNo == 1
-                                && (
-                                    // skip header line
-                                    Utils.TextMatchesPattern(line, "IA,")
-                                    // skip if line is not of a import row Type
-                                    || !Utils.TextMatchesPattern(line, "I*,"))
-                                )
-                            {
+                                //confirmed: with danielle - we skip all lines that do not start with valid record type? 
+                                /*rowNo == 1
+                                && */Utils.TextMatchesPattern(line, "IA,")
+                                     // skip if line is not of a import row Type
+                                     || !Utils.TextMatchesPattern(line, "I*,")
+                            )
                                 return false;
-                            }
                             return true;
                         },
                         fileLogParams,
@@ -427,7 +412,7 @@ namespace DataProcessing
                     var outputTableName = "[dbo].[alegeus_file_final]";
                     var queryStringExp = $"Select * from {outputTableName} order by row_num asc";
                     ImpExpUtils.ExportSingleColumnFlatFile(expFilePath, dbConn, queryStringExp,
-                         "file_row", null, fileLogParams,
+                        "file_row", null, fileLogParams,
                         (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                     );
 
@@ -438,21 +423,19 @@ namespace DataProcessing
                     DbUtils.LogFileOperation(fileLogParams);
 
                     // archive source excel file
-                    string file = srcFilePath;
-                    string archiveFilePath = $"{Path.GetDirectoryName(file)}/Archive/{Path.GetFileName(file)}";
+                    var file = srcFilePath;
+                    var archiveFilePath = $"{Path.GetDirectoryName(file)}/Archive/{Path.GetFileName(file)}";
                     FileUtils.MoveFile(file, archiveFilePath, null, null);
                 },
-                (directory, file, ex) =>
-                {
-                    Import.MoveFileToAlegeusRejectsFolder(file, ex.ToString());
-                }
+                (directory, file, ex) => { Import.MoveFileToAlegeusRejectsFolder(file, ex.ToString()); }
             );
         }
 
         protected void CopyHoldAllFilesToPreCheckDir(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
@@ -464,7 +447,8 @@ namespace DataProcessing
                 {
                     // add to fileLog
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                        Path.GetFileName(destFilePath), destFilePath, "AlegeusFileProcessing-CopyHoldAllFilesToProcessing",
+                        Path.GetFileName(destFilePath), destFilePath,
+                        "AlegeusFileProcessing-CopyHoldAllFilesToProcessing",
                         "Success", "Copied HoldAll File to Processing");
                     // do not log - gives too many lines
                     // DbUtils.LogFileOperation(FileLogParams);
@@ -473,7 +457,8 @@ namespace DataProcessing
             );
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
@@ -482,7 +467,8 @@ namespace DataProcessing
         protected void MoveHeaderDirFilesToPreCheck(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
@@ -490,13 +476,17 @@ namespace DataProcessing
             //1. Copy / y G:\FTP\AutomatedHeaderV1_Files\*.* G:\FTP\AutomatedHeaderV1_Files\Archive
             //
             FileUtils.MoveFiles(
-                new[] { Vars.alegeusFileHeadersRoot }, false, new[] { /*"*.txt", "*.csv",*/ "*.mbi" },
+                new[] {Vars.alegeusFileHeadersRoot}, false, new[]
+                {
+                    /*"*.txt", "*.csv",*/ "*.mbi"
+                },
                 Vars.alegeusFilesPreCheckRoot, "", ".mbi",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
                     // add to fileLog
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                        Path.GetFileName(destFilePath), destFilePath, "AlegeusFileProcessing-renameHeaderDirTxtFilesToMbi",
+                        Path.GetFileName(destFilePath), destFilePath,
+                        "AlegeusFileProcessing-renameHeaderDirTxtFilesToMbi",
                         "Success", "Renamed txt file to mbi");
                     // do not log - gives too many lines
                     // DbUtils.LogFileOperation(FileLogParams);
@@ -505,7 +495,8 @@ namespace DataProcessing
             );
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
@@ -516,7 +507,8 @@ namespace DataProcessing
         {
             //1. delete xls, xlsx, txt, csv for each mbi file found
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
@@ -526,7 +518,7 @@ namespace DataProcessing
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // delete xls, xlsx, txt, csv
-                    string[] extensionsToDelete = { ".xls", ".xlsx", ".txt", ".csv" };
+                    string[] extensionsToDelete = {".xls", ".xlsx", ".txt", ".csv"};
 
                     foreach (var fileExt in extensionsToDelete)
                     {
@@ -540,7 +532,8 @@ namespace DataProcessing
             );
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
@@ -550,7 +543,8 @@ namespace DataProcessing
             FileOperationLogParams fileLogParams)
         {
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
@@ -573,19 +567,17 @@ namespace DataProcessing
 
                     //
                     fileChecker.CheckFileAndProcess(FileCheckType.AllData, FileCheckProcessType.MoveToDestDirectories);
-
                 },
-                (directory, file, ex) =>
-                {
-                    Import.MoveFileToAlegeusRejectsFolder(file, ex.ToString());
-                }
+                (directory, file, ex) => { Import.MoveFileToAlegeusRejectsFolder(file, ex.ToString()); }
             );
 
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
     } // end class
+
 } // end namespace

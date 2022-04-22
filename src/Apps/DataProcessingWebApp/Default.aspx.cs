@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using CoreUtils.Classes;
-using Microsoft.Ajax.Utilities;
+﻿using System.Web.UI;
 
 namespace DataProcessingWebApp
 {
+
     public partial class _Default : Page
     {
         //private string _username = Utils.GetAppSetting("BasicAuthUserName");
@@ -175,4 +165,5 @@ namespace DataProcessingWebApp
         //    //
         //}
     }
+
 }

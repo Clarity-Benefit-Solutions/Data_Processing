@@ -2,12 +2,10 @@
 using System.Data.Common;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using CoreUtils;
 using CoreUtils.Classes;
-using DataProcessing;
 
 // ReSharper disable All
 
@@ -16,6 +14,7 @@ using DataProcessing;
 //todo: FTPErrors: how to avoid reprocessing the same result file over and over again: shall we move all files older than 2 days? does Alegeus ever move them?
 namespace DataProcessing
 {
+
     public class AlegeusErrorLog
     {
         private Vars Vars { get; } = new Vars();
@@ -33,12 +32,14 @@ namespace DataProcessing
                 }
             );
         }
+
         public void USERVERYCAUTIOUSLY_ClearAllTables()
         {
             if (Vars.Environment != "TEST")
             {
                 throw new Exception($"Clear All Tables is available only in TEST Environment");
             }
+
             var dbConn = Vars.dbConnDataProcessing;
             var fileLogParams = Vars.dbFileProcessingLogParams;
 
@@ -67,7 +68,7 @@ namespace DataProcessing
 
             ////GetCrmList
             //Import.ImportCrmListFileBulkCopy(DbConn, $"{Vars.fromBoomiFtpRoot}/CRM_List.csv", false,
-            //    "dbo.[CRM_List]", FileLogParams);
+            //  "dbo.[CRM_List]", FileLogParams);
 
             //ImportAlegeusResultResFiles
             ImportAlegeusFiles(dbConn, fileLogParams);
@@ -83,7 +84,7 @@ namespace DataProcessing
             FileOperationLogParams fileLogParams)
         {
             //1. Clear all files in AutomatedHeaderV1_Files
-            //echo y| del  G:\FTP\AutomatedHeaderV1_Files\*.*
+            //echo y| del G:\FTP\AutomatedHeaderV1_Files\*.*
             //
 
             //
@@ -92,9 +93,9 @@ namespace DataProcessing
             DbUtils.LogFileOperation(fileLogParams);
             //
             //
-            FileUtils.DeleteFiles(new[] { Vars.AlegeusErrorLogMbiFilesRoot, Vars.AlegeusErrorLogResFilesRoot }
+            FileUtils.DeleteFiles(new[] {Vars.AlegeusErrorLogMbiFilesRoot, Vars.AlegeusErrorLogResFilesRoot}
                 , false
-                , new[] { "*.mbi", "*.dne", "*.txt", "*.res" },
+                , new[] {"*.mbi", "*.dne", "*.txt", "*.res"},
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // add to fileLog
@@ -127,8 +128,8 @@ namespace DataProcessing
             // download mbi dir files
             ftpConn.CopyOrMoveFiles(
                 FtpFileOperation.DownloadAndDelete,
-                new string[] { Vars.remoteAlegeusFtpRootPath }, false,
-                new string[] { "*.mbi", "*.dne" },
+                new string[] {Vars.remoteAlegeusFtpRootPath}, false,
+                new string[] {"*.mbi", "*.dne"},
                 Vars.AlegeusErrorLogMbiFilesRoot, "", "",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
@@ -143,15 +144,18 @@ namespace DataProcessing
                         "Success", $"Got MBI/DNE File from FTP");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); throw ex; }
+                (directory, file, ex) =>
+                {
+                    DbUtils.LogError(directory, file, ex, fileLogParams);
+                    throw ex;
+                }
             );
-
 
             // download res dir files
             ftpConn.CopyOrMoveFiles(
                 FtpFileOperation.DownloadAndDelete,
-                new string[] { Vars.remoteAlegeusFtpRootPath }, false,
-                new string[] { "*.res" },
+                new string[] {Vars.remoteAlegeusFtpRootPath}, false,
+                new string[] {"*.res"},
                 Vars.AlegeusErrorLogResFilesRoot, "", "",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
@@ -166,7 +170,11 @@ namespace DataProcessing
                         "Success", $"Got Res File from FTP");
                     DbUtils.LogFileOperation(fileLogParams);
                 },
-                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); throw ex; }
+                (directory, file, ex) =>
+                {
+                    DbUtils.LogError(directory, file, ex, fileLogParams);
+                    throw ex;
+                }
             );
 
             //
@@ -186,8 +194,8 @@ namespace DataProcessing
 
             //
             FileUtils.IterateDirectory(
-                new[] { Vars.AlegeusErrorLogResFilesRoot, Vars.AlegeusErrorLogMbiFilesRoot }, DirectoryIterateType.Files
-                , false, new[] { "*.res", "*.dne", "*.txt", "*.mbi" },
+                new[] {Vars.AlegeusErrorLogResFilesRoot, Vars.AlegeusErrorLogMbiFilesRoot}, DirectoryIterateType.Files
+                , false, new[] {"*.res", "*.dne", "*.txt", "*.mbi"},
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     //
@@ -231,8 +239,8 @@ namespace DataProcessing
 
             // 1: insert into dbo_tracked_errors_local
             queryString = @" 
-                        exec [dbo].[Data_Processing_track_new_ftp_errors]
-                            ";
+            exec [dbo].[Data_Processing_track_new_ftp_errors]
+              ";
             // run query
             DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
                 fileLogParams?.GetMessageLogParams());
@@ -252,7 +260,6 @@ namespace DataProcessing
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
-
 
             // move mbiFiles to Archive
             FileUtils.MoveFiles(
@@ -294,4 +301,5 @@ namespace DataProcessing
             //
         } // routine
     } // end class
+
 } // end namespace

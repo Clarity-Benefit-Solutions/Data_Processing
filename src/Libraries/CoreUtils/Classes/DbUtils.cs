@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.Common;
-using System.Data.Entity.Core.EntityClient;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using CoreUtils.Classes;
-using Microsoft.SqlServer.Server;
 
 // ReSharper disable All
 
 namespace CoreUtils
 {
-
 
     public class DbUtils
     {
@@ -129,7 +124,6 @@ namespace CoreUtils
             {
                 using DbDataReader reader = queryCommand.ExecuteReader();
 
-
                 // read data and return
                 List<DataColumn> listCols = new List<DataColumn>();
                 DataTable dt = new DataTable();
@@ -139,10 +133,10 @@ namespace CoreUtils
                     foreach (DataRow drow in schemaTable.Rows)
                     {
                         string columnName = Convert.ToString(drow["ColumnName"]);
-                        DataColumn column = new DataColumn(columnName, (Type)(drow["DataType"]));
-                        column.Unique = (bool)drow["IsUnique"];
-                        column.AllowDBNull = (bool)drow["AllowDBNull"];
-                        column.AutoIncrement = (bool)drow["IsAutoIncrement"];
+                        DataColumn column = new DataColumn(columnName, (Type) (drow["DataType"]));
+                        column.Unique = (bool) drow["IsUnique"];
+                        column.AllowDBNull = (bool) drow["AllowDBNull"];
+                        column.AutoIncrement = (bool) drow["IsAutoIncrement"];
                         listCols.Add(column);
                         dt.Columns.Add(column);
                     }
@@ -153,7 +147,7 @@ namespace CoreUtils
                         DataRow dataRow = dt.NewRow();
                         for (int i = 0; i < listCols.Count; i++)
                         {
-                            dataRow[((DataColumn)listCols[i])] = reader[i];
+                            dataRow[((DataColumn) listCols[i])] = reader[i];
                         }
 
                         dt.Rows.Add(dataRow);
@@ -196,8 +190,8 @@ namespace CoreUtils
             if (logParams.DbConnection != null && !Utils.IsBlank(logParams.LogTableName))
             {
                 string logQuery = $"INSERT INTO {logParams.LogTableName} " +
-                                  $"                          (platform, module_name, submodule_name, step_type, step_name, command) " +
-                                  $"                          values ('{Utils.DbQuote(logParams.Platform)}','{Utils.DbQuote(logParams.ModuleName)}', '{Utils.DbQuote(logParams.SubModuleName)}', '{Utils.DbQuote(logParams.StepType)}', '{Utils.DbQuote(logParams.StepName)}', '{Utils.DbQuote(logParams.Command)}')";
+                                  $"             (platform, module_name, submodule_name, step_type, step_name, command) " +
+                                  $"             values ('{Utils.DbQuote(logParams.Platform)}','{Utils.DbQuote(logParams.ModuleName)}', '{Utils.DbQuote(logParams.SubModuleName)}', '{Utils.DbQuote(logParams.StepType)}', '{Utils.DbQuote(logParams.StepName)}', '{Utils.DbQuote(logParams.Command)}')";
 
                 // pass new dbLogParams() to ensure no recursion of logging!
                 DbQuery(DbOperation.ExecuteNonQuery, logParams.DbConnection, logQuery, null, null);
@@ -225,7 +219,7 @@ namespace CoreUtils
 
                 if (fileLogParams.FileLogId == 0 && Utils.IsBlank(fileLogParams.FileId))
                 {
-                    //  Debug.WriteLine("a");
+                    // Debug.WriteLine("a");
                 }
 
                 DbParameters queryParams = new DbParameters();
@@ -254,7 +248,7 @@ namespace CoreUtils
                     fileLogParams.ProcessingTaskOutcomeDetails));
 
                 // pass new dbLogParams() to ensure no recursion of logging!
-                DataTable dt = (DataTable)DbQuery(DbOperation.ExecuteReader, fileLogParams.DbConnection, logQuery,
+                DataTable dt = (DataTable) DbQuery(DbOperation.ExecuteReader, fileLogParams.DbConnection, logQuery,
                     queryParams, null, true);
             }
 
@@ -264,7 +258,7 @@ namespace CoreUtils
             // raise event
             RaiseOnLogFileOperationCallback(fileLogParams);
 
-            // clear fileids so we get from db for next file    
+            // clear fileids so we get from db for next file  
             fileLogParams.ReInitIds();
         }
 
@@ -282,8 +276,6 @@ namespace CoreUtils
         }
 
 
-
-
         // return last fileLogId from file_processing_log for old or new filename equal to picked up filename so the file can be tracked across operations
         public static int GetFileOperationFileLogId(string srcFileName, FileOperationLogParams logParams)
         {
@@ -294,7 +286,7 @@ namespace CoreUtils
                 string logQuery = $"select dbo.getFileLogId('{Utils.DbQuote(fileName)}');";
 
                 // pass new dbLogParams() to ensure no recursion of logging!
-                int fileLogId = (int)DbQuery(DbOperation.ExecuteScalar, logParams.DbConnection, logQuery, null, null,
+                int fileLogId = (int) DbQuery(DbOperation.ExecuteScalar, logParams.DbConnection, logQuery, null, null,
                     false);
                 return fileLogId;
             }
@@ -305,8 +297,8 @@ namespace CoreUtils
         }
 
 
-
-        public static string AddUniqueIdToFileAndLogToDb(string srcFilePath, Boolean fixFileNameLength, FileOperationLogParams fileLogParams)
+        public static string AddUniqueIdToFileAndLogToDb(string srcFilePath, Boolean fixFileNameLength,
+            FileOperationLogParams fileLogParams)
         {
             // get filename without leading fileid
 
@@ -319,7 +311,8 @@ namespace CoreUtils
             var srcFileName = Path.GetFileName(srcFilePath);
             // if file has uniqueID and headerttype already, nothing to do
             if (!Utils.IsBlank(Utils.GetUniqueIdFromFileName(srcFileName))
-               /* && (GetHeaderTypeFromFileName(srcFilePath) == headerType || headerType == HeaderType.NotApplicable)*/)
+                /* && (GetHeaderTypeFromFileName(srcFilePath) == headerType || headerType == HeaderType.NotApplicable)*/
+               )
             {
                 return srcFilePath;
             }
@@ -369,11 +362,11 @@ namespace CoreUtils
 
             //
             return srcFilePath;
-
         }
 
         public class DbParameters : List<SqlParameter>
         {
         }
     }
+
 }

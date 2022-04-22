@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 /*
  * 
  * 
  * PGPEncryptDecrypt.EncryptFile(inputFileName, 
-                              outputFileName,
-                              recipientKeyFileName,
-                              shouldArmor,
-                              shouldCheckIntegrity);
+               outputFileName,
+               recipientKeyFileName,
+               shouldArmor,
+               shouldCheckIntegrity);
 Decrypt a file:
 
 
@@ -23,8 +19,9 @@ namespace CoreUtils.Classes
 
     public class PgpUtils
     {
-        public static void PgpDecryptFile(string srcFilePath, string destFilePath, string privateKeyFileName, string passPhrase, SingleFileCallback fileCallback,
-          OnErrorCallback onErrorCallback)
+        public static void PgpDecryptFile(string srcFilePath, string destFilePath, string privateKeyFileName,
+            string passPhrase, SingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
         {
             try
             {
@@ -33,6 +30,7 @@ namespace CoreUtils.Classes
                     var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : srcFilePath should be set";
                     throw new Exception(message);
                 }
+
                 if (Utils.IsBlank(destFilePath))
                 {
                     var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : destFilePath should be set";
@@ -44,7 +42,6 @@ namespace CoreUtils.Classes
                     var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : privateKeyFileName should be set";
                     throw new Exception(message);
                 }
-
 
                 PGPEncryptDecrypt.Decrypt(srcFilePath, privateKeyFileName, passPhrase, destFilePath);
 
@@ -62,8 +59,9 @@ namespace CoreUtils.Classes
         }
 
 
-        public static void PgpEncryptFile(string srcFilePath, string destFilePath, string recipientKeyFileName, bool shouldArmor, bool shouldCheckIntegrity, SingleFileCallback fileCallback,
-          OnErrorCallback onErrorCallback)
+        public static void PgpEncryptFile(string srcFilePath, string destFilePath, string recipientKeyFileName,
+            bool shouldArmor, bool shouldCheckIntegrity, SingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
         {
             try
             {
@@ -72,6 +70,7 @@ namespace CoreUtils.Classes
                     var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : srcFilePath should be set";
                     throw new Exception(message);
                 }
+
                 if (Utils.IsBlank(destFilePath))
                 {
                     var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : destFilePath should be set";
@@ -84,12 +83,11 @@ namespace CoreUtils.Classes
                     throw new Exception(message);
                 }
 
-
                 PGPEncryptDecrypt.EncryptFile(srcFilePath,
-                                  destFilePath,
-                                  recipientKeyFileName,
-                                  shouldArmor,
-                                  shouldCheckIntegrity);
+                    destFilePath,
+                    recipientKeyFileName,
+                    shouldArmor,
+                    shouldCheckIntegrity);
 
                 // callback on complete
                 fileCallback(srcFilePath, destFilePath, "");
@@ -103,7 +101,6 @@ namespace CoreUtils.Classes
                     throw;
             }
         }
-
     }
 
 }

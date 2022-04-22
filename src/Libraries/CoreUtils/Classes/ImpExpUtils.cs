@@ -6,25 +6,25 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Sylvan.Data.Csv;
 using static CoreUtils.DbUtils;
 using SylvanCsvDataReader = Sylvan.Data.Csv.CsvDataReader;
 using CsvHelperCsvDataReader = CsvHelper.CsvDataReader;
-using System.Text.RegularExpressions;
 
 namespace CoreUtils.Classes
 {
 
-
     public static class ImpExpUtils
     {
-        private static SqlBulkCopyOptions _defaultSqlBulkCopyOptions = SqlBulkCopyOptions.KeepNulls |
-                                                                       SqlBulkCopyOptions.CheckConstraints |
-                                                                       SqlBulkCopyOptions.FireTriggers |
-                                                                       SqlBulkCopyOptions.TableLock;
+        private static readonly SqlBulkCopyOptions _defaultSqlBulkCopyOptions = SqlBulkCopyOptions.KeepNulls |
+            SqlBulkCopyOptions.CheckConstraints |
+            SqlBulkCopyOptions.FireTriggers |
+            SqlBulkCopyOptions.TableLock;
+
+        private static readonly Regex RegexCSVParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
 
         public static Dictionary<EdiFileFormat, List<int>> GetAlegeusFileFormats(string srcFilePath, bool hasHeaders,
             FileOperationLogParams fileLogParams)
@@ -57,7 +57,7 @@ namespace CoreUtils.Classes
                         if (fileFormats.ContainsKey(fileFormat))
                             fileFormats[fileFormat].Add(rowNo);
                         else
-                            fileFormats.Add(fileFormat, new List<int> { rowNo });
+                            fileFormats.Add(fileFormat, new List<int> {rowNo});
                     }
                 }
             }
@@ -196,10 +196,9 @@ namespace CoreUtils.Classes
                 using var inputFile = new StreamReader(srcFilePath);
 
                 string line;
-                int rowNo = 0;
+                var rowNo = 0;
                 while ((line = inputFile.ReadLine()!) != null)
                 {
-
                     rowNo++;
                     if (importThisLineCallback == null || importThisLineCallback(srcFilePath, rowNo, line))
                     {
@@ -241,7 +240,7 @@ namespace CoreUtils.Classes
                 //LogFileOperation(fileLogParams);
 
                 // query
-                var dt = (DataTable)DbQuery(DbOperation.ExecuteReader, dbConn, queryString, queryParams,
+                var dt = (DataTable) DbQuery(DbOperation.ExecuteReader, dbConn, queryString, queryParams,
                     fileLogParams?.GetMessageLogParams());
                 //
 
@@ -271,15 +270,11 @@ namespace CoreUtils.Classes
                     throw;
             }
         }
-        private static Regex RegexCSVParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
 
-        public static String[] GetCsvColumnsFromText(string text)
+        public static string[] GetCsvColumnsFromText(string text)
         {
-            if (Utils.IsBlank(text))
-            {
-                return new string[] { };
-            }
-            String[] Fields = RegexCSVParser.Split(text);
+            if (Utils.IsBlank(text)) return new string[] { };
+            var Fields = RegexCSVParser.Split(text);
             return Fields;
         }
 
@@ -303,33 +298,31 @@ namespace CoreUtils.Classes
                     HasHeaderRecord = hasHeaders
                 };
 
-                using (var reader = new StreamReader(filePath))
-                using (var csv = new CsvReader(reader, config))
+                using var reader = new StreamReader(filePath);
+                using var csv = new CsvReader(reader, config);
+                var records = csv.GetRecords<T>();
+
+                foreach (var row in records)
                 {
-                    var records = csv.GetRecords<T>();
-
-                    foreach (var row in records)
+                    // get insertValues string
+                    var insertValuesString = "";
+                    foreach (var columnName in contentsColNames)
                     {
-                        // get insertValues string
-                        var insertValuesString = "";
-                        foreach (var columnName in contentsColNames)
-                        {
-                            var value = theType.GetProperty(columnName)?.GetValue(row, null);
-                            insertValuesString += $"'{Utils.DbQuote(value?.ToString())}',";
-                        }
-
-                        insertValuesString = insertValuesString.Substring(0, insertValuesString.Length - 1);
-
-                        //
-                        var query = $"INSERT INTO {tableName} " +
-                                    $" ({insertColumnNames}) " +
-                                    $" values ({insertValuesString})";
-
-                        // pass new dbLogParams() to ensure no recursion of logging!
-                        DbQuery(DbOperation.ExecuteNonQuery, dbConn, query, null,
-                            fileLogParams?.GetMessageLogParams()
-                            , doNotLogOperationToDb: true);
+                        var value = theType.GetProperty(columnName)?.GetValue(row, null);
+                        insertValuesString += $"'{Utils.DbQuote(value?.ToString())}',";
                     }
+
+                    insertValuesString = insertValuesString.Substring(0, insertValuesString.Length - 1);
+
+                    //
+                    var query = $"INSERT INTO {tableName} " +
+                                $" ({insertColumnNames}) " +
+                                $" values ({insertValuesString})";
+
+                    // pass new dbLogParams() to ensure no recursion of logging!
+                    DbQuery(DbOperation.ExecuteNonQuery, dbConn, query, null,
+                        fileLogParams?.GetMessageLogParams()
+                        , doNotLogOperationToDb: true);
                 }
 
                 //// log
@@ -359,7 +352,6 @@ namespace CoreUtils.Classes
                 // truncate table
                 TruncateTable(dbConn, tableName,
                     fileLogParams?.GetMessageLogParams());
-
 
                 if (columnMappings == null || columnMappings.Count == 0)
                 {
@@ -436,7 +428,6 @@ namespace CoreUtils.Classes
                 TruncateTable(dbConn, tableName,
                     fileLogParams?.GetMessageLogParams());
 
-
                 // Get the schema for the target table
                 var conn = new SqlConnection();
                 conn.Open();
@@ -491,4 +482,5 @@ namespace CoreUtils.Classes
             }
         }
     } // class
+
 } // ns

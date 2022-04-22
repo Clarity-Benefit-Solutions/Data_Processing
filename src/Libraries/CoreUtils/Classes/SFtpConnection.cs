@@ -1,15 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
 
 namespace CoreUtils.Classes
 {
+
     public delegate void FtpSingleFileCallback(string file1, string file2, string fileContents);
-
-
 
 
     public class SFtpConnection
@@ -33,7 +31,7 @@ namespace CoreUtils.Classes
             if (!Utils.IsBlank(privateKeyPath))
             {
                 var keyFile = new PrivateKeyFile(PrivateKeyPath, PrivateKeyPassPhrase);
-                keyFiles = new[] { keyFile };
+                keyFiles = new[] {keyFile};
             }
 
             if (Utils.IsBlank(PrivateKeyPath) || keyFiles?.Length == 0)
@@ -75,7 +73,6 @@ namespace CoreUtils.Classes
                 client = client1;
             }
 
-
             //
             return client;
         }
@@ -102,7 +99,7 @@ namespace CoreUtils.Classes
         public void IterateDirectory(string directory, DirectoryIterateType iterateType, bool subDirsAlso,
             string[] fileMasks, FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] { "*.*" };
+            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] {"*.*"};
 
             // iterate for each fileMask
             foreach (var fileMask in fileMasks)
@@ -135,8 +132,8 @@ namespace CoreUtils.Classes
                 }
                 //if (onErrorCallback == null)
                 //{
-                //    string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : onErrorCallback should be set";
-                //    throw new Exception(message);
+                //  string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : onErrorCallback should be set";
+                //  throw new Exception(message);
                 //}
 
                 // check dir exists
@@ -163,7 +160,8 @@ namespace CoreUtils.Classes
                             // iterate subDir if asked
                             if (subDirsAlso)
                                 // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-                                IterateDirectory(ftpFile.FullName, iterateType, subDirsAlso, fileMask, fileCallback, null);
+                                IterateDirectory(ftpFile.FullName, iterateType, subDirsAlso, fileMask, fileCallback,
+                                    null);
                         }
                         else if (ftpFile.IsSymbolicLink)
                         {
@@ -288,7 +286,7 @@ namespace CoreUtils.Classes
             bool subDirsAlso, string[] fileMasks, string destDirectory, string destFileName, string destFileExt,
             FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] { "*.*" };
+            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] {"*.*"};
 
             // iterate for each fileMask
             foreach (var fileMask in fileMasks)
@@ -350,7 +348,7 @@ namespace CoreUtils.Classes
                     var tempFilePath = Path.GetTempFileName();
                     using var stream = File.Open(tempFilePath, FileMode.Open);
                     //
-                    client.DownloadFile(sourceFilePath, stream, null);
+                    client.DownloadFile(sourceFilePath, stream);
                     fileContents = File.ReadAllText(tempFilePath);
                     //
                     File.Delete(tempFilePath);
@@ -371,7 +369,7 @@ namespace CoreUtils.Classes
                     }
 
                     using var stream = File.Open(sourceFilePath, FileMode.Open);
-                    client.UploadFile(stream, destFilePath, null);
+                    client.UploadFile(stream, destFilePath);
 
                     if (fileOperation == FtpFileOperation.UploadAndDelete) srcFileInfo.Delete();
                 }
@@ -381,7 +379,7 @@ namespace CoreUtils.Classes
                     var fileInfo = new FileInfo(destFilePath);
                     if (fileInfo.Exists) fileInfo.Delete();
                     using var stream = File.Open(destFilePath, FileMode.OpenOrCreate);
-                    client.DownloadFile(sourceFilePath, stream, null);
+                    client.DownloadFile(sourceFilePath, stream);
 
                     if (fileOperation == FtpFileOperation.DownloadAndDelete) client.DeleteFile(sourceFilePath);
                 }
@@ -407,4 +405,5 @@ namespace CoreUtils.Classes
 
         #endregion
     }
+
 }

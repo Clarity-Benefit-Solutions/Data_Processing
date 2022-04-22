@@ -5,18 +5,15 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using CoreUtils;
 using CoreUtils.Classes;
-using DataProcessing;
 
 // ReSharper disable All
 
 namespace DataProcessing
 {
-
 
     [SuppressMessage("ReSharper", "StringLiteralTypo")]
     public class CobraDataProcessing
@@ -130,7 +127,7 @@ namespace DataProcessing
             DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
             //1. Clear all files in AutomatedHeaderV1_Files
-            //echo y| del  G:\FTP\AutomatedHeaderV1_Files\*.*
+            //echo y| del G:\FTP\AutomatedHeaderV1_Files\*.*
             //
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
@@ -141,28 +138,29 @@ namespace DataProcessing
             //2. Get list of folders for header from DB
 
             // sumeet: we will only iterate the folders from ther master table
-            /*   string tableName = "[dbo].[processing_script_tbl]";
-               //run query
-               string queryString = $"Select * from {tableName} ;";
-               DataTable folders =
-                   (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null,
-                       fileLogParams.DbMessageLogParams);
-
-
-               //3. for each header folder, get file and move to header1 folder
-               foreach (DataRow row in folders.Rows)*/
+            /*  string tableName = "[dbo].[processing_script_tbl]";
+              //run query
+              string queryString = $"Select * from {tableName} ;";
+              DataTable folders =
+                (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null,
+                  fileLogParams.DbMessageLogParams);
+      
+      
+              //3. for each header folder, get file and move to header1 folder
+              foreach (DataRow row in folders.Rows)*/
 
             var tableName = "dbo.[FTP_Source_Folders]";
 
             // run query - we take only by environment so we can test 
-            var queryString = $"Select * from {tableName} where environment = '{Vars.Environment}' and is_active = 1  order by folder_name;";
-            var dtHeaderFolders = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null);
+            var queryString =
+                $"Select * from {tableName} where environment = '{Vars.Environment}' and is_active = 1 order by folder_name;";
+            var dtHeaderFolders = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString, null);
 
             //3. for each header folder, get file and move to header1 folder
             foreach (DataRow row in dtHeaderFolders.Rows)
 
             {
-                //Move / y "%_sourcepath%"  G:\FTP\AutomatedHeaderV1_Files
+                //Move / y "%_sourcepath%" G:\FTP\AutomatedHeaderV1_Files
                 var rowFolderName = row["folder_name"].ToString();
                 var rowBenCode = row["BENCODE"].ToString();
                 var rowTemplateType = row["template_type"].ToString();
@@ -221,7 +219,6 @@ namespace DataProcessing
                                     FileUtils.MoveFile(srcFilePath, uniformFilePath, null, null);
                                 }
 
-
                                 // add uniqueId to file so we can track it across folders and operations
                                 var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(uniformFilePath,
                                     true,
@@ -260,7 +257,6 @@ namespace DataProcessing
                 } //iterateDir
             } //foreach (DataRow row in folders.Rows)
 
-
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
@@ -276,7 +272,6 @@ namespace DataProcessing
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
-
 
             // 1. txt -> csv, mbi -> csv
             FileUtils.IterateDirectory(
@@ -309,18 +304,17 @@ namespace DataProcessing
                 }, null
             ); //iterateDir
 
-
             //2. move out blank files
             MoveCobraBlankFtpFilesToArchive(headerType, dbConn, fileLogParams);
 
             // 3. move csv files for preparation of QB
             // from COBRA IMPORTS\Holding,ToDecrypt/*.* -> HOLDING\PreparedQB, COBRA IMPORTS\QB*.csv
             FileUtils.IterateDirectory(
-                new string[] { Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingDecryptRoot, Vars.cobraImportRoot },
+                new string[] {Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingDecryptRoot, Vars.cobraImportRoot},
                 DirectoryIterateType.Files,
                 false,
                 // TODO: How are pgop filkes created or processed? CobraFiles do we need to move *.* files from decrypt? not clear
-                new string[] { "*.csv" },
+                new string[] {"*.csv"},
                 (srcFilePath, dummy1, dummy2) =>
                 {
                     //check file name and move to appropriate directory
@@ -349,7 +343,6 @@ namespace DataProcessing
                 }, null
             ); //iterateDir
 
-
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
@@ -376,7 +369,7 @@ namespace DataProcessing
                 },
                 DirectoryIterateType.Files,
                 false,
-                new string[] { "*.csv" },
+                new string[] {"*.csv"},
                 (srcFilePath, dummy1, dummy2) =>
                 {
                     //check file name and move to appropriate directory
@@ -405,7 +398,6 @@ namespace DataProcessing
                 }, null
             ); //iterateDir
 
-
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
@@ -422,7 +414,6 @@ namespace DataProcessing
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
-
 
             string fileExt = "*.csv";
             //
@@ -443,15 +434,9 @@ namespace DataProcessing
                     ImpExpUtils.ImportSingleColumnFlatFile(dbConnCobra, srcFilePath, srcFilePath, tableName,
                         "folder_name",
                         "QB_data",
-                         (filePath1, rowNo, line) =>
-                         {
-                             return true;
-                         },
-                         fileLogParams,
-                        (directory, file, ex) =>
-                        {
-                            DbUtils.LogError(directory, file, ex, fileLogParams);
-                        }
+                        (filePath1, rowNo, line) => { return true; },
+                        fileLogParams,
+                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                     );
 
                     //3. run script to fix data
@@ -508,10 +493,10 @@ namespace DataProcessing
             // 1. move test files
             // from COBRA IMPORTS, HOLDING, HOLDING\PreparedQB -> COBRA_testfiles
             FileUtils.IterateDirectory(
-                new string[] { Vars.cobraImportRoot, Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot },
+                new string[] {Vars.cobraImportRoot, Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot},
                 DirectoryIterateType.Files,
                 false,
-                new string[] { "*.*" },
+                new string[] {"*.*"},
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     FileInfo fileInfo = new FileInfo(srcFilePath);
@@ -547,9 +532,9 @@ namespace DataProcessing
             // 2. move all holding and prepared files
             // from HOLDING, HOLDING\PreparedQB -> IMPORTS
             FileUtils.MoveFiles(
-                new string[] { Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot },
+                new string[] {Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot},
                 false,
-                new string[] { "*.*" },
+                new string[] {"*.*"},
                 Vars.cobraImportRoot, "", "",
                 (srcFilePath, destFilePath, dummy2) =>
                 {
@@ -571,4 +556,5 @@ namespace DataProcessing
             //
         } // routine
     } // end class
+
 } // end namespace
