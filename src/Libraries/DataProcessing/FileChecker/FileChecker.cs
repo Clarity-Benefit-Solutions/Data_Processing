@@ -219,7 +219,7 @@ namespace DataProcessing
                 FileUtils.EnsurePathExists(splitFileName);
                 //
                 var splitFileWriter = new StreamWriter(splitFileName, false);
-                files.Add(fileFormat, new Object[] {splitFileWriter, splitFileName});
+                files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
             }
 
             // open file for reading
@@ -240,7 +240,7 @@ namespace DataProcessing
                         )
                         {
                             // get temp file for each format
-                            var splitFileWriter = (StreamWriter) files[fileFormat2][0];
+                            var splitFileWriter = (StreamWriter)files[fileFormat2][0];
                             // if there is prvUnwrittenLine it was probably a header line - write to the file that 
 
                             splitFileWriter.WriteLine(line);
@@ -257,11 +257,11 @@ namespace DataProcessing
             foreach (var fileFormat3 in files.Keys)
             {
                 // get temp file for each format
-                var writer = (StreamWriter) files[fileFormat3][0];
+                var writer = (StreamWriter)files[fileFormat3][0];
                 writer.Close();
 
                 // import and check the file
-                CheckFile(fileFormat3, (string) files[fileFormat3][1]);
+                CheckFile(fileFormat3, (string)files[fileFormat3][1]);
             }
         }
 
@@ -733,8 +733,8 @@ namespace DataProcessing
                     else
                     {
                         DataRow dbData = dbRows[0];
-                        DateTime actualPlanStartDate = (DateTime) dbData["plan_year_start_date"];
-                        DateTime actualPlanEndDate = (DateTime) dbData["plan_year_end_date"];
+                        DateTime actualPlanStartDate = (DateTime)dbData["plan_year_start_date"];
+                        DateTime actualPlanEndDate = (DateTime)dbData["plan_year_end_date"];
                         //DateTime actualGracePeriodEndDate = (DateTime)dbData["grace_period_end_date"];
 
                         //check start and end dates 
@@ -896,8 +896,8 @@ namespace DataProcessing
 
                         // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
 
-                        DateTime actualPlanStartDate = (DateTime) dbData["planstart"];
-                        DateTime actualPlanEndDate = (DateTime) dbData["planend"];
+                        DateTime actualPlanStartDate = (DateTime)dbData["planstart"];
+                        DateTime actualPlanEndDate = (DateTime)dbData["planend"];
                         //DateTime? actualGracePeriodEndDate = Utils.ToDate(dbData["actualGracePeriodEndDate"]?.ToString());
 
                         //note: we need to ensure we got alegeus plans going back many years properly. we have data from 2004 onwards in the portal
@@ -996,7 +996,7 @@ namespace DataProcessing
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-AllEmployers";
             if (_cache.ContainsKey(cacheKey))
             {
-                dbResults = (DataTable) _cache.Get(cacheKey);
+                dbResults = (DataTable)_cache.Get(cacheKey);
             }
             else
             {
@@ -1006,14 +1006,14 @@ namespace DataProcessing
                         $"select employer_id, employer_name, employer_status from wc.wc_employers " +
                         $" order by employer_id ;";
                     //
-                    dbResults = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         queryString, null,
                         FileLogParams?.GetMessageLogParams());
 
                     // create index on EmployeeID
 
                     DataColumn[] indices = new DataColumn[1];
-                    indices[0] = (DataColumn) dbResults.Columns["employerid"];
+                    indices[0] = (DataColumn)dbResults.Columns["employerid"];
                     dbResults.PrimaryKey = indices;
 
                     //
@@ -1036,7 +1036,7 @@ namespace DataProcessing
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployees";
             if (_cache.ContainsKey(cacheKey))
             {
-                dbResults = (DataTable) _cache.Get(cacheKey);
+                dbResults = (DataTable)_cache.Get(cacheKey);
             }
             else
             {
@@ -1048,14 +1048,14 @@ namespace DataProcessing
                         $" where employerid = '{Utils.DbQuote(employerId)}' " +
                         $" ORDER by employeeid ";
                     //
-                    dbResults = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         queryString, null,
                         FileLogParams?.GetMessageLogParams());
 
                     // create index on EmployeeID
 
                     DataColumn[] indices = new DataColumn[1];
-                    indices[0] = (DataColumn) dbResults.Columns["employeeid"];
+                    indices[0] = (DataColumn)dbResults.Columns["employeeid"];
                     dbResults.PrimaryKey = indices;
 
                     //
@@ -1078,7 +1078,7 @@ namespace DataProcessing
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployerPlans";
             if (_cache.ContainsKey(cacheKey))
             {
-                dbResults = (DataTable) _cache.Get(cacheKey);
+                dbResults = (DataTable)_cache.Get(cacheKey);
             }
             else
             {
@@ -1092,15 +1092,15 @@ namespace DataProcessing
                             $" order by employer_id, plan_id, account_type_code "
                         ;
                     //
-                    dbResults = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         queryString, null,
                         FileLogParams?.GetMessageLogParams());
 
                     // create index on EmployeeID
 
                     DataColumn[] indices = new DataColumn[2];
-                    indices[0] = (DataColumn) dbResults.Columns["account_type_code"];
-                    indices[1] = (DataColumn) dbResults.Columns["plan_id"];
+                    indices[0] = (DataColumn)dbResults.Columns["account_type_code"];
+                    indices[1] = (DataColumn)dbResults.Columns["plan_id"];
                     dbResults.PrimaryKey = indices;
 
                     //
@@ -1122,7 +1122,7 @@ namespace DataProcessing
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployeePlans";
             if (_cache.ContainsKey(cacheKey))
             {
-                dbResults = (DataTable) _cache.Get(cacheKey);
+                dbResults = (DataTable)_cache.Get(cacheKey);
             }
             else
             {
@@ -1139,16 +1139,16 @@ namespace DataProcessing
                     ;
                     //
 
-                    DataTable dt1 = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                    DataTable dt1 = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
                         queryString1, null,
                         FileLogParams?.GetMessageLogParams());
 
                     // create index on EmployeeID
 
                     DataColumn[] indices = new DataColumn[3];
-                    indices[0] = (DataColumn) dt1.Columns["employeeid"];
-                    indices[1] = (DataColumn) dt1.Columns["plancode"];
-                    indices[2] = (DataColumn) dt1.Columns["plandesc"];
+                    indices[0] = (DataColumn)dt1.Columns["employeeid"];
+                    indices[1] = (DataColumn)dt1.Columns["plancode"];
+                    indices[2] = (DataColumn)dt1.Columns["plandesc"];
                     dt1.PrimaryKey = indices;
 
                     //
@@ -1168,6 +1168,7 @@ namespace DataProcessing
 
         #region CheckUtils
 
+      
         private static readonly Regex regexInteger = new Regex("[^0-9]");
         private static readonly Regex regexDate = new Regex(@"[^a-zA-Z0-9\s:\-\//]");
         private static readonly Regex regexAlphaNumeric = new Regex(@"[^a-zA-Z0-9\s]");

@@ -4,6 +4,7 @@ using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using CoreUtils;
 using CoreUtils.Classes;
 using Sylvan.Data.Csv;
@@ -11,7 +12,6 @@ using Sylvan.Data.Csv;
 //using ETLBox.DataFlow;
 //using ETLBox.DataFlow.Connectors;
 using SylvanCsvDataReader = Sylvan.Data.Csv.CsvDataReader;
-using CsvHelperCsvDataReader = CsvHelper.CsvDataReader;
 
 // ReSharper disable All
 
@@ -105,7 +105,7 @@ namespace DataProcessing
                     FileUtils.EnsurePathExists(splitFileName);
                     //
                     var splitFileWriter = new StreamWriter(splitFileName, false);
-                    files.Add(fileFormat, new Object[] {splitFileWriter, splitFileName});
+                    files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
                 }
 
                 // open file for reading
@@ -124,7 +124,7 @@ namespace DataProcessing
                                 || (line?.Substring(0, 2) == "RA" || line?.Substring(0, 2) == "IA"))
                             {
                                 // get temp file for each format
-                                var splitFileWriter = (StreamWriter) files[fileFormat2][0];
+                                var splitFileWriter = (StreamWriter)files[fileFormat2][0];
                                 // if there is prvUnwrittenLine it was probably a header line - write to the file that 
 
                                 splitFileWriter.WriteLine(line);
@@ -141,11 +141,11 @@ namespace DataProcessing
                 foreach (var fileFormat3 in files.Keys)
                 {
                     // get temp file for each format
-                    var writer = (StreamWriter) files[fileFormat3][0];
+                    var writer = (StreamWriter)files[fileFormat3][0];
                     writer.Close();
 
                     // import the file
-                    ImportAlegeusFile(fileFormat3, dbConn, (string) files[fileFormat3][1], srcFilePath,
+                    ImportAlegeusFile(fileFormat3, dbConn, (string)files[fileFormat3][1], srcFilePath,
                         hasHeaderRow, fileLogParams, onErrorCallback);
                 }
             }
@@ -461,7 +461,7 @@ namespace DataProcessing
                                 ;
                                 expectedMappingColumnsCount = columnCount;
                                 break;
-                            // can also be segmented header!
+                                // can also be segmented header!
                         }
 
                         ;
@@ -1111,6 +1111,33 @@ namespace DataProcessing
                 }
             }
         }
+
+        private static readonly Regex regexALImportHeader = new Regex("IA,"); 
+        private static readonly Regex regexALImportRecType = new Regex("I[B-Z],");
+        private static readonly Regex regexALExportHeader = new Regex("RA,");
+        private static readonly Regex regexALExportRecType = new Regex("R[B-Z],");
+
+        public static Boolean IsAlegeusImportRecLine(string text)
+        {
+            return regexALImportRecType.IsMatch(text?.Trim().Substring(0, 3));
+        }
+        public static Boolean IsAlegeusImportHeaderLine(string text)
+        {
+            return regexALImportHeader.IsMatch(text?.Trim().Substring(0, 3));
+        }
+
+        public static Boolean IsAlegeusExportRecLine(string text)
+        {
+            return regexALExportRecType.IsMatch(text?.Trim().Substring(0, 3));
+        }
+        public static Boolean IsAlegeusExportHeaderLine(string text)
+        {
+            return regexALExportHeader.IsMatch(text?.Trim().Substring(0, 3));
+        }
     }
+
+
+
+
 
 }

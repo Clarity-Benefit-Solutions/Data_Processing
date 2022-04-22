@@ -118,7 +118,7 @@ namespace DataProcessing
             // run query - we take only by environment so we can test 
             var queryString =
                 $"Select * from {tableName} where environment = '{Vars.Environment}' and is_active = 1  order by folder_name;";
-            var dtHeaderFolders = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString);
+            var dtHeaderFolders = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString);
 
             //3. for each header folder, get file and move to header1 folder
             foreach (DataRow row in dtHeaderFolders.Rows)
@@ -379,11 +379,11 @@ namespace DataProcessing
                             }
 
                             if (
-                                //confirmed: with danielle - we skip all lines that do not start with valid record type? 
-                                /*rowNo == 1
-                                && */Utils.TextMatchesPattern(line, "IA,")
-                                     // skip if line is not of a import row Type
-                                     || !Utils.TextMatchesPattern(line, "I*,")
+                                  //confirmed: with danielle - we skip all lines that do not start with valid record type? 
+                                  /*rowNo == 1
+                                  && */
+                                  // skip if line is not of a import row Type
+                                  !Import.IsAlegeusImportRecLine(line)
                             )
                             {
                                 return false;
@@ -481,7 +481,7 @@ namespace DataProcessing
             //1. Copy / y G:\FTP\AutomatedHeaderV1_Files\*.* G:\FTP\AutomatedHeaderV1_Files\Archive
             //
             FileUtils.MoveFiles(
-                new[] {this.Vars.alegeusFileHeadersRoot}, false, new[]
+                new[] { this.Vars.alegeusFileHeadersRoot }, false, new[]
                 {
                     /*"*.txt", "*.csv",*/ "*.mbi",
                 }, this.Vars.alegeusFilesPreCheckRoot, "", ".mbi",
@@ -521,7 +521,7 @@ namespace DataProcessing
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // delete xls, xlsx, txt, csv
-                    string[] extensionsToDelete = {".xls", ".xlsx", ".txt", ".csv"};
+                    string[] extensionsToDelete = { ".xls", ".xlsx", ".txt", ".csv" };
 
                     foreach (var fileExt in extensionsToDelete)
                     {
