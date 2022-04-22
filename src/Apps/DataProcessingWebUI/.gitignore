@@ -1,0 +1,2 @@
+# add all subdirs inc bin
+!**/bin
