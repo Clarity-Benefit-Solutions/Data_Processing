@@ -95,7 +95,7 @@ namespace DataProcessing
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
 
-            //1. Clear all files in AutomatedHeaderV1_Files
+            /*//1. Clear all files in AutomatedHeaderV1_Files
             //echo y| del  G:\FTP\AutomatedHeaderV1_Files\*.*
             //
             FileUtils.DeleteFiles(Vars.alegeusFileHeadersRoot, false, "*.*",
@@ -109,7 +109,7 @@ namespace DataProcessing
                     // DbUtils.LogFileOperation(FileLogParams);
                 },
                 (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
-            );
+            );*/
 
             //2. Get list of folders for header from DB
             //decide table name

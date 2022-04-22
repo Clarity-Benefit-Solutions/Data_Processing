@@ -1321,10 +1321,7 @@ namespace DataProcessing
                 }
             }
 
-            if (!Utils.IsBlank(value))
-            {
-                value.Trim();
-            }
+            value = value?.Trim();
 
             //set default value
             if (Utils.IsBlank(value) && !Utils.IsBlank(column.DefaultValue))

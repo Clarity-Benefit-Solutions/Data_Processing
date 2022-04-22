@@ -331,7 +331,7 @@ namespace DataProcessing
                                                       StringComparison.InvariantCultureIgnoreCase)
                    )
                 {
-                    recType = firstColValue;
+                    recType = firstColValue.Trim();
 
                     //
                     // col2: tpaid
@@ -341,7 +341,7 @@ namespace DataProcessing
                     var thirdColValue = csv.GetString(2);
                     if (thirdColValue.StartsWith("BEN", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        BenCode = thirdColValue;
+                        BenCode = thirdColValue.Trim();
                     }
 
                     // exit when we have both
@@ -353,9 +353,12 @@ namespace DataProcessing
             }
             //
             // remove single quotes
+            
+            srcFileName = srcFileName.Replace(" ", "");
             srcFileName = srcFileName.Replace("'", "");
             srcFileName = srcFileName.Replace(",", "");
             srcFileName = srcFileName.Replace("\"", "");
+            srcFileName = srcFileName.Trim();
             //
             newPath = $"{Path.GetDirectoryName(srcFilePath)}/{Utils.GetUniqueIdFromFileName(srcFileName)}--";
             newPath += $"{testMarker}{ BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";

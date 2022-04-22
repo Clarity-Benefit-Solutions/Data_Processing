@@ -46,7 +46,7 @@ namespace TestApp
             // 
             // cmdProcessCobraFiles
             // 
-            this.cmdProcessCobraFiles.Location = new System.Drawing.Point(268, 21);
+            this.cmdProcessCobraFiles.Location = new System.Drawing.Point(227, 12);
             this.cmdProcessCobraFiles.Name = "cmdProcessCobraFiles";
             this.cmdProcessCobraFiles.Size = new System.Drawing.Size(150, 36);
             this.cmdProcessCobraFiles.TabIndex = 0;
@@ -65,7 +65,7 @@ namespace TestApp
             // 
             // cmdProcessAlegeusFiles
             // 
-            this.cmdProcessAlegeusFiles.Location = new System.Drawing.Point(441, 21);
+            this.cmdProcessAlegeusFiles.Location = new System.Drawing.Point(431, 12);
             this.cmdProcessAlegeusFiles.Name = "cmdProcessAlegeusFiles";
             this.cmdProcessAlegeusFiles.Size = new System.Drawing.Size(150, 36);
             this.cmdProcessAlegeusFiles.TabIndex = 4;
@@ -75,7 +75,7 @@ namespace TestApp
             // 
             // cmdRetrieveFtpErrorLogs
             // 
-            this.cmdRetrieveFtpErrorLogs.Location = new System.Drawing.Point(625, 21);
+            this.cmdRetrieveFtpErrorLogs.Location = new System.Drawing.Point(635, 12);
             this.cmdRetrieveFtpErrorLogs.Name = "cmdRetrieveFtpErrorLogs";
             this.cmdRetrieveFtpErrorLogs.Size = new System.Drawing.Size(150, 36);
             this.cmdRetrieveFtpErrorLogs.TabIndex = 5;
@@ -85,7 +85,7 @@ namespace TestApp
             // 
             // cmdClearLog
             // 
-            this.cmdClearLog.Location = new System.Drawing.Point(1268, 60);
+            this.cmdClearLog.Location = new System.Drawing.Point(1247, 60);
             this.cmdClearLog.Name = "cmdClearLog";
             this.cmdClearLog.Size = new System.Drawing.Size(150, 36);
             this.cmdClearLog.TabIndex = 6;
@@ -95,7 +95,7 @@ namespace TestApp
             // 
             // cmdClearAll
             // 
-            this.cmdClearAll.Location = new System.Drawing.Point(1089, 12);
+            this.cmdClearAll.Location = new System.Drawing.Point(1043, 12);
             this.cmdClearAll.Name = "cmdClearAll";
             this.cmdClearAll.Size = new System.Drawing.Size(150, 36);
             this.cmdClearAll.TabIndex = 7;
@@ -105,7 +105,7 @@ namespace TestApp
             // 
             // cmdOpenAccessDB
             // 
-            this.cmdOpenAccessDB.Location = new System.Drawing.Point(802, 21);
+            this.cmdOpenAccessDB.Location = new System.Drawing.Point(839, 12);
             this.cmdOpenAccessDB.Name = "cmdOpenAccessDB";
             this.cmdOpenAccessDB.Size = new System.Drawing.Size(150, 36);
             this.cmdOpenAccessDB.TabIndex = 8;
@@ -115,7 +115,7 @@ namespace TestApp
             // 
             // cmdDoALL
             // 
-            this.cmdDoALL.Location = new System.Drawing.Point(1250, 12);
+            this.cmdDoALL.Location = new System.Drawing.Point(1247, 12);
             this.cmdDoALL.Name = "cmdDoALL";
             this.cmdDoALL.Size = new System.Drawing.Size(150, 36);
             this.cmdDoALL.TabIndex = 9;
@@ -125,7 +125,7 @@ namespace TestApp
             // 
             // cmdCopyTestFiles
             // 
-            this.cmdCopyTestFiles.Location = new System.Drawing.Point(23, 21);
+            this.cmdCopyTestFiles.Location = new System.Drawing.Point(23, 12);
             this.cmdCopyTestFiles.Name = "cmdCopyTestFiles";
             this.cmdCopyTestFiles.Size = new System.Drawing.Size(150, 36);
             this.cmdCopyTestFiles.TabIndex = 10;
@@ -166,7 +166,6 @@ namespace TestApp
             this.Controls.Add(this.cmdProcessCobraFiles);
             this.Name = "Form1";
             this.Text = "Form1";
-            //this.Closed 
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             ((System.ComponentModel.ISupportInitialize)(this.listLogs)).EndInit();
             this.ResumeLayout(false);
