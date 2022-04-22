@@ -20,24 +20,24 @@ namespace TestApp
 
         public Form1()
         {
-            SubscribeToUnhandledExceptions();
-            InitializeComponent();
+            this.SubscribeToUnhandledExceptions();
+            this.InitializeComponent();
 
-            Closed += Form1_Closed;
+            this.Closed += this.Form1_Closed;
 
-            listLogs.AutoGenerateColumns = true;
-            listLogs.AutoSize = true;
-            listLogs.DataSource = _bindingSource1;
+            this.listLogs.AutoGenerateColumns = true;
+            this.listLogs.AutoSize = true;
+            this.listLogs.DataSource = this._bindingSource1;
 
             //
-            SubscribeToEvents();
+            this.SubscribeToEvents();
 
             //
             if (Vars.Environment != "TEST")
             {
-                cmdClearAll.Visible = false;
-                cmdCopyTestFiles.Visible = false;
-                cmdOpenAccessDB.Visible = false;
+                this.cmdClearAll.Visible = false;
+                this.cmdCopyTestFiles.Visible = false;
+                this.cmdOpenAccessDB.Visible = false;
             }
         }
 
@@ -50,7 +50,7 @@ namespace TestApp
         private void SubscribeToUnhandledExceptions()
         {
             var currentDomain = AppDomain.CurrentDomain;
-            currentDomain.UnhandledException += HandleUnhandledException;
+            currentDomain.UnhandledException += this.HandleUnhandledException;
         }
 
 
@@ -65,7 +65,7 @@ namespace TestApp
                 $"Unhandled Exception: {e}"
             );
 
-            HandleOnFileLogOperationCallback(null, logItem, null);
+            this.HandleOnFileLogOperationCallback(null, logItem, null);
         }
 
         private void HandleOnFileLogOperationCallback(object sender, FileOperationLogParams logParams)
@@ -79,22 +79,25 @@ namespace TestApp
                 logParams.ProcessingTaskOutcomeDetails
             );
 
-            HandleOnFileLogOperationCallback(sender, logItem, null);
+            this.HandleOnFileLogOperationCallback(sender, logItem, null);
         }
 
         private void HandleOnFileLogOperationCallback(object sender, LogFields logItem, Exception ex)
         {
-            if (Visible)
+            if (this.Visible)
             {
-                if (listLogs.InvokeRequired)
+                if (this.listLogs.InvokeRequired)
                 {
-                    listLogs.Invoke(
+                    this.listLogs.Invoke(
                         (Action) (() =>
                             {
-                                _bindingSource1.Add(logItem);
-                                _bindingSource1.MoveLast();
+                                this._bindingSource1.Add(logItem);
+                                this._bindingSource1.MoveLast();
 
-                                if (ex != null) ShowThreadExceptionDialog("Unhandled Error", ex);
+                                if (ex != null)
+                                {
+                                    ShowThreadExceptionDialog("Unhandled Error", ex);
+                                }
                             }
                         )
                     );
@@ -102,10 +105,13 @@ namespace TestApp
                 else
                 {
                     // thread - safe equivalent 
-                    _bindingSource1.Add(logItem);
-                    _bindingSource1.MoveLast();
+                    this._bindingSource1.Add(logItem);
+                    this._bindingSource1.MoveLast();
 
-                    if (ex != null) ShowThreadExceptionDialog("Unhandled Error", ex);
+                    if (ex != null)
+                    {
+                        ShowThreadExceptionDialog("Unhandled Error", ex);
+                    }
                 }
             }
 
@@ -127,12 +133,12 @@ namespace TestApp
             //DbUtils.EventOnLogOperationCallback += HandleOnLogOperationCallback;
 
             // Subscribe to the event
-            DbUtils.eventOnLogFileOperationCallback += HandleOnFileLogOperationCallback;
+            DbUtils.eventOnLogFileOperationCallback += this.HandleOnFileLogOperationCallback;
         }
 
         private async void cmdProcessCobraFiles_Click(object sender, EventArgs e)
         {
-            cmdProcessCobraFiles.Enabled = false;
+            this.cmdProcessCobraFiles.Enabled = false;
 
             try
             {
@@ -140,7 +146,7 @@ namespace TestApp
             }
             catch (Exception ex)
             {
-                HandleOnFileLogOperationCallback(sender,
+                this.HandleOnFileLogOperationCallback(sender,
                     new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
                         "",
                         "Unhandled Exception",
@@ -152,14 +158,14 @@ namespace TestApp
             }
             finally
             {
-                cmdProcessCobraFiles.Enabled = true;
+                this.cmdProcessCobraFiles.Enabled = true;
             }
         }
 
 
         private async void cmdProcessAlegeusFiles_Click(object sender, EventArgs e)
         {
-            cmdProcessAlegeusFiles.Enabled = false;
+            this.cmdProcessAlegeusFiles.Enabled = false;
 
             try
             {
@@ -167,7 +173,7 @@ namespace TestApp
             }
             catch (Exception ex)
             {
-                HandleOnFileLogOperationCallback(sender,
+                this.HandleOnFileLogOperationCallback(sender,
                     new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
                         "",
                         "Unhandled Exception",
@@ -179,13 +185,13 @@ namespace TestApp
             }
             finally
             {
-                cmdProcessAlegeusFiles.Enabled = true;
+                this.cmdProcessAlegeusFiles.Enabled = true;
             }
         }
 
         private async void cmdRetrieveFtpErrorLogs_Click(object sender, EventArgs e)
         {
-            cmdRetrieveFtpErrorLogs.Enabled = false;
+            this.cmdRetrieveFtpErrorLogs.Enabled = false;
 
             try
             {
@@ -193,7 +199,7 @@ namespace TestApp
             }
             catch (Exception ex)
             {
-                HandleOnFileLogOperationCallback(sender,
+                this.HandleOnFileLogOperationCallback(sender,
                     new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
                         "",
                         "Unhandled Exception",
@@ -205,18 +211,18 @@ namespace TestApp
             }
             finally
             {
-                cmdRetrieveFtpErrorLogs.Enabled = true;
+                this.cmdRetrieveFtpErrorLogs.Enabled = true;
             }
         }
 
         private void cmdClearLog_Click(object sender, EventArgs e)
         {
-            _bindingSource1.Clear();
+            this._bindingSource1.Clear();
         }
 
         private void cmdClearAll_Click(object sender, EventArgs e)
         {
-            cmdClearAll.Enabled = false;
+            this.cmdClearAll.Enabled = false;
             try
             {
                 var errorLog = new AlegeusErrorLog();
@@ -224,7 +230,7 @@ namespace TestApp
             }
             catch (Exception ex)
             {
-                HandleOnFileLogOperationCallback(sender,
+                this.HandleOnFileLogOperationCallback(sender,
                     new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
                         "",
                         "Unhandled Exception",
@@ -236,13 +242,13 @@ namespace TestApp
             }
             finally
             {
-                cmdClearAll.Enabled = true;
+                this.cmdClearAll.Enabled = true;
             }
         }
 
         private void cmdOpenAccessDB_Click(object sender, EventArgs e)
         {
-            cmdOpenAccessDB.Enabled = false;
+            this.cmdOpenAccessDB.Enabled = false;
 
             try
             {
@@ -251,7 +257,7 @@ namespace TestApp
             }
             catch (Exception ex)
             {
-                HandleOnFileLogOperationCallback(sender,
+                this.HandleOnFileLogOperationCallback(sender,
                     new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
                         "",
                         "Unhandled Exception",
@@ -263,14 +269,14 @@ namespace TestApp
             }
             finally
             {
-                cmdOpenAccessDB.Enabled = true;
+                this.cmdOpenAccessDB.Enabled = true;
             }
         }
 
         private void cmdCopyTestFiles_Click(object sender, EventArgs e)
         {
             //
-            cmdCopyTestFiles.Enabled = false;
+            this.cmdCopyTestFiles.Enabled = false;
 
             try
             {
@@ -284,7 +290,7 @@ namespace TestApp
             }
             catch (Exception ex)
             {
-                HandleOnFileLogOperationCallback(sender,
+                this.HandleOnFileLogOperationCallback(sender,
                     new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
                         "",
                         "Unhandled Exception",
@@ -296,28 +302,39 @@ namespace TestApp
             }
             finally
             {
-                cmdCopyTestFiles.Enabled = true;
+                this.cmdCopyTestFiles.Enabled = true;
             }
         }
 
         private async void cmdDoALL_Click(object sender, EventArgs e)
         {
-            cmdDoALL.Enabled = false;
+            this.cmdDoALL.Enabled = false;
 
             try
             {
                 var eventArgs = EventArgs.Empty;
-                if (cmdClearAll.Visible && cmdClearAll.Enabled) cmdClearAll_Click(this, eventArgs);
-                if (cmdCopyTestFiles.Visible && cmdCopyTestFiles.Enabled) cmdCopyTestFiles_Click(this, eventArgs);
-                cmdClearLog_Click(this, eventArgs);
+                if (this.cmdClearAll.Visible && this.cmdClearAll.Enabled)
+                {
+                    this.cmdClearAll_Click(this, eventArgs);
+                }
+
+                if (this.cmdCopyTestFiles.Visible && this.cmdCopyTestFiles.Enabled)
+                {
+                    this.cmdCopyTestFiles_Click(this, eventArgs);
+                }
+
+                this.cmdClearLog_Click(this, eventArgs);
                 await CobraDataProcessing.ProcessAll();
                 await AlegeusDataProcessing.ProcessAll();
                 await AlegeusErrorLog.ProcessAll();
-                if (cmdOpenAccessDB.Visible && cmdOpenAccessDB.Enabled) cmdOpenAccessDB_Click(this, eventArgs);
+                if (this.cmdOpenAccessDB.Visible && this.cmdOpenAccessDB.Enabled)
+                {
+                    this.cmdOpenAccessDB_Click(this, eventArgs);
+                }
             }
             catch (Exception ex)
             {
-                HandleOnFileLogOperationCallback(sender,
+                this.HandleOnFileLogOperationCallback(sender,
                     new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
                         "",
                         "Unhandled Exception",
@@ -329,7 +346,7 @@ namespace TestApp
             }
             finally
             {
-                cmdDoALL.Enabled = true;
+                this.cmdDoALL.Enabled = true;
             }
         }
     }

@@ -54,36 +54,36 @@ namespace DataProcessing
         public void ProcessAllFiles()
         {
             //
-            var fileLogParams = Vars.dbFileProcessingLogParams;
+            var fileLogParams = this.Vars.dbFileProcessingLogParams;
 
             // DbConn
-            var dbConn = Vars.dbConnDataProcessing;
+            var dbConn = this.Vars.dbConnDataProcessing;
 
             // CreateHeaders
-            CreateHeaders(dbConn, fileLogParams);
+            this.CreateHeaders(dbConn, fileLogParams);
 
             //PreCheckFilesAndProcess
-            PreCheckFilesAndProcess(HeaderType.NotApplicable, dbConn, fileLogParams);
+            this.PreCheckFilesAndProcess(HeaderType.NotApplicable, dbConn, fileLogParams);
         }
 
         public void CreateHeaders(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
             //MoveSourceFilesToCobraDirs
-            MoveSourceFilesToHeaderDirs(dbConn, fileLogParams);
+            this.MoveSourceFilesToHeaderDirs(dbConn, fileLogParams);
 
             //ConvertExcelFilesToCsv
-            ConvertAllHeaderExcelFilesToCsv(dbConn, fileLogParams);
+            this.ConvertAllHeaderExcelFilesToCsv(dbConn, fileLogParams);
 
-            AddHeaderToAllHeaderDirFiles(dbConn, fileLogParams);
+            this.AddHeaderToAllHeaderDirFiles(dbConn, fileLogParams);
 
             ////CopyHoldAllFilesToPreCheckDir
             //CopyHoldAllFilesToPreCheckDir(dbConn, fileLogParams);
 
             //RenamePreCheckDirFilesToMbi
-            MoveHeaderDirFilesToPreCheck(dbConn, fileLogParams);
+            this.MoveHeaderDirFilesToPreCheck(dbConn, fileLogParams);
 
             //RemoveDuplicateFilesInPreCheckDir
-            RemoveDuplicateFilesInPreCheckDir(dbConn, fileLogParams);
+            this.RemoveDuplicateFilesInPreCheckDir(dbConn, fileLogParams);
         }
 
         protected void MoveSourceFilesToHeaderDirs(DbConnection dbConn,
@@ -133,10 +133,10 @@ namespace DataProcessing
                 if (!Utils.IsBlank(rowFolderName))
                 {
                     // change from PROD source dir to Ctx source dir
-                    rowFolderName = Vars.ConvertFilePathFromProdToCtx(rowFolderName);
+                    rowFolderName = this.Vars.ConvertFilePathFromProdToCtx(rowFolderName);
 
                     // we need to set these first before setting folderName
-                    var fileLogParams1 = Vars.dbFileProcessingLogParams;
+                    var fileLogParams1 = this.Vars.dbFileProcessingLogParams;
 
                     fileLogParams.SetFileNames("", Path.GetFileName(rowFolderName), rowFolderName,
                         Path.GetFileName(rowFolderName), "",
@@ -209,8 +209,7 @@ namespace DataProcessing
 
                     // 3b. move all source files (with new names) to Headers dir
                     FileUtils.MoveFiles(
-                        rowFolderName, false, "*.*",
-                        Vars.alegeusFileHeadersRoot, "", "",
+                        rowFolderName, false, "*.*", this.Vars.alegeusFileHeadersRoot, "", "",
                         (srcFilePath, destFilePath, fileContents) =>
                         {
                             // add to fileLog
@@ -225,9 +224,8 @@ namespace DataProcessing
             } // each dr
 
             //4. copy all header files to Archive root
-            FileUtils.CopyFiles(
-                Vars.alegeusFileHeadersRoot, false, "*.*",
-                Vars.alegeusFileHeadersArchiveRoot, "", "",
+            FileUtils.CopyFiles(this.Vars.alegeusFileHeadersRoot, false, "*.*", this.Vars.alegeusFileHeadersArchiveRoot,
+                "", "",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
                     // add to fileLog
@@ -242,8 +240,7 @@ namespace DataProcessing
             );
 
             //5a. delete all remnant HoldAll files 
-            FileUtils.DeleteFiles(
-                Vars.alegeusFilesPreCheckHoldAllRoot, false, "*.*",
+            FileUtils.DeleteFiles(this.Vars.alegeusFilesPreCheckHoldAllRoot, false, "*.*",
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // add to fileLog
@@ -257,9 +254,8 @@ namespace DataProcessing
             );
 
             //5b: copy all header files to HoldAll
-            FileUtils.CopyFiles(
-                Vars.alegeusFileHeadersRoot, false, "*.*",
-                Vars.alegeusFilesPreCheckHoldAllRoot, "", "",
+            FileUtils.CopyFiles(this.Vars.alegeusFileHeadersRoot, false, "*.*",
+                this.Vars.alegeusFilesPreCheckHoldAllRoot, "", "",
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // add to fileLog
@@ -292,7 +288,8 @@ namespace DataProcessing
             //
 
             // Iterate and convert all Excel files in fileProcessingHeadersRoot - no subDirs
-            FileUtils.ConvertAllExcelFilesToCsv(Vars.alegeusFileHeadersRoot, false, Vars.alegeusFileHeadersRoot, dbConn,
+            FileUtils.ConvertAllExcelFilesToCsv(this.Vars.alegeusFileHeadersRoot, false,
+                this.Vars.alegeusFileHeadersRoot, dbConn,
                 fileLogParams,
                 (srcFilePath, destFilePath, dummy2) =>
                 {
@@ -322,9 +319,9 @@ namespace DataProcessing
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
-            AddHeaderToAllHeaderDirFilesForExt("*.mbi", dbConn, fileLogParams);
-            AddHeaderToAllHeaderDirFilesForExt("*.csv", dbConn, fileLogParams);
-            AddHeaderToAllHeaderDirFilesForExt("*.txt", dbConn, fileLogParams);
+            this.AddHeaderToAllHeaderDirFilesForExt("*.mbi", dbConn, fileLogParams);
+            this.AddHeaderToAllHeaderDirFilesForExt("*.csv", dbConn, fileLogParams);
+            this.AddHeaderToAllHeaderDirFilesForExt("*.txt", dbConn, fileLogParams);
             //
             fileLogParams.SetFileNames("", "", "", "", "",
                 $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
@@ -338,8 +335,7 @@ namespace DataProcessing
 
         {
             // Iterate all files in header dir
-            FileUtils.IterateDirectory(
-                Vars.alegeusFileHeadersRoot, DirectoryIterateType.Files, false, fileExt,
+            FileUtils.IterateDirectory(this.Vars.alegeusFileHeadersRoot, DirectoryIterateType.Files, false, fileExt,
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     //
@@ -377,7 +373,11 @@ namespace DataProcessing
                         "data_row",
                         (filePath1, rowNo, line) =>
                         {
-                            if (Utils.IsBlank(line)) return false;
+                            if (Utils.IsBlank(line))
+                            {
+                                return false;
+                            }
+
                             if (
                                 //confirmed: with danielle - we skip all lines that do not start with valid record type? 
                                 /*rowNo == 1
@@ -385,7 +385,10 @@ namespace DataProcessing
                                      // skip if line is not of a import row Type
                                      || !Utils.TextMatchesPattern(line, "I*,")
                             )
+                            {
                                 return false;
+                            }
+
                             return true;
                         },
                         fileLogParams,
@@ -400,7 +403,10 @@ namespace DataProcessing
                     var queryString = " ";
 
                     // fix header proc
-                    if (!Utils.IsBlank(procName)) queryString += $" EXEC {procName};" + "\r\n";
+                    if (!Utils.IsBlank(procName))
+                    {
+                        queryString += $" EXEC {procName};" + "\r\n";
+                    }
 
                     // run fix headers query
                     DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
@@ -440,9 +446,8 @@ namespace DataProcessing
             DbUtils.LogFileOperation(fileLogParams);
             //
             //
-            FileUtils.CopyFiles(
-                Vars.alegeusFilesPreCheckHoldAllRoot, false, "*.*",
-                Vars.alegeusFilesPreCheckRoot, "", "",
+            FileUtils.CopyFiles(this.Vars.alegeusFilesPreCheckHoldAllRoot, false, "*.*",
+                this.Vars.alegeusFilesPreCheckRoot, "", "",
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // add to fileLog
@@ -476,11 +481,10 @@ namespace DataProcessing
             //1. Copy / y G:\FTP\AutomatedHeaderV1_Files\*.* G:\FTP\AutomatedHeaderV1_Files\Archive
             //
             FileUtils.MoveFiles(
-                new[] {Vars.alegeusFileHeadersRoot}, false, new[]
+                new[] {this.Vars.alegeusFileHeadersRoot}, false, new[]
                 {
-                    /*"*.txt", "*.csv",*/ "*.mbi"
-                },
-                Vars.alegeusFilesPreCheckRoot, "", ".mbi",
+                    /*"*.txt", "*.csv",*/ "*.mbi",
+                }, this.Vars.alegeusFilesPreCheckRoot, "", ".mbi",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
                     // add to fileLog
@@ -513,8 +517,7 @@ namespace DataProcessing
             DbUtils.LogFileOperation(fileLogParams);
             //
             //
-            FileUtils.IterateDirectory(
-                Vars.alegeusFilesPreCheckRoot, DirectoryIterateType.Files, false, "*.mbi",
+            FileUtils.IterateDirectory(this.Vars.alegeusFilesPreCheckRoot, DirectoryIterateType.Files, false, "*.mbi",
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // delete xls, xlsx, txt, csv
@@ -549,13 +552,12 @@ namespace DataProcessing
             DbUtils.LogFileOperation(fileLogParams);
             //
             //
-            FileUtils.IterateDirectory(
-                Vars.alegeusFilesPreCheckRoot, DirectoryIterateType.Files, false, "*.mbi",
+            FileUtils.IterateDirectory(this.Vars.alegeusFilesPreCheckRoot, DirectoryIterateType.Files, false, "*.mbi",
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // check the file 
                     using var fileChecker = new FileChecker(srcFilePath, PlatformType.Alegeus,
-                        Vars.dbConnDataProcessing, fileLogParams,
+                        this.Vars.dbConnDataProcessing, fileLogParams,
                         (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                     );
 

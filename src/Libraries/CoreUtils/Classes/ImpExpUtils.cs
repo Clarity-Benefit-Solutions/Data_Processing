@@ -33,13 +33,13 @@ namespace CoreUtils.Classes
             var csvDataReaderOptions =
                 new CsvDataReaderOptions
                 {
-                    HasHeaders = hasHeaders
+                    HasHeaders = hasHeaders,
                 };
 
             using var csv = SylvanCsvDataReader.Create(srcFilePath, csvDataReaderOptions);
             //
             var rowNo = 0;
-            var fileFormats = new Dictionary<EdiFileFormat, List<int>>();
+            Dictionary<EdiFileFormat, List<int>> fileFormats = new Dictionary<EdiFileFormat, List<int>>();
 
             const int rowsToRead = 9999;
             while (csv.Read())
@@ -55,9 +55,13 @@ namespace CoreUtils.Classes
                         fileFormat != EdiFileFormat.AlegeusResultsHeader)
                     {
                         if (fileFormats.ContainsKey(fileFormat))
+                        {
                             fileFormats[fileFormat].Add(rowNo);
+                        }
                         else
+                        {
                             fileFormats.Add(fileFormat, new List<int> {rowNo});
+                        }
                     }
                 }
             }
@@ -68,7 +72,10 @@ namespace CoreUtils.Classes
 
         public static EdiFileFormat GetAlegeusRowFormat(object[] rowValues)
         {
-            if (rowValues == null || rowValues.Length == 0) return EdiFileFormat.Unknown;
+            if (rowValues == null || rowValues.Length == 0)
+            {
+                return EdiFileFormat.Unknown;
+            }
 
             var firstFieldValue = rowValues[0].ToString();
             return GetAlegeusRowFormat(firstFieldValue);
@@ -77,6 +84,7 @@ namespace CoreUtils.Classes
         public static EdiFileFormat GetAlegeusRowFormat(string firstFieldValue)
         {
             if (!Utils.IsBlank(firstFieldValue) && firstFieldValue.Length == 2)
+            {
                 switch (firstFieldValue)
                 {
                     case "IA":
@@ -176,6 +184,7 @@ namespace CoreUtils.Classes
                     case "RZ":
                         return EdiFileFormat.AlegeusResultsEmployeeHrInfo;
                 }
+            }
 
             return EdiFileFormat.Unknown;
         }
@@ -221,9 +230,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(srcFilePath, srcFileName, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -255,7 +268,10 @@ namespace CoreUtils.Classes
                 }
 
                 // close
-                if (writer != null) writer.Close();
+                if (writer != null)
+                {
+                    writer.Close();
+                }
 
                 //// log
                 //fileLogParams?.SetTaskOutcome("Success", $"Completed: Export using {queryString}");
@@ -265,16 +281,24 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(filePath, queryString, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
         public static string[] GetCsvColumnsFromText(string text)
         {
-            if (Utils.IsBlank(text)) return new string[] { };
-            var Fields = RegexCSVParser.Split(text);
+            if (Utils.IsBlank(text))
+            {
+                return new string[] { };
+            }
+
+            var Fields = ImpExpUtils.RegexCSVParser.Split(text);
             return Fields;
         }
 
@@ -295,12 +319,12 @@ namespace CoreUtils.Classes
                 {
                     NewLine = Environment.NewLine,
                     // in case HasHeaderRecord = false, the reader will use Index attributes of the class properties to match
-                    HasHeaderRecord = hasHeaders
+                    HasHeaderRecord = hasHeaders,
                 };
 
                 using var reader = new StreamReader(filePath);
                 using var csv = new CsvReader(reader, config);
-                var records = csv.GetRecords<T>();
+                IEnumerable<T> records = csv.GetRecords<T>();
 
                 foreach (var row in records)
                 {
@@ -333,9 +357,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(filePath, tableName, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         } // routine
 
@@ -362,10 +390,10 @@ namespace CoreUtils.Classes
                 // Get the schema for the target table
 
                 // init SqlBulkCopy
-                using var bcp = new SqlBulkCopy(dbConn.ConnectionString, _defaultSqlBulkCopyOptions);
+                using var bcp = new SqlBulkCopy(dbConn.ConnectionString, ImpExpUtils._defaultSqlBulkCopyOptions);
 
                 // source columns for reading and mapping for writing
-                var listCols = new List<TypedCsvColumn>();
+                List<TypedCsvColumn> listCols = new List<TypedCsvColumn>();
                 foreach (var column in columnMappings.Columns)
                 {
                     // for reading
@@ -373,11 +401,15 @@ namespace CoreUtils.Classes
 
                     //for writing to DB
                     if (!Utils.IsBlank(column.ColumnName))
+                    {
                         bcp.ColumnMappings.Add(new SqlBulkCopyColumnMapping(column.SourceColumn,
                             column.DestinationColumn));
+                    }
                     else
+                    {
                         bcp.ColumnMappings.Add(new SqlBulkCopyColumnMapping(column.SourceOrdinal,
                             column.DestinationOrdinal));
+                    }
                 }
 
                 // create csv reader options
@@ -385,7 +417,7 @@ namespace CoreUtils.Classes
                     new CsvDataReaderOptions
                     {
                         Schema = new CsvSchema(listCols),
-                        HasHeaders = hasHeaderRow
+                        HasHeaders = hasHeaderRow,
                     };
 
                 // create the csv reader
@@ -407,9 +439,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(srcFilePath, tableName, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -436,9 +472,10 @@ namespace CoreUtils.Classes
                 cmd.CommandText = $"select top 0 * from {tableName}";
                 var reader = cmd.ExecuteReader();
                 var schemaTable = reader.GetSchemaTable();
-                var listCols = new List<TypedCsvColumn>();
+                List<TypedCsvColumn> listCols = new List<TypedCsvColumn>();
 
                 if (schemaTable != null)
+                {
                     foreach (DataRow row in schemaTable.Rows)
                     {
                         var columnName = Convert.ToString(row["ColumnName"]);
@@ -448,19 +485,20 @@ namespace CoreUtils.Classes
 
                         listCols.Add(column);
                     }
+                }
 
                 // create csv reader options
                 var csvDataReaderOptions =
                     new CsvDataReaderOptions
                     {
                         Schema = new CsvSchema(listCols),
-                        HasHeaders = hasHeaderRow
+                        HasHeaders = hasHeaderRow,
                     };
 
                 var csv = SylvanCsvDataReader.Create(srcFilePath, csvDataReaderOptions);
 
                 //
-                var bcp = new SqlBulkCopy(conn.ConnectionString, _defaultSqlBulkCopyOptions);
+                var bcp = new SqlBulkCopy(conn.ConnectionString, ImpExpUtils._defaultSqlBulkCopyOptions);
                 //
                 bcp.BulkCopyTimeout = 0;
                 bcp.DestinationTableName = tableName;
@@ -476,9 +514,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(srcFilePath, tableName, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
     } // class

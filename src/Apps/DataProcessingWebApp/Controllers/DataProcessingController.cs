@@ -1,31 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Web;
-using System.Web.Hosting;
-using System.Web.Http;
 using System.Web.Mvc;
-using CoreUtils;
 using CoreUtils.Classes;
-using DataProcessing;
 using DataProcessingWebApp.Jobs;
 using Hangfire;
-using Hangfire.Console;
-using Hangfire.Storage.Monitoring;
-
 
 namespace DataProcessingWebApp.Controllers
 {
-
 
     [System.Web.Http.Authorize]
     public class DataProcessingController : Controller
@@ -33,14 +17,7 @@ namespace DataProcessingWebApp.Controllers
         [System.Web.Http.Authorize]
         public string Index()
         {
-            try
-            {
-                return "DataProcessingController";
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            return "DataProcessingController";
         }
 
         // GET api/<controller>/5
@@ -55,13 +32,13 @@ namespace DataProcessingWebApp.Controllers
                 }
 
                 // do job in background
-                string jobId = BackgroundJob.Enqueue(() => DataProcessingJob.StartJob(null, id));
+                var jobId = BackgroundJob.Enqueue(() => DataProcessingJob.StartJob(null, id));
 
                 return new JobDetails(id, jobId, $"[JobDetails ID {jobId} Queued for {id}", "STARTED");
             }
             catch (Exception ex)
             {
-                return new JobDetails(id, "", $"[Job Could Not Be Queued as {ex.ToString()}", "FAILED");
+                return new JobDetails(id, "", $"[Job Could Not Be Queued as {ex}", "FAILED");
             }
         }
 
@@ -69,13 +46,13 @@ namespace DataProcessingWebApp.Controllers
         [System.Web.Http.Authorize]
         public JobDetails CheckFileAlegeus(HttpPostedFileBase file)
         {
-            return CheckFile(file, "alegeus");
-
+            return this.CheckFile(file, "alegeus");
         }
+
         [System.Web.Http.Authorize]
         public JobDetails CheckFile(HttpPostedFileBase file, string platform)
         {
-            string id = "CheckFile: " + platform;
+            var id = "CheckFile: " + platform;
 
             try
             {
@@ -92,20 +69,21 @@ namespace DataProcessingWebApp.Controllers
                 file.SaveAs(srcFilePath);
 
                 // do job in background
-                string jobId = BackgroundJob.Enqueue(() => DataProcessingJob.CheckFile(null, srcFilePath, "Alegeus"));
+                var jobId = BackgroundJob.Enqueue(() => DataProcessingJob.CheckFile(null, srcFilePath, "Alegeus"));
                 //
-                return new JobDetails(id, jobId, jobId, $"[JobDetails ID {jobId} Queued for {id} and File {file.FileName}", "STARTED");
+                return new JobDetails(id, jobId, jobId,
+                    $"[JobDetails ID {jobId} Queued for {id} and File {file.FileName}", "STARTED");
             }
             catch (Exception ex)
             {
-                return new JobDetails(id, $"[Job Could Not Be Queued as {ex.ToString()}", "FAILED");
+                return new JobDetails(id, $"[Job Could Not Be Queued as {ex}", "FAILED");
             }
         }
 
         [System.Web.Http.Authorize]
         public JobDetails CheckFileCobra(HttpPostedFileBase file)
         {
-            return CheckFile(file, "cobra");
+            return this.CheckFile(file, "cobra");
         }
 
         [System.Web.Http.Authorize]
@@ -124,37 +102,36 @@ namespace DataProcessingWebApp.Controllers
                     return new JobDetails("", jobId, $"{jobId} Not Found", "Not Found");
                 }
 
-                string history = "";
-                string result = "";
+                var history = "";
+                var result = "";
 
-                string jobKey = (string)(jobData?.Job?.Args?.Last() ?? "");
+                var jobKey = (string) (jobData?.Job?.Args?.Last() ?? "");
 
                 var hMonitoringApi = JobStorage.Current.GetMonitoringApi();
                 var jobState = hMonitoringApi.JobDetails(jobId);
                 if (jobState != null)
                 {
-                    var historyData = jobState.History.First()?.Data;
+                    IDictionary<string, string> historyData = jobState.History.First()?.Data;
                     if (historyData != null)
                     {
-                        var jobResultKeyPair = historyData.Last();
+                        KeyValuePair<string, string> jobResultKeyPair = historyData.Last();
                         if (jobResultKeyPair.Key == "Result")
                         {
                             result = jobResultKeyPair.Value;
                         }
+
                         history = $"CreatedAt: {jobState.CreatedAt}";
                     }
                 }
 
                 return new JobDetails(jobKey, jobId, jobId, jobData.State, history, result);
-
             }
             catch (Exception ex)
             {
-                return new JobDetails("", jobId, jobId, $"[JobDetails jobId {jobId} Results Could Not Be Queried as {ex.ToString()}", "FAILED", "FAILED", "FAILED");
+                return new JobDetails("", jobId, jobId,
+                    $"[JobDetails jobId {jobId} Results Could Not Be Queried as {ex}", "FAILED", "FAILED", "FAILED");
             }
         }
-
-
-
     }
+
 }

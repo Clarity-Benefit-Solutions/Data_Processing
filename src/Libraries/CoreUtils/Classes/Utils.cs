@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.Reflection;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
@@ -43,13 +44,13 @@ namespace CoreUtils.Classes
         public JobDetails(string jobName, string jobId, string jobMessage, string jobState = "", string jobHistory = "",
             string jobResultDetails = "", string jobErrorDetails = "")
         {
-            JobName = jobName;
-            JobMessage = jobMessage;
-            JobId = jobId;
-            JobState = jobState;
-            JobHistory = jobHistory;
-            JobResultDetails = jobResultDetails;
-            JobErrorDetails = jobErrorDetails;
+            this.JobName = jobName;
+            this.JobMessage = jobMessage;
+            this.JobId = jobId;
+            this.JobState = jobState;
+            this.JobHistory = jobHistory;
+            this.JobResultDetails = jobResultDetails;
+            this.JobErrorDetails = jobErrorDetails;
         }
 
         public override string ToString()
@@ -68,11 +69,11 @@ namespace CoreUtils.Classes
 
         public OperationResult(int success, string code, string result = "", string details = "", string error = "")
         {
-            Success = success;
-            Code = code;
-            Error = error;
-            Result = result;
-            Details = details;
+            this.Success = success;
+            this.Code = code;
+            this.Error = error;
+            this.Result = result;
+            this.Details = details;
         }
 
         public override string ToString()
@@ -87,12 +88,12 @@ namespace CoreUtils.Classes
         public LogFields(string logTime, string fileId, string task, string status, string fileName,
             string outcomeDetails)
         {
-            LogTime = logTime;
-            FileId = fileId;
-            Task = task;
-            Status = status;
-            FileName = fileName;
-            OutcomeDetails = outcomeDetails;
+            this.LogTime = logTime;
+            this.FileId = fileId;
+            this.Task = task;
+            this.Status = status;
+            this.FileName = fileName;
+            this.OutcomeDetails = outcomeDetails;
         }
 
         public string LogTime { get; set; }
@@ -104,7 +105,7 @@ namespace CoreUtils.Classes
 
         public override string ToString()
         {
-            return $"{LogTime}\t{FileId}\t{Task}\t{Status}\t{FileName}\t{OutcomeDetails}";
+            return $"{this.LogTime}\t{this.FileId}\t{this.Task}\t{this.Status}\t{this.FileName}\t{this.OutcomeDetails}";
         }
     }
 
@@ -126,11 +127,17 @@ namespace CoreUtils.Classes
         {
             try
             {
-                if (IsBlank(value)) return null;
+                if (IsBlank(value))
+                {
+                    return null;
+                }
 
                 // try to unescape doubly quoted json
                 var try1 = JsonConvert.DeserializeObject(value);
-                if (try1 is string) value = (string) try1;
+                if (try1 is string)
+                {
+                    value = (string) try1;
+                }
 
                 object deserializeObject = JsonConvert.DeserializeObject<T>(value);
 
@@ -146,7 +153,10 @@ namespace CoreUtils.Classes
         {
             try
             {
-                if (value == null) return "";
+                if (value == null)
+                {
+                    return "";
+                }
 
                 var serializedvalue = JsonConvert.SerializeObject(value);
 
@@ -167,7 +177,10 @@ namespace CoreUtils.Classes
 
         public static string Left(string value, int length)
         {
-            if (IsBlank(value)) return value;
+            if (IsBlank(value))
+            {
+                return value;
+            }
 
             var charsToTake = Math.Min(length, value.Length);
             return value.Substring(0, charsToTake);
@@ -175,7 +188,10 @@ namespace CoreUtils.Classes
 
         public static string Right(string value, int length)
         {
-            if (IsBlank(value)) return value;
+            if (IsBlank(value))
+            {
+                return value;
+            }
 
             var charsToTake = Math.Min(length, value.Length);
             return value.Length <= length ? value : value.Substring(value.Length - charsToTake);
@@ -183,7 +199,10 @@ namespace CoreUtils.Classes
 
         public static bool IsBlank(string value)
         {
-            if (string.IsNullOrEmpty(value)) return true;
+            if (string.IsNullOrEmpty(value))
+            {
+                return true;
+            }
 
             return false;
         }
@@ -192,14 +211,14 @@ namespace CoreUtils.Classes
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[Random.Next(s.Length)]).ToArray());
+                .Select(s => s[Utils.Random.Next(s.Length)]).ToArray());
         }
 
         public static string RandomStringNumbers(int length)
         {
             const string chars = "0123456789";
             return new string(Enumerable.Repeat(chars, length)
-                .Select(s => s[Random.Next(s.Length)]).ToArray());
+                .Select(s => s[Utils.Random.Next(s.Length)]).ToArray());
         }
 
         //extension method to get desc of enum item
@@ -207,7 +226,7 @@ namespace CoreUtils.Classes
         {
             var type = en.GetType();
 
-            var memInfo = type.GetMember(en.ToString());
+            MemberInfo[] memInfo = type.GetMember(en.ToString());
 
             if (memInfo.Length > 0)
             {
@@ -217,7 +236,9 @@ namespace CoreUtils.Classes
 
                 if (attrs.Length > 0)
 
+                {
                     return ((DisplayText) attrs[0]).text;
+                }
             }
 
             return en.ToString();
@@ -238,7 +259,10 @@ namespace CoreUtils.Classes
 
         public static bool TextMatchesPattern(string text, string pattern)
         {
-            if (Operators.LikeString(text, pattern, CompareMethod.Text)) return true;
+            if (Operators.LikeString(text, pattern, CompareMethod.Text))
+            {
+                return true;
+            }
 
             return false;
         }
@@ -272,7 +296,10 @@ namespace CoreUtils.Classes
             float dblValue;
             var isNumeric = float.TryParse(value, out dblValue);
             if (isNumeric)
+            {
                 return dblValue;
+            }
+
             return 0;
         }
 
@@ -306,12 +333,19 @@ namespace CoreUtils.Classes
         {
             if (IsBlank(value))
             {
-                if (checkNotNull) return false;
+                if (checkNotNull)
+                {
+                    return false;
+                }
+
                 return true;
             }
 
             var parsed = DateTime.TryParseExact(value, "yyyyMMdd", null, DateTimeStyles.None, out var aDate);
-            if (!parsed) return false;
+            if (!parsed)
+            {
+                return false;
+            }
 
             return true;
         }
@@ -321,19 +355,31 @@ namespace CoreUtils.Classes
             value = value?.Trim();
             if (IsBlank(value))
             {
-                if (checkNotNull) return false;
+                if (checkNotNull)
+                {
+                    return false;
+                }
+
                 return true;
             }
 
             var parsed = DateTime.TryParseExact(value, "yyyyMMdd HHmmss", null, DateTimeStyles.None, out var aDate);
-            if (!parsed) return false;
-            if (aDate == DateTime.MinValue && checkNotNull) return false;
+            if (!parsed)
+            {
+                return false;
+            }
+
+            if (aDate == DateTime.MinValue && checkNotNull)
+            {
+                return false;
+            }
+
             return true;
         }
 
         public static DateTime? ToDate(string value)
         {
-            var aDate = ToDateTime(value);
+            DateTime? aDate = ToDateTime(value);
 
             aDate = aDate?.Date;
             return aDate;
@@ -342,57 +388,89 @@ namespace CoreUtils.Classes
         public static DateTime? ToDateTime(string value)
         {
             value = value?.Trim();
-            if (IsBlank(value)) return null;
+            if (IsBlank(value))
+            {
+                return null;
+            }
 
             var parsed = false;
 
             // ISODateTime
             parsed = DateTime.TryParseExact(value, "yyyyMMdd HH:mm:ss", null, DateTimeStyles.None,
                 out var aDateTimeIso);
-            if (parsed) return aDateTimeIso;
+            if (parsed)
+            {
+                return aDateTimeIso;
+            }
 
             // ISODate
             parsed = DateTime.TryParseExact(value, "yyyyMMdd", null, DateTimeStyles.None, out var aDateIso);
-            if (parsed) return aDateIso;
+            if (parsed)
+            {
+                return aDateIso;
+            }
 
             // US Long date Time
             parsed = DateTime.TryParseExact(value, "dd-MMM-yyyy hh:mm:ss tt", null, DateTimeStyles.None,
                 out var aDateTimeUs);
-            if (parsed) return aDateTimeUs;
+            if (parsed)
+            {
+                return aDateTimeUs;
+            }
 
             // US Long date 
             parsed = DateTime.TryParseExact(value, "dd-MMM-yyyy", null, DateTimeStyles.None, out var aDateUs);
-            if (parsed) return aDateUs;
+            if (parsed)
+            {
+                return aDateUs;
+            }
 
             // us long date time 2 yr
             parsed = DateTime.TryParseExact(value, "dd-MMM-yy hh:mm:ss tt", null, DateTimeStyles.None,
                 out var aDateTimeUs2);
-            if (parsed) return aDateTimeUs2;
+            if (parsed)
+            {
+                return aDateTimeUs2;
+            }
 
             // us long date time 2 yr
             parsed = DateTime.TryParseExact(value, "dd-MMM-yy", null, DateTimeStyles.None, out var aDateUs2);
-            if (parsed) return aDateUs2;
+            if (parsed)
+            {
+                return aDateUs2;
+            }
 
             return null;
         }
 
         public static string ToDateString(DateTime? value)
         {
-            if (value == null) return "";
+            if (value == null)
+            {
+                return "";
+            }
+
             var str = ToIsoDateString(value);
             return str;
         }
 
         public static string ToIsoDateString(DateTime? value)
         {
-            if (value == null) return "";
+            if (value == null)
+            {
+                return "";
+            }
+
             var str = value?.ToString("yyyyMMdd");
             return str;
         }
 
         public static string ToIsoDateTimeString(DateTime? value)
         {
-            if (value == null) return "";
+            if (value == null)
+            {
+                return "";
+            }
 
             var str = value?.ToString("yyyyMMdd HH:mm:ss");
             return str;
@@ -400,14 +478,22 @@ namespace CoreUtils.Classes
 
         public static string ToTimeString(DateTime? value)
         {
-            if (value == null) return "";
+            if (value == null)
+            {
+                return "";
+            }
+
             var str = value?.ToShortTimeString();
             return str;
         }
 
         public static string ToDateTimeString(DateTime? value)
         {
-            if (value == null) return "";
+            if (value == null)
+            {
+                return "";
+            }
+
             var str = $"{ToDateString(value)} {ToTimeString(value)} ";
             return str;
         }
@@ -424,8 +510,12 @@ namespace CoreUtils.Classes
             dynamic section = ConfigurationManager.GetSection("AppSettings");
             var keys = section.Keys;
             foreach (var key in keys)
+            {
                 if (key == settingName)
+                {
                     return section[key];
+                }
+            }
 
             return "";
         }
@@ -434,7 +524,10 @@ namespace CoreUtils.Classes
         {
             var entityConnectionString = GetConnString(connStringName);
             if (entityConnectionString.ToLower().IndexOf(@"provider connection string=", StringComparison.Ordinal) > 0)
+            {
                 return new EntityConnectionStringBuilder(entityConnectionString).ProviderConnectionString;
+            }
+
             return entityConnectionString;
         }
 
@@ -442,7 +535,10 @@ namespace CoreUtils.Classes
         {
             var fileInfo = new FileInfo(srcFilePath);
 
-            if ((fileInfo.Name?.ToLower()).IndexOf("test", StringComparison.Ordinal) >= 0) return true;
+            if ((fileInfo.Name?.ToLower()).IndexOf("test", StringComparison.Ordinal) >= 0)
+            {
+                return true;
+            }
 
             return false;
         }
@@ -450,30 +546,51 @@ namespace CoreUtils.Classes
 
         public static string GetUniqueIdFromFileName(string fileName)
         {
-            var indexOfSep = fileName.IndexOf($"{FilePartsDelimiter}", StringComparison.Ordinal);
-            if (indexOfSep > 0) return fileName.Substring(0, indexOfSep).Trim();
+            var indexOfSep = fileName.IndexOf($"{Utils.FilePartsDelimiter}", StringComparison.Ordinal);
+            if (indexOfSep > 0)
+            {
+                return fileName.Substring(0, indexOfSep).Trim();
+            }
 
             return "";
         }
 
         public static HeaderType GetHeaderTypeFromFileName(string fileName)
         {
-            var fileNameParts = fileName?.Split(new[] {FilePartsDelimiter}, StringSplitOptions.None);
-            if (fileNameParts != null && fileNameParts.Length < 3) return HeaderType.NotApplicable;
+            var fileNameParts = fileName?.Split(new[] {Utils.FilePartsDelimiter}, StringSplitOptions.None);
+            if (fileNameParts != null && fileNameParts.Length < 3)
+            {
+                return HeaderType.NotApplicable;
+            }
 
             if (fileNameParts != null)
             {
                 var strHeaderType = fileNameParts[1];
                 if (strHeaderType == HeaderType.NotApplicable.ToNumberString())
+                {
                     return HeaderType.NotApplicable;
+                }
+
                 if (strHeaderType == HeaderType.New.ToNumberString())
+                {
                     return HeaderType.New;
+                }
+
                 if (strHeaderType == HeaderType.Old.ToNumberString())
+                {
                     return HeaderType.Old;
+                }
+
                 if (strHeaderType == HeaderType.NoChange.ToNumberString())
+                {
                     return HeaderType.NoChange;
+                }
+
                 if (strHeaderType == HeaderType.Own.ToNumberString())
+                {
                     return HeaderType.Own;
+                }
+
                 return HeaderType.NotApplicable;
             }
 
@@ -482,10 +599,13 @@ namespace CoreUtils.Classes
 
         public static string StripUniqueIdAndHeaderTypeFromFileName(string fileName)
         {
-            var fileNameParts = fileName?.Split(new[] {FilePartsDelimiter}, StringSplitOptions.None);
+            var fileNameParts = fileName?.Split(new[] {Utils.FilePartsDelimiter}, StringSplitOptions.None);
 
             // return the last part of the fileName
-            if (fileNameParts != null) return fileNameParts[fileNameParts.Length - 1] ?? "";
+            if (fileNameParts != null)
+            {
+                return fileNameParts[fileNameParts.Length - 1] ?? "";
+            }
 
             return "";
 
@@ -506,7 +626,8 @@ namespace CoreUtils.Classes
             fileName = StripUniqueIdAndHeaderTypeFromFileName(fileName);
 
             var fileId = RandomString(3);
-            fileName = $"{fileId}{FilePartsDelimiter}{headerType.ToNumberString()}{FilePartsDelimiter}{fileName}";
+            fileName =
+                $"{fileId}{Utils.FilePartsDelimiter}{headerType.ToNumberString()}{Utils.FilePartsDelimiter}{fileName}";
             //
             fileName = fileName.Trim();
             //
@@ -518,7 +639,7 @@ namespace CoreUtils.Classes
             fileName = StripUniqueIdAndHeaderTypeFromFileName(fileName);
 
             var fileId = RandomStringNumbers(3);
-            fileName = $"{fileId}{FilePartsDelimiter}{fileName}";
+            fileName = $"{fileId}{Utils.FilePartsDelimiter}{fileName}";
             //
             fileName = fileName.Trim();
             //

@@ -23,24 +23,25 @@ namespace CoreUtils.Classes
         public MessageLogParams(DbConnection dbConnection, string logTableName, string moduleName, string subModuleName,
             string stepType, string stepName, string command)
         {
-            DbConnection = dbConnection;
-            LogTableName = logTableName;
-            ModuleName = moduleName;
-            SubModuleName = subModuleName;
-            StepType = stepType;
-            StepName = stepName;
-            Command = command;
+            this.DbConnection = dbConnection;
+            this.LogTableName = logTableName;
+            this.ModuleName = moduleName;
+            this.SubModuleName = subModuleName;
+            this.StepType = stepType;
+            this.StepName = stepName;
+            this.Command = command;
         }
 
         public override string ToString()
         {
-            return $"{LogTableName} - {ModuleName} - {SubModuleName} - {StepType} - {StepName} - {Command} ";
+            return
+                $"{this.LogTableName} - {this.ModuleName} - {this.SubModuleName} - {this.StepType} - {this.StepName} - {this.Command} ";
         }
 
 
         public MessageLogParams Clone()
         {
-            var cloned = (MessageLogParams) MemberwiseClone();
+            var cloned = (MessageLogParams) this.MemberwiseClone();
             //
             return cloned;
         }
@@ -49,10 +50,10 @@ namespace CoreUtils.Classes
             string command)
         {
             //
-            SubModuleName = subModuleName;
-            StepType = stepType;
-            StepName = stepName;
-            Command = command;
+            this.SubModuleName = subModuleName;
+            this.StepType = stepType;
+            this.StepName = stepName;
+            this.Command = command;
             //
             //var cloned = (MessageLogParams)MemberwiseClone();
             //return cloned;
@@ -61,7 +62,7 @@ namespace CoreUtils.Classes
 
         public MessageLogParams SetStepAndCommand(string stepName, string command)
         {
-            var cloned = (MessageLogParams) MemberwiseClone();
+            var cloned = (MessageLogParams) this.MemberwiseClone();
             //
             cloned.StepName = stepName;
             cloned.Command = command;
@@ -71,7 +72,7 @@ namespace CoreUtils.Classes
 
         public MessageLogParams SetCommand(string command)
         {
-            Command = command;
+            this.Command = command;
             //
             //
             //var cloned = (MessageLogParams)MemberwiseClone();
@@ -116,26 +117,26 @@ namespace CoreUtils.Classes
             string logTableName, string fileId, string folderName, string templateType, string icType, string toFtp,
             string bencode)
         {
-            DbConnection = dbConnection;
-            DbMessageLogParams = dbMessageLogParams;
+            this.DbConnection = dbConnection;
+            this.DbMessageLogParams = dbMessageLogParams;
 
-            Platform = platform;
-            LogTableName = logTableName;
-            FileId = fileId;
-            FolderName = folderName;
-            TemplateType = templateType;
-            IcType = icType;
-            ToFtp = toFtp;
-            Bencode = bencode;
+            this.Platform = platform;
+            this.LogTableName = logTableName;
+            this.FileId = fileId;
+            this.FolderName = folderName;
+            this.TemplateType = templateType;
+            this.IcType = icType;
+            this.ToFtp = toFtp;
+            this.Bencode = bencode;
 
-            FileLogId = 0;
-            FileLogTaskId = 0;
+            this.FileLogId = 0;
+            this.FileLogTaskId = 0;
         }
 
         public FileOperationLogParams Clone()
         {
-            var cloned = (FileOperationLogParams) MemberwiseClone();
-            cloned.DbMessageLogParams = DbMessageLogParams;
+            var cloned = (FileOperationLogParams) this.MemberwiseClone();
+            cloned.DbMessageLogParams = this.DbMessageLogParams;
             //
             return cloned;
         }
@@ -144,9 +145,9 @@ namespace CoreUtils.Classes
         public FileOperationLogParams ReInitIds()
         {
             //
-            FileLogId = 0;
-            FileLogTaskId = 0;
-            FileId = "";
+            this.FileLogId = 0;
+            this.FileLogTaskId = 0;
+            this.FileId = "";
             //
             //var cloned = (MessageLogParams)MemberwiseClone();
             //return cloned;
@@ -157,8 +158,8 @@ namespace CoreUtils.Classes
         {
             //DbConnection dbConnection, string logTableName, string moduleName, string subModuleName,
             //string stepType, string stepName, string command
-            return new MessageLogParams(DbConnection, "dbo.message_log", Platform,
-                NewFileFullPath, ProcessingTask, ProcessingTaskOutcome, ProcessingTaskOutcomeDetails);
+            return new MessageLogParams(this.DbConnection, "dbo.message_log", this.Platform, this.NewFileFullPath,
+                this.ProcessingTask, this.ProcessingTaskOutcome, this.ProcessingTaskOutcomeDetails);
         }
 
         public FileOperationLogParams SetFileNames(string fileId, string originalFileName, string originalFullPath,
@@ -166,21 +167,21 @@ namespace CoreUtils.Classes
             string processingTaskOutcomeDetails)
         {
             //
-            FileId = fileId;
-            OriginalFileName = originalFileName;
-            OriginalFullPath = originalFullPath;
-            NewFileName = newFileName;
-            NewFileFullPath = newFullPath;
+            this.FileId = fileId;
+            this.OriginalFileName = originalFileName;
+            this.OriginalFullPath = originalFullPath;
+            this.NewFileName = newFileName;
+            this.NewFileFullPath = newFullPath;
 
-            FolderName = "";
-            Bencode = "";
-            TemplateType = "";
+            this.FolderName = "";
+            this.Bencode = "";
+            this.TemplateType = "";
 
-            ProcessingTask = processingTask;
-            ProcessingTaskOutcome = processingTaskOutcome;
-            ProcessingTaskOutcomeDetails = processingTaskOutcomeDetails;
+            this.ProcessingTask = processingTask;
+            this.ProcessingTaskOutcome = processingTaskOutcome;
+            this.ProcessingTaskOutcomeDetails = processingTaskOutcomeDetails;
             //
-            CalculateIds();
+            this.CalculateIds();
             //
             //var cloned = (FileOperationLogParams)MemberwiseClone();
             return this;
@@ -190,17 +191,17 @@ namespace CoreUtils.Classes
             string templateType = "")
         {
             //
-            FolderName = folderName;
-            IcType = icType;
-            TemplateType = templateType;
-            Bencode = bencode;
+            this.FolderName = folderName;
+            this.IcType = icType;
+            this.TemplateType = templateType;
+            this.Bencode = bencode;
             //
-            OriginalFileName = folderName;
-            OriginalFullPath = folderName;
-            NewFileName = "";
-            NewFileFullPath = "";
+            this.OriginalFileName = folderName;
+            this.OriginalFullPath = folderName;
+            this.NewFileName = "";
+            this.NewFileFullPath = "";
             //
-            CalculateIds();
+            this.CalculateIds();
             //
             //var cloned = (FileOperationLogParams)MemberwiseClone();
             return this;
@@ -210,10 +211,10 @@ namespace CoreUtils.Classes
             string processingTaskOutcomeDetails)
         {
             //
-            ProcessingTaskOutcome = processingTaskOutcome;
-            ProcessingTaskOutcomeDetails = processingTaskOutcomeDetails;
+            this.ProcessingTaskOutcome = processingTaskOutcome;
+            this.ProcessingTaskOutcomeDetails = processingTaskOutcomeDetails;
             //
-            CalculateIds();
+            this.CalculateIds();
 
             //var cloned = (FileOperationLogParams)MemberwiseClone();
             return this;
@@ -223,38 +224,49 @@ namespace CoreUtils.Classes
         {
             // add if > then sql server min date
             if (originalFileUploadedOn > Utils.ToDate("1753-01-01"))
-                OriginalFileUploadedOn = originalFileUploadedOn.ToString("yyyy-MM-dd HH:mm:ss");
+            {
+                this.OriginalFileUploadedOn = originalFileUploadedOn.ToString("yyyy-MM-dd HH:mm:ss");
+            }
             else
-                OriginalFileUploadedOn = "";
+            {
+                this.OriginalFileUploadedOn = "";
+            }
         }
 
         public void CalculateIds()
         {
-            if (Utils.IsBlank(OriginalFileName) && Utils.IsBlank(NewFileName))
+            if (Utils.IsBlank(this.OriginalFileName) && Utils.IsBlank(this.NewFileName))
             {
-                if (!Utils.IsBlank(FolderName))
-                    OriginalFileName = FolderName;
-                else if (!Utils.IsBlank(ProcessingTask))
-                    OriginalFileName = ProcessingTask;
-                else if (!Utils.IsBlank(Platform)) OriginalFileName = Platform;
+                if (!Utils.IsBlank(this.FolderName))
+                {
+                    this.OriginalFileName = this.FolderName;
+                }
+                else if (!Utils.IsBlank(this.ProcessingTask))
+                {
+                    this.OriginalFileName = this.ProcessingTask;
+                }
+                else if (!Utils.IsBlank(this.Platform))
+                {
+                    this.OriginalFileName = this.Platform;
+                }
             }
 
-            var orgFileId = Utils.GetUniqueIdFromFileName(OriginalFileName);
-            var newFileId = Utils.GetUniqueIdFromFileName(NewFileName);
+            var orgFileId = Utils.GetUniqueIdFromFileName(this.OriginalFileName);
+            var newFileId = Utils.GetUniqueIdFromFileName(this.NewFileName);
             if (!Utils.IsBlank(newFileId))
             {
-                FileId = newFileId;
-                FileLogId = DbUtils.GetFileOperationFileLogId(NewFileName, this);
+                this.FileId = newFileId;
+                this.FileLogId = DbUtils.GetFileOperationFileLogId(this.NewFileName, this);
             }
             else if (!Utils.IsBlank(orgFileId))
             {
-                FileId = orgFileId;
-                FileLogId = DbUtils.GetFileOperationFileLogId(OriginalFileName, this);
+                this.FileId = orgFileId;
+                this.FileLogId = DbUtils.GetFileOperationFileLogId(this.OriginalFileName, this);
             }
             else
             {
                 // FileId = OriginalFileName;
-                FileLogId = DbUtils.GetFileOperationFileLogId(OriginalFileName, this);
+                this.FileLogId = DbUtils.GetFileOperationFileLogId(this.OriginalFileName, this);
             }
         }
 
@@ -262,7 +274,7 @@ namespace CoreUtils.Classes
         public override string ToString()
         {
             return
-                $"'{FileId}' - '{ProcessingTask}' - '{OriginalFileName}' - '{NewFileName}' - '{ProcessingTaskOutcome}' - '{ProcessingTaskOutcomeDetails}'";
+                $"'{this.FileId}' - '{this.ProcessingTask}' - '{this.OriginalFileName}' - '{this.NewFileName}' - '{this.ProcessingTaskOutcome}' - '{this.ProcessingTaskOutcomeDetails}'";
         }
     }
 

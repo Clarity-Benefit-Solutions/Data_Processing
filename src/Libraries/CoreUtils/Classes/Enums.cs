@@ -7,7 +7,7 @@
         Copy,
         Delete,
         DeleteIfExists,
-        Read
+        Read,
     }
 
 
@@ -18,7 +18,7 @@
         DownloadAndDelete,
         UploadAndDelete,
         DeleteRemoteFileIfExists,
-        ReadRemoteFile
+        ReadRemoteFile,
     }
 
 
@@ -26,7 +26,7 @@
     {
         ExecuteScalar = 1,
         ExecuteReader,
-        ExecuteNonQuery
+        ExecuteNonQuery,
     }
 
     public enum DirectoryIterateType
@@ -35,7 +35,7 @@
         Files = 1,
 
         [Utils.DisplayText("DirectoryIterateType.Directories")]
-        Directories
+        Directories,
     }
 
     public enum FormatType
@@ -59,7 +59,7 @@
         [Utils.DisplayText("YYYYMMDD HHMMNNSS")]
         IsoDateTime,
         [Utils.DisplayText("Yes Or No")] YesNo,
-        [Utils.DisplayText("True Or False")] TrueFalse
+        [Utils.DisplayText("True Or False")] TrueFalse,
     }
 
     public enum HeaderType
@@ -74,7 +74,7 @@
         SegmentedFunding,
 
         [Utils.DisplayText("HeaderType.NoChange")]
-        NoChange
+        NoChange,
     }
 
     public enum PlatformType
@@ -84,7 +84,7 @@
         [Utils.DisplayText("Platform.Alegeus")]
         Alegeus,
 
-        Cobra
+        Cobra,
         //
     }
 
@@ -94,7 +94,7 @@
         FormatOnly = 1,
 
         [Utils.DisplayText("FileCheckType.AllData")]
-        AllData
+        AllData,
         //
     }
 
@@ -104,7 +104,7 @@
         MoveToDestDirectories = 1,
 
         [Utils.DisplayText("FileCheckProcessType.ReturnResults")]
-        ReturnResults
+        ReturnResults,
         //
     }
 
@@ -123,7 +123,7 @@
         CompleteFail,
 
         [Utils.DisplayText("OperationResultType.ProcessingError")]
-        ProcessingError
+        ProcessingError,
     }
 
     public enum EdiFileFormat
@@ -234,7 +234,7 @@
         [Utils.DisplayText("EdiFileFormat.Alegeus.ResultsDependentDemographics")]
         AlegeusResultsDependentDemographics,
         AlegeusEmployeeCardFees,
-        AlegeusResultsEmployeeCardFees
+        AlegeusResultsEmployeeCardFees,
     }
 
 }

@@ -56,7 +56,7 @@ namespace DataProcessingWebApp
                     SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
                     UseRecommendedIsolationLevel = true,
                     DisableGlobalLocks = true,
-                    EnableHeavyMigrations = true
+                    EnableHeavyMigrations = true,
                 });
 
             // set job retention timeout
@@ -70,7 +70,7 @@ namespace DataProcessingWebApp
             yield return new BackgroundJobServer(new BackgroundJobServerOptions
             {
                 WorkerCount = 4,
-                StopTimeout = TimeSpan.FromSeconds(5)
+                StopTimeout = TimeSpan.FromSeconds(5),
             });
         }
 
@@ -83,7 +83,7 @@ namespace DataProcessingWebApp
             app.UseHangfireDashboard("/hangfire", new DashboardOptions
             {
                 // ReSharper disable once UseArrayEmptyMethod
-                Authorization = new IDashboardAuthorizationFilter[0]
+                Authorization = new IDashboardAuthorizationFilter[0],
             });
 
             //RecurringJob.AddOrUpdate<SnippetHighlighter>(

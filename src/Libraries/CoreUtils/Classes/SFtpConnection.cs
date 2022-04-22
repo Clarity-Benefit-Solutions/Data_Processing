@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Renci.SshNet;
@@ -18,30 +19,34 @@ namespace CoreUtils.Classes
         public SFtpConnection(string host, int port, string userName, string userPassword, string privateKeyPath = null,
             string privateKeyPassPhrase = null, string rootPath = "/")
         {
-            Host = host;
-            Port = port;
-            UserName = userName;
-            UserPassword = userPassword;
-            PrivateKeyPath = privateKeyPath;
-            PrivateKeyPassPhrase = privateKeyPassPhrase;
-            RootPath = rootPath;
+            this.Host = host;
+            this.Port = port;
+            this.UserName = userName;
+            this.UserPassword = userPassword;
+            this.PrivateKeyPath = privateKeyPath;
+            this.PrivateKeyPassPhrase = privateKeyPassPhrase;
+            this.RootPath = rootPath;
 
             PrivateKeyFile[] keyFiles = null;
 
             if (!Utils.IsBlank(privateKeyPath))
             {
-                var keyFile = new PrivateKeyFile(PrivateKeyPath, PrivateKeyPassPhrase);
+                var keyFile = new PrivateKeyFile(this.PrivateKeyPath, this.PrivateKeyPassPhrase);
                 keyFiles = new[] {keyFile};
             }
 
-            if (Utils.IsBlank(PrivateKeyPath) || keyFiles?.Length == 0)
-                ConnInfo = new ConnectionInfo(Host, Port, userName,
-                    new PasswordAuthenticationMethod(UserName, UserPassword)
+            if (Utils.IsBlank(this.PrivateKeyPath) || keyFiles?.Length == 0)
+            {
+                this.ConnInfo = new ConnectionInfo(this.Host, this.Port, userName,
+                    new PasswordAuthenticationMethod(this.UserName, this.UserPassword)
                 );
+            }
             else
-                ConnInfo = new ConnectionInfo(Host, Port, userName,
-                    new PasswordAuthenticationMethod(UserName, UserPassword),
+            {
+                this.ConnInfo = new ConnectionInfo(this.Host, this.Port, userName,
+                    new PasswordAuthenticationMethod(this.UserName, this.UserPassword),
                     new PrivateKeyAuthenticationMethod("rsa.key", keyFiles));
+            }
         }
 
         public string ConnectionString { get; }
@@ -57,24 +62,24 @@ namespace CoreUtils.Classes
 
         private SftpClient EnsureConnection()
         {
-            if (Utils.IsBlank(Host) || Port <= 0)
+            if (Utils.IsBlank(this.Host) || this.Port <= 0)
             {
                 var message =
-                    $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : {Host}:{Port} is invalid";
+                    $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : {this.Host}:{this.Port} is invalid";
                 throw new Exception(message);
             }
 
-            if (client == null || !client.IsConnected)
+            if (this.client == null || !this.client.IsConnected)
             {
-                var client1 = new SftpClient(ConnInfo);
+                var client1 = new SftpClient(this.ConnInfo);
                 client1.Connect();
                 //
                 //
-                client = client1;
+                this.client = client1;
             }
 
             //
-            return client;
+            return this.client;
         }
 
         #region IOOperations
@@ -92,19 +97,26 @@ namespace CoreUtils.Classes
 
             // iterate for each fileMask
             foreach (var sourceDirectory in sourceDirectories)
-                IterateDirectory(sourceDirectory, iterateType, subDirsAlso, fileMasks, fileCallback,
+            {
+                this.IterateDirectory(sourceDirectory, iterateType, subDirsAlso, fileMasks, fileCallback,
                     onErrorCallback);
+            }
         }
 
         public void IterateDirectory(string directory, DirectoryIterateType iterateType, bool subDirsAlso,
             string[] fileMasks, FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] {"*.*"};
+            if (fileMasks == null || fileMasks.Length == 0)
+            {
+                fileMasks = new[] {"*.*"};
+            }
 
             // iterate for each fileMask
             foreach (var fileMask in fileMasks)
-                IterateDirectory(directory, iterateType, subDirsAlso, fileMask, fileCallback,
+            {
+                this.IterateDirectory(directory, iterateType, subDirsAlso, fileMask, fileCallback,
                     onErrorCallback);
+            }
         }
 
         public void IterateDirectory(string directory, DirectoryIterateType iterateType, bool subDirsAlso,
@@ -137,17 +149,21 @@ namespace CoreUtils.Classes
                 //}
 
                 // check dir exists
-                EnsureConnection();
+                this.EnsureConnection();
                 //
-                if (client.Exists(directory) == false) client.CreateDirectory(directory);
+                if (this.client.Exists(directory) == false)
+                {
+                    this.client.CreateDirectory(directory);
+                }
 
-                client.ChangeDirectory(directory);
+                this.client.ChangeDirectory(directory);
 
                 // get all files in dir
-                var ftpFiles = client.ListDirectory(directory);
+                IEnumerable<SftpFile> ftpFiles = this.client.ListDirectory(directory);
 
                 // ReSharper disable once PossibleMultipleEnumeration
                 foreach (var ftpFile in ftpFiles)
+                {
                     try
                     {
                         // isDirectory?
@@ -155,13 +171,18 @@ namespace CoreUtils.Classes
                         {
                             if (iterateType == DirectoryIterateType.Directories &&
                                 Utils.TextMatchesPattern(ftpFile.Name, fileMask))
+                            {
                                 fileCallback(ftpFile.FullName, null, null);
+                            }
 
                             // iterate subDir if asked
                             if (subDirsAlso)
                                 // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-                                IterateDirectory(ftpFile.FullName, iterateType, subDirsAlso, fileMask, fileCallback,
+                            {
+                                this.IterateDirectory(ftpFile.FullName, iterateType, subDirsAlso, fileMask,
+                                    fileCallback,
                                     null);
+                            }
                         }
                         else if (ftpFile.IsSymbolicLink)
                         {
@@ -177,18 +198,27 @@ namespace CoreUtils.Classes
                     {
                         // callback for complete
                         if (onErrorCallback != null)
+                        {
                             onErrorCallback(directory, fileMask, ex);
+                        }
                         else
+                        {
                             throw;
+                        }
                     }
+                }
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(directory, fileMask, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -205,8 +235,10 @@ namespace CoreUtils.Classes
 
             // iterate for each fileMask
             foreach (var sourceDirectory in sourceDirectories)
-                DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMasks, destDirectory,
+            {
+                this.DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMasks, destDirectory,
                     destFileName, destFileExt, fileCallback, onErrorCallback);
+            }
         }
 
         public void CopyOrMoveFiles(FtpFileOperation fileOperation, string sourceDirectory, bool subDirsAlso,
@@ -214,7 +246,7 @@ namespace CoreUtils.Classes
             string destFileName, string destFileExt, FtpSingleFileCallback fileCallback,
             OnErrorCallback onErrorCallback)
         {
-            DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMask, destDirectory,
+            this.DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMask, destDirectory,
                 destFileName, destFileExt, fileCallback, onErrorCallback);
         }
 
@@ -222,7 +254,7 @@ namespace CoreUtils.Classes
             FtpSingleFileCallback fileCallback,
             OnErrorCallback onErrorCallback)
         {
-            DoSingleFtpFileOperation(fileOperation, sourceFilePath, destFilePath, fileCallback, onErrorCallback);
+            this.DoSingleFtpFileOperation(fileOperation, sourceFilePath, destFilePath, fileCallback, onErrorCallback);
         }
 
 
@@ -239,24 +271,32 @@ namespace CoreUtils.Classes
 
                 // iterate for each fileMask
                 foreach (var sourceDirectory in sourceDirectories)
-                    DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory, subDirsAlso,
+                {
+                    this.DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory,
+                        subDirsAlso,
                         fileMasks, "", "", "",
                         fileCallback, onErrorCallback);
+                }
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
         public void DeleteFiles(string sourceDirectory, bool subDirsAlso, string[] fileMasks,
             FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory, subDirsAlso, fileMasks,
+            this.DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory, subDirsAlso,
+                fileMasks,
                 "", "", "",
                 fileCallback, onErrorCallback);
         }
@@ -264,7 +304,8 @@ namespace CoreUtils.Classes
         public void DeleteFiles(string sourceDirectory, bool subDirsAlso, string fileMask,
             FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory, subDirsAlso, fileMask,
+            this.DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory, subDirsAlso,
+                fileMask,
                 "", "", "",
                 fileCallback, onErrorCallback);
         }
@@ -272,13 +313,13 @@ namespace CoreUtils.Classes
         public void DeleteFileIfExists(string sourceFilePath, FtpSingleFileCallback fileCallback,
             OnErrorCallback onErrorCallback)
         {
-            DoSingleFtpFileOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceFilePath, "", fileCallback,
+            this.DoSingleFtpFileOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceFilePath, "", fileCallback,
                 onErrorCallback);
         }
 
         public void ReadFile(string sourceFilePath, FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            DoSingleFtpFileOperation(FtpFileOperation.ReadRemoteFile, sourceFilePath, "", fileCallback,
+            this.DoSingleFtpFileOperation(FtpFileOperation.ReadRemoteFile, sourceFilePath, "", fileCallback,
                 onErrorCallback);
         }
 
@@ -286,20 +327,25 @@ namespace CoreUtils.Classes
             bool subDirsAlso, string[] fileMasks, string destDirectory, string destFileName, string destFileExt,
             FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] {"*.*"};
+            if (fileMasks == null || fileMasks.Length == 0)
+            {
+                fileMasks = new[] {"*.*"};
+            }
 
             // iterate for each fileMask
             foreach (var fileMask in fileMasks)
-                DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMask, destDirectory,
+            {
+                this.DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMask, destDirectory,
                     destFileName, destFileExt, fileCallback,
                     onErrorCallback);
+            }
         }
 
         private void DoMultipleFilesOperation(FtpFileOperation fileOperation, string sourceDirectory,
             bool subDirsAlso, string fileMask, string destDirectory, string destFileName, string destFileExt,
             FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            IterateDirectory(sourceDirectory, DirectoryIterateType.Files, subDirsAlso, fileMask,
+            this.IterateDirectory(sourceDirectory, DirectoryIterateType.Files, subDirsAlso, fileMask,
                 // handle each found file
                 (foundFile, dummy, dummy2) =>
                 {
@@ -310,12 +356,17 @@ namespace CoreUtils.Classes
                     var destFileExtOnly = Utils.IsBlank(destFileExt) ? Path.GetExtension(foundFile) : destFileExt;
                     var destFullFilePath = $"{destDirectory}/{destFileNameOnly}{destFileExtOnly}";
                     //
-                    DoSingleFtpFileOperation(fileOperation, foundFile, destFullFilePath, fileCallback, onErrorCallback);
+                    this.DoSingleFtpFileOperation(fileOperation, foundFile, destFullFilePath, fileCallback,
+                        onErrorCallback);
                 },
                 // at end 
                 (directory, file, ex) =>
                 {
-                    if (onErrorCallback == null) throw ex;
+                    if (onErrorCallback == null)
+                    {
+                        throw ex;
+                    }
+
                     onErrorCallback(directory, file, ex);
                 }
             );
@@ -324,10 +375,10 @@ namespace CoreUtils.Classes
         public SftpFile GetRemoteFileInfo(string sourceFilePath)
         {
             //
-            EnsureConnection();
+            this.EnsureConnection();
             //
 
-            return client.Get(sourceFilePath);
+            return this.client.Get(sourceFilePath);
         }
 
         public void DoSingleFtpFileOperation(FtpFileOperation fileOperation, string sourceFilePath,
@@ -337,7 +388,7 @@ namespace CoreUtils.Classes
             try
             {
                 //
-                EnsureConnection();
+                this.EnsureConnection();
                 //
 
                 var fileContents = "";
@@ -348,7 +399,7 @@ namespace CoreUtils.Classes
                     var tempFilePath = Path.GetTempFileName();
                     using var stream = File.Open(tempFilePath, FileMode.Open);
                     //
-                    client.DownloadFile(sourceFilePath, stream);
+                    this.client.DownloadFile(sourceFilePath, stream);
                     fileContents = File.ReadAllText(tempFilePath);
                     //
                     File.Delete(tempFilePath);
@@ -356,7 +407,7 @@ namespace CoreUtils.Classes
 
                 else if (fileOperation == FtpFileOperation.DeleteRemoteFileIfExists)
                 {
-                    client.DeleteFile(destFilePath);
+                    this.client.DeleteFile(destFilePath);
                 }
                 else if (fileOperation == FtpFileOperation.Upload || fileOperation == FtpFileOperation.UploadAndDelete)
                 {
@@ -369,19 +420,29 @@ namespace CoreUtils.Classes
                     }
 
                     using var stream = File.Open(sourceFilePath, FileMode.Open);
-                    client.UploadFile(stream, destFilePath);
+                    this.client.UploadFile(stream, destFilePath);
 
-                    if (fileOperation == FtpFileOperation.UploadAndDelete) srcFileInfo.Delete();
+                    if (fileOperation == FtpFileOperation.UploadAndDelete)
+                    {
+                        srcFileInfo.Delete();
+                    }
                 }
                 else if (fileOperation == FtpFileOperation.Download ||
                          fileOperation == FtpFileOperation.DownloadAndDelete)
                 {
                     var fileInfo = new FileInfo(destFilePath);
-                    if (fileInfo.Exists) fileInfo.Delete();
-                    using var stream = File.Open(destFilePath, FileMode.OpenOrCreate);
-                    client.DownloadFile(sourceFilePath, stream);
+                    if (fileInfo.Exists)
+                    {
+                        fileInfo.Delete();
+                    }
 
-                    if (fileOperation == FtpFileOperation.DownloadAndDelete) client.DeleteFile(sourceFilePath);
+                    using var stream = File.Open(destFilePath, FileMode.OpenOrCreate);
+                    this.client.DownloadFile(sourceFilePath, stream);
+
+                    if (fileOperation == FtpFileOperation.DownloadAndDelete)
+                    {
+                        this.client.DeleteFile(sourceFilePath);
+                    }
                 }
                 else
                 {
@@ -391,15 +452,22 @@ namespace CoreUtils.Classes
                 }
 
                 // callback for complete
-                if (fileCallback != null) fileCallback(sourceFilePath, destFilePath, fileContents);
+                if (fileCallback != null)
+                {
+                    fileCallback(sourceFilePath, destFilePath, fileContents);
+                }
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceFilePath, destFilePath, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 

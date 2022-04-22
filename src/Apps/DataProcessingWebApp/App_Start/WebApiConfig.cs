@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
-using Microsoft.Extensions.DependencyInjection;
+﻿using System.Web.Http;
 
 namespace DataProcessingWebApp
 {
+
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
@@ -20,8 +17,7 @@ namespace DataProcessingWebApp
             //    routeTemplate: "api/{controller}/{id}",
             //    defaults: new { id = RouteParameter.Optional }
             //);
-
-            }
-
+        }
     }
+
 }

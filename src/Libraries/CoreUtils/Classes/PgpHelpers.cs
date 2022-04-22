@@ -57,6 +57,7 @@ namespace CoreUtils.Classes
                     using (Stream outputStream = File.Create(outputFile))
                     {
                         if (armor)
+                        {
                             using (var armoredStream = new ArmoredOutputStream(outputStream))
                             {
                                 using (var cOut = cPk.Open(armoredStream, bytes.Length))
@@ -64,11 +65,14 @@ namespace CoreUtils.Classes
                                     cOut.Write(bytes, 0, bytes.Length);
                                 }
                             }
+                        }
                         else
+                        {
                             using (var cOut = cPk.Open(outputStream, bytes.Length))
                             {
                                 cOut.Write(bytes, 0, bytes.Length);
                             }
+                        }
                     }
                 }
             }
@@ -88,30 +92,44 @@ namespace CoreUtils.Classes
             var encryptionKeys = new PgpEncryptionKeys(publicKeyFile, privateKeyFile, passPhrase);
 
             if (!File.Exists(inputFile))
+            {
                 throw new FileNotFoundException(string.Format("Input file [{0}] does not exist.", inputFile));
+            }
 
             if (!File.Exists(publicKeyFile))
+            {
                 throw new FileNotFoundException(string.Format("Public Key file [{0}] does not exist.", publicKeyFile));
+            }
 
             if (!File.Exists(privateKeyFile))
+            {
                 throw new FileNotFoundException(string.Format("Private Key file [{0}] does not exist.",
                     privateKeyFile));
+            }
 
             if (string.IsNullOrEmpty(passPhrase))
+            {
                 throw new ArgumentNullException("Invalid Pass Phrase.");
+            }
 
             if (encryptionKeys == null)
+            {
                 throw new ArgumentNullException("Encryption Key not found.");
+            }
 
             using (Stream outputStream = File.Create(outputFile))
             {
                 if (armor)
+                {
                     using (var armoredOutputStream = new ArmoredOutputStream(outputStream))
                     {
                         OutputEncrypted(inputFile, armoredOutputStream, encryptionKeys);
                     }
+                }
                 else
+                {
                     OutputEncrypted(inputFile, outputStream, encryptionKeys);
+                }
             }
         }
 
@@ -139,7 +157,7 @@ namespace CoreUtils.Classes
             PgpSignatureGenerator signatureGenerator)
         {
             var length = 0;
-            var buf = new byte[BufferSize];
+            var buf = new byte[PGPEncryptDecrypt.BufferSize];
             while ((length = inputFile.Read(buf, 0, buf.Length)) > 0)
             {
                 literalOut.Write(buf, 0, length);
@@ -155,7 +173,7 @@ namespace CoreUtils.Classes
             encryptedDataGenerator =
                 new PgpEncryptedDataGenerator(SymmetricKeyAlgorithmTag.TripleDes, new SecureRandom());
             encryptedDataGenerator.AddMethod(m_encryptionKeys.PublicKey);
-            return encryptedDataGenerator.Open(outputStream, new byte[BufferSize]);
+            return encryptedDataGenerator.Open(outputStream, new byte[PGPEncryptDecrypt.BufferSize]);
         }
 
         private static Stream ChainCompressedOut(Stream encryptedOut)
@@ -202,13 +220,19 @@ namespace CoreUtils.Classes
         public static void Decrypt(string inputfile, string privateKeyFile, string passPhrase, string outputFile)
         {
             if (!File.Exists(inputfile))
+            {
                 throw new FileNotFoundException(string.Format("Encrypted File [{0}] not found.", inputfile));
+            }
 
             if (!File.Exists(privateKeyFile))
+            {
                 throw new FileNotFoundException(string.Format("Private Key File [{0}] not found.", privateKeyFile));
+            }
 
             if (string.IsNullOrEmpty(outputFile))
+            {
                 throw new ArgumentNullException("Invalid Output file path.");
+            }
 
             using (Stream inputStream = File.OpenRead(inputfile))
             {
@@ -237,13 +261,19 @@ namespace CoreUtils.Classes
             pgpSec = new PgpSecretKeyRingBundle(PgpUtilities.GetDecoderStream(privateKeyStream));
 
             if (pgpF != null)
+            {
                 o = pgpF.NextPgpObject();
+            }
 
             // the first object might be a PGP marker packet.
             if (o is PgpEncryptedDataList)
+            {
                 enc = (PgpEncryptedDataList) o;
+            }
             else
+            {
                 enc = (PgpEncryptedDataList) pgpF.NextPgpObject();
+            }
 
             // decrypt
             foreach (PgpPublicKeyEncryptedData pked in enc.GetEncryptedDataObjects())
@@ -258,7 +288,9 @@ namespace CoreUtils.Classes
             }
 
             if (sKey == null)
+            {
                 throw new ArgumentException("Secret key for message not found.");
+            }
 
             PgpObjectFactory plainFact = null;
 
@@ -361,8 +393,12 @@ namespace CoreUtils.Classes
             // iterate through the key rings.
             foreach (PgpPublicKeyRing kRing in pgpPub.GetKeyRings())
             foreach (PgpPublicKey k in kRing.GetPublicKeys())
+            {
                 if (k.IsEncryptionKey)
+                {
                     return k;
+                }
+            }
 
             throw new ArgumentException("Can't find encryption key in key ring.");
         }
@@ -376,7 +412,9 @@ namespace CoreUtils.Classes
             var pgpSecKey = pgpSec.GetSecretKey(keyId);
 
             if (pgpSecKey == null)
+            {
                 return null;
+            }
 
             return pgpSecKey.ExtractPrivateKey(pass);
         }
@@ -399,14 +437,23 @@ namespace CoreUtils.Classes
         public PgpEncryptionKeys(string publicKeyPath, string privateKeyPath, string passPhrase)
         {
             if (!File.Exists(publicKeyPath))
+            {
                 throw new ArgumentException("Public key file not found", "publicKeyPath");
+            }
+
             if (!File.Exists(privateKeyPath))
+            {
                 throw new ArgumentException("Private key file not found", "privateKeyPath");
+            }
+
             if (string.IsNullOrEmpty(passPhrase))
+            {
                 throw new ArgumentException("passPhrase is null or empty.", "passPhrase");
-            PublicKey = ReadPublicKey(publicKeyPath);
-            SecretKey = ReadSecretKey(privateKeyPath);
-            PrivateKey = ReadPrivateKey(passPhrase);
+            }
+
+            this.PublicKey = this.ReadPublicKey(publicKeyPath);
+            this.SecretKey = this.ReadSecretKey(privateKeyPath);
+            this.PrivateKey = this.ReadPrivateKey(passPhrase);
         }
 
         public PgpPublicKey PublicKey { get; }
@@ -419,9 +466,12 @@ namespace CoreUtils.Classes
 
         private PgpPrivateKey ReadPrivateKey(string passPhrase)
         {
-            var privateKey = SecretKey.ExtractPrivateKey(passPhrase.ToCharArray());
+            var privateKey = this.SecretKey.ExtractPrivateKey(passPhrase.ToCharArray());
             if (privateKey != null)
+            {
                 return privateKey;
+            }
+
             throw new ArgumentException("No private key found in secret key.");
         }
 
@@ -436,9 +486,11 @@ namespace CoreUtils.Classes
                 using (var inputStream = PgpUtilities.GetDecoderStream(keyIn))
                 {
                     var secretKeyRingBundle = new PgpSecretKeyRingBundle(inputStream);
-                    var foundKey = GetFirstSecretKey(secretKeyRingBundle);
+                    var foundKey = this.GetFirstSecretKey(secretKeyRingBundle);
                     if (foundKey != null)
+                    {
                         return foundKey;
+                    }
                 }
             }
 
@@ -458,7 +510,9 @@ namespace CoreUtils.Classes
                     .Where(k => k.IsSigningKey)
                     .FirstOrDefault();
                 if (key != null)
+                {
                     return key;
+                }
             }
 
             return null;
@@ -475,9 +529,11 @@ namespace CoreUtils.Classes
                 using (var inputStream = PgpUtilities.GetDecoderStream(keyIn))
                 {
                     var publicKeyRingBundle = new PgpPublicKeyRingBundle(inputStream);
-                    var foundKey = GetFirstPublicKey(publicKeyRingBundle);
+                    var foundKey = this.GetFirstPublicKey(publicKeyRingBundle);
                     if (foundKey != null)
+                    {
                         return foundKey;
+                    }
                 }
             }
 
@@ -493,7 +549,9 @@ namespace CoreUtils.Classes
                     .Where(k => k.IsEncryptionKey)
                     .FirstOrDefault();
                 if (key != null)
+                {
                     return key;
+                }
             }
 
             return null;

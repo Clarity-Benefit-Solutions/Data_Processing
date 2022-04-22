@@ -1,35 +1,27 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Transactions;
-using System.Web;
 using CoreUtils;
 using CoreUtils.Classes;
 using DataProcessing;
-using DataProcessing;
-using Hangfire;
-using Hangfire;
 using Hangfire.Console;
 using Hangfire.Server;
-using Microsoft.AspNet.SignalR;
-using Microsoft.Extensions.Logging;
 
 namespace DataProcessingWebApp.Jobs
 {
+
     public class DataProcessingJob : IDisposable
     {
-
-        public DataProcessingJob()
+        public void Dispose()
         {
+            //_dbContext.Dispose();
         }
 
-        private static void HandleOnFileLogOperationCallback(PerformContext context, List<string> listLogs, FileOperationLogParams logParams)
+        private static void HandleOnFileLogOperationCallback(PerformContext context, List<string> listLogs,
+            FileOperationLogParams logParams)
         {
             var logItem = new LogFields(
                 DateTime.Now.ToString(CultureInfo.InvariantCulture),
@@ -62,7 +54,7 @@ namespace DataProcessingWebApp.Jobs
                     HandleOnFileLogOperationCallback(context, listLogs, logParams);
                 };
 
-                switch (id.ToString().ToLower())
+                switch (id.ToLower())
                 {
                     case @"processcobrafiles":
                         await CobraDataProcessing.ProcessAll();
@@ -86,12 +78,11 @@ namespace DataProcessingWebApp.Jobs
                         var message =
                             $"ERROR: DataProcessingJob:StartJob : {id} is not a valid operation";
                         throw new Exception(message);
-
                 }
-                //
-                string logs = String.Join("\n", listLogs.ToArray());
-                return new OperationResult(1, "200", "Completed", logs, "").ToString();
 
+                //
+                var logs = string.Join("\n", listLogs.ToArray());
+                return new OperationResult(1, "200", "Completed", logs).ToString();
             }
             catch (Exception ex)
             {
@@ -100,7 +91,7 @@ namespace DataProcessingWebApp.Jobs
                 context.SetTextColor(ConsoleTextColor.Black);
 
                 //
-                string logs = String.Join("\n", listLogs.ToArray());
+                var logs = string.Join("\n", listLogs.ToArray());
                 return new OperationResult(0, "400", "Error", logs, ex.ToString()).ToString();
             }
         }
@@ -118,9 +109,9 @@ namespace DataProcessingWebApp.Jobs
                     HandleOnFileLogOperationCallback(context, listLogs, logParams);
                 };
 
-                Vars vars = new Vars();
+                var vars = new Vars();
 
-                PlatformType platformType = PlatformType.Unknown;
+                var platformType = PlatformType.Unknown;
                 if (platform?.ToLower() == "alegeus")
                 {
                     platformType = PlatformType.Alegeus;
@@ -136,13 +127,13 @@ namespace DataProcessingWebApp.Jobs
                 srcFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(srcFilePath, true, fileLogParams);
 
                 // convert from xl is needed
-                string fileName = Path.GetFileName(srcFilePath);
-                string fileExt = Path.GetExtension(srcFilePath);
+                var fileName = Path.GetFileName(srcFilePath);
+                var fileExt = Path.GetExtension(srcFilePath);
                 if (fileExt == ".xlsx" || fileExt == ".xls")
                 {
                     var csvFilePath = Path.GetTempFileName() + ".csv";
-                    string password = "";
-                    FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,password,
+                    var password = "";
+                    FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath, password,
                         null,
                         null);
 
@@ -163,12 +154,13 @@ namespace DataProcessingWebApp.Jobs
                 DbUtils.LogFileOperation(fileLogParams);
 
                 // init checker
-                using FileChecker fileChecker = new FileChecker(
+                using var fileChecker = new FileChecker(
                     srcFilePath, platformType, vars.dbConnDataProcessing, fileLogParams,
                     (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); });
 
                 // check file
-                var results = fileChecker.CheckFileAndProcess(FileCheckType.AllData, FileCheckProcessType.ReturnResults);
+                var results =
+                    fileChecker.CheckFileAndProcess(FileCheckType.AllData, FileCheckProcessType.ReturnResults);
 
                 // if success, save as result
                 /*if (results.Success == "1")
@@ -180,7 +172,6 @@ namespace DataProcessingWebApp.Jobs
                     // throw error - will be saved as error
                     throw new Exception(results.ToString());
                 }*/
-
             }
             catch (Exception ex)
             {
@@ -189,16 +180,10 @@ namespace DataProcessingWebApp.Jobs
                 context.SetTextColor(ConsoleTextColor.Black);
 
                 //
-                string logs = String.Join("\n", listLogs.ToArray());
+                var logs = string.Join("\n", listLogs.ToArray());
                 return new OperationResult(0, "400", "Error", logs, ex.ToString()).ToString();
             }
         }
-
-        public void Dispose()
-        {
-            //_dbContext.Dispose();
-        }
-
-
     }
+
 }

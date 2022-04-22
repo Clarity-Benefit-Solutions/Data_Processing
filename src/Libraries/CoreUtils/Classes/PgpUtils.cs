@@ -52,9 +52,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(srcFilePath, destFilePath, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -96,9 +100,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(srcFilePath, destFilePath, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
     }

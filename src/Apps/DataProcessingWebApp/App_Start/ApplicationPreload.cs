@@ -1,10 +1,9 @@
-﻿using System.Configuration;
-using System.Data.Entity;
-using System.Web.Hosting;
+﻿using System.Web.Hosting;
 using Hangfire;
 
 namespace DataProcessingWebApp
 {
+
     public class ApplicationPreload : IProcessHostPreloadClient
     {
         public void Preload(string[] parameters)
@@ -12,4 +11,5 @@ namespace DataProcessingWebApp
             HangfireAspNet.Use(Startup.GetHangfireConfiguration);
         }
     }
+
 }

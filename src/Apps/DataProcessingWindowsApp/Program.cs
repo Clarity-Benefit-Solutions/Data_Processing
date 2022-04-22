@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using CoreUtils.Classes;
 using DataProcessing;
-using StackExchange.Profiling;
 
 namespace TestApp
 {
+
     internal static class Program
     {
         /// <summary>
@@ -29,26 +26,26 @@ namespace TestApp
 
             // Add the event handler for handling UI thread exceptions to the event.
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
-            Application.ThreadException += new ThreadExceptionEventHandler(UIThreadException);
+            Application.ThreadException += UIThreadException;
 
             //            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             // write output to logfile
-            StreamWriter swConsoleOut = new StreamWriter($"{Vars.GetProcessBaseDir()}/_Output.log", true);
+            var swConsoleOut = new StreamWriter($"{Vars.GetProcessBaseDir()}/_Output.log", true);
             swConsoleOut.AutoFlush = true;
             Console.SetOut(swConsoleOut);
 
             // handle startup args for scheduled processing
 
-            List<Task> tasks = new List<Task> { };
-            string[] args = Environment.GetCommandLineArgs();
+            List<Task> tasks = new List<Task>();
+            var args = Environment.GetCommandLineArgs();
 
-            Boolean showUI = true;
-            foreach (string arg in args)
+            var showUI = true;
+            foreach (var arg in args)
             {
-                switch (arg.ToString().ToLower())
+                switch (arg.ToLower())
                 {
                     case @"test":
                         Vars.Environment = "TEST";
@@ -85,29 +82,26 @@ namespace TestApp
                     case @"noui":
                         showUI = false;
                         break;
-
-                    default:
-                        break;
                 }
             }
 
             if (tasks.Count > 0)
             {
                 // init form so we can view the logs
-                Form1 mainForm = new Form1();
+                var mainForm = new Form1();
                 if (showUI)
                 {
                     mainForm.Show();
                     Application.Run();
-
                 }
 
                 foreach (var task in tasks)
                 {
-                    for (int i = 0; i < 10; i++)
+                    for (var i = 0; i < 10; i++)
                     {
                         Application.DoEvents();
                     }
+
                     task.Wait();
                 }
             }
@@ -124,10 +118,9 @@ namespace TestApp
         }
 
 
-
         public static void UIThreadException(object sender, ThreadExceptionEventArgs t)
         {
-            DialogResult result = DialogResult.Cancel;
+            var result = DialogResult.Cancel;
             try
             {
                 result = Form1.ShowThreadExceptionDialog("Unhandled Error", t.Exception);
@@ -147,7 +140,10 @@ namespace TestApp
 
             // Exits the program when the user clicks Abort.
             if (result == DialogResult.Abort)
+            {
                 Application.Exit();
+            }
         }
     }
+
 }

@@ -35,7 +35,10 @@ namespace CoreUtils.Classes
             var srcFileInfo = new FileInfo(srcFilePath);
             var fileName = srcFileInfo.Name;
 
-            if (fileName.StartsWith(".")) return true;
+            if (fileName.StartsWith("."))
+            {
+                return true;
+            }
 
             return false;
         }
@@ -51,15 +54,22 @@ namespace CoreUtils.Classes
                 writer.WriteLine(text);
 
                 // close
-                if (writer != null) writer.Close();
+                if (writer != null)
+                {
+                    writer.Close();
+                }
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(filePath, text, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -79,37 +89,52 @@ namespace CoreUtils.Classes
 
                 // iterate for each fileMask
                 foreach (var sourceDirectory in sourceDirectories)
+                {
                     IterateDirectory(sourceDirectory, iterateType, subDirsAlso, fileMasks, fileCallback,
                         onErrorCallback);
+                }
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
         public static void IterateDirectory(string directory, DirectoryIterateType iterateType, bool subDirsAlso,
             string[] fileMasks, SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] {"*.*"};
+            if (fileMasks == null || fileMasks.Length == 0)
+            {
+                fileMasks = new[] {"*.*"};
+            }
 
             try
             {
                 // iterate for each fileMask
                 foreach (var fileMask in fileMasks)
+                {
                     IterateDirectory(directory, iterateType, subDirsAlso, fileMask, fileCallback, onErrorCallback);
+                }
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(directory, fileMasks.Join(","), ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -139,22 +164,30 @@ namespace CoreUtils.Classes
 
                 // check dir exists
                 var dirInfo = new DirectoryInfo(directory);
-                if (dirInfo.Exists == false) Directory.CreateDirectory(directory);
+                if (dirInfo.Exists == false)
+                {
+                    Directory.CreateDirectory(directory);
+                }
 
                 // get all files in dir
                 string[] files = { };
 
                 if (iterateType == DirectoryIterateType.Files)
+                {
                     files = Directory.GetFiles(directory, fileMask,
                         subDirsAlso ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly
                     );
+                }
                 else if (iterateType == DirectoryIterateType.Directories)
+                {
                     files = Directory.GetDirectories(directory, fileMask,
                         subDirsAlso ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly
                     );
+                }
 
                 // callback for each file
                 foreach (var file in files)
+                {
                     if (IgnoreFile(file))
                     {
                         // dont call back
@@ -169,11 +202,16 @@ namespace CoreUtils.Classes
                         {
                             // callback for complete
                             if (onErrorCallback != null)
+                            {
                                 onErrorCallback(directory, file, ex);
+                            }
                             else
+                            {
                                 throw;
+                            }
                         }
                     }
+                }
 
                 ;
             }
@@ -181,9 +219,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(directory, directory, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -201,16 +243,22 @@ namespace CoreUtils.Classes
 
                 // iterate for each fileMask
                 foreach (var sourceDirectory in sourceDirectories)
+                {
                     DoMultipleFilesOperation(FileOperation.Move, sourceDirectory, subDirsAlso, fileMasks, destDirectory,
                         destFileName, destFileExt, fileCallback, onErrorCallback);
+                }
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -227,9 +275,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceDirectory, fileMask, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -248,16 +300,22 @@ namespace CoreUtils.Classes
 
                 // iterate for each fileMask
                 foreach (var sourceDirectory in sourceDirectories)
+                {
                     DoMultipleFilesOperation(FileOperation.Copy, sourceDirectory, subDirsAlso, fileMasks, destDirectory,
                         destFileName, destFileExt, fileCallback, onErrorCallback);
+                }
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -274,9 +332,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceDirectory, fileMasks.Join(","), ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -293,9 +355,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceDirectory, fileMask, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -312,16 +378,22 @@ namespace CoreUtils.Classes
 
                 // iterate for each fileMask
                 foreach (var sourceDirectory in sourceDirectories)
+                {
                     DoMultipleFilesOperation(FileOperation.Delete, sourceDirectory, subDirsAlso, fileMasks, "", "", "",
                         fileCallback, onErrorCallback);
+                }
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -337,9 +409,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceDirectory, fileMasks.Join(","), ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -355,9 +431,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceDirectory, fileMask, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -372,9 +452,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceFilePath, destFilePath, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -389,23 +473,37 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceFilePath, destFilePath, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
         public static string FixPath(string filePath, bool makeLowerCase = false)
         {
             // do not fix path is starts with // i.e. is a UNC path
-            if (filePath.StartsWith("\\\\")) return filePath;
+            if (filePath.StartsWith("\\\\"))
+            {
+                return filePath;
+            }
 
             filePath = filePath.Replace("\\", "/");
             filePath = filePath.Replace("//", "/");
             // remove last slash
             if (filePath.Length > 1 && Utils.Right(filePath, 1) == "/")
+            {
                 filePath = filePath.Remove(filePath.Length - 1, 1);
-            if (makeLowerCase) filePath = filePath.ToLower();
+            }
+
+            if (makeLowerCase)
+            {
+                filePath = filePath.ToLower();
+            }
+
             return filePath;
         }
 
@@ -424,9 +522,14 @@ namespace CoreUtils.Classes
             //
             var newName = Path.GetFileNameWithoutExtension(sourceFileInfo.Name);
             if (!Utils.IsBlank(replaceNamePattern))
+            {
                 newName = Regex.Replace(newName, replaceNamePattern, replaceNameString);
+            }
 
-            if (Utils.IsBlank(newExt)) newExt = sourceFileInfo.Extension;
+            if (Utils.IsBlank(newExt))
+            {
+                newExt = sourceFileInfo.Extension;
+            }
 
             var destFilePath = $"{destDir}/{newName}{newExt}";
             return destFilePath;
@@ -445,7 +548,10 @@ namespace CoreUtils.Classes
             //
             var newName = Path.GetFileNameWithoutExtension(sourceFileInfo.Name);
 
-            if (Utils.IsBlank(newExt)) newExt = sourceFileInfo.Extension;
+            if (Utils.IsBlank(newExt))
+            {
+                newExt = sourceFileInfo.Extension;
+            }
 
             var destFilePath = $"{sourceFileInfo.Directory}/{newName}{newExt}";
             return destFilePath;
@@ -463,9 +569,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceFilePath, "", ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -480,9 +590,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceFilePath, "", ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -497,9 +611,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceFilePath, "", ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -508,22 +626,32 @@ namespace CoreUtils.Classes
             bool subDirsAlso, string[] fileMasks, string destDirectory, string destFileName, string destFileExt,
             SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
-            if (fileMasks == null || fileMasks.Length == 0) fileMasks = new[] {"*.*"};
+            if (fileMasks == null || fileMasks.Length == 0)
+            {
+                fileMasks = new[] {"*.*"};
+            }
+
             try
             {
                 // iterate for each fileMask
                 foreach (var fileMask in fileMasks)
+                {
                     DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMask, destDirectory,
                         destFileName, destFileExt, fileCallback,
                         onErrorCallback);
+                }
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceDirectory, fileMasks.Join(","), ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -552,7 +680,11 @@ namespace CoreUtils.Classes
                     // at end 
                     (directory, file, ex) =>
                     {
-                        if (onErrorCallback == null) throw ex;
+                        if (onErrorCallback == null)
+                        {
+                            throw ex;
+                        }
+
                         onErrorCallback(directory, file, ex);
                     }
                 );
@@ -561,9 +693,13 @@ namespace CoreUtils.Classes
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceDirectory, fileMask, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -577,7 +713,10 @@ namespace CoreUtils.Classes
                 if (!Utils.IsBlank(destFilePath))
                 {
                     var destFileDirInfo = new DirectoryInfo(Path.GetDirectoryName(destFilePath) ?? string.Empty);
-                    if (!destFileDirInfo.Exists) destFileDirInfo.Create();
+                    if (!destFileDirInfo.Exists)
+                    {
+                        destFileDirInfo.Create();
+                    }
                 }
 
                 var fileContents = "";
@@ -585,7 +724,10 @@ namespace CoreUtils.Classes
                 // validate
                 if (!srcFileInfo.Exists)
                 {
-                    if (fileOperation == FileOperation.DeleteIfExists) return;
+                    if (fileOperation == FileOperation.DeleteIfExists)
+                    {
+                        return;
+                    }
 
                     var message =
                         $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source File: {sourceFilePath} does not exist";
@@ -634,15 +776,22 @@ namespace CoreUtils.Classes
                 }
 
                 // callback for complete
-                if (fileCallback != null) fileCallback(sourceFilePath, destFilePath, fileContents);
+                if (fileCallback != null)
+                {
+                    fileCallback(sourceFilePath, destFilePath, fileContents);
+                }
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceFilePath, destFilePath, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 
@@ -668,7 +817,10 @@ namespace CoreUtils.Classes
                 rowNo++;
                 contents += line;
 
-                if (firstNLinesOnly != 0 && rowNo >= firstNLinesOnly) return contents;
+                if (firstNLinesOnly != 0 && rowNo >= firstNLinesOnly)
+                {
+                    return contents;
+                }
             }
 
             return contents;
@@ -721,32 +873,45 @@ namespace CoreUtils.Classes
                     var config = new ExcelReaderConfiguration {Password = password};
                     IExcelDataReader reader = null;
                     if (sourceFilePath.EndsWith(".xls"))
+                    {
                         reader = ExcelReaderFactory.CreateBinaryReader(stream);
-                    else if (sourceFilePath.EndsWith(".xlsx")) reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                    }
+                    else if (sourceFilePath.EndsWith(".xlsx"))
+                    {
+                        reader = ExcelReaderFactory.CreateOpenXmlReader(stream);
+                    }
 
-                    if (reader == null) return;
+                    if (reader == null)
+                    {
+                        return;
+                    }
 
                     var ds = reader.AsDataSet(new ExcelDataSetConfiguration
                     {
                         ConfigureDataTable = tableReader => new ExcelDataTableConfiguration
                         {
-                            UseHeaderRow = false
-                        }
+                            UseHeaderRow = false,
+                        },
                     });
 
                     var csvContent = string.Empty;
                     var rowNo = 0;
                     while (rowNo < ds.Tables[0].Rows.Count)
                     {
-                        var arr = new List<string>();
+                        List<string> arr = new List<string>();
                         for (var i = 0; i < ds.Tables[0].Columns.Count; i++)
                         {
                             var fieldValue = ds.Tables[0].Rows[rowNo][i];
                             string strFieldValue;
                             if (fieldValue.GetType().Name == "DateTime")
+                            {
                                 strFieldValue = Utils.ToIsoDateTimeString((DateTime) fieldValue);
+                            }
                             else
+                            {
                                 strFieldValue = fieldValue.ToString() ?? "";
+                            }
+
                             arr.Add(strFieldValue);
                         }
 
@@ -763,15 +928,22 @@ namespace CoreUtils.Classes
                 }
 
                 // callback for complete
-                if (fileCallback != null) fileCallback(sourceFilePath, destFilePath, "");
+                if (fileCallback != null)
+                {
+                    fileCallback(sourceFilePath, destFilePath, "");
+                }
             }
             catch (Exception ex)
             {
                 // callback for complete
                 if (onErrorCallback != null)
+                {
                     onErrorCallback(sourceFilePath, sourceFilePath, ex);
+                }
                 else
+                {
                     throw;
+                }
             }
         }
 

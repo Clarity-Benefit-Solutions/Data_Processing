@@ -9,18 +9,30 @@ namespace DataProcessing
     {
         internal bool MarkAsCompleteFail = false;
 
-        public bool HasErrors => Count > 0;
+        public bool HasErrors
+        {
+            get { return this.Count > 0; }
+        }
 
-        public bool IsCompleteFail => MarkAsCompleteFail;
+        public bool IsCompleteFail
+        {
+            get { return this.MarkAsCompleteFail; }
+        }
 
         public OperationResultType OperationResultType
         {
             get
             {
-                if (IsCompleteFail)
+                if (this.IsCompleteFail)
+                {
                     return OperationResultType.CompleteFail;
-                if (HasErrors)
+                }
+
+                if (this.HasErrors)
+                {
                     return OperationResultType.PartialFail;
+                }
+
                 return OperationResultType.Ok;
             }
         }

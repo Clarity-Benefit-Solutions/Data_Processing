@@ -365,7 +365,7 @@ namespace DataProcessing
                 new string[]
                 {
                     Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot,
-                    Vars.paylocityFtpRoot
+                    Vars.paylocityFtpRoot,
                 },
                 DirectoryIterateType.Files,
                 false,

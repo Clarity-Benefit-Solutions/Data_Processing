@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Security.Principal;
 using System.Text;
@@ -10,6 +8,7 @@ using CoreUtils.Classes;
 
 namespace DataProcessingWebApp.Modules
 {
+
     public class BasicAuthHttpModule : IHttpModule
     {
         private const string Realm = "DataProcessing Realm";
@@ -19,6 +18,10 @@ namespace DataProcessingWebApp.Modules
             // Register event handlers
             context.AuthenticateRequest += OnApplicationAuthenticateRequest;
             context.EndRequest += OnApplicationEndRequest;
+        }
+
+        public void Dispose()
+        {
         }
 
         private static void SetPrincipal(IPrincipal principal)
@@ -49,9 +52,9 @@ namespace DataProcessingWebApp.Modules
                         credentials = encoding.GetString(Convert.FromBase64String(credentials));
                     }
 
-                    int separator = credentials.IndexOf(':');
-                    string name = credentials.Substring(0, separator);
-                    string password = credentials.Substring(separator + 1);
+                    var separator = credentials.IndexOf(':');
+                    var name = credentials.Substring(0, separator);
+                    var password = credentials.Substring(separator + 1);
 
                     if (CheckPassword(name, password))
                     {
@@ -106,16 +109,14 @@ namespace DataProcessingWebApp.Modules
             {
                 return;
             }
+
             var response = HttpContext.Current.Response;
             if (response.StatusCode == 401)
             {
                 response.Headers.Add("WWW-Authenticate",
-                    $"Basic realm=\"{Realm}\"");
+                    $"Basic realm=\"{BasicAuthHttpModule.Realm}\"");
             }
         }
-
-        public void Dispose()
-        {
-        }
     }
+
 }
