@@ -97,11 +97,11 @@ namespace DataProcessing
                     {
                         if (Utils.IsTestFile(this.SrcFilePath))
                         {
-                            newFilePath = $"{Vars.alegeusFilesPreCheckTestRoot}/{fileName}";
+                            newFilePath = $"{Vars.alegeusFilesTestPath}/{fileName}";
                         }
                         else
                         {
-                            newFilePath = $"{Vars.alegeusFilesPreCheckOKRoot}/{fileName}";
+                            newFilePath = $"{Vars.alegeusFilesPassedPath}/{fileName}";
                         }
 
                         FileUtils.MoveFile(SrcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
@@ -138,11 +138,11 @@ namespace DataProcessing
                     {
                         if (Utils.IsTestFile(this.SrcFilePath))
                         {
-                            newFilePath = $"{Vars.alegeusFilesPreCheckTestRoot}/{fileName}";
+                            newFilePath = $"{Vars.alegeusFilesTestPath}/{fileName}";
                         }
                         else
                         {
-                            newFilePath = $"{Vars.alegeusFilesPreCheckFailRoot}/{fileName}";
+                            newFilePath = $"{Vars.alegeusFilesRejectsPath}/{fileName}";
                         }
 
                         FileUtils.MoveFile(SrcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>

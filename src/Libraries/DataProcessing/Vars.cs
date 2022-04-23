@@ -347,7 +347,7 @@ namespace DataProcessing
         {
             if (appSettings == null)
             {
-                appSettings = (DataTable) DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnDataProcessing,
+                appSettings = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnDataProcessing,
                     "select * from dbo.app_settings where is_active = 1 order by environment, setting_name", null, null,
                     false, true);
 
@@ -393,58 +393,66 @@ namespace DataProcessing
         public string salesForceCrmListPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("SalesForceCrmListPath")}");
 
-        public string cobraImportRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("CobraImportPath")}");
+        public string cobraFilesImportHoldingPath =>
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraFilesImportHoldingPath")}");
 
-        public string cobraImportHoldingRoot =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("CobraImportHoldingPath")}");
+        public string cobraFilesImportHoldingArchivePath =>
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraFilesImportHoldingArchivePath")}");
 
-        public string cobraImportTestFilesRoot =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("CobraImportTestFilesPath")}");
+        public string cobraFilesToProcessPath =>
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraFilesToProcessPath")}");
 
-        public string cobraImportHoldingPreparedQbRoot =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraImportHoldingPreparedQbPath")}");
+        public string cobraFilesPreparedQbPath =>
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraFilesPreparedQbPath")}");
 
-        public string cobraImportArchiveDoneRoot =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraImportArchiveDonePath")}");
-
-        public string cobraImportArchiveEmptyRoot =>
+        public string cobraFilesEmptyPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraImportArchiveEmptyPath")}");
+        
+        public string cobraFilesPassedPath =>
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraFilesPassedPath")}");
 
-        public string cobraImportArchiveErrorRoot =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraImportArchiveErrorPath")}");
+        public string cobraFilesRejectsPath =>
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraFilesRejectsPath")}");
 
-        public string cobraImportHoldingDecryptRoot =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraImportHoldingDecryptPath")}");
+        public string cobraFilesTestPath =>
+                  FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraFilesTestPath")}");
+
+        public string cobraFilesDecryptPath =>
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraFilesDecryptPath")}");
+
+        public string cobraFilesToReProcessPath =>
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraFilesToReProcessPath")}");
+
+
+
+        public string alegeusImportHoldingRoot =>
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesImportHoldingPath")}");
+
+        public string alegeusFilesImportHoldingArchivePath =>
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesImportHoldingArchivePath")}");
+
 
         public string alegeusFileHeadersRoot =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFileHeadersPath")}");
 
-        public string alegeusFileHeadersArchiveRoot =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFileHeadersArchivePath")}");
+        public string alegeusFilesToProcessPath =>
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesToProcessPath")}");
 
-        public string alegeusFilesPreCheckRoot =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckPath")}");
-
-        public string alegeusFilesPreCheckOKRoot =>
+        public string alegeusFilesPassedPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckOKPath")}");
 
-        public string alegeusFilesPreCheckOKArchiveRoot =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckOKArchivePath")}");
-
-        public string alegeusFilesPreCheckFailRoot =>
+        public string alegeusFilesEmptyPath =>
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesEmptyPath")}");
+        
+        public string alegeusFilesRejectsPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckFailPath")}");
 
-        public string alegeusFilesPreCheckTestRoot =>
+        public string alegeusFilesTestPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckTestPath")}");
 
-        public string alegeusFilesReprocessRoot =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesReprocessPath")}");
+        public string alegeusFilesToReProcessPath =>
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesToReProcessPath")}");
 
-        public string alegeusFilesPreCheckHoldAllRoot =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckHoldAllPath")}");
-
-        public string alegeusFilesPreCheckHoldAllOriginalRoot =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckHoldAllPath")}");
 
         public string alegeusParticipantEnrollmentFilesDownloadPath =>
             FileUtils.FixPath($"{GetAppSetting("alegeusParticipantEnrollmentFilesDownloadPath")}");
@@ -476,10 +484,9 @@ namespace DataProcessing
             {
                 string[] dirs =
                 {
-                    $"{GetAppSetting("localTestFilesPath")}/processing@claritybenefitsolutions", cobraImportRoot,
-                    cobraImportHoldingRoot,
-                    cobraImportHoldingDecryptRoot, alegeusFilesPreCheckRoot, alegeusFilesPreCheckHoldAllRoot,
-                    alegeusFileHeadersArchiveRoot, alegeusFileHeadersRoot,
+                    $"{GetAppSetting("localTestFilesPath")}/processing@claritybenefitsolutions",
+                    $"{GetAppSetting("localTestFilesPath")}/ImportHolding",
+                    $"{GetAppSetting("localTestFilesPath")}/Processed",
                 };
                 return dirs;
             }
@@ -492,8 +499,9 @@ namespace DataProcessing
             {
                 string[] dirs =
                 {
-                    cobraImportRoot, cobraImportHoldingRoot, cobraImportHoldingDecryptRoot, alegeusFilesPreCheckRoot,
-                    alegeusFilesPreCheckHoldAllRoot, alegeusFileHeadersArchiveRoot, alegeusFileHeadersRoot,
+                    $"{GetAppSetting("localTestFilesPath")}/processing@claritybenefitsolutions",
+                    $"{GetAppSetting("localTestFilesPath")}/ImportHolding",
+                    $"{GetAppSetting("localTestFilesPath")}/Processed",
                 };
                 return dirs;
             }
@@ -508,9 +516,9 @@ namespace DataProcessing
                 if (_prodToRunningCtxPathReplacePatterns == null)
                     _prodToRunningCtxPathReplacePatterns = new Dictionary<string, string>
                     {
-                        {
+                        /*{
                             "\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP\\To_Alegeus_FTP_Holding\\Archive",
-                            alegeusFileHeadersArchiveRoot
+                            alegeusFilesImportHoldingArchivePath
                         },
                         {
                             "\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP\\To_Alegeus_FTP_Holding\\HoldALL",
@@ -518,13 +526,13 @@ namespace DataProcessing
                         },
                         {
                             "\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP\\To_Alegeus_FTP_Holding",
-                            alegeusFilesPreCheckRoot
+                            alegeusFilesToProcessPath
                         },
                         {
                             "\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP\\AutomatedHeaderV1_Files",
                             alegeusFileHeadersRoot
                         },
-                        {"\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP", localFtpRoot},
+                        {"\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP", localFtpRoot},*/
                     };
                 return _prodToRunningCtxPathReplacePatterns;
             }

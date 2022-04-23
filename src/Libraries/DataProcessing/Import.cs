@@ -370,7 +370,7 @@ namespace DataProcessing
         public static void MoveFileToAlegeusRejectsFolder(string srcFilePath, string rejectMessage)
         {
             Vars Vars = new Vars();
-            MoveFileToRejectsFolder(srcFilePath, rejectMessage, Vars.alegeusFilesPreCheckFailRoot);
+            MoveFileToRejectsFolder(srcFilePath, rejectMessage, Vars.alegeusFilesRejectsPath);
         }
 
         public static void MoveFileToRejectsFolder(string srcFilePath, string rejectMessage, string destFolder)
@@ -550,7 +550,7 @@ namespace DataProcessing
             //else if (fileInfo.Extension == ".pgp")
             //{
             //    processThisFile = true;
-            //    destDirPath = $"{Vars.cobraImportHoldingDecryptRoot}";
+            //    destDirPath = $"{Vars.cobraFilesDecryptPath}";
             //}
 
             //if (processThisFile

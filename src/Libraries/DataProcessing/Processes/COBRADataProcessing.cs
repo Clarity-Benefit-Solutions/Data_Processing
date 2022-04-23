@@ -202,12 +202,12 @@ namespace DataProcessing
                             if (fileInfo.Extension == ".pgp")
                             {
                                 processThisFile = true;
-                                destDirPath = $"{Vars.cobraImportHoldingDecryptRoot}";
+                                destDirPath = $"{Vars.cobraFilesDecryptPath}";
                             }
                             else if (Import.IsCobraImportFile(srcFilePath))
                             {
                                 processThisFile = true;
-                                destDirPath = $"{Vars.cobraImportRoot}";
+                                destDirPath = $"{Vars.cobraFilesImportHoldingPath}";
                             }
 
                             if (processThisFile && !Utils.IsBlank((destDirPath)))
@@ -275,7 +275,7 @@ namespace DataProcessing
 
             // 1. txt -> csv, mbi -> csv
             FileUtils.IterateDirectory(
-                Vars.cobraImportHoldingRoot, DirectoryIterateType.Files, false, "*.*",
+                Vars.cobraFilesImportHoldingPath, DirectoryIterateType.Files, false, "*.*",
                 (srcFilePath, dummy1, dummy2) =>
                 {
                     //check file name and move to appropriate directory
@@ -310,7 +310,7 @@ namespace DataProcessing
             // 3. move csv files for preparation of QB
             // from COBRA IMPORTS\Holding,ToDecrypt/*.* -> HOLDING\PreparedQB, COBRA IMPORTS\QB*.csv
             FileUtils.IterateDirectory(
-                new string[] {Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingDecryptRoot, Vars.cobraImportRoot},
+                new string[] {Vars.cobraFilesImportHoldingPath, Vars.cobraFilesDecryptPath/*, Vars.cobraImportRoot*/},
                 DirectoryIterateType.Files,
                 false,
                 // TODO: How are pgop filkes created or processed? CobraFiles do we need to move *.* files from decrypt? not clear
@@ -324,7 +324,7 @@ namespace DataProcessing
                     if (fileInfo.Name.IndexOf("QB", StringComparison.InvariantCulture) >= 0)
                     {
                         string destFilePath =
-                            $"{Vars.cobraImportHoldingPreparedQbRoot}/{fileInfo.Name}";
+                            $"{Vars.cobraFilesPreparedQbPath}/{fileInfo.Name}";
 
                         FileUtils.MoveFile(srcFilePath, destFilePath,
                             (srcFilePath2, destFilePath2, dummy4) =>
@@ -364,7 +364,7 @@ namespace DataProcessing
             FileUtils.IterateDirectory(
                 new string[]
                 {
-                    Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot,
+                    Vars.cobraFilesImportHoldingPath, Vars.cobraFilesImportHoldingPath, Vars.cobraFilesPreparedQbPath,
                     Vars.paylocityFtpRoot,
                 },
                 DirectoryIterateType.Files,
@@ -379,7 +379,7 @@ namespace DataProcessing
                     if (fileInfo.Length <= 30)
                     {
                         string destFilePath =
-                            $"{Vars.cobraImportArchiveEmptyRoot}/{fileInfo.Name}";
+                            $"{Vars.cobraFilesEmptyPath}/{fileInfo.Name}";
 
                         FileUtils.MoveFile(srcFilePath, destFilePath,
                             (srcFilePath2, destFilePath2, dummy4) =>
@@ -418,7 +418,7 @@ namespace DataProcessing
             string fileExt = "*.csv";
             //
             FileUtils.IterateDirectory(
-                Vars.cobraImportHoldingPreparedQbRoot, DirectoryIterateType.Files, false, fileExt,
+                Vars.cobraFilesPreparedQbPath, DirectoryIterateType.Files, false, fileExt,
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // DB connecrtion for COBRA specific
@@ -493,7 +493,7 @@ namespace DataProcessing
             // 1. move test files
             // from COBRA IMPORTS, HOLDING, HOLDING\PreparedQB -> COBRA_testfiles
             FileUtils.IterateDirectory(
-                new string[] {Vars.cobraImportRoot, Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot},
+                new string[] {Vars.cobraFilesImportHoldingPath, Vars.cobraFilesImportHoldingPath, Vars.cobraFilesPreparedQbPath},
                 DirectoryIterateType.Files,
                 false,
                 new string[] {"*.*"},
@@ -507,7 +507,7 @@ namespace DataProcessing
                     if (Utils.IsTestFile(srcFilePath))
                     {
                         processThisFile = true;
-                        destDirPath = $"{Vars.cobraImportTestFilesRoot}";
+                        destDirPath = $"{Vars.cobraFilesTestPath}";
                     }
 
                     if (processThisFile && !Utils.IsBlank(destDirPath))
@@ -532,10 +532,10 @@ namespace DataProcessing
             // 2. move all holding and prepared files
             // from HOLDING, HOLDING\PreparedQB -> IMPORTS
             FileUtils.MoveFiles(
-                new string[] {Vars.cobraImportHoldingRoot, Vars.cobraImportHoldingPreparedQbRoot},
+                new string[] {/*Vars.cobraFilesImportHoldingPath, */Vars.cobraFilesPreparedQbPath},
                 false,
                 new string[] {"*.*"},
-                Vars.cobraImportRoot, "", "",
+                Vars.cobraFilesImportHoldingPath, "", "",
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
