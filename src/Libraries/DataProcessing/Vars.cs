@@ -408,7 +408,7 @@ namespace DataProcessing
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraFilesPreparedQbPath")}");
 
         public string cobraFilesEmptyPath =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraImportArchiveEmptyPath")}");
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraFilesEmptyPath")}");
         
         public string cobraFilesPassedPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraFilesPassedPath")}");

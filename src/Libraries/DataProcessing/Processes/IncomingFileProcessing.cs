@@ -187,7 +187,7 @@ namespace DataProcessing
                 //
                 FileUtils.CopyFile(srcFilePath, srcArchivePath, null, null);
 
-                
+
 
                 // 4. make FilenameProperty uniform
                 var uniformFilePath = Import.GetUniformNameForFile(platformType, srcFilePath);
@@ -494,6 +494,9 @@ namespace DataProcessing
                             },
                             (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                         );
+
+                        // don't process any more
+                        return;
                     }
                     // rename txt and mbi files to csv
                     else if (fileInfo.Extension == ".txt" || fileInfo.Extension == ".mbi")
@@ -635,47 +638,30 @@ namespace DataProcessing
                 {
                     FileInfo fileInfo = new FileInfo(srcFilePath);
 
-                    Boolean processThisFile = false;
                     string destDirPath = "";
 
                     if (Utils.IsTestFile(srcFilePath))
                     {
-                        processThisFile = true;
                         destDirPath = $"{Vars.cobraFilesTestPath}";
                     }
-
-                    if (processThisFile && !Utils.IsBlank(destDirPath))
+                    else
                     {
-                        string destFilePath2 = $"{destDirPath}/{fileInfo.Name}";
-                        FileUtils.MoveFile(srcFilePath, destFilePath2,
-                            (srcFilePath3, destFilePath3, dummy4) =>
-                            {
-                                fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                                    Path.GetFileName(destFilePath), destFilePath,
-                                    "CobraProcessing-AfterPrepare",
-                                    "Success", $"Moved File");
-                                DbUtils.LogFileOperation(fileLogParams);
-                            },
-                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
-                        );
+                        destDirPath = Vars.cobraFilesToProcessPath;
                     }
-                },
-                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
-            );
 
-            // 2. move all holding and prepared files
-            // from HOLDING, HOLDING\PreparedQB -> IMPORTS
-            FileUtils.MoveFiles(
-                new string[] { Vars.cobraFilesImportHoldingPath, Vars.cobraFilesPreparedQbPath },
-                false,
-                new string[] { "*.*" },
-                Vars.cobraFilesToProcessPath, "", "",
-                (srcFilePath, destFilePath, dummy2) =>
-                {
-                    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                        Path.GetFileName(destFilePath), destFilePath, "CobraProcessing-AfterPrepare",
-                        "Success", $"Moved File");
-                    DbUtils.LogFileOperation(fileLogParams);
+                    string destFilePath2 = $"{destDirPath}/{fileInfo.Name}";
+                    FileUtils.MoveFile(srcFilePath, destFilePath2,
+                        (srcFilePath3, destFilePath3, dummy4) =>
+                        {
+                            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                                Path.GetFileName(destFilePath), destFilePath,
+                                "CobraProcessing-AfterPrepare",
+                                "Success", $"Moved File to Process Dir");
+                            DbUtils.LogFileOperation(fileLogParams);
+                        },
+                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+                    );
+
                 },
                 (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             );
