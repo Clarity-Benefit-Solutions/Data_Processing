@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
   <parameter name="IIS Web Application Name" description="" value="FileAndDataProcessingUI" tags="IisApp">
-    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\___Clarity\\clarity_dev\\r1_Data_Processing\\src\\Apps\\DataProcessingWebUI\\obj\\Debug\\net6\.0\\win-x86\\PubTmp\\Out\\$" />
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^E:\\FileAndDataProcessingAndErrorLog\\src\\Apps\\DataProcessingWebUI\\obj\\Debug\\net6\.0\\win-x86\\PubTmp\\Out\\$" />
   </parameter>
 </parameters>

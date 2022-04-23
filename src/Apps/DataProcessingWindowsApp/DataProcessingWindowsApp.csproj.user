@@ -4,7 +4,7 @@
     <ProjectView>ShowAllFiles</ProjectView>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <StartArguments>TEST UsevpntoconnecttoPortal PRODx ProcessParticipantEnrollmentFilesx nouix</StartArguments>
+    <StartArguments>TEST UsevpntoconnecttoPortalx PRODx ProcessParticipantEnrollmentFilesx nouix</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <StartArguments>TEST</StartArguments>

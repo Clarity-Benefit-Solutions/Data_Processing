@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CoreUtils</name>
+    </assembly>
+    <members>
+        <member name="M:CoreUtils.Classes.PgpEncryptionKeys.#ctor(System.String,System.String,System.String)">
+            <summary>
+                Initializes a new instance of the EncryptionKeys class.
+                Two keys are required to encrypt and sign data. Your private key and the recipients public key.
+                The data is encrypted with the recipients public key and signed with your private key.
+            </summary>
+            <param name="publicKeyPath">The key used to encrypt the data</param>
+            <param name="privateKeyPath">The key used to sign the data.</param>
+            <param name="passPhrase">The (your) password required to access the private key</param>
+            <exception cref="T:System.ArgumentException">Public key not found. Private key not found. Missing password</exception>
+        </member>
+        <member name="M:CoreUtils.Classes.PgpEncryptionKeys.GetFirstSecretKey(Org.BouncyCastle.Bcpg.OpenPgp.PgpSecretKeyRingBundle)">
+            <summary>
+                Return the first key we can use to encrypt.
+                Note: A file can contain multiple keys (stored in "key rings")
+            </summary>
+        </member>
+    </members>
+</doc>
