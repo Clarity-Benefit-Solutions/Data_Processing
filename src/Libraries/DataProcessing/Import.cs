@@ -4,9 +4,11 @@ using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using CoreUtils;
 using CoreUtils.Classes;
+using Org.BouncyCastle.Crypto.Engines;
 using Sylvan.Data.Csv;
 //using ETLBox.Connection;
 //using ETLBox.DataFlow;
@@ -275,6 +277,10 @@ namespace DataProcessing
             {
                 platformCode = "CO";
             }
+            else
+            {
+                platformCode = "UNKNOWN";
+            }
 
             if (platformType == PlatformType.Cobra)
             {
@@ -290,9 +296,7 @@ namespace DataProcessing
             var useThisFilePath = srcFilePath;
 
             // convert excel files to csv to check
-            string fileName = Path.GetFileName(srcFilePath);
-            string fileExt = Path.GetExtension(srcFilePath);
-            if (fileExt == ".xlsx" || fileExt == ".xls")
+            if (FileUtils.IsExcelFile(srcFilePath))
             {
                 var csvFilePath = Path.GetTempFileName() + ".csv";
 
@@ -367,13 +371,44 @@ namespace DataProcessing
             return newPath;
         }
 
-        public static void MoveFileToAlegeusRejectsFolder(string srcFilePath, string rejectMessage)
+        public static void MoveFileToPlatformRejectsFolder(string srcFilePath, Exception ex)
         {
-            Vars Vars = new Vars();
-            MoveFileToRejectsFolder(srcFilePath, rejectMessage, Vars.alegeusFilesRejectsPath);
+            MoveFileToPlatformRejectsFolder(srcFilePath, ex.ToString());
         }
 
-        public static void MoveFileToRejectsFolder(string srcFilePath, string rejectMessage, string destFolder)
+        public static void MoveFileToPlatformRejectsFolder(string srcFilePath, string rejectMessage)
+        {
+            Vars Vars = new Vars();
+            PlatformType platformType;
+            try
+            {
+                platformType = Import.GetPlatformTypeForFile(srcFilePath);
+            }
+            catch (Exception ex)
+            {
+                platformType = PlatformType.Unknown;
+            }
+
+            string destDir;
+            switch (platformType)
+            {
+                case PlatformType.Alegeus:
+                    destDir = Vars.alegeusFilesRejectsPath;
+                    break;
+
+                case PlatformType.Cobra:
+                    destDir = Vars.cobraFilesRejectsPath;
+                    break;
+
+                default:
+                    destDir = Vars.unknownFilesRejectsPath;
+                    break;
+            }
+
+            MoveFileToPlatformRejectsFolder(srcFilePath, rejectMessage, destDir);
+        }
+
+        public static void MoveFileToPlatformRejectsFolder(string srcFilePath, string rejectMessage, string destFolder)
         {
             var file = srcFilePath;
             //
@@ -394,9 +429,7 @@ namespace DataProcessing
         {
             var headerType = HeaderType.NotApplicable;
             // convert excel files to csv to check
-            string fileName = Path.GetFileName(srcFilePath);
-            string fileExt = Path.GetExtension(srcFilePath);
-            if (fileExt == ".xlsx" || fileExt == ".xls")
+            if (FileUtils.IsExcelFile(srcFilePath))
             {
                 var csvFilePath = Path.GetTempFileName() + ".csv";
 
@@ -530,6 +563,33 @@ namespace DataProcessing
             }
         }
 
+        public static PlatformType GetPlatformTypeForFile(string srcFilePath)
+        {
+            // convert excel file
+            if (FileUtils.IsExcelFile(srcFilePath))
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                string password = "";
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath, password,
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
+            }
+            //
+            if (IsCobraImportFile(srcFilePath))
+            {
+                return PlatformType.Cobra;
+            }
+            else
+            {
+                return PlatformType.Alegeus;
+
+            }
+        }
+
+
         public static Boolean IsCobraImportFile(string srcFilePath)
         {
             // COBRA files, first line starts with [VERSION],
@@ -540,22 +600,15 @@ namespace DataProcessing
                 return true;
             }
 
-            // if (fileInfo.Name.IndexOf("QB", StringComparison.InvariantCulture) >= 0
-            //             || fileInfo.Name.IndexOf("NPM", StringComparison.InvariantCulture) >= 0)
-            //    {
-            //        return true;
-            //    }
-            //}
-            //// encrypted files
-            //else if (fileInfo.Extension == ".pgp")
-            //{
-            //    processThisFile = true;
-            //    destDirPath = $"{Vars.cobraFilesDecryptPath}";
-            //}
-
-            //if (processThisFile
 
             return false;
+        }        
+        public static Boolean IsCobraImportQbFile(string srcFilePath)
+        {
+            Boolean isCobraFile = IsCobraImportFile(srcFilePath);
+
+            // toDo: how to distincguih QB and NPM files?
+            return isCobraFile;
         }
 
         public static Boolean GetAlegeusFileFormatIsResultFile(EdiFileFormat fileFormat)
@@ -1112,7 +1165,7 @@ namespace DataProcessing
             }
         }
 
-        private static readonly Regex regexALImportHeader = new Regex("IA,"); 
+        private static readonly Regex regexALImportHeader = new Regex("IA,");
         private static readonly Regex regexALImportRecType = new Regex("I[B-Z],");
         private static readonly Regex regexALExportHeader = new Regex("RA,");
         private static readonly Regex regexALExportRecType = new Regex("R[B-Z],");

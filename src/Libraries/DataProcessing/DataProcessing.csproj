@@ -409,9 +409,8 @@
     <Compile Include="FileChecker\FileCheckResults.cs" />
     <Compile Include="Import.cs" />
     <Compile Include="Processes\AlegeusErrorLog.cs" />
-    <Compile Include="Processes\AlegeusDataProcessing.cs" />
+    <Compile Include="Processes\IncomingFileProcessing.cs" />
     <Compile Include="Processes\MiscFileProcessing.cs" />
-    <Compile Include="Processes\COBRADataProcessing.cs" />
     <Compile Include="DataModels\EntitiesCustomCode.cs" />
     <Compile Include="Vars.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -31,9 +31,8 @@ namespace TestApp
         /// </summary>
         private void InitializeComponent()
         {
-            this.cmdProcessCobraFiles = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.cmdProcessAlegeusFiles = new System.Windows.Forms.Button();
+            this.cmdProcessIncomingFiles = new System.Windows.Forms.Button();
             this.cmdRetrieveFtpErrorLogs = new System.Windows.Forms.Button();
             this.cmdClearLog = new System.Windows.Forms.Button();
             this.cmdClearAll = new System.Windows.Forms.Button();
@@ -44,16 +43,6 @@ namespace TestApp
             ((System.ComponentModel.ISupportInitialize)(this.listLogs)).BeginInit();
             this.SuspendLayout();
             // 
-            // cmdProcessCobraFiles
-            // 
-            this.cmdProcessCobraFiles.Location = new System.Drawing.Point(227, 12);
-            this.cmdProcessCobraFiles.Name = "cmdProcessCobraFiles";
-            this.cmdProcessCobraFiles.Size = new System.Drawing.Size(150, 36);
-            this.cmdProcessCobraFiles.TabIndex = 0;
-            this.cmdProcessCobraFiles.Text = "ProcessCobraFiles";
-            this.cmdProcessCobraFiles.UseVisualStyleBackColor = true;
-            this.cmdProcessCobraFiles.Click += new System.EventHandler(this.cmdProcessCobraFiles_Click);
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -63,21 +52,21 @@ namespace TestApp
             this.label1.TabIndex = 2;
             this.label1.Text = "Logs";
             // 
-            // cmdProcessAlegeusFiles
+            // cmdProcessIncomingFiles
             // 
-            this.cmdProcessAlegeusFiles.Location = new System.Drawing.Point(431, 12);
-            this.cmdProcessAlegeusFiles.Name = "cmdProcessAlegeusFiles";
-            this.cmdProcessAlegeusFiles.Size = new System.Drawing.Size(150, 36);
-            this.cmdProcessAlegeusFiles.TabIndex = 4;
-            this.cmdProcessAlegeusFiles.Text = "ProcessAlegeusFiles";
-            this.cmdProcessAlegeusFiles.UseVisualStyleBackColor = true;
-            this.cmdProcessAlegeusFiles.Click += new System.EventHandler(this.cmdProcessAlegeusFiles_Click);
+            this.cmdProcessIncomingFiles.Location = new System.Drawing.Point(267, 12);
+            this.cmdProcessIncomingFiles.Name = "cmdProcessIncomingFiles";
+            this.cmdProcessIncomingFiles.Size = new System.Drawing.Size(169, 36);
+            this.cmdProcessIncomingFiles.TabIndex = 4;
+            this.cmdProcessIncomingFiles.Text = "ProcessAllIncomingFiles";
+            this.cmdProcessIncomingFiles.UseVisualStyleBackColor = true;
+            this.cmdProcessIncomingFiles.Click += new System.EventHandler(this.cmdProcessIncomingFiles_Click);
             // 
             // cmdRetrieveFtpErrorLogs
             // 
-            this.cmdRetrieveFtpErrorLogs.Location = new System.Drawing.Point(635, 12);
+            this.cmdRetrieveFtpErrorLogs.Location = new System.Drawing.Point(511, 12);
             this.cmdRetrieveFtpErrorLogs.Name = "cmdRetrieveFtpErrorLogs";
-            this.cmdRetrieveFtpErrorLogs.Size = new System.Drawing.Size(150, 36);
+            this.cmdRetrieveFtpErrorLogs.Size = new System.Drawing.Size(169, 36);
             this.cmdRetrieveFtpErrorLogs.TabIndex = 5;
             this.cmdRetrieveFtpErrorLogs.Text = "RetrieveFtpErrorLogs";
             this.cmdRetrieveFtpErrorLogs.UseVisualStyleBackColor = true;
@@ -95,9 +84,9 @@ namespace TestApp
             // 
             // cmdClearAll
             // 
-            this.cmdClearAll.Location = new System.Drawing.Point(1043, 12);
+            this.cmdClearAll.Location = new System.Drawing.Point(999, 12);
             this.cmdClearAll.Name = "cmdClearAll";
-            this.cmdClearAll.Size = new System.Drawing.Size(150, 36);
+            this.cmdClearAll.Size = new System.Drawing.Size(169, 36);
             this.cmdClearAll.TabIndex = 7;
             this.cmdClearAll.Text = "Clear All Tables";
             this.cmdClearAll.UseVisualStyleBackColor = true;
@@ -105,9 +94,9 @@ namespace TestApp
             // 
             // cmdOpenAccessDB
             // 
-            this.cmdOpenAccessDB.Location = new System.Drawing.Point(839, 12);
+            this.cmdOpenAccessDB.Location = new System.Drawing.Point(755, 12);
             this.cmdOpenAccessDB.Name = "cmdOpenAccessDB";
-            this.cmdOpenAccessDB.Size = new System.Drawing.Size(150, 36);
+            this.cmdOpenAccessDB.Size = new System.Drawing.Size(169, 36);
             this.cmdOpenAccessDB.TabIndex = 8;
             this.cmdOpenAccessDB.Text = "Open Access UI";
             this.cmdOpenAccessDB.UseVisualStyleBackColor = true;
@@ -115,9 +104,9 @@ namespace TestApp
             // 
             // cmdDoALL
             // 
-            this.cmdDoALL.Location = new System.Drawing.Point(1247, 12);
+            this.cmdDoALL.Location = new System.Drawing.Point(1243, 12);
             this.cmdDoALL.Name = "cmdDoALL";
-            this.cmdDoALL.Size = new System.Drawing.Size(150, 36);
+            this.cmdDoALL.Size = new System.Drawing.Size(169, 36);
             this.cmdDoALL.TabIndex = 9;
             this.cmdDoALL.Text = "Do ALL";
             this.cmdDoALL.UseVisualStyleBackColor = true;
@@ -127,7 +116,7 @@ namespace TestApp
             // 
             this.cmdCopyTestFiles.Location = new System.Drawing.Point(23, 12);
             this.cmdCopyTestFiles.Name = "cmdCopyTestFiles";
-            this.cmdCopyTestFiles.Size = new System.Drawing.Size(150, 36);
+            this.cmdCopyTestFiles.Size = new System.Drawing.Size(169, 36);
             this.cmdCopyTestFiles.TabIndex = 10;
             this.cmdCopyTestFiles.Text = "CopyTestFiles";
             this.cmdCopyTestFiles.UseVisualStyleBackColor = true;
@@ -161,9 +150,8 @@ namespace TestApp
             this.Controls.Add(this.cmdClearAll);
             this.Controls.Add(this.cmdClearLog);
             this.Controls.Add(this.cmdRetrieveFtpErrorLogs);
-            this.Controls.Add(this.cmdProcessAlegeusFiles);
+            this.Controls.Add(this.cmdProcessIncomingFiles);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.cmdProcessCobraFiles);
             this.Name = "Form1";
             this.Text = "Form1";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -174,10 +162,8 @@ namespace TestApp
         }
 
         #endregion
-
-        private Button cmdProcessCobraFiles;
         private Label label1;
-        private Button cmdProcessAlegeusFiles;
+        private Button cmdProcessIncomingFiles;
         private Button cmdRetrieveFtpErrorLogs;
         private Button cmdClearLog;
         private Button cmdClearAll;

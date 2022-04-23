@@ -63,12 +63,8 @@ namespace TestApp
                         tasks.Add(MiscFileProcessing.ProcessAll());
                         break;
 
-                    case @"processcobrafiles":
-                        tasks.Add(CobraDataProcessing.ProcessAll());
-                        break;
-
-                    case @"processalegeusfiles":
-                        tasks.Add(AlegeusDataProcessing.ProcessAll());
+                    case @"processincomingfiles":
+                        tasks.Add(IncomingFileProcessing.ProcessAll());
                         break;
 
                     case @"retrieveftperrorlogs":
@@ -76,7 +72,7 @@ namespace TestApp
                         break;
 
                     case @"copytestfiles":
-                        tasks.Add(AlegeusDataProcessing.CopyTestFiles());
+                        tasks.Add(IncomingFileProcessing.CopyTestFiles());
                         break;
 
                     case @"noui":

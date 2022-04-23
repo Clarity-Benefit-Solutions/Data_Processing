@@ -113,7 +113,7 @@ namespace CoreUtils.Classes
         {
             if (fileMasks == null || fileMasks.Length == 0)
             {
-                fileMasks = new[] {"*.*"};
+                fileMasks = new[] { "*.*" };
             }
 
             try
@@ -188,32 +188,31 @@ namespace CoreUtils.Classes
                 // callback for each file
                 foreach (var file in files)
                 {
-                    if (IgnoreFile(file))
+                    try
                     {
-                        // dont call back
-                    }
-                    else
-                    {
-                        try
+                        if (IgnoreFile(file))
+                        {
+                            // dont call back
+                        }
+                        else
                         {
                             fileCallback(file, "", "");
                         }
-                        catch (Exception ex)
+                    }
+                    catch (Exception ex)
+                    {
+                        // callback for complete
+                        if (onErrorCallback != null)
                         {
-                            // callback for complete
-                            if (onErrorCallback != null)
-                            {
-                                onErrorCallback(directory, file, ex);
-                            }
-                            else
-                            {
-                                throw;
-                            }
+                            onErrorCallback(directory, file, ex);
+                        }
+                        else
+                        {
+                            throw;
                         }
                     }
                 }
-
-                ;
+                
             }
             catch (Exception ex)
             {
@@ -628,7 +627,7 @@ namespace CoreUtils.Classes
         {
             if (fileMasks == null || fileMasks.Length == 0)
             {
-                fileMasks = new[] {"*.*"};
+                fileMasks = new[] { "*.*" };
             }
 
             try
@@ -709,6 +708,9 @@ namespace CoreUtils.Classes
             //
             try
             {
+                sourceFilePath = FileUtils.FixPath(sourceFilePath);
+                destFilePath = FileUtils.FixPath(destFilePath);
+
                 var srcFileInfo = new FileInfo(sourceFilePath);
                 if (!Utils.IsBlank(destFilePath))
                 {
@@ -795,21 +797,33 @@ namespace CoreUtils.Classes
             }
         }
 
-        public static string GetFlatFileContents(string sourceFilePath, int firstNLinesOnly = 0)
+        public static string GetFlatFileContents(string srcFilePath, int firstNLinesOnly = 0)
         {
-            var srcFileInfo = new FileInfo(sourceFilePath);
+            var srcFileInfo = new FileInfo(srcFilePath);
 
             // validate
             if (!srcFileInfo.Exists)
             {
                 var message =
-                    $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source File: {sourceFilePath} does not exist";
+                    $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source File: {srcFilePath} does not exist";
                 throw new Exception(message);
+            }
+
+            if (FileUtils.IsExcelFile(srcFilePath))
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                string password = "";
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath, password,
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
             }
 
             var contents = "";
             // read each line and insert
-            using var inputFile = new StreamReader(sourceFilePath);
+            using var inputFile = new StreamReader(srcFilePath);
             string line;
             var rowNo = 0;
             while ((line = inputFile.ReadLine()!) != null)
@@ -838,22 +852,7 @@ namespace CoreUtils.Classes
                 sourceDir, DirectoryIterateType.Files, subDirsAlso, "*.xls*"
                 , /*fileCallBack*/ (foundFile, dummy, dummy2) =>
                 {
-                    var csvFilePath = GetDestFilePath(foundFile, destDir, "", "", ".csv");
-                    //
-                    var password = "";
-                    ConvertExcelFileToCsv(foundFile, csvFilePath, password,
-                        (srcFilePath, destFilePath, dummy4) =>
-                        {
-                            // add to fileLog
-                            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                                Path.GetFileName(destFilePath), destFilePath, "CreateHeaders-ConvertExcelFile",
-                                "Success", "Converted Excel File to Csv");
-                            DbUtils.LogFileOperation(fileLogParams);
 
-                            //
-                            singleFileCallback(srcFilePath, csvFilePath, "");
-                        },
-                        onErrorCallback);
                 } /*end fileCallBack*/
                 , /*onErrorCallback*/ // at end 
                 (directory, file, ex) =>
@@ -863,6 +862,16 @@ namespace CoreUtils.Classes
             ); //FileUtils.IterateDirectory;
         } //end method
 
+        public static Boolean IsExcelFile(string srcFilePath)
+        {
+            var fileExt = Path.GetExtension(srcFilePath);
+            if (fileExt == ".xlsx" || fileExt == ".xls")
+            {
+                return true;
+            }
+
+            return false;
+        }
         public static void ConvertExcelFileToCsv(string sourceFilePath, string destFilePath, string password,
             SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
@@ -870,7 +879,7 @@ namespace CoreUtils.Classes
             {
                 using (var stream = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    var config = new ExcelReaderConfiguration {Password = password};
+                    var config = new ExcelReaderConfiguration { Password = password };
                     IExcelDataReader reader = null;
                     if (sourceFilePath.EndsWith(".xls"))
                     {
@@ -905,7 +914,7 @@ namespace CoreUtils.Classes
                             string strFieldValue;
                             if (fieldValue.GetType().Name == "DateTime")
                             {
-                                strFieldValue = Utils.ToIsoDateTimeString((DateTime) fieldValue);
+                                strFieldValue = Utils.ToIsoDateTimeString((DateTime)fieldValue);
                             }
                             else
                             {

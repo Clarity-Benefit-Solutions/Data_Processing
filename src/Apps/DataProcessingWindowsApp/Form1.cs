@@ -136,13 +136,15 @@ namespace TestApp
             DbUtils.eventOnLogFileOperationCallback += this.HandleOnFileLogOperationCallback;
         }
 
-        private async void cmdProcessCobraFiles_Click(object sender, EventArgs e)
+     
+
+        private async void cmdProcessIncomingFiles_Click(object sender, EventArgs e)
         {
-            this.cmdProcessCobraFiles.Enabled = false;
+            this.cmdProcessIncomingFiles.Enabled = false;
 
             try
             {
-                await CobraDataProcessing.ProcessAll();
+                await IncomingFileProcessing.ProcessAll();
             }
             catch (Exception ex)
             {
@@ -158,34 +160,7 @@ namespace TestApp
             }
             finally
             {
-                this.cmdProcessCobraFiles.Enabled = true;
-            }
-        }
-
-
-        private async void cmdProcessAlegeusFiles_Click(object sender, EventArgs e)
-        {
-            this.cmdProcessAlegeusFiles.Enabled = false;
-
-            try
-            {
-                await AlegeusDataProcessing.ProcessAll();
-            }
-            catch (Exception ex)
-            {
-                this.HandleOnFileLogOperationCallback(sender,
-                    new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                        "",
-                        "Unhandled Exception",
-                        "Unhandled Exception", "",
-                        $"Unhandled Exception: {ex}"
-                    ),
-                    ex
-                );
-            }
-            finally
-            {
-                this.cmdProcessAlegeusFiles.Enabled = true;
+                this.cmdProcessIncomingFiles.Enabled = true;
             }
         }
 
@@ -324,8 +299,7 @@ namespace TestApp
                 }
 
                 this.cmdClearLog_Click(this, eventArgs);
-                await CobraDataProcessing.ProcessAll();
-                await AlegeusDataProcessing.ProcessAll();
+                await IncomingFileProcessing.ProcessAll();
                 await AlegeusErrorLog.ProcessAll();
                 if (this.cmdOpenAccessDB.Visible && this.cmdOpenAccessDB.Enabled)
                 {

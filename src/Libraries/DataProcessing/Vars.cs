@@ -71,6 +71,8 @@ namespace DataProcessing
                     fixedPath = entry.Value + prodFilePath.Substring(entry.Key.Length);
             }
 
+            fixedPath = FileUtils.FixPath(fixedPath);
+
             return fixedPath;
         }
 
@@ -423,10 +425,15 @@ namespace DataProcessing
         public string cobraFilesToReProcessPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraFilesToReProcessPath")}");
 
-
-
-        public string alegeusImportHoldingRoot =>
+        public string alegeusFilesImportHoldingPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesImportHoldingPath")}");
+         
+        public string unknownFilesImportHoldingPath =>
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("unknownFilesImportHoldingPath")}");
+
+        public string unknownFilesRejectsPath =>
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("unknownFilesRejectsPath")}");
+
 
         public string alegeusFilesImportHoldingArchivePath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesImportHoldingArchivePath")}");
@@ -439,16 +446,16 @@ namespace DataProcessing
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesToProcessPath")}");
 
         public string alegeusFilesPassedPath =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckOKPath")}");
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPassedPath")}");
 
         public string alegeusFilesEmptyPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesEmptyPath")}");
         
         public string alegeusFilesRejectsPath =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckFailPath")}");
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesRejectsPath")}");
 
         public string alegeusFilesTestPath =>
-            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesPreCheckTestPath")}");
+            FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesTestPath")}");
 
         public string alegeusFilesToReProcessPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesToReProcessPath")}");
@@ -522,7 +529,7 @@ namespace DataProcessing
                         },
                         {
                             "\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP\\To_Alegeus_FTP_Holding\\HoldALL",
-                            alegeusFilesPreCheckHoldAllRoot
+                            alegeusFilesToProcessPath
                         },
                         {
                             "\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP\\To_Alegeus_FTP_Holding",
@@ -531,8 +538,8 @@ namespace DataProcessing
                         {
                             "\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP\\AutomatedHeaderV1_Files",
                             alegeusFileHeadersRoot
-                        },
-                        {"\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP", localFtpRoot},*/
+                        },*/
+                        {"\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP", localFtpRoot},
                     };
                 return _prodToRunningCtxPathReplacePatterns;
             }

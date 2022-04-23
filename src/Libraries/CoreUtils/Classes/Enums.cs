@@ -87,6 +87,13 @@
         Cobra,
         //
     }
+    public enum Channel
+    {
+        Unknown = 0,
+
+        [Utils.DisplayText("Channel.SFTP")]
+        SFtp
+    }
 
     public enum FileCheckType
     {

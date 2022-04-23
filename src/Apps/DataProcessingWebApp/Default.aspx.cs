@@ -143,7 +143,7 @@ namespace DataProcessingWebApp
         //    dynamic result = this.SendRequest("StartJob", "processcobrafiles");
         //}
 
-        //protected void cmdProcessAlegeusFiles_Click(object sender, EventArgs e)
+        //protected void cmdProcessIncomingFiles_Click(object sender, EventArgs e)
         //{
         //    this._logs.Clear();
         //    this.listLogs.DataBind();

@@ -56,12 +56,8 @@ namespace DataProcessingWebApp.Jobs
 
                 switch (id.ToLower())
                 {
-                    case @"processcobrafiles":
-                        await CobraDataProcessing.ProcessAll();
-                        break;
-
-                    case @"processalegeusfiles":
-                        await AlegeusDataProcessing.ProcessAll();
+                    case @"processincomingfiles":
+                        await IncomingFileProcessing.ProcessAll();
                         break;
 
                     case @"retrieveftperrorlogs":
@@ -70,7 +66,7 @@ namespace DataProcessingWebApp.Jobs
 
                     case @"copytestfiles":
                         var directoryPath = Vars.GetProcessBaseDir();
-                        await AlegeusDataProcessing.CopyTestFiles();
+                        await IncomingFileProcessing.CopyTestFiles();
 
                         break;
 
@@ -127,9 +123,7 @@ namespace DataProcessingWebApp.Jobs
                 srcFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(srcFilePath, true, fileLogParams);
 
                 // convert from xl is needed
-                var fileName = Path.GetFileName(srcFilePath);
-                var fileExt = Path.GetExtension(srcFilePath);
-                if (fileExt == ".xlsx" || fileExt == ".xls")
+                if (FileUtils.IsExcelFile(srcFilePath))
                 {
                     var csvFilePath = Path.GetTempFileName() + ".csv";
                     var password = "";
