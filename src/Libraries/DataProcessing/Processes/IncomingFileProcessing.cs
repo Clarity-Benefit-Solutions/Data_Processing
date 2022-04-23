@@ -78,7 +78,7 @@ namespace DataProcessing
         protected void ProcessIncomingAlegeusFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
             //AddAlegeusHeaderForAllFiles
-            this.AddAlegeusHeaderForAllFiles(new string[] { "*.mbi", "*.csv", "*.txt", "*.xls", "*.xlsx" }, dbConn, fileLogParams);
+            this.AddAlegeusHeaderForAllFiles(dbConn, fileLogParams);
 
             //PreCheckAndProcessAlegeusFiles
             this.PreCheckAndProcessAlegeusFiles(dbConn, fileLogParams);
@@ -188,7 +188,6 @@ namespace DataProcessing
                 FileUtils.CopyFile(srcFilePath, srcArchivePath, null, null);
 
 
-
                 // 4. make FilenameProperty uniform
                 var uniformFilePath = Import.GetUniformNameForFile(platformType, srcFilePath);
                 if (Path.GetFileName(srcFilePath) != Path.GetFileName(uniformFilePath))
@@ -225,7 +224,7 @@ namespace DataProcessing
                 }
 
                 // 8. copy source file to holding archive root
-                string destPathHoldingArchive = $"{destDirHolding}/Archive/{Path.GetFileName(currentFilePath)}";
+                string destPathHoldingArchive = $"{destDirHolding}/Archive/{Utils.ToIsoDateString(DateTime.Now)}/{Path.GetFileName(currentFilePath)}";
                 FileUtils.CopyFile(currentFilePath, destPathHoldingArchive, null, null);
 
                 // 9. move source file to holding root
@@ -272,12 +271,12 @@ namespace DataProcessing
             }
         }
 
-        protected void AddAlegeusHeaderForAllFiles(string[] fileExtensions, DbConnection dbConn,
-            FileOperationLogParams fileLogParams)
+        protected void AddAlegeusHeaderForAllFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
 
         {
             // Iterate all files in header dir
-            FileUtils.IterateDirectory(this.Vars.alegeusFileHeadersRoot, DirectoryIterateType.Files, false, fileExtensions,
+            FileUtils.IterateDirectory(this.Vars.alegeusFileHeadersRoot, DirectoryIterateType.Files, false,
+                new string[] { "*.mbi", "*.csv", "*.txt", "*.xls", "*.xlsx" },
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     try
@@ -286,9 +285,10 @@ namespace DataProcessing
                         if (FileUtils.IsExcelFile(srcFilePath))
                         {
                             var csvFilePath =
-                                $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileName(srcFilePath)}.csv";
+                                $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileNameWithoutExtension(srcFilePath)}.csv";
 
                             string password = "";
+                            //ToDo: handle password protected files
                             FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath, password,
                                 null,
                                 null);
@@ -341,7 +341,7 @@ namespace DataProcessing
                             fileLogParams,
                             (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                         );
-
+                        
                         // 5. create headers
                         string procName;
                         switch (headerType)
@@ -356,6 +356,10 @@ namespace DataProcessing
                                 procName = "dbo.[proc_alegeus_AlterHeadersNone]";
                                 break;
                             case HeaderType.New:
+                                procName = "dbo.[proc_alegeus_AlterHeaders2019]";
+                                break;
+                            //todo: how to add headers for segmented funding?
+                            case HeaderType.SegmentedFunding:
                                 procName = "dbo.[proc_alegeus_AlterHeaders2019]";
                                 break;
                             default:
@@ -375,7 +379,12 @@ namespace DataProcessing
                         }
 
                         //6. Export File with proper headers
-                        var expFilePath = FileUtils.GetDestFilePath(srcFilePath, ".mbi");
+                        var expFilePath =
+                            $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileNameWithoutExtension(srcFilePath)}.mbi";
+
+                        // delete src file to avoid duplicates
+                        FileUtils.DeleteFile(srcFilePath, null, null);
+
 
                         var outputTableName = "[dbo].[alegeus_file_final]";
                         var queryStringExp = $"Select * from {outputTableName} order by row_num asc";
@@ -392,7 +401,8 @@ namespace DataProcessing
                         DbUtils.LogFileOperation(fileLogParams);
 
                         // 7. move file to PreCheck
-                        string destPreCheckPath = $"{Vars.alegeusFilesToProcessPath}/{Path.GetFileName(srcFilePath)}";
+                        string destPreCheckPath = $"{Vars.alegeusFilesToProcessPath}/{Path.GetFileName(expFilePath)}";
+                        FileUtils.MoveFile(expFilePath, destPreCheckPath, null, null);
 
                         // add to fileLog
                         fileLogParams?.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
