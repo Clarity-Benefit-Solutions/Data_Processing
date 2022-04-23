@@ -29,19 +29,11 @@
     <div>
         <p>
             &nbsp;
-            <button id="cmdProcessCobraFiles" @onclick="cmdProcessCobraFiles">ProcessCobraFiles</button>
+            <button id="cmdProcessIncomingFiles" @onclick="cmdProcessIncomingFiles">ProcessIncomingFiles</button>
             &nbsp;&nbsp;&nbsp;&nbsp; Process COBRA Source Files
         </p>
     </div>
-    <div>
-        <p>
-
-            &nbsp;
-            <button id="cmdProcessAlegeusFiles" @onclick="cmdProcessAlegeusFiles">ProcessAlegeusFiles</button>
-            &nbsp;&nbsp;&nbsp;&nbsp; Process Alegeus Source Files
-        </p>
-    </div>
-    <div>
+     <div>
         <p>
 
             &nbsp;
@@ -54,7 +46,7 @@
         <p>
 
             &nbsp;
-            <button id="cmdOpenAccessDB" @onclick="cmdOpenAccessDB">Open Access UI</button>
+            <button id="cmdProcessParticipantEnrollmentfiles" @onclick="cmdProcessParticipantEnrollmentfiles">Process Participant Enrollment Files</button>
             &nbsp;&nbsp;&nbsp;&nbsp; Open MS Access User Interface
         </p>
     </div>
@@ -302,9 +294,9 @@
         dynamic result = SendRequest("StartJob", "copytestfiles");
     }
 
-    void cmdProcessCobraFiles()
+    void cmdProcessIncomingFiles()
     {
-        dynamic result = SendRequest("StartJob", "processcobrafiles");
+        dynamic result = SendRequest("StartJob", "processincomingfiles");
     }
 
     void cmdProcessAlegeusFiles()
@@ -317,9 +309,9 @@
         dynamic result = SendRequest("StartJob", "retrieveftperrorlogs");
     }
 
-    void cmdOpenAccessDB()
+    void cmdProcessParticipantEnrollmentfiles()
     {
-        Clear();
+        dynamic result = SendRequest("StartJob", "processparticipantenrollmentfiles");
     }
 
     void cmdShowJobStatus()
