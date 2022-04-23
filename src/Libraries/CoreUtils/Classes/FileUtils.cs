@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using ExcelDataReader;
+using ExcelDataReader.Exceptions;
+using Sylvan;
 
 namespace CoreUtils.Classes
 {
@@ -212,7 +215,7 @@ namespace CoreUtils.Classes
                         }
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -952,6 +955,44 @@ namespace CoreUtils.Classes
                 else
                 {
                     throw;
+                }
+            }
+        }
+
+        public static void ConvertExcelFileToCsv(string sourceFilePath, string destFilePath, string[] passwords,
+            SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
+        {
+            Boolean success = false;
+
+            // try empty password first
+            List<string> passwords2 = new List<string> { "" };
+            passwords2.AddRange(passwords);
+            //
+            foreach (var password in passwords2)
+            {
+                try
+                {
+                    ConvertExcelFileToCsv(sourceFilePath, destFilePath, password, fileCallback, null);
+                    success = true;
+                    return;
+                }
+                catch (InvalidPasswordException ex)
+                {
+                    continue;
+                }
+            }
+
+            if (!success)
+            {
+                // throw error
+                var ex = new InvalidPasswordException($"Invalid password: Could Not Open Excel File : {sourceFilePath}");
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(sourceFilePath, sourceFilePath, ex);
+                }
+                else
+                {
+                    throw ex;
                 }
             }
         }

@@ -287,9 +287,9 @@ namespace DataProcessing
                             var csvFilePath =
                                 $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileNameWithoutExtension(srcFilePath)}.csv";
 
-                            string password = "";
-                            //ToDo: handle password protected files
-                            FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath, password,
+                            string[] passwords = new string []{};
+                            //ToDo: get list of password so that we can open password protected excel files
+                            FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath, passwords,
                                 null,
                                 null);
 
