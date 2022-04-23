@@ -816,8 +816,9 @@ namespace CoreUtils.Classes
             {
                 var csvFilePath = Path.GetTempFileName() + ".csv";
 
-                string password = "";
-                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath, password,
+
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    "",
                     null,
                     null);
 
@@ -964,10 +965,15 @@ namespace CoreUtils.Classes
         {
             Boolean success = false;
 
-            // try empty password first
-            List<string> passwords2 = new List<string> { "" };
+            // add empty password if missing
+            List<string> passwords2 = new List<string> { };
+            if (!passwords.Contains(""))
+            {
+                passwords2.Add("");
+            }
             passwords2.AddRange(passwords);
-            //
+
+            // try each password
             foreach (var password in passwords2)
             {
                 try
@@ -979,6 +985,18 @@ namespace CoreUtils.Classes
                 catch (InvalidPasswordException ex)
                 {
                     continue;
+                }
+                catch (Exception ex)
+                {
+                    if (onErrorCallback != null)
+                    {
+                        onErrorCallback(sourceFilePath, sourceFilePath, ex);
+                        return;
+                    }
+                    else
+                    {
+                        throw ;
+                    }
                 }
             }
 

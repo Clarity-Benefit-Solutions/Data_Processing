@@ -126,8 +126,8 @@ namespace DataProcessingWebApp.Jobs
                 if (FileUtils.IsExcelFile(srcFilePath))
                 {
                     var csvFilePath = Path.GetTempFileName() + ".csv";
-                    var password = "";
-                    FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath, password,
+                    FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                        Import.GetPasswordsToOpenExcelFiles(srcFilePath),
                         null,
                         null);
 

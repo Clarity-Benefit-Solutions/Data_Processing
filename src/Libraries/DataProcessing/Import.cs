@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -300,8 +301,8 @@ namespace DataProcessing
             {
                 var csvFilePath = Path.GetTempFileName() + ".csv";
 
-                string password = "";
-                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath, password,
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
                     null,
                     null);
 
@@ -371,6 +372,12 @@ namespace DataProcessing
             return newPath;
         }
 
+        public static string[] GetPasswordsToOpenExcelFiles(string srcFilePath)
+        {
+            string[] passwords = new string[] { "" };
+            //ToDo: get list of password so that we can open password protected files
+            return passwords;
+        }
         public static void MoveFileToPlatformRejectsFolder(string srcFilePath, Exception ex)
         {
             MoveFileToPlatformRejectsFolder(srcFilePath, ex.ToString());
@@ -433,8 +440,8 @@ namespace DataProcessing
             {
                 var csvFilePath = Path.GetTempFileName() + ".csv";
 
-                string password = "";
-                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath, password,
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
                     null,
                     null);
 
@@ -570,8 +577,8 @@ namespace DataProcessing
             {
                 var csvFilePath = Path.GetTempFileName() + ".csv";
 
-                string password = "";
-                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath, password,
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
                     null,
                     null);
 
@@ -582,10 +589,14 @@ namespace DataProcessing
             {
                 return PlatformType.Cobra;
             }
-            else
+            else if (IsAlegeusImportFile(srcFilePath))
             {
                 return PlatformType.Alegeus;
 
+            }
+            else
+            {
+                return PlatformType.Unknown;
             }
         }
 
@@ -602,7 +613,21 @@ namespace DataProcessing
 
 
             return false;
-        }        
+        }
+        public static Boolean IsAlegeusImportFile(string srcFilePath)
+        {
+            using var inputFile = new StreamReader(srcFilePath);
+            string line;
+            while ((line = inputFile.ReadLine()!) != null)
+            {
+                if (IsAlegeusImportRecLine(line))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
         public static Boolean IsCobraImportQbFile(string srcFilePath)
         {
             Boolean isCobraFile = IsCobraImportFile(srcFilePath);

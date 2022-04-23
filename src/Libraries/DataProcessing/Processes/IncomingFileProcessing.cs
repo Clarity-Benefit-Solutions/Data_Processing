@@ -173,21 +173,27 @@ namespace DataProcessing
                     "Success", "Found Source File");
                 DbUtils.LogFileOperation(fileLogParams);
 
-                //
-                var platformType = Import.GetPlatformTypeForFile(srcFilePath);
-                if (platformType == PlatformType.Alegeus)
-                {
-                    // 3. check if we can get the header type - if not it is an invalid file - do not rename
-                    var headerType = Import.GetAlegeusHeaderTypeFromFile(currentFilePath);
-                }
-
                 // 2. archive source in source subfolder
                 string srcArchiveDir = $"{Path.GetDirectoryName(srcFilePath)}/Archive/{Utils.ToIsoDateString(DateTime.Now)}";
                 string srcArchivePath = $"{srcArchiveDir}/{Path.GetFileName(srcFilePath)}";
                 //
                 FileUtils.CopyFile(srcFilePath, srcArchivePath, null, null);
 
+                // 2B. Convert excel file to csv now itself so any password protected files that cannot be opened will be rejected. Also we can look inside the file easier
+                // convert from xl is needed
+                if (FileUtils.IsExcelFile(srcFilePath))
+                {
+                    var csvFilePath = Path.GetTempFileName() + ".csv";
+                    FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                        Import.GetPasswordsToOpenExcelFiles(srcFilePath),
+                        null,
+                        null);
 
+                    srcFilePath = csvFilePath;
+                }
+                //
+                var platformType = Import.GetPlatformTypeForFile(srcFilePath);
+               
                 // 4. make FilenameProperty uniform
                 var uniformFilePath = Import.GetUniformNameForFile(platformType, srcFilePath);
                 if (Path.GetFileName(srcFilePath) != Path.GetFileName(uniformFilePath))
@@ -205,6 +211,7 @@ namespace DataProcessing
                 // 6. Suffix uniquePath to Archived Source file so we can trace back from passed/reject file
                 string srcArchiveCombinedPath = $"{srcArchivePath}---{Path.GetFileName(uniqueIdFilePath)}";
                 FileUtils.MoveFile(srcArchivePath, srcArchiveCombinedPath, null, null);
+
 
                 // 7. move source to platform holding dir
                 string destDirHolding;
@@ -287,9 +294,8 @@ namespace DataProcessing
                             var csvFilePath =
                                 $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileNameWithoutExtension(srcFilePath)}.csv";
 
-                            string[] passwords = new string []{};
-                            //ToDo: get list of password so that we can open password protected excel files
-                            FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath, passwords,
+                            FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                                Import.GetPasswordsToOpenExcelFiles(srcFilePath),
                                 null,
                                 null);
 
@@ -341,7 +347,7 @@ namespace DataProcessing
                             fileLogParams,
                             (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                         );
-                        
+
                         // 5. create headers
                         string procName;
                         switch (headerType)
