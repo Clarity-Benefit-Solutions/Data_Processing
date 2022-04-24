@@ -39,7 +39,7 @@ namespace DataProcessing
                 () =>
                 {
                     Vars Vars = new Vars();
-                    var directoryPath = $"{Vars.localFtpRoot}/.."
+                    var directoryPath = $"{Vars.localFtpRoot}/..";
                     Process.Start(
                         $"{directoryPath}/copy_test_files.bat");
                 }
