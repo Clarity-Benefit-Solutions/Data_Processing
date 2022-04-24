@@ -39,7 +39,10 @@ namespace DataProcessing
                 () =>
                 {
                     Vars Vars = new Vars();
-                    var directoryPath = $"{Vars.localFtpRoot}/..";
+                    var directoryPath = $"{Vars.localFtpRoot}/.."; Process.Start(
+                        $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
+                    Process.Start(
+                        $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
                     Process.Start(
                         $"{directoryPath}/copy_test_files.bat");
                 }
