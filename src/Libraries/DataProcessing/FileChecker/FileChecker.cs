@@ -145,14 +145,15 @@ namespace DataProcessing
                         }
 
                         //
-                        string errorFilePath = $"{destFilePath}.err";
-                        string passedLinesFilePath = $"{destFilePath}";
+                        string errorFilePath = $"{destFilePath}-RejectedLines.err";
+                        string allLinesWithErrorFilePath = $"{destFilePath}-allLines.err";
+                        string passedLinesFilePath = $"{destFilePath}-PassedLines.mbi";
                         string rejectedLinesFilePath = $"{destFilePath}-RejectedLines.mbi";
 
                         // 2. export error file
                         var outputTableName = "[dbo].[mbi_file_table]";
 
-                        // .err files
+                        // .err lines only errors
                         var queryStringExpErrFile =
                             $" select concat(data_row, ',', case when len(error_message) > 0 then concat( 'PreCheck Errors: ' , error_message ) else 'PreCheck: OK' end ) as file_row" +
                             $" from {outputTableName} " +
@@ -165,6 +166,19 @@ namespace DataProcessing
                             (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                         );
 
+                        // entire file with errors
+                        var queryStringExpAllLinesErrFile =
+                            $" select concat(data_row, ',', case when len(error_message) > 0 then concat( 'PreCheck Errors: ' , error_message ) else 'PreCheck: OK' end ) as file_row" +
+                            $" from {outputTableName} " +
+                            $" where mbi_file_name = '{srcFileName}'" +
+                            //$" and (len(error_message) > 0 OR row_type = 'IA')" +
+                            $" order by mbi_file_table.source_row_no; ";
+
+                        ImpExpUtils.ExportSingleColumnFlatFile(allLinesWithErrorFilePath, DbConn, queryStringExpAllLinesErrFile,
+                            "file_row", null, FileLogParams,
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
+                        );
+
                         // rejected lines
                         var queryStringExpRejectedLines =
                             $" select data_row as file_row" +
@@ -173,7 +187,7 @@ namespace DataProcessing
                             $" and (len(error_message) > 0 OR row_type = 'IA')" +
                             $" order by mbi_file_table.source_row_no; ";
 
-                        ImpExpUtils.ExportSingleColumnFlatFile(errorFilePath, DbConn, queryStringExpRejectedLines,
+                        ImpExpUtils.ExportSingleColumnFlatFile(rejectedLinesFilePath, DbConn, queryStringExpRejectedLines,
                             "file_row", null, FileLogParams,
                             (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                         );
@@ -186,10 +200,12 @@ namespace DataProcessing
                             $" and (len(error_message) = 0 OR error_message is null OR row_type = 'IA')" +
                             $" order by mbi_file_table.source_row_no; ";
 
-                        ImpExpUtils.ExportSingleColumnFlatFile(errorFilePath, DbConn, queryStringExpPassedLines,
+                        ImpExpUtils.ExportSingleColumnFlatFile(passedLinesFilePath, DbConn, queryStringExpPassedLines,
                             "file_row", null, FileLogParams,
                             (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                         );
+
+
 
 
                         //
