@@ -25,8 +25,8 @@ namespace DataProcessing
                 () =>
                 {
                     Thread.CurrentThread.Name = "IncomingFileProcessing";
-                    var FileProcessing = new IncomingFileProcessing();
-                    FileProcessing.ProcessAllFiles();
+                    var fileProcessing = new IncomingFileProcessing();
+                    fileProcessing.ProcessAllFiles();
                 }
             );
         }
@@ -39,10 +39,7 @@ namespace DataProcessing
                 () =>
                 {
                     Vars Vars = new Vars();
-                    var directoryPath = $"{Vars.localFtpRoot}/.."; Process.Start(
-                        $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_Alegeus_source_files_to_import_ftp.bat");
-                    Process.Start(
-                        $"{directoryPath}/../../../__LocalTestDirsAndFiles/copy_COBRA_source_files_to_import_ftp.bat");
+                    var directoryPath = $"{Vars.localFtpRoot}/..";
                     Process.Start(
                         $"{directoryPath}/copy_test_files.bat");
                 }
@@ -184,23 +181,24 @@ namespace DataProcessing
                 // convert from xl is needed
                 if (FileUtils.IsExcelFile(srcFilePath))
                 {
-                    var csvFilePath = Path.GetTempFileName() + ".csv";
+                    var csvFilePath = $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileNameWithoutExtension(srcFilePath)}.csv";
                     FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
                         Import.GetPasswordsToOpenExcelFiles(srcFilePath),
                         null,
                         null);
-
+                    FileUtils.DeleteFile(srcFilePath, null, null);
                     srcFilePath = csvFilePath;
                 }
                 //
                 var platformType = Import.GetPlatformTypeForFile(srcFilePath);
-               
+
                 // 4. make FilenameProperty uniform
                 var uniformFilePath = Import.GetUniformNameForFile(platformType, srcFilePath);
                 if (Path.GetFileName(srcFilePath) != Path.GetFileName(uniformFilePath))
                 {
                     FileUtils.MoveFile(srcFilePath, uniformFilePath, null, null);
                     currentFilePath = uniformFilePath;
+
                 }
 
                 // 5. add uniqueId to file so we can track it across folders and operations

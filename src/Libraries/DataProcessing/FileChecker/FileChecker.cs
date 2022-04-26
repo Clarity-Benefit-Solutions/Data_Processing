@@ -147,7 +147,7 @@ namespace DataProcessing
                         //
                         string errorFilePath = $"{destFilePath}.err";
                         string passedLinesFilePath = $"{destFilePath}";
-                        string rejectedLinesFilePath = $"{destFilePath}-RejecterdLines.mbi";
+                        string rejectedLinesFilePath = $"{destFilePath}-RejectedLines.mbi";
 
                         // 2. export error file
                         var outputTableName = "[dbo].[mbi_file_table]";
@@ -225,8 +225,6 @@ namespace DataProcessing
                     {
                         throw new Exception($"FileCheckProcessType: {fileCheckProcessType} is invalid");
                     }
-
-                    break;
 
             }
         }
