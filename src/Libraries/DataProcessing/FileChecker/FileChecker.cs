@@ -83,9 +83,8 @@ namespace DataProcessing
             OperationResultType resultType = CheckFile(fileCheckType);
 
             // move source mbi file
-            var fileName = Path.GetFileName(this.SrcFilePath);
-            var newFilePath = this.SrcFilePath;
-            var newErrorFilePath = "";
+            var fileName = $"{Path.GetFileNameWithoutExtension(this.SrcFilePath)}.mbi";
+            var destFilePath = this.SrcFilePath;
 
             // act on resultType
             switch (resultType)
@@ -97,18 +96,18 @@ namespace DataProcessing
                     {
                         if (Utils.IsTestFile(this.SrcFilePath))
                         {
-                            newFilePath = $"{Vars.alegeusFilesTestPath}/{fileName}";
+                            destFilePath = $"{Vars.alegeusFilesTestPath}/{ fileName}";
                         }
                         else
                         {
-                            newFilePath = $"{Vars.alegeusFilesPassedPath}/{fileName}";
+                            destFilePath = $"{Vars.alegeusFilesPassedPath}/{fileName}";
                         }
 
-                        FileUtils.MoveFile(SrcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
+                        FileUtils.MoveFile(SrcFilePath, destFilePath, (srcFilePath2, destFilePath2, dummy2) =>
                             {
                                 // add to fileLog
                                 FileLogParams.SetFileNames("", fileName, SrcFilePath,
-                                    Path.GetFileName(newFilePath), newFilePath,
+                                    Path.GetFileName(destFilePath), destFilePath,
                                     $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
                                     "Success", "PreCheck OK. Moved File to PreCheck OK Directory");
                                 //
@@ -138,52 +137,97 @@ namespace DataProcessing
                     {
                         if (Utils.IsTestFile(this.SrcFilePath))
                         {
-                            newFilePath = $"{Vars.alegeusFilesTestPath}/{fileName}";
+                            destFilePath = $"{Vars.alegeusFilesTestPath}/{fileName}";
                         }
                         else
                         {
-                            newFilePath = $"{Vars.alegeusFilesRejectsPath}/{fileName}";
+                            destFilePath = $"{Vars.alegeusFilesRejectsPath}/{fileName}";
                         }
 
-                        FileUtils.MoveFile(SrcFilePath, newFilePath, (srcFilePath2, destFilePath2, dummy2) =>
-                            {
-                                // add to fileLog
-                                FileLogParams.SetFileNames("", fileName, SrcFilePath,
-                                    Path.GetFileName(newFilePath), newFilePath,
-                                    $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                                    "Fail", "PreCheck FAIL. Moved File to PreCheck FAIL Directory");
-                                //
-                                DbUtils.LogFileOperation(FileLogParams);
-                            },
+                        //
+                        string errorFilePath = $"{destFilePath}.err";
+                        string passedLinesFilePath = $"{destFilePath}";
+                        string rejectedLinesFilePath = $"{destFilePath}-RejecterdLines.mbi";
+
+                        // 2. export error file
+                        var outputTableName = "[dbo].[mbi_file_table]";
+
+                        // .err files
+                        var queryStringExpErrFile =
+                            $" select concat(data_row, ',', case when len(error_message) > 0 then concat( 'PreCheck Errors: ' , error_message ) else 'PreCheck: OK' end ) as file_row" +
+                            $" from {outputTableName} " +
+                            $" where mbi_file_name = '{srcFileName}'" +
+                            $" and (len(error_message) > 0 OR row_type = 'IA')" +
+                            $" order by mbi_file_table.source_row_no; ";
+
+                        ImpExpUtils.ExportSingleColumnFlatFile(errorFilePath, DbConn, queryStringExpErrFile,
+                            "file_row", null, FileLogParams,
                             (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                         );
 
-                        newErrorFilePath = $"{newFilePath}.err";
+                        // rejected lines
+                        var queryStringExpRejectedLines =
+                            $" select data_row as file_row" +
+                            $" from {outputTableName} " +
+                            $" where mbi_file_name = '{srcFileName}'" +
+                            $" and (len(error_message) > 0 OR row_type = 'IA')" +
+                            $" order by mbi_file_table.source_row_no; ";
+
+                        ImpExpUtils.ExportSingleColumnFlatFile(errorFilePath, DbConn, queryStringExpRejectedLines,
+                            "file_row", null, FileLogParams,
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
+                        );
+
+                        // passed lines
+                        var queryStringExpPassedLines =
+                            $" select data_row as file_row" +
+                            $" from {outputTableName} " +
+                            $" where mbi_file_name = '{srcFileName}'" +
+                            $" and (len(error_message) = 0 OR error_message is null OR row_type = 'IA')" +
+                            $" order by mbi_file_table.source_row_no; ";
+
+                        ImpExpUtils.ExportSingleColumnFlatFile(errorFilePath, DbConn, queryStringExpPassedLines,
+                            "file_row", null, FileLogParams,
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
+                        );
+
+
+                        //
+                        string strCheckResults = File.ReadAllText(errorFilePath);
+
+                        // OK result
+                        return new OperationResult(0, "300", "Completed", "", strCheckResults);
                     }
                     else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
                     {
-                        newErrorFilePath = $"{SrcFilePath}.err";
+                        string errorFilePath = $"{SrcFilePath}.err";
+                        // 2. export error file
+                        var outputTableName = "[dbo].[mbi_file_table]";
+                        //
+                        var queryStringExp =
+                            $" select concat(data_row, ',', case when len(error_message) > 0 then concat( 'PreCheck Errors: ' , error_message ) else 'PreCheck: OK' end ) as file_row" +
+                            $" from {outputTableName} " +
+                            $" where mbi_file_name = '{srcFileName}'" +
+                            $" order by mbi_file_table.source_row_no; ";
+
+                        ImpExpUtils.ExportSingleColumnFlatFile(errorFilePath, DbConn, queryStringExp,
+                            "file_row", null, FileLogParams,
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
+                        );
+
+                        //
+                        string strCheckResults = File.ReadAllText(errorFilePath);
+
+                        // OK result
+                        return new OperationResult(0, "300", "Completed", "", strCheckResults);
+                    }
+                    else
+                    {
+                        throw new Exception($"FileCheckProcessType: {fileCheckProcessType} is invalid");
                     }
 
-                    // 2. export error file
-                    var outputTableName = "[dbo].[mbi_file_table]";
-                    //
-                    var queryStringExp =
-                        $" select concat(data_row, ',', case when len(error_message) > 0 then concat( 'PreCheck Errors: ' , error_message ) else 'PreCheck: OK' end ) as file_row" +
-                        $" from {outputTableName} " +
-                        $" where mbi_file_name = '{srcFileName}'" +
-                        $" order by mbi_file_table.source_row_no; ";
+                    break;
 
-                    ImpExpUtils.ExportSingleColumnFlatFile(newErrorFilePath, DbConn, queryStringExp,
-                        "file_row", null, FileLogParams,
-                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
-                    );
-
-                    //
-                    string strCheckResults = File.ReadAllText(newErrorFilePath);
-
-                    // OK result
-                    return new OperationResult(0, "300", "Completed", "", strCheckResults);
             }
         }
         //
@@ -437,6 +481,7 @@ namespace DataProcessing
                         break;
                 }
             }
+            // ToDo: check duplicated posting for IH files. bencode, eeid, deposit date, amount, deposittype
         }
 
         private void AddErrorForRow(mbi_file_table_stage dataRow, string errCode, string errMessage,
@@ -1171,7 +1216,7 @@ namespace DataProcessing
 
         #region CheckUtils
 
-      
+
         private static readonly Regex regexInteger = new Regex("[^0-9]");
         private static readonly Regex regexDate = new Regex(@"[^a-zA-Z0-9\s:\-\//]");
         private static readonly Regex regexAlphaNumeric = new Regex(@"[^a-zA-Z0-9\s]");
