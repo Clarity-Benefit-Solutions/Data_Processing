@@ -120,7 +120,6 @@ namespace DataProcessing
             DbUtils.LogFileOperation(fileLogParams);
             string tempDownLoadPath = FileUtils.FixPath(Path.GetTempPath());
 
-            // todo: delete the file after download?
             ftpConn.CopyOrMoveFiles(
                 /* Note: 2022-04-27: Linda S verified files can be deleted from remote after it has been downloaded*/
                 // todo: test download and delete

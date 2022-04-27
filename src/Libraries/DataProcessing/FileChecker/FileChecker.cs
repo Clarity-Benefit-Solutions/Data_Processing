@@ -762,7 +762,6 @@ namespace DataProcessing
             switch (fileFormat)
             {
                 case EdiFileFormat.AlegeusEmployeeDeposit:
-                    // ToDo: check duplicated posting for tpaid, bencode, eeid, deposit date, amount, deposittype
                     string queryString =
                         $"select * from  [mbi_file_table] " +
                         $" where " +

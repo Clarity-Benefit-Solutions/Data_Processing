@@ -12,7 +12,6 @@ using CoreUtils.Classes;
 
 // ReSharper disable StringLiteralTypo
 
-//todo: FTPErrors: how to avoid reprocessing the same result file over and over again: shall we move all files older than 2 days? does Alegeus ever move them?
 namespace DataProcessing
 {
 
@@ -148,7 +147,6 @@ namespace DataProcessing
                     DbUtils.LogFileOperation(fileLogParams);
 
                     // remove if older than N days
-                    //ToDo: test: remove if older than N days
                     if (file != null && DateTime.Now.Subtract(file.Attributes.LastWriteTime) > TimeSpan.FromDays(DAYS_TO_KEEP_REMOTE_FILE))
                     {
                         ftpConn.DeleteFileIfExists(srcFilePath, null,
@@ -192,7 +190,6 @@ namespace DataProcessing
                     DbUtils.LogFileOperation(fileLogParams);
 
                     // remove if older than N days
-                    //ToDo: test: remove if older than N days
                     if (file != null && DateTime.Now.Subtract(file.Attributes.LastWriteTime) > TimeSpan.FromDays(DAYS_TO_KEEP_REMOTE_FILE))
                     {
                         ftpConn.DeleteFileIfExists(srcFilePath, null,
