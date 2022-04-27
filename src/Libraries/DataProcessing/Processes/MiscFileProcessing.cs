@@ -122,10 +122,12 @@ namespace DataProcessing
 
             // todo: delete the file after download?
             ftpConn.CopyOrMoveFiles(
-                //FtpFileOperation.DownloadAndDelete,
-                FtpFileOperation.Download,
-                new string[] {Vars.remoteAlegeusFtpRootPath}, false,
-                new string[] {"Enrolled_Participant_Report_*.csv.pgp"},
+                /* Note: 2022-04-27: Linda S verified files can be deleted from remote after it has been downloaded*/
+                // todo: test download and delete
+                FtpFileOperation.DownloadAndDelete,
+                //FtpFileOperation.Download,
+                new string[] { Vars.remoteAlegeusFtpRootPath }, false,
+                new string[] { "Enrolled_Participant_Report_*.csv.pgp" },
                 tempDownLoadPath, "", "",
                 (srcFilePath, destFilePath, fileContents) =>
                 {
@@ -167,10 +169,10 @@ namespace DataProcessing
 
             //decrypt all files
             FileUtils.IterateDirectory(
-                new string[] {Vars.alegeusParticipantEnrollmentFilesDownloadPath},
+                new string[] { Vars.alegeusParticipantEnrollmentFilesDownloadPath },
                 DirectoryIterateType.Files,
                 false,
-                new string[] {"Enrolled_Participant_Report*.csv.pgp"},
+                new string[] { "Enrolled_Participant_Report*.csv.pgp" },
                 (srcFilePath, destFilePath, fileContents) =>
                 {
                     FileUtils.EnsurePathExists(Vars.alegeusParticipantEnrollmentFilesDecryptedPath);

@@ -85,6 +85,7 @@ namespace DataProcessing
             // move source mbi file
             var fileName = $"{Path.GetFileNameWithoutExtension(this.SrcFilePath)}.mbi";
             var destFilePath = this.SrcFilePath;
+            string strCheckResults = "";
 
             // act on resultType
             switch (resultType)
@@ -123,14 +124,21 @@ namespace DataProcessing
                             "file_row", null, FileLogParams,
                             (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                         );
-                  
+
+
+
                     }
                     else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
                     {
+                        // nothing to do
                     }
 
+                    // delete src file
+                    FileUtils.DeleteFile(SrcFilePath, null, null);
+
                     // OK result
-                    return new OperationResult(1, "200", "Completed", "", "");
+                    strCheckResults = "";
+                    return new OperationResult(1, "200", "Completed", strCheckResults, strCheckResults);
 
                 ///////////////////////////////////////
                 case OperationResultType.CompleteFail:
@@ -209,7 +217,11 @@ namespace DataProcessing
                         );
 
                         //
-                        string strCheckResults = File.ReadAllText(allLinesErrorFilePath);
+                        strCheckResults = File.ReadAllText(allLinesErrorFilePath);
+
+                        // delete src file
+                        FileUtils.DeleteFile(SrcFilePath, null, null);
+
 
                         // OK result
                         return new OperationResult(0, "300", "Completed", "", strCheckResults);
@@ -229,7 +241,7 @@ namespace DataProcessing
 
 
                         //
-                        string strCheckResults = File.ReadAllText(allLinesErrorFilePath);
+                        strCheckResults = File.ReadAllText(allLinesErrorFilePath);
 
                         // OK result
                         return new OperationResult(0, "300", "Completed", "", strCheckResults);
