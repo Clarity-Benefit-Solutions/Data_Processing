@@ -480,6 +480,13 @@ namespace DataProcessing
                 var firstColValue = columns[0];
                 var fileFormat = ImpExpUtils.GetAlegeusRowFormat(firstColValue);
 
+                // we only care for Import Headers
+                if (Import.GetAlegeusFileFormatIsResultFile(fileFormat))
+                {
+                    return HeaderType.New;
+                }
+
+
                 // get file format
                 // note: we are also detecting header type from conettn for prev Own and NoChange header folders
                 switch (fileFormat)
