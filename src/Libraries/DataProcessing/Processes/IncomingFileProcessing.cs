@@ -448,12 +448,13 @@ namespace DataProcessing
                 (srcFilePath, destFilePath, dummy2) =>
                 {
                     // ensure file ext is mbi
-                    if (Path.GetExtension(srcFilePath) != ".mbi")
+                    if (Path.GetExtension(srcFilePath).ToLower() != ".mbi")
                     {
                         string mbiFilePath = $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileNameWithoutExtension(srcFilePath)}.mbi";
                         if (Path.GetFileName(mbiFilePath) != Path.GetFileName(srcFilePath))
                         {
                             FileUtils.MoveFile(srcFilePath, mbiFilePath, null, null);
+                            srcFilePath = mbiFilePath;
                         }
                     }
                     // check the file 

@@ -868,7 +868,7 @@ namespace CoreUtils.Classes
 
         public static Boolean IsExcelFile(string srcFilePath)
         {
-            var fileExt = Path.GetExtension(srcFilePath);
+            var fileExt = Path.GetExtension(srcFilePath).ToLower();
             if (fileExt == ".xlsx" || fileExt == ".xls")
             {
                 return true;
