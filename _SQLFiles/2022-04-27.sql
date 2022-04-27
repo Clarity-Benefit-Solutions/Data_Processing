@@ -106,3 +106,19 @@ exec [dbo].[proc_alegeus_ExportImportFile] '078--BENHUGHGA_IH_AL_20220427.mbi' ,
 exec [dbo].[proc_alegeus_ExportImportFile] '078--BENHUGHGA_IH_AL_20220427.mbi' ,
      'rejected_lines_with_errors' ,
      121234;
+
+select
+    TpaId
+  , EmployerId
+  , EmployeeID
+  , AccountTypeCode
+  , PlanEndDate
+  , PlanStartDate
+  , EffectiveDate
+  , DepositType
+  
+from
+    dbo.mbi_file_table_stage;
+
+-- auto-generated definition
+alter table mbi_file_table add CreatedAt datetime default sysdatetime();

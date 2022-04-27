@@ -349,6 +349,21 @@ namespace CoreUtils.Classes
 
             return true;
         }
+        public static bool IsDate(string value)
+        {
+            if (IsBlank(value))
+            {
+                return false;
+            }
+
+            var parsed = DateTime.TryParse(value, out var dt);
+            if (!parsed)
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         public static bool IsIsoDateTime(string value, bool checkNotNull = true)
         {
@@ -463,6 +478,23 @@ namespace CoreUtils.Classes
 
             var str = value?.ToString("yyyyMMdd");
             return str;
+        }
+
+        public static string ToIsoDateString(Object value)
+        {
+            if (value == null)
+            {
+                return "";
+            }
+
+            if (Utils.IsDate(value.ToString()))
+            {
+                var dt = (DateTime)value;
+                return ToIsoDateString(dt);
+            }
+
+            return "";
+
         }
 
         public static string ToIsoDateTimeString(DateTime? value)

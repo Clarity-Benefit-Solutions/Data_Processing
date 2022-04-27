@@ -161,7 +161,6 @@ namespace DataProcessing
                             destFilePath = $"{Vars.alegeusFilesRejectsPath}/{fileName}";
                         }
 
-                        //ToDo: ? add fileLogID as BatchId as last column in header row
                         string originalFilePath = $"{destFilePath}-0-OriginalFile.mbi";
                         string passedLinesFilePath = $"{destFilePath}-1-PassedLines.mbi";
                         string rejectedLinesErrorFilePath = $"{destFilePath}-2-RejectedLines.err";
@@ -504,7 +503,8 @@ namespace DataProcessing
                         break;
                 }
             }
-            // ToDo: check duplicated posting for IH files. bencode, eeid, deposit date, amount, deposittype
+            // check for duplicate posting of the row
+            hasError = CheckForDuplicatePosting(dataRow, fileFormat);
         }
 
         private void AddErrorForRow(mbi_file_table_stage dataRow, string errCode, string errMessage,
@@ -743,6 +743,61 @@ namespace DataProcessing
             if (!Utils.IsBlank(errorMessage))
             {
                 this.AddErrorForRow(dataRow, column.SourceColumn, $"{errorMessage}");
+                // do not check any more
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public Boolean CheckForDuplicatePosting(mbi_file_table_stage dataRow,
+                  EdiFileFormat fileFormat = EdiFileFormat.Unknown)
+        {
+
+
+            string errorMessage = "";
+
+            //
+            switch (fileFormat)
+            {
+                case EdiFileFormat.AlegeusEmployeeDeposit:
+                    // ToDo: check duplicated posting for tpaid, bencode, eeid, deposit date, amount, deposittype
+                    string queryString =
+                        $"select * from  [mbi_file_table] " +
+                        $" where " +
+                        $" TpaId='{dataRow.TpaId}'" +
+                        $" and EmployerId='{dataRow.EmployerId}'" +
+                        $" and EmployeeID='{dataRow.EmployeeID}'" +
+                        $" and AccountTypeCode='{dataRow.AccountTypeCode}'" +
+                        $" and PlanEndDate='{dataRow.PlanEndDate}'" +
+                        $" and PlanStartDate='{dataRow.PlanStartDate}'" +
+                        $" and EffectiveDate='{dataRow.EffectiveDate}'" +
+                        $" and DepositType='{dataRow.DepositType}'" +
+                        $" and len(isnull(error_message, '')) = 0" +
+                        $" order by row_id desc, mbi_file_name, source_row_no ;";
+                    //
+                    DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, DbConn,
+                         queryString, null,
+                         FileLogParams?.GetMessageLogParams());
+                    //
+                    if (dbResults.Rows.Count == 0)
+                    {
+                        return false;
+                    }
+
+                    DataRow prvRow = dbResults.Rows[0];
+//
+                    errorMessage = $"Potential Duplicate Posting! Was probably posted earlier on {Utils.ToIsoDateString(prvRow["CreatedAt"])} as part of file  {prvRow["mbi_file_name"]}";
+                    break;
+                default:
+                    break;
+            }
+
+            //
+            if (!Utils.IsBlank(errorMessage))
+            {
+                this.AddErrorForRow(dataRow, "DuplicatePosting", $"{errorMessage}");
                 // do not check any more
                 return true;
             }
