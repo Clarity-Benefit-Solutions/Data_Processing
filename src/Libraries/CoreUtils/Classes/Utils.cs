@@ -578,10 +578,11 @@ namespace CoreUtils.Classes
 
         public static string GetUniqueIdFromFileName(string fileName)
         {
-            var indexOfSep = fileName.IndexOf($"{Utils.FilePartsDelimiter}", StringComparison.Ordinal);
+            string fileNaneWithoutDir = Path.GetFileName(fileName);
+            var indexOfSep = fileNaneWithoutDir.IndexOf($"{Utils.FilePartsDelimiter}", StringComparison.Ordinal);
             if (indexOfSep > 0)
             {
-                return fileName.Substring(0, indexOfSep).Trim();
+                return fileNaneWithoutDir.Substring(0, indexOfSep).Trim();
             }
 
             return "";

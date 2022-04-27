@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -17,6 +18,8 @@ namespace DataProcessing
 
     public class AlegeusErrorLog
     {
+        private const int DAYS_TO_KEEP_REMOTE_FILE = 3;
+
         private Vars Vars { get; } = new Vars();
 
         public static async Task ProcessAll()
@@ -127,21 +130,39 @@ namespace DataProcessing
 
             // download mbi dir files
             ftpConn.CopyOrMoveFiles(
-                FtpFileOperation.DownloadAndDelete,
+                FtpFileOperation.Download,
                 new string[] { Vars.remoteAlegeusFtpRootPath }, false,
                 new string[] { "*.mbi", "*.dne" },
                 Vars.AlegeusErrorLogMbiFilesRoot, "", "",
-                (srcFilePath, destFilePath, fileContents) =>
+                (srcFilePath, destFilePath, file, fileContents) =>
                 {
-                    var headerType = Import.GetAlegeusHeaderTypeFromFile(destFilePath);
-
                     // add uniqueId to file so we can track it across folders and operations
                     var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(destFilePath, false, false, fileLogParams);
 
-                    fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
-                        Path.GetFileName(uniqueIdFilePath), "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+                    fileLogParams.SetFileNames("", srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
+                        Path.GetFileName(uniqueIdFilePath), $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                         "Success", $"Got MBI/DNE File from FTP");
                     DbUtils.LogFileOperation(fileLogParams);
+
+                    // remove if older than N days
+                    //ToDo: test: remove if older than N days
+                    if (file != null && DateTime.Now.Subtract(file.Attributes.LastWriteTime) > TimeSpan.FromDays(DAYS_TO_KEEP_REMOTE_FILE))
+                    {
+                        ftpConn.DeleteFileIfExists(srcFilePath, null,
+                            (srcFilePath, destFilePath, file, fileContents) =>
+                            {
+                                fileLogParams.SetFileNames("", srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
+                                    Path.GetFileName(uniqueIdFilePath),
+                                    $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+                                    "Success", $"Deleted mbi/dne File as Older Than {DAYS_TO_KEEP_REMOTE_FILE } days");
+                                DbUtils.LogFileOperation(fileLogParams);
+                            }
+                            , (directory, file, ex) =>
+                            {
+                                DbUtils.LogError(directory, file, ex, fileLogParams);
+                                //throw ex;
+                            });
+                    }
                 },
                 (directory, file, ex) =>
                 {
@@ -152,21 +173,40 @@ namespace DataProcessing
 
             // download res dir files
             ftpConn.CopyOrMoveFiles(
-                FtpFileOperation.DownloadAndDelete,
+                FtpFileOperation.Download,
                 new string[] { Vars.remoteAlegeusFtpRootPath }, false,
                 new string[] { "*.res" },
                 Vars.AlegeusErrorLogResFilesRoot, "", "",
-                (srcFilePath, destFilePath, fileContents) =>
+                (srcFilePath, destFilePath, file, fileContents) =>
                 {
                     // add uniqueId to file so we can track it across folders and operations
-                    var headerType = Import.GetAlegeusHeaderTypeFromFile(destFilePath);
                     var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(destFilePath, true, false, fileLogParams);
 
-                    fileLogParams.SetFileNames(srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
-                        Path.GetFileName(uniqueIdFilePath), "",
+                    fileLogParams.SetFileNames("", srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
+                        Path.GetFileName(uniqueIdFilePath),
                         $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                         "Success", $"Got Res File from FTP");
                     DbUtils.LogFileOperation(fileLogParams);
+
+                    // remove if older than N days
+                    //ToDo: test: remove if older than N days
+                    if (file != null && DateTime.Now.Subtract(file.Attributes.LastWriteTime) > TimeSpan.FromDays(DAYS_TO_KEEP_REMOTE_FILE))
+                    {
+                        ftpConn.DeleteFileIfExists(srcFilePath, null,
+                            (srcFilePath, destFilePath, file, fileContents) =>
+                            {
+                                fileLogParams.SetFileNames("", srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
+                                    Path.GetFileName(uniqueIdFilePath),
+                                    $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+                                    "Success", $"Deleted Res File as Older Than {DAYS_TO_KEEP_REMOTE_FILE } days");
+                                DbUtils.LogFileOperation(fileLogParams);
+                            }
+                            , (directory, file, ex) =>
+                            {
+                                DbUtils.LogError(directory, file, ex, fileLogParams);
+                                //throw ex;
+                            });
+                    }
                 },
                 (directory, file, ex) =>
                 {

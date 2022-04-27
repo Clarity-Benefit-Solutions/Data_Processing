@@ -129,7 +129,7 @@ namespace DataProcessing
                 new string[] { Vars.remoteAlegeusFtpRootPath }, false,
                 new string[] { "Enrolled_Participant_Report_*.csv.pgp" },
                 tempDownLoadPath, "", "",
-                (srcFilePath, destFilePath, fileContents) =>
+                (srcFilePath, destFilePath, file, fileContents) =>
                 {
                     // move to final path
                     string downloadedFilePath =
