@@ -107,7 +107,8 @@ namespace DataProcessingWebApp.Jobs
 
                 var vars = new Vars();
 
-                var platformType = PlatformType.Unknown;
+                // presume Alegeus
+                var platformType = PlatformType.Alegeus;
                 if (platform?.ToLower() == "alegeus")
                 {
                     platformType = PlatformType.Alegeus;

@@ -394,7 +394,8 @@ namespace DataProcessing
             }
             catch (Exception ex)
             {
-                platformType = PlatformType.Unknown;
+                // presume Alegeus
+                platformType = PlatformType.Alegeus;
             }
 
             string destDir;
@@ -596,8 +597,9 @@ namespace DataProcessing
 
             }
             else
-            {
-                return PlatformType.Unknown;
+            { 
+                // presume Alegeus
+                return PlatformType.Alegeus;
             }
         }
 
