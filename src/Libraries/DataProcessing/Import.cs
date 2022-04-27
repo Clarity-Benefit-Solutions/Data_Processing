@@ -430,7 +430,7 @@ namespace DataProcessing
             FileUtils.MoveFile(file, rejectFilePath, null, null);
 
             /*export .err file */
-            string errorFilePath = $"{destFolder}/{Path.GetFileName(file)}.err";
+            string errorFilePath = $"{destFolder}/{Path.GetFileName(file)}.error";
             FileUtils.WriteToFile(errorFilePath, rejectMessage, null);
         }
 
