@@ -108,7 +108,10 @@ namespace DataProcessing
                     // do not log - gives too many lines
                     //DbUtils.LogFileOperation(FileLogParams);
                 },
-                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+                (directory, file, ex) =>
+                {
+                    DbUtils.LogError(directory, file, ex, fileLogParams);
+                }
             );
 
             //
@@ -244,7 +247,10 @@ namespace DataProcessing
 
                     //2. import file
                     Import.ImportAlegeusFile(dbConn, srcFilePath, false, fileLogParams,
-                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+                        (directory, file, ex) =>
+                        {
+                            DbUtils.LogError(directory, file, ex, fileLogParams);
+                        }
                     );
 
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
@@ -312,7 +318,10 @@ namespace DataProcessing
                     // do not log - gives too many lines
                     // DbUtils.LogFileOperation(FileLogParams);
                 },
-                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+                (directory, file, ex) =>
+                {
+                    DbUtils.LogError(directory, file, ex, fileLogParams);
+                }
             );
             // move resFiles to Archive
             FileUtils.MoveFiles(
@@ -329,7 +338,10 @@ namespace DataProcessing
                     // do not log - gives too many lines
                     // DbUtils.LogFileOperation(FileLogParams);
                 },
-                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+                (directory, file, ex) =>
+                {
+                    DbUtils.LogError(directory, file, ex, fileLogParams);
+                }
             );
 
             //
