@@ -116,10 +116,10 @@ namespace DataProcessing
                             (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                         );*/
 
-                        var queryStringExpErrFile =
-                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{SrcFilePath}', 'original_file', {this.FileLogParams.FileLogId}";
+                        var queryStringOrgFile =
+                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{Path.GetFileName(this.SrcFilePath)}', 'original_file', {this.FileLogParams.FileLogId}";
 
-                        ImpExpUtils.ExportSingleColumnFlatFile(destFilePath, DbConn, queryStringExpErrFile,
+                        ImpExpUtils.ExportSingleColumnFlatFile(destFilePath, DbConn, queryStringOrgFile,
                             "file_row", null, FileLogParams,
                             (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                         );
@@ -162,37 +162,11 @@ namespace DataProcessing
 
                         // 2. export error file
 
-                        // .err lines only errors
+                        // org file 
                         var queryStringOrgFile =
                             $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'original_file', {this.FileLogParams.FileLogId}";
 
                         ImpExpUtils.ExportSingleColumnFlatFile(originalFilePath, DbConn, queryStringOrgFile,
-                            "file_row", null, FileLogParams,
-                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
-                        );
-                        // .err lines only errors
-                        var queryStringExpErrFile =
-                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'error_only_lines', {this.FileLogParams.FileLogId}";
-
-                        ImpExpUtils.ExportSingleColumnFlatFile(rejectedLinesErrorFilePath, DbConn, queryStringExpErrFile,
-                            "file_row", null, FileLogParams,
-                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
-                        );
-
-                        // entire file with errors
-                        var queryStringExpAllLinesErrFile =
-                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'all_lines_with_errors', {this.FileLogParams.FileLogId}";
-
-                        ImpExpUtils.ExportSingleColumnFlatFile(allLinesErrorFilePath, DbConn, queryStringExpAllLinesErrFile,
-                            "file_row", null, FileLogParams,
-                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
-                        );
-
-                        // rejected lines
-                        var queryStringExpRejectedLines =
-                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'rejected_lines', {this.FileLogParams.FileLogId}";
-
-                        ImpExpUtils.ExportSingleColumnFlatFile(rejectedLinesFilePath, DbConn, queryStringExpRejectedLines,
                             "file_row", null, FileLogParams,
                             (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                         );
@@ -206,32 +180,56 @@ namespace DataProcessing
                             (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                         );
 
+                        // .err lines only errors
+                        var queryStringExpErrFile =
+                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'rejected_lines_with_errors', {this.FileLogParams.FileLogId}";
+
+                        ImpExpUtils.ExportSingleColumnFlatFile(rejectedLinesErrorFilePath, DbConn, queryStringExpErrFile,
+                            "file_row", null, FileLogParams,
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
+                        );
+
+                        // rejected lines
+                        var queryStringExpRejectedLines =
+                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'rejected_lines', {this.FileLogParams.FileLogId}";
+
+                        ImpExpUtils.ExportSingleColumnFlatFile(rejectedLinesFilePath, DbConn, queryStringExpRejectedLines,
+                            "file_row", null, FileLogParams,
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
+                        );
+
+
+                        // entire file with errors
+                        var queryStringExpAllLinesErrFile =
+                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'all_lines_with_errors', {this.FileLogParams.FileLogId}";
+
+                        ImpExpUtils.ExportSingleColumnFlatFile(allLinesErrorFilePath, DbConn, queryStringExpAllLinesErrFile,
+                            "file_row", null, FileLogParams,
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
+                        );
 
                         //
-                        string strCheckResults = File.ReadAllText(rejectedLinesErrorFilePath);
+                        string strCheckResults = File.ReadAllText(allLinesErrorFilePath);
 
                         // OK result
                         return new OperationResult(0, "300", "Completed", "", strCheckResults);
                     }
                     else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
                     {
-                        string errorFilePath = $"{SrcFilePath}.err";
-                        // 2. export error file
-                        var outputTableName = "[dbo].[mbi_file_table]";
-                        //
-                        var queryStringExp =
-                            $" select concat(data_row, ',', case when len(error_message) > 0 then concat( 'PreCheck Errors: ' , error_message ) else 'PreCheck: OK' end ) as file_row" +
-                            $" from {outputTableName} " +
-                            $" where mbi_file_name = '{srcFileName}'" +
-                            $" order by mbi_file_table.source_row_no; ";
+                        string allLinesErrorFilePath = $"{destFilePath}-4-allLines.err";
 
-                        ImpExpUtils.ExportSingleColumnFlatFile(errorFilePath, DbConn, queryStringExp,
+                        // entire file with errors
+                        var queryStringExpAllLinesErrFile =
+                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'all_lines_with_errors', {this.FileLogParams.FileLogId}";
+
+                        ImpExpUtils.ExportSingleColumnFlatFile(allLinesErrorFilePath, DbConn, queryStringExpAllLinesErrFile,
                             "file_row", null, FileLogParams,
                             (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                         );
 
+
                         //
-                        string strCheckResults = File.ReadAllText(errorFilePath);
+                        string strCheckResults = File.ReadAllText(allLinesErrorFilePath);
 
                         // OK result
                         return new OperationResult(0, "300", "Completed", "", strCheckResults);
