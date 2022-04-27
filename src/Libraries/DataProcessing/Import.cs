@@ -364,7 +364,8 @@ namespace DataProcessing
             srcFileName = srcFileName.Replace("\"", "");
             srcFileName = srcFileName.Trim();
             //
-            newPath = $"{Path.GetDirectoryName(srcFilePath)}/{Utils.GetUniqueIdFromFileName(srcFileName)}--";
+            /*newPath = $"{Path.GetDirectoryName(srcFilePath)}/{Utils.GetUniqueIdFromFileName(srcFileName)}--";*/
+            newPath = $"{Path.GetDirectoryName(srcFilePath)}/";
             newPath +=
                 $"{testMarker}{BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
             newPath = FileUtils.FixPath(newPath);

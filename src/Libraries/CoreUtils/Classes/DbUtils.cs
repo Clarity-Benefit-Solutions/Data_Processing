@@ -133,10 +133,10 @@ namespace CoreUtils
                     foreach (DataRow drow in schemaTable.Rows)
                     {
                         string columnName = Convert.ToString(drow["ColumnName"]);
-                        DataColumn column = new DataColumn(columnName, (Type) (drow["DataType"]));
-                        column.Unique = (bool) drow["IsUnique"];
-                        column.AllowDBNull = (bool) drow["AllowDBNull"];
-                        column.AutoIncrement = (bool) drow["IsAutoIncrement"];
+                        DataColumn column = new DataColumn(columnName, (Type)(drow["DataType"]));
+                        column.Unique = (bool)drow["IsUnique"];
+                        column.AllowDBNull = (bool)drow["AllowDBNull"];
+                        column.AutoIncrement = (bool)drow["IsAutoIncrement"];
                         listCols.Add(column);
                         dt.Columns.Add(column);
                     }
@@ -147,7 +147,7 @@ namespace CoreUtils
                         DataRow dataRow = dt.NewRow();
                         for (int i = 0; i < listCols.Count; i++)
                         {
-                            dataRow[((DataColumn) listCols[i])] = reader[i];
+                            dataRow[((DataColumn)listCols[i])] = reader[i];
                         }
 
                         dt.Rows.Add(dataRow);
@@ -248,7 +248,7 @@ namespace CoreUtils
                     fileLogParams.ProcessingTaskOutcomeDetails));
 
                 // pass new dbLogParams() to ensure no recursion of logging!
-                DataTable dt = (DataTable) DbQuery(DbOperation.ExecuteReader, fileLogParams.DbConnection, logQuery,
+                DataTable dt = (DataTable)DbQuery(DbOperation.ExecuteReader, fileLogParams.DbConnection, logQuery,
                     queryParams, null, true);
             }
 
@@ -286,7 +286,7 @@ namespace CoreUtils
                 string logQuery = $"select dbo.getFileLogId('{Utils.DbQuote(fileName)}');";
 
                 // pass new dbLogParams() to ensure no recursion of logging!
-                int fileLogId = (int) DbQuery(DbOperation.ExecuteScalar, logParams.DbConnection, logQuery, null, null,
+                int fileLogId = (int)DbQuery(DbOperation.ExecuteScalar, logParams.DbConnection, logQuery, null, null,
                     false);
                 return fileLogId;
             }
@@ -297,8 +297,7 @@ namespace CoreUtils
         }
 
 
-        public static string AddUniqueIdToFileAndLogToDb(string srcFilePath, Boolean fixFileNameLength,
-            FileOperationLogParams fileLogParams)
+        public static string AddUniqueIdToFileAndLogToDb(string srcFilePath, Boolean fixFileNameLength, Boolean forceNewFileId, FileOperationLogParams fileLogParams)
         {
             // get filename without leading fileid
 
@@ -310,9 +309,7 @@ namespace CoreUtils
 
             var srcFileName = Path.GetFileName(srcFilePath);
             // if file has uniqueID and headerttype already, nothing to do
-            if (!Utils.IsBlank(Utils.GetUniqueIdFromFileName(srcFileName))
-                /* && (GetHeaderTypeFromFileName(srcFilePath) == headerType || headerType == HeaderType.NotApplicable)*/
-               )
+            if (!Utils.IsBlank(Utils.GetUniqueIdFromFileName(srcFileName)) && !forceNewFileId)
             {
                 return srcFilePath;
             }

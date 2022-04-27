@@ -206,8 +206,6 @@ namespace DataProcessing
                         );
 
 
-
-
                         //
                         string strCheckResults = File.ReadAllText(errorFilePath);
 

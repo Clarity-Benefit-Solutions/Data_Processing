@@ -136,7 +136,7 @@ namespace DataProcessing
                         rowFolderName, DirectoryIterateType.Files, false, "*.*",
                         (srcFilePath, destFilePath, dummy2) =>
                         {
-                            this.ArchiveAndMoveIncomingFile(srcFilePath, dbConn, fileLogParams);
+                            this.MoveIncomingFileToNextStepDir(srcFilePath, dbConn, fileLogParams);
                         },
                         (directory, file, ex) =>
                         {
@@ -156,7 +156,7 @@ namespace DataProcessing
 
         }
 
-        protected void ArchiveAndMoveIncomingFile(string srcFilePath, DbConnection dbConn, FileOperationLogParams fileLogParams)
+        protected void MoveIncomingFileToNextStepDir(string srcFilePath, DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
             var currentFilePath = srcFilePath;
             try
@@ -202,8 +202,7 @@ namespace DataProcessing
                 }
 
                 // 5. add uniqueId to file so we can track it across folders and operations
-                var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(uniformFilePath, true,
-                    fileLogParams);
+                var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(uniformFilePath, true, true, fileLogParams);
                 currentFilePath = uniqueIdFilePath;
 
 
@@ -406,7 +405,7 @@ namespace DataProcessing
                         DbUtils.LogFileOperation(fileLogParams);
 
                         // 7. move file to PreCheck
-                        string destPreCheckPath = $"{Vars.alegeusFilesToProcessPath}/{Path.GetFileName(expFilePath)}";
+                        string destPreCheckPath = $"{Vars.alegeusFilesToProcessPath}/{Path.GetFileNameWithoutExtension(expFilePath)}.mbi";
                         FileUtils.MoveFile(expFilePath, destPreCheckPath, null, null);
 
                         // add to fileLog
@@ -448,6 +447,15 @@ namespace DataProcessing
             FileUtils.IterateDirectory(this.Vars.alegeusFilesToProcessPath, DirectoryIterateType.Files, false, "*.mbi",
                 (srcFilePath, destFilePath, dummy2) =>
                 {
+                    // ensure file ext is mbi
+                    if (Path.GetExtension(srcFilePath) != ".mbi")
+                    {
+                        string mbiFilePath = $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileNameWithoutExtension(srcFilePath)}.mbi";
+                        if (Path.GetFileName(mbiFilePath) != Path.GetFileName(srcFilePath))
+                        {
+                            FileUtils.MoveFile(srcFilePath, mbiFilePath, null, null);
+                        }
+                    }
                     // check the file 
                     using var fileChecker = new FileChecker(srcFilePath, PlatformType.Alegeus,
                         this.Vars.dbConnDataProcessing, fileLogParams,

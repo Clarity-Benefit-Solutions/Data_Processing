@@ -120,7 +120,7 @@ namespace DataProcessingWebApp.Jobs
                 var fileLogParams = vars.dbFileProcessingLogParams;
 
                 // Get local temp file with UniqueID Added
-                srcFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(srcFilePath, true, fileLogParams);
+                srcFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(srcFilePath, true, true, fileLogParams);
 
                 // convert from xl is needed
                 if (FileUtils.IsExcelFile(srcFilePath))
