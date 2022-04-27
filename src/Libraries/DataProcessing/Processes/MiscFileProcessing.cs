@@ -124,8 +124,8 @@ namespace DataProcessing
             ftpConn.CopyOrMoveFiles(
                 /* Note: 2022-04-27: Linda S verified files can be deleted from remote after it has been downloaded*/
                 // todo: test download and delete
-                FtpFileOperation.DownloadAndDelete,
                 //FtpFileOperation.Download,
+                FtpFileOperation.DownloadAndDelete,
                 new string[] { Vars.remoteAlegeusFtpRootPath }, false,
                 new string[] { "Enrolled_Participant_Report_*.csv.pgp" },
                 tempDownLoadPath, "", "",
