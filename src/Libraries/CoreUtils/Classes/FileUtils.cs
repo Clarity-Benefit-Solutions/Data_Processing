@@ -993,7 +993,7 @@ namespace CoreUtils.Classes
             Boolean success = false;
 
             // add empty password if missing
-            string[] passwords2 = passwords.Values.ToArray().Distinct<string>().ToArray();
+            IEnumerable<string> passwords2 = passwords.Values.ToArray().Distinct<string>();
 
             // try each password
             foreach (var password in passwords2)
