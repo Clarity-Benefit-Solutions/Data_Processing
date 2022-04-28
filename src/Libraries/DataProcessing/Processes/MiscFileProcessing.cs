@@ -262,7 +262,7 @@ namespace DataProcessing
             var srcFilePath = files.Last();
 
             // 
-            var destFilePath = $"{Path.GetDirectoryName(srcFilePath)}/Enrolled_Participant_Report_Latest.csv";
+            var destFilePath = $"{Path.GetDirectoryName(srcFilePath)}/EPR_ENROLLED_PARTICIPANT.csv";
             FileUtils.CopyFile(srcFilePath, destFilePath, null, null);
 
             // log
