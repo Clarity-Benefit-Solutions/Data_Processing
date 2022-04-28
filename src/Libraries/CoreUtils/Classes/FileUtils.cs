@@ -960,19 +960,15 @@ namespace CoreUtils.Classes
             }
         }
 
-        public static void ConvertExcelFileToCsv(string sourceFilePath, string destFilePath, string[] passwords,
+        public static void ConvertExcelFileToCsv(string sourceFilePath, string destFilePath,
+            Dictionary<string, string> passwords,
             SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
             Boolean success = false;
 
             // add empty password if missing
-            List<string> passwords2 = new List<string> { };
-            if (!passwords.Contains(""))
-            {
-                passwords2.Add("");
-            }
-            passwords2.AddRange(passwords);
-
+            string[] passwords2 = passwords.Values.ToArray();
+   
             // try each password
             foreach (var password in passwords2)
             {

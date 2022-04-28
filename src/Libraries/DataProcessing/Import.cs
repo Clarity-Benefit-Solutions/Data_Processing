@@ -373,9 +373,27 @@ namespace DataProcessing
             return newPath;
         }
 
-        public static string[] GetPasswordsToOpenExcelFiles(string srcFilePath)
+        public static Dictionary<string, string> GetPasswordsToOpenExcelFiles(string srcFilePath)
         {
-            string[] passwords = new string[] { "" };
+            Dictionary<string, string> passwords = new Dictionary<string, string>();
+            passwords.Add("", "");
+            //
+            passwords.Add("Building Maintenance Service", "benflex");
+            passwords.Add("LLC-Vornado Realty Trust", "benflex");
+            passwords.Add("Southern Bank of Tennessee", "Christmas2021!");
+            passwords.Add("Columbia Bank", "Winter2022!");
+            passwords.Add("Instinet Group Inc", "benefits2022");
+            passwords.Add("Trilogy Federal", "Trilogy2022");
+            passwords.Add("LLCView Account Hierarchy", "Trilogy2022");
+            passwords.Add("Standard New York Inc.", "Clarity_2022");
+            passwords.Add("ESS Management Corp", "4817 -- EIN no.");
+            passwords.Add("The Studio Museum in Harlem", "Clarity1!");
+            passwords.Add("HR Acuity", "HRAHSA#1");
+            passwords.Add("Population Council", "lhpclar");
+            passwords.Add("Archwell Holdings", "Clarity1!");
+            passwords.Add("National Capitol Contracting LLC", "Clarity1!");
+
+
             //ToDo: get list of password so that we can open password protected files
             return passwords;
         }
@@ -604,7 +622,7 @@ namespace DataProcessing
 
             }
             else
-            { 
+            {
                 // presume Alegeus
                 return PlatformType.Alegeus;
             }
