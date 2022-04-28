@@ -136,7 +136,7 @@ namespace CoreUtils.Classes
                 var try1 = JsonConvert.DeserializeObject(value);
                 if (try1 is string)
                 {
-                    value = (string) try1;
+                    value = (string)try1;
                 }
 
                 object deserializeObject = JsonConvert.DeserializeObject<T>(value);
@@ -237,7 +237,7 @@ namespace CoreUtils.Classes
                 if (attrs.Length > 0)
 
                 {
-                    return ((DisplayText) attrs[0]).text;
+                    return ((DisplayText)attrs[0]).text;
                 }
             }
 
@@ -578,11 +578,12 @@ namespace CoreUtils.Classes
 
         public static string GetUniqueIdFromFileName(string fileName)
         {
-            string fileNaneWithoutDir = Path.GetFileName(fileName);
-            var indexOfSep = fileNaneWithoutDir.IndexOf($"{Utils.FilePartsDelimiter}", StringComparison.Ordinal);
+            string fileNameWithoutExt = Path.GetFileNameWithoutExtension(fileName);
+            var indexOfSep = fileNameWithoutExt.IndexOf($"{Utils.FilePartsDelimiter}", StringComparison.Ordinal);
             if (indexOfSep > 0)
             {
-                return fileNaneWithoutDir.Substring(0, indexOfSep).Trim();
+                string uniqueId = $"{fileNameWithoutExt.Substring(indexOfSep + Utils.FilePartsDelimiter.Length).Trim()}";
+                return uniqueId;
             }
 
             return "";
@@ -590,7 +591,7 @@ namespace CoreUtils.Classes
 
         public static HeaderType GetHeaderTypeFromFileName(string fileName)
         {
-            var fileNameParts = fileName?.Split(new[] {Utils.FilePartsDelimiter}, StringSplitOptions.None);
+            var fileNameParts = fileName?.Split(new[] { Utils.FilePartsDelimiter }, StringSplitOptions.None);
             if (fileNameParts != null && fileNameParts.Length < 3)
             {
                 return HeaderType.NotApplicable;
@@ -632,25 +633,16 @@ namespace CoreUtils.Classes
 
         public static string StripUniqueIdAndHeaderTypeFromFileName(string fileName)
         {
-            var fileNameParts = fileName?.Split(new[] {Utils.FilePartsDelimiter}, StringSplitOptions.None);
+            var fileNameParts = fileName?.Split(new[] { Utils.FilePartsDelimiter }, StringSplitOptions.None);
 
             // return the last part of the fileName
             if (fileNameParts != null)
             {
-                return fileNameParts[fileNameParts.Length - 1] ?? "";
+                return fileNameParts[0] ?? "";
             }
 
             return "";
 
-            //int indexOfSep = fileName.IndexOf($"{FilePartsDelimiter}");
-            //if (indexOfSep > 0)
-            //{
-            //    fileName = fileName.Substring(indexOfSep + 2);
-            //}
-
-            //fileName = fileName.Trim();
-
-            //return fileName;
         }
 
         public static string AddUniqueIdAndHeaderTypeToFileName(string fileName,
@@ -669,10 +661,11 @@ namespace CoreUtils.Classes
 
         public static string AddUniqueIdToFileName(string fileName)
         {
-            fileName = StripUniqueIdAndHeaderTypeFromFileName(fileName);
+            string filenameNoExt = Path.GetFileNameWithoutExtension(fileName);
+            filenameNoExt = StripUniqueIdAndHeaderTypeFromFileName(filenameNoExt);
 
             var fileId = RandomStringNumbers(3);
-            fileName = $"{fileId}{Utils.FilePartsDelimiter}{fileName}";
+            fileName = $"{filenameNoExt}{Utils.FilePartsDelimiter}{fileId}{Path.GetExtension(fileName)}";
             //
             fileName = fileName.Trim();
             //

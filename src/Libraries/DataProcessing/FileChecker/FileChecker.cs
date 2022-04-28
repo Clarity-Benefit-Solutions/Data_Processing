@@ -76,181 +76,220 @@ namespace DataProcessing
 
         #region CheckFile
 
-        public OperationResult CheckFileAndProcess(FileCheckType fileCheckType,
-            FileCheckProcessType fileCheckProcessType)
+        public OperationResult CheckFileAndProcess(FileCheckType fileCheckType,            FileCheckProcessType fileCheckProcessType)
         {
             // check file
             OperationResultType resultType = CheckFile(fileCheckType);
+            OperationResult operationResult = null ;
 
-            // move source mbi file
-            var fileName = $"{Path.GetFileNameWithoutExtension(this.SrcFilePath)}.mbi";
-            var destFilePath = this.SrcFilePath;
-            string strCheckResults = "";
-
-            // act on resultType
-            switch (resultType)
+            try
             {
-                ///////////////////////////////////////
-                case OperationResultType.Ok:
-                    ///////////////////////////////////////
-                    if (fileCheckProcessType == FileCheckProcessType.MoveToDestDirectories)
-                    {
-                        if (Utils.IsTestFile(this.SrcFilePath))
-                        {
-                            destFilePath = $"{Vars.alegeusFilesTestPath}/{ fileName}";
-                        }
-                        else
-                        {
-                            destFilePath = $"{Vars.alegeusFilesPassedPath}/{fileName}";
-                        }
+                // move source mbi file
+                var fileName = $"{Path.GetFileNameWithoutExtension(this.SrcFilePath)}.mbi";
+                var destFilePath = this.SrcFilePath;
+                string strCheckResults = "";
 
-                        /*FileUtils.MoveFile(SrcFilePath, destFilePath, (srcFilePath2, destFilePath2, dummy2) =>
+                // act on resultType
+                switch (resultType)
+                {
+                    ///////////////////////////////////////
+                    case OperationResultType.Ok:
+                        ///////////////////////////////////////
+                        if (fileCheckProcessType == FileCheckProcessType.MoveToDestDirectories)
+                        {
+                            if (Utils.IsTestFile(this.SrcFilePath))
                             {
-                                // add to fileLog
-                                FileLogParams.SetFileNames("", fileName, SrcFilePath,
-                                    Path.GetFileName(destFilePath), destFilePath,
-                                    $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
-                                    "Success", "PreCheck OK. Moved File to PreCheck OK Directory");
-                                //
-                                DbUtils.LogFileOperation(FileLogParams);
-                            },
-                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
-                        );*/
+                                destFilePath = $"{Vars.alegeusFilesTestPath}/{ fileName}";
+                            }
+                            else
+                            {
+                                destFilePath = $"{Vars.alegeusFilesPassedPath}/{fileName}";
+                            }
 
-                        var queryStringOrgFile =
-                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{Path.GetFileName(this.SrcFilePath)}', 'original_file', {this.FileLogParams.FileLogId}";
+                            /*FileUtils.MoveFile(SrcFilePath, destFilePath, (srcFilePath2, destFilePath2, dummy2) =>
+                                {
+                                    // add to fileLog
+                                    FileLogParams.SetFileNames("", fileName, SrcFilePath,
+                                        Path.GetFileName(destFilePath), destFilePath,
+                                        $"AutomatedHeaders-{MethodBase.GetCurrentMethod()?.Name}",
+                                        "Success", "PreCheck OK. Moved File to PreCheck OK Directory");
+                                    //
+                                    DbUtils.LogFileOperation(FileLogParams);
+                                },
+                                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
+                            );*/
 
-                        ImpExpUtils.ExportSingleColumnFlatFile(destFilePath, DbConn, queryStringOrgFile,
-                            "file_row", null, FileLogParams,
-                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
-                        );
+                            var queryStringOrgFile =
+                                $"exec [dbo].[proc_alegeus_ExportImportFile] '{Path.GetFileName(this.SrcFilePath)}', 'original_file', {this.FileLogParams.FileLogId}";
+
+                            ImpExpUtils.ExportSingleColumnFlatFile(destFilePath, DbConn, queryStringOrgFile,
+                                "file_row", null, FileLogParams,
+                                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
+                            );
 
 
 
-                    }
-                    else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
-                    {
-                        // nothing to do
-                    }
-
-                    // delete src file
-                    FileUtils.DeleteFile(SrcFilePath, null, null);
-
-                    // OK result
-                    strCheckResults = "";
-                    return new OperationResult(1, "200", "Completed", strCheckResults, strCheckResults);
-
-                ///////////////////////////////////////
-                case OperationResultType.CompleteFail:
-                case OperationResultType.ProcessingError:
-                case OperationResultType.PartialFail:
-                default:
-                    ///////////////////////////////////////
-
-                    string srcFileName = Path.GetFileName(this.SrcFilePath);
-                    //
-
-                    if (fileCheckProcessType == FileCheckProcessType.MoveToDestDirectories)
-                    {
-                        if (Utils.IsTestFile(this.SrcFilePath))
-                        {
-                            destFilePath = $"{Vars.alegeusFilesTestPath}/{fileName}";
                         }
-                        else
+                        else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
                         {
-                            destFilePath = $"{Vars.alegeusFilesRejectsPath}/{fileName}";
+                            // nothing to do
                         }
-
-                        string originalFilePath = $"{destFilePath}-0-OriginalFile.mbi";
-                        string passedLinesFilePath = $"{destFilePath}-1-PassedLines.mbi";
-                        string rejectedLinesErrorFilePath = $"{destFilePath}-2-RejectedLines.err";
-                        string rejectedLinesFilePath = $"{destFilePath}-3-RejectedLines.mbi";
-                        string allLinesErrorFilePath = $"{destFilePath}-4-allLines.err";
-
-                        // 2. export error file
-
-                        // org file 
-                        var queryStringOrgFile =
-                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'original_file', {this.FileLogParams.FileLogId}";
-
-                        ImpExpUtils.ExportSingleColumnFlatFile(originalFilePath, DbConn, queryStringOrgFile,
-                            "file_row", null, FileLogParams,
-                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
-                        );
-
-                        // passed lines
-                        var queryStringExpPassedLines =
-                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'passed_lines', {this.FileLogParams.FileLogId}";
-
-                        ImpExpUtils.ExportSingleColumnFlatFile(passedLinesFilePath, DbConn, queryStringExpPassedLines,
-                            "file_row", null, FileLogParams,
-                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
-                        );
-
-                        // .err lines only errors
-                        var queryStringExpErrFile =
-                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'rejected_lines_with_errors', {this.FileLogParams.FileLogId}";
-
-                        ImpExpUtils.ExportSingleColumnFlatFile(rejectedLinesErrorFilePath, DbConn, queryStringExpErrFile,
-                            "file_row", null, FileLogParams,
-                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
-                        );
-
-                        // rejected lines
-                        var queryStringExpRejectedLines =
-                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'rejected_lines', {this.FileLogParams.FileLogId}";
-
-                        ImpExpUtils.ExportSingleColumnFlatFile(rejectedLinesFilePath, DbConn, queryStringExpRejectedLines,
-                            "file_row", null, FileLogParams,
-                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
-                        );
-
-
-                        // entire file with errors
-                        var queryStringExpAllLinesErrFile =
-                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'all_lines_with_errors', {this.FileLogParams.FileLogId}";
-
-                        ImpExpUtils.ExportSingleColumnFlatFile(allLinesErrorFilePath, DbConn, queryStringExpAllLinesErrFile,
-                            "file_row", null, FileLogParams,
-                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
-                        );
-
-                        //
-                        strCheckResults = File.ReadAllText(allLinesErrorFilePath);
 
                         // delete src file
                         FileUtils.DeleteFile(SrcFilePath, null, null);
 
-
                         // OK result
-                        return new OperationResult(0, "300", "Completed", "", strCheckResults);
-                    }
-                    else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
-                    {
-                        string allLinesErrorFilePath = $"{destFilePath}-4-allLines.err";
-
-                        // entire file with errors
-                        var queryStringExpAllLinesErrFile =
-                            $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'all_lines_with_errors', {this.FileLogParams.FileLogId}";
-
-                        ImpExpUtils.ExportSingleColumnFlatFile(allLinesErrorFilePath, DbConn, queryStringExpAllLinesErrFile,
-                            "file_row", null, FileLogParams,
-                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
-                        );
+                        strCheckResults = "";
+                        operationResult = new OperationResult(1, "200", "Completed", strCheckResults, strCheckResults);
+                        return operationResult;
 
 
+                    ///////////////////////////////////////
+                    case OperationResultType.CompleteFail:
+                    case OperationResultType.ProcessingError:
+                    case OperationResultType.PartialFail:
+                    default:
+                        ///////////////////////////////////////
+
+                        string srcFileName = Path.GetFileName(this.SrcFilePath);
                         //
-                        strCheckResults = File.ReadAllText(allLinesErrorFilePath);
 
-                        // OK result
-                        return new OperationResult(0, "300", "Completed", "", strCheckResults);
-                    }
-                    else
-                    {
-                        throw new Exception($"FileCheckProcessType: {fileCheckProcessType} is invalid");
-                    }
+                        if (fileCheckProcessType == FileCheckProcessType.MoveToDestDirectories)
+                        {
+                            if (Utils.IsTestFile(this.SrcFilePath))
+                            {
+                                destFilePath = $"{Vars.alegeusFilesTestPath}/{fileName}";
+                            }
+                            else
+                            {
+                                destFilePath = $"{Vars.alegeusFilesRejectsPath}/{fileName}";
+                            }
 
+                            string originalFilePath = $"{destFilePath}-0-OriginalFile.mbi";
+                            string passedLinesFilePath = $"{destFilePath}-1-PassedLines.mbi";
+                            string rejectedLinesErrorFilePath = $"{destFilePath}-2-RejectedLines.err";
+                            string rejectedLinesFilePath = $"{destFilePath}-3-RejectedLines.mbi";
+                            string allLinesErrorFilePath = $"{destFilePath}-4-allLines.err";
+
+                            // 2. export error file
+
+                            // org file 
+                            var queryStringOrgFile =
+                                $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'original_file', {this.FileLogParams.FileLogId}";
+
+                            ImpExpUtils.ExportSingleColumnFlatFile(originalFilePath, DbConn, queryStringOrgFile,
+                                "file_row", null, FileLogParams,
+                                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
+                            );
+
+                            // passed lines
+                            var queryStringExpPassedLines =
+                                $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'passed_lines', {this.FileLogParams.FileLogId}";
+
+                            ImpExpUtils.ExportSingleColumnFlatFile(passedLinesFilePath, DbConn, queryStringExpPassedLines,
+                                "file_row", null, FileLogParams,
+                                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
+                            );
+
+                            // .err lines only errors
+                            var queryStringExpErrFile =
+                                $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'rejected_lines_with_errors', {this.FileLogParams.FileLogId}";
+
+                            ImpExpUtils.ExportSingleColumnFlatFile(rejectedLinesErrorFilePath, DbConn, queryStringExpErrFile,
+                                "file_row", null, FileLogParams,
+                                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
+                            );
+
+                            // rejected lines
+                            var queryStringExpRejectedLines =
+                                $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'rejected_lines', {this.FileLogParams.FileLogId}";
+
+                            ImpExpUtils.ExportSingleColumnFlatFile(rejectedLinesFilePath, DbConn, queryStringExpRejectedLines,
+                                "file_row", null, FileLogParams,
+                                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
+                            );
+
+
+                            // entire file with errors
+                            var queryStringExpAllLinesErrFile =
+                                $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'all_lines_with_errors', {this.FileLogParams.FileLogId}";
+
+                            ImpExpUtils.ExportSingleColumnFlatFile(allLinesErrorFilePath, DbConn, queryStringExpAllLinesErrFile,
+                                "file_row", null, FileLogParams,
+                                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
+                            );
+
+                            //
+                            strCheckResults = File.ReadAllText(allLinesErrorFilePath);
+
+                            // delete src file
+                            FileUtils.DeleteFile(SrcFilePath, null, null);
+
+
+                            // OK result
+                            operationResult = new OperationResult(0, "300", "Failed", "", strCheckResults);
+                            return operationResult;
+                        }
+                        else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
+                        {
+                            string allLinesErrorFilePath = $"{destFilePath}-4-allLines.err";
+
+                            // entire file with errors
+                            var queryStringExpAllLinesErrFile =
+                                $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'all_lines_with_errors', {this.FileLogParams.FileLogId}";
+
+                            ImpExpUtils.ExportSingleColumnFlatFile(allLinesErrorFilePath, DbConn, queryStringExpAllLinesErrFile,
+                                "file_row", null, FileLogParams,
+                                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
+                            );
+
+
+                            //
+                            strCheckResults = File.ReadAllText(allLinesErrorFilePath);
+
+                            // OK result
+                            operationResult = new OperationResult(0, "300", "Failed", "", strCheckResults);
+                            return operationResult;
+                        }
+                        else
+                        {
+                            throw new Exception($"FileCheckProcessType: {fileCheckProcessType} is invalid");
+                        }
+                }
             }
+            finally
+            {
+                if (operationResult == null)
+                {
+                    operationResult = new OperationResult(0, "400", "ERROR", "", "");
+                }
+
+
+                FileLogParams.SetFileNames("", Path.GetFileName(SrcFilePath), SrcFilePath,
+                    Path.GetFileName(SrcFilePath), SrcFilePath,
+                    $"FileChecker-{MethodBase.GetCurrentMethod()?.Name}",
+                    "", "");
+                
+                switch (operationResult.Code)
+                {
+                    case "200":
+                        FileLogParams.ProcessingTaskOutcome = "Passed";
+                        FileLogParams.ProcessingTaskOutcomeDetails = "PreCheck File: Passed";
+                        break;
+                    case "300":
+                        FileLogParams.ProcessingTaskOutcome = "Rejected";
+                        FileLogParams.ProcessingTaskOutcomeDetails = "PreCheck File: Rejected";
+                        break;
+                    default:
+                        FileLogParams.ProcessingTaskOutcome = "ERROR";
+                        FileLogParams.ProcessingTaskOutcomeDetails = "PreCheck File: ERROR";
+                        break;
+                }
+
+                DbUtils.LogFileOperation(FileLogParams);
+                
+            }
+          
         }
         //
 
@@ -786,7 +825,7 @@ namespace DataProcessing
                     }
 
                     DataRow prvRow = dbResults.Rows[0];
-//
+                    //
                     errorMessage = $"Potential Duplicate Posting! Was probably posted earlier on {Utils.ToIsoDateString(prvRow["CreatedAt"])} as part of file  {prvRow["mbi_file_name"]}";
                     break;
                 default:

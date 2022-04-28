@@ -319,6 +319,7 @@ namespace CoreUtils
 
             //string newFileName = AddUniqueIdAndHeaderTypeToFileName(oldFileName, headerType);
             string newFileName = Utils.AddUniqueIdToFileName(oldFileName);
+            string newFileId = Utils.GetUniqueIdFromFileName(newFileName);
 
             // fix for alegeus - max 30 chars incvluding extension
             string newFileNameFixed = newFileName;
@@ -327,9 +328,6 @@ namespace CoreUtils
                 newFileNameFixed =
                     $" {Utils.Left(Path.GetFileNameWithoutExtension(newFileName), Utils.MaxFilenameLengthFtp - 4)}{Path.GetExtension(newFileName)}";
             }
-
-            //
-            string newFileId = Utils.GetUniqueIdFromFileName(newFileName);
 
             //get full path of dest file with uniqueID
             string newFilePath = $"{srcFileInfo.Directory}/{newFileName}";

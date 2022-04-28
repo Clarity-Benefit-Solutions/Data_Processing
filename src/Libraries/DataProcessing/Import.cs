@@ -358,7 +358,10 @@ namespace DataProcessing
             //
             // remove single quotes
 
-            srcFileName = srcFileName.Replace(" ", "");
+            srcFileName = srcFileName.Replace("--", "_");
+            srcFileName = srcFileName.Replace("-", "_");
+            srcFileName = srcFileName.Replace(" ", "_");
+            srcFileName = srcFileName.Replace("__", "_");
             srcFileName = srcFileName.Replace("'", "");
             srcFileName = srcFileName.Replace(",", "");
             srcFileName = srcFileName.Replace("\"", "");
