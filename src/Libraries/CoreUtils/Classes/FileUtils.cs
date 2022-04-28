@@ -1002,6 +1002,10 @@ namespace CoreUtils.Classes
                 {
                     ConvertExcelFileToCsv(sourceFilePath, destFilePath, password, fileCallback, null);
                     success = true;
+                    if (password != "")
+                    {
+                        Console.WriteLine($"decrypted {Path.GetFileName(sourceFilePath)} using password {password}");
+                    }
                     return;
                 }
                 catch (InvalidPasswordException ex)
