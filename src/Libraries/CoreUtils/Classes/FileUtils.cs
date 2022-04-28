@@ -287,6 +287,32 @@ namespace CoreUtils.Classes
             }
         }
 
+        public static List<string> GetListOfFiles(string[] sourceDirectories, bool subDirsAlso, string[] fileMasks)
+        {
+            List<string> files = new List<string>();
+
+            try
+            {
+                IterateDirectory(sourceDirectories, DirectoryIterateType.Files, subDirsAlso, fileMasks,
+                    (srcFilePath, destFilePath, fileContents) =>
+                    {
+                        files.Add(srcFilePath);
+                    },
+                    (directory, file, ex) =>
+                    {
+                        throw ex;
+                    }
+
+                );
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return files;
+        }
+
         public static void CopyFiles(string[] sourceDirectories, bool subDirsAlso, string[] fileMasks,
             string destDirectory,
             string destFileName, string destFileExt, SingleFileCallback fileCallback,
@@ -968,7 +994,7 @@ namespace CoreUtils.Classes
 
             // add empty password if missing
             string[] passwords2 = passwords.Values.ToArray();
-   
+
             // try each password
             foreach (var password in passwords2)
             {
@@ -991,7 +1017,7 @@ namespace CoreUtils.Classes
                     }
                     else
                     {
-                        throw ;
+                        throw;
                     }
                 }
             }

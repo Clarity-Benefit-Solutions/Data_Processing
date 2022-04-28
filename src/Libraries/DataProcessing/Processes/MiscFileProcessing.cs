@@ -1,6 +1,8 @@
-﻿using System.Data.Common;
+﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -69,8 +71,9 @@ namespace DataProcessing
             //ParticipantEnrollmentDecryptFiles
             ParticipantEnrollmentDecryptFiles(ftpConn, fileLogParams);
 
-            ////ParticipantEnrollmentImportFiles
-            //ParticipantEnrollmentImportFiles(dbConn, fileLogParams);
+            //ParticipantEnrollmentCopyLastFileToStandardPath
+            ParticipantEnrollmentCopyLastFileToStandardPath(ftpConn, fileLogParams);
+
         }
 
         protected void ParticipantEnrollmentDeleteStagingFiles(DbConnection dbConn,
@@ -228,6 +231,47 @@ namespace DataProcessing
                 }
             );
 
+            //
+            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            DbUtils.LogFileOperation(fileLogParams);
+            //
+        }
+        protected void ParticipantEnrollmentCopyLastFileToStandardPath(SFtpConnection ftpConn,
+         FileOperationLogParams fileLogParams)
+        {
+            //
+            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            fileLogParams.SetSourceFolderName(Vars.alegeusParticipantEnrollmentFilesDownloadPath);
+            //
+            DbUtils.LogFileOperation(fileLogParams);
+            FileUtils.EnsurePathExists(Vars.alegeusParticipantEnrollmentFilesDownloadPath);
+
+            //get list of all decrypted files
+            List<string> files = FileUtils.GetListOfFiles(
+                new string[] { Vars.alegeusParticipantEnrollmentFilesDecryptedPath },
+                false,
+                new string[] { "Enrolled_Participant_Report*.csv" }
+                );
+
+            // sort by name asc
+            files.Sort((x, y) => string.Compare(x, y));
+
+            // the last file will be the latest one
+            var srcFilePath = files.Last();
+
+            // 
+            var destFilePath = $"{Path.GetDirectoryName(srcFilePath)}/Enrolled_Participant_Report_Latest.csv";
+            FileUtils.CopyFile(srcFilePath, destFilePath, null, null);
+
+            // log
+            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                Path.GetFileName(destFilePath), destFilePath,
+                $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+                "Success", $"Saved Decrypted File as Latest File");
+
+            DbUtils.LogFileOperation(fileLogParams);
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
