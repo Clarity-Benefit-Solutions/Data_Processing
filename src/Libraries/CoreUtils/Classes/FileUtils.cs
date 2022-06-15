@@ -740,7 +740,7 @@ namespace CoreUtils.Classes
                 sourceFilePath = FileUtils.FixPath(sourceFilePath);
                 destFilePath = FileUtils.FixPath(destFilePath);
 
-                var srcFileInfo = new FileInfo(sourceFilePath);
+
                 if (!Utils.IsBlank(destFilePath))
                 {
                     var destFileDirInfo = new DirectoryInfo(Path.GetDirectoryName(destFilePath) ?? string.Empty);
@@ -753,7 +753,7 @@ namespace CoreUtils.Classes
                 var fileContents = "";
 
                 // validate
-                if (!srcFileInfo.Exists)
+                if (!File.Exists(sourceFilePath))
                 {
                     if (fileOperation == FileOperation.DeleteIfExists)
                     {
@@ -765,32 +765,31 @@ namespace CoreUtils.Classes
                     throw new Exception(message);
                 }
 
+                if (!Utils.IsBlank(destFilePath) && File.Exists(destFilePath))
+                {
+                    File.Delete(destFilePath);
+                }
+
                 // do operation
                 if (fileOperation == FileOperation.Move)
                 {
                     if (FixPath(destFilePath) != FixPath(sourceFilePath))
                     {
-                        var destFile = new FileInfo(destFilePath);
-                        if (destFile.Exists)
-                        {
-                            destFile.Delete();
-                            fileContents = "";
-                        }
-
-                        srcFileInfo.MoveTo(destFilePath);
+                        File.Move(sourceFilePath, destFilePath);
+                        fileContents = "";
                     }
                 }
                 else if (fileOperation == FileOperation.Copy)
                 {
                     if (FixPath(destFilePath) != FixPath(sourceFilePath))
                     {
-                        srcFileInfo.CopyTo(destFilePath, true);
+                        File.Copy(sourceFilePath, destFilePath, true);
                         fileContents = "";
                     }
                 }
                 else if (fileOperation == FileOperation.Delete || fileOperation == FileOperation.DeleteIfExists)
                 {
-                    srcFileInfo.Delete();
+                    File.Delete(sourceFilePath);
                     destFilePath = "";
                     fileContents = "";
                 }

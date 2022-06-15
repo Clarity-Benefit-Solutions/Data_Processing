@@ -426,7 +426,7 @@ namespace CoreUtils.Classes
                 //
                 bcp.BulkCopyTimeout = 0;
                 bcp.DestinationTableName = tableName;
-                bcp.BatchSize = 1;
+                bcp.BatchSize = 1000;
 
                 // write all rows to server
                 bcp.WriteToServer(csv);
@@ -472,6 +472,8 @@ namespace CoreUtils.Classes
                 cmd.CommandText = $"select top 0 * from {tableName}";
                 var reader = cmd.ExecuteReader();
                 var schemaTable = reader.GetSchemaTable();
+                reader.Close();
+
                 List<TypedCsvColumn> listCols = new List<TypedCsvColumn>();
 
                 if (schemaTable != null)

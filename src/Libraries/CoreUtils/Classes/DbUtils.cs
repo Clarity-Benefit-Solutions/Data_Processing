@@ -152,6 +152,7 @@ namespace CoreUtils
 
                         dt.Rows.Add(dataRow);
                     }
+                    reader.Close();
                 }
 
                 //

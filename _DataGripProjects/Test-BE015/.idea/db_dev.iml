@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="DBE_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/../../../BROKERCOMMISSION/Broker_Commission/_SQLFiles.BrokerCommissions" />
+    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$/../../_SQLFiles-FileProcessing" />
+    <content url="file://$MODULE_DIR$/../../db_dev" />
+    <content url="file://$MODULE_DIR$/../../../r1_Data_Processing/_dataGrip_projects" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

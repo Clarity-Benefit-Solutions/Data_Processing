@@ -19,6 +19,18 @@ namespace CoreUtils.Classes
         {
         }
     }
+    public class EmailBrokerStatementsException: Exception
+    {
+        public EmailBrokerStatementsException(string message) : base(message)
+        {
+        }
+    }
+    public class ImportException : Exception
+    {
+        public ImportException(string message) : base(message)
+        {
+        }
+    }
 
     public class OpenExcelFileException : Exception
     {
@@ -302,6 +314,28 @@ namespace CoreUtils.Classes
 
             return 0;
         }
+        public static decimal ToDecimal(string? value)
+        {
+            value = value?.Trim();
+            decimal dblValue;
+            var isNumeric = decimal.TryParse(value, out dblValue);
+            if (isNumeric)
+            {
+                return dblValue;
+            }
+
+            return 0;
+        }
+
+        public static decimal ToDecimal(decimal? value)
+        {
+            if (value != null)
+            {
+                return (decimal)value;
+            }
+
+            return 0;
+        }
 
         public static bool IsValidEmail(string email)
         {
@@ -326,6 +360,17 @@ namespace CoreUtils.Classes
         {
             value = value?.Trim();
             var isNumeric = float.TryParse(value, out var number);
+            return number;
+        }
+        public static int ToInt(string value)
+        {
+            value = value?.Trim();
+            var parsed = int.TryParse(value, out var number);
+            if (!parsed)
+            {
+                return 0;
+            }
+
             return number;
         }
 
@@ -448,14 +493,17 @@ namespace CoreUtils.Classes
                 return aDateTimeUs2;
             }
 
-            // us long date time 2 yr
-            parsed = DateTime.TryParseExact(value, "dd-MMM-yy", null, DateTimeStyles.None, out var aDateUs2);
+            // us short date time 
+            parsed = DateTime.TryParseExact(value, "d-M-yyyy hh:mm:ss tt", null, DateTimeStyles.None, out var aDateUs2);
             if (parsed)
             {
                 return aDateUs2;
             }
 
-            return null;
+            // try default Parse
+            return DateTime.Parse(value);
+
+            
         }
 
         public static string ToDateString(DateTime? value)
@@ -466,6 +514,21 @@ namespace CoreUtils.Classes
             }
 
             var str = ToIsoDateString(value);
+            return str;
+        }
+           public static string ToUsDateString(DateTime? value)
+        {
+            if (value == null)
+            {
+                return "";
+            }
+
+            if (value == null)
+            {
+                return "";
+            }
+
+            var str = value?.ToString("MM/dd/yyyy");
             return str;
         }
 
@@ -479,6 +542,7 @@ namespace CoreUtils.Classes
             var str = value?.ToString("yyyyMMdd");
             return str;
         }
+      
 
         public static string ToIsoDateString(Object value)
         {

@@ -149,6 +149,10 @@
         CobraSpm,
 
         //
+        [Utils.DisplayText("EdiFileFormat.BrokerCommission.QBRawData")]
+        BrokerCommissionQBRawData,
+
+        //
         [Utils.DisplayText("EdiFileFormat.Alegeus.AlegeusHeader")]
         AlegeusHeader,
 
@@ -240,7 +244,11 @@
 
         [Utils.DisplayText("EdiFileFormat.Alegeus.ResultsDependentDemographics")]
         AlegeusResultsDependentDemographics,
+
+        [Utils.DisplayText("EdiFileFormat.Alegeus.AlegeusEmployeeCardFees")]
         AlegeusEmployeeCardFees,
+
+        [Utils.DisplayText("EdiFileFormat.Alegeus.AlegeusResultsEmployeeCardFees")]
         AlegeusResultsEmployeeCardFees,
     }
 

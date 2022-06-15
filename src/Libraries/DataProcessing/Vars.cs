@@ -105,6 +105,29 @@ namespace DataProcessing
             return "";
         }
 
+        
+        public static string GetProcessExeDir()
+        {
+            if (IsRunningAsWebApp())
+            {
+                return FileUtils.FixPath(AppDomain.CurrentDomain.BaseDirectory) + "\\bin";
+            }
+            else
+            {
+                var processModule = Process.GetCurrentProcess().MainModule;
+                if (processModule != null)
+                {
+                    var exePath = processModule.FileName;
+                    var directoryPath = $"{Path.GetDirectoryName(exePath)}";
+                    return FileUtils.FixPath(directoryPath);
+                }
+            }
+
+            return "";
+        }
+
+
+
 
         public string ConnStrNameDataProcessing
         {
@@ -150,6 +173,38 @@ namespace DataProcessing
                 }
 
                 return _dbConnDataProcessing;
+            }
+        }
+
+        #endregion
+        #region BrokerCommission
+        public string ConnStrNameBrokerCommission
+        {
+            get { return "Broker_CommissionConnectionString"; }
+        }
+
+        private DbConnection _dbConnBrokerCommission;
+
+        public DbConnection dbConnBrokerCommission
+        {
+            get
+            {
+                if (_dbConnBrokerCommission == null)
+                {
+                    string connString =
+                        Utils.GetProviderConnString(ConnStrNameBrokerCommission);
+                    //
+                    _dbConnBrokerCommission = new SqlConnection(connString);
+                    // profiling
+#if PROFILE
+                    _dbConnBrokerCommission =
+ new StackExchange.Profiling.Data.ProfiledDbConnection(_dbConnBrokerCommission, MiniProfiler.Current);
+#endif
+
+                    if (_dbConnBrokerCommission.State != ConnectionState.Open) _dbConnBrokerCommission.Open();
+                }
+
+                return _dbConnBrokerCommission;
             }
         }
 
@@ -241,6 +296,15 @@ namespace DataProcessing
             }
         }
 
+        public FileOperationLogParams GetDbFileProcessingLogParams(string platform = "Alegeus")
+        {
+            FileOperationLogParams logParams = dbFileProcessingLogParams;
+            if (!Utils.IsBlank(platform) || logParams.Platform != platform)
+            {
+                logParams.Platform = platform;
+            }
+            return logParams;
+        }
 
         private FileOperationLogParams _dbFileProcessingLogParams;
 
@@ -256,7 +320,7 @@ namespace DataProcessing
                         w.DbConnection = dbConnDataProcessing;
                         w.DbMessageLogParams = dbMessageLogParams;
 
-                        w.Platform = "Alegeus";
+                        w.Platform = "Unknown";
                         w.LogTableName = "dbo.[file_processing_log]";
                     });
                 }
@@ -408,7 +472,7 @@ namespace DataProcessing
 
         public string cobraFilesEmptyPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraFilesEmptyPath")}");
-        
+
         public string cobraFilesPassedPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("cobraFilesPassedPath")}");
 
@@ -426,7 +490,7 @@ namespace DataProcessing
 
         public string alegeusFilesImportHoldingPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesImportHoldingPath")}");
-         
+
         public string unknownFilesImportHoldingPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("unknownFilesImportHoldingPath")}");
 
@@ -449,7 +513,7 @@ namespace DataProcessing
 
         public string alegeusFilesEmptyPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesEmptyPath")}");
-        
+
         public string alegeusFilesRejectsPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesRejectsPath")}");
 

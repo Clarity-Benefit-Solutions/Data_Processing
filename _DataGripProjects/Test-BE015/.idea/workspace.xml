@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:master" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </select>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0853958f-c1a2-4d9c-ae8d-4ae39e7a6a8c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Broker_Commission.EUXFFw.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Broker_Commission.EUXFFw/schema/INFORMATION_SCHEMA.NBgcMw.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Broker_Commission.EUXFFw/schema/dbo.sYMBAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Broker_Commission.EUXFFw/schema/dbo.sYMBAA.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Broker_Commission.EUXFFw/schema/sys.zb4BAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/INFORMATION_SCHEMA.NBgcMw.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/sys.zb4BAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/SSISDB.iElWkg.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/SSISDB.iElWkg/schema/INFORMATION_SCHEMA.NBgcMw.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/SSISDB.iElWkg/schema/dbo.sYMBAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/SSISDB.iElWkg/schema/dbo.sYMBAA.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/SSISDB.iElWkg/schema/sys.zb4BAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/SalesForce_Enav.nk0LwQ.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/SalesForce_Enav.nk0LwQ/schema/INFORMATION_SCHEMA.NBgcMw.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/SalesForce_Enav.nk0LwQ/schema/dbo.sYMBAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/SalesForce_Enav.nk0LwQ/schema/dbo.sYMBAA.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/SalesForce_Enav.nk0LwQ/schema/sys.zb4BAA.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/2022-06-03-DbChanges.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/10_track_new_errors.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/11_fixes.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/12_fixes.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/13_file_checker_1.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/13_file_checker_2.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/14_file_checker_3.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/14_file_checker_4.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/15_file_checker_5.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/16_file_processing.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/1_log_tables.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/2022-03-31-use-unc-paths.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/2022-04-23.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/2022-04-26.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/2022-04-27.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/20_changes.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/2_headers_views.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/3_log_procs.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/4_crm_list.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/5_res_import_tables.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/5z_mbi_import_tables.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/6_csv_split.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/8_post_res_import.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/9_post_res_import.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/ShrinkAll.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/app_settings_data.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/q_1_logs.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/q_2_error_logs.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/q_2_truncate.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/q_3_view.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/q_4_error_log_view.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/q_4_error_log_wf.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/Prv/q_5_file_checker.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/dataSources.local.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/dataSources.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/master.YiqNvw.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/master.YiqNvw/schema/INFORMATION_SCHEMA.NBgcMw.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/master.YiqNvw/schema/dbo.sYMBAA.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/master.YiqNvw/schema/dbo.sYMBAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/master.YiqNvw/schema/sys.zb4BAA.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/db_dev.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_06-Oct-21_11_18_PM_[Default_Changelist]/api.GnoBAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_06-Oct-21_11_18_PM_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_06-Oct-21_11_18_PM__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_10_14_21,_7_29_AM_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_10_14_21,_7_29_AM_[Default_Changelist]1/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_10_14_21__7_29_AM__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2020_7_34_AM_[Default_Changelist]/adp.rXgBAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2020_7_34_AM_[Default_Changelist]/api.GnoBAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2020_7_34_AM_[Default_Changelist]/boomi.3iKZBQ.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2020_7_34_AM_[Default_Changelist]/bs.UQwAAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2020_7_34_AM_[Default_Changelist]/cp.bQwAAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2020_7_34_AM_[Default_Changelist]/en.qQwAAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2020_7_34_AM_[Default_Changelist]/mysql.osA4Bg.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2020_7_34_AM_[Default_Changelist]/portal.bIhwxQ.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2020_7_34_AM_[Default_Changelist]/sf.Uw4AAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2020_7_34_AM_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2020_7_34_AM_[Default_Changelist]/wc.zA4AAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_11_12_2020_7_34_AM__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_1_19_PM_[Default_Changelist]/adp.rXgBAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_1_19_PM_[Default_Changelist]/api.GnoBAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_1_19_PM_[Default_Changelist]/boomi.3iKZBQ.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_1_19_PM_[Default_Changelist]/bs.UQwAAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_1_19_PM_[Default_Changelist]/cp.bQwAAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_1_19_PM_[Default_Changelist]/en.qQwAAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_1_19_PM_[Default_Changelist]/mysql.osA4Bg.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_1_19_PM_[Default_Changelist]/portal.bIhwxQ.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_1_19_PM_[Default_Changelist]/sf.Uw4AAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_1_19_PM_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_1_19_PM_[Default_Changelist]/wc.zA4AAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_11_2020_1_19_PM__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/adp.rXgBAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/adp.rXgBAA1.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/api.GnoBAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/api.GnoBAA1.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/boomi.3iKZBQ.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/boomi.3iKZBQ1.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/bs.UQwAAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/bs.UQwAAA1.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/cp.bQwAAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/cp.bQwAAA1.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/en.qQwAAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/en.qQwAAA1.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/logs.r8UyAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/logs.r8UyAA1.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/mysql.osA4Bg.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/mysql.osA4Bg1.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/portal.bIhwxQ.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/portal.bIhwxQ1.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/sf.Uw4AAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/sf.Uw4AAA1.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/wc.zA4AAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM_[Default_Changelist]/wc.zA4AAA1.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_19_2020_6_55_PM__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_20_20,_5_39_AM_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_20_20__5_39_AM__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_22_20,_2_12_PM_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_22_20__2_12_PM__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_31_20,_2_40_AM_[Default_Changelist]/api.GnoBAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_31_20,_2_40_AM_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_31_20,_2_40_AM_[Default_Changelist]/wc.zA4AAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_12_31_20__2_40_AM__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_3_24_21,_5_19_AM_[Default_Changelist]/api.GnoBAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_3_24_21,_5_19_AM_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_3_24_21__5_19_AM__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_8_14_21,_4_51_AM_[Default_Changelist]/api.GnoBAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_8_14_21,_4_51_AM_[Default_Changelist]/en.qQwAAA.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_8_14_21,_4_51_AM_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_8_14_21__4_51_AM__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_8_19_21,_3_14_PM_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/shelf/Uncommitted_changes_before_Update_at_8_19_21__3_14_PM__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/sqldialects.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/10_track_new_errors.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/11_fixes.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/12_fixes.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/13_file_checker_1.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/13_file_checker_2.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/14_file_checker_3.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/14_file_checker_4.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/15_file_checker_5.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/16_file_processing.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/1_log_tables.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/2022-03-31-use-unc-paths.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/2022-04-23.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/2022-04-26.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/2022-04-27.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/20_changes.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/2_headers_views.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/3_log_procs.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/4_crm_list.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/5_res_import_tables.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/5z_mbi_import_tables.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/6_csv_split.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/8_post_res_import.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/9_post_res_import.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/ShrinkAll.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/app_settings_data.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/q_1_logs.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/q_2_error_logs.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/q_2_truncate.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/q_3_view.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/q_4_error_log_view.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/q_4_error_log_wf.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles/q_5_file_checker.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/.vs/DataProcessing/DesignTimeBuild/.dtbcache.v2" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/.vs/DataProcessing/DesignTimeBuild/.dtbcache.v2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/.vs/DataProcessing/v16/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/.vs/DataProcessing/v16/.suo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Apps/DataProcessingWindowsApp/DataProcessingWindowsApp.csproj.user" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Apps/DataProcessingWindowsApp/DataProcessingWindowsApp.csproj.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Apps/DataProcessingWindowsApp/web.config" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Apps/DataProcessingWindowsApp/web.config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/App.Config" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/App.Config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/Classes/DbUtils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/Classes/DbUtils.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/Classes/Enums.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/Classes/Enums.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/Classes/FileUtils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/Classes/FileUtils.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/Classes/ImpExpUtils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/Classes/ImpExpUtils.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/Classes/Utils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/Classes/Utils.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/CoreUtils.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/CoreUtils.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/packages.config" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/packages.config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/App.config" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/App.config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/DataProcessing.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/DataProcessing.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Import.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Import.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Processes/MiscFileProcessing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Processes/MiscFileProcessing.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Vars.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Vars.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/packages.config" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/packages.config" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="SQL Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+    <option name="UPDATE_TYPE" value="REBASE" />
+    <option name="WARN_ABOUT_CRLF" value="false" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="1iqhdN24pZ8aGs0g8duuOGwllaG" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="false" id="Update" />
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="DBE.Init.BalloonShown" value="true" />
+    <property name="DatabaseDriversLRU" value="mariadb&#10;sqlserver.jtds" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="true" />
+    <property name="RunConfigurationTargetLRU" value="b2522701-3b0e-4411-9582-468293372d7a/schema/&quot;api&quot;" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="GenericSQL" />
+    <property name="database.data.extractors.current.export.id" value="Tab-separated (TSV)_id" />
+    <property name="database.data.extractors.current.id" value="Tab-separated (TSV)_id" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../BROKERCOMMISSION/Broker_Commission/_SQLFiles.BrokerCommissions" />
+    <property name="settings.editor.selected.configurable" value="application.passwordSafe" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\BROKERCOMMISSION\Broker_Commission\_SQLFiles.BrokerCommissions\AllDbChanges" />
+      <recent name="E:\FileAndDataProcessingAndErrorLog\_DataGripProjects\Test-BE015" />
+      <recent name="C:\___Clarity\clarity_dev\r1_documents\db_dev\db_changes" />
+      <recent name="$PROJECT_DIR$/../../db_dev/db_changes" />
+      <recent name="zz_PROD_clarity/zz_PROD/schema/api/table/cobra_continuation_contacts/trigger" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\BROKERCOMMISSION\Broker_Commission\_SQLFiles.BrokerCommissions" />
+      <recent name="$PROJECT_DIR$/../../db_dev/_prv" />
+      <recent name="$PROJECT_DIR$/../../db_dev/db_changes" />
+      <recent name="C:\___Clarity\clarity_dev\r1_documents\db_dev" />
+      <recent name="C:\___Clarity\clarity_dev\r1_documents\db_dev\_prv" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Database Script.registration_log.sql">
+    <configuration name="2020-12-19-fix-data-1.sql" type="DatabaseScript" editBeforeRun="true" temporary="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/../../db_dev/db_changes/2020-12-19-fix-data-1.sql" />
+      <script-mode>FILE</script-mode>
+      <method v="2" />
+    </configuration>
+    <configuration name="registration_log.sql" type="DatabaseScript" editBeforeRun="true" temporary="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/../../../../Downloads/registration_log.sql" />
+      <script-mode>FILE</script-mode>
+      <data-source id="b2522701-3b0e-4411-9582-468293372d7a" namespace="schema/&quot;api&quot;" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Database Script.registration_log.sql" />
+        <item itemvalue="Database Script.2020-12-19-fix-data-1.sql" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+      </list>
+    </option>
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list />
+          </value>
+        </entry>
+        <entry key="User">
+          <value>
+            <list />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+      <path value="$PROJECT_DIR$/.." />
+    </ignored-roots>
+    <MESSAGE value="fix trn level for register part" />
+    <MESSAGE value="form changes return valueof fields as json" />
+    <MESSAGE value="performance tweaking" />
+    <MESSAGE value="register part or retrieve password" />
+    <MESSAGE value="Apr 25" />
+    <MESSAGE value="Apr 29" />
+    <MESSAGE value="May 5" />
+    <MESSAGE value="May 14" />
+    <MESSAGE value="June  14" />
+    <MESSAGE value="June  20" />
+    <MESSAGE value="June  23" />
+    <MESSAGE value="if aggegragation working&#10;need to find a way to get all plans with details from Alegeus" />
+    <MESSAGE value="Files moved to _prv" />
+    <MESSAGE value="Troubleshooting admin user under DB changes" />
+    <MESSAGE value="tpa streanm" />
+    <MESSAGE value="tpa stream" />
+    <MESSAGE value="check for errors" />
+    <MESSAGE value="cases iomplementation changes" />
+    <MESSAGE value="cases implementation changes" />
+    <MESSAGE value="cases status change changes" />
+    <MESSAGE value="Oct 14" />
+    <MESSAGE value="Oct 20" />
+    <MESSAGE value="Oct 22" />
+    <MESSAGE value="Nov 3" />
+    <MESSAGE value="Nov 9 - WIP 1" />
+    <option name="LAST_COMMIT_MESSAGE" value="Nov 9 - WIP 1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="408" y="114" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1654592683542">
+      <screen x="62" y="0" width="1474" height="864" />
+    </state>
+    <state x="361" y="123" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.930@0.0.1536.930" timestamp="1650714218274" />
+    <state x="408" y="114" key="#com.intellij.execution.impl.EditConfigurationsDialog/62.0.1474.864@62.0.1474.864" timestamp="1654592683542" />
+    <state x="553" y="301" key="#com.intellij.ide.actions.ChooseComponentsToExportDialog" timestamp="1654592724626">
+      <screen x="62" y="0" width="1474" height="864" />
+    </state>
+    <state x="553" y="301" key="#com.intellij.ide.actions.ChooseComponentsToExportDialog/62.0.1474.864@62.0.1474.864" timestamp="1654592724626" />
+    <state x="589" y="204" key="FileChooserDialogImpl" timestamp="1654592722273">
+      <screen x="62" y="0" width="1474" height="864" />
+    </state>
+    <state x="549" y="220" key="FileChooserDialogImpl/0.0.1536.930@0.0.1536.930" timestamp="1650714183158" />
+    <state x="589" y="204" key="FileChooserDialogImpl/62.0.1474.864@62.0.1474.864" timestamp="1654592722273" />
+    <state width="832" height="259" key="GridCell.Tab.0.bottom" timestamp="1654525814988">
+      <screen x="62" y="0" width="1218" height="720" />
+    </state>
+    <state width="832" height="259" key="GridCell.Tab.0.bottom/62.0.1218.720@62.0.1218.720" timestamp="1654525814988" />
+    <state width="767" height="326" key="GridCell.Tab.0.bottom/62.0.1474.864@62.0.1474.864" timestamp="1654288005589" />
+    <state width="832" height="259" key="GridCell.Tab.0.center" timestamp="1654525814988">
+      <screen x="62" y="0" width="1218" height="720" />
+    </state>
+    <state width="832" height="259" key="GridCell.Tab.0.center/62.0.1218.720@62.0.1218.720" timestamp="1654525814988" />
+    <state width="767" height="326" key="GridCell.Tab.0.center/62.0.1474.864@62.0.1474.864" timestamp="1654288005589" />
+    <state width="832" height="259" key="GridCell.Tab.0.left" timestamp="1654525814987">
+      <screen x="62" y="0" width="1218" height="720" />
+    </state>
+    <state width="832" height="259" key="GridCell.Tab.0.left/62.0.1218.720@62.0.1218.720" timestamp="1654525814987" />
+    <state width="767" height="326" key="GridCell.Tab.0.left/62.0.1474.864@62.0.1474.864" timestamp="1654288005588" />
+    <state width="832" height="259" key="GridCell.Tab.0.right" timestamp="1654525814988">
+      <screen x="62" y="0" width="1218" height="720" />
+    </state>
+    <state width="832" height="259" key="GridCell.Tab.0.right/62.0.1218.720@62.0.1218.720" timestamp="1654525814988" />
+    <state width="767" height="326" key="GridCell.Tab.0.right/62.0.1474.864@62.0.1474.864" timestamp="1654288005589" />
+    <state x="535" y="239" width="316" height="321" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1654540483708">
+      <screen x="62" y="0" width="1474" height="864" />
+    </state>
+    <state x="453" y="199" width="316" height="321" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/62.0.1218.720@62.0.1218.720" timestamp="1654525509655" />
+    <state x="535" y="239" width="316" height="385" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/62.0.1474.864@62.0.1474.864" timestamp="1654540483708" />
+    <state x="379" y="86" key="com.intellij.database.dbimport.ImportDialog" timestamp="1654540353495">
+      <screen x="62" y="0" width="1474" height="864" />
+    </state>
+    <state x="379" y="86" key="com.intellij.database.dbimport.ImportDialog/62.0.1474.864@62.0.1474.864" timestamp="1654540353495" />
+    <state x="541" y="170" width="863" height="596" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1654525526675">
+      <screen x="62" y="0" width="1218" height="720" />
+    </state>
+    <state x="541" y="170" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/62.0.1218.720@62.0.1218.720" timestamp="1654525526675" />
+    <state x="642" y="204" width="863" height="596" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/62.0.1474.864@62.0.1474.864" timestamp="1653658150512" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="OracleBreakpointType">
+          <url>file://$PROJECT_DIR$/../../db_dev/db_changes/2021-07-27-new-elevate4.sql</url>
+          <line>512</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

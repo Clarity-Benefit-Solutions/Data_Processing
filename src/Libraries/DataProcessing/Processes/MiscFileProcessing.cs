@@ -272,6 +272,17 @@ namespace DataProcessing
                 "Success", $"Saved Decrypted File as Latest File");
 
             DbUtils.LogFileOperation(fileLogParams);
+            //  // 
+            destFilePath = $"\\\\fs009\\FTP-IT\\ToBoomi\\EPR_ENROLLED_PARTICIPANT.csv";
+            FileUtils.CopyFile(srcFilePath, destFilePath, null, null);
+
+            // log
+            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                Path.GetFileName(destFilePath), destFilePath,
+                $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+                "Success", $"Copied Latest File To FTP IT");
+
+            DbUtils.LogFileOperation(fileLogParams);
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");

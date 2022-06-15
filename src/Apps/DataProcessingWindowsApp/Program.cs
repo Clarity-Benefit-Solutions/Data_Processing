@@ -32,10 +32,19 @@ namespace TestApp
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // write output to logfile
-            var swConsoleOut = new StreamWriter($"{Vars.GetProcessBaseDir()}/_Output.log", true);
-            swConsoleOut.AutoFlush = true;
-            Console.SetOut(swConsoleOut);
+            string filePath = $"{Vars.GetProcessExeDir()}/_Output.log";
+try
+            {
+                // write output to logfile
+                var swConsoleOut = new StreamWriter(filePath, true);
+                swConsoleOut.AutoFlush = true;
+                Console.SetOut(swConsoleOut);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Could Not Log to File {filePath} as {ex.ToString()}");
+            }
+
 
             // handle startup args for scheduled processing
 
