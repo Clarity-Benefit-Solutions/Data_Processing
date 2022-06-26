@@ -24,7 +24,52 @@ namespace DataProcessing
 
     public static class Import
     {
+
+        #region Common
+
         public static readonly string AppendCommasToCsvLine = ",,,,,,,,,,,,,,,,,,,,";
+
+        public static void ImportCrmListFileBulkCopy(DbConnection dbConn, string srcFilePath,
+          Boolean hasHeaderRow, string tableName, FileOperationLogParams fileLogParams
+          , OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                string fileName = Path.GetFileName(srcFilePath);
+                fileLogParams?.SetFileNames(Utils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, tableName,
+                    tableName, "ImportCrmListFileBulkCopy", $"Starting: Import {fileName}", "Starting");
+
+                //
+                TypedCsvSchema mappings = new TypedCsvSchema();
+                //
+                mappings.Add(new TypedCsvColumn("BENCODE", "BENCODE"));
+                mappings.Add(new TypedCsvColumn("CRM", "CRM"));
+                mappings.Add(new TypedCsvColumn("CRM_email", "CRM_email"));
+                mappings.Add(new TypedCsvColumn("emp_services", "emp_services"));
+                mappings.Add(new TypedCsvColumn("Primary_contact_name", "Primary_contact_name"));
+                mappings.Add(new TypedCsvColumn("Primary_contact_email", "Primary_contact_email"));
+                mappings.Add(new TypedCsvColumn("client_start_date", "client_start_date"));
+
+                //
+                ImpExpUtils.ImportCsvFileBulkCopy(dbConn, srcFilePath, hasHeaderRow, tableName, mappings,
+                    fileLogParams,
+                    (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+                );
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(srcFilePath, tableName, ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
 
         public static void ImportCrmListCsvHlpr(DbConnection dbConn, string srcFilePath,
             string tableName, FileOperationLogParams fileLogParams
@@ -47,235 +92,6 @@ namespace DataProcessing
             //
             ImpExpUtils.ImportCsvFile<CsvFileSpecs>(srcFilePath, dbConn, tableName, columns, false, fileLogParams,
                 onErrorCallback);
-        }
-
-
-        public static void ImportBrokerCommissionFile(DbConnection dbConn, string srcFilePath,
-            Boolean hasHeaderRow, FileOperationLogParams fileLogParams
-            , OnErrorCallback onErrorCallback)
-        {
-            //
-            EdiFileFormat fileFormat = EdiFileFormat.BrokerCommissionQBRawData;
-
-
-            // 2. import the file
-            try
-            {
-                // check mappinsg and type opf file (Import or Result)
-
-                var headerType = HeaderType.NotApplicable;
-                TypedCsvSchema mappings = GetBrokerCommissionFileImportMappings(fileFormat, headerType);
-                Boolean isResultFile = false;
-
-                //
-                //var newPath =PrefixLineWithEntireLineAndFileName(srcFilePath, orgSrcFilePath, fileLogParams);
-                var newPath = srcFilePath;
-                //
-                string tableName = isResultFile ? "[dbo].Import_OCT" : "[dbo].Import_OCT";
-                string postImportProc = isResultFile
-                    ? ""
-                    : "";
-
-                // truncate staging table
-                DbUtils.TruncateTable(dbConn, tableName,
-                    fileLogParams?.GetMessageLogParams());
-
-                // import the file with bulk copy
-                ImpExpUtils.ImportCsvFileBulkCopy(dbConn, newPath, hasHeaderRow, tableName, mappings,
-                    fileLogParams, onErrorCallback
-                );
-
-                if (!Utils.IsBlank(postImportProc))
-                {
-                    //
-                    // run postimport query to take from staging to final table
-                    string queryString = $"exec {postImportProc};";
-                    DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
-                        fileLogParams?.GetMessageLogParams());
-                }
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(srcFilePath, fileFormat.ToDescription(), ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-
-
-        public static void ImportAlegeusFile(DbConnection dbConn, string srcFilePath,
-            Boolean hasHeaderRow, FileOperationLogParams fileLogParams
-            , OnErrorCallback onErrorCallback)
-        {
-            //
-            Dictionary<EdiFileFormat, List<int>> fileFormats = ImpExpUtils.GetAlegeusFileFormats(
-                srcFilePath, hasHeaderRow, fileLogParams
-            );
-
-            // file may contain only a header...
-            if (fileFormats.Count == 0)
-            {
-                Boolean isResultFile = GetAlegeusFileFormatIsResultFile(fileFormats.Keys.First());
-
-                // import as plain text file
-                ImpExpUtils.ImportSingleColumnFlatFile(dbConn, srcFilePath, Path.GetFileName(srcFilePath),
-                    isResultFile ? "res_file_table_stage" : "mbi_file_table_stage",
-                    isResultFile ? "res_file_name" : "mbi_file_name",
-                    isResultFile ? "error_row" : "data_row",
-                    (filePath1, rowNo, line) =>
-                    {
-                        // we only import valid import lines 
-                        Boolean import = true;
-                        return import;
-                    },
-                    fileLogParams,
-                    onErrorCallback
-                );
-
-                return;
-            }
-
-            // 2. import the file
-            ImportAlegeusFile(fileFormats, dbConn, srcFilePath, hasHeaderRow, fileLogParams,
-                onErrorCallback);
-        }
-
-        //doesnt work - mappings not clear
-        public static void ImportAlegeusFile(Dictionary<EdiFileFormat, List<int>> fileFormats,
-            DbConnection dbConn, string srcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams
-            , OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                string fileName = Path.GetFileName(srcFilePath);
-                fileLogParams?.SetFileNames(Utils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, "", "",
-                    "ImportAlegeusFile", $"Starting: Import {fileName}", "Starting");
-
-                // split text fileinto multiple files
-                Dictionary<EdiFileFormat, Object[]> files = new Dictionary<EdiFileFormat, Object[]>();
-
-                //
-                foreach (EdiFileFormat fileFormat in fileFormats.Keys)
-                {
-                    // get temp file for each format
-                    string splitFileName = Path.GetTempFileName();
-                    FileUtils.EnsurePathExists(splitFileName);
-                    //
-                    var splitFileWriter = new StreamWriter(splitFileName, false);
-                    files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
-                }
-
-                // open file for reading
-                // read each line and insert
-                using (var inputFile = new StreamReader(srcFilePath))
-                {
-                    int rowNo = 0;
-                    string line;
-                    while ((line = inputFile.ReadLine()) != null)
-                    {
-                        rowNo++;
-
-                        foreach (EdiFileFormat fileFormat2 in fileFormats.Keys)
-                        {
-                            if (fileFormats[fileFormat2].Contains(rowNo)
-                                || (line?.Substring(0, 2) == "RA" || line?.Substring(0, 2) == "IA"))
-                            {
-                                // get temp file for each format
-                                var splitFileWriter = (StreamWriter)files[fileFormat2][0];
-                                // if there is prvUnwrittenLine it was probably a header line - write to the file that 
-
-                                splitFileWriter.WriteLine(line);
-                                continue;
-                            }
-                        }
-
-                        // go to next line if a line was written
-                    }
-                }
-
-                // close all files
-                //
-                foreach (var fileFormat3 in files.Keys)
-                {
-                    // get temp file for each format
-                    var writer = (StreamWriter)files[fileFormat3][0];
-                    writer.Close();
-
-                    // import the file
-                    ImportAlegeusFile(fileFormat3, dbConn, (string)files[fileFormat3][1], srcFilePath,
-                        hasHeaderRow, fileLogParams, onErrorCallback);
-                }
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(srcFilePath, fileFormats.Values.ToString(), ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-
-        private static void ImportAlegeusFile(EdiFileFormat fileFormat, DbConnection dbConn,
-            string srcFilePath, string orgSrcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams
-            , OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                // check mappinsg and type opf file (Import or Result)
-
-                var headerType = GetAlegeusHeaderTypeFromFile(srcFilePath);
-                TypedCsvSchema mappings = GetAlegeusFileImportMappings(fileFormat, headerType);
-                Boolean isResultFile = GetAlegeusFileFormatIsResultFile(fileFormat);
-
-                //
-                var newPath =
-                    PrefixLineWithEntireLineAndFileName(srcFilePath, orgSrcFilePath, fileLogParams);
-                //
-                string tableName = isResultFile ? "[dbo].[res_file_table_stage]" : "[dbo].[mbi_file_table_stage]";
-                string postImportProc = isResultFile
-                    ? "dbo.process_res_file_table_stage_import"
-                    : "dbo.process_mbi_file_table_stage_import";
-
-                // truncate staging table
-                DbUtils.TruncateTable(dbConn, tableName,
-                    fileLogParams?.GetMessageLogParams());
-
-                // import the file with bulk copy
-                ImpExpUtils.ImportCsvFileBulkCopy(dbConn, newPath, hasHeaderRow, tableName, mappings,
-                    fileLogParams, onErrorCallback
-                );
-
-                //
-                // run postimport query to take from staging to final table
-                string queryString = $"exec {postImportProc};";
-                DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
-                    fileLogParams?.GetMessageLogParams());
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(orgSrcFilePath, fileFormat.ToDescription(), ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
         }
 
         public static string PrefixLineWithEntireLineAndFileName(string srcFilePath, string orgSrcFilePath,
@@ -516,151 +332,6 @@ namespace DataProcessing
             FileUtils.WriteToFile(errorFilePath, rejectMessage, null);
         }
 
-        public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath)
-        {
-            var headerType = HeaderType.NotApplicable;
-            // convert excel files to csv to check
-            if (FileUtils.IsExcelFile(srcFilePath))
-            {
-                var csvFilePath = Path.GetTempFileName() + ".csv";
-
-                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
-                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
-                    null,
-                    null);
-
-                srcFilePath = csvFilePath;
-            }
-
-            int rowNo = 0;
-            using var inputFile = new StreamReader(srcFilePath);
-            while (true)
-            {
-                string line = inputFile.ReadLine()!;
-                rowNo++;
-
-                if (line == null)
-                {
-                    if (headerType == HeaderType.NotApplicable)
-                    {
-                        string message =
-                            $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Could Not Determine Header Type for  {srcFilePath}";
-                        throw new IncorrectFileFormatException(message);
-                    }
-
-                    return headerType;
-                }
-
-                string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
-                var columnCount = columns.Length;
-                if (columnCount == 0)
-                {
-                    continue;
-                }
-
-                var expectedMappingColumnsCount = 0;
-                var firstColValue = columns[0];
-                var fileFormat = ImpExpUtils.GetAlegeusRowFormat(firstColValue);
-
-                // we only care for Import Headers
-                if (Import.GetAlegeusFileFormatIsResultFile(fileFormat))
-                {
-                    return HeaderType.New;
-                }
-
-
-                // get file format
-                // note: we are also detecting header type from conettn for prev Own and NoChange header folders
-                switch (fileFormat)
-                {
-                    // ignore unknown and header lines
-                    case EdiFileFormat.Unknown:
-                    case EdiFileFormat.AlegeusHeader:
-                    case EdiFileFormat.AlegeusResultsHeader:
-                        continue;
-
-                    case EdiFileFormat.AlegeusDemographics:
-                        switch (columnCount)
-                        {
-                            case 19:
-                                headerType = HeaderType.Old;
-                                expectedMappingColumnsCount = columnCount;
-                                break;
-
-                            case 24:
-                                headerType = HeaderType.New;
-                                ;
-                                expectedMappingColumnsCount = columnCount;
-                                break;
-                                // can also be segmented header!
-                        }
-
-                        ;
-                        break;
-
-                    case EdiFileFormat.AlegeusEnrollment:
-                        switch (columnCount)
-                        {
-                            case 14:
-                                headerType = HeaderType.Old;
-                                expectedMappingColumnsCount = columnCount;
-                                break;
-
-                            case 15:
-                                headerType = HeaderType.New;
-                                expectedMappingColumnsCount = columnCount;
-                                break;
-
-                            case 16:
-                                headerType = HeaderType.SegmentedFunding;
-                                expectedMappingColumnsCount = columnCount;
-                                break;
-                        }
-
-                        ;
-                        break;
-
-                    case EdiFileFormat.AlegeusEmployeeDeposit:
-                        switch (columnCount)
-                        {
-                            case 11:
-                                headerType = HeaderType.Old;
-                                expectedMappingColumnsCount = columnCount;
-                                break;
-
-                            default:
-                                headerType = HeaderType.NotApplicable;
-                                break;
-                        }
-
-                        ;
-                        break;
-
-                    default:
-                        headerType = HeaderType.New;
-                        break;
-                }
-
-                if (expectedMappingColumnsCount <= 0)
-                {
-                    // what mappings do we expect for this format
-                    var mappings = GetAlegeusFileImportMappings(fileFormat, HeaderType.NotApplicable, true);
-
-                    // check we have the exact columns that we expected
-                    expectedMappingColumnsCount =
-                        mappings.Count /*subtract the extra columns we add before iomport to csv files*/ - 3;
-                    if (columnCount != expectedMappingColumnsCount)
-                    {
-                        string message =
-                            $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source file with format {fileFormat.ToDescription()} has {columnCount} columns instead of the expected {expectedMappingColumnsCount}. Could Not Determine Header Type for {srcFilePath}";
-                        throw new IncorrectFileFormatException(message);
-                    }
-                }
-
-                return headerType;
-            }
-        }
-
         public static PlatformType GetPlatformTypeForFile(string srcFilePath)
         {
             // convert excel file
@@ -691,53 +362,9 @@ namespace DataProcessing
                 return PlatformType.Alegeus;
             }
         }
+        #endregion
 
-
-        public static Boolean IsCobraImportFile(string srcFilePath)
-        {
-            // COBRA files, first line starts with [VERSION],
-            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
-
-            if (contents.Contains("[VERSION],"))
-            {
-                return true;
-            }
-
-
-            return false;
-        }
-        public static Boolean IsAlegeusImportFile(string srcFilePath)
-        {
-            using var inputFile = new StreamReader(srcFilePath);
-            string line;
-            while ((line = inputFile.ReadLine()!) != null)
-            {
-                if (IsAlegeusImportRecLine(line))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-        public static Boolean IsCobraImportQbFile(string srcFilePath)
-        {
-            Boolean isCobraFile = IsCobraImportFile(srcFilePath);
-
-            // toDo: how to distincguih QB and NPM files?
-            return isCobraFile;
-        }
-
-        public static Boolean GetAlegeusFileFormatIsResultFile(EdiFileFormat fileFormat)
-        {
-            String fileFormatDesc = fileFormat.ToDescription();
-            if (fileFormatDesc.IndexOf("Result", StringComparison.InvariantCultureIgnoreCase) >= 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
+        #region BrokerCommissions
 
         public static TypedCsvSchema GetBrokerCommissionFileImportMappings(EdiFileFormat fileFormat, HeaderType headerType, Boolean forImport = true)
         {
@@ -775,6 +402,72 @@ namespace DataProcessing
             return mappings;
         }
 
+        public static void ImportBrokerCommissionFile(DbConnection dbConn, string srcFilePath,
+            Boolean hasHeaderRow, FileOperationLogParams fileLogParams
+            , OnErrorCallback onErrorCallback)
+        {
+            //
+            EdiFileFormat fileFormat = EdiFileFormat.BrokerCommissionQBRawData;
+
+
+            // 2. import the file
+            try
+            {
+                // check mappinsg and type opf file (Import or Result)
+
+                var headerType = HeaderType.NotApplicable;
+                TypedCsvSchema mappings = GetBrokerCommissionFileImportMappings(fileFormat, headerType);
+                Boolean isResultFile = false;
+
+                //
+                //var newPath =PrefixLineWithEntireLineAndFileName(srcFilePath, orgSrcFilePath, fileLogParams);
+                var newPath = srcFilePath;
+                //
+                string tableName = isResultFile ? "[dbo].Import_OCT" : "[dbo].Import_OCT";
+                string postImportProc = isResultFile
+                    ? ""
+                    : "";
+
+                // truncate staging table
+                DbUtils.TruncateTable(dbConn, tableName,
+                    fileLogParams?.GetMessageLogParams());
+
+                // import the file with bulk copy
+                ImpExpUtils.ImportCsvFileBulkCopy(dbConn, newPath, hasHeaderRow, tableName, mappings,
+                    fileLogParams, onErrorCallback
+                );
+
+                if (!Utils.IsBlank(postImportProc))
+                {
+                    //
+                    // run postimport query to take from staging to final table
+                    string queryString = $"exec {postImportProc};";
+                    DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
+                        fileLogParams?.GetMessageLogParams());
+                }
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(srcFilePath, fileFormat.ToDescription(), ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Alegeus
+
+        private static readonly Regex regexALImportHeader = new Regex("IA,");
+        private static readonly Regex regexALImportRecType = new Regex("I[B-Z],");
+        private static readonly Regex regexALExportHeader = new Regex("RA,");
+        private static readonly Regex regexALExportRecType = new Regex("R[B-Z],");
 
         public static TypedCsvSchema GetAlegeusFileImportMappings(EdiFileFormat fileFormat, HeaderType headerType,
             Boolean forImport = true)
@@ -1277,152 +970,389 @@ namespace DataProcessing
             return mappings;
         }
 
-        /*all cobra column names for DB
-         VersionNumber
-        ClientName
-        ClientDivisionName
-        Salutation
-        FirstName
-        MiddleInitial
-        LastName
-        SSN
-        IndividualID
-        Email
-        Phone
-        Phone2
-        Address1
-        Address2
-        City
-        StateOrProvince
-        PostalCode
-        Country
-        PremiumAddressSameAsPrimary
-        PremiumAddress1
-        PremiumAddress2
-        PremiumCity
-        PremiumStateOrProvince
-        PremiumPostalCode
-        PremiumCountry
-        Sex
-        DOB
-        TobaccoUse
-        EmployeeType
-        EmployeePayrollType
-        YearsOfService
-        PremiumCouponType
-        UsesHCTC
-        Active
-        AllowMemberSSO
-        BenefitGroup
-        AccountStructure
-        ClientSpecificData
-        SSOIdentifier
-        PlanCategory
-        EventType
-        EventDate
-        EnrollmentDate
-        EmployeeSSN
-        EmployeeName
-        SecondEventOriginalFDOC
-        DateSpecificRightsNoticeWasPrinted
-        PostmarkDateOfElection
-        IsPaidThroughLastDayOfCOBRA
-        NextPremiumOwedMonth
-        NextPremiumOwedYear
-        NextPremiumOwedAmountReceived
-        SendTakeoverLetter
-        IsConversionLetterSent
-        SendDODSubsidyExtension
-        PlanName
-        CoverageLevel
-        NumberOfUnit
-        PlanName
-        StartDate
-        EndDate
-        CoverageLevel
-        FirstDayOfCOBRA
-        LastDayOfCOBRA
-        COBRADurationMonths
-        DaysToElect
-        DaysToMake1stPayment
-        DaysToMakeSubsequentPayments
-        ElectionPostmarkDate
-        LastDateRatesNotified
-        NumberOfUnits
-        SendPlanChangeLetterForLegacy
-        PlanBundleName
-        SSN
-        Relationship
-        Salutation
-        FirstName
-        MiddleInitial
-        LastName
-        Email
-        Phone
-        Phone2
-        AddressSameAsQB
-        Address1
-        Address2
-        City
-        StateOrProvince
-        PostalCode
-        Country
-        EnrollmentDate
-        Sex
-        DOB
-        IsQMCSO
-        PlanName
-        PlanName
-        StartDate
-        EndDate
-        UsesFDOC
-        NoteType
-        DateTime
-        NoteText
-        UserName
-        InsuranceType
-        SubsidyAmountType
-        StartDate
-        EndDate
-        Amount
-        SubsidyType
-        RatePeriodSubsidy
-        CASRINSERT
-        CTSRINSERT
-        MNLIFEINSERT
-        MNCONTINSERT
-        ORSRINSERT
-        TXSRINSERT
-        NY-SR INSERT
-        VEBASRINSERT
-        ILSRINSERT
-        RISRINSERT
-        GASRINSERT
-        VASRINSERT
-        DisabilityApproved
-        PostmarkOfDisabilityExtension
-        DateDisabled
-        DenialReason
-        PlanName
-        Rate
-        PlanName
-        StartDate
-        EndDate
-        Rate
-        PlanName
-        TermOrReinstate
-        EffectiveDate
-        Reason
-        LetterAttachmentName
-        ClientName
-        SSN
-        QualifyingEventDate
-        UserDefinedFieldName
-        UserDefinedFieldValue
-        */
+        public static Boolean IsAlegeusImportRecLine(string text)
+        {
+            return regexALImportRecType.IsMatch(text?.Trim().Substring(0, 3));
+        }
+        public static Boolean IsAlegeusImportHeaderLine(string text)
+        {
+            return regexALImportHeader.IsMatch(text?.Trim().Substring(0, 3));
+        }
+
+        public static Boolean IsAlegeusExportRecLine(string text)
+        {
+            return regexALExportRecType.IsMatch(text?.Trim().Substring(0, 3));
+        }
+        public static Boolean IsAlegeusExportHeaderLine(string text)
+        {
+            return regexALExportHeader.IsMatch(text?.Trim().Substring(0, 3));
+        }
+
+        public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath)
+        {
+            var headerType = HeaderType.NotApplicable;
+            // convert excel files to csv to check
+            if (FileUtils.IsExcelFile(srcFilePath))
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
+            }
+
+            int rowNo = 0;
+            using var inputFile = new StreamReader(srcFilePath);
+            while (true)
+            {
+                string line = inputFile.ReadLine()!;
+                rowNo++;
+
+                if (line == null)
+                {
+                    if (headerType == HeaderType.NotApplicable)
+                    {
+                        string message =
+                            $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Could Not Determine Header Type for  {srcFilePath}";
+                        throw new IncorrectFileFormatException(message);
+                    }
+
+                    return headerType;
+                }
+
+                string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
+                var columnCount = columns.Length;
+                if (columnCount == 0)
+                {
+                    continue;
+                }
+
+                var expectedMappingColumnsCount = 0;
+                var firstColValue = columns[0];
+                var fileFormat = ImpExpUtils.GetAlegeusRowFormat(firstColValue);
+
+                // we only care for Import Headers
+                if (Import.GetAlegeusFileFormatIsResultFile(fileFormat))
+                {
+                    return HeaderType.New;
+                }
+
+
+                // get file format
+                // note: we are also detecting header type from conettn for prev Own and NoChange header folders
+                switch (fileFormat)
+                {
+                    // ignore unknown and header lines
+                    case EdiFileFormat.Unknown:
+                    case EdiFileFormat.AlegeusHeader:
+                    case EdiFileFormat.AlegeusResultsHeader:
+                        continue;
+
+                    case EdiFileFormat.AlegeusDemographics:
+                        switch (columnCount)
+                        {
+                            case 19:
+                                headerType = HeaderType.Old;
+                                expectedMappingColumnsCount = columnCount;
+                                break;
+
+                            case 24:
+                                headerType = HeaderType.New;
+                                ;
+                                expectedMappingColumnsCount = columnCount;
+                                break;
+                                // can also be segmented header!
+                        }
+
+                        ;
+                        break;
+
+                    case EdiFileFormat.AlegeusEnrollment:
+                        switch (columnCount)
+                        {
+                            case 14:
+                                headerType = HeaderType.Old;
+                                expectedMappingColumnsCount = columnCount;
+                                break;
+
+                            case 15:
+                                headerType = HeaderType.New;
+                                expectedMappingColumnsCount = columnCount;
+                                break;
+
+                            case 16:
+                                headerType = HeaderType.SegmentedFunding;
+                                expectedMappingColumnsCount = columnCount;
+                                break;
+                        }
+
+                        ;
+                        break;
+
+                    case EdiFileFormat.AlegeusEmployeeDeposit:
+                        switch (columnCount)
+                        {
+                            case 11:
+                                headerType = HeaderType.Old;
+                                expectedMappingColumnsCount = columnCount;
+                                break;
+
+                            default:
+                                headerType = HeaderType.NotApplicable;
+                                break;
+                        }
+
+                        ;
+                        break;
+
+                    default:
+                        headerType = HeaderType.New;
+                        break;
+                }
+
+                if (expectedMappingColumnsCount <= 0)
+                {
+                    // what mappings do we expect for this format
+                    var mappings = GetAlegeusFileImportMappings(fileFormat, HeaderType.NotApplicable, true);
+
+                    // check we have the exact columns that we expected
+                    expectedMappingColumnsCount =
+                        mappings.Count /*subtract the extra columns we add before iomport to csv files*/ - 3;
+                    if (columnCount != expectedMappingColumnsCount)
+                    {
+                        string message =
+                            $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source file with format {fileFormat.ToDescription()} has {columnCount} columns instead of the expected {expectedMappingColumnsCount}. Could Not Determine Header Type for {srcFilePath}";
+                        throw new IncorrectFileFormatException(message);
+                    }
+                }
+
+                return headerType;
+            }
+        }
+
+        public static Boolean IsAlegeusImportFile(string srcFilePath)
+        {
+            using var inputFile = new StreamReader(srcFilePath);
+            string line;
+            while ((line = inputFile.ReadLine()!) != null)
+            {
+                if (IsAlegeusImportRecLine(line))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static Boolean GetAlegeusFileFormatIsResultFile(EdiFileFormat fileFormat)
+        {
+            String fileFormatDesc = fileFormat.ToDescription();
+            if (fileFormatDesc.IndexOf("Result", StringComparison.InvariantCultureIgnoreCase) >= 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static void ImportAlegeusFile(DbConnection dbConn, string srcFilePath,
+            Boolean hasHeaderRow, FileOperationLogParams fileLogParams
+            , OnErrorCallback onErrorCallback)
+        {
+            //
+            Dictionary<EdiFileFormat, List<int>> fileFormats = ImpExpUtils.GetAlegeusFileFormats(
+                srcFilePath, hasHeaderRow, fileLogParams
+            );
+
+            // file may contain only a header...
+            if (fileFormats.Count == 0)
+            {
+                Boolean isResultFile = GetAlegeusFileFormatIsResultFile(fileFormats.Keys.First());
+
+                // import as plain text file
+                ImpExpUtils.ImportSingleColumnFlatFile(dbConn, srcFilePath, Path.GetFileName(srcFilePath),
+                    isResultFile ? "res_file_table_stage" : "mbi_file_table_stage",
+                    isResultFile ? "res_file_name" : "mbi_file_name",
+                    isResultFile ? "error_row" : "data_row",
+                    (filePath1, rowNo, line) =>
+                    {
+                        // we only import valid import lines 
+                        Boolean import = true;
+                        return import;
+                    },
+                    fileLogParams,
+                    onErrorCallback
+                );
+
+                return;
+            }
+
+            // 2. import the file
+            ImportAlegeusFile(fileFormats, dbConn, srcFilePath, hasHeaderRow, fileLogParams,
+                onErrorCallback);
+        }
+
+        //doesnt work - mappings not clear
+        public static void ImportAlegeusFile(Dictionary<EdiFileFormat, List<int>> fileFormats,
+            DbConnection dbConn, string srcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams
+            , OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                string fileName = Path.GetFileName(srcFilePath);
+                fileLogParams?.SetFileNames(Utils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, "", "",
+                    "ImportAlegeusFile", $"Starting: Import {fileName}", "Starting");
+
+                // split text fileinto multiple files
+                Dictionary<EdiFileFormat, Object[]> files = new Dictionary<EdiFileFormat, Object[]>();
+
+                //
+                foreach (EdiFileFormat fileFormat in fileFormats.Keys)
+                {
+                    // get temp file for each format
+                    string splitFileName = Path.GetTempFileName();
+                    FileUtils.EnsurePathExists(splitFileName);
+                    //
+                    var splitFileWriter = new StreamWriter(splitFileName, false);
+                    files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
+                }
+
+                // open file for reading
+                // read each line and insert
+                using (var inputFile = new StreamReader(srcFilePath))
+                {
+                    int rowNo = 0;
+                    string line;
+                    while ((line = inputFile.ReadLine()) != null)
+                    {
+                        rowNo++;
+
+                        foreach (EdiFileFormat fileFormat2 in fileFormats.Keys)
+                        {
+                            if (fileFormats[fileFormat2].Contains(rowNo)
+                                || (line?.Substring(0, 2) == "RA" || line?.Substring(0, 2) == "IA"))
+                            {
+                                // get temp file for each format
+                                var splitFileWriter = (StreamWriter)files[fileFormat2][0];
+                                // if there is prvUnwrittenLine it was probably a header line - write to the file that 
+
+                                splitFileWriter.WriteLine(line);
+                                continue;
+                            }
+                        }
+
+                        // go to next line if a line was written
+                    }
+                }
+
+                // close all files
+                //
+                foreach (var fileFormat3 in files.Keys)
+                {
+                    // get temp file for each format
+                    var writer = (StreamWriter)files[fileFormat3][0];
+                    writer.Close();
+
+                    // import the file
+                    ImportAlegeusFile(fileFormat3, dbConn, (string)files[fileFormat3][1], srcFilePath,
+                        hasHeaderRow, fileLogParams, onErrorCallback);
+                }
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(srcFilePath, fileFormats.Values.ToString(), ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        private static void ImportAlegeusFile(EdiFileFormat fileFormat, DbConnection dbConn,
+            string srcFilePath, string orgSrcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams
+            , OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                // check mappinsg and type opf file (Import or Result)
+
+                var headerType = GetAlegeusHeaderTypeFromFile(srcFilePath);
+                TypedCsvSchema mappings = GetAlegeusFileImportMappings(fileFormat, headerType);
+                Boolean isResultFile = GetAlegeusFileFormatIsResultFile(fileFormat);
+
+                //
+                var newPath =
+                    PrefixLineWithEntireLineAndFileName(srcFilePath, orgSrcFilePath, fileLogParams);
+                //
+                string tableName = isResultFile ? "[dbo].[res_file_table_stage]" : "[dbo].[mbi_file_table_stage]";
+                string postImportProc = isResultFile
+                    ? "dbo.process_res_file_table_stage_import"
+                    : "dbo.process_mbi_file_table_stage_import";
+
+                // truncate staging table
+                DbUtils.TruncateTable(dbConn, tableName,
+                    fileLogParams?.GetMessageLogParams());
+
+                // import the file with bulk copy
+                ImpExpUtils.ImportCsvFileBulkCopy(dbConn, newPath, hasHeaderRow, tableName, mappings,
+                    fileLogParams, onErrorCallback
+                );
+
+                //
+                // run postimport query to take from staging to final table
+                string queryString = $"exec {postImportProc};";
+                DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
+                    fileLogParams?.GetMessageLogParams());
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(orgSrcFilePath, fileFormat.ToDescription(), ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        #endregion
+      
+        #region COBRA
+
+        public static Boolean IsCobraImportFile(string srcFilePath)
+        {
+            // COBRA files, first line starts with [VERSION],
+            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
+
+            if (contents.Contains("[VERSION],"))
+            {
+                return true;
+            }
+
+
+            return false;
+        }
+        public static Boolean IsCobraImportQbFile(string srcFilePath)
+        {
+            Boolean isCobraFile = IsCobraImportFile(srcFilePath);
+
+            // toDo: how to distincguih QB and NPM files?
+            return isCobraFile;
+        }
 
         public static TypedCsvSchema GetCobraFileImportMappings(string fileFormat, HeaderType headerType,
-                 Boolean forImport = true)
+             Boolean forImport = true)
         {
             var mappings = new TypedCsvSchema();
 
@@ -1650,73 +1580,7 @@ namespace DataProcessing
         }
 
 
-        public static void ImportCrmListFileBulkCopy(DbConnection dbConn, string srcFilePath,
-            Boolean hasHeaderRow, string tableName, FileOperationLogParams fileLogParams
-            , OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                string fileName = Path.GetFileName(srcFilePath);
-                fileLogParams?.SetFileNames(Utils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, tableName,
-                    tableName, "ImportCrmListFileBulkCopy", $"Starting: Import {fileName}", "Starting");
+        #endregion
 
-                //
-                TypedCsvSchema mappings = new TypedCsvSchema();
-                //
-                mappings.Add(new TypedCsvColumn("BENCODE", "BENCODE"));
-                mappings.Add(new TypedCsvColumn("CRM", "CRM"));
-                mappings.Add(new TypedCsvColumn("CRM_email", "CRM_email"));
-                mappings.Add(new TypedCsvColumn("emp_services", "emp_services"));
-                mappings.Add(new TypedCsvColumn("Primary_contact_name", "Primary_contact_name"));
-                mappings.Add(new TypedCsvColumn("Primary_contact_email", "Primary_contact_email"));
-                mappings.Add(new TypedCsvColumn("client_start_date", "client_start_date"));
-
-                //
-                ImpExpUtils.ImportCsvFileBulkCopy(dbConn, srcFilePath, hasHeaderRow, tableName, mappings,
-                    fileLogParams,
-                    (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
-                );
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(srcFilePath, tableName, ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        private static readonly Regex regexALImportHeader = new Regex("IA,");
-        private static readonly Regex regexALImportRecType = new Regex("I[B-Z],");
-        private static readonly Regex regexALExportHeader = new Regex("RA,");
-        private static readonly Regex regexALExportRecType = new Regex("R[B-Z],");
-
-        public static Boolean IsAlegeusImportRecLine(string text)
-        {
-            return regexALImportRecType.IsMatch(text?.Trim().Substring(0, 3));
-        }
-        public static Boolean IsAlegeusImportHeaderLine(string text)
-        {
-            return regexALImportHeader.IsMatch(text?.Trim().Substring(0, 3));
-        }
-
-        public static Boolean IsAlegeusExportRecLine(string text)
-        {
-            return regexALExportRecType.IsMatch(text?.Trim().Substring(0, 3));
-        }
-        public static Boolean IsAlegeusExportHeaderLine(string text)
-        {
-            return regexALExportHeader.IsMatch(text?.Trim().Substring(0, 3));
-        }
     }
-
-
-
-
-
 }
