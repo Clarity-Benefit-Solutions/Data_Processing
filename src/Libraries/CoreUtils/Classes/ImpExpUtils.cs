@@ -60,7 +60,7 @@ namespace CoreUtils.Classes
                         }
                         else
                         {
-                            fileFormats.Add(fileFormat, new List<int> {rowNo});
+                            fileFormats.Add(fileFormat, new List<int> { rowNo });
                         }
                     }
                 }
@@ -253,7 +253,7 @@ namespace CoreUtils.Classes
                 //LogFileOperation(fileLogParams);
 
                 // query
-                var dt = (DataTable) DbQuery(DbOperation.ExecuteReader, dbConn, queryString, queryParams,
+                var dt = (DataTable)DbQuery(DbOperation.ExecuteReader, dbConn, queryString, queryParams,
                     fileLogParams?.GetMessageLogParams());
                 //
 
@@ -302,56 +302,28 @@ namespace CoreUtils.Classes
             return Fields;
         }
 
-        public static void ImportCsvFile<T>(string filePath, DbConnection dbConn, string tableName,
-            string[] contentsColNames, bool hasHeaders, FileOperationLogParams fileLogParams,
+        //imports passed csvfile into table line by line as per passed columns
+        public static void ImportCsvFile(string filePath, DbConnection dbConn, string tableName,
+            TypedCsvSchema mappings, bool hasHeaders, FileOperationLogParams fileLogParams,
             OnErrorCallback onErrorCallback)
         {
             try
             {
-                //fileLogParams?.SetTaskOutcome("Starting", $"Starting: Import Into {tableName}");
-                //LogFileOperation(fileLogParams);
-
-                var theType = typeof(T);
-
-                var insertColumnNames = string.Join(",", contentsColNames);
-
-                var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+                using (var inputFile = new StreamReader(filePath))
                 {
-                    NewLine = Environment.NewLine,
-                    // in case HasHeaderRecord = false, the reader will use Index attributes of the class properties to match
-                    HasHeaderRecord = hasHeaders,
-                };
-
-                using var reader = new StreamReader(filePath);
-                using var csv = new CsvReader(reader, config);
-                IEnumerable<T> records = csv.GetRecords<T>();
-
-                foreach (var row in records)
-                {
-                    // get insertValues string
-                    var insertValuesString = "";
-                    foreach (var columnName in contentsColNames)
+                    int rowNo = 0;
+                    string line;
+                    while ((line = inputFile.ReadLine()) != null)
                     {
-                        var value = theType.GetProperty(columnName)?.GetValue(row, null);
-                        insertValuesString += $"'{Utils.DbQuote(value?.ToString())}',";
+                        rowNo++;
+                        if (rowNo == 1 && hasHeaders)
+                        {
+                            continue;
+                        }
+
+                        ImportCsvLine(line, dbConn, tableName, mappings, fileLogParams, onErrorCallback);
                     }
-
-                    insertValuesString = insertValuesString.Substring(0, insertValuesString.Length - 1);
-
-                    //
-                    var query = $"INSERT INTO {tableName} " +
-                                $" ({insertColumnNames}) " +
-                                $" values ({insertValuesString})";
-
-                    // pass new dbLogParams() to ensure no recursion of logging!
-                    DbQuery(DbOperation.ExecuteNonQuery, dbConn, query, null,
-                        fileLogParams?.GetMessageLogParams()
-                        , doNotLogOperationToDb: true);
                 }
-
-                //// log
-                //fileLogParams?.SetTaskOutcome("Success", $"Completed: Import Into {tableName}");
-                //LogFileOperation(fileLogParams);
             }
             catch (Exception ex)
             {
@@ -365,6 +337,43 @@ namespace CoreUtils.Classes
                     throw;
                 }
             }
+        } // routine
+
+        //imports passed line into table as per passed columns
+        public static void ImportCsvLine(string line, DbConnection dbConn, string tableName,
+        TypedCsvSchema mappings, FileOperationLogParams fileLogParams,
+        OnErrorCallback onErrorCallback)
+        {
+            // get insertValues string
+            var insertValuesString = "";
+            string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
+            int colNo = -1;
+
+            string insertColumnNames = "";
+            foreach (var mapping in mappings.Columns)
+            {
+                insertColumnNames += $"{ mapping.DestinationColumn}";
+                //
+                colNo++;
+                var value = columns[colNo];
+                //
+                insertValuesString += $"'{Utils.DbQuote(value)}',";
+            }
+
+            insertValuesString = insertValuesString.Substring(0, insertValuesString.Length - 1);
+            insertColumnNames = insertColumnNames.Substring(0, insertColumnNames.Length - 1);
+
+            //
+            var query = $"INSERT INTO {tableName} " +
+                        $" ({insertColumnNames}) " +
+                        $" values ({insertValuesString})";
+
+            // pass new dbLogParams() to ensure no recursion of logging!
+            DbQuery(DbOperation.ExecuteNonQuery, dbConn, query, null,
+                fileLogParams?.GetMessageLogParams()
+                , doNotLogOperationToDb: true);
+
+
         } // routine
 
         public static void ImportCsvFileBulkCopy(DbConnection dbConn,

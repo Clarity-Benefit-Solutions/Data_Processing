@@ -71,29 +71,6 @@ namespace DataProcessing
         }
 
 
-        public static void ImportCrmListCsvHlpr(DbConnection dbConn, string srcFilePath,
-            string tableName, FileOperationLogParams fileLogParams
-            , OnErrorCallback onErrorCallback)
-        {
-            fileLogParams?.SetFileNames("", "", "", "", "", "ImportCrmListManual", "CRMList", "Starting: Get CRM List");
-
-            //
-            string[] columns =
-            {
-                "BENCODE",
-                "CRM",
-                "CRM_email",
-                "emp_services",
-                "Primary_contact_name",
-                "Primary_contact_email",
-                "client_start_date",
-            };
-
-            //
-            ImpExpUtils.ImportCsvFile<CsvFileSpecs>(srcFilePath, dbConn, tableName, columns, false, fileLogParams,
-                onErrorCallback);
-        }
-
         public static string PrefixLineWithEntireLineAndFileName(string srcFilePath, string orgSrcFilePath,
             FileOperationLogParams fileLogParams)
         {
@@ -1133,6 +1110,17 @@ namespace DataProcessing
             }
         }
 
+        public static Boolean GetAlegeusFileFormatIsResultFile(EdiFileFormat fileFormat)
+        {
+            String fileFormatDesc = fileFormat.ToDescription();
+            if (fileFormatDesc.IndexOf("Result", StringComparison.InvariantCultureIgnoreCase) >= 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public static Boolean IsAlegeusImportFile(string srcFilePath)
         {
             using var inputFile = new StreamReader(srcFilePath);
@@ -1148,20 +1136,9 @@ namespace DataProcessing
             return false;
         }
 
-        public static Boolean GetAlegeusFileFormatIsResultFile(EdiFileFormat fileFormat)
-        {
-            String fileFormatDesc = fileFormat.ToDescription();
-            if (fileFormatDesc.IndexOf("Result", StringComparison.InvariantCultureIgnoreCase) >= 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         public static void ImportAlegeusFile(DbConnection dbConn, string srcFilePath,
-            Boolean hasHeaderRow, FileOperationLogParams fileLogParams
-            , OnErrorCallback onErrorCallback)
+                  Boolean hasHeaderRow, FileOperationLogParams fileLogParams
+                  , OnErrorCallback onErrorCallback)
         {
             //
             Dictionary<EdiFileFormat, List<int>> fileFormats = ImpExpUtils.GetAlegeusFileFormats(
@@ -1327,7 +1304,7 @@ namespace DataProcessing
         }
 
         #endregion
-      
+
         #region COBRA
 
         public static Boolean IsCobraImportFile(string srcFilePath)
@@ -1579,7 +1556,93 @@ namespace DataProcessing
             return mappings;
         }
 
+        public static string GetCobraRowFormatFromLine(string line)
+        {
+            var headerType = HeaderType.NotApplicable;
 
+            if (Utils.IsBlank(line))
+            {
+                return "[UKNOWN]";
+            }
+
+            string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
+            var columnCount = columns.Length;
+            if (columnCount == 0)
+            {
+                return "[UKNOWN]";
+            }
+
+            var firstColValue = columns[0];
+
+            //todo: improce this
+            return firstColValue;
+
+        }
+
+        public static void ImportCobraFile(DbConnection dbConn, string srcFilePath,
+          Boolean hasHeaderRow, FileOperationLogParams fileLogParams
+          , OnErrorCallback onErrorCallback)
+        {
+
+            try
+            {
+                string fileName = Path.GetFileName(srcFilePath);
+                fileLogParams?.SetFileNames(Utils.GetUniqueIdFromFileName(fileName), fileName, srcFilePath, "", "",
+                    "ImportCobraFile", $"Starting: Import {fileName}", "Starting");
+
+                // split text fileinto multiple files
+                Dictionary<EdiFileFormat, Object[]> files = new Dictionary<EdiFileFormat, Object[]>();
+
+
+                // open file for reading
+                // read each line and insert
+                using (var inputFile = new StreamReader(srcFilePath))
+                {
+                    int rowNo = 0;
+                    string line;
+                    while ((line = inputFile.ReadLine()) != null)
+                    {
+                        rowNo++;
+
+                        var headerType = HeaderType.NotApplicable;
+                        string fileFormat = GetCobraRowFormatFromLine(line);
+                        TypedCsvSchema mappings = GetCobraFileImportMappings(fileFormat, headerType);
+                        Boolean isResultFile = false; // GetCobraFileFormatIsResultFile(fileFormat);
+
+                        //
+                        string tableName = isResultFile ? "[dbo].[cobra_res_file_table_stage]" : "[dbo].[cobra_file_table_stage]";
+                        string postImportProc = isResultFile
+                            ? "dbo.process_cobra_res_file_table_stage_import"
+                            : "dbo.process_cobra_file_table_stage_import";
+
+                        // truncate staging table
+                        DbUtils.TruncateTable(dbConn, tableName,
+                            fileLogParams?.GetMessageLogParams());
+
+                        // import the line with manual insert statement
+                        ImpExpUtils.ImportCsvLine(line, dbConn, tableName, mappings, fileLogParams, onErrorCallback);
+
+                        //
+                        // run postimport query to take from staging to final table
+                        string queryString = $"exec {postImportProc};";
+                        DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
+                            fileLogParams?.GetMessageLogParams());
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(srcFilePath, "", ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
         #endregion
 
     }
