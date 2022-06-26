@@ -1248,6 +1248,7 @@ namespace DataProcessing
             {
                 if (PlatformType == PlatformType.Alegeus)
                 {
+                    // todo: we need check exactly check against each plan - min/max are not correct
                     string queryString =
                             $"select employer_id, account_type_code, plan_id, date(min(plan_year_start_date)) as plan_year_start_date, date(max(plan_year_end_date)) as plan_year_end_date /* , max(grace_period_end_date) grace_period_end_date*/ " +
                             $" from wc.vw_wc_employer_plans_combined " +
@@ -1292,6 +1293,7 @@ namespace DataProcessing
             {
                 if (PlatformType == PlatformType.Alegeus)
                 {
+                    // todo: we need check exactly check against each plan - min/max are not correct
                     // get ALL plans
                     string queryString1 =
                             $" select employerid, employeeid, plancode, plandesc, date(min(planstart)) as planstart, date(max(planend)) as planend " +

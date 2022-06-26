@@ -42,6 +42,7 @@
     {
         [Utils.DisplayText("")] Any = 0,
         [Utils.DisplayText("String")] String,
+        [Utils.DisplayText("SSN")] SSN,
         [Utils.DisplayText("Email")] Email,
         [Utils.DisplayText("Zip")] Zip,
         [Utils.DisplayText("Phone")] Phone,
@@ -53,12 +54,15 @@
         NumbersAndDashes,
         [Utils.DisplayText("Integer")] Integer,
         [Utils.DisplayText("Double")] Double,
+        [Utils.DisplayText("one decimal, no commas, #0.00")] CobraMoney,
         [Utils.DisplayText("FixedConstant")] FixedConstant,
         [Utils.DisplayText("YYYYMMDD")] IsoDate,
+        [Utils.DisplayText("MM/DD/YYYY")] CobraDate,
 
-        [Utils.DisplayText("YYYYMMDD HHMMNNSS")]
-        IsoDateTime,
+        [Utils.DisplayText("YYYYMMDD HHMMNNSS")] IsoDateTime,
+        [Utils.DisplayText("MM/DD/YYYY HH:mm AM")] CobraDateTime,
         [Utils.DisplayText("Yes Or No")] YesNo,
+        [Utils.DisplayText("YES Or NO")] CobraYesNo,
         [Utils.DisplayText("True Or False")] TrueFalse,
     }
 

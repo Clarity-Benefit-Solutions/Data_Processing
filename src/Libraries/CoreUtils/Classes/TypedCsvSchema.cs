@@ -10,6 +10,9 @@ namespace CoreUtils.Classes
     // utility class that wraps DbColumn (to use with Sylvan.CsvReader) and adds props needed for fileCheck and bulkCopy to DB
     public class TypedCsvColumn : DbColumn
     {
+        public TypedCsvColumn() : base()
+        {
+        }
         public TypedCsvColumn(int sourceOrdinal, int destinationOrdinal, FormatType formatType = FormatType.Any,
             int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0, string defaultValue = "")
         {
@@ -139,4 +142,27 @@ namespace CoreUtils.Classes
         }
     }
 
-}
+    public class CobraTypedCsvColumn : TypedCsvColumn
+    {
+        public CobraTypedCsvColumn(string sourceColumn, FormatType formatType = FormatType.Any,
+           int maxLength = 0, int isRequired=0, string notes = "", string possibleValues = "") : base()
+        {
+            this.ColumnName = sourceColumn;
+            this.DestinationColumn = sourceColumn;
+            this.FormatType = formatType;
+            this.FixedValue = "";
+            this.MinLength = isRequired > 0 ? 1 : 0;
+            this.MaxLength = maxLength;
+            this.MinValue = 0;
+            this.MaxValue = 0;
+            this.DefaultValue = "";
+
+            //
+            this.AllowDBNull = true;
+            this.DataType = Type.GetType("String");
+        }
+
+
+    }
+
+} // NAMESPACE
