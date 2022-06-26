@@ -797,8 +797,6 @@ namespace DataProcessing
                     // source filename
                     mappings.Add(new TypedCsvColumn("res_file_name", "res_file_name", FormatType.String, null, 0, 0, 0,
                         0));
-
-                    mappings.Add(new CobraTypedCsvColumn("A",))
                 }
                 else
                 {
@@ -1279,12 +1277,156 @@ namespace DataProcessing
             return mappings;
         }
 
-        public static TypedCsvSchema GetCobraFileImportMappings(EdiFileFormat fileFormat, HeaderType headerType,
+        /*all cobra column names for DB
+         VersionNumber
+        ClientName
+        ClientDivisionName
+        Salutation
+        FirstName
+        MiddleInitial
+        LastName
+        SSN
+        IndividualID
+        Email
+        Phone
+        Phone2
+        Address1
+        Address2
+        City
+        StateOrProvince
+        PostalCode
+        Country
+        PremiumAddressSameAsPrimary
+        PremiumAddress1
+        PremiumAddress2
+        PremiumCity
+        PremiumStateOrProvince
+        PremiumPostalCode
+        PremiumCountry
+        Sex
+        DOB
+        TobaccoUse
+        EmployeeType
+        EmployeePayrollType
+        YearsOfService
+        PremiumCouponType
+        UsesHCTC
+        Active
+        AllowMemberSSO
+        BenefitGroup
+        AccountStructure
+        ClientSpecificData
+        SSOIdentifier
+        PlanCategory
+        EventType
+        EventDate
+        EnrollmentDate
+        EmployeeSSN
+        EmployeeName
+        SecondEventOriginalFDOC
+        DateSpecificRightsNoticeWasPrinted
+        PostmarkDateOfElection
+        IsPaidThroughLastDayOfCOBRA
+        NextPremiumOwedMonth
+        NextPremiumOwedYear
+        NextPremiumOwedAmountReceived
+        SendTakeoverLetter
+        IsConversionLetterSent
+        SendDODSubsidyExtension
+        PlanName
+        CoverageLevel
+        NumberOfUnit
+        PlanName
+        StartDate
+        EndDate
+        CoverageLevel
+        FirstDayOfCOBRA
+        LastDayOfCOBRA
+        COBRADurationMonths
+        DaysToElect
+        DaysToMake1stPayment
+        DaysToMakeSubsequentPayments
+        ElectionPostmarkDate
+        LastDateRatesNotified
+        NumberOfUnits
+        SendPlanChangeLetterForLegacy
+        PlanBundleName
+        SSN
+        Relationship
+        Salutation
+        FirstName
+        MiddleInitial
+        LastName
+        Email
+        Phone
+        Phone2
+        AddressSameAsQB
+        Address1
+        Address2
+        City
+        StateOrProvince
+        PostalCode
+        Country
+        EnrollmentDate
+        Sex
+        DOB
+        IsQMCSO
+        PlanName
+        PlanName
+        StartDate
+        EndDate
+        UsesFDOC
+        NoteType
+        DateTime
+        NoteText
+        UserName
+        InsuranceType
+        SubsidyAmountType
+        StartDate
+        EndDate
+        Amount
+        SubsidyType
+        RatePeriodSubsidy
+        CASRINSERT
+        CTSRINSERT
+        MNLIFEINSERT
+        MNCONTINSERT
+        ORSRINSERT
+        TXSRINSERT
+        NY-SR INSERT
+        VEBASRINSERT
+        ILSRINSERT
+        RISRINSERT
+        GASRINSERT
+        VASRINSERT
+        DisabilityApproved
+        PostmarkOfDisabilityExtension
+        DateDisabled
+        DenialReason
+        PlanName
+        Rate
+        PlanName
+        StartDate
+        EndDate
+        Rate
+        PlanName
+        TermOrReinstate
+        EffectiveDate
+        Reason
+        LetterAttachmentName
+        ClientName
+        SSN
+        QualifyingEventDate
+        UserDefinedFieldName
+        UserDefinedFieldValue
+        */
+
+        public static TypedCsvSchema GetCobraFileImportMappings(string fileFormat, HeaderType headerType,
                  Boolean forImport = true)
         {
             var mappings = new TypedCsvSchema();
 
-            Boolean isResultFile = GetAlegeusFileFormatIsResultFile(fileFormat);
+            Boolean isResultFile = false;// GetAlegeusFileFormatIsResultFile(fileFormat);
 
             // add src file path as res_file_name and mbi_file_name
             if (forImport)
@@ -1301,7 +1443,6 @@ namespace DataProcessing
                     mappings.Add(new TypedCsvColumn("res_file_name", "res_file_name", FormatType.String, null, 0, 0, 0,
                         0));
 
-                    mappings.Add(new CobraTypedCsvColumn("A",))
                 }
                 else
                 {
@@ -1316,10 +1457,8 @@ namespace DataProcessing
             // the row_type
             mappings.Add(new TypedCsvColumn("row_type", "row_type", FormatType.String, null, 0, 0, 0, 0));
 
-            switch (fileFormat.ToString())
+            switch (fileFormat)
             {
-
-
                 case "[VERSION]":
                     mappings.Add(new CobraTypedCsvColumn("VersionNumber", FormatType.Integer, 0, 1, "Use “1.2” for this import specification"));
                     break;
@@ -1341,23 +1480,23 @@ namespace DataProcessing
                     mappings.Add(new CobraTypedCsvColumn("StateOrProvince", FormatType.String, 50, 1, ""));
                     mappings.Add(new CobraTypedCsvColumn("PostalCode", FormatType.String, 35, 1, ""));
                     mappings.Add(new CobraTypedCsvColumn("Country", FormatType.String, 50, 0, "Leave blank if the QB resides in the USA"));
-                    mappings.Add(new CobraTypedCsvColumn("PremiumAddressSameAsPrimary", FormatType.CobraYesNo, 1, 0, "Always set to TRUE"));
+                    mappings.Add(new CobraTypedCsvColumn("PremiumAddressSameAsPrimary", FormatType.CobraYesNo, 0, 1, "Always set to TRUE"));
                     mappings.Add(new CobraTypedCsvColumn("PremiumAddress1", FormatType.String, 50, 0, "[Deprecated – do not use]"));
                     mappings.Add(new CobraTypedCsvColumn("PremiumAddress2", FormatType.String, 50, 0, "[Deprecated – do not use]"));
                     mappings.Add(new CobraTypedCsvColumn("PremiumCity", FormatType.String, 50, 0, "[Deprecated – do not use]"));
                     mappings.Add(new CobraTypedCsvColumn("PremiumStateOrProvince", FormatType.String, 50, 0, "[Deprecated – do not use]"));
                     mappings.Add(new CobraTypedCsvColumn("PremiumPostalCode", FormatType.String, 35, 0, "[Deprecated – do not use]"));
                     mappings.Add(new CobraTypedCsvColumn("PremiumCountry", FormatType.String, 50, 0, "[Deprecated – do not use]"));
-                    mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, "1", 1, "F, M, U", "F|M|U"));
-                    mappings.Add(new CobraTypedCsvColumn("DOB", FormatType.CobraDate, 1, 0, "Date of Birth – needed for age based plans and also for the Medicare Letter"));
+                    mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 1, "F, M, U", "F|M|U"));
+                    mappings.Add(new CobraTypedCsvColumn("DOB", FormatType.CobraDate, 0, 1, "Date of Birth – needed for age based plans and also for the Medicare Letter"));
                     mappings.Add(new CobraTypedCsvColumn("TobaccoUse", FormatType.String, 35, 1, "YES, NO, UNKNOWN"));
                     mappings.Add(new CobraTypedCsvColumn("EmployeeType", FormatType.String, 35, 1, "FTE, PTE, H1B, CONSULTANT, SABBATICAL, PROBATIONARY, CONTINGENT, TELECOMMUTING, INTERN, GROUPLEADER, ASSOCIATE, PARTNER, UNKNOWN"));
                     mappings.Add(new CobraTypedCsvColumn("EmployeePayrollType", FormatType.String, 35, 1, "EXEMPT, NONEXEMPT, UNKNOWN"));
                     mappings.Add(new CobraTypedCsvColumn("YearsOfService", FormatType.Integer, 0, 0, "Not used currently and only informational"));
                     mappings.Add(new CobraTypedCsvColumn("PremiumCouponType", FormatType.String, 35, 1, "PREMIUMNOTICE, COUPONBOOK, NONE"));
-                    mappings.Add(new CobraTypedCsvColumn("UsesHCTC", FormatType.CobraYesNo, 1, 0, "TRUE if this QB uses the Health Care Tax Credit (HCTC) system"));
-                    mappings.Add(new CobraTypedCsvColumn("Active", FormatType.CobraYesNo, 1, 0, "Should always be set to TRUE"));
-                    mappings.Add(new CobraTypedCsvColumn("AllowMemberSSO", FormatType.CobraYesNo, 1, 0, "TRUE or FALSE"));
+                    mappings.Add(new CobraTypedCsvColumn("UsesHCTC", FormatType.CobraYesNo, 0, 1, "TRUE if this QB uses the Health Care Tax Credit (HCTC) system"));
+                    mappings.Add(new CobraTypedCsvColumn("Active", FormatType.CobraYesNo, 0, 1, "Should always be set to TRUE"));
+                    mappings.Add(new CobraTypedCsvColumn("AllowMemberSSO", FormatType.CobraYesNo, 1, 1, "TRUE or FALSE"));
                     mappings.Add(new CobraTypedCsvColumn("BenefitGroup", FormatType.String, 50, 0, ""));
                     mappings.Add(new CobraTypedCsvColumn("AccountStructure", FormatType.String, 50, 0, ""));
                     mappings.Add(new CobraTypedCsvColumn("ClientSpecificData", FormatType.String, 50, 0, ""));
@@ -1367,10 +1506,10 @@ namespace DataProcessing
                 case "[QBEVENT]":
                     mappings.Add(new CobraTypedCsvColumn("EventType", FormatType.String, 35, 1, "DIVORCELEGASSEPARATION,DEATH,INELIGIBLEDEPENDENT,MEDICARE,TERMINATION,RETIREMENT,REDUCTIONINHOURS-STATUSCHANGE,REDUCTIONINFORCE,BANKRUPTCY,STATECONTINUATION,LOSSOFELIGIBILITY,REDUCTIONINHOURS-ENDOFLEAVE,WORKSTOPPAGE,USERRA-TERMINATION,USERRA-REDUCTIONINHOURS,INVOLUNTARYTERMINATION,TERMINATIONWITHSEVERANCE,RETIREEBANKRUPTCY"));
                     mappings.Add(new CobraTypedCsvColumn("EventDate", FormatType.CobraDate, 0, 0, "The qualifying event date that the event type occurred on. Do not adjust for plan benefit termination types, just use the actual date of the event."));
-                    mappings.Add(new CobraTypedCsvColumn("EnrollmentDate", FormatType.CobraDate, 1, 0, "Original enrollment date of the member’s current medical plan - used for HIPAA certificate to show length of continuous coverage"));
+                    mappings.Add(new CobraTypedCsvColumn("EnrollmentDate", FormatType.CobraDate, 0, 1, "Original enrollment date of the member’s current medical plan - used for HIPAA certificate to show length of continuous coverage"));
                     mappings.Add(new CobraTypedCsvColumn("EmployeeSSN", FormatType.SSN, 9, 1, "The original employee’s SSN. Required if the event type is a dependent type event, such as DEATH, DIVORCELEGALSEPARATION, INELIGIBLEDEPENDENT or MEDICARE."));
                     mappings.Add(new CobraTypedCsvColumn("EmployeeName", FormatType.String, 100, 1, "The original employee’s name. Required if the event type is a dependent type event, such as DEATH, DIVORCELEGALSEPARATION, INELIGIBLEDEPENDENT or MEDICARE."));
-                    mappings.Add(new CobraTypedCsvColumn("SecondEventOriginalFDOC", FormatType.CobraDate, 1, 0, "DEPRECATED – any value will be ignored"));
+                    mappings.Add(new CobraTypedCsvColumn("SecondEventOriginalFDOC", FormatType.CobraDate, 1, 1, "DEPRECATED – any value will be ignored"));
                     break;
                 case "[QBLEGACY]":
                     mappings.Add(new CobraTypedCsvColumn("DateSpecificRightsNoticeWasPrinted", FormatType.CobraDate, 0, 1, "The date that the original Specific Rights Notice was printed (or postmarked)"));
@@ -1415,14 +1554,14 @@ namespace DataProcessing
                     mappings.Add(new CobraTypedCsvColumn("Email", FormatType.Email, 100, 0, ""));
                     mappings.Add(new CobraTypedCsvColumn("Phone", FormatType.Phone, 10, 0, ""));
                     mappings.Add(new CobraTypedCsvColumn("Phone2", FormatType.Phone, 10, 0, ""));
-                    mappings.Add(new CobraTypedCsvColumn("AddressSameAsQB", FormatType.CobraYesNo, 1, 0, "Set to TRUE if the dependent’s address is the same as the QB’s address"));
+                    mappings.Add(new CobraTypedCsvColumn("AddressSameAsQB", FormatType.CobraYesNo, 1, 1, "Set to TRUE if the dependent’s address is the same as the QB’s address"));
                     mappings.Add(new CobraTypedCsvColumn("Address1", FormatType.String, 50, 0, ""));
                     mappings.Add(new CobraTypedCsvColumn("Address2", FormatType.String, 50, 0, ""));
                     mappings.Add(new CobraTypedCsvColumn("City", FormatType.String, 50, 0, ""));
                     mappings.Add(new CobraTypedCsvColumn("StateOrProvince", FormatType.String, 50, 0, ""));
                     mappings.Add(new CobraTypedCsvColumn("PostalCode", FormatType.String, 35, 0, ""));
                     mappings.Add(new CobraTypedCsvColumn("Country", FormatType.String, 50, 0, "Leave empty if the dependent resides in the USA"));
-                    mappings.Add(new CobraTypedCsvColumn("EnrollmentDate", FormatType.CobraDate, 0,0, "Original enrollment date of the dependent’s medical plan - used for HIPAA certificate"));
+                    mappings.Add(new CobraTypedCsvColumn("EnrollmentDate", FormatType.CobraDate, 0, 0, "Original enrollment date of the dependent’s medical plan - used for HIPAA certificate"));
                     mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 0, "F, M, U (this is required if the dependent is on a sex based plan that sets rates based on the dependent’s sex)", "F|M|U"));
                     mappings.Add(new CobraTypedCsvColumn("DOB", FormatType.CobraDate, 0, 0, "Date of birth (this is required if the dependent is on an age based plan that sets rates based on the dependent’s age)"));
                     mappings.Add(new CobraTypedCsvColumn("IsQMCSO", FormatType.CobraYesNo, 1, 0, "TRUE if the dependent is under a Qualified Medical Child Support Order (QMCSO)"));
@@ -1438,60 +1577,55 @@ namespace DataProcessing
                     break;
                 case " [QBNOTE]":
                     mappings.Add(new CobraTypedCsvColumn("NoteType", FormatType.String, 35, 1, "MANUAL, AUTONOTE"));
-                    mappings.Add(new CobraTypedCsvColumn("DateTime", FormatType.CobraDateTime, 1, "Date and time of the note"));
+                    mappings.Add(new CobraTypedCsvColumn("DateTime", FormatType.CobraDateTime, 0, 1, "Date and time of the note"));
                     mappings.Add(new CobraTypedCsvColumn("NoteText", FormatType.String, 0, 1, ""));
                     mappings.Add(new CobraTypedCsvColumn("UserName", FormatType.String, 0, 0, "Always leave blank"));
                     break;
-                case "[QBSUBSIDYSCHEDULE]
+                case "[QBSUBSIDYSCHEDULE]":
                     mappings.Add(new CobraTypedCsvColumn("InsuranceType", FormatType.String, 35, 1, "MEDICAL, DENTAL, VISION, PHARMACY, FSA, HCRA, EAP, GAP, 401k, LIFE, NULIFE, MSA, PBA, HSA, NUOTHER1, NUOTHER2, GRPLIFE, NUGRPLIFE, VOLLIFE, NUVOLLIFE, CANCER, MERP, DEPLIFE1, DEPLIFE2, DEPLIFE3, NUDEPLIFE1, NUDEPLIFE2, NUDEPLIFE3, MEDSTURIDER1, MEDSTURIDER2, MEDSTURIDER3, LTD, AD&D, CHIROPRACTIC, VEBA, CUSTOMBILLING, LTDNONUNITBASED, LTDUNITBASED, STDNONUNITBASED, STDUNITBASED, CRITICALILLNESS, ACCIDENTNONUNITBASED, ACCIDENTUNITBASED, VOLUNTARYOTHER, UOTHER1, UOTHER2, UOTHER3"));
                     break;
-                case "[QBNOTE]
-                    mappings.Add(new CobraTypedCsvColumn("SubsidyAmountType", FormatType.String, 35, "?", "FLAT or PERCENTAGE is required if RatePeriodSubsidy is False"));
-                    mappings.Add(new CobraTypedCsvColumn("StartDate", FormatType.CobraDate, 1, "Start date of the subsidy"));
-                    mappings.Add(new CobraTypedCsvColumn("EndDate", FormatType.CobraDate, 1, "End date of the subsidy"));
-                    mappings.Add(new CobraTypedCsvColumn("Amount", FormatType.CobraMoney, "?", "Required if RatePeriodSubsidy is False."));
-                    Amount if FLAT or Percentage if PERCENTAGE of the subsidy.For example, use “50” if it is a 50 % subsidy and the SubsidyAmountType is set to PERCENTAGE.""));
-                    mappings.Add(new CobraTypedCsvColumn("SubsidyType", FormatType.String, 35, "EMPLOYER (defaults to EMPLOYER)"));
-                    mappings.Add(new CobraTypedCsvColumn("RatePeriodSubsidy", FormatType.CobraYesNo, "?", "True = '1', 'Y', 'YES', 'T' or 'TRUE'; "));
-                    False = '0', 'N', 'NO', 'F' or 'FALSE'; "));
-Blank value. If RatePeriodSubsidy = blank, True or False value will be applied after import by the system according to the existing logic."));
-"));
-RatePeriodSubsidy is not allowed to import on Employer Portal. True or False value will be applied after import by the system according to the existing logic.""));
+                case "[QBNOTE]":
+                    mappings.Add(new CobraTypedCsvColumn("SubsidyAmountType", FormatType.String, 35, 0, "?", "FLAT or PERCENTAGE is required if RatePeriodSubsidy is False"));
+                    mappings.Add(new CobraTypedCsvColumn("StartDate", FormatType.CobraDate, 0, 1, "Start date of the subsidy"));
+                    mappings.Add(new CobraTypedCsvColumn("EndDate", FormatType.CobraDate, 0, 1, "End date of the subsidy"));
+                    mappings.Add(new CobraTypedCsvColumn("Amount", FormatType.CobraMoney, 0, 0, "Required if RatePeriodSubsidy is False. Amount if FLAT or Percentage if PERCENTAGE of the subsidy.For example, use “50” if it is a 50 % subsidy and the SubsidyAmountType is set to PERCENTAGE."));
+                    mappings.Add(new CobraTypedCsvColumn("SubsidyType", FormatType.String, 35, 0, "EMPLOYER (defaults to EMPLOYER)"));
+                    mappings.Add(new CobraTypedCsvColumn("RatePeriodSubsidy", FormatType.CobraYesNo, 0, 0, "True = '1', 'Y', 'YES', 'T' or 'TRUE'; False = '0', 'N', 'NO', 'F' or 'FALSE'; Blank value. If RatePeriodSubsidy = blank, True or False value will be applied after import by the system according to the existing logic. RatePeriodSubsidy is not allowed to import on Employer Portal. True or False value will be applied after import by the system according to the existing logic."));
                     break;
                 case "[QBSTATEINSERTS]":
-                    mappings.Add(new CobraTypedCsvColumn("CASRINSERT", FormatType.CobraYesNo, "California Specific Rights Letter Insert. Default is FALSE."));
-                    mappings.Add(new CobraTypedCsvColumn("CTSRINSERT", FormatType.CobraYesNo, "Connecticut Specific Rights Letter Insert. Default is FALSE."));
-                    mappings.Add(new CobraTypedCsvColumn("MNLIFEINSERT", FormatType.CobraYesNo, "Minnesota Life Specific Rights Letter Insert. Default is FALSE."));
-                    mappings.Add(new CobraTypedCsvColumn("MNCONTINSERT", FormatType.CobraYesNo, "Minnesota Continuation Specific Rights Insert. Default is FALSE."));
-                    mappings.Add(new CobraTypedCsvColumn("ORSRINSERT", FormatType.CobraYesNo, "Oregon Specific Rights Letter Insert. Default is FALSE."));
-                    mappings.Add(new CobraTypedCsvColumn("TXSRINSERT", FormatType.CobraYesNo, "Texas Specific Rights Letter Insert. Default is FALSE."));
-                    mappings.Add(new CobraTypedCsvColumn("NY-SR INSERT", FormatType.CobraYesNo, "New York State Continuation. Default is FALSE."));
-                    mappings.Add(new CobraTypedCsvColumn("VEBASRINSERT", FormatType.CobraYesNo, "VEBA Specific Rights Letter Insert. Default is FALSE."));
-                    mappings.Add(new CobraTypedCsvColumn("ILSRINSERT", FormatType.CobraYesNo, "Illinois State Continuation. Default is FALSE."));
-                    mappings.Add(new CobraTypedCsvColumn("RISRINSERT", FormatType.CobraYesNo, "Rhode Island State Continuation. Default is FALSE."));
-                    mappings.Add(new CobraTypedCsvColumn("GASRINSERT", FormatType.CobraYesNo, "Georgia State Continuation. Default is FALSE. Default is FALSE."));
-                    mappings.Add(new CobraTypedCsvColumn("VASRINSERT", FormatType.CobraYesNo, "Commonwealth of VA Continuation. Default is FALSE."));
+                    mappings.Add(new CobraTypedCsvColumn("CASRINSERT", FormatType.CobraYesNo, 0, 0, "California Specific Rights Letter Insert. Default is FALSE."));
+                    mappings.Add(new CobraTypedCsvColumn("CTSRINSERT", FormatType.CobraYesNo, 0, 0, "Connecticut Specific Rights Letter Insert. Default is FALSE."));
+                    mappings.Add(new CobraTypedCsvColumn("MNLIFEINSERT", FormatType.CobraYesNo, 0, 0, "Minnesota Life Specific Rights Letter Insert. Default is FALSE."));
+                    mappings.Add(new CobraTypedCsvColumn("MNCONTINSERT", FormatType.CobraYesNo, 0, 0, "Minnesota Continuation Specific Rights Insert. Default is FALSE."));
+                    mappings.Add(new CobraTypedCsvColumn("ORSRINSERT", FormatType.CobraYesNo, 0, 0, "Oregon Specific Rights Letter Insert. Default is FALSE."));
+                    mappings.Add(new CobraTypedCsvColumn("TXSRINSERT", FormatType.CobraYesNo, 0, 0, "Texas Specific Rights Letter Insert. Default is FALSE."));
+                    mappings.Add(new CobraTypedCsvColumn("NY-SR INSERT", FormatType.CobraYesNo, 0, 0, "New York State Continuation. Default is FALSE."));
+                    mappings.Add(new CobraTypedCsvColumn("VEBASRINSERT", FormatType.CobraYesNo, 0, 0, "VEBA Specific Rights Letter Insert. Default is FALSE."));
+                    mappings.Add(new CobraTypedCsvColumn("ILSRINSERT", FormatType.CobraYesNo, 0, 0, "Illinois State Continuation. Default is FALSE."));
+                    mappings.Add(new CobraTypedCsvColumn("RISRINSERT", FormatType.CobraYesNo, 0, 0, "Rhode Island State Continuation. Default is FALSE."));
+                    mappings.Add(new CobraTypedCsvColumn("GASRINSERT", FormatType.CobraYesNo, 0, 0, "Georgia State Continuation. Default is FALSE. Default is FALSE."));
+                    mappings.Add(new CobraTypedCsvColumn("VASRINSERT", FormatType.CobraYesNo, 0, 0, "Commonwealth of VA Continuation. Default is FALSE."));
                     break;
                 case "[QBDISABILITYEXTENSION]":
-                    mappings.Add(new CobraTypedCsvColumn("DisabilityApproved", FormatType.CobraYesNo, 1, "Set to TRUE if the Disability Extension is approved or FALSE if it is not"));
-                    mappings.Add(new CobraTypedCsvColumn("PostmarkOfDisabilityExtension", FormatType.CobraDate, 1, "Set to the postmark date that the Disability Extension when it was received"));
-                    mappings.Add(new CobraTypedCsvColumn("DateDisabled", FormatType.CobraDate, 1, "The date the member was disabled"));
-                    mappings.Add(new CobraTypedCsvColumn("DenialReason", FormatType.String, 35, "DISABILITYDATE, SUBMISSIONDATE – required if DisabilityApproved is FALSE"));
+                    mappings.Add(new CobraTypedCsvColumn("DisabilityApproved", FormatType.CobraYesNo, 1, 1, "Set to TRUE if the Disability Extension is approved or FALSE if it is not"));
+                    mappings.Add(new CobraTypedCsvColumn("PostmarkOfDisabilityExtension", FormatType.CobraDate, 0, 1, "Set to the postmark date that the Disability Extension when it was received"));
+                    mappings.Add(new CobraTypedCsvColumn("DateDisabled", FormatType.CobraDate, 0, 1, "The date the member was disabled"));
+                    mappings.Add(new CobraTypedCsvColumn("DenialReason", FormatType.String, 35, 0, "DISABILITYDATE, SUBMISSIONDATE – required if DisabilityApproved is FALSE"));
                     break;
                 case "[QBPLANMEMBERSPECIFICRATEINITIAL]":
                     mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
-                    mappings.Add(new CobraTypedCsvColumn("Rate", FormatType.Decimal, 1, "The amount of the member specific rate"));
+                    mappings.Add(new CobraTypedCsvColumn("Rate", FormatType.CobraMoney, 0, 1, "The amount of the member specific rate"));
                     break;
                 case "[QBPLANMEMBERSPECIFICRATE]":
                     mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
-                    mappings.Add(new CobraTypedCsvColumn("StartDate", FormatType.CobraDate, 1, "The start date of the dependent on the plan. This should be set to the FDOC for the plan in the field above."));
-                    mappings.Add(new CobraTypedCsvColumn("EndDate", FormatType.CobraDate, 1, "End date of the member specific rate"));
-                    mappings.Add(new CobraTypedCsvColumn("Rate", FormatType.Decimal, 1, "The amount of the member specific rate"));
+                    mappings.Add(new CobraTypedCsvColumn("StartDate", FormatType.CobraDate, 0, 1, "The start date of the dependent on the plan. This should be set to the FDOC for the plan in the field above."));
+                    mappings.Add(new CobraTypedCsvColumn("EndDate", FormatType.CobraDate, 0, 1, "End date of the member specific rate"));
+                    mappings.Add(new CobraTypedCsvColumn("Rate", FormatType.CobraMoney, 0, 1, "The amount of the member specific rate"));
                     break;
                 case "[QBPLANTERMREINSTATE]":
                     mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
-                    mappings.Add(new CobraTypedCsvColumn("TermOrReinstate", FormatType.String, "20", 1, "TERMINATE or REINSTATE"));
-                    mappings.Add(new CobraTypedCsvColumn("EffectiveDate", FormatType.CobraDate, 1, "Effective date of the term or reinstate"));
+                    mappings.Add(new CobraTypedCsvColumn("TermOrReinstate", FormatType.String, 20, 1, "TERMINATE or REINSTATE"));
+                    mappings.Add(new CobraTypedCsvColumn("EffectiveDate", FormatType.CobraDate, 0, 1, "Effective date of the term or reinstate"));
                     mappings.Add(new CobraTypedCsvColumn("Reason", FormatType.String, 35, 1, "Reason for the termination or reinstatement"));
                     break;
                 case "[QBLETTERATTACHMENT]":
@@ -1499,16 +1633,16 @@ RatePeriodSubsidy is not allowed to import on Employer Portal. True or False val
                     break;
                 case "[QBLOOKUP]":
                     mappings.Add(new CobraTypedCsvColumn("ClientName", FormatType.String, 100, 1, "N/A"));
-                    mappings.Add(new CobraTypedCsvColumn(FormatType.SSN, FormatType.SSN, 9, 1, "N/A"));
-                    mappings.Add(new CobraTypedCsvColumn("QualifyingEventDate", FormatType.CobraDate, 1, "N/A"));
+                    mappings.Add(new CobraTypedCsvColumn("SSN", FormatType.SSN, 9, 1, "N/A"));
+                    mappings.Add(new CobraTypedCsvColumn("QualifyingEventDate", FormatType.CobraDate, 0, 1, "N/A"));
                     break;
                 case "[MEMBERUSERDEFINEDFIELD]":
-                    mappings.Add(new CobraTypedCsvColumn("UserDefinedFieldName", 1, "The unique name of the user defined field."));
-                    mappings.Add(new CobraTypedCsvColumn("UserDefinedFieldValue", FormatType.String, "2000", "Any provided value, including blank, will be saved."));
-                    True = '1', 'Y', 'YES', 'T' or 'TRUE'; "));
-False = '0', 'N', 'NO', 'F' or 'FALSE' or blank.""));
-                    "));
-                        break;
+                    mappings.Add(new CobraTypedCsvColumn("UserDefinedFieldName", FormatType.String, 0, 1, "The unique name of the user defined field."));
+                    mappings.Add(new CobraTypedCsvColumn("UserDefinedFieldValue", FormatType.String, 2000, 0, "Any provided value, including blank, will be saved."));
+                    break;
+                default:
+                    var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : fileFormat : {fileFormat} is invalid";
+                    throw new Exception(message);
             }
 
             // entrire line
