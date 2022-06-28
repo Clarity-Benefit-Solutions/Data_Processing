@@ -98,7 +98,6 @@ namespace DataProcessing
                         ///////////////////////////////////////
                         if (fileCheckProcessType == FileCheckProcessType.MoveToDestDirectories)
                         {
-                            // 
                             if (PlatformType == PlatformType.Alegeus)
                             {
                                 if (Utils.IsTestFile(this.SrcFilePath))
@@ -109,8 +108,7 @@ namespace DataProcessing
                                 {
                                     destFilePath = $"{Vars.alegeusFilesPassedPath}/{fileName}";
                                 }
-                                queryStringOrgFile =
-                                 $"exec [dbo].[proc_alegeus_ExportImportFile] '{Path.GetFileName(this.SrcFilePath)}', 'original_file', {this.FileLogParams.FileLogId}";
+
 
                             }
                             else if (PlatformType == PlatformType.Cobra)
@@ -123,12 +121,12 @@ namespace DataProcessing
                                 {
                                     destFilePath = $"{Vars.cobraFilesPassedPath}/{fileName}";
                                 }
-                                queryStringOrgFile =
-                                 $"exec [dbo].[proc_cobra_ExportImportFile] '{Path.GetFileName(this.SrcFilePath)}', 'original_file', {this.FileLogParams.FileLogId}";
-
                             }
 
                             // export all rows to file
+                            queryStringOrgFile =
+       $"exec [dbo].[proc_{PlatformType.ToDescription()}_ExportImportFile] '{Path.GetFileName(this.SrcFilePath)}', 'original_file', {this.FileLogParams.FileLogId}";
+                            //
                             ImpExpUtils.ExportSingleColumnFlatFile(destFilePath, DbConn, queryStringOrgFile,
                                 "file_row", null, FileLogParams,
                                 (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
@@ -173,8 +171,6 @@ namespace DataProcessing
                                 }
                                 ext = ".mbi";
 
-                                queryStringOrgFile =
-                                $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'original_file', {this.FileLogParams.FileLogId}";
 
                             }
                             else if (PlatformType == PlatformType.Cobra)
@@ -188,9 +184,6 @@ namespace DataProcessing
                                     destFilePath = $"{Vars.cobraFilesRejectsPath}/{fileName}";
                                 }
                                 ext = ".csv";
-
-                                queryStringOrgFile =
-                                $"exec [dbo].[proc_cobra_ExportImportFile] '{srcFileName}', 'original_file', {this.FileLogParams.FileLogId}";
 
                             }
                             string originalFilePath = $"{destFilePath}-0-OriginalFile{ext}";
@@ -207,7 +200,7 @@ namespace DataProcessing
 
                             // passed lines
                             var queryStringExpPassedLines =
-                                $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'passed_lines', {this.FileLogParams.FileLogId}";
+                                $"exec [dbo].[proc_{PlatformType.ToDescription()}_ExportImportFile] '{srcFileName}', 'passed_lines', {this.FileLogParams.FileLogId}";
 
                             ImpExpUtils.ExportSingleColumnFlatFile(passedLinesFilePath, DbConn, queryStringExpPassedLines,
                                 "file_row", null, FileLogParams,
@@ -216,7 +209,7 @@ namespace DataProcessing
 
                             // .err lines only errors
                             var queryStringExpErrFile =
-                                $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'rejected_lines_with_errors', {this.FileLogParams.FileLogId}";
+                                $"exec [dbo].[proc_{PlatformType.ToDescription()}_ExportImportFile] '{srcFileName}', 'rejected_lines_with_errors', {this.FileLogParams.FileLogId}";
 
                             ImpExpUtils.ExportSingleColumnFlatFile(rejectedLinesErrorFilePath, DbConn, queryStringExpErrFile,
                                 "file_row", null, FileLogParams,
@@ -225,7 +218,7 @@ namespace DataProcessing
 
                             // rejected lines
                             var queryStringExpRejectedLines =
-                                $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'rejected_lines', {this.FileLogParams.FileLogId}";
+                                $"exec [dbo].[proc_{PlatformType.ToDescription()}_ExportImportFile] '{srcFileName}', 'rejected_lines', {this.FileLogParams.FileLogId}";
 
                             ImpExpUtils.ExportSingleColumnFlatFile(rejectedLinesFilePath, DbConn, queryStringExpRejectedLines,
                                 "file_row", null, FileLogParams,
@@ -235,7 +228,7 @@ namespace DataProcessing
 
                             // entire file with errors
                             var queryStringExpAllLinesErrFile =
-                                $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'all_lines_with_errors', {this.FileLogParams.FileLogId}";
+                                $"exec [dbo].[proc_{PlatformType.ToDescription()}_ExportImportFile] '{srcFileName}', 'all_lines_with_errors', {this.FileLogParams.FileLogId}";
 
                             ImpExpUtils.ExportSingleColumnFlatFile(allLinesErrorFilePath, DbConn, queryStringExpAllLinesErrFile,
                                 "file_row", null, FileLogParams,
@@ -255,6 +248,7 @@ namespace DataProcessing
                         }
                         else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
                         {
+
                             string allLinesErrorFilePath = $"{destFilePath}-4-allLines.err";
                             if (PlatformType == PlatformType.Alegeus)
                             {
@@ -268,9 +262,6 @@ namespace DataProcessing
                                 }
                                 ext = ".mbi";
 
-                                queryStringOrgFile =
-                                $"exec [dbo].[proc_alegeus_ExportImportFile] '{srcFileName}', 'original_file', {this.FileLogParams.FileLogId}";
-
                             }
                             else if (PlatformType == PlatformType.Cobra)
                             {
@@ -283,18 +274,16 @@ namespace DataProcessing
                                     destFilePath = $"{Vars.cobraFilesRejectsPath}/{fileName}";
                                 }
                                 ext = ".csv";
-
-                                queryStringOrgFile =
-                                $"exec [dbo].[proc_cobra_ExportImportFile] '{srcFileName}', 'original_file', {this.FileLogParams.FileLogId}";
-
                             }
 
                             // export entire file with errors
-                            ImpExpUtils.ExportSingleColumnFlatFile(allLinesErrorFilePath, DbConn, queryStringExpAllLinesErrFile,
+                            queryStringOrgFile =
+                $"exec [dbo].[proc_{PlatformType.ToDescription()}_ExportImportFile] '{srcFileName}', 'all_lines_with_errors', {this.FileLogParams.FileLogId}";
+                            //
+                            ImpExpUtils.ExportSingleColumnFlatFile(allLinesErrorFilePath, DbConn, queryStringOrgFile,
                                 "file_row", null, FileLogParams,
                                 (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                             );
-
 
                             //
                             strCheckResults = File.ReadAllText(allLinesErrorFilePath);
