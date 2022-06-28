@@ -81,6 +81,29 @@
         NoChange,
     }
 
+    public enum CobraFileType
+    {
+        [Utils.DisplayText("CobraFileType.NotApplicable")]
+        Unknown = 0,
+        [Utils.DisplayText("CobraFileType.QB")] Qb,
+        [Utils.DisplayText("CobraFileType.NPM")] Npm,
+        [Utils.DisplayText("CobraFileType.SPM")] Spm,
+    }
+    public enum CobraFileVersionNo
+    {
+        [Utils.DisplayText("CobraFileVersionNo.NA")]
+        NotApplicable = 0,
+        [Utils.DisplayText("CobraFileVersionNo.v1_1")] v1_1,
+        [Utils.DisplayText("CobraFileVersionNo.v1_2")] v1_2,
+        [Utils.DisplayText("CobraFileVersionNo.v1_3")] v1_3,
+    }
+
+    public class CobraFileTypeAndVersionNo
+    {
+        public CobraFileType fileType = CobraFileType.Unknown;
+        public string versionNo = "";
+    }
+
     public enum PlatformType
     {
         Unknown = 0,
