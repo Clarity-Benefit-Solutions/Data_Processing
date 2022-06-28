@@ -70,8 +70,9 @@ namespace DataProcessing
             // PrepareIncomingCobraQbFiles
             this.PrepareIncomingCobraQbFiles(dbConn, fileLogParams);
 
+
             // MoveIncomingCobraFilesToProcessingDir
-            this.MoveIncomingCobraFilesToProcessingDir(dbConn, fileLogParams);
+            this.PreCheckAndProcessCobraFiles(dbConn, fileLogParams);
         }
         protected void ProcessIncomingAlegeusFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
@@ -643,16 +644,16 @@ namespace DataProcessing
             DbUtils.LogFileOperation(fileLogParams);
         }
 
-        protected void MoveIncomingCobraFilesToProcessingDir(DbConnection dbConn, FileOperationLogParams fileLogParams)
+        protected void PreCheckAndProcessCobraFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
+
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"CobraFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
-
-            // 1. move test files
-            // from COBRA IMPORTS, HOLDING, HOLDING\PreparedQB -> COBRA_testfiles
+            //
             FileUtils.IterateDirectory(
                 new string[] { Vars.cobraFilesImportHoldingPath, Vars.cobraFilesPreparedQbPath },
                 DirectoryIterateType.Files,
@@ -660,42 +661,43 @@ namespace DataProcessing
                 new string[] { "*.*" },
                 (srcFilePath, destFilePath, dummy2) =>
                 {
-                    FileInfo fileInfo = new FileInfo(srcFilePath);
-
-                    string destDirPath = "";
-
-                    if (Utils.IsTestFile(srcFilePath))
+                    // ensure file ext is csv
+                    if (Path.GetExtension(srcFilePath).ToLower() != ".csv")
                     {
-                        destDirPath = $"{Vars.cobraFilesTestPath}";
-                    }
-                    else
-                    {
-                        destDirPath = Vars.cobraFilesToProcessPath;
-                    }
-
-                    string destFilePath2 = $"{destDirPath}/{fileInfo.Name}";
-                    FileUtils.MoveFile(srcFilePath, destFilePath2,
-                        (srcFilePath3, destFilePath3, dummy4) =>
+                        string csvFilePath = $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileNameWithoutExtension(srcFilePath)}.csv";
+                        if (Path.GetFileName(csvFilePath) != Path.GetFileName(srcFilePath))
                         {
-                            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                                Path.GetFileName(destFilePath), destFilePath,
-                                "CobraProcessing-AfterPrepare",
-                                "Success", $"Moved File to Process Dir");
-                            DbUtils.LogFileOperation(fileLogParams);
-                        },
+                            FileUtils.MoveFile(srcFilePath, csvFilePath, null, null);
+                            srcFilePath = csvFilePath;
+                        }
+                    }
+                    // check the file 
+                    using var fileChecker = new FileChecker(srcFilePath, PlatformType.Cobra,
+                        this.Vars.dbConnDataProcessing, fileLogParams,
                         (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
                     );
 
+                    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                        Path.GetFileName(srcFilePath), srcFilePath,
+                        $"CobraFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                        "Starting", "Starting PreCheck");
+                    DbUtils.LogFileOperation(fileLogParams);
+
+                    //
+                    fileChecker.CheckFileAndProcess(FileCheckType.AllData, FileCheckProcessType.MoveToDestDirectories);
                 },
-                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+                (directory, file, ex) => { Import.MoveFileToPlatformRejectsFolder(file, ex.ToString()); }
             );
 
-
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            fileLogParams.SetFileNames("", "", "", "", "",
+                $"CobraFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
+
+
+        
         } // routine
 
     } // end class
