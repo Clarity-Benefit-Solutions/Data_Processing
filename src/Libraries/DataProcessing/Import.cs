@@ -1328,9 +1328,9 @@ namespace DataProcessing
             return isCobraFile;
         }
 
-        public static CobraFileTypeAndVersionNo GetCobraFileTypeAndVersionNoFromFile(string srcFilePath)
+        public static string GetCobraFileVersionNoFromFile(string srcFilePath)
         {
-            CobraFileTypeAndVersionNo fileTypeAndVersionNo = new CobraFileTypeAndVersionNo();
+            string versionNo = "";
 
             // convert excel files to csv to check
             if (FileUtils.IsExcelFile(srcFilePath))
@@ -1347,7 +1347,6 @@ namespace DataProcessing
 
             int rowNo = 0;
             string firstLine = null;
-            string secondLine = null;
 
             using var inputFile = new StreamReader(srcFilePath);
             while (true)
@@ -1358,7 +1357,7 @@ namespace DataProcessing
                 // if we reached end of file, return what we got
                 if (line == null)
                 {
-                    return fileTypeAndVersionNo;
+                    return versionNo;
                 }
 
                 string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
@@ -1371,31 +1370,13 @@ namespace DataProcessing
                 // take first non blank line with 2 columns
                 if (Utils.IsBlank(firstLine) && columnCount == 2 && columns[0].ToUpperInvariant() == "[VERSION]")
                 {
-                    fileTypeAndVersionNo.versionNo = columns[1];
-                }
-
-                // take first non blank line mathing basic entity type
-                if (Utils.IsBlank(secondLine) && columns[0].ToUpperInvariant() == "[QB]")
-                {
-                    fileTypeAndVersionNo.fileType = CobraFileType.Qb;
-                }
-                else if (Utils.IsBlank(secondLine) && columns[0].ToUpperInvariant() == "[SPM]")
-                {
-                    fileTypeAndVersionNo.fileType = CobraFileType.Spm;
-                }
-                else if (Utils.IsBlank(secondLine) && columns[0].ToUpperInvariant() == "[NPM]")
-                {
-                    fileTypeAndVersionNo.fileType = CobraFileType.Npm;
-                }
-
-                if (!Utils.IsBlank(fileTypeAndVersionNo.versionNo) && fileTypeAndVersionNo.fileType != CobraFileType.Unknown)
-                {
-                    return fileTypeAndVersionNo;
+                    versionNo = columns[1];
+                    return versionNo;
                 }
             }
         }
 
-        public static TypedCsvSchema GetCobraFileImportMappings(CobraFileTypeAndVersionNo fileTypeAndVersionNo, string rowType, Boolean forImport = true)
+        public static TypedCsvSchema GetCobraFileImportMappings(string rowType, string versionNo, Boolean forImport = true)
         {
             var mappings = new TypedCsvSchema();
 
@@ -1437,7 +1418,7 @@ namespace DataProcessing
                     mappings.Add(new CobraTypedCsvColumn("VersionNumber", FormatType.Integer, 0, 1, "Use “1.2” for this import specification"));
                     break;
                 case "[QB]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("ClientName", FormatType.String, 100, 1, "The unique Client name assigned in COBRA & Direct Billing "));
@@ -1484,7 +1465,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[QBEVENT]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("EventType", FormatType.String, 35, 1, "DIVORCELEGASSEPARATION,DEATH,INELIGIBLEDEPENDENT,MEDICARE,TERMINATION,RETIREMENT,REDUCTIONINHOURS-STATUSCHANGE,REDUCTIONINFORCE,BANKRUPTCY,STATECONTINUATION,LOSSOFELIGIBILITY,REDUCTIONINHOURS-ENDOFLEAVE,WORKSTOPPAGE,USERRA-TERMINATION,USERRA-REDUCTIONINHOURS,INVOLUNTARYTERMINATION,TERMINATIONWITHSEVERANCE,RETIREEBANKRUPTCY"));
@@ -1500,7 +1481,7 @@ namespace DataProcessing
                 //
 
                 case "[QBLEGACY]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("DateSpecificRightsNoticeWasPrinted", FormatType.CobraDate, 0, 1, "The date that the original Specific Rights Notice was printed (or postmarked)"));
@@ -1517,7 +1498,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[QBPLANINITIAL]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
@@ -1528,7 +1509,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[QBPLAN]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
@@ -1551,7 +1532,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[QBDEPENDENT]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("SSN", FormatType.SSN, 9, 0, "Social Security Number"));
@@ -1579,7 +1560,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[QBDEPENDENTPLANINITIAL]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
@@ -1588,7 +1569,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[QBDEPENDENTPLAN]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
@@ -1600,7 +1581,7 @@ namespace DataProcessing
                     }
                     break;
                 case " [QBNOTE]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("NoteType", FormatType.String, 35, 1, "MANUAL, AUTONOTE"));
@@ -1612,7 +1593,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[QBSUBSIDYSCHEDULE]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("InsuranceType", FormatType.String, 35, 1, "MEDICAL, DENTAL, VISION, PHARMACY, FSA, HCRA, EAP, GAP, 401k, LIFE, NULIFE, MSA, PBA, HSA, NUOTHER1, NUOTHER2, GRPLIFE, NUGRPLIFE, VOLLIFE, NUVOLLIFE, CANCER, MERP, DEPLIFE1, DEPLIFE2, DEPLIFE3, NUDEPLIFE1, NUDEPLIFE2, NUDEPLIFE3, MEDSTURIDER1, MEDSTURIDER2, MEDSTURIDER3, LTD, AD&D, CHIROPRACTIC, VEBA, CUSTOMBILLING, LTDNONUNITBASED, LTDUNITBASED, STDNONUNITBASED, STDUNITBASED, CRITICALILLNESS, ACCIDENTNONUNITBASED, ACCIDENTUNITBASED, VOLUNTARYOTHER, UOTHER1, UOTHER2, UOTHER3"));
@@ -1621,7 +1602,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[QBNOTE]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("SubsidyAmountType", FormatType.String, 35, 0, "?", "FLAT or PERCENTAGE is required if RatePeriodSubsidy is False"));
@@ -1635,7 +1616,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[QBSTATEINSERTS]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("CASRINSERT", FormatType.CobraYesNo, 0, 0, "California Specific Rights Letter Insert. Default is FALSE."));
@@ -1655,7 +1636,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[QBDISABILITYEXTENSION]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("DisabilityApproved", FormatType.CobraYesNo, 1, 1, "Set to TRUE if the Disability Extension is approved or FALSE if it is not"));
@@ -1667,7 +1648,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[QBPLANMEMBERSPECIFICRATEINITIAL]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
@@ -1677,7 +1658,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[QBPLANMEMBERSPECIFICRATE]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
@@ -1689,7 +1670,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[QBPLANTERMREINSTATE]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
@@ -1701,7 +1682,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[QBLETTERATTACHMENT]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("LetterAttachmentName", FormatType.String, 100, 1, "The unique name of letter attachment."));
@@ -1710,7 +1691,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[QBLOOKUP]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("ClientName", FormatType.String, 100, 1, "N/A"));
@@ -1721,7 +1702,7 @@ namespace DataProcessing
                     }
                     break;
                 case "[MEMBERUSERDEFINEDFIELD]":
-                    switch (fileTypeAndVersionNo.versionNo)
+                    switch (versionNo)
                     {
                         case "1.2":
                             mappings.Add(new CobraTypedCsvColumn("UserDefinedFieldName", FormatType.String, 0, 1, "The unique name of the user defined field."));
@@ -1785,10 +1766,7 @@ namespace DataProcessing
                     {
                         rowNo++;
 
-                        var fileTypeAndVersionNo = GetCobraFileTypeAndVersionNoFromFile(srcFilePath);
-                        string fileFormat = GetCobraRowFormatFromLine(line);
-                        //
-                        TypedCsvSchema mappings = GetCobraFileImportMappings(fileFormat, fileTypeAndVersionNo.fileType, fileTypeAndVersionNo.versionNo);
+                        var versionNo = GetCobraFileVersionNoFromFile(srcFilePath);
                         //
                         Boolean isResultFile = false; // GetCobraFileFormatIsResultFile(fileFormat);
 
@@ -1803,7 +1781,7 @@ namespace DataProcessing
                             fileLogParams?.GetMessageLogParams());
 
                         // import the line with manual insert statement
-                        ImpExpUtils.ImportCsvLine(line, dbConn, tableName, mappings, fileLogParams, onErrorCallback);
+                        ImportCobraCsvLine(line, dbConn, tableName, versionNo, fileLogParams, onErrorCallback);
 
                         //
                         // run postimport query to take from staging to final table
@@ -1826,6 +1804,23 @@ namespace DataProcessing
                 }
             }
         }
+
+        //imports passed line into table as per passed columns
+        public static void ImportCobraCsvLine(string line, DbConnection dbConn, string tableName,
+        string versionNo, FileOperationLogParams fileLogParams,
+        OnErrorCallback onErrorCallback)
+        {
+            // get row format for current lione as file can have multiple row types
+            string rowType = GetCobraRowFormatFromLine(line);
+
+            // get mappings for event type & version
+            TypedCsvSchema mappings = GetCobraFileImportMappings(rowType, versionNo);
+
+            // import into DB
+            ImpExpUtils.ImportCsvLine(line, dbConn, tableName, mappings, fileLogParams, onErrorCallback);
+
+        } // routine
+
         #endregion
 
     }
