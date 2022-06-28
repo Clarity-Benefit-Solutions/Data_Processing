@@ -1253,7 +1253,7 @@ namespace DataProcessing
             }
         }
 
-        private static void ImportAlegeusFile(EdiFileFormat fileFormat, DbConnection dbConn,
+        public static void ImportAlegeusFile(EdiFileFormat fileFormat, DbConnection dbConn,
             string srcFilePath, string orgSrcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams
             , OnErrorCallback onErrorCallback)
         {
@@ -1746,7 +1746,7 @@ namespace DataProcessing
             return false;
         }
 
-        public static void ImportCobraFile(DbConnection dbConn, string srcFilePath,
+        public static void ImportCobraFile(DbConnection dbConn, string srcFilePath, string orgSrcFilePath,
           Boolean hasHeaderRow, FileOperationLogParams fileLogParams
           , OnErrorCallback onErrorCallback)
         {
