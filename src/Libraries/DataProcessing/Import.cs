@@ -1741,6 +1741,11 @@ namespace DataProcessing
 
         }
 
+        public static Boolean GetCobraFileFormatIsResultFile(string srcFilepath)
+        {
+            return false;
+        }
+
         public static void ImportCobraFile(DbConnection dbConn, string srcFilePath,
           Boolean hasHeaderRow, FileOperationLogParams fileLogParams
           , OnErrorCallback onErrorCallback)
@@ -1768,13 +1773,13 @@ namespace DataProcessing
 
                         var versionNo = GetCobraFileVersionNoFromFile(srcFilePath);
                         //
-                        Boolean isResultFile = false; // GetCobraFileFormatIsResultFile(fileFormat);
+                        Boolean isResultFile = GetCobraFileFormatIsResultFile(srcFilePath);
 
                         //
-                        string tableName = isResultFile ? "[dbo].[cobra_res_file_table_stage]" : "[dbo].[cobra_file_table_stage]";
+                        string tableName = isResultFile ? "[dbo].[cobra_res_file_table_stage]" : "[dbo].[cobra_import_file_table_stage]";
                         string postImportProc = isResultFile
                             ? "dbo.process_cobra_res_file_table_stage_import"
-                            : "dbo.process_cobra_file_table_stage_import";
+                            : "dbo.process_cobra_import_file_table_stage_import";
 
                         // truncate staging table
                         DbUtils.TruncateTable(dbConn, tableName,
