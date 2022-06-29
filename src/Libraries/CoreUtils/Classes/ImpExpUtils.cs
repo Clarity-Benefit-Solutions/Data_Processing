@@ -349,13 +349,19 @@ namespace CoreUtils.Classes
             string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
             int colNo = -1;
 
+
             string insertColumnNames = "";
             foreach (var mapping in mappings.Columns)
             {
-                insertColumnNames += $"{ mapping.DestinationColumn}";
+                insertColumnNames += $"{ mapping.DestinationColumn},";
                 //
                 colNo++;
-                var value = columns[colNo];
+                var value = "";
+                if (columns.Length > colNo)
+                {
+                    value = columns[colNo];
+                }
+
                 //
                 insertValuesString += $"'{Utils.DbQuote(value)}',";
             }

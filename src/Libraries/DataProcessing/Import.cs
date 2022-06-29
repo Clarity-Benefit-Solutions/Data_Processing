@@ -1368,7 +1368,7 @@ namespace DataProcessing
                 }
 
                 // take first non blank line with 2 columns
-                if (Utils.IsBlank(firstLine) && columnCount == 2 && columns[0].ToUpperInvariant() == "[VERSION]")
+                if (Utils.IsBlank(firstLine) && columnCount >= 2 && columns[0].ToUpperInvariant() == "[VERSION]")
                 {
                     versionNo = columns[1];
                     return versionNo;
@@ -1421,6 +1421,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("ClientName", FormatType.String, 100, 1, "The unique Client name assigned in COBRA & Direct Billing "));
                             mappings.Add(new CobraTypedCsvColumn("ClientDivisionName", FormatType.String, 50, 1, "The unique Client Division name assigned in COBRA & Direct Billing. If there are no Divisions, then use the ClientName."));
                             mappings.Add(new CobraTypedCsvColumn("Salutation", FormatType.String, 35, 0, "MR, MRS, MS, MISS, DR"));
@@ -1468,6 +1469,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("EventType", FormatType.String, 35, 1, "DIVORCELEGASSEPARATION,DEATH,INELIGIBLEDEPENDENT,MEDICARE,TERMINATION,RETIREMENT,REDUCTIONINHOURS-STATUSCHANGE,REDUCTIONINFORCE,BANKRUPTCY,STATECONTINUATION,LOSSOFELIGIBILITY,REDUCTIONINHOURS-ENDOFLEAVE,WORKSTOPPAGE,USERRA-TERMINATION,USERRA-REDUCTIONINHOURS,INVOLUNTARYTERMINATION,TERMINATIONWITHSEVERANCE,RETIREEBANKRUPTCY"));
                             mappings.Add(new CobraTypedCsvColumn("EventDate", FormatType.CobraDate, 0, 0, "The qualifying event date that the event type occurred on. Do not adjust for plan benefit termination types, just use the actual date of the event."));
                             mappings.Add(new CobraTypedCsvColumn("EnrollmentDate", FormatType.CobraDate, 0, 1, "Original enrollment date of the member’s current medical plan - used for HIPAA certificate to show length of continuous coverage"));
@@ -1484,6 +1486,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("DateSpecificRightsNoticeWasPrinted", FormatType.CobraDate, 0, 1, "The date that the original Specific Rights Notice was printed (or postmarked)"));
                             mappings.Add(new CobraTypedCsvColumn("PostmarkDateOfElection", FormatType.CobraDate, 0, 0, "If the QB has elected, then the date of that election (or the postmark of the election form receipt) should be entered as the postmark date of election form"));
                             mappings.Add(new CobraTypedCsvColumn("IsPaidThroughLastDayOfCOBRA", FormatType.CobraYesNo, 0, 1, "If the QB is paid all the way through the end of COBRA then set this to TRUE, otherwise FALSE"));
@@ -1501,6 +1504,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
                             mappings.Add(new CobraTypedCsvColumn("CoverageLevel", FormatType.String, 35, 1, "EE,EE+SPOUSE,EE+CHILD,EE+CHILDREN,EE+FAMILY,EE+1,EE+2,SPOUSEONLY,SPOUSE+CHILD,CHILDREN,EE+1Child,EE+2Children,EE+3Children,EE+4Children,EE+5orMoreChildren,EE+Spouse+1Child,EE+Spouse+2Children,EE+Spouse+3Children,EE+Spouse+4Children,EE+Spouse+5orMoreChildren,SPOUSE+1CHILD,SPOUSE+2CHILDREN,SPOUSE+3CHILDREN,SPOUSE+4CHILDREN,SPOUSE+5ORMORECHILDREN,EE+DOMESTICPARTNER,EE1UNDER19,EE+SPOUSE1UNDER19,EE+SPOUSE2UNDER19,EE+CHILDREN1UNDER19,EE+CHILDREN2UNDER19,EE+CHILDREN3UNDER19,EE+FAMILY1UNDER19,EE+FAMILY2UNDER19,EE+FAMILY3UNDER19"));
                             mappings.Add(new CobraTypedCsvColumn("NumberOfUnit", FormatType.CobraMoney, 0, 0, "Sets the # of units for this plan. Required if plan is units based (e.g. Life)."));
@@ -1512,6 +1516,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
                             mappings.Add(new CobraTypedCsvColumn("StartDate", FormatType.CobraDate, 0, 1, "The start date that the QB will begin coverage on this plan. This should be set to the FDOC for the plan in the field above."));
                             mappings.Add(new CobraTypedCsvColumn("EndDate", FormatType.CobraDate, 0, 0, "Optional, the end date the QB will cease coverage on this plan. This should be set to the LDOC for the plan in the field above."));
@@ -1535,6 +1540,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("SSN", FormatType.SSN, 9, 0, "Social Security Number"));
                             mappings.Add(new CobraTypedCsvColumn("Relationship", FormatType.String, 35, 1, "SPOUSE, CHILD, DOMESTICPARTNER"));
                             mappings.Add(new CobraTypedCsvColumn("Salutation", FormatType.String, 35, 0, "MR, MRS, MS, MISS, DR"));
@@ -1563,6 +1569,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
                             //
                             break;
@@ -1572,6 +1579,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
                             mappings.Add(new CobraTypedCsvColumn("StartDate", FormatType.CobraDate, 0, 1, "The start date of the dependent on the plan. This should be set to the FDOC for the plan in the field above."));
                             mappings.Add(new CobraTypedCsvColumn("EndDate", FormatType.CobraDate, 0, 0, "The end date of the dependent on the plan. This should be set to the LDOC for the plan in the field above unless it is known that the dependent will be ending the plan before LDOC."));
@@ -1584,6 +1592,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("NoteType", FormatType.String, 35, 1, "MANUAL, AUTONOTE"));
                             mappings.Add(new CobraTypedCsvColumn("DateTime", FormatType.CobraDateTime, 0, 1, "Date and time of the note"));
                             mappings.Add(new CobraTypedCsvColumn("NoteText", FormatType.String, 0, 1, ""));
@@ -1596,6 +1605,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("InsuranceType", FormatType.String, 35, 1, "MEDICAL, DENTAL, VISION, PHARMACY, FSA, HCRA, EAP, GAP, 401k, LIFE, NULIFE, MSA, PBA, HSA, NUOTHER1, NUOTHER2, GRPLIFE, NUGRPLIFE, VOLLIFE, NUVOLLIFE, CANCER, MERP, DEPLIFE1, DEPLIFE2, DEPLIFE3, NUDEPLIFE1, NUDEPLIFE2, NUDEPLIFE3, MEDSTURIDER1, MEDSTURIDER2, MEDSTURIDER3, LTD, AD&D, CHIROPRACTIC, VEBA, CUSTOMBILLING, LTDNONUNITBASED, LTDUNITBASED, STDNONUNITBASED, STDUNITBASED, CRITICALILLNESS, ACCIDENTNONUNITBASED, ACCIDENTUNITBASED, VOLUNTARYOTHER, UOTHER1, UOTHER2, UOTHER3"));
                             //
                             break;
@@ -1605,6 +1615,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("SubsidyAmountType", FormatType.String, 35, 0, "?", "FLAT or PERCENTAGE is required if RatePeriodSubsidy is False"));
                             mappings.Add(new CobraTypedCsvColumn("StartDate", FormatType.CobraDate, 0, 1, "Start date of the subsidy"));
                             mappings.Add(new CobraTypedCsvColumn("EndDate", FormatType.CobraDate, 0, 1, "End date of the subsidy"));
@@ -1619,6 +1630,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("CASRINSERT", FormatType.CobraYesNo, 0, 0, "California Specific Rights Letter Insert. Default is FALSE."));
                             mappings.Add(new CobraTypedCsvColumn("CTSRINSERT", FormatType.CobraYesNo, 0, 0, "Connecticut Specific Rights Letter Insert. Default is FALSE."));
                             mappings.Add(new CobraTypedCsvColumn("MNLIFEINSERT", FormatType.CobraYesNo, 0, 0, "Minnesota Life Specific Rights Letter Insert. Default is FALSE."));
@@ -1639,6 +1651,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("DisabilityApproved", FormatType.CobraYesNo, 1, 1, "Set to TRUE if the Disability Extension is approved or FALSE if it is not"));
                             mappings.Add(new CobraTypedCsvColumn("PostmarkOfDisabilityExtension", FormatType.CobraDate, 0, 1, "Set to the postmark date that the Disability Extension when it was received"));
                             mappings.Add(new CobraTypedCsvColumn("DateDisabled", FormatType.CobraDate, 0, 1, "The date the member was disabled"));
@@ -1651,6 +1664,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
                             mappings.Add(new CobraTypedCsvColumn("Rate", FormatType.CobraMoney, 0, 1, "The amount of the member specific rate"));
                             //
@@ -1661,6 +1675,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
                             mappings.Add(new CobraTypedCsvColumn("StartDate", FormatType.CobraDate, 0, 1, "The start date of the dependent on the plan. This should be set to the FDOC for the plan in the field above."));
                             mappings.Add(new CobraTypedCsvColumn("EndDate", FormatType.CobraDate, 0, 1, "End date of the member specific rate"));
@@ -1673,6 +1688,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
                             mappings.Add(new CobraTypedCsvColumn("TermOrReinstate", FormatType.String, 20, 1, "TERMINATE or REINSTATE"));
                             mappings.Add(new CobraTypedCsvColumn("EffectiveDate", FormatType.CobraDate, 0, 1, "Effective date of the term or reinstate"));
@@ -1685,6 +1701,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("LetterAttachmentName", FormatType.String, 100, 1, "The unique name of letter attachment."));
                             //
                             break;
@@ -1694,6 +1711,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("ClientName", FormatType.String, 100, 1, "N/A"));
                             mappings.Add(new CobraTypedCsvColumn("SSN", FormatType.SSN, 9, 1, "N/A"));
                             mappings.Add(new CobraTypedCsvColumn("QualifyingEventDate", FormatType.CobraDate, 0, 1, "N/A"));
@@ -1705,6 +1723,7 @@ namespace DataProcessing
                     switch (versionNo)
                     {
                         case "1.2":
+                        case "1.1":
                             mappings.Add(new CobraTypedCsvColumn("UserDefinedFieldName", FormatType.String, 0, 1, "The unique name of the user defined field."));
                             mappings.Add(new CobraTypedCsvColumn("UserDefinedFieldValue", FormatType.String, 2000, 0, "Any provided value, including blank, will be saved."));
                             //
@@ -1760,6 +1779,19 @@ namespace DataProcessing
                 // split text fileinto multiple files
                 Dictionary<EdiFileFormat, Object[]> files = new Dictionary<EdiFileFormat, Object[]>();
 
+                var versionNo = GetCobraFileVersionNoFromFile(srcFilePath);
+                //
+                Boolean isResultFile = GetCobraFileFormatIsResultFile(srcFilePath);
+
+                //
+                string tableName = isResultFile ? "[dbo].[cobra_res_file_table_stage]" : "[dbo].[cobra_file_table_stage]";
+                string postImportProc = isResultFile
+                    ? "dbo.process_cobra_res_file_table_stage_import"
+                    : "dbo.process_cobra_file_table_stage_import";
+
+                // truncate staging table
+                DbUtils.TruncateTable(dbConn, tableName,
+                    fileLogParams?.GetMessageLogParams());
 
                 // open file for reading
                 // read each line and insert
@@ -1771,22 +1803,8 @@ namespace DataProcessing
                     {
                         rowNo++;
 
-                        var versionNo = GetCobraFileVersionNoFromFile(srcFilePath);
-                        //
-                        Boolean isResultFile = GetCobraFileFormatIsResultFile(srcFilePath);
-
-                        //
-                        string tableName = isResultFile ? "[dbo].[cobra_res_file_table_stage]" : "[dbo].[cobra_file_table_stage]";
-                        string postImportProc = isResultFile
-                            ? "dbo.process_cobra_res_file_table_stage_import"
-                            : "dbo.process_cobra_file_table_stage_import";
-
-                        // truncate staging table
-                        DbUtils.TruncateTable(dbConn, tableName,
-                            fileLogParams?.GetMessageLogParams());
-
-                        // import the line with manual insert statement
-                        ImportCobraCsvLine(line, dbConn, tableName, versionNo, fileLogParams, onErrorCallback);
+                                  // import the line with manual insert statement
+                        ImportCobraCsvLine(Path.GetFileName(srcFilePath), rowNo, line, dbConn, tableName, versionNo, fileLogParams, onErrorCallback);
 
                         //
                         // run postimport query to take from staging to final table
@@ -1811,7 +1829,7 @@ namespace DataProcessing
         }
 
         //imports passed line into table as per passed columns
-        public static void ImportCobraCsvLine(string line, DbConnection dbConn, string tableName,
+        public static void ImportCobraCsvLine(string srcFileName, int srcRowNo, string line, DbConnection dbConn, string tableName,
         string versionNo, FileOperationLogParams fileLogParams,
         OnErrorCallback onErrorCallback)
         {
@@ -1820,6 +1838,9 @@ namespace DataProcessing
 
             // get mappings for event type & version
             TypedCsvSchema mappings = GetCobraFileImportMappings(rowType, versionNo);
+
+            // add fixed columns to line
+            line = $"{srcRowNo},\"{line}\",{srcFileName},{line}";
 
             // import into DB
             ImpExpUtils.ImportCsvLine(line, dbConn, tableName, mappings, fileLogParams, onErrorCallback);
