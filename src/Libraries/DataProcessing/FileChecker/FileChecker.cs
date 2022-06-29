@@ -78,11 +78,13 @@ namespace DataProcessing
 
         public OperationResult CheckFileAndProcess(FileCheckType fileCheckType, FileCheckProcessType fileCheckProcessType)
         {
-            // check file
+            // A) check file format and dATA
             OperationResultType resultType = CheckFile(fileCheckType);
+
             //
             OperationResult operationResult = null;
 
+            // B) return results based on filecheck results and fileCheckProcessType
             try
             {
                 // move source mbi file
@@ -90,6 +92,21 @@ namespace DataProcessing
                 var destFilePath = this.SrcFilePath;
                 var queryStringOrgFile = "";
                 string strCheckResults = "";
+
+                var platformName = "";
+                switch (PlatformType)
+                {
+                    case PlatformType.Alegeus:
+                        platformName = "Alegeus";
+                        break;
+                    case PlatformType.Cobra:
+                        platformName = "Cobra";
+                        break;
+                    default:
+                        platformName = "uUnknown";
+                        break;
+                }
+
 
                 // act on resultType
                 switch (resultType)
@@ -109,8 +126,6 @@ namespace DataProcessing
                                 {
                                     destFilePath = $"{Vars.alegeusFilesPassedPath}/{fileName}";
                                 }
-
-
                             }
                             else if (PlatformType == PlatformType.Cobra)
                             {
@@ -126,7 +141,8 @@ namespace DataProcessing
 
                             // export all rows to file
                             queryStringOrgFile =
-       $"exec [dbo].[proc_{PlatformType.ToDescription()}_ExportImportFile] '{Path.GetFileName(this.SrcFilePath)}', 'original_file', {this.FileLogParams.FileLogId}";
+       $"exec [dbo].[proc_{platformName}_ExportImportFile] '{Path.GetFileName(this.SrcFilePath)}', 'original_file', {this.FileLogParams.FileLogId}";
+
                             //
                             ImpExpUtils.ExportSingleColumnFlatFile(destFilePath, DbConn, queryStringOrgFile,
                                 "file_row", null, FileLogParams,
@@ -171,8 +187,6 @@ namespace DataProcessing
                                     destFilePath = $"{Vars.alegeusFilesRejectsPath}/{fileName}";
                                 }
                                 ext = ".mbi";
-
-
                             }
                             else if (PlatformType == PlatformType.Cobra)
                             {
@@ -185,8 +199,8 @@ namespace DataProcessing
                                     destFilePath = $"{Vars.cobraFilesRejectsPath}/{fileName}";
                                 }
                                 ext = ".csv";
-
                             }
+                            //
                             string originalFilePath = $"{destFilePath}-0-OriginalFile{ext}";
                             string passedLinesFilePath = $"{destFilePath}-1-PassedLines{ext}";
                             string rejectedLinesErrorFilePath = $"{destFilePath}-2-RejectedLines.err";
@@ -194,32 +208,35 @@ namespace DataProcessing
                             string allLinesErrorFilePath = $"{destFilePath}-4-allLines.err";
 
                             // 2. export error file
+                            queryStringOrgFile =
+                             $"exec [dbo].[proc_{platformName}_ExportImportFile] '{srcFileName}', 'original_file', {this.FileLogParams.FileLogId}";
+
                             ImpExpUtils.ExportSingleColumnFlatFile(originalFilePath, DbConn, queryStringOrgFile,
                                 "file_row", null, FileLogParams,
                                 (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                             );
 
-                            // passed lines
+                            // 2a) passed lines
                             var queryStringExpPassedLines =
-                                $"exec [dbo].[proc_{PlatformType.ToDescription()}_ExportImportFile] '{srcFileName}', 'passed_lines', {this.FileLogParams.FileLogId}";
+                                $"exec [dbo].[proc_{platformName}_ExportImportFile] '{srcFileName}', 'passed_lines', {this.FileLogParams.FileLogId}";
 
                             ImpExpUtils.ExportSingleColumnFlatFile(passedLinesFilePath, DbConn, queryStringExpPassedLines,
                                 "file_row", null, FileLogParams,
                                 (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                             );
 
-                            // .err lines only errors
+                            // 2b) .err lines only errors
                             var queryStringExpErrFile =
-                                $"exec [dbo].[proc_{PlatformType.ToDescription()}_ExportImportFile] '{srcFileName}', 'rejected_lines_with_errors', {this.FileLogParams.FileLogId}";
+                                $"exec [dbo].[proc_{platformName}_ExportImportFile] '{srcFileName}', 'rejected_lines_with_errors', {this.FileLogParams.FileLogId}";
 
                             ImpExpUtils.ExportSingleColumnFlatFile(rejectedLinesErrorFilePath, DbConn, queryStringExpErrFile,
                                 "file_row", null, FileLogParams,
                                 (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                             );
 
-                            // rejected lines
+                            // 2c) rejected lines
                             var queryStringExpRejectedLines =
-                                $"exec [dbo].[proc_{PlatformType.ToDescription()}_ExportImportFile] '{srcFileName}', 'rejected_lines', {this.FileLogParams.FileLogId}";
+                                $"exec [dbo].[proc_{platformName}_ExportImportFile] '{srcFileName}', 'rejected_lines', {this.FileLogParams.FileLogId}";
 
                             ImpExpUtils.ExportSingleColumnFlatFile(rejectedLinesFilePath, DbConn, queryStringExpRejectedLines,
                                 "file_row", null, FileLogParams,
@@ -227,9 +244,9 @@ namespace DataProcessing
                             );
 
 
-                            // entire file with errors
+                            // 2d) entire file with errors
                             var queryStringExpAllLinesErrFile =
-                                $"exec [dbo].[proc_{PlatformType.ToDescription()}_ExportImportFile] '{srcFileName}', 'all_lines_with_errors', {this.FileLogParams.FileLogId}";
+                                $"exec [dbo].[proc_{platformName}_ExportImportFile] '{srcFileName}', 'all_lines_with_errors', {this.FileLogParams.FileLogId}";
 
                             ImpExpUtils.ExportSingleColumnFlatFile(allLinesErrorFilePath, DbConn, queryStringExpAllLinesErrFile,
                                 "file_row", null, FileLogParams,
@@ -279,7 +296,7 @@ namespace DataProcessing
 
                             // export entire file with errors
                             queryStringOrgFile =
-                $"exec [dbo].[proc_{PlatformType.ToDescription()}_ExportImportFile] '{srcFileName}', 'all_lines_with_errors', {this.FileLogParams.FileLogId}";
+                $"exec [dbo].[proc_{platformName}_ExportImportFile] '{srcFileName}', 'all_lines_with_errors', {this.FileLogParams.FileLogId}";
                             //
                             ImpExpUtils.ExportSingleColumnFlatFile(allLinesErrorFilePath, DbConn, queryStringOrgFile,
                                 "file_row", null, FileLogParams,
@@ -306,7 +323,7 @@ namespace DataProcessing
                     operationResult = new OperationResult(0, "400", "ERROR", "", "");
                 }
 
-
+                // log operation with outcome
                 FileLogParams.SetFileNames("", Path.GetFileName(SrcFilePath), SrcFilePath,
                     Path.GetFileName(SrcFilePath), SrcFilePath,
                     $"FileChecker-{MethodBase.GetCurrentMethod()?.Name}",
@@ -329,12 +346,12 @@ namespace DataProcessing
                 }
 
                 DbUtils.LogFileOperation(FileLogParams);
-
             }
 
         }
         //
 
+        //check file format, format data and check against db - save results to ErrorCode and ErrorMessage of each row
         private OperationResultType CheckFile(FileCheckType fileCheckType)
         {
             if (this.PlatformType == PlatformType.Alegeus)
@@ -369,7 +386,6 @@ namespace DataProcessing
                 throw new Exception(message);
             }
         }
-
 
         #endregion
 

@@ -109,7 +109,7 @@ namespace DataProcessing
             tableName = "[dbo].[mbi_file_table_stage]";
             postImportProc = "[dbo].[process_mbi_file_table_stage_import]";
 
-            //
+            //todo: need to check changed code
             Import.ImportAlegeusFile(fileFormat, DbConn, currentFilePath, OriginalSrcFilePath, this.hasHeaderRow, FileLogParams, null);
 
             //
@@ -149,15 +149,14 @@ namespace DataProcessing
             foreach (var dataRow in dataRows)
             {
                 rowNo++;
-                this.CheckAlegeusFileData(fileFormat, dataRow, mappings);
+                this.CheckAlegeusRowData(fileFormat, dataRow, mappings);
             }
 
             // save any changes
             dbErrorLog.SaveChanges();
         }
 
-
-        private void CheckAlegeusFileData(EdiFileFormat fileFormat, mbi_file_table_stage dataRow, TypedCsvSchema mappings)
+        private void CheckAlegeusRowData(EdiFileFormat fileFormat, mbi_file_table_stage dataRow, TypedCsvSchema mappings)
         {
             // don't check header dataRow
             if (dataRow.row_type == "IA" || dataRow.row_type == "RA")

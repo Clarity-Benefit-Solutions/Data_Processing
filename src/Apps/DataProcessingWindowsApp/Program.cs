@@ -32,7 +32,7 @@ namespace TestApp
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            string filePath = $"{Vars.GetProcessExeDir()}/_Output.log";
+            string filePath = $"{Vars.GetProcessExeDir()}/_Output_{DateTime.Now.ToString("yyyy-MM-dd HH-mm")}.log";
 try
             {
                 // write output to logfile
