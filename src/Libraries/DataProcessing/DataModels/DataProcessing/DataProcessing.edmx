@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Data_ProcessingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Data_ProcessingModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Data_Processing.dbo.alegeus_file_final' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="alegeus_file_final">
@@ -12,8 +12,9 @@ warning 6002: The table/view 'Data_Processing.dbo.alegeus_file_final' does not h
             <PropertyRef Name="row_num" />
           </Key>
           <Property Name="file_row" Type="varchar(max)" />
-          <Property Name="folder_name" Type="varchar" MaxLength="200" />
+          <Property Name="folder_name" Type="varchar" MaxLength="2000" />
           <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountSegmentId" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Data_Processing.dbo.alegeus_file_staging' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -22,33 +23,23 @@ warning 6002: The table/view 'Data_Processing.dbo.alegeus_file_staging' does not
             <PropertyRef Name="row_num" />
           </Key>
           <Property Name="data_row" Type="varchar(max)" />
-          <Property Name="folder_name" Type="varchar" MaxLength="200" />
+          <Property Name="folder_name" Type="varchar" MaxLength="2000" />
           <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccountSegmentId" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Data_Processing.dbo.app_settings' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="app_settings">
           <Key>
             <PropertyRef Name="id" />
+            <PropertyRef Name="is_active" />
           </Key>
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="environment" Type="nvarchar" MaxLength="50" />
           <Property Name="setting_name" Type="nvarchar" MaxLength="100" />
           <Property Name="setting_value" Type="nvarchar" MaxLength="2000" />
           <Property Name="created_at" Type="datetime" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Data_Processing.dbo.Automated_Header_list' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="Automated_Header_list">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="Folder_name" Type="nvarchar(max)" />
-          <Property Name="template_type" Type="nvarchar(max)" />
-          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
-          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="is_active" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6013: The table/view 'Data_Processing.dbo.bfx_broker_extract' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
@@ -89,6 +80,501 @@ warning 6013: The table/view 'Data_Processing.dbo.ClarityStandardFileHeader2019'
         <EntityType Name="ClarityStandardFileHeader2019">
           <Property Name="header_row" Type="varchar" MaxLength="154" />
         </EntityType>-->
+        <EntityType Name="cobra_file_table">
+          <Key>
+            <PropertyRef Name="row_id" />
+          </Key>
+          <Property Name="cobra_file_name" Type="nvarchar" MaxLength="2000" />
+          <Property Name="data_row" Type="nvarchar(max)" />
+          <Property Name="row_num" Type="int" />
+          <Property Name="row_type" Type="nvarchar" MaxLength="200" />
+          <Property Name="row_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="source_row_no" Type="int" />
+          <Property Name="check_type" Type="nvarchar" MaxLength="200" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="200" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="2000" />
+          <Property Name="error_message_calc" Type="nvarchar" MaxLength="2000" />
+          <Property Name="CreatedAt" Type="datetime" />
+          <Property Name="VersionNumber" Type="nvarchar" MaxLength="200" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="200" />
+          <Property Name="ClientDivisionName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Salutation" Type="nvarchar" MaxLength="200" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="200" />
+          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="200" />
+          <Property Name="SSN" Type="nvarchar" MaxLength="200" />
+          <Property Name="IndividualID" Type="nvarchar" MaxLength="200" />
+          <Property Name="Email" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone2" Type="nvarchar" MaxLength="200" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="200" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="200" />
+          <Property Name="City" Type="nvarchar" MaxLength="200" />
+          <Property Name="StateOrProvince" Type="nvarchar" MaxLength="200" />
+          <Property Name="PostalCode" Type="nvarchar" MaxLength="200" />
+          <Property Name="Country" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumAddressSameAsPrimary" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumAddress1" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumAddress2" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumCity" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumStateOrProvince" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumPostalCode" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumCountry" Type="nvarchar" MaxLength="200" />
+          <Property Name="Sex" Type="nvarchar" MaxLength="200" />
+          <Property Name="DOB" Type="nvarchar" MaxLength="200" />
+          <Property Name="TobaccoUse" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeType" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeePayrollType" Type="nvarchar" MaxLength="200" />
+          <Property Name="YearsOfService" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumCouponType" Type="nvarchar" MaxLength="200" />
+          <Property Name="UsesHCTC" Type="nvarchar" MaxLength="200" />
+          <Property Name="Active" Type="nvarchar" MaxLength="200" />
+          <Property Name="AllowMemberSSO" Type="nvarchar" MaxLength="200" />
+          <Property Name="BenefitGroup" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountStructure" Type="nvarchar" MaxLength="200" />
+          <Property Name="ClientSpecificData" Type="nvarchar" MaxLength="200" />
+          <Property Name="SSOIdentifier" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanCategory" Type="nvarchar" MaxLength="200" />
+          <Property Name="EventType" Type="nvarchar" MaxLength="200" />
+          <Property Name="EventDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EnrollmentDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeSSN" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeName" Type="nvarchar" MaxLength="200" />
+          <Property Name="SecondEventOriginalFDOC" Type="nvarchar" MaxLength="200" />
+          <Property Name="DateSpecificRightsNoticeWasPrinted" Type="nvarchar" MaxLength="200" />
+          <Property Name="PostmarkDateOfElection" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsPaidThroughLastDayOfCOBRA" Type="nvarchar" MaxLength="200" />
+          <Property Name="NextPremiumOwedMonth" Type="nvarchar" MaxLength="200" />
+          <Property Name="NextPremiumOwedYear" Type="nvarchar" MaxLength="200" />
+          <Property Name="NextPremiumOwedAmountReceived" Type="nvarchar" MaxLength="200" />
+          <Property Name="SendTakeoverLetter" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsConversionLetterSent" Type="nvarchar" MaxLength="200" />
+          <Property Name="SendDODSubsidyExtension" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanName" Type="nvarchar" MaxLength="200" />
+          <Property Name="CoverageLevel" Type="nvarchar" MaxLength="200" />
+          <Property Name="NumberOfUnit" Type="nvarchar" MaxLength="200" />
+          <Property Name="TXSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="ORSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="StartDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EndDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="FirstDayOfCOBRA" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastDayOfCOBRA" Type="nvarchar" MaxLength="200" />
+          <Property Name="COBRADurationMonths" Type="nvarchar" MaxLength="200" />
+          <Property Name="DaysToElect" Type="nvarchar" MaxLength="200" />
+          <Property Name="DaysToMake1stPayment" Type="nvarchar" MaxLength="200" />
+          <Property Name="DaysToMakeSubsequentPayments" Type="nvarchar" MaxLength="200" />
+          <Property Name="ElectionPostmarkDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastDateRatesNotified" Type="nvarchar" MaxLength="200" />
+          <Property Name="NumberOfUnits" Type="nvarchar" MaxLength="200" />
+          <Property Name="SendPlanChangeLetterForLegacy" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanBundleName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Relationship" Type="nvarchar" MaxLength="200" />
+          <Property Name="AddressSameAsQB" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsQMCSO" Type="nvarchar" MaxLength="200" />
+          <Property Name="UsesFDOC" Type="nvarchar" MaxLength="200" />
+          <Property Name="NoteType" Type="nvarchar" MaxLength="200" />
+          <Property Name="DateTime" Type="nvarchar" MaxLength="200" />
+          <Property Name="NoteText" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="200" />
+          <Property Name="InsuranceType" Type="nvarchar" MaxLength="200" />
+          <Property Name="SubsidyAmountType" Type="nvarchar" MaxLength="200" />
+          <Property Name="Amount" Type="nvarchar" MaxLength="200" />
+          <Property Name="SubsidyType" Type="nvarchar" MaxLength="200" />
+          <Property Name="RatePeriodSubsidy" Type="nvarchar" MaxLength="200" />
+          <Property Name="CASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="CTSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="MNLIFEINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="MNCONTINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="NYSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="VEBASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="ILSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="RISRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="GASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="VASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="DisabilityApproved" Type="nvarchar" MaxLength="200" />
+          <Property Name="PostmarkOfDisabilityExtension" Type="nvarchar" MaxLength="200" />
+          <Property Name="DateDisabled" Type="nvarchar" MaxLength="200" />
+          <Property Name="DenialReason" Type="nvarchar" MaxLength="200" />
+          <Property Name="Rate" Type="nvarchar" MaxLength="200" />
+          <Property Name="TermOrReinstate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="200" />
+          <Property Name="LetterAttachmentName" Type="nvarchar" MaxLength="200" />
+          <Property Name="QualifyingEventDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserDefinedFieldName" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserDefinedFieldValue" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="cobra_file_table_stage">
+          <Key>
+            <PropertyRef Name="row_num" />
+          </Key>
+          <Property Name="cobra_file_name" Type="nvarchar" MaxLength="2000" />
+          <Property Name="data_row" Type="nvarchar(max)" />
+          <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="row_type" Type="nvarchar" MaxLength="200" />
+          <Property Name="source_row_no" Type="int" />
+          <Property Name="check_type" Type="nvarchar" MaxLength="200" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="200" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="2000" />
+          <Property Name="error_message_calc" Type="nvarchar" MaxLength="2000" />
+          <Property Name="VersionNumber" Type="nvarchar" MaxLength="200" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="200" />
+          <Property Name="ClientDivisionName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Salutation" Type="nvarchar" MaxLength="200" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="200" />
+          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="200" />
+          <Property Name="SSN" Type="nvarchar" MaxLength="200" />
+          <Property Name="IndividualID" Type="nvarchar" MaxLength="200" />
+          <Property Name="Email" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone2" Type="nvarchar" MaxLength="200" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="200" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="200" />
+          <Property Name="City" Type="nvarchar" MaxLength="200" />
+          <Property Name="StateOrProvince" Type="nvarchar" MaxLength="200" />
+          <Property Name="PostalCode" Type="nvarchar" MaxLength="200" />
+          <Property Name="Country" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumAddressSameAsPrimary" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumAddress1" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumAddress2" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumCity" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumStateOrProvince" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumPostalCode" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumCountry" Type="nvarchar" MaxLength="200" />
+          <Property Name="Sex" Type="nvarchar" MaxLength="200" />
+          <Property Name="DOB" Type="nvarchar" MaxLength="200" />
+          <Property Name="TobaccoUse" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeType" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeePayrollType" Type="nvarchar" MaxLength="200" />
+          <Property Name="YearsOfService" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumCouponType" Type="nvarchar" MaxLength="200" />
+          <Property Name="UsesHCTC" Type="nvarchar" MaxLength="200" />
+          <Property Name="Active" Type="nvarchar" MaxLength="200" />
+          <Property Name="AllowMemberSSO" Type="nvarchar" MaxLength="200" />
+          <Property Name="BenefitGroup" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountStructure" Type="nvarchar" MaxLength="200" />
+          <Property Name="ClientSpecificData" Type="nvarchar" MaxLength="200" />
+          <Property Name="SSOIdentifier" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanCategory" Type="nvarchar" MaxLength="200" />
+          <Property Name="EventType" Type="nvarchar" MaxLength="200" />
+          <Property Name="EventDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EnrollmentDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeSSN" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeName" Type="nvarchar" MaxLength="200" />
+          <Property Name="SecondEventOriginalFDOC" Type="nvarchar" MaxLength="200" />
+          <Property Name="DateSpecificRightsNoticeWasPrinted" Type="nvarchar" MaxLength="200" />
+          <Property Name="PostmarkDateOfElection" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsPaidThroughLastDayOfCOBRA" Type="nvarchar" MaxLength="200" />
+          <Property Name="NextPremiumOwedMonth" Type="nvarchar" MaxLength="200" />
+          <Property Name="NextPremiumOwedYear" Type="nvarchar" MaxLength="200" />
+          <Property Name="NextPremiumOwedAmountReceived" Type="nvarchar" MaxLength="200" />
+          <Property Name="SendTakeoverLetter" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsConversionLetterSent" Type="nvarchar" MaxLength="200" />
+          <Property Name="SendDODSubsidyExtension" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanName" Type="nvarchar" MaxLength="200" />
+          <Property Name="CoverageLevel" Type="nvarchar" MaxLength="200" />
+          <Property Name="NumberOfUnit" Type="nvarchar" MaxLength="200" />
+          <Property Name="StartDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EndDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="FirstDayOfCOBRA" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastDayOfCOBRA" Type="nvarchar" MaxLength="200" />
+          <Property Name="COBRADurationMonths" Type="nvarchar" MaxLength="200" />
+          <Property Name="DaysToElect" Type="nvarchar" MaxLength="200" />
+          <Property Name="DaysToMake1stPayment" Type="nvarchar" MaxLength="200" />
+          <Property Name="DaysToMakeSubsequentPayments" Type="nvarchar" MaxLength="200" />
+          <Property Name="ElectionPostmarkDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastDateRatesNotified" Type="nvarchar" MaxLength="200" />
+          <Property Name="NumberOfUnits" Type="nvarchar" MaxLength="200" />
+          <Property Name="SendPlanChangeLetterForLegacy" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanBundleName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Relationship" Type="nvarchar" MaxLength="200" />
+          <Property Name="AddressSameAsQB" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsQMCSO" Type="nvarchar" MaxLength="200" />
+          <Property Name="UsesFDOC" Type="nvarchar" MaxLength="200" />
+          <Property Name="NoteType" Type="nvarchar" MaxLength="200" />
+          <Property Name="DateTime" Type="nvarchar" MaxLength="200" />
+          <Property Name="NoteText" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="200" />
+          <Property Name="InsuranceType" Type="nvarchar" MaxLength="200" />
+          <Property Name="SubsidyAmountType" Type="nvarchar" MaxLength="200" />
+          <Property Name="Amount" Type="nvarchar" MaxLength="200" />
+          <Property Name="SubsidyType" Type="nvarchar" MaxLength="200" />
+          <Property Name="RatePeriodSubsidy" Type="nvarchar" MaxLength="200" />
+          <Property Name="CASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="CTSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="MNLIFEINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="MNCONTINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="ORSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="TXSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="NYSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="VEBASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="ILSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="RISRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="GASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="VASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="DisabilityApproved" Type="nvarchar" MaxLength="200" />
+          <Property Name="PostmarkOfDisabilityExtension" Type="nvarchar" MaxLength="200" />
+          <Property Name="DateDisabled" Type="nvarchar" MaxLength="200" />
+          <Property Name="DenialReason" Type="nvarchar" MaxLength="200" />
+          <Property Name="Rate" Type="nvarchar" MaxLength="200" />
+          <Property Name="TermOrReinstate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="200" />
+          <Property Name="LetterAttachmentName" Type="nvarchar" MaxLength="200" />
+          <Property Name="QualifyingEventDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserDefinedFieldName" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserDefinedFieldValue" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="cobra_res_file_table">
+          <Key>
+            <PropertyRef Name="row_id" />
+          </Key>
+          <Property Name="error_row" Type="nvarchar(max)" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="200" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="2000" />
+          <Property Name="row_num" Type="int" />
+          <Property Name="row_type" Type="varchar" MaxLength="50" />
+          <Property Name="error_message_calc" Type="varchar" MaxLength="500" />
+          <Property Name="cobra_res_file_name" Type="nvarchar" MaxLength="2000" />
+          <Property Name="result_template" Type="nvarchar" MaxLength="100" />
+          <Property Name="row_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="source_row_no" Type="int" />
+          <Property Name="check_type" Type="nvarchar" MaxLength="200" />
+          <Property Name="VersionNumber" Type="nvarchar" MaxLength="200" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="200" />
+          <Property Name="ClientDivisionName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Salutation" Type="nvarchar" MaxLength="200" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="200" />
+          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="200" />
+          <Property Name="SSN" Type="nvarchar" MaxLength="200" />
+          <Property Name="IndividualID" Type="nvarchar" MaxLength="200" />
+          <Property Name="Email" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone2" Type="nvarchar" MaxLength="200" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="200" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="200" />
+          <Property Name="City" Type="nvarchar" MaxLength="200" />
+          <Property Name="StateOrProvince" Type="nvarchar" MaxLength="200" />
+          <Property Name="PostalCode" Type="nvarchar" MaxLength="200" />
+          <Property Name="Country" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumAddressSameAsPrimary" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumAddress1" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumAddress2" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumCity" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumStateOrProvince" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumPostalCode" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumCountry" Type="nvarchar" MaxLength="200" />
+          <Property Name="Sex" Type="nvarchar" MaxLength="200" />
+          <Property Name="DOB" Type="nvarchar" MaxLength="200" />
+          <Property Name="TobaccoUse" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeType" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeePayrollType" Type="nvarchar" MaxLength="200" />
+          <Property Name="YearsOfService" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumCouponType" Type="nvarchar" MaxLength="200" />
+          <Property Name="UsesHCTC" Type="nvarchar" MaxLength="200" />
+          <Property Name="Active" Type="nvarchar" MaxLength="200" />
+          <Property Name="AllowMemberSSO" Type="nvarchar" MaxLength="200" />
+          <Property Name="BenefitGroup" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountStructure" Type="nvarchar" MaxLength="200" />
+          <Property Name="ClientSpecificData" Type="nvarchar" MaxLength="200" />
+          <Property Name="SSOIdentifier" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanCategory" Type="nvarchar" MaxLength="200" />
+          <Property Name="EventType" Type="nvarchar" MaxLength="200" />
+          <Property Name="EventDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EnrollmentDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeSSN" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeName" Type="nvarchar" MaxLength="200" />
+          <Property Name="SecondEventOriginalFDOC" Type="nvarchar" MaxLength="200" />
+          <Property Name="DateSpecificRightsNoticeWasPrinted" Type="nvarchar" MaxLength="200" />
+          <Property Name="PostmarkDateOfElection" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsPaidThroughLastDayOfCOBRA" Type="nvarchar" MaxLength="200" />
+          <Property Name="NextPremiumOwedMonth" Type="nvarchar" MaxLength="200" />
+          <Property Name="NextPremiumOwedYear" Type="nvarchar" MaxLength="200" />
+          <Property Name="NextPremiumOwedAmountReceived" Type="nvarchar" MaxLength="200" />
+          <Property Name="SendTakeoverLetter" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsConversionLetterSent" Type="nvarchar" MaxLength="200" />
+          <Property Name="SendDODSubsidyExtension" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanName" Type="nvarchar" MaxLength="200" />
+          <Property Name="CoverageLevel" Type="nvarchar" MaxLength="200" />
+          <Property Name="NumberOfUnit" Type="nvarchar" MaxLength="200" />
+          <Property Name="StartDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EndDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="FirstDayOfCOBRA" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastDayOfCOBRA" Type="nvarchar" MaxLength="200" />
+          <Property Name="COBRADurationMonths" Type="nvarchar" MaxLength="200" />
+          <Property Name="DaysToElect" Type="nvarchar" MaxLength="200" />
+          <Property Name="DaysToMake1stPayment" Type="nvarchar" MaxLength="200" />
+          <Property Name="DaysToMakeSubsequentPayments" Type="nvarchar" MaxLength="200" />
+          <Property Name="ElectionPostmarkDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastDateRatesNotified" Type="nvarchar" MaxLength="200" />
+          <Property Name="NumberOfUnits" Type="nvarchar" MaxLength="200" />
+          <Property Name="SendPlanChangeLetterForLegacy" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanBundleName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Relationship" Type="nvarchar" MaxLength="200" />
+          <Property Name="AddressSameAsQB" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsQMCSO" Type="nvarchar" MaxLength="200" />
+          <Property Name="UsesFDOC" Type="nvarchar" MaxLength="200" />
+          <Property Name="NoteType" Type="nvarchar" MaxLength="200" />
+          <Property Name="DateTime" Type="nvarchar" MaxLength="200" />
+          <Property Name="NoteText" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="200" />
+          <Property Name="InsuranceType" Type="nvarchar" MaxLength="200" />
+          <Property Name="SubsidyAmountType" Type="nvarchar" MaxLength="200" />
+          <Property Name="Amount" Type="nvarchar" MaxLength="200" />
+          <Property Name="SubsidyType" Type="nvarchar" MaxLength="200" />
+          <Property Name="RatePeriodSubsidy" Type="nvarchar" MaxLength="200" />
+          <Property Name="CASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="CTSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="MNLIFEINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="MNCONTINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="ORSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="TXSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="NYSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="VEBASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="ILSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="RISRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="GASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="VASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="DisabilityApproved" Type="nvarchar" MaxLength="200" />
+          <Property Name="PostmarkOfDisabilityExtension" Type="nvarchar" MaxLength="200" />
+          <Property Name="DateDisabled" Type="nvarchar" MaxLength="200" />
+          <Property Name="DenialReason" Type="nvarchar" MaxLength="200" />
+          <Property Name="Rate" Type="nvarchar" MaxLength="200" />
+          <Property Name="TermOrReinstate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="200" />
+          <Property Name="LetterAttachmentName" Type="nvarchar" MaxLength="200" />
+          <Property Name="QualifyingEventDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserDefinedFieldName" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserDefinedFieldValue" Type="nvarchar" MaxLength="200" />
+          <Property Name="data_row" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="cobra_res_file_table_stage">
+          <Key>
+            <PropertyRef Name="row_num" />
+          </Key>
+          <Property Name="result_template" Type="nvarchar" MaxLength="200" />
+          <Property Name="error_row" Type="nvarchar(max)" />
+          <Property Name="error_code" Type="nvarchar" MaxLength="200" />
+          <Property Name="error_message" Type="nvarchar" MaxLength="2000" />
+          <Property Name="row_num" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="row_type" Type="nvarchar" MaxLength="200" />
+          <Property Name="error_message_calc" Type="varchar" MaxLength="500" />
+          <Property Name="cobra_res_file_name" Type="nvarchar" MaxLength="2000" />
+          <Property Name="data_row" Type="nvarchar(max)" />
+          <Property Name="source_row_no" Type="int" />
+          <Property Name="check_type" Type="nvarchar" MaxLength="200" />
+          <Property Name="VersionNumber" Type="nvarchar" MaxLength="200" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="200" />
+          <Property Name="ClientDivisionName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Salutation" Type="nvarchar" MaxLength="200" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="200" />
+          <Property Name="MiddleInitial" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="200" />
+          <Property Name="SSN" Type="nvarchar" MaxLength="200" />
+          <Property Name="IndividualID" Type="nvarchar" MaxLength="200" />
+          <Property Name="Email" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone2" Type="nvarchar" MaxLength="200" />
+          <Property Name="Address1" Type="nvarchar" MaxLength="200" />
+          <Property Name="Address2" Type="nvarchar" MaxLength="200" />
+          <Property Name="City" Type="nvarchar" MaxLength="200" />
+          <Property Name="StateOrProvince" Type="nvarchar" MaxLength="200" />
+          <Property Name="PostalCode" Type="nvarchar" MaxLength="200" />
+          <Property Name="Country" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumAddressSameAsPrimary" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumAddress1" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumAddress2" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumCity" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumStateOrProvince" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumPostalCode" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumCountry" Type="nvarchar" MaxLength="200" />
+          <Property Name="Sex" Type="nvarchar" MaxLength="200" />
+          <Property Name="DOB" Type="nvarchar" MaxLength="200" />
+          <Property Name="TobaccoUse" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeType" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeePayrollType" Type="nvarchar" MaxLength="200" />
+          <Property Name="YearsOfService" Type="nvarchar" MaxLength="200" />
+          <Property Name="PremiumCouponType" Type="nvarchar" MaxLength="200" />
+          <Property Name="UsesHCTC" Type="nvarchar" MaxLength="200" />
+          <Property Name="Active" Type="nvarchar" MaxLength="200" />
+          <Property Name="AllowMemberSSO" Type="nvarchar" MaxLength="200" />
+          <Property Name="BenefitGroup" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountStructure" Type="nvarchar" MaxLength="200" />
+          <Property Name="ClientSpecificData" Type="nvarchar" MaxLength="200" />
+          <Property Name="SSOIdentifier" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanCategory" Type="nvarchar" MaxLength="200" />
+          <Property Name="EventType" Type="nvarchar" MaxLength="200" />
+          <Property Name="EventDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EnrollmentDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeSSN" Type="nvarchar" MaxLength="200" />
+          <Property Name="EmployeeName" Type="nvarchar" MaxLength="200" />
+          <Property Name="SecondEventOriginalFDOC" Type="nvarchar" MaxLength="200" />
+          <Property Name="DateSpecificRightsNoticeWasPrinted" Type="nvarchar" MaxLength="200" />
+          <Property Name="PostmarkDateOfElection" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsPaidThroughLastDayOfCOBRA" Type="nvarchar" MaxLength="200" />
+          <Property Name="NextPremiumOwedMonth" Type="nvarchar" MaxLength="200" />
+          <Property Name="NextPremiumOwedYear" Type="nvarchar" MaxLength="200" />
+          <Property Name="NextPremiumOwedAmountReceived" Type="nvarchar" MaxLength="200" />
+          <Property Name="SendTakeoverLetter" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsConversionLetterSent" Type="nvarchar" MaxLength="200" />
+          <Property Name="SendDODSubsidyExtension" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanName" Type="nvarchar" MaxLength="200" />
+          <Property Name="CoverageLevel" Type="nvarchar" MaxLength="200" />
+          <Property Name="NumberOfUnit" Type="nvarchar" MaxLength="200" />
+          <Property Name="StartDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EndDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="FirstDayOfCOBRA" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastDayOfCOBRA" Type="nvarchar" MaxLength="200" />
+          <Property Name="COBRADurationMonths" Type="nvarchar" MaxLength="200" />
+          <Property Name="DaysToElect" Type="nvarchar" MaxLength="200" />
+          <Property Name="DaysToMake1stPayment" Type="nvarchar" MaxLength="200" />
+          <Property Name="DaysToMakeSubsequentPayments" Type="nvarchar" MaxLength="200" />
+          <Property Name="ElectionPostmarkDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="LastDateRatesNotified" Type="nvarchar" MaxLength="200" />
+          <Property Name="NumberOfUnits" Type="nvarchar" MaxLength="200" />
+          <Property Name="SendPlanChangeLetterForLegacy" Type="nvarchar" MaxLength="200" />
+          <Property Name="PlanBundleName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Relationship" Type="nvarchar" MaxLength="200" />
+          <Property Name="AddressSameAsQB" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsQMCSO" Type="nvarchar" MaxLength="200" />
+          <Property Name="UsesFDOC" Type="nvarchar" MaxLength="200" />
+          <Property Name="NoteType" Type="nvarchar" MaxLength="200" />
+          <Property Name="DateTime" Type="nvarchar" MaxLength="200" />
+          <Property Name="NoteText" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="200" />
+          <Property Name="InsuranceType" Type="nvarchar" MaxLength="200" />
+          <Property Name="SubsidyAmountType" Type="nvarchar" MaxLength="200" />
+          <Property Name="Amount" Type="nvarchar" MaxLength="200" />
+          <Property Name="SubsidyType" Type="nvarchar" MaxLength="200" />
+          <Property Name="RatePeriodSubsidy" Type="nvarchar" MaxLength="200" />
+          <Property Name="CASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="CTSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="MNLIFEINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="MNCONTINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="ORSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="TXSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="NYSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="VEBASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="ILSRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="RISRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="GASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="VASRINSERT" Type="nvarchar" MaxLength="200" />
+          <Property Name="DisabilityApproved" Type="nvarchar" MaxLength="200" />
+          <Property Name="PostmarkOfDisabilityExtension" Type="nvarchar" MaxLength="200" />
+          <Property Name="DateDisabled" Type="nvarchar" MaxLength="200" />
+          <Property Name="DenialReason" Type="nvarchar" MaxLength="200" />
+          <Property Name="Rate" Type="nvarchar" MaxLength="200" />
+          <Property Name="TermOrReinstate" Type="nvarchar" MaxLength="200" />
+          <Property Name="EffectiveDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="Reason" Type="nvarchar" MaxLength="200" />
+          <Property Name="LetterAttachmentName" Type="nvarchar" MaxLength="200" />
+          <Property Name="QualifyingEventDate" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserDefinedFieldName" Type="nvarchar" MaxLength="200" />
+          <Property Name="UserDefinedFieldValue" Type="nvarchar" MaxLength="200" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6013: The table/view 'Data_Processing.dbo.CRM_fix09292020' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
         <EntityType Name="CRM_fix09292020">
@@ -266,6 +752,19 @@ warning 6013: The table/view 'Data_Processing.dbo.ftp_autofile_list' does not ha
         <EntityType Name="ftp_autofile_list">
           <Property Name="find_autoftp_file" Type="varchar(max)" />
         </EntityType>-->
+        <EntityType Name="FTP_Source_Folders">
+          <Key>
+            <PropertyRef Name="Folder_name" />
+          </Key>
+          <Property Name="Folder_name" Type="nvarchar" MaxLength="2000" Nullable="false" />
+          <Property Name="template_type" Type="nvarchar(max)" />
+          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="environment" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="is_active" Type="int" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6013: The table/view 'Data_Processing.dbo.IF_cardfile_Dep' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
         <EntityType Name="IF_cardfile_Dep">
@@ -370,6 +869,8 @@ warning 6013: The table/view 'Data_Processing.dbo.IF_File' does not have a prima
           <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="200" />
           <Property Name="AlternateId" Type="nvarchar" MaxLength="200" />
           <Property Name="Class" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountSegmentId" Type="nvarchar" MaxLength="255" />
+          <Property Name="CreatedAt" Type="datetime" />
         </EntityType>
         <EntityType Name="mbi_file_table_stage">
           <Key>
@@ -423,6 +924,7 @@ warning 6013: The table/view 'Data_Processing.dbo.IF_File' does not have a prima
           <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="200" />
           <Property Name="AlternateId" Type="nvarchar" MaxLength="200" />
           <Property Name="Class" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountSegmentId" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Data_Processing.dbo.message_log' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -518,6 +1020,7 @@ warning 6002: The table/view 'Data_Processing.dbo.QB_file_data_fixtbl' does not 
           <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="200" />
           <Property Name="Class" Type="nvarchar" MaxLength="200" />
           <Property Name="AlternateId" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountSegmentId" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="res_file_table_stage">
           <Key>
@@ -574,6 +1077,23 @@ warning 6002: The table/view 'Data_Processing.dbo.QB_file_data_fixtbl' does not 
           <Property Name="OngoingPrefunded" Type="nvarchar" MaxLength="200" />
           <Property Name="AlternateId" Type="nvarchar" MaxLength="200" />
           <Property Name="Class" Type="nvarchar" MaxLength="200" />
+          <Property Name="AccountSegmentId" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Data_Processing.dbo.Automated_Header_list' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Automated_Header_list">
+          <Key>
+            
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="environment" />
+          </Key>
+          <Property Name="Folder_name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="template_type" Type="nvarchar(max)" />
+          <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="to_FTP" Type="nchar" MaxLength="10" />
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="environment" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6013: The table/view 'Data_Processing.dbo.CRM_Listview' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
@@ -639,59 +1159,101 @@ warning 6013: The table/view 'Data_Processing.dbo.error_log_results_withmbi_with
           <Property Name="mbi_line" Type="nvarchar(max)" />
         </EntityType>-->
         <!--Errors Found During Generation:
-warning 6013: The table/view 'Data_Processing.dbo.Header_list_ALL' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="Header_list_ALL">
-          <Property Name="folder_name" Type="nvarchar(max)" />
+warning 6002: The table/view 'Data_Processing.dbo.Header_list_all' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Header_list_all">
+          <Key>
+            <PropertyRef Name="Folder_name" />
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="environment" />
+          </Key>
+          <Property Name="Folder_name" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="template_type" Type="nvarchar(max)" />
           <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
-          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="to_FTP" Type="nchar" MaxLength="10" />
-        </EntityType>-->
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="environment" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'Data_Processing.dbo.Header_list_ALL_folders' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="Header_list_ALL_folders">
-          <Property Name="folder_name" Type="nvarchar(max)" />
+warning 6002: The table/view 'Data_Processing.dbo.Header_list_all_folders' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Header_list_all_folders">
+          <Key>
+            <PropertyRef Name="Folder_name" />
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="environment" />
+          </Key>
+          <Property Name="Folder_name" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="template_type" Type="nvarchar(max)" />
           <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
-          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="to_FTP" Type="nchar" MaxLength="10" />
-        </EntityType>-->
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="environment" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'Data_Processing.dbo.Header_list_new' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+warning 6002: The table/view 'Data_Processing.dbo.Header_list_new' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Header_list_new">
-          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Key>
+            <PropertyRef Name="Folder_name" />
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="environment" />
+          </Key>
+          <Property Name="Folder_name" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="template_type" Type="nvarchar(max)" />
           <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
-          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="to_FTP" Type="nchar" MaxLength="10" />
-        </EntityType>-->
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="environment" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'Data_Processing.dbo.Header_list_none' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+warning 6002: The table/view 'Data_Processing.dbo.Header_list_none' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Header_list_none">
-          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Key>
+            <PropertyRef Name="Folder_name" />
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="environment" />
+          </Key>
+          <Property Name="Folder_name" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="template_type" Type="nvarchar(max)" />
           <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
-          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="to_FTP" Type="nchar" MaxLength="10" />
-        </EntityType>-->
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="environment" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'Data_Processing.dbo.Header_list_old' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+warning 6002: The table/view 'Data_Processing.dbo.Header_list_old' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Header_list_old">
-          <Property Name="folder_name" Type="nvarchar(max)" />
+          <Key>
+            <PropertyRef Name="Folder_name" />
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="environment" />
+          </Key>
+          <Property Name="Folder_name" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="template_type" Type="nvarchar(max)" />
           <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
-          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="to_FTP" Type="nchar" MaxLength="10" />
-        </EntityType>-->
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="environment" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'Data_Processing.dbo.Header_list_Own' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="Header_list_Own">
-          <Property Name="folder_name" Type="nvarchar(max)" />
+warning 6002: The table/view 'Data_Processing.dbo.Header_list_own' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Header_list_own">
+          <Key>
+            <PropertyRef Name="Folder_name" />
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="environment" />
+          </Key>
+          <Property Name="Folder_name" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="template_type" Type="nvarchar(max)" />
           <Property Name="IC_type" Type="nvarchar" MaxLength="50" />
-          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="to_FTP" Type="nchar" MaxLength="10" />
-        </EntityType>-->
+          <Property Name="BENCODE" Type="varchar" MaxLength="50" />
+          <Property Name="environment" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6013: The table/view 'Data_Processing.dbo.mbi_errors' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
         <EntityType Name="mbi_errors">
@@ -782,6 +1344,18 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
         <Function Name="proc_alegeus_AlterHeaders2019" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="proc_alegeus_AlterHeadersNone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="proc_alegeus_AlterHeadersOwn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="proc_alegeus_ExportImportFile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="mbi_file_name" Type="nvarchar" Mode="In" />
+          <Parameter Name="exportType" Type="nvarchar" Mode="In" />
+          <Parameter Name="batchId" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="proc_cobra_ExportImportFile" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="cobra_file_name" Type="nvarchar" Mode="In" />
+          <Parameter Name="exportType" Type="nvarchar" Mode="In" />
+          <Parameter Name="batchId" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="process_cobra_file_table_stage_import" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="process_cobra_res_file_table_stage_import" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="process_mbi_file_table_stage_import" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="process_res_file_table_stage_import" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SplitAllErrorRowStringsToFields" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -819,7 +1393,12 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
         </Function>
         <Function Name="zz_truncate_all" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="Data_ProcessingModelStoreContainer">
+          <EntitySet Name="cobra_file_table" EntityType="Self.cobra_file_table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cobra_file_table_stage" EntityType="Self.cobra_file_table_stage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cobra_res_file_table" EntityType="Self.cobra_res_file_table" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="cobra_res_file_table_stage" EntityType="Self.cobra_res_file_table_stage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="dbo_error_log_results_workflow_local" EntityType="Self.dbo_error_log_results_workflow_local" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FTP_Source_Folders" EntityType="Self.FTP_Source_Folders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mbi_file_table" EntityType="Self.mbi_file_table" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="mbi_file_table_stage" EntityType="Self.mbi_file_table_stage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="res_file_table" EntityType="Self.res_file_table" Schema="dbo" store:Type="Tables" />
@@ -828,14 +1407,16 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
             <DefiningQuery>SELECT 
     [alegeus_file_final].[file_row] AS [file_row], 
     [alegeus_file_final].[folder_name] AS [folder_name], 
-    [alegeus_file_final].[row_num] AS [row_num]
+    [alegeus_file_final].[row_num] AS [row_num], 
+    [alegeus_file_final].[AccountSegmentId] AS [AccountSegmentId]
     FROM [dbo].[alegeus_file_final] AS [alegeus_file_final]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="alegeus_file_staging" EntityType="Self.alegeus_file_staging" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [alegeus_file_staging].[data_row] AS [data_row], 
     [alegeus_file_staging].[folder_name] AS [folder_name], 
-    [alegeus_file_staging].[row_num] AS [row_num]
+    [alegeus_file_staging].[row_num] AS [row_num], 
+    [alegeus_file_staging].[AccountSegmentId] AS [AccountSegmentId]
     FROM [dbo].[alegeus_file_staging] AS [alegeus_file_staging]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="app_settings" EntityType="Self.app_settings" store:Type="Tables" store:Schema="dbo">
@@ -844,18 +1425,9 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
     [app_settings].[environment] AS [environment], 
     [app_settings].[setting_name] AS [setting_name], 
     [app_settings].[setting_value] AS [setting_value], 
-    [app_settings].[created_at] AS [created_at]
+    [app_settings].[created_at] AS [created_at], 
+    [app_settings].[is_active] AS [is_active]
     FROM [dbo].[app_settings] AS [app_settings]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="Automated_Header_list" EntityType="Self.Automated_Header_list" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Automated_Header_list].[Folder_name] AS [Folder_name], 
-    [Automated_Header_list].[template_type] AS [template_type], 
-    [Automated_Header_list].[IC_type] AS [IC_type], 
-    [Automated_Header_list].[ID] AS [ID], 
-    [Automated_Header_list].[to_FTP] AS [to_FTP], 
-    [Automated_Header_list].[BENCODE] AS [BENCODE]
-    FROM [dbo].[Automated_Header_list] AS [Automated_Header_list]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="dbo_error_log_results_workflow_local_AL" EntityType="Self.dbo_error_log_results_workflow_local_AL" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -960,6 +1532,83 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
     [QB_file_data_fixtbl].[row_num] AS [row_num]
     FROM [dbo].[QB_file_data_fixtbl] AS [QB_file_data_fixtbl]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="Automated_Header_list" EntityType="Self.Automated_Header_list" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Automated_Header_list].[Folder_name] AS [Folder_name], 
+    [Automated_Header_list].[template_type] AS [template_type], 
+    [Automated_Header_list].[IC_type] AS [IC_type], 
+    [Automated_Header_list].[ID] AS [ID], 
+    [Automated_Header_list].[to_FTP] AS [to_FTP], 
+    [Automated_Header_list].[BENCODE] AS [BENCODE], 
+    [Automated_Header_list].[environment] AS [environment]
+    FROM [dbo].[Automated_Header_list] AS [Automated_Header_list]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Header_list_all" EntityType="Self.Header_list_all" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Header_list_all].[Folder_name] AS [Folder_name], 
+    [Header_list_all].[template_type] AS [template_type], 
+    [Header_list_all].[IC_type] AS [IC_type], 
+    [Header_list_all].[ID] AS [ID], 
+    [Header_list_all].[to_FTP] AS [to_FTP], 
+    [Header_list_all].[BENCODE] AS [BENCODE], 
+    [Header_list_all].[environment] AS [environment]
+    FROM [dbo].[Header_list_all] AS [Header_list_all]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Header_list_all_folders" EntityType="Self.Header_list_all_folders" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Header_list_all_folders].[Folder_name] AS [Folder_name], 
+    [Header_list_all_folders].[template_type] AS [template_type], 
+    [Header_list_all_folders].[IC_type] AS [IC_type], 
+    [Header_list_all_folders].[ID] AS [ID], 
+    [Header_list_all_folders].[to_FTP] AS [to_FTP], 
+    [Header_list_all_folders].[BENCODE] AS [BENCODE], 
+    [Header_list_all_folders].[environment] AS [environment]
+    FROM [dbo].[Header_list_all_folders] AS [Header_list_all_folders]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Header_list_new" EntityType="Self.Header_list_new" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Header_list_new].[Folder_name] AS [Folder_name], 
+    [Header_list_new].[template_type] AS [template_type], 
+    [Header_list_new].[IC_type] AS [IC_type], 
+    [Header_list_new].[ID] AS [ID], 
+    [Header_list_new].[to_FTP] AS [to_FTP], 
+    [Header_list_new].[BENCODE] AS [BENCODE], 
+    [Header_list_new].[environment] AS [environment]
+    FROM [dbo].[Header_list_new] AS [Header_list_new]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Header_list_none" EntityType="Self.Header_list_none" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Header_list_none].[Folder_name] AS [Folder_name], 
+    [Header_list_none].[template_type] AS [template_type], 
+    [Header_list_none].[IC_type] AS [IC_type], 
+    [Header_list_none].[ID] AS [ID], 
+    [Header_list_none].[to_FTP] AS [to_FTP], 
+    [Header_list_none].[BENCODE] AS [BENCODE], 
+    [Header_list_none].[environment] AS [environment]
+    FROM [dbo].[Header_list_none] AS [Header_list_none]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Header_list_old" EntityType="Self.Header_list_old" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Header_list_old].[Folder_name] AS [Folder_name], 
+    [Header_list_old].[template_type] AS [template_type], 
+    [Header_list_old].[IC_type] AS [IC_type], 
+    [Header_list_old].[ID] AS [ID], 
+    [Header_list_old].[to_FTP] AS [to_FTP], 
+    [Header_list_old].[BENCODE] AS [BENCODE], 
+    [Header_list_old].[environment] AS [environment]
+    FROM [dbo].[Header_list_old] AS [Header_list_old]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Header_list_own" EntityType="Self.Header_list_own" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Header_list_own].[Folder_name] AS [Folder_name], 
+    [Header_list_own].[template_type] AS [template_type], 
+    [Header_list_own].[IC_type] AS [IC_type], 
+    [Header_list_own].[ID] AS [ID], 
+    [Header_list_own].[to_FTP] AS [to_FTP], 
+    [Header_list_own].[BENCODE] AS [BENCODE], 
+    [Header_list_own].[environment] AS [environment]
+    FROM [dbo].[Header_list_own] AS [Header_list_own]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="vw_file_processing_log" EntityType="Self.vw_file_processing_log" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [vw_file_processing_log].[fileLogId] AS [fileLogId], 
@@ -980,8 +1629,7 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
     FROM [dbo].[vw_file_processing_log] AS [vw_file_processing_log]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Data_ProcessingModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1084,6 +1732,8 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <Property Name="OngoingPrefunded" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="AlternateId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Class" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountSegmentId" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="mbi_file_table_stage">
           <Key>
@@ -1137,6 +1787,7 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <Property Name="OngoingPrefunded" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="AlternateId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Class" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountSegmentId" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="res_file_table">
           <Key>
@@ -1193,6 +1844,7 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <Property Name="OngoingPrefunded" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Class" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="AlternateId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountSegmentId" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="res_file_table_stage">
           <Key>
@@ -1249,43 +1901,50 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <Property Name="OngoingPrefunded" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="AlternateId" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="Class" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountSegmentId" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="alegeus_file_final">
           <Key>
             <PropertyRef Name="row_num" />
           </Key>
           <Property Name="file_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="folder_name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="folder_name" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
           <Property Name="row_num" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountSegmentId" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="alegeus_file_staging">
           <Key>
             <PropertyRef Name="row_num" />
           </Key>
           <Property Name="data_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-          <Property Name="folder_name" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="folder_name" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
           <Property Name="row_num" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountSegmentId" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="app_settings">
           <Key>
             <PropertyRef Name="id" />
+            <PropertyRef Name="is_active" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="environment" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="setting_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="setting_value" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
           <Property Name="created_at" Type="DateTime" Precision="3" />
+          <Property Name="is_active" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Automated_Header_list">
           <Key>
             <PropertyRef Name="ID" />
+            <PropertyRef Name="environment" />
           </Key>
-          <Property Name="Folder_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Folder_name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="template_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IC_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="to_FTP" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="BENCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="environment" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="dbo_error_log_results_workflow_local_AL">
           <Key>
@@ -1448,7 +2107,7 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
             <Parameter Name="delimiter" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SplitErrorRowStringToFields" IsComposable="true" ReturnType="Collection(Data_ProcessingModel.SplitErrorRowStringToFields_Result)">
-            <Parameter Name="csvString" Mode="In" Type="String" />
+          <Parameter Name="csvString" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="SplitStringsOrdered" IsComposable="true" ReturnType="Collection(Data_ProcessingModel.SplitStringsOrdered_Result)">
             <Parameter Name="List" Mode="In" Type="String" />
@@ -1492,10 +2151,633 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <FunctionImport Name="process_mbi_file_table_stage_import" />
           <FunctionImport Name="process_res_file_table_stage_import" />
           <FunctionImport Name="SplitAllErrorRowStringsToFields">
-            <Parameter Name="tableName" Mode="In" Type="String" />
+          <Parameter Name="tableName" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="zz_truncate_all" />
+          <EntitySet Name="cobra_file_table" EntityType="Data_ProcessingModel.cobra_file_table" />
+          <EntitySet Name="cobra_file_table_stage" EntityType="Data_ProcessingModel.cobra_file_table_stage" />
+          <EntitySet Name="cobra_res_file_table" EntityType="Data_ProcessingModel.cobra_res_file_table" />
+          <EntitySet Name="cobra_res_file_table_stage" EntityType="Data_ProcessingModel.cobra_res_file_table_stage" />
+          <EntitySet Name="FTP_Source_Folders" EntityType="Data_ProcessingModel.FTP_Source_Folders" />
+          <EntitySet Name="Header_list_all" EntityType="Data_ProcessingModel.Header_list_all" />
+          <EntitySet Name="Header_list_all_folders" EntityType="Data_ProcessingModel.Header_list_all_folders" />
+          <EntitySet Name="Header_list_new" EntityType="Data_ProcessingModel.Header_list_new" />
+          <EntitySet Name="Header_list_none" EntityType="Data_ProcessingModel.Header_list_none" />
+          <EntitySet Name="Header_list_old" EntityType="Data_ProcessingModel.Header_list_old" />
+          <EntitySet Name="Header_list_own" EntityType="Data_ProcessingModel.Header_list_own" />
+          <FunctionImport Name="proc_alegeus_ExportImportFile" ReturnType="Collection(Data_ProcessingModel.proc_alegeus_ExportImportFile_Result)">
+            <Parameter Name="mbi_file_name" Mode="In" Type="String" />
+            <Parameter Name="exportType" Mode="In" Type="String" />
+            <Parameter Name="batchId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="proc_cobra_ExportImportFile" ReturnType="Collection(Data_ProcessingModel.proc_cobra_ExportImportFile_Result)">
+            <Parameter Name="cobra_file_name" Mode="In" Type="String" />
+            <Parameter Name="exportType" Mode="In" Type="String" />
+            <Parameter Name="batchId" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="process_cobra_file_table_stage_import" />
+          <FunctionImport Name="process_cobra_res_file_table_stage_import" />
         </EntityContainer>
+        <EntityType Name="cobra_file_table">
+          <Key>
+            <PropertyRef Name="row_id" />
+          </Key>
+          <Property Name="cobra_file_name" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="data_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="row_num" Type="Int32" />
+          <Property Name="row_type" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="row_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="source_row_no" Type="Int32" />
+          <Property Name="check_type" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="error_code" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="error_message_calc" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="3" />
+          <Property Name="VersionNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ClientName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ClientDivisionName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Salutation" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SSN" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IndividualID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Address1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Address2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="StateOrProvince" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PostalCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumAddressSameAsPrimary" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumAddress1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumAddress2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumCity" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumStateOrProvince" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumPostalCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumCountry" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Sex" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DOB" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TobaccoUse" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeePayrollType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="YearsOfService" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumCouponType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UsesHCTC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AllowMemberSSO" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="BenefitGroup" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountStructure" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ClientSpecificData" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SSOIdentifier" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanCategory" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EventType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EventDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EnrollmentDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeSSN" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SecondEventOriginalFDOC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DateSpecificRightsNoticeWasPrinted" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PostmarkDateOfElection" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsPaidThroughLastDayOfCOBRA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NextPremiumOwedMonth" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NextPremiumOwedYear" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NextPremiumOwedAmountReceived" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SendTakeoverLetter" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsConversionLetterSent" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SendDODSubsidyExtension" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CoverageLevel" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NumberOfUnit" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TXSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ORSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EndDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FirstDayOfCOBRA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastDayOfCOBRA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="COBRADurationMonths" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DaysToElect" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DaysToMake1stPayment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DaysToMakeSubsequentPayments" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ElectionPostmarkDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastDateRatesNotified" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NumberOfUnits" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SendPlanChangeLetterForLegacy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanBundleName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Relationship" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddressSameAsQB" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsQMCSO" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UsesFDOC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NoteType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DateTime" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NoteText" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="InsuranceType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SubsidyAmountType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SubsidyType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RatePeriodSubsidy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CTSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MNLIFEINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MNCONTINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NYSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="VEBASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ILSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RISRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="GASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="VASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DisabilityApproved" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PostmarkOfDisabilityExtension" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DateDisabled" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DenialReason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Rate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TermOrReinstate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EffectiveDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Reason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LetterAttachmentName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="QualifyingEventDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UserDefinedFieldName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UserDefinedFieldValue" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="cobra_file_table_stage">
+          <Key>
+            <PropertyRef Name="row_num" />
+          </Key>
+          <Property Name="cobra_file_name" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="data_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="row_num" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="row_type" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="source_row_no" Type="Int32" />
+          <Property Name="check_type" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="error_code" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="error_message_calc" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="VersionNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ClientName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ClientDivisionName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Salutation" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SSN" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IndividualID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Address1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Address2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="StateOrProvince" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PostalCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumAddressSameAsPrimary" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumAddress1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumAddress2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumCity" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumStateOrProvince" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumPostalCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumCountry" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Sex" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DOB" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TobaccoUse" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeePayrollType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="YearsOfService" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumCouponType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UsesHCTC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AllowMemberSSO" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="BenefitGroup" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountStructure" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ClientSpecificData" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SSOIdentifier" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanCategory" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EventType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EventDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EnrollmentDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeSSN" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SecondEventOriginalFDOC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DateSpecificRightsNoticeWasPrinted" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PostmarkDateOfElection" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsPaidThroughLastDayOfCOBRA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NextPremiumOwedMonth" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NextPremiumOwedYear" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NextPremiumOwedAmountReceived" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SendTakeoverLetter" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsConversionLetterSent" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SendDODSubsidyExtension" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CoverageLevel" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NumberOfUnit" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EndDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FirstDayOfCOBRA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastDayOfCOBRA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="COBRADurationMonths" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DaysToElect" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DaysToMake1stPayment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DaysToMakeSubsequentPayments" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ElectionPostmarkDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastDateRatesNotified" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NumberOfUnits" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SendPlanChangeLetterForLegacy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanBundleName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Relationship" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddressSameAsQB" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsQMCSO" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UsesFDOC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NoteType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DateTime" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NoteText" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="InsuranceType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SubsidyAmountType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SubsidyType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RatePeriodSubsidy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CTSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MNLIFEINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MNCONTINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ORSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TXSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NYSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="VEBASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ILSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RISRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="GASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="VASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DisabilityApproved" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PostmarkOfDisabilityExtension" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DateDisabled" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DenialReason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Rate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TermOrReinstate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EffectiveDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Reason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LetterAttachmentName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="QualifyingEventDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UserDefinedFieldName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UserDefinedFieldValue" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="cobra_res_file_table">
+          <Key>
+            <PropertyRef Name="row_id" />
+          </Key>
+          <Property Name="error_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="error_code" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="row_num" Type="Int32" />
+          <Property Name="row_type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="error_message_calc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="cobra_res_file_name" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="result_template" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="row_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="source_row_no" Type="Int32" />
+          <Property Name="check_type" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="VersionNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ClientName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ClientDivisionName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Salutation" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SSN" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IndividualID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Address1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Address2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="StateOrProvince" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PostalCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumAddressSameAsPrimary" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumAddress1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumAddress2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumCity" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumStateOrProvince" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumPostalCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumCountry" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Sex" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DOB" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TobaccoUse" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeePayrollType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="YearsOfService" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumCouponType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UsesHCTC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AllowMemberSSO" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="BenefitGroup" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountStructure" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ClientSpecificData" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SSOIdentifier" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanCategory" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EventType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EventDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EnrollmentDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeSSN" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SecondEventOriginalFDOC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DateSpecificRightsNoticeWasPrinted" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PostmarkDateOfElection" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsPaidThroughLastDayOfCOBRA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NextPremiumOwedMonth" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NextPremiumOwedYear" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NextPremiumOwedAmountReceived" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SendTakeoverLetter" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsConversionLetterSent" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SendDODSubsidyExtension" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CoverageLevel" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NumberOfUnit" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EndDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FirstDayOfCOBRA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastDayOfCOBRA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="COBRADurationMonths" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DaysToElect" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DaysToMake1stPayment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DaysToMakeSubsequentPayments" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ElectionPostmarkDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastDateRatesNotified" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NumberOfUnits" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SendPlanChangeLetterForLegacy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanBundleName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Relationship" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddressSameAsQB" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsQMCSO" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UsesFDOC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NoteType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DateTime" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NoteText" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="InsuranceType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SubsidyAmountType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SubsidyType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RatePeriodSubsidy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CTSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MNLIFEINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MNCONTINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ORSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TXSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NYSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="VEBASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ILSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RISRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="GASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="VASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DisabilityApproved" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PostmarkOfDisabilityExtension" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DateDisabled" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DenialReason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Rate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TermOrReinstate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EffectiveDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Reason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LetterAttachmentName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="QualifyingEventDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UserDefinedFieldName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UserDefinedFieldValue" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="data_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="cobra_res_file_table_stage">
+          <Key>
+            <PropertyRef Name="row_num" />
+          </Key>
+          <Property Name="result_template" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="error_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="error_code" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="error_message" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="row_num" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="row_type" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="error_message_calc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="cobra_res_file_name" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="data_row" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="source_row_no" Type="Int32" />
+          <Property Name="check_type" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="VersionNumber" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ClientName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ClientDivisionName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Salutation" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SSN" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IndividualID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Address1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Address2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="StateOrProvince" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PostalCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumAddressSameAsPrimary" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumAddress1" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumAddress2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumCity" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumStateOrProvince" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumPostalCode" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumCountry" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Sex" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DOB" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TobaccoUse" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeePayrollType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="YearsOfService" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PremiumCouponType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UsesHCTC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AllowMemberSSO" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="BenefitGroup" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AccountStructure" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ClientSpecificData" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SSOIdentifier" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanCategory" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EventType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EventDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EnrollmentDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeSSN" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SecondEventOriginalFDOC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DateSpecificRightsNoticeWasPrinted" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PostmarkDateOfElection" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsPaidThroughLastDayOfCOBRA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NextPremiumOwedMonth" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NextPremiumOwedYear" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NextPremiumOwedAmountReceived" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SendTakeoverLetter" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsConversionLetterSent" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SendDODSubsidyExtension" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CoverageLevel" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NumberOfUnit" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EndDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="FirstDayOfCOBRA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastDayOfCOBRA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="COBRADurationMonths" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DaysToElect" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DaysToMake1stPayment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DaysToMakeSubsequentPayments" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ElectionPostmarkDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LastDateRatesNotified" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NumberOfUnits" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SendPlanChangeLetterForLegacy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PlanBundleName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Relationship" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AddressSameAsQB" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="IsQMCSO" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UsesFDOC" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NoteType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DateTime" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NoteText" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="InsuranceType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SubsidyAmountType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SubsidyType" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RatePeriodSubsidy" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CTSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MNLIFEINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="MNCONTINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ORSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TXSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="NYSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="VEBASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ILSRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="RISRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="GASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="VASRINSERT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DisabilityApproved" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PostmarkOfDisabilityExtension" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DateDisabled" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="DenialReason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Rate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TermOrReinstate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EffectiveDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Reason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="LetterAttachmentName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="QualifyingEventDate" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UserDefinedFieldName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="UserDefinedFieldValue" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="FTP_Source_Folders">
+          <Key>
+            <PropertyRef Name="Folder_name" />
+          </Key>
+          <Property Name="Folder_name" Type="String" Nullable="false" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="template_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IC_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="to_FTP" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="BENCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="environment" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="is_active" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Header_list_all">
+          <Key>
+            <PropertyRef Name="Folder_name" />
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="environment" />
+          </Key>
+          <Property Name="Folder_name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="template_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IC_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="to_FTP" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="BENCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="environment" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Header_list_all_folders">
+          <Key>
+            <PropertyRef Name="Folder_name" />
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="environment" />
+          </Key>
+          <Property Name="Folder_name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="template_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IC_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="to_FTP" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="BENCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="environment" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Header_list_new">
+          <Key>
+            <PropertyRef Name="Folder_name" />
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="environment" />
+          </Key>
+          <Property Name="Folder_name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="template_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IC_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="to_FTP" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="BENCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="environment" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Header_list_none">
+          <Key>
+            <PropertyRef Name="Folder_name" />
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="environment" />
+          </Key>
+          <Property Name="Folder_name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="template_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IC_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="to_FTP" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="BENCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="environment" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Header_list_old">
+          <Key>
+            <PropertyRef Name="Folder_name" />
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="environment" />
+          </Key>
+          <Property Name="Folder_name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="template_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IC_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="to_FTP" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="BENCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="environment" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Header_list_own">
+          <Key>
+            <PropertyRef Name="Folder_name" />
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="environment" />
+          </Key>
+          <Property Name="Folder_name" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="template_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IC_type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="to_FTP" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="BENCODE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="environment" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="proc_alegeus_ExportImportFile_Result">
+          <Property Type="String" Name="file_row" Nullable="true" />
+          <Property Type="Int32" Name="source_row_no" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="proc_cobra_ExportImportFile_Result">
+          <Property Type="String" Name="file_row" Nullable="true" />
+          <Property Type="Int32" Name="source_row_no" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1533,6 +2815,8 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <EntitySetMapping Name="mbi_file_table">
             <EntityTypeMapping TypeName="Data_ProcessingModel.mbi_file_table">
               <MappingFragment StoreEntitySet="mbi_file_table">
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="AccountSegmentId" ColumnName="AccountSegmentId" />
                 <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
                 <ScalarProperty Name="data_row" ColumnName="data_row" />
                 <ScalarProperty Name="row_num" ColumnName="row_num" />
@@ -1588,6 +2872,7 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <EntitySetMapping Name="mbi_file_table_stage">
             <EntityTypeMapping TypeName="Data_ProcessingModel.mbi_file_table_stage">
               <MappingFragment StoreEntitySet="mbi_file_table_stage">
+                <ScalarProperty Name="AccountSegmentId" ColumnName="AccountSegmentId" />
                 <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
                 <ScalarProperty Name="data_row" ColumnName="data_row" />
                 <ScalarProperty Name="row_num" ColumnName="row_num" />
@@ -1642,6 +2927,7 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <EntitySetMapping Name="res_file_table">
             <EntityTypeMapping TypeName="Data_ProcessingModel.res_file_table">
               <MappingFragment StoreEntitySet="res_file_table">
+                <ScalarProperty Name="AccountSegmentId" ColumnName="AccountSegmentId" />
                 <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
                 <ScalarProperty Name="error_row" ColumnName="error_row" />
                 <ScalarProperty Name="error_code" ColumnName="error_code" />
@@ -1699,6 +2985,7 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <EntitySetMapping Name="res_file_table_stage">
             <EntityTypeMapping TypeName="Data_ProcessingModel.res_file_table_stage">
               <MappingFragment StoreEntitySet="res_file_table_stage">
+                <ScalarProperty Name="AccountSegmentId" ColumnName="AccountSegmentId" />
                 <ScalarProperty Name="mbi_file_name" ColumnName="mbi_file_name" />
                 <ScalarProperty Name="result_template" ColumnName="result_template" />
                 <ScalarProperty Name="error_row" ColumnName="error_row" />
@@ -1756,6 +3043,7 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <EntitySetMapping Name="alegeus_file_final">
             <EntityTypeMapping TypeName="Data_ProcessingModel.alegeus_file_final">
               <MappingFragment StoreEntitySet="alegeus_file_final">
+                <ScalarProperty Name="AccountSegmentId" ColumnName="AccountSegmentId" />
                 <ScalarProperty Name="file_row" ColumnName="file_row" />
                 <ScalarProperty Name="folder_name" ColumnName="folder_name" />
                 <ScalarProperty Name="row_num" ColumnName="row_num" />
@@ -1765,6 +3053,7 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <EntitySetMapping Name="alegeus_file_staging">
             <EntityTypeMapping TypeName="Data_ProcessingModel.alegeus_file_staging">
               <MappingFragment StoreEntitySet="alegeus_file_staging">
+                <ScalarProperty Name="AccountSegmentId" ColumnName="AccountSegmentId" />
                 <ScalarProperty Name="data_row" ColumnName="data_row" />
                 <ScalarProperty Name="folder_name" ColumnName="folder_name" />
                 <ScalarProperty Name="row_num" ColumnName="row_num" />
@@ -1774,6 +3063,7 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <EntitySetMapping Name="app_settings">
             <EntityTypeMapping TypeName="Data_ProcessingModel.app_settings">
               <MappingFragment StoreEntitySet="app_settings">
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="environment" ColumnName="environment" />
                 <ScalarProperty Name="setting_name" ColumnName="setting_name" />
@@ -1785,6 +3075,7 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <EntitySetMapping Name="Automated_Header_list">
             <EntityTypeMapping TypeName="Data_ProcessingModel.Automated_Header_list">
               <MappingFragment StoreEntitySet="Automated_Header_list">
+                <ScalarProperty Name="environment" ColumnName="environment" />
                 <ScalarProperty Name="Folder_name" ColumnName="Folder_name" />
                 <ScalarProperty Name="template_type" ColumnName="template_type" />
                 <ScalarProperty Name="IC_type" ColumnName="IC_type" />
@@ -1984,6 +3275,615 @@ warning 6002: The table/view 'Data_Processing.dbo.vw_file_processing_log' does n
           <FunctionImportMapping FunctionImportName="process_res_file_table_stage_import" FunctionName="Data_ProcessingModel.Store.process_res_file_table_stage_import" />
           <FunctionImportMapping FunctionImportName="SplitAllErrorRowStringsToFields" FunctionName="Data_ProcessingModel.Store.SplitAllErrorRowStringsToFields" />
           <FunctionImportMapping FunctionImportName="zz_truncate_all" FunctionName="Data_ProcessingModel.Store.zz_truncate_all" />
+          <EntitySetMapping Name="cobra_file_table">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.cobra_file_table">
+              <MappingFragment StoreEntitySet="cobra_file_table">
+                <ScalarProperty Name="UserDefinedFieldValue" ColumnName="UserDefinedFieldValue" />
+                <ScalarProperty Name="UserDefinedFieldName" ColumnName="UserDefinedFieldName" />
+                <ScalarProperty Name="QualifyingEventDate" ColumnName="QualifyingEventDate" />
+                <ScalarProperty Name="LetterAttachmentName" ColumnName="LetterAttachmentName" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="TermOrReinstate" ColumnName="TermOrReinstate" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="DenialReason" ColumnName="DenialReason" />
+                <ScalarProperty Name="DateDisabled" ColumnName="DateDisabled" />
+                <ScalarProperty Name="PostmarkOfDisabilityExtension" ColumnName="PostmarkOfDisabilityExtension" />
+                <ScalarProperty Name="DisabilityApproved" ColumnName="DisabilityApproved" />
+                <ScalarProperty Name="VASRINSERT" ColumnName="VASRINSERT" />
+                <ScalarProperty Name="GASRINSERT" ColumnName="GASRINSERT" />
+                <ScalarProperty Name="RISRINSERT" ColumnName="RISRINSERT" />
+                <ScalarProperty Name="ILSRINSERT" ColumnName="ILSRINSERT" />
+                <ScalarProperty Name="VEBASRINSERT" ColumnName="VEBASRINSERT" />
+                <ScalarProperty Name="NYSRINSERT" ColumnName="NYSRINSERT" />
+                <ScalarProperty Name="MNCONTINSERT" ColumnName="MNCONTINSERT" />
+                <ScalarProperty Name="MNLIFEINSERT" ColumnName="MNLIFEINSERT" />
+                <ScalarProperty Name="CTSRINSERT" ColumnName="CTSRINSERT" />
+                <ScalarProperty Name="CASRINSERT" ColumnName="CASRINSERT" />
+                <ScalarProperty Name="RatePeriodSubsidy" ColumnName="RatePeriodSubsidy" />
+                <ScalarProperty Name="SubsidyType" ColumnName="SubsidyType" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="SubsidyAmountType" ColumnName="SubsidyAmountType" />
+                <ScalarProperty Name="InsuranceType" ColumnName="InsuranceType" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="NoteText" ColumnName="NoteText" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="NoteType" ColumnName="NoteType" />
+                <ScalarProperty Name="UsesFDOC" ColumnName="UsesFDOC" />
+                <ScalarProperty Name="IsQMCSO" ColumnName="IsQMCSO" />
+                <ScalarProperty Name="AddressSameAsQB" ColumnName="AddressSameAsQB" />
+                <ScalarProperty Name="Relationship" ColumnName="Relationship" />
+                <ScalarProperty Name="PlanBundleName" ColumnName="PlanBundleName" />
+                <ScalarProperty Name="SendPlanChangeLetterForLegacy" ColumnName="SendPlanChangeLetterForLegacy" />
+                <ScalarProperty Name="NumberOfUnits" ColumnName="NumberOfUnits" />
+                <ScalarProperty Name="LastDateRatesNotified" ColumnName="LastDateRatesNotified" />
+                <ScalarProperty Name="ElectionPostmarkDate" ColumnName="ElectionPostmarkDate" />
+                <ScalarProperty Name="DaysToMakeSubsequentPayments" ColumnName="DaysToMakeSubsequentPayments" />
+                <ScalarProperty Name="DaysToMake1stPayment" ColumnName="DaysToMake1stPayment" />
+                <ScalarProperty Name="DaysToElect" ColumnName="DaysToElect" />
+                <ScalarProperty Name="COBRADurationMonths" ColumnName="COBRADurationMonths" />
+                <ScalarProperty Name="LastDayOfCOBRA" ColumnName="LastDayOfCOBRA" />
+                <ScalarProperty Name="FirstDayOfCOBRA" ColumnName="FirstDayOfCOBRA" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="ORSRINSERT" ColumnName="ORSRINSERT" />
+                <ScalarProperty Name="TXSRINSERT" ColumnName="TXSRINSERT" />
+                <ScalarProperty Name="NumberOfUnit" ColumnName="NumberOfUnit" />
+                <ScalarProperty Name="CoverageLevel" ColumnName="CoverageLevel" />
+                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+                <ScalarProperty Name="SendDODSubsidyExtension" ColumnName="SendDODSubsidyExtension" />
+                <ScalarProperty Name="IsConversionLetterSent" ColumnName="IsConversionLetterSent" />
+                <ScalarProperty Name="SendTakeoverLetter" ColumnName="SendTakeoverLetter" />
+                <ScalarProperty Name="NextPremiumOwedAmountReceived" ColumnName="NextPremiumOwedAmountReceived" />
+                <ScalarProperty Name="NextPremiumOwedYear" ColumnName="NextPremiumOwedYear" />
+                <ScalarProperty Name="NextPremiumOwedMonth" ColumnName="NextPremiumOwedMonth" />
+                <ScalarProperty Name="IsPaidThroughLastDayOfCOBRA" ColumnName="IsPaidThroughLastDayOfCOBRA" />
+                <ScalarProperty Name="PostmarkDateOfElection" ColumnName="PostmarkDateOfElection" />
+                <ScalarProperty Name="DateSpecificRightsNoticeWasPrinted" ColumnName="DateSpecificRightsNoticeWasPrinted" />
+                <ScalarProperty Name="SecondEventOriginalFDOC" ColumnName="SecondEventOriginalFDOC" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="EmployeeSSN" ColumnName="EmployeeSSN" />
+                <ScalarProperty Name="EnrollmentDate" ColumnName="EnrollmentDate" />
+                <ScalarProperty Name="EventDate" ColumnName="EventDate" />
+                <ScalarProperty Name="EventType" ColumnName="EventType" />
+                <ScalarProperty Name="PlanCategory" ColumnName="PlanCategory" />
+                <ScalarProperty Name="SSOIdentifier" ColumnName="SSOIdentifier" />
+                <ScalarProperty Name="ClientSpecificData" ColumnName="ClientSpecificData" />
+                <ScalarProperty Name="AccountStructure" ColumnName="AccountStructure" />
+                <ScalarProperty Name="BenefitGroup" ColumnName="BenefitGroup" />
+                <ScalarProperty Name="AllowMemberSSO" ColumnName="AllowMemberSSO" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="UsesHCTC" ColumnName="UsesHCTC" />
+                <ScalarProperty Name="PremiumCouponType" ColumnName="PremiumCouponType" />
+                <ScalarProperty Name="YearsOfService" ColumnName="YearsOfService" />
+                <ScalarProperty Name="EmployeePayrollType" ColumnName="EmployeePayrollType" />
+                <ScalarProperty Name="EmployeeType" ColumnName="EmployeeType" />
+                <ScalarProperty Name="TobaccoUse" ColumnName="TobaccoUse" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="PremiumCountry" ColumnName="PremiumCountry" />
+                <ScalarProperty Name="PremiumPostalCode" ColumnName="PremiumPostalCode" />
+                <ScalarProperty Name="PremiumStateOrProvince" ColumnName="PremiumStateOrProvince" />
+                <ScalarProperty Name="PremiumCity" ColumnName="PremiumCity" />
+                <ScalarProperty Name="PremiumAddress2" ColumnName="PremiumAddress2" />
+                <ScalarProperty Name="PremiumAddress1" ColumnName="PremiumAddress1" />
+                <ScalarProperty Name="PremiumAddressSameAsPrimary" ColumnName="PremiumAddressSameAsPrimary" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="StateOrProvince" ColumnName="StateOrProvince" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IndividualID" ColumnName="IndividualID" />
+                <ScalarProperty Name="SSN" ColumnName="SSN" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="ClientDivisionName" ColumnName="ClientDivisionName" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="VersionNumber" ColumnName="VersionNumber" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="error_message_calc" ColumnName="error_message_calc" />
+                <ScalarProperty Name="error_message" ColumnName="error_message" />
+                <ScalarProperty Name="error_code" ColumnName="error_code" />
+                <ScalarProperty Name="check_type" ColumnName="check_type" />
+                <ScalarProperty Name="source_row_no" ColumnName="source_row_no" />
+                <ScalarProperty Name="row_id" ColumnName="row_id" />
+                <ScalarProperty Name="row_type" ColumnName="row_type" />
+                <ScalarProperty Name="row_num" ColumnName="row_num" />
+                <ScalarProperty Name="data_row" ColumnName="data_row" />
+                <ScalarProperty Name="cobra_file_name" ColumnName="cobra_file_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cobra_file_table_stage">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.cobra_file_table_stage">
+              <MappingFragment StoreEntitySet="cobra_file_table_stage">
+                <ScalarProperty Name="UserDefinedFieldValue" ColumnName="UserDefinedFieldValue" />
+                <ScalarProperty Name="UserDefinedFieldName" ColumnName="UserDefinedFieldName" />
+                <ScalarProperty Name="QualifyingEventDate" ColumnName="QualifyingEventDate" />
+                <ScalarProperty Name="LetterAttachmentName" ColumnName="LetterAttachmentName" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="TermOrReinstate" ColumnName="TermOrReinstate" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="DenialReason" ColumnName="DenialReason" />
+                <ScalarProperty Name="DateDisabled" ColumnName="DateDisabled" />
+                <ScalarProperty Name="PostmarkOfDisabilityExtension" ColumnName="PostmarkOfDisabilityExtension" />
+                <ScalarProperty Name="DisabilityApproved" ColumnName="DisabilityApproved" />
+                <ScalarProperty Name="VASRINSERT" ColumnName="VASRINSERT" />
+                <ScalarProperty Name="GASRINSERT" ColumnName="GASRINSERT" />
+                <ScalarProperty Name="RISRINSERT" ColumnName="RISRINSERT" />
+                <ScalarProperty Name="ILSRINSERT" ColumnName="ILSRINSERT" />
+                <ScalarProperty Name="VEBASRINSERT" ColumnName="VEBASRINSERT" />
+                <ScalarProperty Name="NYSRINSERT" ColumnName="NYSRINSERT" />
+                <ScalarProperty Name="TXSRINSERT" ColumnName="TXSRINSERT" />
+                <ScalarProperty Name="ORSRINSERT" ColumnName="ORSRINSERT" />
+                <ScalarProperty Name="MNCONTINSERT" ColumnName="MNCONTINSERT" />
+                <ScalarProperty Name="MNLIFEINSERT" ColumnName="MNLIFEINSERT" />
+                <ScalarProperty Name="CTSRINSERT" ColumnName="CTSRINSERT" />
+                <ScalarProperty Name="CASRINSERT" ColumnName="CASRINSERT" />
+                <ScalarProperty Name="RatePeriodSubsidy" ColumnName="RatePeriodSubsidy" />
+                <ScalarProperty Name="SubsidyType" ColumnName="SubsidyType" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="SubsidyAmountType" ColumnName="SubsidyAmountType" />
+                <ScalarProperty Name="InsuranceType" ColumnName="InsuranceType" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="NoteText" ColumnName="NoteText" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="NoteType" ColumnName="NoteType" />
+                <ScalarProperty Name="UsesFDOC" ColumnName="UsesFDOC" />
+                <ScalarProperty Name="IsQMCSO" ColumnName="IsQMCSO" />
+                <ScalarProperty Name="AddressSameAsQB" ColumnName="AddressSameAsQB" />
+                <ScalarProperty Name="Relationship" ColumnName="Relationship" />
+                <ScalarProperty Name="PlanBundleName" ColumnName="PlanBundleName" />
+                <ScalarProperty Name="SendPlanChangeLetterForLegacy" ColumnName="SendPlanChangeLetterForLegacy" />
+                <ScalarProperty Name="NumberOfUnits" ColumnName="NumberOfUnits" />
+                <ScalarProperty Name="LastDateRatesNotified" ColumnName="LastDateRatesNotified" />
+                <ScalarProperty Name="ElectionPostmarkDate" ColumnName="ElectionPostmarkDate" />
+                <ScalarProperty Name="DaysToMakeSubsequentPayments" ColumnName="DaysToMakeSubsequentPayments" />
+                <ScalarProperty Name="DaysToMake1stPayment" ColumnName="DaysToMake1stPayment" />
+                <ScalarProperty Name="DaysToElect" ColumnName="DaysToElect" />
+                <ScalarProperty Name="COBRADurationMonths" ColumnName="COBRADurationMonths" />
+                <ScalarProperty Name="LastDayOfCOBRA" ColumnName="LastDayOfCOBRA" />
+                <ScalarProperty Name="FirstDayOfCOBRA" ColumnName="FirstDayOfCOBRA" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="NumberOfUnit" ColumnName="NumberOfUnit" />
+                <ScalarProperty Name="CoverageLevel" ColumnName="CoverageLevel" />
+                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+                <ScalarProperty Name="SendDODSubsidyExtension" ColumnName="SendDODSubsidyExtension" />
+                <ScalarProperty Name="IsConversionLetterSent" ColumnName="IsConversionLetterSent" />
+                <ScalarProperty Name="SendTakeoverLetter" ColumnName="SendTakeoverLetter" />
+                <ScalarProperty Name="NextPremiumOwedAmountReceived" ColumnName="NextPremiumOwedAmountReceived" />
+                <ScalarProperty Name="NextPremiumOwedYear" ColumnName="NextPremiumOwedYear" />
+                <ScalarProperty Name="NextPremiumOwedMonth" ColumnName="NextPremiumOwedMonth" />
+                <ScalarProperty Name="IsPaidThroughLastDayOfCOBRA" ColumnName="IsPaidThroughLastDayOfCOBRA" />
+                <ScalarProperty Name="PostmarkDateOfElection" ColumnName="PostmarkDateOfElection" />
+                <ScalarProperty Name="DateSpecificRightsNoticeWasPrinted" ColumnName="DateSpecificRightsNoticeWasPrinted" />
+                <ScalarProperty Name="SecondEventOriginalFDOC" ColumnName="SecondEventOriginalFDOC" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="EmployeeSSN" ColumnName="EmployeeSSN" />
+                <ScalarProperty Name="EnrollmentDate" ColumnName="EnrollmentDate" />
+                <ScalarProperty Name="EventDate" ColumnName="EventDate" />
+                <ScalarProperty Name="EventType" ColumnName="EventType" />
+                <ScalarProperty Name="PlanCategory" ColumnName="PlanCategory" />
+                <ScalarProperty Name="SSOIdentifier" ColumnName="SSOIdentifier" />
+                <ScalarProperty Name="ClientSpecificData" ColumnName="ClientSpecificData" />
+                <ScalarProperty Name="AccountStructure" ColumnName="AccountStructure" />
+                <ScalarProperty Name="BenefitGroup" ColumnName="BenefitGroup" />
+                <ScalarProperty Name="AllowMemberSSO" ColumnName="AllowMemberSSO" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="UsesHCTC" ColumnName="UsesHCTC" />
+                <ScalarProperty Name="PremiumCouponType" ColumnName="PremiumCouponType" />
+                <ScalarProperty Name="YearsOfService" ColumnName="YearsOfService" />
+                <ScalarProperty Name="EmployeePayrollType" ColumnName="EmployeePayrollType" />
+                <ScalarProperty Name="EmployeeType" ColumnName="EmployeeType" />
+                <ScalarProperty Name="TobaccoUse" ColumnName="TobaccoUse" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="PremiumCountry" ColumnName="PremiumCountry" />
+                <ScalarProperty Name="PremiumPostalCode" ColumnName="PremiumPostalCode" />
+                <ScalarProperty Name="PremiumStateOrProvince" ColumnName="PremiumStateOrProvince" />
+                <ScalarProperty Name="PremiumCity" ColumnName="PremiumCity" />
+                <ScalarProperty Name="PremiumAddress2" ColumnName="PremiumAddress2" />
+                <ScalarProperty Name="PremiumAddress1" ColumnName="PremiumAddress1" />
+                <ScalarProperty Name="PremiumAddressSameAsPrimary" ColumnName="PremiumAddressSameAsPrimary" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="StateOrProvince" ColumnName="StateOrProvince" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IndividualID" ColumnName="IndividualID" />
+                <ScalarProperty Name="SSN" ColumnName="SSN" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="ClientDivisionName" ColumnName="ClientDivisionName" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="VersionNumber" ColumnName="VersionNumber" />
+                <ScalarProperty Name="error_message_calc" ColumnName="error_message_calc" />
+                <ScalarProperty Name="error_message" ColumnName="error_message" />
+                <ScalarProperty Name="error_code" ColumnName="error_code" />
+                <ScalarProperty Name="check_type" ColumnName="check_type" />
+                <ScalarProperty Name="source_row_no" ColumnName="source_row_no" />
+                <ScalarProperty Name="row_type" ColumnName="row_type" />
+                <ScalarProperty Name="row_num" ColumnName="row_num" />
+                <ScalarProperty Name="data_row" ColumnName="data_row" />
+                <ScalarProperty Name="cobra_file_name" ColumnName="cobra_file_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cobra_res_file_table">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.cobra_res_file_table">
+              <MappingFragment StoreEntitySet="cobra_res_file_table">
+                <ScalarProperty Name="data_row" ColumnName="data_row" />
+                <ScalarProperty Name="UserDefinedFieldValue" ColumnName="UserDefinedFieldValue" />
+                <ScalarProperty Name="UserDefinedFieldName" ColumnName="UserDefinedFieldName" />
+                <ScalarProperty Name="QualifyingEventDate" ColumnName="QualifyingEventDate" />
+                <ScalarProperty Name="LetterAttachmentName" ColumnName="LetterAttachmentName" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="TermOrReinstate" ColumnName="TermOrReinstate" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="DenialReason" ColumnName="DenialReason" />
+                <ScalarProperty Name="DateDisabled" ColumnName="DateDisabled" />
+                <ScalarProperty Name="PostmarkOfDisabilityExtension" ColumnName="PostmarkOfDisabilityExtension" />
+                <ScalarProperty Name="DisabilityApproved" ColumnName="DisabilityApproved" />
+                <ScalarProperty Name="VASRINSERT" ColumnName="VASRINSERT" />
+                <ScalarProperty Name="GASRINSERT" ColumnName="GASRINSERT" />
+                <ScalarProperty Name="RISRINSERT" ColumnName="RISRINSERT" />
+                <ScalarProperty Name="ILSRINSERT" ColumnName="ILSRINSERT" />
+                <ScalarProperty Name="VEBASRINSERT" ColumnName="VEBASRINSERT" />
+                <ScalarProperty Name="NYSRINSERT" ColumnName="NYSRINSERT" />
+                <ScalarProperty Name="TXSRINSERT" ColumnName="TXSRINSERT" />
+                <ScalarProperty Name="ORSRINSERT" ColumnName="ORSRINSERT" />
+                <ScalarProperty Name="MNCONTINSERT" ColumnName="MNCONTINSERT" />
+                <ScalarProperty Name="MNLIFEINSERT" ColumnName="MNLIFEINSERT" />
+                <ScalarProperty Name="CTSRINSERT" ColumnName="CTSRINSERT" />
+                <ScalarProperty Name="CASRINSERT" ColumnName="CASRINSERT" />
+                <ScalarProperty Name="RatePeriodSubsidy" ColumnName="RatePeriodSubsidy" />
+                <ScalarProperty Name="SubsidyType" ColumnName="SubsidyType" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="SubsidyAmountType" ColumnName="SubsidyAmountType" />
+                <ScalarProperty Name="InsuranceType" ColumnName="InsuranceType" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="NoteText" ColumnName="NoteText" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="NoteType" ColumnName="NoteType" />
+                <ScalarProperty Name="UsesFDOC" ColumnName="UsesFDOC" />
+                <ScalarProperty Name="IsQMCSO" ColumnName="IsQMCSO" />
+                <ScalarProperty Name="AddressSameAsQB" ColumnName="AddressSameAsQB" />
+                <ScalarProperty Name="Relationship" ColumnName="Relationship" />
+                <ScalarProperty Name="PlanBundleName" ColumnName="PlanBundleName" />
+                <ScalarProperty Name="SendPlanChangeLetterForLegacy" ColumnName="SendPlanChangeLetterForLegacy" />
+                <ScalarProperty Name="NumberOfUnits" ColumnName="NumberOfUnits" />
+                <ScalarProperty Name="LastDateRatesNotified" ColumnName="LastDateRatesNotified" />
+                <ScalarProperty Name="ElectionPostmarkDate" ColumnName="ElectionPostmarkDate" />
+                <ScalarProperty Name="DaysToMakeSubsequentPayments" ColumnName="DaysToMakeSubsequentPayments" />
+                <ScalarProperty Name="DaysToMake1stPayment" ColumnName="DaysToMake1stPayment" />
+                <ScalarProperty Name="DaysToElect" ColumnName="DaysToElect" />
+                <ScalarProperty Name="COBRADurationMonths" ColumnName="COBRADurationMonths" />
+                <ScalarProperty Name="LastDayOfCOBRA" ColumnName="LastDayOfCOBRA" />
+                <ScalarProperty Name="FirstDayOfCOBRA" ColumnName="FirstDayOfCOBRA" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="NumberOfUnit" ColumnName="NumberOfUnit" />
+                <ScalarProperty Name="CoverageLevel" ColumnName="CoverageLevel" />
+                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+                <ScalarProperty Name="SendDODSubsidyExtension" ColumnName="SendDODSubsidyExtension" />
+                <ScalarProperty Name="IsConversionLetterSent" ColumnName="IsConversionLetterSent" />
+                <ScalarProperty Name="SendTakeoverLetter" ColumnName="SendTakeoverLetter" />
+                <ScalarProperty Name="NextPremiumOwedAmountReceived" ColumnName="NextPremiumOwedAmountReceived" />
+                <ScalarProperty Name="NextPremiumOwedYear" ColumnName="NextPremiumOwedYear" />
+                <ScalarProperty Name="NextPremiumOwedMonth" ColumnName="NextPremiumOwedMonth" />
+                <ScalarProperty Name="IsPaidThroughLastDayOfCOBRA" ColumnName="IsPaidThroughLastDayOfCOBRA" />
+                <ScalarProperty Name="PostmarkDateOfElection" ColumnName="PostmarkDateOfElection" />
+                <ScalarProperty Name="DateSpecificRightsNoticeWasPrinted" ColumnName="DateSpecificRightsNoticeWasPrinted" />
+                <ScalarProperty Name="SecondEventOriginalFDOC" ColumnName="SecondEventOriginalFDOC" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="EmployeeSSN" ColumnName="EmployeeSSN" />
+                <ScalarProperty Name="EnrollmentDate" ColumnName="EnrollmentDate" />
+                <ScalarProperty Name="EventDate" ColumnName="EventDate" />
+                <ScalarProperty Name="EventType" ColumnName="EventType" />
+                <ScalarProperty Name="PlanCategory" ColumnName="PlanCategory" />
+                <ScalarProperty Name="SSOIdentifier" ColumnName="SSOIdentifier" />
+                <ScalarProperty Name="ClientSpecificData" ColumnName="ClientSpecificData" />
+                <ScalarProperty Name="AccountStructure" ColumnName="AccountStructure" />
+                <ScalarProperty Name="BenefitGroup" ColumnName="BenefitGroup" />
+                <ScalarProperty Name="AllowMemberSSO" ColumnName="AllowMemberSSO" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="UsesHCTC" ColumnName="UsesHCTC" />
+                <ScalarProperty Name="PremiumCouponType" ColumnName="PremiumCouponType" />
+                <ScalarProperty Name="YearsOfService" ColumnName="YearsOfService" />
+                <ScalarProperty Name="EmployeePayrollType" ColumnName="EmployeePayrollType" />
+                <ScalarProperty Name="EmployeeType" ColumnName="EmployeeType" />
+                <ScalarProperty Name="TobaccoUse" ColumnName="TobaccoUse" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="PremiumCountry" ColumnName="PremiumCountry" />
+                <ScalarProperty Name="PremiumPostalCode" ColumnName="PremiumPostalCode" />
+                <ScalarProperty Name="PremiumStateOrProvince" ColumnName="PremiumStateOrProvince" />
+                <ScalarProperty Name="PremiumCity" ColumnName="PremiumCity" />
+                <ScalarProperty Name="PremiumAddress2" ColumnName="PremiumAddress2" />
+                <ScalarProperty Name="PremiumAddress1" ColumnName="PremiumAddress1" />
+                <ScalarProperty Name="PremiumAddressSameAsPrimary" ColumnName="PremiumAddressSameAsPrimary" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="StateOrProvince" ColumnName="StateOrProvince" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IndividualID" ColumnName="IndividualID" />
+                <ScalarProperty Name="SSN" ColumnName="SSN" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="ClientDivisionName" ColumnName="ClientDivisionName" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="VersionNumber" ColumnName="VersionNumber" />
+                <ScalarProperty Name="check_type" ColumnName="check_type" />
+                <ScalarProperty Name="source_row_no" ColumnName="source_row_no" />
+                <ScalarProperty Name="row_id" ColumnName="row_id" />
+                <ScalarProperty Name="result_template" ColumnName="result_template" />
+                <ScalarProperty Name="cobra_res_file_name" ColumnName="cobra_res_file_name" />
+                <ScalarProperty Name="error_message_calc" ColumnName="error_message_calc" />
+                <ScalarProperty Name="row_type" ColumnName="row_type" />
+                <ScalarProperty Name="row_num" ColumnName="row_num" />
+                <ScalarProperty Name="error_message" ColumnName="error_message" />
+                <ScalarProperty Name="error_code" ColumnName="error_code" />
+                <ScalarProperty Name="error_row" ColumnName="error_row" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cobra_res_file_table_stage">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.cobra_res_file_table_stage">
+              <MappingFragment StoreEntitySet="cobra_res_file_table_stage">
+                <ScalarProperty Name="UserDefinedFieldValue" ColumnName="UserDefinedFieldValue" />
+                <ScalarProperty Name="UserDefinedFieldName" ColumnName="UserDefinedFieldName" />
+                <ScalarProperty Name="QualifyingEventDate" ColumnName="QualifyingEventDate" />
+                <ScalarProperty Name="LetterAttachmentName" ColumnName="LetterAttachmentName" />
+                <ScalarProperty Name="Reason" ColumnName="Reason" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="TermOrReinstate" ColumnName="TermOrReinstate" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="DenialReason" ColumnName="DenialReason" />
+                <ScalarProperty Name="DateDisabled" ColumnName="DateDisabled" />
+                <ScalarProperty Name="PostmarkOfDisabilityExtension" ColumnName="PostmarkOfDisabilityExtension" />
+                <ScalarProperty Name="DisabilityApproved" ColumnName="DisabilityApproved" />
+                <ScalarProperty Name="VASRINSERT" ColumnName="VASRINSERT" />
+                <ScalarProperty Name="GASRINSERT" ColumnName="GASRINSERT" />
+                <ScalarProperty Name="RISRINSERT" ColumnName="RISRINSERT" />
+                <ScalarProperty Name="ILSRINSERT" ColumnName="ILSRINSERT" />
+                <ScalarProperty Name="VEBASRINSERT" ColumnName="VEBASRINSERT" />
+                <ScalarProperty Name="NYSRINSERT" ColumnName="NYSRINSERT" />
+                <ScalarProperty Name="TXSRINSERT" ColumnName="TXSRINSERT" />
+                <ScalarProperty Name="ORSRINSERT" ColumnName="ORSRINSERT" />
+                <ScalarProperty Name="MNCONTINSERT" ColumnName="MNCONTINSERT" />
+                <ScalarProperty Name="MNLIFEINSERT" ColumnName="MNLIFEINSERT" />
+                <ScalarProperty Name="CTSRINSERT" ColumnName="CTSRINSERT" />
+                <ScalarProperty Name="CASRINSERT" ColumnName="CASRINSERT" />
+                <ScalarProperty Name="RatePeriodSubsidy" ColumnName="RatePeriodSubsidy" />
+                <ScalarProperty Name="SubsidyType" ColumnName="SubsidyType" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="SubsidyAmountType" ColumnName="SubsidyAmountType" />
+                <ScalarProperty Name="InsuranceType" ColumnName="InsuranceType" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="NoteText" ColumnName="NoteText" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="NoteType" ColumnName="NoteType" />
+                <ScalarProperty Name="UsesFDOC" ColumnName="UsesFDOC" />
+                <ScalarProperty Name="IsQMCSO" ColumnName="IsQMCSO" />
+                <ScalarProperty Name="AddressSameAsQB" ColumnName="AddressSameAsQB" />
+                <ScalarProperty Name="Relationship" ColumnName="Relationship" />
+                <ScalarProperty Name="PlanBundleName" ColumnName="PlanBundleName" />
+                <ScalarProperty Name="SendPlanChangeLetterForLegacy" ColumnName="SendPlanChangeLetterForLegacy" />
+                <ScalarProperty Name="NumberOfUnits" ColumnName="NumberOfUnits" />
+                <ScalarProperty Name="LastDateRatesNotified" ColumnName="LastDateRatesNotified" />
+                <ScalarProperty Name="ElectionPostmarkDate" ColumnName="ElectionPostmarkDate" />
+                <ScalarProperty Name="DaysToMakeSubsequentPayments" ColumnName="DaysToMakeSubsequentPayments" />
+                <ScalarProperty Name="DaysToMake1stPayment" ColumnName="DaysToMake1stPayment" />
+                <ScalarProperty Name="DaysToElect" ColumnName="DaysToElect" />
+                <ScalarProperty Name="COBRADurationMonths" ColumnName="COBRADurationMonths" />
+                <ScalarProperty Name="LastDayOfCOBRA" ColumnName="LastDayOfCOBRA" />
+                <ScalarProperty Name="FirstDayOfCOBRA" ColumnName="FirstDayOfCOBRA" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="NumberOfUnit" ColumnName="NumberOfUnit" />
+                <ScalarProperty Name="CoverageLevel" ColumnName="CoverageLevel" />
+                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+                <ScalarProperty Name="SendDODSubsidyExtension" ColumnName="SendDODSubsidyExtension" />
+                <ScalarProperty Name="IsConversionLetterSent" ColumnName="IsConversionLetterSent" />
+                <ScalarProperty Name="SendTakeoverLetter" ColumnName="SendTakeoverLetter" />
+                <ScalarProperty Name="NextPremiumOwedAmountReceived" ColumnName="NextPremiumOwedAmountReceived" />
+                <ScalarProperty Name="NextPremiumOwedYear" ColumnName="NextPremiumOwedYear" />
+                <ScalarProperty Name="NextPremiumOwedMonth" ColumnName="NextPremiumOwedMonth" />
+                <ScalarProperty Name="IsPaidThroughLastDayOfCOBRA" ColumnName="IsPaidThroughLastDayOfCOBRA" />
+                <ScalarProperty Name="PostmarkDateOfElection" ColumnName="PostmarkDateOfElection" />
+                <ScalarProperty Name="DateSpecificRightsNoticeWasPrinted" ColumnName="DateSpecificRightsNoticeWasPrinted" />
+                <ScalarProperty Name="SecondEventOriginalFDOC" ColumnName="SecondEventOriginalFDOC" />
+                <ScalarProperty Name="EmployeeName" ColumnName="EmployeeName" />
+                <ScalarProperty Name="EmployeeSSN" ColumnName="EmployeeSSN" />
+                <ScalarProperty Name="EnrollmentDate" ColumnName="EnrollmentDate" />
+                <ScalarProperty Name="EventDate" ColumnName="EventDate" />
+                <ScalarProperty Name="EventType" ColumnName="EventType" />
+                <ScalarProperty Name="PlanCategory" ColumnName="PlanCategory" />
+                <ScalarProperty Name="SSOIdentifier" ColumnName="SSOIdentifier" />
+                <ScalarProperty Name="ClientSpecificData" ColumnName="ClientSpecificData" />
+                <ScalarProperty Name="AccountStructure" ColumnName="AccountStructure" />
+                <ScalarProperty Name="BenefitGroup" ColumnName="BenefitGroup" />
+                <ScalarProperty Name="AllowMemberSSO" ColumnName="AllowMemberSSO" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="UsesHCTC" ColumnName="UsesHCTC" />
+                <ScalarProperty Name="PremiumCouponType" ColumnName="PremiumCouponType" />
+                <ScalarProperty Name="YearsOfService" ColumnName="YearsOfService" />
+                <ScalarProperty Name="EmployeePayrollType" ColumnName="EmployeePayrollType" />
+                <ScalarProperty Name="EmployeeType" ColumnName="EmployeeType" />
+                <ScalarProperty Name="TobaccoUse" ColumnName="TobaccoUse" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="PremiumCountry" ColumnName="PremiumCountry" />
+                <ScalarProperty Name="PremiumPostalCode" ColumnName="PremiumPostalCode" />
+                <ScalarProperty Name="PremiumStateOrProvince" ColumnName="PremiumStateOrProvince" />
+                <ScalarProperty Name="PremiumCity" ColumnName="PremiumCity" />
+                <ScalarProperty Name="PremiumAddress2" ColumnName="PremiumAddress2" />
+                <ScalarProperty Name="PremiumAddress1" ColumnName="PremiumAddress1" />
+                <ScalarProperty Name="PremiumAddressSameAsPrimary" ColumnName="PremiumAddressSameAsPrimary" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="StateOrProvince" ColumnName="StateOrProvince" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="IndividualID" ColumnName="IndividualID" />
+                <ScalarProperty Name="SSN" ColumnName="SSN" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="ClientDivisionName" ColumnName="ClientDivisionName" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="VersionNumber" ColumnName="VersionNumber" />
+                <ScalarProperty Name="check_type" ColumnName="check_type" />
+                <ScalarProperty Name="source_row_no" ColumnName="source_row_no" />
+                <ScalarProperty Name="data_row" ColumnName="data_row" />
+                <ScalarProperty Name="cobra_res_file_name" ColumnName="cobra_res_file_name" />
+                <ScalarProperty Name="error_message_calc" ColumnName="error_message_calc" />
+                <ScalarProperty Name="row_type" ColumnName="row_type" />
+                <ScalarProperty Name="row_num" ColumnName="row_num" />
+                <ScalarProperty Name="error_message" ColumnName="error_message" />
+                <ScalarProperty Name="error_code" ColumnName="error_code" />
+                <ScalarProperty Name="error_row" ColumnName="error_row" />
+                <ScalarProperty Name="result_template" ColumnName="result_template" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FTP_Source_Folders">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.FTP_Source_Folders">
+              <MappingFragment StoreEntitySet="FTP_Source_Folders">
+                <ScalarProperty Name="is_active" ColumnName="is_active" />
+                <ScalarProperty Name="environment" ColumnName="environment" />
+                <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+                <ScalarProperty Name="to_FTP" ColumnName="to_FTP" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IC_type" ColumnName="IC_type" />
+                <ScalarProperty Name="template_type" ColumnName="template_type" />
+                <ScalarProperty Name="Folder_name" ColumnName="Folder_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Header_list_all">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.Header_list_all">
+              <MappingFragment StoreEntitySet="Header_list_all">
+                <ScalarProperty Name="environment" ColumnName="environment" />
+                <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+                <ScalarProperty Name="to_FTP" ColumnName="to_FTP" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IC_type" ColumnName="IC_type" />
+                <ScalarProperty Name="template_type" ColumnName="template_type" />
+                <ScalarProperty Name="Folder_name" ColumnName="Folder_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Header_list_all_folders">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.Header_list_all_folders">
+              <MappingFragment StoreEntitySet="Header_list_all_folders">
+                <ScalarProperty Name="environment" ColumnName="environment" />
+                <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+                <ScalarProperty Name="to_FTP" ColumnName="to_FTP" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IC_type" ColumnName="IC_type" />
+                <ScalarProperty Name="template_type" ColumnName="template_type" />
+                <ScalarProperty Name="Folder_name" ColumnName="Folder_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Header_list_new">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.Header_list_new">
+              <MappingFragment StoreEntitySet="Header_list_new">
+                <ScalarProperty Name="environment" ColumnName="environment" />
+                <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+                <ScalarProperty Name="to_FTP" ColumnName="to_FTP" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IC_type" ColumnName="IC_type" />
+                <ScalarProperty Name="template_type" ColumnName="template_type" />
+                <ScalarProperty Name="Folder_name" ColumnName="Folder_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Header_list_none">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.Header_list_none">
+              <MappingFragment StoreEntitySet="Header_list_none">
+                <ScalarProperty Name="environment" ColumnName="environment" />
+                <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+                <ScalarProperty Name="to_FTP" ColumnName="to_FTP" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IC_type" ColumnName="IC_type" />
+                <ScalarProperty Name="template_type" ColumnName="template_type" />
+                <ScalarProperty Name="Folder_name" ColumnName="Folder_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Header_list_old">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.Header_list_old">
+              <MappingFragment StoreEntitySet="Header_list_old">
+                <ScalarProperty Name="environment" ColumnName="environment" />
+                <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+                <ScalarProperty Name="to_FTP" ColumnName="to_FTP" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IC_type" ColumnName="IC_type" />
+                <ScalarProperty Name="template_type" ColumnName="template_type" />
+                <ScalarProperty Name="Folder_name" ColumnName="Folder_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Header_list_own">
+            <EntityTypeMapping TypeName="Data_ProcessingModel.Header_list_own">
+              <MappingFragment StoreEntitySet="Header_list_own">
+                <ScalarProperty Name="environment" ColumnName="environment" />
+                <ScalarProperty Name="BENCODE" ColumnName="BENCODE" />
+                <ScalarProperty Name="to_FTP" ColumnName="to_FTP" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IC_type" ColumnName="IC_type" />
+                <ScalarProperty Name="template_type" ColumnName="template_type" />
+                <ScalarProperty Name="Folder_name" ColumnName="Folder_name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="proc_alegeus_ExportImportFile" FunctionName="Data_ProcessingModel.Store.proc_alegeus_ExportImportFile">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Data_ProcessingModel.proc_alegeus_ExportImportFile_Result">
+                <ScalarProperty Name="file_row" ColumnName="file_row" />
+                <ScalarProperty Name="source_row_no" ColumnName="source_row_no" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="proc_cobra_ExportImportFile" FunctionName="Data_ProcessingModel.Store.proc_cobra_ExportImportFile">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="Data_ProcessingModel.proc_cobra_ExportImportFile_Result">
+                <ScalarProperty Name="file_row" ColumnName="file_row" />
+                <ScalarProperty Name="source_row_no" ColumnName="source_row_no" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="process_cobra_file_table_stage_import" FunctionName="Data_ProcessingModel.Store.process_cobra_file_table_stage_import" />
+          <FunctionImportMapping FunctionImportName="process_cobra_res_file_table_stage_import" FunctionName="Data_ProcessingModel.Store.process_cobra_res_file_table_stage_import" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

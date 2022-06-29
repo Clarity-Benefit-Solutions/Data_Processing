@@ -1,0 +1,2317 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="COBRApoint.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="db_error_log">
+          <Key>
+            <PropertyRef Name="log_id" />
+          </Key>
+          <Property Name="log_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="sql_state" Type="nvarchar" MaxLength="200" />
+          <Property Name="err_no" Type="nvarchar" MaxLength="50" />
+          <Property Name="err_source" Type="nvarchar" MaxLength="500" />
+          <Property Name="err_msg" Type="text" />
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+          <Property Name="created_by" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="db_message_log">
+          <Key>
+            <PropertyRef Name="log_id" />
+          </Key>
+          <Property Name="log_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="log_level" Type="nvarchar" MaxLength="200" />
+          <Property Name="log_source" Type="nvarchar" MaxLength="500" />
+          <Property Name="log_msg" Type="text" />
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+          <Property Name="created_by" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.QBAEI_ClientList_csv' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="QBAEI_ClientList_csv">
+          <Key>
+            <PropertyRef Name="clientID" />
+            <PropertyRef Name="ClientName" />
+          </Key>
+          <Property Name="clientID" Type="int" Nullable="false" />
+          <Property Name="ClientName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ClientAlternate" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'COBRApoint_portal_prod.dbo.QBAEI_dailyreport' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="QBAEI_dailyreport">
+          <Property Name="Last Name" Type="varchar(max)" />
+          <Property Name="First Name" Type="varchar(max)" />
+          <Property Name="MID" Type="varchar(max)" />
+          <Property Name="AEI 2021 Status" Type="varchar(max)" />
+          <Property Name="SSN" Type="varchar(max)" />
+          <Property Name="QE Date" Type="varchar(max)" />
+          <Property Name="FDOC" Type="varchar(max)" />
+          <Property Name="LDOC" Type="varchar(max)" />
+          <Property Name="Event Type" Type="varchar(max)" />
+          <Property Name="Client Name" Type="varchar(max)" />
+          <Property Name="Client Division Name" Type="varchar(max)" />
+          <Property Name="Member Status" Type="varchar(max)" />
+          <Property Name="Medical Plan Status" Type="varchar(max)" />
+          <Property Name="Dental Plan Status" Type="varchar(max)" />
+          <Property Name="Vision Plan Status" Type="varchar(max)" />
+          <Property Name="EAP Plan Status" Type="varchar(max)" />
+          <Property Name="HRA Plan Status" Type="varchar(max)" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'COBRApoint_portal_prod.dbo.QBAEI_RecordRptRunlog' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="QBAEI_RecordRptRunlog">
+          <Property Name="Last Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="First Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Mid" Type="nvarchar" MaxLength="255" />
+          <Property Name="SSN" Type="nvarchar" MaxLength="255" />
+          <Property Name="timestamp" Type="datetime" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'COBRApoint_portal_prod.dbo.QBAEI_RecordRptRunlog_notunknown' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="QBAEI_RecordRptRunlog_notunknown">
+          <Property Name="Last Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="First Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Mid" Type="nvarchar" MaxLength="255" />
+          <Property Name="SSN" Type="nvarchar" MaxLength="255" />
+          <Property Name="timestamp" Type="datetime" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'COBRApoint_portal_prod.dbo.QBAEI_Subsidy_csv' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="QBAEI_Subsidy_csv">
+          <Property Name="clientid" Type="int" />
+          <Property Name="clientAlternate" Type="varchar" MaxLength="50" />
+          <Property Name="Last Name" Type="varchar(max)" />
+          <Property Name="First Name" Type="varchar(max)" />
+          <Property Name="MID" Type="varchar(max)" />
+          <Property Name="AEI 2021 Status" Type="varchar(max)" />
+          <Property Name="SSN" Type="varchar(max)" />
+          <Property Name="QE Date" Type="varchar(max)" />
+          <Property Name="FDOC" Type="varchar(max)" />
+          <Property Name="LDOC" Type="varchar(max)" />
+          <Property Name="Event Type" Type="varchar(max)" />
+          <Property Name="Client Name" Type="varchar(max)" />
+          <Property Name="Client Division Name" Type="varchar(max)" />
+          <Property Name="Member Status" Type="varchar(max)" />
+          <Property Name="Medical Plan Status" Type="varchar(max)" />
+          <Property Name="Dental Plan Status" Type="varchar(max)" />
+          <Property Name="Vision Plan Status" Type="varchar(max)" />
+          <Property Name="EAP Plan Status" Type="varchar(max)" />
+          <Property Name="HRA Plan Status" Type="varchar(max)" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'COBRApoint_portal_prod.dbo.QBAEI_Subsidy_csv_notunknown' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="QBAEI_Subsidy_csv_notunknown">
+          <Property Name="clientid" Type="int" />
+          <Property Name="clientAlternate" Type="varchar" MaxLength="50" />
+          <Property Name="Last Name" Type="varchar(max)" />
+          <Property Name="First Name" Type="varchar(max)" />
+          <Property Name="MID" Type="varchar(max)" />
+          <Property Name="AEI 2021 Status" Type="varchar(max)" />
+          <Property Name="SSN" Type="varchar(max)" />
+          <Property Name="QE Date" Type="varchar(max)" />
+          <Property Name="FDOC" Type="varchar(max)" />
+          <Property Name="LDOC" Type="varchar(max)" />
+          <Property Name="Event Type" Type="varchar(max)" />
+          <Property Name="Client Name" Type="varchar(max)" />
+          <Property Name="Client Division Name" Type="varchar(max)" />
+          <Property Name="Member Status" Type="varchar(max)" />
+          <Property Name="Medical Plan Status" Type="varchar(max)" />
+          <Property Name="Dental Plan Status" Type="varchar(max)" />
+          <Property Name="Vision Plan Status" Type="varchar(max)" />
+          <Property Name="EAP Plan Status" Type="varchar(max)" />
+          <Property Name="HRA Plan Status" Type="varchar(max)" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.AdminTPAUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="AdminTPAUser">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="UserName" />
+          </Key>
+          <Property Name="UserID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.AdminUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="AdminUser">
+          <Key>
+            <PropertyRef Name="User" />
+            <PropertyRef Name="UserName" />
+            <PropertyRef Name="UserEmailAddress" />
+          </Key>
+          <Property Name="User" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserEmailAddress" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Active" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.AllSSOUsers' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="AllSSOUsers">
+          <Key>
+            <PropertyRef Name="orderseq" />
+            <PropertyRef Name="entitytype" />
+          </Key>
+          <Property Name="orderseq" Type="int" Nullable="false" />
+          <Property Name="entitytype" Type="varchar" MaxLength="14" Nullable="false" />
+          <Property Name="memberid" Type="int" />
+          <Property Name="brokerid" Type="int" />
+          <Property Name="clientcontactid" Type="int" />
+          <Property Name="clientid" Type="int" />
+          <Property Name="clientdivisionid" Type="int" />
+          <Property Name="organizationname" Type="varchar" MaxLength="100" />
+          <Property Name="organizationisactive" Type="int" />
+          <Property Name="divisionname" Type="varchar" MaxLength="50" />
+          <Property Name="individualidentifier" Type="varchar" MaxLength="50" />
+          <Property Name="contacttype" Type="varchar" MaxLength="50" />
+          <Property Name="salutation" Type="varchar" MaxLength="50" />
+          <Property Name="firstname" Type="varchar" MaxLength="50" />
+          <Property Name="lastname" Type="varchar" MaxLength="50" />
+          <Property Name="email" Type="varchar" MaxLength="100" />
+          <Property Name="title" Type="varchar" MaxLength="50" />
+          <Property Name="department" Type="varchar" MaxLength="50" />
+          <Property Name="phone" Type="varchar" MaxLength="50" />
+          <Property Name="phone2" Type="varchar" MaxLength="50" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="city" Type="varchar" MaxLength="50" />
+          <Property Name="state" Type="varchar" MaxLength="50" />
+          <Property Name="postalcode" Type="varchar" MaxLength="50" />
+          <Property Name="country" Type="varchar" MaxLength="50" />
+          <Property Name="active" Type="int" />
+          <Property Name="loginstatus" Type="varchar" MaxLength="50" />
+          <Property Name="registrationcode" Type="varchar" MaxLength="50" />
+          <Property Name="registrationdate" Type="datetime" />
+          <Property Name="userdisplayname" Type="varchar" MaxLength="50" />
+          <Property Name="allowsso" Type="int" />
+          <Property Name="ssoidentifier" Type="varchar" MaxLength="50" />
+          <Property Name="userid" Type="nvarchar" MaxLength="36" />
+          <Property Name="ssn" Type="varchar" MaxLength="50" />
+          <Property Name="employeeid" Type="varchar" MaxLength="50" />
+          <Property Name="dob" Type="date" />
+          <Property Name="employerid" Type="varchar" MaxLength="50" />
+          <Property Name="QualEventDate" Type="date" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.Broker' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Broker">
+          <Key>
+            <PropertyRef Name="BrokerID" />
+            <PropertyRef Name="BrokerName" />
+          </Key>
+          <Property Name="BrokerID" Type="int" Nullable="false" />
+          <Property Name="BrokerName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DBAName" Type="varchar" MaxLength="100" />
+          <Property Name="EIN" Type="varchar" MaxLength="50" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="Fax" Type="varchar" MaxLength="50" />
+          <Property Name="AllowBrokerPortalAccess" Type="int" />
+          <Property Name="Active" Type="int" />
+          <Property Name="AllowBrokerSSO" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.BrokerClient' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="BrokerClient">
+          <Key>
+            <PropertyRef Name="BrokerClientID" />
+            <PropertyRef Name="BrokerID" />
+            <PropertyRef Name="ClientID" />
+          </Key>
+          <Property Name="BrokerClientID" Type="int" Nullable="false" />
+          <Property Name="BrokerID" Type="int" Nullable="false" />
+          <Property Name="ClientID" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.BrokerContact' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="BrokerContact">
+          <Key>
+            <PropertyRef Name="BrokerContactID" />
+            <PropertyRef Name="BrokerID" />
+            <PropertyRef Name="ContactType" />
+          </Key>
+          <Property Name="BrokerContactID" Type="int" Nullable="false" />
+          <Property Name="BrokerID" Type="int" Nullable="false" />
+          <Property Name="ContactType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Salutation" Type="varchar" MaxLength="50" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="MiddleInitial" Type="varchar" MaxLength="1" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Title" Type="varchar" MaxLength="50" />
+          <Property Name="Department" Type="varchar" MaxLength="50" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="PhoneExtension" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2Extension" Type="varchar" MaxLength="50" />
+          <Property Name="Fax" Type="varchar" MaxLength="50" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Active" Type="int" />
+          <Property Name="LoginStatus" Type="varchar" MaxLength="50" />
+          <Property Name="RegistrationCode" Type="varchar" MaxLength="50" />
+          <Property Name="RegistrationDate" Type="date" />
+          <Property Name="UserDisplayName" Type="varchar" MaxLength="50" />
+          <Property Name="AllowSSO" Type="int" />
+          <Property Name="SSOIdentifier" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.Carrier' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Carrier">
+          <Key>
+            <PropertyRef Name="CarrierID" />
+            <PropertyRef Name="CarrierName" />
+          </Key>
+          <Property Name="CarrierID" Type="int" Nullable="false" />
+          <Property Name="CarrierName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="35" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="CarrierFax" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.CarrierContact' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="CarrierContact">
+          <Key>
+            <PropertyRef Name="CarrierContactID" />
+            <PropertyRef Name="CarrierID" />
+            <PropertyRef Name="ContactType" />
+          </Key>
+          <Property Name="CarrierContactID" Type="int" Nullable="false" />
+          <Property Name="CarrierID" Type="int" Nullable="false" />
+          <Property Name="ContactType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Salutation" Type="varchar" MaxLength="50" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Title" Type="varchar" MaxLength="50" />
+          <Property Name="Department" Type="varchar" MaxLength="50" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="PhoneExtension" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2Extension" Type="varchar" MaxLength="50" />
+          <Property Name="Fax" Type="varchar" MaxLength="50" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="WebLink" Type="varchar" MaxLength="100" />
+          <Property Name="Active" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.Client' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ClientID" />
+            <PropertyRef Name="ClientName" />
+            <PropertyRef Name="ClientGroupID" />
+          </Key>
+          <Property Name="ClientID" Type="int" Nullable="false" />
+          <Property Name="ClientName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ClientGroupID" Type="int" Nullable="false" />
+          <Property Name="DBAName" Type="varchar" MaxLength="100" />
+          <Property Name="EIN" Type="varchar" MaxLength="50" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="Fax" Type="varchar" MaxLength="50" />
+          <Property Name="BillingStartDate" Type="date" />
+          <Property Name="SendHIPAACertWithQBSRandQBTermination" Type="int" />
+          <Property Name="SendHIPAACertWithWelcomeLetter" Type="int" />
+          <Property Name="AllowClientPortalAccess" Type="int" />
+          <Property Name="AutomaticallyCreateQBSubsidyForInsignificantAmount" Type="int" />
+          <Property Name="IgnoreSPMPaymentGracePeriods" Type="int" />
+          <Property Name="MigratedClient" Type="bit" />
+          <Property Name="ClientPremiumNotice" Type="varchar" MaxLength="50" />
+          <Property Name="EmployeeCountRange" Type="varchar" MaxLength="50" />
+          <Property Name="WeeklyBillingFirstDayOfWeek" Type="varchar" MaxLength="50" />
+          <Property Name="ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize" Type="bit" />
+          <Property Name="ClientAllowsAEI2009PlanEnrollmentOptions" Type="bit" />
+          <Property Name="ClientDoesOwnAEI2009SubsidyTakenReportPosting" Type="bit" />
+          <Property Name="ClientAlternate" Type="varchar" MaxLength="50" />
+          <Property Name="AllowClientSSO" Type="int" />
+          <Property Name="SPMInitialGracePeriodDays" Type="int" />
+          <Property Name="SPMConvenienceFee" Type="money" />
+          <Property Name="SPMPartnerConvenienceFee" Type="money" />
+          <Property Name="QBConvenienceFee" Type="money" />
+          <Property Name="QBPartnerConvenienceFee" Type="money" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.ClientContact' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ClientContact">
+          <Key>
+            <PropertyRef Name="ClientContactID" />
+            <PropertyRef Name="ClientID" />
+            <PropertyRef Name="ContactType" />
+          </Key>
+          <Property Name="ClientContactID" Type="int" Nullable="false" />
+          <Property Name="ClientID" Type="int" Nullable="false" />
+          <Property Name="ContactType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Salutation" Type="varchar" MaxLength="50" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="MiddleInitial" Type="varchar" MaxLength="1" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Title" Type="varchar" MaxLength="50" />
+          <Property Name="Department" Type="varchar" MaxLength="50" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="PhoneExtension" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2Extension" Type="varchar" MaxLength="50" />
+          <Property Name="Fax" Type="varchar" MaxLength="50" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Active" Type="int" />
+          <Property Name="LoginStatus" Type="varchar" MaxLength="50" />
+          <Property Name="RegistrationCode" Type="varchar" MaxLength="50" />
+          <Property Name="RegistrationDate" Type="date" />
+          <Property Name="AllowSSO" Type="int" />
+          <Property Name="SSOIdentifier" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.ClientDivision' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ClientDivision">
+          <Key>
+            <PropertyRef Name="ClientDivisionID" />
+            <PropertyRef Name="ClientID" />
+            <PropertyRef Name="DivisionName" />
+          </Key>
+          <Property Name="ClientDivisionID" Type="int" Nullable="false" />
+          <Property Name="ClientID" Type="int" Nullable="false" />
+          <Property Name="DivisionName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="Fax" Type="varchar" MaxLength="50" />
+          <Property Name="ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting" Type="int" />
+          <Property Name="SendHIPAACertWithSPMWelcomeAndTerminationLetters" Type="int" />
+          <Property Name="AllowClientDivisionSSO" Type="int" />
+          <Property Name="Active" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.ClientDivisionContact' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ClientDivisionContact">
+          <Key>
+            <PropertyRef Name="ClientDivisionContactID" />
+            <PropertyRef Name="ClientDivisionID" />
+            <PropertyRef Name="ContactType" />
+          </Key>
+          <Property Name="ClientDivisionContactID" Type="int" Nullable="false" />
+          <Property Name="ClientDivisionID" Type="int" Nullable="false" />
+          <Property Name="ContactType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Salutation" Type="varchar" MaxLength="50" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Title" Type="varchar" MaxLength="50" />
+          <Property Name="Department" Type="varchar" MaxLength="50" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="PhoneExtension" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2Extension" Type="varchar" MaxLength="50" />
+          <Property Name="Fax" Type="varchar" MaxLength="50" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Active" Type="int" />
+          <Property Name="LoginStatus" Type="varchar" MaxLength="50" />
+          <Property Name="RegistrationCode" Type="varchar" MaxLength="50" />
+          <Property Name="RegistrationDate" Type="datetime" />
+          <Property Name="AllowSSO" Type="int" />
+          <Property Name="SSOIdentifier" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'COBRApoint_portal_prod.dbo.Customer' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Customer">
+          <Property Name="CustomerID" Type="int" />
+          <Property Name="CustomerName" Type="varchar" MaxLength="50" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.NPM' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="NPM">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="ClientDivisionID" />
+            <PropertyRef Name="DateEntered" />
+          </Key>
+          <Property Name="MemberID" Type="int" Nullable="false" />
+          <Property Name="ClientDivisionID" Type="int" Nullable="false" />
+          <Property Name="Active" Type="int" />
+          <Property Name="DateEntered" Type="date" Nullable="false" />
+          <Property Name="MethodEntered" Type="varchar" MaxLength="50" />
+          <Property Name="EnteredByUser" Type="varchar" MaxLength="50" />
+          <Property Name="Salutation" Type="varchar" MaxLength="50" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="MiddleInitial" Type="varchar" MaxLength="1" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="IndividualID" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2" Type="varchar" MaxLength="50" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="UsesAndFamily" Type="int" />
+          <Property Name="HasBecomeAQB" Type="int" />
+          <Property Name="HasWaivedAllCoverage" Type="int" />
+          <Property Name="HireDate" Type="nvarchar" MaxLength="19" />
+          <Property Name="IsGRLetterSent" Type="int" />
+          <Property Name="EnteredDateTime" Type="nvarchar" MaxLength="19" />
+          <Property Name="LastModifiedDate" Type="nvarchar" MaxLength="19" />
+          <Property Name="SSN" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.QB' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="QB">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="ClientID" />
+            <PropertyRef Name="ClientDivisionID" />
+            <PropertyRef Name="UsesHCTC" />
+            <PropertyRef Name="Active" />
+          </Key>
+          <Property Name="MemberID" Type="int" Nullable="false" />
+          <Property Name="ClientID" Type="int" Nullable="false" />
+          <Property Name="ClientDivisionID" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="MiddleInitial" Type="varchar" MaxLength="1" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="Salutation" Type="varchar" MaxLength="50" />
+          <Property Name="SSN" Type="varchar" MaxLength="50" />
+          <Property Name="IndividualIdentifier" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2" Type="varchar" MaxLength="50" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Gender" Type="varchar" MaxLength="1" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="TobaccoUse" Type="varchar" MaxLength="50" />
+          <Property Name="EmployeeType" Type="varchar" MaxLength="50" />
+          <Property Name="PayrollType" Type="varchar" MaxLength="50" />
+          <Property Name="YearsOfService" Type="int" />
+          <Property Name="PremiumCouponType" Type="varchar" MaxLength="50" />
+          <Property Name="UsesHCTC" Type="bit" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="EnteredDateTime" Type="datetime" />
+          <Property Name="EnteredByUser" Type="varchar" MaxLength="50" />
+          <Property Name="MethodEntered" Type="varchar" MaxLength="50" />
+          <Property Name="PaidThroughDate" Type="date" />
+          <Property Name="OnlineElectionProcessedDate" Type="datetime" />
+          <Property Name="BenefitGroup" Type="varchar" MaxLength="50" />
+          <Property Name="AccountStructure" Type="varchar" MaxLength="50" />
+          <Property Name="ClientCustomData" Type="varchar" MaxLength="50" />
+          <Property Name="AllowSSO" Type="bit" />
+          <Property Name="SSOIdentifier" Type="varchar" MaxLength="50" />
+          <Property Name="LastModifiedDate" Type="datetime" />
+          <Property Name="PlanCategory" Type="varchar(max)" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.QBEvent' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="QBEvent">
+          <Key>
+            <PropertyRef Name="QBEventID" />
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="EventType" />
+            <PropertyRef Name="EventDate" />
+            <PropertyRef Name="OriginalEnrollmentDate" />
+            <PropertyRef Name="IsSecondEvent" />
+          </Key>
+          <Property Name="QBEventID" Type="int" Nullable="false" />
+          <Property Name="MemberID" Type="int" Nullable="false" />
+          <Property Name="Category" Type="varchar" MaxLength="50" />
+          <Property Name="EventType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="EventDate" Type="date" Nullable="false" />
+          <Property Name="OriginalEnrollmentDate" Type="date" Nullable="false" />
+          <Property Name="EmployeeNameIfDependentEvent" Type="varchar" MaxLength="100" />
+          <Property Name="EmployeeSSNIfDependentEvent" Type="varchar" MaxLength="100" />
+          <Property Name="IsSecondEvent" Type="bit" Nullable="false" />
+          <Property Name="OriginalFDOC" Type="date" />
+          <Property Name="AEIStatus" Type="varchar" MaxLength="50" />
+          <Property Name="NewQBInvoluntaryTermFollowingReductionInHours" Type="bit" />
+          <Property Name="QEDateofRIH" Type="date" />
+          <Property Name="LatestElectionPMD" Type="date" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.QBPlan' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="QBPlan">
+          <Key>
+            <PropertyRef Name="QBPlanID" />
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="InsuranceType" />
+            <PropertyRef Name="ClientPlanQBID" />
+          </Key>
+          <Property Name="QBPlanID" Type="int" Nullable="false" />
+          <Property Name="MemberID" Type="int" Nullable="false" />
+          <Property Name="InsuranceType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="FDOC" Type="date" />
+          <Property Name="LDOC" Type="date" />
+          <Property Name="MonthsOfCOBRA" Type="int" />
+          <Property Name="DaysToElect" Type="int" />
+          <Property Name="InitialPaymentGracePeriod" Type="int" />
+          <Property Name="SubsequentPaymentGracePeriod" Type="int" />
+          <Property Name="Status" Type="varchar" MaxLength="50" />
+          <Property Name="StatusDate" Type="date" />
+          <Property Name="ElectionPostMarkDate" Type="date" />
+          <Property Name="TerminationDate" Type="date" />
+          <Property Name="PlanName" Type="varchar" MaxLength="50" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="EndDate" Type="date" />
+          <Property Name="CarrierPlanIdentification" Type="varchar" MaxLength="50" />
+          <Property Name="CoverageLevel" Type="varchar" MaxLength="50" />
+          <Property Name="BundleName" Type="varchar" MaxLength="50" />
+          <Property Name="IsElected" Type="bit" />
+          <Property Name="ClientPlanQBID" Type="int" Nullable="false" />
+          <Property Name="NumberOfUnits" Type="decimal" Precision="16" Scale="4" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPM' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="SPM">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="ClientDivisionID" />
+            <PropertyRef Name="ClientID" />
+          </Key>
+          <Property Name="MemberID" Type="int" Nullable="false" />
+          <Property Name="ClientDivisionID" Type="int" Nullable="false" />
+          <Property Name="Active" Type="int" />
+          <Property Name="EnteredDateTime" Type="datetime" />
+          <Property Name="EnteredByUser" Type="varchar" MaxLength="50" />
+          <Property Name="ClientID" Type="int" Nullable="false" />
+          <Property Name="Salutation" Type="varchar" MaxLength="50" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="MiddleInitial" Type="varchar" MaxLength="1" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
+          <Property Name="IndividualID" Type="varchar" MaxLength="50" />
+          <Property Name="Email" Type="varchar" MaxLength="100" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="Phone2" Type="varchar" MaxLength="50" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Gender" Type="varchar" MaxLength="1" />
+          <Property Name="DOB" Type="date" />
+          <Property Name="TobaccoUse" Type="varchar" MaxLength="50" />
+          <Property Name="EmployeeType" Type="varchar" MaxLength="50" />
+          <Property Name="PayrollType" Type="varchar" MaxLength="50" />
+          <Property Name="YearsOfService" Type="int" />
+          <Property Name="PremiumCouponType" Type="varchar" MaxLength="50" />
+          <Property Name="CurrentlyHasCOBRARights" Type="int" />
+          <Property Name="WillHaveCOBRARightsOnTermination" Type="int" />
+          <Property Name="BillingStartDate" Type="nvarchar" MaxLength="19" />
+          <Property Name="BillingEndDate" Type="nvarchar" MaxLength="19" />
+          <Property Name="BillingFrequency" Type="varchar" MaxLength="50" />
+          <Property Name="BillingType" Type="varchar" MaxLength="50" />
+          <Property Name="IsSPMLegacy" Type="int" />
+          <Property Name="Migrated" Type="int" />
+          <Property Name="HIPAAEnrollmentDate" Type="nvarchar" MaxLength="19" />
+          <Property Name="GracePeriodNumberOfDays" Type="int" />
+          <Property Name="MethodEntered" Type="varchar" MaxLength="50" />
+          <Property Name="PaidThroughDate" Type="nvarchar" MaxLength="19" />
+          <Property Name="BenefitGroup" Type="varchar" MaxLength="50" />
+          <Property Name="AccountStructure" Type="varchar" MaxLength="50" />
+          <Property Name="ClientCustomData" Type="varchar" MaxLength="50" />
+          <Property Name="AllowSSO" Type="int" />
+          <Property Name="SSOIdentifier" Type="varchar" MaxLength="50" />
+          <Property Name="LastModifiedDate" Type="nvarchar" MaxLength="19" />
+          <Property Name="PlanCategory" Type="varchar(max)" />
+          <Property Name="InitialGracePeriodDate" Type="nvarchar" MaxLength="19" />
+          <Property Name="InitialGracePeriodDays" Type="int" />
+          <Property Name="SPMInitialGracePeriodOptionType" Type="varchar" MaxLength="35" />
+          <Property Name="SSN" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="SPMAccess">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="AccessUser" />
+          </Key>
+          <Property Name="MemberID" Type="int" Nullable="false" />
+          <Property Name="AccessUser" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <Function Name="buildSqlForParam" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar(max)">
+          <Parameter Name="value" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="isnumber" Type="int" Mode="In" />
+        </Function>
+        <Function Name="COBRA_Update_alert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="db_log_error" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="err_no" Type="varchar" Mode="In" />
+          <Parameter Name="err_source" Type="varchar" Mode="In" />
+          <Parameter Name="err_msg" Type="varchar" Mode="In" />
+          <Parameter Name="sqlstate" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="db_log_message" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="msg_source" Type="nvarchar" Mode="In" />
+          <Parameter Name="msg" Type="text" Mode="In" />
+          <Parameter Name="log_level" Type="nvarchar" Mode="In" />
+          <Parameter Name="recsaffected" Type="int" Mode="In" />
+        </Function>
+        <Function Name="exp_cp_AllSSOUsers_to_Portal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="p_only_for_email" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="exp_cp_AllSSOUsers_to_Portal_PRV" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="export_cp_tables_to_portal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="FixBool" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+          <Parameter Name="value" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="FixDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar">
+          <Parameter Name="value" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="GetClientId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+          <Parameter Name="ClientDivisionId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetQBQualifyingEventDate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="date">
+          <Parameter Name="memberId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="QBAEI_Create_filesandInsertintoRunLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="QBAEI_Create_filesandInsertintoRunLog_notunknown" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="COBRApointStoreContainer">
+          <EntitySet Name="db_error_log" EntityType="Self.db_error_log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="db_message_log" EntityType="Self.db_message_log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QBAEI_ClientList_csv" EntityType="Self.QBAEI_ClientList_csv" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [QBAEI_ClientList_csv].[clientID] AS [clientID], 
+    [QBAEI_ClientList_csv].[ClientName] AS [ClientName], 
+    [QBAEI_ClientList_csv].[ClientAlternate] AS [ClientAlternate]
+    FROM [dbo].[QBAEI_ClientList_csv] AS [QBAEI_ClientList_csv]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="AdminTPAUser" EntityType="Self.AdminTPAUser" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [AdminTPAUser].[UserID] AS [UserID], 
+    [AdminTPAUser].[UserName] AS [UserName]
+    FROM [dbo].[AdminTPAUser] AS [AdminTPAUser]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="AdminUser" EntityType="Self.AdminUser" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [AdminUser].[User] AS [User], 
+    [AdminUser].[UserName] AS [UserName], 
+    [AdminUser].[UserEmailAddress] AS [UserEmailAddress], 
+    [AdminUser].[Active] AS [Active]
+    FROM [dbo].[AdminUser] AS [AdminUser]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="AllSSOUsers" EntityType="Self.AllSSOUsers" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [AllSSOUsers].[orderseq] AS [orderseq], 
+    [AllSSOUsers].[entitytype] AS [entitytype], 
+    [AllSSOUsers].[memberid] AS [memberid], 
+    [AllSSOUsers].[brokerid] AS [brokerid], 
+    [AllSSOUsers].[clientcontactid] AS [clientcontactid], 
+    [AllSSOUsers].[clientid] AS [clientid], 
+    [AllSSOUsers].[clientdivisionid] AS [clientdivisionid], 
+    [AllSSOUsers].[organizationname] AS [organizationname], 
+    [AllSSOUsers].[organizationisactive] AS [organizationisactive], 
+    [AllSSOUsers].[divisionname] AS [divisionname], 
+    [AllSSOUsers].[individualidentifier] AS [individualidentifier], 
+    [AllSSOUsers].[contacttype] AS [contacttype], 
+    [AllSSOUsers].[salutation] AS [salutation], 
+    [AllSSOUsers].[firstname] AS [firstname], 
+    [AllSSOUsers].[lastname] AS [lastname], 
+    [AllSSOUsers].[email] AS [email], 
+    [AllSSOUsers].[title] AS [title], 
+    [AllSSOUsers].[department] AS [department], 
+    [AllSSOUsers].[phone] AS [phone], 
+    [AllSSOUsers].[phone2] AS [phone2], 
+    [AllSSOUsers].[Address1] AS [Address1], 
+    [AllSSOUsers].[Address2] AS [Address2], 
+    [AllSSOUsers].[city] AS [city], 
+    [AllSSOUsers].[state] AS [state], 
+    [AllSSOUsers].[postalcode] AS [postalcode], 
+    [AllSSOUsers].[country] AS [country], 
+    [AllSSOUsers].[active] AS [active], 
+    [AllSSOUsers].[loginstatus] AS [loginstatus], 
+    [AllSSOUsers].[registrationcode] AS [registrationcode], 
+    [AllSSOUsers].[registrationdate] AS [registrationdate], 
+    [AllSSOUsers].[userdisplayname] AS [userdisplayname], 
+    [AllSSOUsers].[allowsso] AS [allowsso], 
+    [AllSSOUsers].[ssoidentifier] AS [ssoidentifier], 
+    [AllSSOUsers].[userid] AS [userid], 
+    [AllSSOUsers].[ssn] AS [ssn], 
+    [AllSSOUsers].[employeeid] AS [employeeid], 
+    [AllSSOUsers].[dob] AS [dob], 
+    [AllSSOUsers].[employerid] AS [employerid], 
+    [AllSSOUsers].[QualEventDate] AS [QualEventDate]
+    FROM [dbo].[AllSSOUsers] AS [AllSSOUsers]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Broker" EntityType="Self.Broker" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Broker].[BrokerID] AS [BrokerID], 
+    [Broker].[BrokerName] AS [BrokerName], 
+    [Broker].[DBAName] AS [DBAName], 
+    [Broker].[EIN] AS [EIN], 
+    [Broker].[Address1] AS [Address1], 
+    [Broker].[Address2] AS [Address2], 
+    [Broker].[City] AS [City], 
+    [Broker].[State] AS [State], 
+    [Broker].[PostalCode] AS [PostalCode], 
+    [Broker].[Country] AS [Country], 
+    [Broker].[Phone] AS [Phone], 
+    [Broker].[Fax] AS [Fax], 
+    [Broker].[AllowBrokerPortalAccess] AS [AllowBrokerPortalAccess], 
+    [Broker].[Active] AS [Active], 
+    [Broker].[AllowBrokerSSO] AS [AllowBrokerSSO]
+    FROM [dbo].[Broker] AS [Broker]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="BrokerClient" EntityType="Self.BrokerClient" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [BrokerClient].[BrokerClientID] AS [BrokerClientID], 
+    [BrokerClient].[BrokerID] AS [BrokerID], 
+    [BrokerClient].[ClientID] AS [ClientID]
+    FROM [dbo].[BrokerClient] AS [BrokerClient]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="BrokerContact" EntityType="Self.BrokerContact" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [BrokerContact].[BrokerContactID] AS [BrokerContactID], 
+    [BrokerContact].[BrokerID] AS [BrokerID], 
+    [BrokerContact].[ContactType] AS [ContactType], 
+    [BrokerContact].[Salutation] AS [Salutation], 
+    [BrokerContact].[FirstName] AS [FirstName], 
+    [BrokerContact].[MiddleInitial] AS [MiddleInitial], 
+    [BrokerContact].[LastName] AS [LastName], 
+    [BrokerContact].[Email] AS [Email], 
+    [BrokerContact].[Title] AS [Title], 
+    [BrokerContact].[Department] AS [Department], 
+    [BrokerContact].[Phone] AS [Phone], 
+    [BrokerContact].[PhoneExtension] AS [PhoneExtension], 
+    [BrokerContact].[Phone2] AS [Phone2], 
+    [BrokerContact].[Phone2Extension] AS [Phone2Extension], 
+    [BrokerContact].[Fax] AS [Fax], 
+    [BrokerContact].[Address1] AS [Address1], 
+    [BrokerContact].[Address2] AS [Address2], 
+    [BrokerContact].[City] AS [City], 
+    [BrokerContact].[State] AS [State], 
+    [BrokerContact].[PostalCode] AS [PostalCode], 
+    [BrokerContact].[Country] AS [Country], 
+    [BrokerContact].[Active] AS [Active], 
+    [BrokerContact].[LoginStatus] AS [LoginStatus], 
+    [BrokerContact].[RegistrationCode] AS [RegistrationCode], 
+    [BrokerContact].[RegistrationDate] AS [RegistrationDate], 
+    [BrokerContact].[UserDisplayName] AS [UserDisplayName], 
+    [BrokerContact].[AllowSSO] AS [AllowSSO], 
+    [BrokerContact].[SSOIdentifier] AS [SSOIdentifier]
+    FROM [dbo].[BrokerContact] AS [BrokerContact]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Carrier" EntityType="Self.Carrier" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Carrier].[CarrierID] AS [CarrierID], 
+    [Carrier].[CarrierName] AS [CarrierName], 
+    [Carrier].[Address1] AS [Address1], 
+    [Carrier].[Address2] AS [Address2], 
+    [Carrier].[City] AS [City], 
+    [Carrier].[State] AS [State], 
+    [Carrier].[PostalCode] AS [PostalCode], 
+    [Carrier].[Country] AS [Country], 
+    [Carrier].[Phone] AS [Phone], 
+    [Carrier].[CarrierFax] AS [CarrierFax]
+    FROM [dbo].[Carrier] AS [Carrier]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="CarrierContact" EntityType="Self.CarrierContact" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CarrierContact].[CarrierContactID] AS [CarrierContactID], 
+    [CarrierContact].[CarrierID] AS [CarrierID], 
+    [CarrierContact].[ContactType] AS [ContactType], 
+    [CarrierContact].[Salutation] AS [Salutation], 
+    [CarrierContact].[FirstName] AS [FirstName], 
+    [CarrierContact].[LastName] AS [LastName], 
+    [CarrierContact].[Email] AS [Email], 
+    [CarrierContact].[Title] AS [Title], 
+    [CarrierContact].[Department] AS [Department], 
+    [CarrierContact].[Phone] AS [Phone], 
+    [CarrierContact].[PhoneExtension] AS [PhoneExtension], 
+    [CarrierContact].[Phone2] AS [Phone2], 
+    [CarrierContact].[Phone2Extension] AS [Phone2Extension], 
+    [CarrierContact].[Fax] AS [Fax], 
+    [CarrierContact].[Address1] AS [Address1], 
+    [CarrierContact].[Address2] AS [Address2], 
+    [CarrierContact].[City] AS [City], 
+    [CarrierContact].[State] AS [State], 
+    [CarrierContact].[PostalCode] AS [PostalCode], 
+    [CarrierContact].[Country] AS [Country], 
+    [CarrierContact].[WebLink] AS [WebLink], 
+    [CarrierContact].[Active] AS [Active]
+    FROM [dbo].[CarrierContact] AS [CarrierContact]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Client" EntityType="Self.Client" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Client].[ClientID] AS [ClientID], 
+    [Client].[ClientName] AS [ClientName], 
+    [Client].[ClientGroupID] AS [ClientGroupID], 
+    [Client].[DBAName] AS [DBAName], 
+    [Client].[EIN] AS [EIN], 
+    [Client].[Address1] AS [Address1], 
+    [Client].[Address2] AS [Address2], 
+    [Client].[City] AS [City], 
+    [Client].[State] AS [State], 
+    [Client].[PostalCode] AS [PostalCode], 
+    [Client].[Country] AS [Country], 
+    [Client].[Phone] AS [Phone], 
+    [Client].[Fax] AS [Fax], 
+    [Client].[BillingStartDate] AS [BillingStartDate], 
+    [Client].[SendHIPAACertWithQBSRandQBTermination] AS [SendHIPAACertWithQBSRandQBTermination], 
+    [Client].[SendHIPAACertWithWelcomeLetter] AS [SendHIPAACertWithWelcomeLetter], 
+    [Client].[AllowClientPortalAccess] AS [AllowClientPortalAccess], 
+    [Client].[AutomaticallyCreateQBSubsidyForInsignificantAmount] AS [AutomaticallyCreateQBSubsidyForInsignificantAmount], 
+    [Client].[IgnoreSPMPaymentGracePeriods] AS [IgnoreSPMPaymentGracePeriods], 
+    [Client].[MigratedClient] AS [MigratedClient], 
+    [Client].[ClientPremiumNotice] AS [ClientPremiumNotice], 
+    [Client].[EmployeeCountRange] AS [EmployeeCountRange], 
+    [Client].[WeeklyBillingFirstDayOfWeek] AS [WeeklyBillingFirstDayOfWeek], 
+    [Client].[ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize] AS [ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize], 
+    [Client].[ClientAllowsAEI2009PlanEnrollmentOptions] AS [ClientAllowsAEI2009PlanEnrollmentOptions], 
+    [Client].[ClientDoesOwnAEI2009SubsidyTakenReportPosting] AS [ClientDoesOwnAEI2009SubsidyTakenReportPosting], 
+    [Client].[ClientAlternate] AS [ClientAlternate], 
+    [Client].[AllowClientSSO] AS [AllowClientSSO], 
+    [Client].[SPMInitialGracePeriodDays] AS [SPMInitialGracePeriodDays], 
+    [Client].[SPMConvenienceFee] AS [SPMConvenienceFee], 
+    [Client].[SPMPartnerConvenienceFee] AS [SPMPartnerConvenienceFee], 
+    [Client].[QBConvenienceFee] AS [QBConvenienceFee], 
+    [Client].[QBPartnerConvenienceFee] AS [QBPartnerConvenienceFee]
+    FROM [dbo].[Client] AS [Client]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="ClientContact" EntityType="Self.ClientContact" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ClientContact].[ClientContactID] AS [ClientContactID], 
+    [ClientContact].[ClientID] AS [ClientID], 
+    [ClientContact].[ContactType] AS [ContactType], 
+    [ClientContact].[Salutation] AS [Salutation], 
+    [ClientContact].[FirstName] AS [FirstName], 
+    [ClientContact].[MiddleInitial] AS [MiddleInitial], 
+    [ClientContact].[LastName] AS [LastName], 
+    [ClientContact].[Email] AS [Email], 
+    [ClientContact].[Title] AS [Title], 
+    [ClientContact].[Department] AS [Department], 
+    [ClientContact].[Phone] AS [Phone], 
+    [ClientContact].[PhoneExtension] AS [PhoneExtension], 
+    [ClientContact].[Phone2] AS [Phone2], 
+    [ClientContact].[Phone2Extension] AS [Phone2Extension], 
+    [ClientContact].[Fax] AS [Fax], 
+    [ClientContact].[Address1] AS [Address1], 
+    [ClientContact].[Address2] AS [Address2], 
+    [ClientContact].[City] AS [City], 
+    [ClientContact].[State] AS [State], 
+    [ClientContact].[PostalCode] AS [PostalCode], 
+    [ClientContact].[Country] AS [Country], 
+    [ClientContact].[Active] AS [Active], 
+    [ClientContact].[LoginStatus] AS [LoginStatus], 
+    [ClientContact].[RegistrationCode] AS [RegistrationCode], 
+    [ClientContact].[RegistrationDate] AS [RegistrationDate], 
+    [ClientContact].[AllowSSO] AS [AllowSSO], 
+    [ClientContact].[SSOIdentifier] AS [SSOIdentifier]
+    FROM [dbo].[ClientContact] AS [ClientContact]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="ClientDivision" EntityType="Self.ClientDivision" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ClientDivision].[ClientDivisionID] AS [ClientDivisionID], 
+    [ClientDivision].[ClientID] AS [ClientID], 
+    [ClientDivision].[DivisionName] AS [DivisionName], 
+    [ClientDivision].[Address1] AS [Address1], 
+    [ClientDivision].[Address2] AS [Address2], 
+    [ClientDivision].[City] AS [City], 
+    [ClientDivision].[State] AS [State], 
+    [ClientDivision].[PostalCode] AS [PostalCode], 
+    [ClientDivision].[Country] AS [Country], 
+    [ClientDivision].[Phone] AS [Phone], 
+    [ClientDivision].[Fax] AS [Fax], 
+    [ClientDivision].[ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting] AS [ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting], 
+    [ClientDivision].[SendHIPAACertWithSPMWelcomeAndTerminationLetters] AS [SendHIPAACertWithSPMWelcomeAndTerminationLetters], 
+    [ClientDivision].[AllowClientDivisionSSO] AS [AllowClientDivisionSSO], 
+    [ClientDivision].[Active] AS [Active]
+    FROM [dbo].[ClientDivision] AS [ClientDivision]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="ClientDivisionContact" EntityType="Self.ClientDivisionContact" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ClientDivisionContact].[ClientDivisionContactID] AS [ClientDivisionContactID], 
+    [ClientDivisionContact].[ClientDivisionID] AS [ClientDivisionID], 
+    [ClientDivisionContact].[ContactType] AS [ContactType], 
+    [ClientDivisionContact].[Salutation] AS [Salutation], 
+    [ClientDivisionContact].[FirstName] AS [FirstName], 
+    [ClientDivisionContact].[LastName] AS [LastName], 
+    [ClientDivisionContact].[Email] AS [Email], 
+    [ClientDivisionContact].[Title] AS [Title], 
+    [ClientDivisionContact].[Department] AS [Department], 
+    [ClientDivisionContact].[Phone] AS [Phone], 
+    [ClientDivisionContact].[PhoneExtension] AS [PhoneExtension], 
+    [ClientDivisionContact].[Phone2] AS [Phone2], 
+    [ClientDivisionContact].[Phone2Extension] AS [Phone2Extension], 
+    [ClientDivisionContact].[Fax] AS [Fax], 
+    [ClientDivisionContact].[Address1] AS [Address1], 
+    [ClientDivisionContact].[Address2] AS [Address2], 
+    [ClientDivisionContact].[City] AS [City], 
+    [ClientDivisionContact].[State] AS [State], 
+    [ClientDivisionContact].[PostalCode] AS [PostalCode], 
+    [ClientDivisionContact].[Country] AS [Country], 
+    [ClientDivisionContact].[Active] AS [Active], 
+    [ClientDivisionContact].[LoginStatus] AS [LoginStatus], 
+    [ClientDivisionContact].[RegistrationCode] AS [RegistrationCode], 
+    [ClientDivisionContact].[RegistrationDate] AS [RegistrationDate], 
+    [ClientDivisionContact].[AllowSSO] AS [AllowSSO], 
+    [ClientDivisionContact].[SSOIdentifier] AS [SSOIdentifier]
+    FROM [dbo].[ClientDivisionContact] AS [ClientDivisionContact]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="NPM" EntityType="Self.NPM" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [NPM].[MemberID] AS [MemberID], 
+    [NPM].[ClientDivisionID] AS [ClientDivisionID], 
+    [NPM].[Active] AS [Active], 
+    [NPM].[DateEntered] AS [DateEntered], 
+    [NPM].[MethodEntered] AS [MethodEntered], 
+    [NPM].[EnteredByUser] AS [EnteredByUser], 
+    [NPM].[Salutation] AS [Salutation], 
+    [NPM].[FirstName] AS [FirstName], 
+    [NPM].[MiddleInitial] AS [MiddleInitial], 
+    [NPM].[LastName] AS [LastName], 
+    [NPM].[IndividualID] AS [IndividualID], 
+    [NPM].[Email] AS [Email], 
+    [NPM].[Phone] AS [Phone], 
+    [NPM].[Phone2] AS [Phone2], 
+    [NPM].[Address1] AS [Address1], 
+    [NPM].[Address2] AS [Address2], 
+    [NPM].[City] AS [City], 
+    [NPM].[State] AS [State], 
+    [NPM].[PostalCode] AS [PostalCode], 
+    [NPM].[Country] AS [Country], 
+    [NPM].[UsesAndFamily] AS [UsesAndFamily], 
+    [NPM].[HasBecomeAQB] AS [HasBecomeAQB], 
+    [NPM].[HasWaivedAllCoverage] AS [HasWaivedAllCoverage], 
+    [NPM].[HireDate] AS [HireDate], 
+    [NPM].[IsGRLetterSent] AS [IsGRLetterSent], 
+    [NPM].[EnteredDateTime] AS [EnteredDateTime], 
+    [NPM].[LastModifiedDate] AS [LastModifiedDate], 
+    [NPM].[SSN] AS [SSN]
+    FROM [dbo].[NPM] AS [NPM]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="QB" EntityType="Self.QB" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [QB].[MemberID] AS [MemberID], 
+    [QB].[ClientID] AS [ClientID], 
+    [QB].[ClientDivisionID] AS [ClientDivisionID], 
+    [QB].[FirstName] AS [FirstName], 
+    [QB].[MiddleInitial] AS [MiddleInitial], 
+    [QB].[LastName] AS [LastName], 
+    [QB].[Salutation] AS [Salutation], 
+    [QB].[SSN] AS [SSN], 
+    [QB].[IndividualIdentifier] AS [IndividualIdentifier], 
+    [QB].[Email] AS [Email], 
+    [QB].[Phone] AS [Phone], 
+    [QB].[Phone2] AS [Phone2], 
+    [QB].[Address1] AS [Address1], 
+    [QB].[Address2] AS [Address2], 
+    [QB].[City] AS [City], 
+    [QB].[State] AS [State], 
+    [QB].[PostalCode] AS [PostalCode], 
+    [QB].[Country] AS [Country], 
+    [QB].[Gender] AS [Gender], 
+    [QB].[DOB] AS [DOB], 
+    [QB].[TobaccoUse] AS [TobaccoUse], 
+    [QB].[EmployeeType] AS [EmployeeType], 
+    [QB].[PayrollType] AS [PayrollType], 
+    [QB].[YearsOfService] AS [YearsOfService], 
+    [QB].[PremiumCouponType] AS [PremiumCouponType], 
+    [QB].[UsesHCTC] AS [UsesHCTC], 
+    [QB].[Active] AS [Active], 
+    [QB].[EnteredDateTime] AS [EnteredDateTime], 
+    [QB].[EnteredByUser] AS [EnteredByUser], 
+    [QB].[MethodEntered] AS [MethodEntered], 
+    [QB].[PaidThroughDate] AS [PaidThroughDate], 
+    [QB].[OnlineElectionProcessedDate] AS [OnlineElectionProcessedDate], 
+    [QB].[BenefitGroup] AS [BenefitGroup], 
+    [QB].[AccountStructure] AS [AccountStructure], 
+    [QB].[ClientCustomData] AS [ClientCustomData], 
+    [QB].[AllowSSO] AS [AllowSSO], 
+    [QB].[SSOIdentifier] AS [SSOIdentifier], 
+    [QB].[LastModifiedDate] AS [LastModifiedDate], 
+    [QB].[PlanCategory] AS [PlanCategory]
+    FROM [dbo].[QB] AS [QB]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="QBEvent" EntityType="Self.QBEvent" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [QBEvent].[QBEventID] AS [QBEventID], 
+    [QBEvent].[MemberID] AS [MemberID], 
+    [QBEvent].[Category] AS [Category], 
+    [QBEvent].[EventType] AS [EventType], 
+    [QBEvent].[EventDate] AS [EventDate], 
+    [QBEvent].[OriginalEnrollmentDate] AS [OriginalEnrollmentDate], 
+    [QBEvent].[EmployeeNameIfDependentEvent] AS [EmployeeNameIfDependentEvent], 
+    [QBEvent].[EmployeeSSNIfDependentEvent] AS [EmployeeSSNIfDependentEvent], 
+    [QBEvent].[IsSecondEvent] AS [IsSecondEvent], 
+    [QBEvent].[OriginalFDOC] AS [OriginalFDOC], 
+    [QBEvent].[AEIStatus] AS [AEIStatus], 
+    [QBEvent].[NewQBInvoluntaryTermFollowingReductionInHours] AS [NewQBInvoluntaryTermFollowingReductionInHours], 
+    [QBEvent].[QEDateofRIH] AS [QEDateofRIH], 
+    [QBEvent].[LatestElectionPMD] AS [LatestElectionPMD]
+    FROM [dbo].[QBEvent] AS [QBEvent]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="QBPlan" EntityType="Self.QBPlan" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [QBPlan].[QBPlanID] AS [QBPlanID], 
+    [QBPlan].[MemberID] AS [MemberID], 
+    [QBPlan].[InsuranceType] AS [InsuranceType], 
+    [QBPlan].[FDOC] AS [FDOC], 
+    [QBPlan].[LDOC] AS [LDOC], 
+    [QBPlan].[MonthsOfCOBRA] AS [MonthsOfCOBRA], 
+    [QBPlan].[DaysToElect] AS [DaysToElect], 
+    [QBPlan].[InitialPaymentGracePeriod] AS [InitialPaymentGracePeriod], 
+    [QBPlan].[SubsequentPaymentGracePeriod] AS [SubsequentPaymentGracePeriod], 
+    [QBPlan].[Status] AS [Status], 
+    [QBPlan].[StatusDate] AS [StatusDate], 
+    [QBPlan].[ElectionPostMarkDate] AS [ElectionPostMarkDate], 
+    [QBPlan].[TerminationDate] AS [TerminationDate], 
+    [QBPlan].[PlanName] AS [PlanName], 
+    [QBPlan].[StartDate] AS [StartDate], 
+    [QBPlan].[EndDate] AS [EndDate], 
+    [QBPlan].[CarrierPlanIdentification] AS [CarrierPlanIdentification], 
+    [QBPlan].[CoverageLevel] AS [CoverageLevel], 
+    [QBPlan].[BundleName] AS [BundleName], 
+    [QBPlan].[IsElected] AS [IsElected], 
+    [QBPlan].[ClientPlanQBID] AS [ClientPlanQBID], 
+    [QBPlan].[NumberOfUnits] AS [NumberOfUnits]
+    FROM [dbo].[QBPlan] AS [QBPlan]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="SPM" EntityType="Self.SPM" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [SPM].[MemberID] AS [MemberID], 
+    [SPM].[ClientDivisionID] AS [ClientDivisionID], 
+    [SPM].[Active] AS [Active], 
+    [SPM].[EnteredDateTime] AS [EnteredDateTime], 
+    [SPM].[EnteredByUser] AS [EnteredByUser], 
+    [SPM].[ClientID] AS [ClientID], 
+    [SPM].[Salutation] AS [Salutation], 
+    [SPM].[FirstName] AS [FirstName], 
+    [SPM].[MiddleInitial] AS [MiddleInitial], 
+    [SPM].[LastName] AS [LastName], 
+    [SPM].[IndividualID] AS [IndividualID], 
+    [SPM].[Email] AS [Email], 
+    [SPM].[Phone] AS [Phone], 
+    [SPM].[Phone2] AS [Phone2], 
+    [SPM].[Address1] AS [Address1], 
+    [SPM].[Address2] AS [Address2], 
+    [SPM].[City] AS [City], 
+    [SPM].[State] AS [State], 
+    [SPM].[PostalCode] AS [PostalCode], 
+    [SPM].[Country] AS [Country], 
+    [SPM].[Gender] AS [Gender], 
+    [SPM].[DOB] AS [DOB], 
+    [SPM].[TobaccoUse] AS [TobaccoUse], 
+    [SPM].[EmployeeType] AS [EmployeeType], 
+    [SPM].[PayrollType] AS [PayrollType], 
+    [SPM].[YearsOfService] AS [YearsOfService], 
+    [SPM].[PremiumCouponType] AS [PremiumCouponType], 
+    [SPM].[CurrentlyHasCOBRARights] AS [CurrentlyHasCOBRARights], 
+    [SPM].[WillHaveCOBRARightsOnTermination] AS [WillHaveCOBRARightsOnTermination], 
+    [SPM].[BillingStartDate] AS [BillingStartDate], 
+    [SPM].[BillingEndDate] AS [BillingEndDate], 
+    [SPM].[BillingFrequency] AS [BillingFrequency], 
+    [SPM].[BillingType] AS [BillingType], 
+    [SPM].[IsSPMLegacy] AS [IsSPMLegacy], 
+    [SPM].[Migrated] AS [Migrated], 
+    [SPM].[HIPAAEnrollmentDate] AS [HIPAAEnrollmentDate], 
+    [SPM].[GracePeriodNumberOfDays] AS [GracePeriodNumberOfDays], 
+    [SPM].[MethodEntered] AS [MethodEntered], 
+    [SPM].[PaidThroughDate] AS [PaidThroughDate], 
+    [SPM].[BenefitGroup] AS [BenefitGroup], 
+    [SPM].[AccountStructure] AS [AccountStructure], 
+    [SPM].[ClientCustomData] AS [ClientCustomData], 
+    [SPM].[AllowSSO] AS [AllowSSO], 
+    [SPM].[SSOIdentifier] AS [SSOIdentifier], 
+    [SPM].[LastModifiedDate] AS [LastModifiedDate], 
+    [SPM].[PlanCategory] AS [PlanCategory], 
+    [SPM].[InitialGracePeriodDate] AS [InitialGracePeriodDate], 
+    [SPM].[InitialGracePeriodDays] AS [InitialGracePeriodDays], 
+    [SPM].[SPMInitialGracePeriodOptionType] AS [SPMInitialGracePeriodOptionType], 
+    [SPM].[SSN] AS [SSN]
+    FROM [dbo].[SPM] AS [SPM]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="SPMAccess" EntityType="Self.SPMAccess" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [SPMAccess].[MemberID] AS [MemberID], 
+    [SPMAccess].[AccessUser] AS [AccessUser]
+    FROM [dbo].[SPMAccess] AS [SPMAccess]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="COBRApoint" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="db_error_log">
+          <Key>
+            <PropertyRef Name="log_id" />
+          </Key>
+          <Property Name="log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="sql_state" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="err_no" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="err_source" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="err_msg" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="created_by" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="db_message_log">
+          <Key>
+            <PropertyRef Name="log_id" />
+          </Key>
+          <Property Name="log_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="log_level" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="log_source" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="log_msg" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="created_by" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="QBAEI_ClientList_csv">
+          <Key>
+            <PropertyRef Name="clientID" />
+            <PropertyRef Name="ClientName" />
+          </Key>
+          <Property Name="clientID" Type="Int32" Nullable="false" />
+          <Property Name="ClientName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ClientAlternate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="AdminTPAUser">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="UserName" />
+          </Key>
+          <Property Name="UserID" Type="Guid" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AdminUser">
+          <Key>
+            <PropertyRef Name="User" />
+            <PropertyRef Name="UserName" />
+            <PropertyRef Name="UserEmailAddress" />
+          </Key>
+          <Property Name="User" Type="Guid" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserEmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Active" Type="Int32" />
+        </EntityType>
+        <EntityType Name="AllSSOUser">
+          <Key>
+            <PropertyRef Name="orderseq" />
+            <PropertyRef Name="entitytype" />
+          </Key>
+          <Property Name="orderseq" Type="Int32" Nullable="false" />
+          <Property Name="entitytype" Type="String" MaxLength="14" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="memberid" Type="Int32" />
+          <Property Name="brokerid" Type="Int32" />
+          <Property Name="clientcontactid" Type="Int32" />
+          <Property Name="clientid" Type="Int32" />
+          <Property Name="clientdivisionid" Type="Int32" />
+          <Property Name="organizationname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="organizationisactive" Type="Int32" />
+          <Property Name="divisionname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="individualidentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="contacttype" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="salutation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="lastname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="phone2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="state" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="postalcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="active" Type="Int32" />
+          <Property Name="loginstatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="registrationcode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="registrationdate" Type="DateTime" Precision="3" />
+          <Property Name="userdisplayname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="allowsso" Type="Int32" />
+          <Property Name="ssoidentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="userid" Type="String" MaxLength="36" FixedLength="false" Unicode="true" />
+          <Property Name="ssn" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="employeeid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="dob" Type="DateTime" Precision="0" />
+          <Property Name="employerid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="QualEventDate" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="Broker">
+          <Key>
+            <PropertyRef Name="BrokerID" />
+            <PropertyRef Name="BrokerName" />
+          </Key>
+          <Property Name="BrokerID" Type="Int32" Nullable="false" />
+          <Property Name="BrokerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DBAName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="EIN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AllowBrokerPortalAccess" Type="Int32" />
+          <Property Name="Active" Type="Int32" />
+          <Property Name="AllowBrokerSSO" Type="Int32" />
+        </EntityType>
+        <EntityType Name="BrokerClient">
+          <Key>
+            <PropertyRef Name="BrokerClientID" />
+            <PropertyRef Name="BrokerID" />
+            <PropertyRef Name="ClientID" />
+          </Key>
+          <Property Name="BrokerClientID" Type="Int32" Nullable="false" />
+          <Property Name="BrokerID" Type="Int32" Nullable="false" />
+          <Property Name="ClientID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BrokerContact">
+          <Key>
+            <PropertyRef Name="BrokerContactID" />
+            <PropertyRef Name="BrokerID" />
+            <PropertyRef Name="ContactType" />
+          </Key>
+          <Property Name="BrokerContactID" Type="Int32" Nullable="false" />
+          <Property Name="BrokerID" Type="Int32" Nullable="false" />
+          <Property Name="ContactType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Salutation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneExtension" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone2Extension" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Int32" />
+          <Property Name="LoginStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RegistrationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RegistrationDate" Type="DateTime" Precision="0" />
+          <Property Name="UserDisplayName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AllowSSO" Type="Int32" />
+          <Property Name="SSOIdentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Carrier">
+          <Key>
+            <PropertyRef Name="CarrierID" />
+            <PropertyRef Name="CarrierName" />
+          </Key>
+          <Property Name="CarrierID" Type="Int32" Nullable="false" />
+          <Property Name="CarrierName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CarrierFax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="CarrierContact">
+          <Key>
+            <PropertyRef Name="CarrierContactID" />
+            <PropertyRef Name="CarrierID" />
+            <PropertyRef Name="ContactType" />
+          </Key>
+          <Property Name="CarrierContactID" Type="Int32" Nullable="false" />
+          <Property Name="CarrierID" Type="Int32" Nullable="false" />
+          <Property Name="ContactType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Salutation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneExtension" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone2Extension" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="WebLink" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Client">
+          <Key>
+            <PropertyRef Name="ClientID" />
+            <PropertyRef Name="ClientName" />
+            <PropertyRef Name="ClientGroupID" />
+          </Key>
+          <Property Name="ClientID" Type="Int32" Nullable="false" />
+          <Property Name="ClientName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ClientGroupID" Type="Int32" Nullable="false" />
+          <Property Name="DBAName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="EIN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BillingStartDate" Type="DateTime" Precision="0" />
+          <Property Name="SendHIPAACertWithQBSRandQBTermination" Type="Int32" />
+          <Property Name="SendHIPAACertWithWelcomeLetter" Type="Int32" />
+          <Property Name="AllowClientPortalAccess" Type="Int32" />
+          <Property Name="AutomaticallyCreateQBSubsidyForInsignificantAmount" Type="Int32" />
+          <Property Name="IgnoreSPMPaymentGracePeriods" Type="Int32" />
+          <Property Name="MigratedClient" Type="Boolean" />
+          <Property Name="ClientPremiumNotice" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeCountRange" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="WeeklyBillingFirstDayOfWeek" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize" Type="Boolean" />
+          <Property Name="ClientAllowsAEI2009PlanEnrollmentOptions" Type="Boolean" />
+          <Property Name="ClientDoesOwnAEI2009SubsidyTakenReportPosting" Type="Boolean" />
+          <Property Name="ClientAlternate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AllowClientSSO" Type="Int32" />
+          <Property Name="SPMInitialGracePeriodDays" Type="Int32" />
+          <Property Name="SPMConvenienceFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="SPMPartnerConvenienceFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="QBConvenienceFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="QBPartnerConvenienceFee" Type="Decimal" Precision="19" Scale="4" />
+        </EntityType>
+        <EntityType Name="ClientContact">
+          <Key>
+            <PropertyRef Name="ClientContactID" />
+            <PropertyRef Name="ClientID" />
+            <PropertyRef Name="ContactType" />
+          </Key>
+          <Property Name="ClientContactID" Type="Int32" Nullable="false" />
+          <Property Name="ClientID" Type="Int32" Nullable="false" />
+          <Property Name="ContactType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Salutation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneExtension" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone2Extension" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Int32" />
+          <Property Name="LoginStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RegistrationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RegistrationDate" Type="DateTime" Precision="0" />
+          <Property Name="AllowSSO" Type="Int32" />
+          <Property Name="SSOIdentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ClientDivision">
+          <Key>
+            <PropertyRef Name="ClientDivisionID" />
+            <PropertyRef Name="ClientID" />
+            <PropertyRef Name="DivisionName" />
+          </Key>
+          <Property Name="ClientDivisionID" Type="Int32" Nullable="false" />
+          <Property Name="ClientID" Type="Int32" Nullable="false" />
+          <Property Name="DivisionName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting" Type="Int32" />
+          <Property Name="SendHIPAACertWithSPMWelcomeAndTerminationLetters" Type="Int32" />
+          <Property Name="AllowClientDivisionSSO" Type="Int32" />
+          <Property Name="Active" Type="Int32" />
+        </EntityType>
+        <EntityType Name="ClientDivisionContact">
+          <Key>
+            <PropertyRef Name="ClientDivisionContactID" />
+            <PropertyRef Name="ClientDivisionID" />
+            <PropertyRef Name="ContactType" />
+          </Key>
+          <Property Name="ClientDivisionContactID" Type="Int32" Nullable="false" />
+          <Property Name="ClientDivisionID" Type="Int32" Nullable="false" />
+          <Property Name="ContactType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Salutation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Department" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneExtension" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone2Extension" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Active" Type="Int32" />
+          <Property Name="LoginStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RegistrationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RegistrationDate" Type="DateTime" Precision="3" />
+          <Property Name="AllowSSO" Type="Int32" />
+          <Property Name="SSOIdentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="NPM">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="ClientDivisionID" />
+            <PropertyRef Name="DateEntered" />
+          </Key>
+          <Property Name="MemberID" Type="Int32" Nullable="false" />
+          <Property Name="ClientDivisionID" Type="Int32" Nullable="false" />
+          <Property Name="Active" Type="Int32" />
+          <Property Name="DateEntered" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="MethodEntered" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EnteredByUser" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Salutation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IndividualID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UsesAndFamily" Type="Int32" />
+          <Property Name="HasBecomeAQB" Type="Int32" />
+          <Property Name="HasWaivedAllCoverage" Type="Int32" />
+          <Property Name="HireDate" Type="String" MaxLength="19" FixedLength="false" Unicode="true" />
+          <Property Name="IsGRLetterSent" Type="Int32" />
+          <Property Name="EnteredDateTime" Type="String" MaxLength="19" FixedLength="false" Unicode="true" />
+          <Property Name="LastModifiedDate" Type="String" MaxLength="19" FixedLength="false" Unicode="true" />
+          <Property Name="SSN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="QB">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="ClientID" />
+            <PropertyRef Name="ClientDivisionID" />
+            <PropertyRef Name="UsesHCTC" />
+            <PropertyRef Name="Active" />
+          </Key>
+          <Property Name="MemberID" Type="Int32" Nullable="false" />
+          <Property Name="ClientID" Type="Int32" Nullable="false" />
+          <Property Name="ClientDivisionID" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Salutation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SSN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IndividualIdentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="TobaccoUse" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PayrollType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="YearsOfService" Type="Int32" />
+          <Property Name="PremiumCouponType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="UsesHCTC" Type="Boolean" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="EnteredDateTime" Type="DateTime" Precision="3" />
+          <Property Name="EnteredByUser" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MethodEntered" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PaidThroughDate" Type="DateTime" Precision="0" />
+          <Property Name="OnlineElectionProcessedDate" Type="DateTime" Precision="3" />
+          <Property Name="BenefitGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AccountStructure" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ClientCustomData" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AllowSSO" Type="Boolean" />
+          <Property Name="SSOIdentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="PlanCategory" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="QBEvent">
+          <Key>
+            <PropertyRef Name="QBEventID" />
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="EventType" />
+            <PropertyRef Name="EventDate" />
+            <PropertyRef Name="OriginalEnrollmentDate" />
+            <PropertyRef Name="IsSecondEvent" />
+          </Key>
+          <Property Name="QBEventID" Type="Int32" Nullable="false" />
+          <Property Name="MemberID" Type="Int32" Nullable="false" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EventType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EventDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="OriginalEnrollmentDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EmployeeNameIfDependentEvent" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeSSNIfDependentEvent" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsSecondEvent" Type="Boolean" Nullable="false" />
+          <Property Name="OriginalFDOC" Type="DateTime" Precision="0" />
+          <Property Name="AEIStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NewQBInvoluntaryTermFollowingReductionInHours" Type="Boolean" />
+          <Property Name="QEDateofRIH" Type="DateTime" Precision="0" />
+          <Property Name="LatestElectionPMD" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="QBPlan">
+          <Key>
+            <PropertyRef Name="QBPlanID" />
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="InsuranceType" />
+            <PropertyRef Name="ClientPlanQBID" />
+          </Key>
+          <Property Name="QBPlanID" Type="Int32" Nullable="false" />
+          <Property Name="MemberID" Type="Int32" Nullable="false" />
+          <Property Name="InsuranceType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="FDOC" Type="DateTime" Precision="0" />
+          <Property Name="LDOC" Type="DateTime" Precision="0" />
+          <Property Name="MonthsOfCOBRA" Type="Int32" />
+          <Property Name="DaysToElect" Type="Int32" />
+          <Property Name="InitialPaymentGracePeriod" Type="Int32" />
+          <Property Name="SubsequentPaymentGracePeriod" Type="Int32" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StatusDate" Type="DateTime" Precision="0" />
+          <Property Name="ElectionPostMarkDate" Type="DateTime" Precision="0" />
+          <Property Name="TerminationDate" Type="DateTime" Precision="0" />
+          <Property Name="PlanName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="CarrierPlanIdentification" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CoverageLevel" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BundleName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsElected" Type="Boolean" />
+          <Property Name="ClientPlanQBID" Type="Int32" Nullable="false" />
+          <Property Name="NumberOfUnits" Type="Decimal" Precision="16" Scale="4" />
+        </EntityType>
+        <EntityType Name="SPM">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="ClientDivisionID" />
+            <PropertyRef Name="ClientID" />
+          </Key>
+          <Property Name="MemberID" Type="Int32" Nullable="false" />
+          <Property Name="ClientDivisionID" Type="Int32" Nullable="false" />
+          <Property Name="Active" Type="Int32" />
+          <Property Name="EnteredDateTime" Type="DateTime" Precision="3" />
+          <Property Name="EnteredByUser" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ClientID" Type="Int32" Nullable="false" />
+          <Property Name="Salutation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IndividualID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="DOB" Type="DateTime" Precision="0" />
+          <Property Name="TobaccoUse" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PayrollType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="YearsOfService" Type="Int32" />
+          <Property Name="PremiumCouponType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CurrentlyHasCOBRARights" Type="Int32" />
+          <Property Name="WillHaveCOBRARightsOnTermination" Type="Int32" />
+          <Property Name="BillingStartDate" Type="String" MaxLength="19" FixedLength="false" Unicode="true" />
+          <Property Name="BillingEndDate" Type="String" MaxLength="19" FixedLength="false" Unicode="true" />
+          <Property Name="BillingFrequency" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BillingType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsSPMLegacy" Type="Int32" />
+          <Property Name="Migrated" Type="Int32" />
+          <Property Name="HIPAAEnrollmentDate" Type="String" MaxLength="19" FixedLength="false" Unicode="true" />
+          <Property Name="GracePeriodNumberOfDays" Type="Int32" />
+          <Property Name="MethodEntered" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PaidThroughDate" Type="String" MaxLength="19" FixedLength="false" Unicode="true" />
+          <Property Name="BenefitGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AccountStructure" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ClientCustomData" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AllowSSO" Type="Int32" />
+          <Property Name="SSOIdentifier" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastModifiedDate" Type="String" MaxLength="19" FixedLength="false" Unicode="true" />
+          <Property Name="PlanCategory" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="InitialGracePeriodDate" Type="String" MaxLength="19" FixedLength="false" Unicode="true" />
+          <Property Name="InitialGracePeriodDays" Type="Int32" />
+          <Property Name="SPMInitialGracePeriodOptionType" Type="String" MaxLength="35" FixedLength="false" Unicode="false" />
+          <Property Name="SSN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="SPMAccess">
+          <Key>
+            <PropertyRef Name="MemberID" />
+            <PropertyRef Name="AccessUser" />
+          </Key>
+          <Property Name="MemberID" Type="Int32" Nullable="false" />
+          <Property Name="AccessUser" Type="Guid" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="COBRApoint_portal_prodEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="db_error_log" EntityType="Self.db_error_log" />
+          <EntitySet Name="db_message_log" EntityType="Self.db_message_log" />
+          <EntitySet Name="QBAEI_ClientList_csv" EntityType="Self.QBAEI_ClientList_csv" />
+          <EntitySet Name="AdminTPAUsers" EntityType="Self.AdminTPAUser" />
+          <EntitySet Name="AdminUsers" EntityType="Self.AdminUser" />
+          <EntitySet Name="AllSSOUsers" EntityType="Self.AllSSOUser" />
+          <EntitySet Name="Brokers" EntityType="Self.Broker" />
+          <EntitySet Name="BrokerClients" EntityType="Self.BrokerClient" />
+          <EntitySet Name="BrokerContacts" EntityType="Self.BrokerContact" />
+          <EntitySet Name="Carriers" EntityType="Self.Carrier" />
+          <EntitySet Name="CarrierContacts" EntityType="Self.CarrierContact" />
+          <EntitySet Name="Clients" EntityType="Self.Client" />
+          <EntitySet Name="ClientContacts" EntityType="Self.ClientContact" />
+          <EntitySet Name="ClientDivisions" EntityType="Self.ClientDivision" />
+          <EntitySet Name="ClientDivisionContacts" EntityType="Self.ClientDivisionContact" />
+          <EntitySet Name="NPMs" EntityType="Self.NPM" />
+          <EntitySet Name="QBs" EntityType="Self.QB" />
+          <EntitySet Name="QBEvents" EntityType="Self.QBEvent" />
+          <EntitySet Name="QBPlans" EntityType="Self.QBPlan" />
+          <EntitySet Name="SPMs" EntityType="Self.SPM" />
+          <EntitySet Name="SPMAccesses" EntityType="Self.SPMAccess" />
+          <FunctionImport Name="COBRA_Update_alert" ReturnType="Collection(String)" />
+          <FunctionImport Name="db_log_error">
+            <Parameter Name="err_no" Mode="In" Type="String" />
+            <Parameter Name="err_source" Mode="In" Type="String" />
+            <Parameter Name="err_msg" Mode="In" Type="String" />
+            <Parameter Name="sqlstate" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="db_log_message">
+            <Parameter Name="msg_source" Mode="In" Type="String" />
+            <Parameter Name="msg" Mode="In" Type="String" />
+            <Parameter Name="log_level" Mode="In" Type="String" />
+            <Parameter Name="recsaffected" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="exp_cp_AllSSOUsers_to_Portal">
+            <Parameter Name="p_only_for_email" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="exp_cp_AllSSOUsers_to_Portal_PRV" />
+          <FunctionImport Name="export_cp_tables_to_portal" />
+          <FunctionImport Name="QBAEI_Create_filesandInsertintoRunLog" />
+          <FunctionImport Name="QBAEI_Create_filesandInsertintoRunLog_notunknown" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="COBRApointStoreContainer" CdmEntityContainer="COBRApoint_portal_prodEntities">
+          <EntitySetMapping Name="db_error_log">
+            <EntityTypeMapping TypeName="COBRApoint.db_error_log">
+              <MappingFragment StoreEntitySet="db_error_log">
+                <ScalarProperty Name="log_id" ColumnName="log_id" />
+                <ScalarProperty Name="sql_state" ColumnName="sql_state" />
+                <ScalarProperty Name="err_no" ColumnName="err_no" />
+                <ScalarProperty Name="err_source" ColumnName="err_source" />
+                <ScalarProperty Name="err_msg" ColumnName="err_msg" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="db_message_log">
+            <EntityTypeMapping TypeName="COBRApoint.db_message_log">
+              <MappingFragment StoreEntitySet="db_message_log">
+                <ScalarProperty Name="log_id" ColumnName="log_id" />
+                <ScalarProperty Name="log_level" ColumnName="log_level" />
+                <ScalarProperty Name="log_source" ColumnName="log_source" />
+                <ScalarProperty Name="log_msg" ColumnName="log_msg" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QBAEI_ClientList_csv">
+            <EntityTypeMapping TypeName="COBRApoint.QBAEI_ClientList_csv">
+              <MappingFragment StoreEntitySet="QBAEI_ClientList_csv">
+                <ScalarProperty Name="clientID" ColumnName="clientID" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="ClientAlternate" ColumnName="ClientAlternate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AdminTPAUsers">
+            <EntityTypeMapping TypeName="COBRApoint.AdminTPAUser">
+              <MappingFragment StoreEntitySet="AdminTPAUser">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AdminUsers">
+            <EntityTypeMapping TypeName="COBRApoint.AdminUser">
+              <MappingFragment StoreEntitySet="AdminUser">
+                <ScalarProperty Name="User" ColumnName="User" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserEmailAddress" ColumnName="UserEmailAddress" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AllSSOUsers">
+            <EntityTypeMapping TypeName="COBRApoint.AllSSOUser">
+              <MappingFragment StoreEntitySet="AllSSOUsers">
+                <ScalarProperty Name="orderseq" ColumnName="orderseq" />
+                <ScalarProperty Name="entitytype" ColumnName="entitytype" />
+                <ScalarProperty Name="memberid" ColumnName="memberid" />
+                <ScalarProperty Name="brokerid" ColumnName="brokerid" />
+                <ScalarProperty Name="clientcontactid" ColumnName="clientcontactid" />
+                <ScalarProperty Name="clientid" ColumnName="clientid" />
+                <ScalarProperty Name="clientdivisionid" ColumnName="clientdivisionid" />
+                <ScalarProperty Name="organizationname" ColumnName="organizationname" />
+                <ScalarProperty Name="organizationisactive" ColumnName="organizationisactive" />
+                <ScalarProperty Name="divisionname" ColumnName="divisionname" />
+                <ScalarProperty Name="individualidentifier" ColumnName="individualidentifier" />
+                <ScalarProperty Name="contacttype" ColumnName="contacttype" />
+                <ScalarProperty Name="salutation" ColumnName="salutation" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="department" ColumnName="department" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="phone2" ColumnName="phone2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="postalcode" ColumnName="postalcode" />
+                <ScalarProperty Name="country" ColumnName="country" />
+                <ScalarProperty Name="active" ColumnName="active" />
+                <ScalarProperty Name="loginstatus" ColumnName="loginstatus" />
+                <ScalarProperty Name="registrationcode" ColumnName="registrationcode" />
+                <ScalarProperty Name="registrationdate" ColumnName="registrationdate" />
+                <ScalarProperty Name="userdisplayname" ColumnName="userdisplayname" />
+                <ScalarProperty Name="allowsso" ColumnName="allowsso" />
+                <ScalarProperty Name="ssoidentifier" ColumnName="ssoidentifier" />
+                <ScalarProperty Name="userid" ColumnName="userid" />
+                <ScalarProperty Name="ssn" ColumnName="ssn" />
+                <ScalarProperty Name="employeeid" ColumnName="employeeid" />
+                <ScalarProperty Name="dob" ColumnName="dob" />
+                <ScalarProperty Name="employerid" ColumnName="employerid" />
+                <ScalarProperty Name="QualEventDate" ColumnName="QualEventDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Brokers">
+            <EntityTypeMapping TypeName="COBRApoint.Broker">
+              <MappingFragment StoreEntitySet="Broker">
+                <ScalarProperty Name="BrokerID" ColumnName="BrokerID" />
+                <ScalarProperty Name="BrokerName" ColumnName="BrokerName" />
+                <ScalarProperty Name="DBAName" ColumnName="DBAName" />
+                <ScalarProperty Name="EIN" ColumnName="EIN" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="AllowBrokerPortalAccess" ColumnName="AllowBrokerPortalAccess" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="AllowBrokerSSO" ColumnName="AllowBrokerSSO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BrokerClients">
+            <EntityTypeMapping TypeName="COBRApoint.BrokerClient">
+              <MappingFragment StoreEntitySet="BrokerClient">
+                <ScalarProperty Name="BrokerClientID" ColumnName="BrokerClientID" />
+                <ScalarProperty Name="BrokerID" ColumnName="BrokerID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BrokerContacts">
+            <EntityTypeMapping TypeName="COBRApoint.BrokerContact">
+              <MappingFragment StoreEntitySet="BrokerContact">
+                <ScalarProperty Name="BrokerContactID" ColumnName="BrokerContactID" />
+                <ScalarProperty Name="BrokerID" ColumnName="BrokerID" />
+                <ScalarProperty Name="ContactType" ColumnName="ContactType" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PhoneExtension" ColumnName="PhoneExtension" />
+                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+                <ScalarProperty Name="Phone2Extension" ColumnName="Phone2Extension" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="LoginStatus" ColumnName="LoginStatus" />
+                <ScalarProperty Name="RegistrationCode" ColumnName="RegistrationCode" />
+                <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+                <ScalarProperty Name="UserDisplayName" ColumnName="UserDisplayName" />
+                <ScalarProperty Name="AllowSSO" ColumnName="AllowSSO" />
+                <ScalarProperty Name="SSOIdentifier" ColumnName="SSOIdentifier" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Carriers">
+            <EntityTypeMapping TypeName="COBRApoint.Carrier">
+              <MappingFragment StoreEntitySet="Carrier">
+                <ScalarProperty Name="CarrierID" ColumnName="CarrierID" />
+                <ScalarProperty Name="CarrierName" ColumnName="CarrierName" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="CarrierFax" ColumnName="CarrierFax" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CarrierContacts">
+            <EntityTypeMapping TypeName="COBRApoint.CarrierContact">
+              <MappingFragment StoreEntitySet="CarrierContact">
+                <ScalarProperty Name="CarrierContactID" ColumnName="CarrierContactID" />
+                <ScalarProperty Name="CarrierID" ColumnName="CarrierID" />
+                <ScalarProperty Name="ContactType" ColumnName="ContactType" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PhoneExtension" ColumnName="PhoneExtension" />
+                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+                <ScalarProperty Name="Phone2Extension" ColumnName="Phone2Extension" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="WebLink" ColumnName="WebLink" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="COBRApoint.Client">
+              <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="ClientGroupID" ColumnName="ClientGroupID" />
+                <ScalarProperty Name="DBAName" ColumnName="DBAName" />
+                <ScalarProperty Name="EIN" ColumnName="EIN" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="BillingStartDate" ColumnName="BillingStartDate" />
+                <ScalarProperty Name="SendHIPAACertWithQBSRandQBTermination" ColumnName="SendHIPAACertWithQBSRandQBTermination" />
+                <ScalarProperty Name="SendHIPAACertWithWelcomeLetter" ColumnName="SendHIPAACertWithWelcomeLetter" />
+                <ScalarProperty Name="AllowClientPortalAccess" ColumnName="AllowClientPortalAccess" />
+                <ScalarProperty Name="AutomaticallyCreateQBSubsidyForInsignificantAmount" ColumnName="AutomaticallyCreateQBSubsidyForInsignificantAmount" />
+                <ScalarProperty Name="IgnoreSPMPaymentGracePeriods" ColumnName="IgnoreSPMPaymentGracePeriods" />
+                <ScalarProperty Name="MigratedClient" ColumnName="MigratedClient" />
+                <ScalarProperty Name="ClientPremiumNotice" ColumnName="ClientPremiumNotice" />
+                <ScalarProperty Name="EmployeeCountRange" ColumnName="EmployeeCountRange" />
+                <ScalarProperty Name="WeeklyBillingFirstDayOfWeek" ColumnName="WeeklyBillingFirstDayOfWeek" />
+                <ScalarProperty Name="ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize" ColumnName="ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize" />
+                <ScalarProperty Name="ClientAllowsAEI2009PlanEnrollmentOptions" ColumnName="ClientAllowsAEI2009PlanEnrollmentOptions" />
+                <ScalarProperty Name="ClientDoesOwnAEI2009SubsidyTakenReportPosting" ColumnName="ClientDoesOwnAEI2009SubsidyTakenReportPosting" />
+                <ScalarProperty Name="ClientAlternate" ColumnName="ClientAlternate" />
+                <ScalarProperty Name="AllowClientSSO" ColumnName="AllowClientSSO" />
+                <ScalarProperty Name="SPMInitialGracePeriodDays" ColumnName="SPMInitialGracePeriodDays" />
+                <ScalarProperty Name="SPMConvenienceFee" ColumnName="SPMConvenienceFee" />
+                <ScalarProperty Name="SPMPartnerConvenienceFee" ColumnName="SPMPartnerConvenienceFee" />
+                <ScalarProperty Name="QBConvenienceFee" ColumnName="QBConvenienceFee" />
+                <ScalarProperty Name="QBPartnerConvenienceFee" ColumnName="QBPartnerConvenienceFee" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClientContacts">
+            <EntityTypeMapping TypeName="COBRApoint.ClientContact">
+              <MappingFragment StoreEntitySet="ClientContact">
+                <ScalarProperty Name="ClientContactID" ColumnName="ClientContactID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="ContactType" ColumnName="ContactType" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PhoneExtension" ColumnName="PhoneExtension" />
+                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+                <ScalarProperty Name="Phone2Extension" ColumnName="Phone2Extension" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="LoginStatus" ColumnName="LoginStatus" />
+                <ScalarProperty Name="RegistrationCode" ColumnName="RegistrationCode" />
+                <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+                <ScalarProperty Name="AllowSSO" ColumnName="AllowSSO" />
+                <ScalarProperty Name="SSOIdentifier" ColumnName="SSOIdentifier" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClientDivisions">
+            <EntityTypeMapping TypeName="COBRApoint.ClientDivision">
+              <MappingFragment StoreEntitySet="ClientDivision">
+                <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="DivisionName" ColumnName="DivisionName" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting" ColumnName="ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting" />
+                <ScalarProperty Name="SendHIPAACertWithSPMWelcomeAndTerminationLetters" ColumnName="SendHIPAACertWithSPMWelcomeAndTerminationLetters" />
+                <ScalarProperty Name="AllowClientDivisionSSO" ColumnName="AllowClientDivisionSSO" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ClientDivisionContacts">
+            <EntityTypeMapping TypeName="COBRApoint.ClientDivisionContact">
+              <MappingFragment StoreEntitySet="ClientDivisionContact">
+                <ScalarProperty Name="ClientDivisionContactID" ColumnName="ClientDivisionContactID" />
+                <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
+                <ScalarProperty Name="ContactType" ColumnName="ContactType" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PhoneExtension" ColumnName="PhoneExtension" />
+                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+                <ScalarProperty Name="Phone2Extension" ColumnName="Phone2Extension" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="LoginStatus" ColumnName="LoginStatus" />
+                <ScalarProperty Name="RegistrationCode" ColumnName="RegistrationCode" />
+                <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+                <ScalarProperty Name="AllowSSO" ColumnName="AllowSSO" />
+                <ScalarProperty Name="SSOIdentifier" ColumnName="SSOIdentifier" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NPMs">
+            <EntityTypeMapping TypeName="COBRApoint.NPM">
+              <MappingFragment StoreEntitySet="NPM">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="DateEntered" ColumnName="DateEntered" />
+                <ScalarProperty Name="MethodEntered" ColumnName="MethodEntered" />
+                <ScalarProperty Name="EnteredByUser" ColumnName="EnteredByUser" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="IndividualID" ColumnName="IndividualID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="UsesAndFamily" ColumnName="UsesAndFamily" />
+                <ScalarProperty Name="HasBecomeAQB" ColumnName="HasBecomeAQB" />
+                <ScalarProperty Name="HasWaivedAllCoverage" ColumnName="HasWaivedAllCoverage" />
+                <ScalarProperty Name="HireDate" ColumnName="HireDate" />
+                <ScalarProperty Name="IsGRLetterSent" ColumnName="IsGRLetterSent" />
+                <ScalarProperty Name="EnteredDateTime" ColumnName="EnteredDateTime" />
+                <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+                <ScalarProperty Name="SSN" ColumnName="SSN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QBs">
+            <EntityTypeMapping TypeName="COBRApoint.QB">
+              <MappingFragment StoreEntitySet="QB">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="SSN" ColumnName="SSN" />
+                <ScalarProperty Name="IndividualIdentifier" ColumnName="IndividualIdentifier" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="TobaccoUse" ColumnName="TobaccoUse" />
+                <ScalarProperty Name="EmployeeType" ColumnName="EmployeeType" />
+                <ScalarProperty Name="PayrollType" ColumnName="PayrollType" />
+                <ScalarProperty Name="YearsOfService" ColumnName="YearsOfService" />
+                <ScalarProperty Name="PremiumCouponType" ColumnName="PremiumCouponType" />
+                <ScalarProperty Name="UsesHCTC" ColumnName="UsesHCTC" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="EnteredDateTime" ColumnName="EnteredDateTime" />
+                <ScalarProperty Name="EnteredByUser" ColumnName="EnteredByUser" />
+                <ScalarProperty Name="MethodEntered" ColumnName="MethodEntered" />
+                <ScalarProperty Name="PaidThroughDate" ColumnName="PaidThroughDate" />
+                <ScalarProperty Name="OnlineElectionProcessedDate" ColumnName="OnlineElectionProcessedDate" />
+                <ScalarProperty Name="BenefitGroup" ColumnName="BenefitGroup" />
+                <ScalarProperty Name="AccountStructure" ColumnName="AccountStructure" />
+                <ScalarProperty Name="ClientCustomData" ColumnName="ClientCustomData" />
+                <ScalarProperty Name="AllowSSO" ColumnName="AllowSSO" />
+                <ScalarProperty Name="SSOIdentifier" ColumnName="SSOIdentifier" />
+                <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+                <ScalarProperty Name="PlanCategory" ColumnName="PlanCategory" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QBEvents">
+            <EntityTypeMapping TypeName="COBRApoint.QBEvent">
+              <MappingFragment StoreEntitySet="QBEvent">
+                <ScalarProperty Name="QBEventID" ColumnName="QBEventID" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="EventType" ColumnName="EventType" />
+                <ScalarProperty Name="EventDate" ColumnName="EventDate" />
+                <ScalarProperty Name="OriginalEnrollmentDate" ColumnName="OriginalEnrollmentDate" />
+                <ScalarProperty Name="EmployeeNameIfDependentEvent" ColumnName="EmployeeNameIfDependentEvent" />
+                <ScalarProperty Name="EmployeeSSNIfDependentEvent" ColumnName="EmployeeSSNIfDependentEvent" />
+                <ScalarProperty Name="IsSecondEvent" ColumnName="IsSecondEvent" />
+                <ScalarProperty Name="OriginalFDOC" ColumnName="OriginalFDOC" />
+                <ScalarProperty Name="AEIStatus" ColumnName="AEIStatus" />
+                <ScalarProperty Name="NewQBInvoluntaryTermFollowingReductionInHours" ColumnName="NewQBInvoluntaryTermFollowingReductionInHours" />
+                <ScalarProperty Name="QEDateofRIH" ColumnName="QEDateofRIH" />
+                <ScalarProperty Name="LatestElectionPMD" ColumnName="LatestElectionPMD" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QBPlans">
+            <EntityTypeMapping TypeName="COBRApoint.QBPlan">
+              <MappingFragment StoreEntitySet="QBPlan">
+                <ScalarProperty Name="QBPlanID" ColumnName="QBPlanID" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="InsuranceType" ColumnName="InsuranceType" />
+                <ScalarProperty Name="FDOC" ColumnName="FDOC" />
+                <ScalarProperty Name="LDOC" ColumnName="LDOC" />
+                <ScalarProperty Name="MonthsOfCOBRA" ColumnName="MonthsOfCOBRA" />
+                <ScalarProperty Name="DaysToElect" ColumnName="DaysToElect" />
+                <ScalarProperty Name="InitialPaymentGracePeriod" ColumnName="InitialPaymentGracePeriod" />
+                <ScalarProperty Name="SubsequentPaymentGracePeriod" ColumnName="SubsequentPaymentGracePeriod" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StatusDate" ColumnName="StatusDate" />
+                <ScalarProperty Name="ElectionPostMarkDate" ColumnName="ElectionPostMarkDate" />
+                <ScalarProperty Name="TerminationDate" ColumnName="TerminationDate" />
+                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="CarrierPlanIdentification" ColumnName="CarrierPlanIdentification" />
+                <ScalarProperty Name="CoverageLevel" ColumnName="CoverageLevel" />
+                <ScalarProperty Name="BundleName" ColumnName="BundleName" />
+                <ScalarProperty Name="IsElected" ColumnName="IsElected" />
+                <ScalarProperty Name="ClientPlanQBID" ColumnName="ClientPlanQBID" />
+                <ScalarProperty Name="NumberOfUnits" ColumnName="NumberOfUnits" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SPMs">
+            <EntityTypeMapping TypeName="COBRApoint.SPM">
+              <MappingFragment StoreEntitySet="SPM">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="EnteredDateTime" ColumnName="EnteredDateTime" />
+                <ScalarProperty Name="EnteredByUser" ColumnName="EnteredByUser" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="Salutation" ColumnName="Salutation" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="IndividualID" ColumnName="IndividualID" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Phone2" ColumnName="Phone2" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+                <ScalarProperty Name="TobaccoUse" ColumnName="TobaccoUse" />
+                <ScalarProperty Name="EmployeeType" ColumnName="EmployeeType" />
+                <ScalarProperty Name="PayrollType" ColumnName="PayrollType" />
+                <ScalarProperty Name="YearsOfService" ColumnName="YearsOfService" />
+                <ScalarProperty Name="PremiumCouponType" ColumnName="PremiumCouponType" />
+                <ScalarProperty Name="CurrentlyHasCOBRARights" ColumnName="CurrentlyHasCOBRARights" />
+                <ScalarProperty Name="WillHaveCOBRARightsOnTermination" ColumnName="WillHaveCOBRARightsOnTermination" />
+                <ScalarProperty Name="BillingStartDate" ColumnName="BillingStartDate" />
+                <ScalarProperty Name="BillingEndDate" ColumnName="BillingEndDate" />
+                <ScalarProperty Name="BillingFrequency" ColumnName="BillingFrequency" />
+                <ScalarProperty Name="BillingType" ColumnName="BillingType" />
+                <ScalarProperty Name="IsSPMLegacy" ColumnName="IsSPMLegacy" />
+                <ScalarProperty Name="Migrated" ColumnName="Migrated" />
+                <ScalarProperty Name="HIPAAEnrollmentDate" ColumnName="HIPAAEnrollmentDate" />
+                <ScalarProperty Name="GracePeriodNumberOfDays" ColumnName="GracePeriodNumberOfDays" />
+                <ScalarProperty Name="MethodEntered" ColumnName="MethodEntered" />
+                <ScalarProperty Name="PaidThroughDate" ColumnName="PaidThroughDate" />
+                <ScalarProperty Name="BenefitGroup" ColumnName="BenefitGroup" />
+                <ScalarProperty Name="AccountStructure" ColumnName="AccountStructure" />
+                <ScalarProperty Name="ClientCustomData" ColumnName="ClientCustomData" />
+                <ScalarProperty Name="AllowSSO" ColumnName="AllowSSO" />
+                <ScalarProperty Name="SSOIdentifier" ColumnName="SSOIdentifier" />
+                <ScalarProperty Name="LastModifiedDate" ColumnName="LastModifiedDate" />
+                <ScalarProperty Name="PlanCategory" ColumnName="PlanCategory" />
+                <ScalarProperty Name="InitialGracePeriodDate" ColumnName="InitialGracePeriodDate" />
+                <ScalarProperty Name="InitialGracePeriodDays" ColumnName="InitialGracePeriodDays" />
+                <ScalarProperty Name="SPMInitialGracePeriodOptionType" ColumnName="SPMInitialGracePeriodOptionType" />
+                <ScalarProperty Name="SSN" ColumnName="SSN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SPMAccesses">
+            <EntityTypeMapping TypeName="COBRApoint.SPMAccess">
+              <MappingFragment StoreEntitySet="SPMAccess">
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="AccessUser" ColumnName="AccessUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="COBRA_Update_alert" FunctionName="COBRApoint.Store.COBRA_Update_alert" />
+          <FunctionImportMapping FunctionImportName="db_log_error" FunctionName="COBRApoint.Store.db_log_error" />
+          <FunctionImportMapping FunctionImportName="db_log_message" FunctionName="COBRApoint.Store.db_log_message" />
+          <FunctionImportMapping FunctionImportName="exp_cp_AllSSOUsers_to_Portal" FunctionName="COBRApoint.Store.exp_cp_AllSSOUsers_to_Portal" />
+          <FunctionImportMapping FunctionImportName="exp_cp_AllSSOUsers_to_Portal_PRV" FunctionName="COBRApoint.Store.exp_cp_AllSSOUsers_to_Portal_PRV" />
+          <FunctionImportMapping FunctionImportName="export_cp_tables_to_portal" FunctionName="COBRApoint.Store.export_cp_tables_to_portal" />
+          <FunctionImportMapping FunctionImportName="QBAEI_Create_filesandInsertintoRunLog" FunctionName="COBRApoint.Store.QBAEI_Create_filesandInsertintoRunLog" />
+          <FunctionImportMapping FunctionImportName="QBAEI_Create_filesandInsertintoRunLog_notunknown" FunctionName="COBRApoint.Store.QBAEI_Create_filesandInsertintoRunLog_notunknown" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

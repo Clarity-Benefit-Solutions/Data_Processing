@@ -22,7 +22,7 @@ namespace DataProcessing
     {
         #region CheckCobraFile
 
-        private void CheckCobraFile(EdiFileFormat fileFormat, string currentFilePath)
+        private void CheckCobraFile(string currentFilePath)
         {
             string tableName = "";
             TypedCsvSchema mappings = new TypedCsvSchema();
@@ -34,15 +34,12 @@ namespace DataProcessing
             {
                 return;
             }
-         
-            // get columns for file based on header type
-            mappings = Import.GetAlegeusFileImportMappings(fileFormat, headerType);
 
             //
             tableName = "[dbo].[cobra_file_table_stage]";
             postImportProc = "[dbo].[process_cobra_file_table_stage_import]";
             //
-            Import.ImportCobraFile(DbConn, currentFilePath, OriginalSrcFilePath, this.hasHeaderRow, FileLogParams, null);
+            Import.ImportCobraFile(DbConn, currentFilePath, currentFilePath, this.hasHeaderRow, FileLogParams, null);
 
             //
             // update check type for table
@@ -55,7 +52,7 @@ namespace DataProcessing
             );
 
             // check file data from the table based on mappings
-            CheckCobraFileData(fileFormat, mappings);
+            CheckCobraFileData();
 
             // run post import proc to take data from stage into final table
             string queryString = $"exec {postImportProc};";
@@ -65,34 +62,42 @@ namespace DataProcessing
             );
         }
 
-        private void CheckCobraFileData(EdiFileFormat fileFormat, TypedCsvSchema mappings)
+        private void CheckCobraFileData()
         {
             // ensure previously cached data is not used so
             // so create a new db context to ensure stale data will NOT be used
-            var dbErrorLog = Vars.dbCtxDataProcessingNew;
+            var dbDataProcessing = Vars.dbCtxDataProcessingNew;
 
             // get all dbRows without caching
-            var dataRows = dbErrorLog.mbi_file_table_stage
+            var dataRows = dbDataProcessing.cobra_file_table_stage
                 .OrderBy(dataRow => dataRow.source_row_no)
                 .ToList();
+
+            var versionNo = Import.GetCobraFileVersionNoFromFile(SrcFilePath);
 
             //check each dataRow
             int rowNo = 0;
             foreach (var dataRow in dataRows)
             {
+                // get row format for current lione as file can have multiple row types
+                string rowType = dataRow.row_type;
+
+                // get mappings for event type & version
+                TypedCsvSchema mappings = Import.GetCobraFileImportMappings(rowType, versionNo);
+
                 rowNo++;
-                this.CheckCobraFileData(fileFormat, dataRow, mappings);
+                this.CheckCobraFileData(versionNo, dataRow, mappings);
             }
 
             // save any changes
-            dbErrorLog.SaveChanges();
+            dbDataProcessing.SaveChanges();
         }
 
 
-        private void CheckCobraFileData(EdiFileFormat fileFormat, mbi_file_table_stage dataRow, TypedCsvSchema mappings)
+        private void CheckCobraFileData(string versionNo, cobra_file_table_stage dataRow, TypedCsvSchema mappings)
         {
             // don't check header dataRow
-            if (dataRow.row_type == "IA" || dataRow.row_type == "RA")
+            if (dataRow.row_type == "")
             {
                 return;
             }
@@ -110,7 +115,7 @@ namespace DataProcessing
                     case "error_row":
                     case "data_row":
                     case "res_file_name":
-                    case "mbi_file_name":
+                    case "cobra_file_name":
                     case "row_type":
                     case "check_type":
                         continue;
@@ -137,7 +142,7 @@ namespace DataProcessing
                     case "error_row":
                     case "data_row":
                     case "res_file_name":
-                    case "mbi_file_name":
+                    case "cobra_file_name":
                     case "row_type":
                     case "check_type":
                         continue;
@@ -151,32 +156,32 @@ namespace DataProcessing
                 {
                     // ER ID
                     case "tpaid":
-                        hasError = this.CheckCobraTpaExists(dataRow, column, fileFormat);
+                        hasError = this.CheckCobraTpaExists(dataRow, column, versionNo);
                         break;
 
                     // ER ID
                     case "employerid":
                         //ER must exist before any Import files are sent
-                        hasError = this.CheckCobraEmployerExists(dataRow, column, fileFormat);
+                        hasError = this.CheckCobraEmployerExists(dataRow, column, versionNo);
                         break;
 
                     // EE ID
                     case "employeeid":
                         //ER must exist before any Import files are sent. But for IB files, employee need not exist - he is being added
-                        hasError = this.CheckCobraEmployeeExists(dataRow, column, fileFormat);
+                        hasError = this.CheckCobraEmployeeExists(dataRow, column, versionNo);
 
                         break;
                     // plan related
                     case "planid":
                     case @"accounttypecode":
-                        if (fileFormat == EdiFileFormat.CobraEnrollment)
-                        {
-                            hasError = this.CheckCobraEmployerPlanExists(dataRow, column, fileFormat);
-                        }
-                        else if (fileFormat == EdiFileFormat.CobraEmployeeDeposit)
-                        {
-                            hasError = this.CheckCobraEmployeePlanExists(dataRow, column, fileFormat);
-                        }
+                        //if (versionNo == string.CobraEnrollment)
+                        //{
+                        //    hasError = this.CheckCobraEmployerPlanExists(dataRow, column, versionNo);
+                        //}
+                        //else if (versionNo == string.CobraEmployeeDeposit)
+                        //{
+                        //    hasError = this.CheckCobraEmployeePlanExists(dataRow, column, versionNo);
+                        //}
 
                         break;
 
@@ -185,10 +190,10 @@ namespace DataProcessing
                 }
             }
             // check for duplicate posting of the row
-            hasError = CheckForDuplicateCobraPosting(dataRow, fileFormat);
+            hasError = CheckForDuplicateCobraPosting(dataRow, versionNo);
         }
 
-        private void AddCobraErrorForRow(mbi_file_table_stage dataRow, string errCode, string errMessage,
+        private void AddCobraErrorForRow(cobra_file_table_stage dataRow, string errCode, string errMessage,
             Boolean markAsCompleteFail = false)
         {
             // add to dataRow so it will be saved back to DB for dataRow by dataRow data
@@ -240,39 +245,39 @@ namespace DataProcessing
         }
 
 
-        public Boolean CheckCobraTpaExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
+        public Boolean CheckCobraTpaExists(cobra_file_table_stage dataRow, TypedCsvColumn column, string versionNo)
         {
             var errorMessage = "";
-            var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{dataRow.TpaId}";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                errorMessage = _cache.Get(cacheKey)?.ToString();
-            }
-            else
-            {
-                if (PlatformType == PlatformType.Cobra)
-                {
-                    // check DB
-                    if (Utils.IsBlank(column.FixedValue))
-                    {
-                        if (Utils.IsBlank(dataRow.TpaId))
-                        {
-                            errorMessage = "TPA ID cannot be blank. It must always be BENEFL";
-                        }
-                        else if (dataRow.TpaId != "BENEFL")
-                        {
-                            errorMessage = $"TPA ID {dataRow.TpaId} is invalid. It must always be BENEFL";
-                        }
-                    }
-                }
-                else
-                {
-                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
-                }
+            //var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{dataRow.TpaId}";
+            //if (_cache.ContainsKey(cacheKey))
+            //{
+            //    errorMessage = _cache.Get(cacheKey)?.ToString();
+            //}
+            //else
+            //{
+            //    if (PlatformType == PlatformType.Cobra)
+            //    {
+            //        // check DB
+            //        if (Utils.IsBlank(column.FixedValue))
+            //        {
+            //            if (Utils.IsBlank(dataRow.TpaId))
+            //            {
+            //                errorMessage = "TPA ID cannot be blank. It must always be BENEFL";
+            //            }
+            //            else if (dataRow.TpaId != "BENEFL")
+            //            {
+            //                errorMessage = $"TPA ID {dataRow.TpaId} is invalid. It must always be BENEFL";
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
+            //    }
 
-                //
-                _cache.Add(cacheKey, errorMessage);
-            }
+            //    //
+            //    _cache.Add(cacheKey, errorMessage);
+            //}
 
             //
             if (!Utils.IsBlank(errorMessage))
@@ -287,51 +292,51 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckCobraEmployerExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
-            EdiFileFormat fileFormat)
+        public Boolean CheckCobraEmployerExists(cobra_file_table_stage dataRow, TypedCsvColumn column,
+            string versionNo)
         {
             var errorMessage = "";
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                errorMessage = _cache.Get(cacheKey)?.ToString();
-            }
-            else
-            {
-                // check DB
-                if (Utils.IsBlank(dataRow.EmployerId))
-                {
-                    errorMessage = $"The Employer ID cannot be blank";
-                }
-                else
-                {
-                    DataTable dbResults = GetAllCobraEmployers();
-                    // planid is not always present e.g. in deposit file
-                    string filter = $"employer_id = '{dataRow.EmployerId}'";
-                    DataRow[] dbRows = dbResults.Select(filter);
+            //var cacheKey =
+            //    $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}";
+            //if (_cache.ContainsKey(cacheKey))
+            //{
+            //    errorMessage = _cache.Get(cacheKey)?.ToString();
+            //}
+            //else
+            //{
+            //    // check DB
+            //    if (Utils.IsBlank(dataRow.EmployerId))
+            //    {
+            //        errorMessage = $"The Employer ID cannot be blank";
+            //    }
+            //    else
+            //    {
+            //        DataTable dbResults = GetAllCobraEmployers();
+            //        // planid is not always present e.g. in deposit file
+            //        string filter = $"employer_id = '{dataRow.EmployerId}'";
+            //        DataRow[] dbRows = dbResults.Select(filter);
 
-                    if (dbRows.Length == 0)
-                    {
-                        errorMessage = $"The Employer ID {dataRow.EmployerId} could not be found";
-                    }
-                    else
-                    {
-                        //DataRow dbData = dbRows[0];
+            //        if (dbRows.Length == 0)
+            //        {
+            //            errorMessage = $"The Employer ID {dataRow.EmployerId} could not be found";
+            //        }
+            //        else
+            //        {
+            //            //DataRow dbData = dbRows[0];
 
-                        //note: FileChecker: verify if employer status need to be checked
-                        //string status = dbData["employer_status"]?.ToString();
-                        //if (status != "Active" && status != "New")
-                        //{
-                        //  errorMessage =
-                        //    $"The Employer ID {dataRow.EmployerId} has status {status} which is not valid";
-                        //}
-                    }
-                }
+            //            //note: FileChecker: verify if employer status need to be checked
+            //            //string status = dbData["employer_status"]?.ToString();
+            //            //if (status != "Active" && status != "New")
+            //            //{
+            //            //  errorMessage =
+            //            //    $"The Employer ID {dataRow.EmployerId} has status {status} which is not valid";
+            //            //}
+            //        }
+            //    }
 
-                //
-                _cache.Add(cacheKey, errorMessage);
-            }
+            //    //
+            //    _cache.Add(cacheKey, errorMessage);
+            //}
 
             //
             if (!Utils.IsBlank(errorMessage))
@@ -346,75 +351,75 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckCobraEmployeeExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
-            EdiFileFormat fileFormat = EdiFileFormat.Unknown)
+        public Boolean CheckCobraEmployeeExists(cobra_file_table_stage dataRow, TypedCsvColumn column,
+            string versionNo )
         {
             var errorMessage = "";
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.EmployeeID}";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                errorMessage = _cache.Get(cacheKey)?.ToString();
-            }
-            else
-            {
-                // check DB
-                if (Utils.IsBlank(dataRow.EmployerId))
-                {
-                    AddCobraErrorForRow(dataRow, "EmployerId", $"The Employer ID cannot be blank");
-                }
-                else if (Utils.IsBlank(dataRow.EmployeeID))
-                {
-                    AddCobraErrorForRow(dataRow, "EmployeeId", $"The Employee ID cannot be blank");
-                }
-                else
-                {
-                    DataTable dbResults = GetAllCobraEmployeesForEmployer(dataRow.EmployerId);
-                    DataRow[] dbRows =
-                        dbResults.Select(
-                            $"employerid = '{dataRow.EmployerId}' and employeeid = '{dataRow.EmployeeID}'");
-                    if (dbRows.Length == 0)
-                    {
-                        // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
-                        if (fileFormat == EdiFileFormat.CobraDemographics)
-                        {
-                            // as it is an demographics file, add this employee to the ER-EE table so a check for plan enrollemnt within same run or before reaggregation from Cobra will suceed
-                            DataRow newRow = dbResults.NewRow();
-                            newRow["employerid"] = dataRow.EmployerId;
-                            newRow["employeeid"] = dataRow.EmployeeID;
-                            newRow["is_active"] = dataRow.EmployeeStatus == "2" ? 1 : 0;
-                            dbResults.Rows.Add(newRow);
+            //var cacheKey =
+            //    $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.EmployeeID}";
+            //if (_cache.ContainsKey(cacheKey))
+            //{
+            //    errorMessage = _cache.Get(cacheKey)?.ToString();
+            //}
+            //else
+            //{
+            //    // check DB
+            //    if (Utils.IsBlank(dataRow.EmployerId))
+            //    {
+            //        AddCobraErrorForRow(dataRow, "EmployerId", $"The Employer ID cannot be blank");
+            //    }
+            //    else if (Utils.IsBlank(dataRow.EmployeeID))
+            //    {
+            //        AddCobraErrorForRow(dataRow, "EmployeeId", $"The Employee ID cannot be blank");
+            //    }
+            //    else
+            //    {
+            //        DataTable dbResults = GetAllCobraEmployeesForEmployer(dataRow.EmployerId);
+            //        DataRow[] dbRows =
+            //            dbResults.Select(
+            //                $"employerid = '{dataRow.EmployerId}' and employeeid = '{dataRow.EmployeeID}'");
+            //        if (dbRows.Length == 0)
+            //        {
+            //            // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
+            //            if (true /*|| versionNo == string.CobraDemographics*/)
+            //            {
+            //                // as it is an demographics file, add this employee to the ER-EE table so a check for plan enrollemnt within same run or before reaggregation from Cobra will suceed
+            //                DataRow newRow = dbResults.NewRow();
+            //                newRow["employerid"] = dataRow.EmployerId;
+            //                newRow["employeeid"] = dataRow.EmployeeID;
+            //                newRow["is_active"] = dataRow.EmployeeStatus == "2" ? 1 : 0;
+            //                dbResults.Rows.Add(newRow);
 
-                            var cacheKey2 =
-                                $"GetAllEmployeesForEmployer-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-AllEmployees";
-                            _cache.Add(cacheKey2, dbResults);
+            //                var cacheKey2 =
+            //                    $"GetAllEmployeesForEmployer-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-AllEmployees";
+            //                _cache.Add(cacheKey2, dbResults);
 
-                            //
-                            return false;
-                        }
-                        else
-                        {
-                            errorMessage +=
-                                $"The Employee ID {dataRow.EmployeeID} could not be found for Employer Id {dataRow.EmployerId}";
-                        }
-                    }
-                    else
-                    {
-                        DataRow dbData = dbRows[0];
-                        // if employee exists as per our data, that is fine
-                        // do not check the file EmployeeStatus against what we havwe in the db
-                        //float status = Utils.ToNumber(dbData["is_active"]?.ToString());
-                        //if (status <= 0 && Utils.ToNumber(dataRow.EmployeeStatus) > 1)
-                        //{
-                        //  errorMessage +=
-                        //    $"The Employee ID {dataRow.EmployeeID} has status {status} which is not valid";
-                        //}
-                    }
-                }
+            //                //
+            //                return false;
+            //            }
+            //            else
+            //            {
+            //                errorMessage +=
+            //                    $"The Employee ID {dataRow.EmployeeID} could not be found for Employer Id {dataRow.EmployerId}";
+            //            }
+            //        }
+            //        else
+            //        {
+            //            DataRow dbData = dbRows[0];
+            //            // if employee exists as per our data, that is fine
+            //            // do not check the file EmployeeStatus against what we havwe in the db
+            //            //float status = Utils.ToNumber(dbData["is_active"]?.ToString());
+            //            //if (status <= 0 && Utils.ToNumber(dataRow.EmployeeStatus) > 1)
+            //            //{
+            //            //  errorMessage +=
+            //            //    $"The Employee ID {dataRow.EmployeeID} has status {status} which is not valid";
+            //            //}
+            //        }
+            //    }
 
-                //
-                _cache.Add(cacheKey, errorMessage);
-            }
+            //    //
+            //    _cache.Add(cacheKey, errorMessage);
+            //}
 
             //
             if (!Utils.IsBlank(errorMessage))
@@ -428,47 +433,44 @@ namespace DataProcessing
                 return false;
             }
         }
-        public Boolean CheckForDuplicateCobraPosting(mbi_file_table_stage dataRow,
-                  EdiFileFormat fileFormat = EdiFileFormat.Unknown)
+        public Boolean CheckForDuplicateCobraPosting(cobra_file_table_stage dataRow,
+                  string versionNo )
         {
-
-
             string errorMessage = "";
 
-            //
-            switch (fileFormat)
-            {
-                case EdiFileFormat.CobraEmployeeDeposit:
-                    string queryString =
-                        $"select * from  [mbi_file_table] " +
-                        $" where " +
-                        $" TpaId='{dataRow.TpaId}'" +
-                        $" and EmployerId='{dataRow.EmployerId}'" +
-                        $" and EmployeeID='{dataRow.EmployeeID}'" +
-                        $" and AccountTypeCode='{dataRow.AccountTypeCode}'" +
-                        $" and PlanEndDate='{dataRow.PlanEndDate}'" +
-                        $" and PlanStartDate='{dataRow.PlanStartDate}'" +
-                        $" and EffectiveDate='{dataRow.EffectiveDate}'" +
-                        $" and DepositType='{dataRow.DepositType}'" +
-                        $" and len(isnull(error_message, '')) = 0" +
-                        $" order by row_id desc, mbi_file_name, source_row_no ;";
-                    //
-                    DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, DbConn,
-                         queryString, null,
-                         FileLogParams?.GetMessageLogParams());
-                    //
-                    if (dbResults.Rows.Count == 0)
-                    {
-                        return false;
-                    }
+            ////
+            //switch (versionNo)
+            //{
+            //    default:
+            //        string queryString =
+            //            $"select * from  [cobra_file_table] " +
+            //            $" where " +
+            //            $" TpaId='{dataRow.TpaId}'" +
+            //            $" and EmployerId='{dataRow.EmployerId}'" +
+            //            $" and EmployeeID='{dataRow.EmployeeID}'" +
+            //            $" and AccountTypeCode='{dataRow.AccountTypeCode}'" +
+            //            $" and PlanEndDate='{dataRow.PlanEndDate}'" +
+            //            $" and PlanStartDate='{dataRow.PlanStartDate}'" +
+            //            $" and EffectiveDate='{dataRow.EffectiveDate}'" +
+            //            $" and DepositType='{dataRow.DepositType}'" +
+            //            $" and len(isnull(error_message, '')) = 0" +
+            //            $" order by row_id desc, cobra_file_name, source_row_no ;";
+            //        //
+            //        DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, DbConn,
+            //             queryString, null,
+            //             FileLogParams?.GetMessageLogParams());
+            //        //
+            //        if (dbResults.Rows.Count == 0)
+            //        {
+            //            return false;
+            //        }
 
-                    DataRow prvRow = dbResults.Rows[0];
-                    //
-                    errorMessage = $"Potential Duplicate Posting! Was probably posted earlier on {Utils.ToIsoDateString(prvRow["CreatedAt"])} as part of file  {prvRow["mbi_file_name"]}";
-                    break;
-                default:
-                    break;
-            }
+            //        DataRow prvRow = dbResults.Rows[0];
+            //        //
+            //        errorMessage = $"Potential Duplicate Posting! Was probably posted earlier on {Utils.ToIsoDateString(prvRow["CreatedAt"])} as part of file  {prvRow["cobra_file_name"]}";
+            //        break;
+                
+            //}
 
             //
             if (!Utils.IsBlank(errorMessage))
@@ -483,117 +485,117 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckCobraEmployerPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
-            EdiFileFormat fileFormat)
+        public Boolean CheckCobraEmployerPlanExists(cobra_file_table_stage dataRow, TypedCsvColumn column,
+            string versionNo)
         {
             var errorMessage = "";
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.AccountTypeCode}-{dataRow.PlanId}";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                errorMessage = _cache.Get(cacheKey)?.ToString();
-            }
-            else
-            {
-                // check DB
-                if (Utils.IsBlank(dataRow.EmployerId))
-                {
-                    errorMessage += $"The Employer ID cannot be blank";
-                    ;
-                }
-                else if (Utils.IsBlank(dataRow.AccountTypeCode))
-                {
-                    errorMessage += $"The AccountTypeCode cannot be blank";
-                    ;
-                }
-                else
-                {
-                    DataTable dbResults = GetAllCobraPlansForEmployer(dataRow.EmployerId);
+            //var cacheKey =
+            //    $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.AccountTypeCode}-{dataRow.PlanId}";
+            //if (_cache.ContainsKey(cacheKey))
+            //{
+            //    errorMessage = _cache.Get(cacheKey)?.ToString();
+            //}
+            //else
+            //{
+            //    // check DB
+            //    if (Utils.IsBlank(dataRow.EmployerId))
+            //    {
+            //        errorMessage += $"The Employer ID cannot be blank";
+            //        ;
+            //    }
+            //    else if (Utils.IsBlank(dataRow.AccountTypeCode))
+            //    {
+            //        errorMessage += $"The AccountTypeCode cannot be blank";
+            //        ;
+            //    }
+            //    else
+            //    {
+            //        DataTable dbResults = GetAllCobraPlansForEmployer(dataRow.EmployerId);
 
-                    // planid is not always present e.g. in deposit file
-                    string filter = $"employer_id = '{dataRow.EmployerId}'";
-                    if (!Utils.IsBlank(dataRow.AccountTypeCode))
-                    {
-                        filter += $" and account_type_code = '{dataRow.AccountTypeCode}' ";
-                    }
+            //        // planid is not always present e.g. in deposit file
+            //        string filter = $"employer_id = '{dataRow.EmployerId}'";
+            //        if (!Utils.IsBlank(dataRow.AccountTypeCode))
+            //        {
+            //            filter += $" and account_type_code = '{dataRow.AccountTypeCode}' ";
+            //        }
 
-                    if (!Utils.IsBlank(dataRow.PlanId))
-                    {
-                        filter += $" and plan_id = '{dataRow.PlanId}' ";
-                    }
+            //        if (!Utils.IsBlank(dataRow.PlanId))
+            //        {
+            //            filter += $" and plan_id = '{dataRow.PlanId}' ";
+            //        }
 
-                    DataRow[] dbRows = dbResults.Select(filter);
+            //        DataRow[] dbRows = dbResults.Select(filter);
 
-                    if (dbRows.Length == 0)
-                    {
-                        errorMessage +=
-                            $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                            (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                            $" could not be found for Employer Id {dataRow.EmployerId}";
-                        ;
-                    }
-                    else
-                    {
-                        DataRow dbData = dbRows[0];
-                        DateTime actualPlanStartDate = (DateTime)dbData["plan_year_start_date"];
-                        DateTime actualPlanEndDate = (DateTime)dbData["plan_year_end_date"];
-                        //DateTime actualGracePeriodEndDate = (DateTime)dbData["grace_period_end_date"];
+            //        if (dbRows.Length == 0)
+            //        {
+            //            errorMessage +=
+            //                $"The AccountTypeID {dataRow.AccountTypeCode}" +
+            //                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+            //                $" could not be found for Employer Id {dataRow.EmployerId}";
+            //            ;
+            //        }
+            //        else
+            //        {
+            //            DataRow dbData = dbRows[0];
+            //            DateTime actualPlanStartDate = (DateTime)dbData["plan_year_start_date"];
+            //            DateTime actualPlanEndDate = (DateTime)dbData["plan_year_end_date"];
+            //            //DateTime actualGracePeriodEndDate = (DateTime)dbData["grace_period_end_date"];
 
-                        //check start and end dates 
-                        if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) &&
-                            Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
-                        {
-                            errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
-                        }
+            //            //check start and end dates 
+            //            if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) &&
+            //                Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
+            //            {
+            //                errorMessage +=
+            //                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+            //                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+            //                    $" Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
+            //            }
 
-                        //check plan dates match Cobra
-                        if (!Utils.IsBlank(dataRow.PlanStartDate) &&
-                            actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
-                        {
-                            errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
-                        }
+            //            //check plan dates match Cobra
+            //            if (!Utils.IsBlank(dataRow.PlanStartDate) &&
+            //                actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
+            //            {
+            //                errorMessage +=
+            //                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+            //                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+            //                    $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
+            //            }
 
-                        if (!Utils.IsBlank(dataRow.PlanEndDate) &&
-                            actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate))
-                        {
-                            errorMessage =
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanStartDate}";
-                            ;
-                        }
+            //            if (!Utils.IsBlank(dataRow.PlanEndDate) &&
+            //                actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate))
+            //            {
+            //                errorMessage =
+            //                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+            //                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+            //                    $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanStartDate}";
+            //                ;
+            //            }
 
-                        //check effectivedate is within plan dates
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) &&
-                            actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
-                        {
-                            errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
-                        }
+            //            //check effectivedate is within plan dates
+            //            if (!Utils.IsBlank(dataRow.EffectiveDate) &&
+            //                actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
+            //            {
+            //                errorMessage +=
+            //                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+            //                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+            //                    $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
+            //            }
 
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) &&
-                            actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
-                        {
-                            errorMessage =
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.EffectiveDate}";
-                            ;
-                        }
-                    }
+            //            if (!Utils.IsBlank(dataRow.EffectiveDate) &&
+            //                actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
+            //            {
+            //                errorMessage =
+            //                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+            //                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+            //                    $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.EffectiveDate}";
+            //                ;
+            //            }
+            //        }
 
-                    //
-                    _cache.Add(cacheKey, errorMessage);
-                }
-            }
+            //        //
+            //        _cache.Add(cacheKey, errorMessage);
+            //    }
+            //}
 
             //
             if (!Utils.IsBlank(errorMessage))
@@ -608,157 +610,157 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckCobraEmployeePlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
-            EdiFileFormat fileFormat)
+        public Boolean CheckCobraEmployeePlanExists(cobra_file_table_stage dataRow, TypedCsvColumn column,
+            string versionNo)
         {
             var errorMessage = "";
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.EmployeeID}-{dataRow.AccountTypeCode}-{dataRow.PlanId}";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                errorMessage = _cache.Get(cacheKey)?.ToString();
-            }
-            else
-            {
-                // check DB
-                if (Utils.IsBlank(dataRow.EmployerId))
-                {
-                    errorMessage += $"The Employer ID cannot be blank";
-                    ;
-                }
-                else if (Utils.IsBlank(dataRow.EmployeeID))
-                {
-                    errorMessage += $"The Employer ID cannot be blank";
-                    ;
-                }
-                else if (Utils.IsBlank(dataRow.AccountTypeCode))
-                {
-                    errorMessage += $"The AccountTypeCode cannot be blank";
-                    ;
-                }
-                else
-                {
-                    //// if we are enrolling an employee in a plan, only check if ER has this EE
-                    //if (fileFormat == EdiFileFormat.CobraEnrollment)
-                    //{
-                    //  //as it is an enrollment file, check the EE exists and enroll in the plan
-                    //  var hasError = this.CheckEmployeeExists(dataRow, column, fileFormat);
-                    //  //return hasError;
-                    //}
+            //var cacheKey =
+            //    $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-{dataRow.EmployeeID}-{dataRow.AccountTypeCode}-{dataRow.PlanId}";
+            //if (_cache.ContainsKey(cacheKey))
+            //{
+            //    errorMessage = _cache.Get(cacheKey)?.ToString();
+            //}
+            //else
+            //{
+            //    // check DB
+            //    if (Utils.IsBlank(dataRow.EmployerId))
+            //    {
+            //        errorMessage += $"The Employer ID cannot be blank";
+            //        ;
+            //    }
+            //    else if (Utils.IsBlank(dataRow.EmployeeID))
+            //    {
+            //        errorMessage += $"The Employer ID cannot be blank";
+            //        ;
+            //    }
+            //    else if (Utils.IsBlank(dataRow.AccountTypeCode))
+            //    {
+            //        errorMessage += $"The AccountTypeCode cannot be blank";
+            //        ;
+            //    }
+            //    else
+            //    {
+            //        //// if we are enrolling an employee in a plan, only check if ER has this EE
+            //        //if (versionNo == string.CobraEnrollment)
+            //        //{
+            //        //  //as it is an enrollment file, check the EE exists and enroll in the plan
+            //        //  var hasError = this.CheckEmployeeExists(dataRow, column, versionNo);
+            //        //  //return hasError;
+            //        //}
 
-                    DataTable dbResults = GetAllCobraEmployeePlansForEmployer(dataRow.EmployerId);
+            //        DataTable dbResults = GetAllCobraEmployeePlansForEmployer(dataRow.EmployerId);
 
-                    // planid is not always present e.g. in deposit file
-                    string filter = $" employeeid = '{dataRow.EmployeeID}' ";
-                    if (!Utils.IsBlank(dataRow.AccountTypeCode))
-                    {
-                        filter += $" and plancode = '{dataRow.AccountTypeCode}' ";
-                    }
+            //        // planid is not always present e.g. in deposit file
+            //        string filter = $" employeeid = '{dataRow.EmployeeID}' ";
+            //        if (!Utils.IsBlank(dataRow.AccountTypeCode))
+            //        {
+            //            filter += $" and plancode = '{dataRow.AccountTypeCode}' ";
+            //        }
 
-                    if (!Utils.IsBlank(dataRow.PlanId))
-                    {
-                        filter += $" and plandesc = '{dataRow.PlanId}' ";
-                    }
+            //        if (!Utils.IsBlank(dataRow.PlanId))
+            //        {
+            //            filter += $" and plandesc = '{dataRow.PlanId}' ";
+            //        }
 
-                    DataRow[] dbRows = dbResults.Select(filter);
+            //        DataRow[] dbRows = dbResults.Select(filter);
 
-                    if (dbRows.Length == 0)
-                    {
-                        if (fileFormat == EdiFileFormat.CobraEnrollment)
-                        {
-                            // as it is an enrollment, enroll the EE in this plan demographics file, 
-                            DataRow newRow = dbResults.NewRow();
-                            newRow["employerid"] = dataRow.EmployerId;
-                            newRow["employeeid"] = dataRow.EmployeeID;
-                            newRow["plancode"] = dataRow.AccountTypeCode;
-                            newRow["plandesc"] = dataRow.PlanId;
-                            newRow["planstart"] = Utils.ToDateTime(dataRow.PlanStartDate);
-                            newRow["planend"] = Utils.ToDateTime(dataRow.PlanEndDate);
+            //        if (dbRows.Length == 0)
+            //        {
+            //            if (true  /*|| versionNo == string.CobraEnrollment*/)
+            //            {
+            //                // as it is an enrollment, enroll the EE in this plan demographics file, 
+            //                DataRow newRow = dbResults.NewRow();
+            //                newRow["employerid"] = dataRow.EmployerId;
+            //                newRow["employeeid"] = dataRow.EmployeeID;
+            //                newRow["plancode"] = dataRow.AccountTypeCode;
+            //                newRow["plandesc"] = dataRow.PlanId;
+            //                newRow["planstart"] = Utils.ToDateTime(dataRow.PlanStartDate);
+            //                newRow["planend"] = Utils.ToDateTime(dataRow.PlanEndDate);
 
-                            dbResults.Rows.Add(newRow);
+            //                dbResults.Rows.Add(newRow);
 
-                            var cacheKey2 =
-                                $"GetAllEmployeePlansForEmployer-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-AllEmployeePlans";
-                            //
-                            _cache.Add(cacheKey2, dbResults);
+            //                var cacheKey2 =
+            //                    $"GetAllEmployeePlansForEmployer-{this.PlatformType.ToDescription()}-{dataRow.EmployerId}-AllEmployeePlans";
+            //                //
+            //                _cache.Add(cacheKey2, dbResults);
 
-                            //
-                            return false;
-                        }
+            //                //
+            //                return false;
+            //            }
 
-                        errorMessage +=
-                            $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                            (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                            $" could not be found for Employee Id {dataRow.EmployeeID}";
-                        ;
-                    }
-                    else
-                    {
-                        DataRow dbData = dbRows[0];
+            //            errorMessage +=
+            //                $"The AccountTypeID {dataRow.AccountTypeCode}" +
+            //                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+            //                $" could not be found for Employee Id {dataRow.EmployeeID}";
+            //            ;
+            //        }
+            //        else
+            //        {
+            //            DataRow dbData = dbRows[0];
 
-                        // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
+            //            // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
 
-                        DateTime actualPlanStartDate = (DateTime)dbData["planstart"];
-                        DateTime actualPlanEndDate = (DateTime)dbData["planend"];
-                        //DateTime? actualGracePeriodEndDate = Utils.ToDate(dbData["actualGracePeriodEndDate"]?.ToString());
+            //            DateTime actualPlanStartDate = (DateTime)dbData["planstart"];
+            //            DateTime actualPlanEndDate = (DateTime)dbData["planend"];
+            //            //DateTime? actualGracePeriodEndDate = Utils.ToDate(dbData["actualGracePeriodEndDate"]?.ToString());
 
-                        //note: we need to ensure we got Cobra plans going back many years properly. we have data from 2004 onwards in the portal
-                        //check start and end dates 
-                        if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) &&
-                            Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
-                        {
-                            errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate} for Employee Id {dataRow.EmployeeID}";
-                        }
+            //            //note: we need to ensure we got Cobra plans going back many years properly. we have data from 2004 onwards in the portal
+            //            //check start and end dates 
+            //            if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) &&
+            //                Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
+            //            {
+            //                errorMessage +=
+            //                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+            //                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+            //                    $" Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate} for Employee Id {dataRow.EmployeeID}";
+            //            }
 
-                        //check plan dates match Cobra
-                        if (!Utils.IsBlank(dataRow.PlanStartDate) &&
-                            actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
-                        {
-                            errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate} for Employee Id {dataRow.EmployeeID}";
-                        }
+            //            //check plan dates match Cobra
+            //            if (!Utils.IsBlank(dataRow.PlanStartDate) &&
+            //                actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
+            //            {
+            //                errorMessage +=
+            //                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+            //                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+            //                    $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate} for Employee Id {dataRow.EmployeeID}";
+            //            }
 
-                        if (!Utils.IsBlank(dataRow.PlanEndDate) &&
-                            actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate)
-                            && dataRow.PlanEndDate != "20991231")
-                        {
-                            errorMessage =
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanEndDate} for Employee Id {dataRow.EmployeeID}";
-                            ;
-                        }
+            //            if (!Utils.IsBlank(dataRow.PlanEndDate) &&
+            //                actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate)
+            //                && dataRow.PlanEndDate != "20991231")
+            //            {
+            //                errorMessage =
+            //                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+            //                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+            //                    $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanEndDate} for Employee Id {dataRow.EmployeeID}";
+            //                ;
+            //            }
 
-                        //check effectivedate is within plan dates
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) &&
-                            actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
-                        {
-                            errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate} for Employee Id {dataRow.EmployeeID}";
-                        }
+            //            //check effectivedate is within plan dates
+            //            if (!Utils.IsBlank(dataRow.EffectiveDate) &&
+            //                actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
+            //            {
+            //                errorMessage +=
+            //                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+            //                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+            //                    $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate} for Employee Id {dataRow.EmployeeID}";
+            //            }
 
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) &&
-                            actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
-                        {
-                            errorMessage =
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.EffectiveDate} for Employee Id {dataRow.EmployeeID}";
-                            ;
-                        }
-                    }
-                }
+            //            if (!Utils.IsBlank(dataRow.EffectiveDate) &&
+            //                actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
+            //            {
+            //                errorMessage =
+            //                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+            //                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+            //                    $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.EffectiveDate} for Employee Id {dataRow.EmployeeID}";
+            //                ;
+            //            }
+            //        }
+            //    }
 
-                //
-                _cache.Add(cacheKey, errorMessage);
-            }
+            //    //
+            //    _cache.Add(cacheKey, errorMessage);
+            //}
 
             //
             if (!Utils.IsBlank(errorMessage))
@@ -773,18 +775,18 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckCobraDependentExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
-            EdiFileFormat fileFormat)
+        public Boolean CheckCobraDependentExists(cobra_file_table_stage dataRow, TypedCsvColumn column,
+            string versionNo)
         {
             // dependent plans are linked to the employee
-            return CheckCobraEmployeeExists(dataRow, column, fileFormat);
+            return CheckCobraEmployeeExists(dataRow, column, versionNo);
         }
 
-        public Boolean CheckCobraDependentPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
-            EdiFileFormat fileFormat)
+        public Boolean CheckCobraDependentPlanExists(cobra_file_table_stage dataRow, TypedCsvColumn column,
+            string versionNo)
         {
             // dependent plans are linked to the employee
-            return CheckCobraEmployeePlanExists(dataRow, column, fileFormat);
+            return CheckCobraEmployeePlanExists(dataRow, column, versionNo);
         }
 
         #endregion checkData
@@ -969,5 +971,268 @@ namespace DataProcessing
         }
 
         #endregion cacheEmployerData
+
+
+        #region CheckUtils
+
+        public string EnsureValueIsOfFormatAndMatchesRules(cobra_file_table_stage dataRow, TypedCsvColumn column,
+            TypedCsvSchema mappings)
+        {
+            var orgValue = dataRow.ColumnValue(column.SourceColumn) ?? "";
+            var value = orgValue;
+
+            // always trim
+            value = value?.Trim();
+
+            //1. Check and fix format
+            if (!Utils.IsBlank(value))
+            {
+                // fix value if possible
+                switch (column.FormatType)
+                {
+                    case FormatType.Any:
+                    case FormatType.String:
+                        break;
+
+                    case FormatType.Email:
+                        if (!Utils.IsValidEmail(value))
+                        {
+                            this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be a valid Email. {orgValue} is not valid");
+                        }
+
+                        break;
+                    case FormatType.Zip:
+                        value = regexInteger.Replace(value, String.Empty);
+                        if (!Utils.IsBlank(value) && value.Length > column.MaxLength)
+                        {
+                            value = value.Substring(0, column.MaxLength);
+                        }
+
+                        break;
+                    case FormatType.Phone:
+                        value = regexInteger.Replace(value, String.Empty);
+                        if (!Utils.IsBlank(value) && value.Length > column.MaxLength)
+                        {
+                            value = Utils.Right(value, column.MaxLength);
+                        }
+
+                        break;
+                    case FormatType.AlphaNumeric:
+                        // replace all non alphanumeric
+                        value = regexAlphaNumeric.Replace(value, String.Empty);
+                        break;
+
+                    case FormatType.AlphaOnly:
+                        // replace all non alphanumeric
+                        value = regexAlphaOnly.Replace(value, String.Empty);
+                        break;
+
+                    case FormatType.FixedConstant:
+                        // default to fixed value always!
+                        value = column.FixedValue;
+                        break;
+
+                    case FormatType.AlphaAndDashes:
+                        // replace all non alphanumeric
+                        value = regexAlphaAndDashes.Replace(value, String.Empty);
+                        break;
+
+                    case FormatType.NumbersAndDashes:
+                        // replace all non alphanumeric
+                        value = regexNumericAndDashes.Replace(value, String.Empty);
+                        break;
+
+                    case FormatType.Integer:
+                        // remove any non digits
+                        value = regexInteger.Replace(value, String.Empty);
+                        //
+                        if (!Utils.IsInteger(value))
+                        {
+                            this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be numbers only. {orgValue} is not valid");
+                        }
+
+                        break;
+
+                    case FormatType.Double:
+                        // remove any non digits and non . and non ,
+                        value = regexDouble.Replace(value, String.Empty);
+                        if (!Utils.IsDouble(value))
+                        {
+                            this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be a Currency Value. {orgValue} is not valid");
+                        }
+
+                        // format as 0.00
+                        var dblValue = Utils.ToDouble(value);
+                        value = dblValue.ToString("0.00");
+
+                        break;
+
+                    case FormatType.IsoDate:
+                        // remove any non digits
+                        value = regexDate.Replace(value, String.Empty);
+                        value = Utils.ToIsoDateString(Utils.ToDate(value));
+                        if (!Utils.IsIsoDate(value, column.MaxLength > 0))
+                        {
+                            this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be in format YYYYMMDD. {orgValue} is not valid");
+                        }
+
+                        break;
+
+                    case FormatType.IsoDateTime:
+                        // remove any non digits
+                        value = regexDate.Replace(value, String.Empty);
+                        value = Utils.ToDateTimeString(Utils.ToDateTime(value));
+
+                        if (!Utils.IsIsoDateTime(value, column.MaxLength > 0))
+                        {
+                            this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be in format YYYYMMDD. {orgValue} is not valid");
+                        }
+
+                        break;
+
+                    case FormatType.YesNo:
+                        if (!value.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) &&
+                            !value.Equals("No", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be be either Yes or No. {orgValue} is not valid");
+                        }
+
+                        break;
+
+                    case FormatType.TrueFalse:
+                        if (!value.Equals("True", StringComparison.InvariantCultureIgnoreCase) &&
+                            !value.Equals("False", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be be either Yes or No. {orgValue} is not valid");
+                        }
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            value = value?.Trim();
+
+            //set default value
+            if (Utils.IsBlank(value) && !Utils.IsBlank(column.DefaultValue))
+            {
+                value = column.DefaultValue;
+            }
+
+            // pad ssn to 9 digits with leading zeros
+            if ((column.SourceColumn == "EmployeeSocialSecurityNumber" || column.SourceColumn == "EmployeeID"))
+
+            {
+                if (!Utils.IsBlank(value))
+                {
+                    value = regexAlphaNumeric.Replace(value, String.Empty);
+                    if (value.Length < column.MinLength)
+                    {
+                        value = value.PadLeft(column.MinLength, '0');
+                    }
+                }
+            }
+
+            // set row column value to the fixed value if it has changed
+            if (value != orgValue)
+            {
+                dataRow.SetColumnValue(column.SourceColumn, value);
+                dataRow.data_row = GetDelimitedDataRow(dataRow, mappings);
+            }
+
+            // 2. check against GENERAL rules
+            if (column.FixedValue != null && value != column.FixedValue &&
+                !column.FixedValue.Split('|').Contains(value) && column.MinLength > 0)
+            {
+                this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                    $"{column.SourceColumn} must always be {column.FixedValue}. {orgValue} is not valid");
+            }
+
+            // minLength
+            if (column.MinLength > 0 && value.Length < column.MinLength)
+            {
+                this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                    $"{column.SourceColumn} must be minimum {column.MinLength} characters long. {orgValue} is not valid");
+            }
+
+            // maxLength
+            if (column.MaxLength > 0 && value.Length > column.MaxLength)
+            {
+                this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                    $"{column.SourceColumn} must be maximum {column.MaxLength} characters long. {orgValue} is not valid");
+            }
+
+            // min/max value
+            if (column.MinValue != 0 || column.MaxValue != 0)
+            {
+                if (!Utils.IsNumeric(value))
+                {
+                    this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                        $"{column.SourceColumn} must be a number. {orgValue} is not valid");
+                }
+
+                float numValue = Utils.ToNumber(value);
+                if (numValue < column.MinValue)
+                {
+                    this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                        $"{column.SourceColumn} must be a number with a value greater than ${column.MinValue}. {orgValue} is not valid");
+                }
+
+                if (numValue > column.MaxValue)
+                {
+                    this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                        $"{column.SourceColumn} must be a number with a value less than ${column.MaxValue}. {orgValue} is not valid");
+                }
+            }
+
+            return value;
+        }
+
+        private string GetDelimitedDataRow(cobra_file_table_stage dataRow, TypedCsvSchema mappings)
+        {
+            string value = "";
+
+            foreach (TypedCsvColumn column in mappings)
+            {
+                switch (column.SourceColumn?.ToLowerInvariant() ?? "")
+                {
+                    case "":
+                    case "source_row_no":
+                    case "error_row":
+                    case "data_row":
+                    case "res_file_name":
+                    case "cobra_file_name":
+                    case "check_type":
+                        continue;
+                    //
+                    default:
+                        break;
+                }
+
+                string fieldValue = dataRow.ColumnValue(column.SourceColumn);
+                if (fieldValue?.IndexOf(",", StringComparison.InvariantCulture) > 0)
+                {
+                    fieldValue = $"\"{fieldValue}\"";
+                }
+
+                value += $",{fieldValue}";
+            }
+
+            // remove first char
+            value = value.Substring(1);
+            //
+            return value;
+        }
+
+        #endregion
     }
 }

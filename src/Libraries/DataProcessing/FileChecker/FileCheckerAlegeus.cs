@@ -137,10 +137,10 @@ namespace DataProcessing
         {
             // ensure previously cached data is not used so
             // so create a new db context to ensure stale data will NOT be used
-            var dbErrorLog = Vars.dbCtxDataProcessingNew;
+            var dbDataProcessing = Vars.dbCtxDataProcessingNew;
 
             // get all dbRows without caching
-            var dataRows = dbErrorLog.mbi_file_table_stage
+            var dataRows = dbDataProcessing.mbi_file_table_stage
                 .OrderBy(dataRow => dataRow.source_row_no)
                 .ToList();
 
@@ -153,7 +153,7 @@ namespace DataProcessing
             }
 
             // save any changes
-            dbErrorLog.SaveChanges();
+            dbDataProcessing.SaveChanges();
         }
 
         private void CheckAlegeusRowData(EdiFileFormat fileFormat, mbi_file_table_stage dataRow, TypedCsvSchema mappings)
@@ -1036,5 +1036,270 @@ namespace DataProcessing
         }
 
         #endregion cacheEmployerData
+
+
+        #region CheckUtils
+
+
+      
+        public string EnsureValueIsOfFormatAndMatchesRules(mbi_file_table_stage dataRow, TypedCsvColumn column,
+            TypedCsvSchema mappings)
+        {
+            var orgValue = dataRow.ColumnValue(column.SourceColumn) ?? "";
+            var value = orgValue;
+
+            // always trim
+            value = value?.Trim();
+
+            //1. Check and fix format
+            if (!Utils.IsBlank(value))
+            {
+                // fix value if possible
+                switch (column.FormatType)
+                {
+                    case FormatType.Any:
+                    case FormatType.String:
+                        break;
+
+                    case FormatType.Email:
+                        if (!Utils.IsValidEmail(value))
+                        {
+                            this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be a valid Email. {orgValue} is not valid");
+                        }
+
+                        break;
+                    case FormatType.Zip:
+                        value = regexInteger.Replace(value, String.Empty);
+                        if (!Utils.IsBlank(value) && value.Length > column.MaxLength)
+                        {
+                            value = value.Substring(0, column.MaxLength);
+                        }
+
+                        break;
+                    case FormatType.Phone:
+                        value = regexInteger.Replace(value, String.Empty);
+                        if (!Utils.IsBlank(value) && value.Length > column.MaxLength)
+                        {
+                            value = Utils.Right(value, column.MaxLength);
+                        }
+
+                        break;
+                    case FormatType.AlphaNumeric:
+                        // replace all non alphanumeric
+                        value = regexAlphaNumeric.Replace(value, String.Empty);
+                        break;
+
+                    case FormatType.AlphaOnly:
+                        // replace all non alphanumeric
+                        value = regexAlphaOnly.Replace(value, String.Empty);
+                        break;
+
+                    case FormatType.FixedConstant:
+                        // default to fixed value always!
+                        value = column.FixedValue;
+                        break;
+
+                    case FormatType.AlphaAndDashes:
+                        // replace all non alphanumeric
+                        value = regexAlphaAndDashes.Replace(value, String.Empty);
+                        break;
+
+                    case FormatType.NumbersAndDashes:
+                        // replace all non alphanumeric
+                        value = regexNumericAndDashes.Replace(value, String.Empty);
+                        break;
+
+                    case FormatType.Integer:
+                        // remove any non digits
+                        value = regexInteger.Replace(value, String.Empty);
+                        //
+                        if (!Utils.IsInteger(value))
+                        {
+                            this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be numbers only. {orgValue} is not valid");
+                        }
+
+                        break;
+
+                    case FormatType.Double:
+                        // remove any non digits and non . and non ,
+                        value = regexDouble.Replace(value, String.Empty);
+                        if (!Utils.IsDouble(value))
+                        {
+                            this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be a Currency Value. {orgValue} is not valid");
+                        }
+
+                        // format as 0.00
+                        var dblValue = Utils.ToDouble(value);
+                        value = dblValue.ToString("0.00");
+
+                        break;
+
+                    case FormatType.IsoDate:
+                        // remove any non digits
+                        value = regexDate.Replace(value, String.Empty);
+                        value = Utils.ToIsoDateString(Utils.ToDate(value));
+                        if (!Utils.IsIsoDate(value, column.MaxLength > 0))
+                        {
+                            this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be in format YYYYMMDD. {orgValue} is not valid");
+                        }
+
+                        break;
+
+                    case FormatType.IsoDateTime:
+                        // remove any non digits
+                        value = regexDate.Replace(value, String.Empty);
+                        value = Utils.ToDateTimeString(Utils.ToDateTime(value));
+
+                        if (!Utils.IsIsoDateTime(value, column.MaxLength > 0))
+                        {
+                            this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be in format YYYYMMDD. {orgValue} is not valid");
+                        }
+
+                        break;
+
+                    case FormatType.YesNo:
+                        if (!value.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) &&
+                            !value.Equals("No", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be be either Yes or No. {orgValue} is not valid");
+                        }
+
+                        break;
+
+                    case FormatType.TrueFalse:
+                        if (!value.Equals("True", StringComparison.InvariantCultureIgnoreCase) &&
+                            !value.Equals("False", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be be either Yes or No. {orgValue} is not valid");
+                        }
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            value = value?.Trim();
+
+            //set default value
+            if (Utils.IsBlank(value) && !Utils.IsBlank(column.DefaultValue))
+            {
+                value = column.DefaultValue;
+            }
+
+            // pad ssn to 9 digits with leading zeros
+            if ((column.SourceColumn == "EmployeeSocialSecurityNumber" || column.SourceColumn == "EmployeeID"))
+
+            {
+                if (!Utils.IsBlank(value))
+                {
+                    value = regexAlphaNumeric.Replace(value, String.Empty);
+                    if (value.Length < column.MinLength)
+                    {
+                        value = value.PadLeft(column.MinLength, '0');
+                    }
+                }
+            }
+
+            // set row column value to the fixed value if it has changed
+            if (value != orgValue)
+            {
+                dataRow.SetColumnValue(column.SourceColumn, value);
+                dataRow.data_row = GetDelimitedDataRow(dataRow, mappings);
+            }
+
+            // 2. check against GENERAL rules
+            if (column.FixedValue != null && value != column.FixedValue &&
+                !column.FixedValue.Split('|').Contains(value) && column.MinLength > 0)
+            {
+                this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
+                    $"{column.SourceColumn} must always be {column.FixedValue}. {orgValue} is not valid");
+            }
+
+            // minLength
+            if (column.MinLength > 0 && value.Length < column.MinLength)
+            {
+                this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
+                    $"{column.SourceColumn} must be minimum {column.MinLength} characters long. {orgValue} is not valid");
+            }
+
+            // maxLength
+            if (column.MaxLength > 0 && value.Length > column.MaxLength)
+            {
+                this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
+                    $"{column.SourceColumn} must be maximum {column.MaxLength} characters long. {orgValue} is not valid");
+            }
+
+            // min/max value
+            if (column.MinValue != 0 || column.MaxValue != 0)
+            {
+                if (!Utils.IsNumeric(value))
+                {
+                    this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
+                        $"{column.SourceColumn} must be a number. {orgValue} is not valid");
+                }
+
+                float numValue = Utils.ToNumber(value);
+                if (numValue < column.MinValue)
+                {
+                    this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
+                        $"{column.SourceColumn} must be a number with a value greater than ${column.MinValue}. {orgValue} is not valid");
+                }
+
+                if (numValue > column.MaxValue)
+                {
+                    this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
+                        $"{column.SourceColumn} must be a number with a value less than ${column.MaxValue}. {orgValue} is not valid");
+                }
+            }
+
+            return value;
+        }
+
+        private string GetDelimitedDataRow(mbi_file_table_stage dataRow, TypedCsvSchema mappings)
+        {
+            string value = "";
+
+            foreach (TypedCsvColumn column in mappings)
+            {
+                switch (column.SourceColumn?.ToLowerInvariant() ?? "")
+                {
+                    case "":
+                    case "source_row_no":
+                    case "error_row":
+                    case "data_row":
+                    case "res_file_name":
+                    case "mbi_file_name":
+                    case "check_type":
+                        continue;
+                    //
+                    default:
+                        break;
+                }
+
+                string fieldValue = dataRow.ColumnValue(column.SourceColumn);
+                if (fieldValue?.IndexOf(",", StringComparison.InvariantCulture) > 0)
+                {
+                    fieldValue = $"\"{fieldValue}\"";
+                }
+
+                value += $",{fieldValue}";
+            }
+
+            // remove first char
+            value = value.Substring(1);
+            //
+            return value;
+        }
+
+        #endregion
     }
 }

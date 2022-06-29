@@ -140,7 +140,7 @@ namespace DataProcessing
             if (platformType == PlatformType.Cobra)
             {
                 // we dont have bencodes! just return the filename
-                newPath = $"{Path.GetDirectoryName(srcFilePath)}/{Utils.GetUniqueIdFromFileName(srcFileName)}--";
+                newPath = $"{Path.GetDirectoryName(srcFilePath)}/";
                 newPath +=
                     $"{testMarker}{Utils.StripUniqueIdAndHeaderTypeFromFileName(Path.GetFileNameWithoutExtension(srcFileName))}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
                 newPath = FileUtils.FixPath(newPath);
@@ -949,20 +949,32 @@ namespace DataProcessing
 
         public static Boolean IsAlegeusImportRecLine(string text)
         {
-            return regexALImportRecType.IsMatch(text?.Trim().Substring(0, 3));
+            if (text != null & text.Length >= 3)
+                return regexALImportRecType.IsMatch(text?.Trim().Substring(0, 3));
+
+            return false;
         }
         public static Boolean IsAlegeusImportHeaderLine(string text)
         {
-            return regexALImportHeader.IsMatch(text?.Trim().Substring(0, 3));
+            if (text != null & text.Length >= 3)
+                return regexALImportHeader.IsMatch(text?.Trim().Substring(0, 3));
+
+            return false;
         }
 
         public static Boolean IsAlegeusExportRecLine(string text)
         {
-            return regexALExportRecType.IsMatch(text?.Trim().Substring(0, 3));
+            if (text != null & text.Length >= 3)
+                return regexALExportRecType.IsMatch(text?.Trim().Substring(0, 3));
+
+            return false;
         }
         public static Boolean IsAlegeusExportHeaderLine(string text)
         {
-            return regexALExportHeader.IsMatch(text?.Trim().Substring(0, 3));
+            if (text != null & text.Length >= 3)
+                return regexALExportHeader.IsMatch(text?.Trim().Substring(0, 3));
+
+            return false;
         }
 
         public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath)
@@ -1803,16 +1815,14 @@ namespace DataProcessing
                     {
                         rowNo++;
 
-                                  // import the line with manual insert statement
+                        // import the line with manual insert statement
                         ImportCobraCsvLine(Path.GetFileName(srcFilePath), rowNo, line, dbConn, tableName, versionNo, fileLogParams, onErrorCallback);
-
-                        //
-                        // run postimport query to take from staging to final table
-                        string queryString = $"exec {postImportProc};";
-                        DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
-                            fileLogParams?.GetMessageLogParams());
                     }
                 }
+                // run postimport query to take from staging to final table
+                string queryString = $"exec {postImportProc};";
+                DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
+                    fileLogParams?.GetMessageLogParams());
             }
             catch (Exception ex)
             {

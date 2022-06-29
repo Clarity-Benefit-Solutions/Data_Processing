@@ -63,5 +63,7 @@ namespace DataProcessing.DataModels.DataProcessing
         public string OngoingPrefunded { get; set; }
         public string AlternateId { get; set; }
         public string Class { get; set; }
+        public string AccountSegmentId { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
     }
 }

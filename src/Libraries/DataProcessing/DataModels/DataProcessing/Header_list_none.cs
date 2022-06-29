@@ -12,7 +12,7 @@ namespace DataProcessing.DataModels.DataProcessing
     using System;
     using System.Collections.Generic;
     
-    public partial class Automated_Header_list
+    public partial class Header_list_none
     {
         public string Folder_name { get; set; }
         public string template_type { get; set; }

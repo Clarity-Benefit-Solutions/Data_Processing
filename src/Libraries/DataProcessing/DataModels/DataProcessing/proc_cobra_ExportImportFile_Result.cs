@@ -10,16 +10,10 @@
 namespace DataProcessing.DataModels.DataProcessing
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Automated_Header_list
+    public partial class proc_cobra_ExportImportFile_Result
     {
-        public string Folder_name { get; set; }
-        public string template_type { get; set; }
-        public string IC_type { get; set; }
-        public int ID { get; set; }
-        public string to_FTP { get; set; }
-        public string BENCODE { get; set; }
-        public string environment { get; set; }
+        public string file_row { get; set; }
+        public Nullable<int> source_row_no { get; set; }
     }
 }

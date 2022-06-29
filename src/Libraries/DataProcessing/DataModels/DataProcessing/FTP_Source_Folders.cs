@@ -12,7 +12,7 @@ namespace DataProcessing.DataModels.DataProcessing
     using System;
     using System.Collections.Generic;
     
-    public partial class Automated_Header_list
+    public partial class FTP_Source_Folders
     {
         public string Folder_name { get; set; }
         public string template_type { get; set; }
@@ -21,5 +21,6 @@ namespace DataProcessing.DataModels.DataProcessing
         public string to_FTP { get; set; }
         public string BENCODE { get; set; }
         public string environment { get; set; }
+        public int is_active { get; set; }
     }
 }

@@ -17,5 +17,6 @@ namespace DataProcessing.DataModels.DataProcessing
         public string file_row { get; set; }
         public string folder_name { get; set; }
         public int row_num { get; set; }
+        public string AccountSegmentId { get; set; }
     }
 }

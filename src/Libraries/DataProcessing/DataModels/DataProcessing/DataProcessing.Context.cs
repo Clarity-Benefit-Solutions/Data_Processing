@@ -35,7 +35,7 @@ namespace DataProcessing.DataModels.DataProcessing
         public virtual DbSet<alegeus_file_final> alegeus_file_final { get; set; }
         public virtual DbSet<alegeus_file_staging> alegeus_file_staging { get; set; }
         public virtual DbSet<app_settings> app_settings { get; set; }
-        public virtual DbSet<FTP_Source_Folders> FTP_Source_Folders { get; set; }
+        public virtual DbSet<Automated_Header_list> Automated_Header_list { get; set; }
         public virtual DbSet<dbo_error_log_results_workflow_local_AL> dbo_error_log_results_workflow_local_AL { get; set; }
         public virtual DbSet<dbo_error_log_results_workflow_localBU> dbo_error_log_results_workflow_localBU { get; set; }
         public virtual DbSet<dbo_tracked_errors_local> dbo_tracked_errors_local { get; set; }
@@ -44,6 +44,17 @@ namespace DataProcessing.DataModels.DataProcessing
         public virtual DbSet<message_log> message_log { get; set; }
         public virtual DbSet<QB_file_data_fixtbl> QB_file_data_fixtbl { get; set; }
         public virtual DbSet<vw_file_processing_log> vw_file_processing_log { get; set; }
+        public virtual DbSet<cobra_file_table> cobra_file_table { get; set; }
+        public virtual DbSet<cobra_file_table_stage> cobra_file_table_stage { get; set; }
+        public virtual DbSet<cobra_res_file_table> cobra_res_file_table { get; set; }
+        public virtual DbSet<cobra_res_file_table_stage> cobra_res_file_table_stage { get; set; }
+        public virtual DbSet<FTP_Source_Folders> FTP_Source_Folders { get; set; }
+        public virtual DbSet<Header_list_all> Header_list_all { get; set; }
+        public virtual DbSet<Header_list_all_folders> Header_list_all_folders { get; set; }
+        public virtual DbSet<Header_list_new> Header_list_new { get; set; }
+        public virtual DbSet<Header_list_none> Header_list_none { get; set; }
+        public virtual DbSet<Header_list_old> Header_list_old { get; set; }
+        public virtual DbSet<Header_list_own> Header_list_own { get; set; }
     
         [DbFunction("Data_ProcessingEntities", "CsvSplit1")]
         public virtual IQueryable<CsvSplit1_Result> CsvSplit1(string delimited, string delimiter)
@@ -250,6 +261,50 @@ namespace DataProcessing.DataModels.DataProcessing
         public virtual int zz_truncate_all()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("zz_truncate_all");
+        }
+    
+        public virtual ObjectResult<proc_alegeus_ExportImportFile_Result> proc_alegeus_ExportImportFile(string mbi_file_name, string exportType, string batchId)
+        {
+            var mbi_file_nameParameter = mbi_file_name != null ?
+                new ObjectParameter("mbi_file_name", mbi_file_name) :
+                new ObjectParameter("mbi_file_name", typeof(string));
+    
+            var exportTypeParameter = exportType != null ?
+                new ObjectParameter("exportType", exportType) :
+                new ObjectParameter("exportType", typeof(string));
+    
+            var batchIdParameter = batchId != null ?
+                new ObjectParameter("batchId", batchId) :
+                new ObjectParameter("batchId", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_alegeus_ExportImportFile_Result>("proc_alegeus_ExportImportFile", mbi_file_nameParameter, exportTypeParameter, batchIdParameter);
+        }
+    
+        public virtual ObjectResult<proc_cobra_ExportImportFile_Result> proc_cobra_ExportImportFile(string cobra_file_name, string exportType, string batchId)
+        {
+            var cobra_file_nameParameter = cobra_file_name != null ?
+                new ObjectParameter("cobra_file_name", cobra_file_name) :
+                new ObjectParameter("cobra_file_name", typeof(string));
+    
+            var exportTypeParameter = exportType != null ?
+                new ObjectParameter("exportType", exportType) :
+                new ObjectParameter("exportType", typeof(string));
+    
+            var batchIdParameter = batchId != null ?
+                new ObjectParameter("batchId", batchId) :
+                new ObjectParameter("batchId", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<proc_cobra_ExportImportFile_Result>("proc_cobra_ExportImportFile", cobra_file_nameParameter, exportTypeParameter, batchIdParameter);
+        }
+    
+        public virtual int process_cobra_file_table_stage_import()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("process_cobra_file_table_stage_import");
+        }
+    
+        public virtual int process_cobra_res_file_table_stage_import()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("process_cobra_res_file_table_stage_import");
         }
     }
 }

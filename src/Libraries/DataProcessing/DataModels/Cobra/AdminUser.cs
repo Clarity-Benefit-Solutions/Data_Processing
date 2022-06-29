@@ -7,19 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataProcessing.DataModels.DataProcessing
+namespace DataProcessing.DataModels.Cobra
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Automated_Header_list
+    public partial class AdminUser
     {
-        public string Folder_name { get; set; }
-        public string template_type { get; set; }
-        public string IC_type { get; set; }
-        public int ID { get; set; }
-        public string to_FTP { get; set; }
-        public string BENCODE { get; set; }
-        public string environment { get; set; }
+        public System.Guid User { get; set; }
+        public string UserName { get; set; }
+        public string UserEmailAddress { get; set; }
+        public Nullable<int> Active { get; set; }
     }
 }

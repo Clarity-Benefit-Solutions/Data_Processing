@@ -134,7 +134,7 @@ namespace DataProcessing
                     //
                     // 3a. set unique fileNames for each file in source folder and add to file Log and move to Holding Dir
                     FileUtils.IterateDirectory(
-                        rowFolderName, DirectoryIterateType.Files, false, "*.*",
+                        new string[] { rowFolderName }, DirectoryIterateType.Files, false, new string[] { "*.csv" , "*.xlsx", "*.xls"},
                         (srcFilePath, destFilePath, dummy2) =>
                         {
                             this.MoveIncomingFileToNextStepDir(srcFilePath, dbConn, fileLogParams);

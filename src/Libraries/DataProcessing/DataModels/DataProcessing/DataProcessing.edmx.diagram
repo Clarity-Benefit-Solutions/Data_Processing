@@ -22,6 +22,17 @@
         <EntityTypeShape EntityType="Data_ProcessingModel.message_log" Width="1.5" PointX="6.75" PointY="12.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Data_ProcessingModel.QB_file_data_fixtbl" Width="1.5" PointX="8.75" PointY="12.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Data_ProcessingModel.vw_file_processing_log" Width="1.5" PointX="12.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Data_ProcessingModel.cobra_file_table" Width="1.5" PointX="15.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Data_ProcessingModel.cobra_file_table_stage" Width="1.5" PointX="9.75" PointY="15.75" />
+        <EntityTypeShape EntityType="Data_ProcessingModel.cobra_res_file_table" Width="1.5" PointX="11.75" PointY="15.75" />
+        <EntityTypeShape EntityType="Data_ProcessingModel.cobra_res_file_table_stage" Width="1.5" PointX="17.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Data_ProcessingModel.FTP_Source_Folders" Width="1.5" PointX="3.75" PointY="17.75" />
+        <EntityTypeShape EntityType="Data_ProcessingModel.Header_list_all" Width="1.5" PointX="5.75" PointY="17.75" />
+        <EntityTypeShape EntityType="Data_ProcessingModel.Header_list_all_folders" Width="1.5" PointX="0.75" PointY="18.75" />
+        <EntityTypeShape EntityType="Data_ProcessingModel.Header_list_new" Width="1.5" PointX="19.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Data_ProcessingModel.Header_list_none" Width="1.5" PointX="19.75" PointY="4.75" />
+        <EntityTypeShape EntityType="Data_ProcessingModel.Header_list_old" Width="1.5" PointX="19.75" PointY="8.75" />
+        <EntityTypeShape EntityType="Data_ProcessingModel.Header_list_own" Width="1.5" PointX="19.75" PointY="12.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

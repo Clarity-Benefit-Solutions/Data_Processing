@@ -331,6 +331,84 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CsvFileSpecs.cs" />
+    <Compile Include="DataModels\Cobra\AdminTPAUser.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\AdminUser.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\AllSSOUser.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\Broker.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\BrokerClient.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\BrokerContact.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\Carrier.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\CarrierContact.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\Client.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\ClientContact.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\ClientDivision.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\ClientDivisionContact.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\Cobra.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Cobra.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\Cobra.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\Cobra.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Cobra.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\db_error_log.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\db_message_log.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\NPM.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\QB.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\QBAEI_ClientList_csv.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\QBEvent.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\QBPlan.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\SPM.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\Cobra\SPMAccess.cs">
+      <DependentUpon>Cobra.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataModels\DataProcessing\alegeus_file_final.cs">
       <DependentUpon>DataProcessing.tt</DependentUpon>
     </Compile>
@@ -341,6 +419,18 @@
       <DependentUpon>DataProcessing.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\DataProcessing\Automated_Header_list.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\cobra_file_table.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\cobra_file_table_stage.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\cobra_res_file_table.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\cobra_res_file_table_stage.cs">
       <DependentUpon>DataProcessing.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\DataProcessing\CsvSplit1_Result.cs">
@@ -379,6 +469,27 @@
     <Compile Include="DataModels\DataProcessing\file_processing_tasks_log.cs">
       <DependentUpon>DataProcessing.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataModels\DataProcessing\FTP_Source_Folders.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\Header_list_all.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\Header_list_all_folders.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\Header_list_new.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\Header_list_none.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\Header_list_old.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\Header_list_own.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataModels\DataProcessing\mbi_file_table.cs">
       <DependentUpon>DataProcessing.tt</DependentUpon>
     </Compile>
@@ -386,6 +497,12 @@
       <DependentUpon>DataProcessing.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\DataProcessing\message_log.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\proc_alegeus_ExportImportFile_Result.cs">
+      <DependentUpon>DataProcessing.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\DataProcessing\proc_cobra_ExportImportFile_Result.cs">
       <DependentUpon>DataProcessing.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\DataProcessing\QB_file_data_fixtbl.cs">
@@ -430,6 +547,13 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DataProcessing.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <EntityDeploy Include="DataModels\Cobra\Cobra.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Cobra.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="DataModels\Cobra\Cobra.edmx.diagram">
+      <DependentUpon>Cobra.edmx</DependentUpon>
+    </None>
     <None Include="DataModels\DataProcessing\DataProcessing.edmx.diagram">
       <DependentUpon>DataProcessing.edmx</DependentUpon>
     </None>
@@ -443,6 +567,16 @@
     <Folder Include="_SQLs\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DataModels\Cobra\Cobra.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Cobra.edmx</DependentUpon>
+      <LastGenOutput>Cobra.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="DataModels\Cobra\Cobra.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Cobra.edmx</DependentUpon>
+      <LastGenOutput>Cobra.cs</LastGenOutput>
+    </Content>
     <Content Include="DataModels\DataProcessing\DataProcessing.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DataProcessing.edmx</DependentUpon>

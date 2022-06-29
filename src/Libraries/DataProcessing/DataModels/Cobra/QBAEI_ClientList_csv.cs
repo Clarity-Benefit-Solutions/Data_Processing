@@ -7,19 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataProcessing.DataModels.DataProcessing
+namespace DataProcessing.DataModels.Cobra
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Automated_Header_list
+    public partial class QBAEI_ClientList_csv
     {
-        public string Folder_name { get; set; }
-        public string template_type { get; set; }
-        public string IC_type { get; set; }
-        public int ID { get; set; }
-        public string to_FTP { get; set; }
-        public string BENCODE { get; set; }
-        public string environment { get; set; }
+        public int clientID { get; set; }
+        public string ClientName { get; set; }
+        public string ClientAlternate { get; set; }
     }
 }

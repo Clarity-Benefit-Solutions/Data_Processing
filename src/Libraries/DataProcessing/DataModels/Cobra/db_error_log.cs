@@ -7,19 +7,19 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataProcessing.DataModels.DataProcessing
+namespace DataProcessing.DataModels.Cobra
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Automated_Header_list
+    public partial class db_error_log
     {
-        public string Folder_name { get; set; }
-        public string template_type { get; set; }
-        public string IC_type { get; set; }
-        public int ID { get; set; }
-        public string to_FTP { get; set; }
-        public string BENCODE { get; set; }
-        public string environment { get; set; }
+        public int log_id { get; set; }
+        public string sql_state { get; set; }
+        public string err_no { get; set; }
+        public string err_source { get; set; }
+        public string err_msg { get; set; }
+        public System.DateTime created_at { get; set; }
+        public string created_by { get; set; }
     }
 }

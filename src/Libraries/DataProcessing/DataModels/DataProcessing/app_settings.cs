@@ -19,5 +19,6 @@ namespace DataProcessing.DataModels.DataProcessing
         public string setting_name { get; set; }
         public string setting_value { get; set; }
         public Nullable<System.DateTime> created_at { get; set; }
+        public int is_active { get; set; }
     }
 }
