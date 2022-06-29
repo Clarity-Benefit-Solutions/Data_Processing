@@ -22,6 +22,49 @@ namespace DataProcessing
     {
         #region CheckCobraFile
 
+        private void CheckCobraFile(EdiFileFormat fileFormat, string currentFilePath)
+        {
+            string tableName = "";
+            TypedCsvSchema mappings = new TypedCsvSchema();
+            string postImportProc = "";
+
+            // check mappings and type of file (Import or Result)
+            Boolean isResultFile = Import.GetCobraFileFormatIsResultFile(currentFilePath);
+            if (isResultFile)
+            {
+                return;
+            }
+         
+            // get columns for file based on header type
+            mappings = Import.GetAlegeusFileImportMappings(fileFormat, headerType);
+
+            //
+            tableName = "[dbo].[cobra_import_file_table_stage]";
+            postImportProc = "[dbo].[process_cobra_import_file_table_stage_import]";
+            //
+            Import.ImportCobraFile(DbConn, currentFilePath, OriginalSrcFilePath, this.hasHeaderRow, FileLogParams, null);
+
+            //
+            // update check type for table
+            string queryString1 = $" update {tableName} set " +
+                                  $" /* set check type */check_type = 'PreCheck', " +
+                                  $" /* remove extra csv commas added to line */ data_row = replace(data_row, ',,,,,,,,,,,,,,,,,,,,', '') " +
+                                  $" where 1 = 1;";
+            DbUtils.DbQuery(DbOperation.ExecuteNonQuery, DbConn, queryString1, null,
+                FileLogParams?.GetMessageLogParams()
+            );
+
+            // check file data from the table based on mappings
+            CheckCobraFileData(fileFormat, mappings);
+
+            // run post import proc to take data from stage into final table
+            string queryString = $"exec {postImportProc};";
+            //
+            DbUtils.DbQuery(DbOperation.ExecuteNonQuery, DbConn, queryString, null,
+                FileLogParams?.GetMessageLogParams()
+            );
+        }
+
         private void CheckCobraFileData(EdiFileFormat fileFormat, TypedCsvSchema mappings)
         {
             // ensure previously cached data is not used so

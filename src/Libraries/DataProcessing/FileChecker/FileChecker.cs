@@ -344,7 +344,7 @@ namespace DataProcessing
                     ImpExpUtils.GetAlegeusFileFormats(this.SrcFilePath, false, this.FileLogParams);
 
                 //
-                CheckFile(fileFormats);
+                CheckAlegeusFile(fileFormats);
 
                 //
                 var result = this.fileCheckResults.OperationResultType;
@@ -357,7 +357,7 @@ namespace DataProcessing
                 // we can check the entire file directly
                 EdiFileFormat fileFormat = EdiFileFormat.Unknown;
                 //
-                CheckFile(fileFormat, this.OriginalSrcFilePath);
+                CheckCobraFile(fileFormat, this.OriginalSrcFilePath);
                 //
                 var result = this.fileCheckResults.OperationResultType;
                 //
@@ -370,148 +370,10 @@ namespace DataProcessing
             }
         }
 
-        private void CheckFile(Dictionary<EdiFileFormat, List<int>> fileFormats)
-        {
-            // 2. import the file
-            string fileName = Path.GetFileName(SrcFilePath) ?? string.Empty;
-            FileLogParams?.SetFileNames(Utils.GetUniqueIdFromFileName(fileName), fileName, SrcFilePath, "", "",
-                "CheckFile", $"Starting: Check {fileName}", "Starting");
 
-            // split text fileinto multiple files
-            Dictionary<EdiFileFormat, object[]> files = new Dictionary<EdiFileFormat, object[]>();
-
-            //
-            foreach (EdiFileFormat fileFormat in fileFormats.Keys)
-            {
-                // get temp file for each format
-                string splitFileName = Path.GetTempFileName();
-                FileUtils.EnsurePathExists(splitFileName);
-                //
-                var splitFileWriter = new StreamWriter(splitFileName, false);
-                files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
-            }
-
-            // open file for reading
-            // read each line and insert
-            using (var inputFile = new StreamReader(this.SrcFilePath))
-            {
-                int rowNo = 0;
-                string line;
-                while ((line = inputFile.ReadLine()!) != null)
-                {
-                    rowNo++;
-
-                    foreach (EdiFileFormat fileFormat2 in fileFormats.Keys)
-                    {
-                        if (
-                            fileFormats[fileFormat2].Contains(rowNo)
-                            || Utils.Left(line, 2) == "RA" || Utils.Left(line, 2) == "IA"
-                        )
-                        {
-                            // get temp file for each format
-                            var splitFileWriter = (StreamWriter)files[fileFormat2][0];
-                            // if there is prvUnwrittenLine it was probably a header line - write to the file that 
-
-                            splitFileWriter.WriteLine(line);
-                            continue;
-                        }
-                    }
-
-                    // go to next line if a line was written
-                }
-            }
-
-            // close all files
-            //
-            foreach (var fileFormat3 in files.Keys)
-            {
-                // get temp file for each format
-                var writer = (StreamWriter)files[fileFormat3][0];
-                writer.Close();
-
-                // import and check the file
-                CheckFile(fileFormat3, (string)files[fileFormat3][1]);
-            }
-        }
-
-        private void CheckFile(EdiFileFormat fileFormat, string currentFilePath)
-        {
-            string tableName = "";
-            TypedCsvSchema mappings = new TypedCsvSchema();
-            string postImportProc = "";
-
-            if (PlatformType == PlatformType.Alegeus)
-            {
-                // check mappings and type of file (Import or Result)
-                Boolean isResultFile = Import.GetAlegeusFileFormatIsResultFile(fileFormat);
-                if (isResultFile)
-                {
-                    return;
-                }
-
-                // get header type from filename
-                var headerType = Import.GetAlegeusHeaderTypeFromFile(currentFilePath);
-
-                // get columns for file based on header type
-                mappings = Import.GetAlegeusFileImportMappings(fileFormat, headerType);
-
-                //
-                tableName = "[dbo].[mbi_file_table_stage]";
-                postImportProc = "[dbo].[process_mbi_file_table_stage_import]";
-
-                //
-                Import.ImportAlegeusFile(fileFormat, DbConn, currentFilePath, OriginalSrcFilePath, this.hasHeaderRow, FileLogParams, null);
-
-            }
-            else if (PlatformType == PlatformType.Cobra)
-            {
-                // check mappings and type of file (Import or Result)
-                Boolean isResultFile = false; // Import.GetAlegeusFileFormatIsResultFile(fileFormat);
-                if (isResultFile)
-                {
-                    return;
-                }
-
-                // get columns for file based on header type
-                mappings = Import.GetAlegeusFileImportMappings(fileFormat, headerType);
-
-                //
-                tableName = "[dbo].[cobra_import_file_table_stage]";
-                postImportProc = "[dbo].[process_cobra_import_file_table_stage_import]";
-                //
-                Import.ImportCobraFile(DbConn, currentFilePath, OriginalSrcFilePath, this.hasHeaderRow, FileLogParams, null);
-            }
-            //
-            // update check type for table
-            string queryString1 = $" update {tableName} set " +
-                                  $" /* set check type */check_type = 'PreCheck', " +
-                                  $" /* remove extra csv commas added to line */ data_row = replace(data_row, ',,,,,,,,,,,,,,,,,,,,', '') " +
-                                  $" where 1 = 1;";
-            DbUtils.DbQuery(DbOperation.ExecuteNonQuery, DbConn, queryString1, null,
-                FileLogParams?.GetMessageLogParams()
-            );
-
-// check file data from the table based on mappings
-            CheckFileData(fileFormat, mappings);
-
-            // run post import proc to take data from stage into final table
-            string queryString = $"exec {postImportProc};";
-            //
-            DbUtils.DbQuery(DbOperation.ExecuteNonQuery, DbConn, queryString, null,
-                FileLogParams?.GetMessageLogParams()
-            );
-        }
-
-        private void CheckFileData(EdiFileFormat fileFormat, TypedCsvSchema mappings)
-        {
-            if (PlatformType == PlatformType.Alegeus)
-            {
-                CheckAlegeusFileData(fileFormat, mappings);
-            }
-        }
         #endregion
 
-      
+
 
         #region CheckUtils
 

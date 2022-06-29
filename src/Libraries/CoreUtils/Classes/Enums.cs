@@ -277,6 +277,11 @@
 
         [Utils.DisplayText("EdiFileFormat.Alegeus.AlegeusResultsEmployeeCardFees")]
         AlegeusResultsEmployeeCardFees,
+
+        /**/
+        CobraEnrollment,
+        CobraEmployeeDeposit,
+        CobraDemographics
     }
 
 }
