@@ -26,18 +26,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0853958f-c1a2-4d9c-ae8d-4ae39e7a6a8c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-06-129-cobra-filechecker-1.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-06-129-cobra-filechecker-2.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-06-129-cobra-filechecker-3.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Broker_Commission.EUXFFw/schema/dbo.sYMBAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Broker_Commission.EUXFFw/schema/dbo.sYMBAA.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.zip" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/.vs/DataProcessing/v16/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/.vs/DataProcessing/v16/.suo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/FileChecker/FileCheckerCobra.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/FileChecker/FileCheckerCobra.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Import.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Import.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-06-129-cobra-filechecker-2.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-06-129-cobra-filechecker-2.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-06-129-cobra-filechecker-3.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-06-129-cobra-filechecker-3.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -182,7 +177,6 @@
       <path value="$PROJECT_DIR$" />
       <path value="$PROJECT_DIR$/.." />
     </ignored-roots>
-    <MESSAGE value="fix trn level for register part" />
     <MESSAGE value="form changes return valueof fields as json" />
     <MESSAGE value="performance tweaking" />
     <MESSAGE value="register part or retrieve password" />
@@ -207,7 +201,8 @@
     <MESSAGE value="Oct 22" />
     <MESSAGE value="Nov 3" />
     <MESSAGE value="Nov 9 - WIP 1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Nov 9 - WIP 1" />
+    <MESSAGE value="June 29 - COBRA" />
+    <option name="LAST_COMMIT_MESSAGE" value="June 29 - COBRA" />
   </component>
   <component name="WindowStateProjectService">
     <state x="408" y="114" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1654592683542">
@@ -219,36 +214,44 @@
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state x="553" y="301" key="#com.intellij.ide.actions.ChooseComponentsToExportDialog/62.0.1474.864@62.0.1474.864" timestamp="1654592724626" />
+    <state x="396" y="0" key="CommitChangelistDialog2" timestamp="1656492615720">
+      <screen x="62" y="0" width="1474" height="864" />
+    </state>
+    <state x="396" y="0" key="CommitChangelistDialog2/62.0.1474.864@62.0.1474.864" timestamp="1656492615720" />
     <state x="589" y="204" key="FileChooserDialogImpl" timestamp="1654592722273">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state x="549" y="220" key="FileChooserDialogImpl/0.0.1536.930@0.0.1536.930" timestamp="1650714183158" />
     <state x="589" y="204" key="FileChooserDialogImpl/62.0.1474.864@62.0.1474.864" timestamp="1654592722273" />
-    <state width="0" height="0" key="GridCell.Tab.0.bottom" timestamp="1656492257903">
+    <state width="1088" height="86" key="GridCell.Tab.0.bottom" timestamp="1656493455892">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="832" height="259" key="GridCell.Tab.0.bottom/62.0.1218.720@62.0.1218.720" timestamp="1654525814988" />
-    <state width="0" height="0" key="GridCell.Tab.0.bottom/62.0.1474.864@62.0.1474.864" timestamp="1656492257903" />
-    <state width="0" height="0" key="GridCell.Tab.0.center" timestamp="1656492257902">
+    <state width="1088" height="86" key="GridCell.Tab.0.bottom/62.0.1474.864@62.0.1474.864" timestamp="1656493455892" />
+    <state width="1088" height="86" key="GridCell.Tab.0.center" timestamp="1656493455892">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="832" height="259" key="GridCell.Tab.0.center/62.0.1218.720@62.0.1218.720" timestamp="1654525814988" />
-    <state width="0" height="0" key="GridCell.Tab.0.center/62.0.1474.864@62.0.1474.864" timestamp="1656492257902" />
-    <state width="0" height="0" key="GridCell.Tab.0.left" timestamp="1656492257902">
+    <state width="1088" height="86" key="GridCell.Tab.0.center/62.0.1474.864@62.0.1474.864" timestamp="1656493455892" />
+    <state width="1088" height="86" key="GridCell.Tab.0.left" timestamp="1656493455892">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="832" height="259" key="GridCell.Tab.0.left/62.0.1218.720@62.0.1218.720" timestamp="1654525814987" />
-    <state width="0" height="0" key="GridCell.Tab.0.left/62.0.1474.864@62.0.1474.864" timestamp="1656492257902" />
-    <state width="0" height="0" key="GridCell.Tab.0.right" timestamp="1656492257902">
+    <state width="1088" height="86" key="GridCell.Tab.0.left/62.0.1474.864@62.0.1474.864" timestamp="1656493455892" />
+    <state width="1088" height="86" key="GridCell.Tab.0.right" timestamp="1656493455892">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="832" height="259" key="GridCell.Tab.0.right/62.0.1218.720@62.0.1218.720" timestamp="1654525814988" />
-    <state width="0" height="0" key="GridCell.Tab.0.right/62.0.1474.864@62.0.1474.864" timestamp="1656492257902" />
-    <state x="535" y="239" width="316" height="321" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1654540483708">
+    <state width="1088" height="86" key="GridCell.Tab.0.right/62.0.1474.864@62.0.1474.864" timestamp="1656493455892" />
+    <state x="391" y="151" key="Vcs.Push.Dialog.v2" timestamp="1656492621187">
+      <screen x="62" y="0" width="1474" height="864" />
+    </state>
+    <state x="391" y="151" key="Vcs.Push.Dialog.v2/62.0.1474.864@62.0.1474.864" timestamp="1656492621187" />
+    <state x="535" y="239" width="316" height="321" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1656492759319">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state x="453" y="199" width="316" height="321" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/62.0.1218.720@62.0.1218.720" timestamp="1654525509655" />
-    <state x="535" y="239" width="316" height="385" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/62.0.1474.864@62.0.1474.864" timestamp="1654540483708" />
+    <state x="535" y="239" width="316" height="385" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/62.0.1474.864@62.0.1474.864" timestamp="1656492759319" />
     <state x="379" y="86" key="com.intellij.database.dbimport.ImportDialog" timestamp="1654540353495">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
@@ -258,6 +261,10 @@
     </state>
     <state x="541" y="170" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/62.0.1218.720@62.0.1218.720" timestamp="1654525526675" />
     <state x="642" y="204" width="863" height="596" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/62.0.1474.864@62.0.1474.864" timestamp="1656492196928" />
+    <state x="524" y="31" width="549" height="801" key="find.popup" timestamp="1656492972574">
+      <screen x="62" y="0" width="1474" height="864" />
+    </state>
+    <state x="524" y="31" width="549" height="801" key="find.popup/62.0.1474.864@62.0.1474.864" timestamp="1656492972574" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

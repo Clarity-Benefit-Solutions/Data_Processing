@@ -718,3 +718,15 @@ go
 exec sp_rename 'cobra_res_file_table_stage.res_file_name', cobra_res_file_name, 'COLUMN'
 go
 
+alter table cobra_res_file_table
+    drop column mbi_file_name
+go
+alter table dbo.cobra_res_file_table_stage
+    drop column mbi_file_name
+go
+
+alter table dbo.cobra_res_file_table
+    add  data_row nvarchar(max)
+go
+
+
