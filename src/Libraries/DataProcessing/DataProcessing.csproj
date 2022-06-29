@@ -407,6 +407,8 @@
       <DependentUpon>DataProcessing.tt</DependentUpon>
     </Compile>
     <Compile Include="FileChecker\FileChecker.cs" />
+    <Compile Include="FileChecker\FileCheckerCobra.cs" />
+    <Compile Include="FileChecker\FileCheckerAlegeus.cs" />
     <Compile Include="FileChecker\FileCheckResults.cs" />
     <Compile Include="Import.cs" />
     <Compile Include="Processes\AlegeusErrorLog.cs" />

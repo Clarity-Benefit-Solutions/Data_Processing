@@ -20,7 +20,7 @@ namespace DataProcessing
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public partial class FileChecker : IDisposable
     {
-          #region CheckCobraFile
+        #region CheckCobraFile
 
         private void CheckCobraFileData(EdiFileFormat fileFormat, TypedCsvSchema mappings)
         {
@@ -108,19 +108,19 @@ namespace DataProcessing
                 {
                     // ER ID
                     case "tpaid":
-                        hasError = this.CheckTpaExists(dataRow, column, fileFormat);
+                        hasError = this.CheckCobraTpaExists(dataRow, column, fileFormat);
                         break;
 
                     // ER ID
                     case "employerid":
                         //ER must exist before any Import files are sent
-                        hasError = this.CheckEmployerExists(dataRow, column, fileFormat);
+                        hasError = this.CheckCobraEmployerExists(dataRow, column, fileFormat);
                         break;
 
                     // EE ID
                     case "employeeid":
                         //ER must exist before any Import files are sent. But for IB files, employee need not exist - he is being added
-                        hasError = this.CheckEmployeeExists(dataRow, column, fileFormat);
+                        hasError = this.CheckCobraEmployeeExists(dataRow, column, fileFormat);
 
                         break;
                     // plan related
@@ -128,11 +128,11 @@ namespace DataProcessing
                     case @"accounttypecode":
                         if (fileFormat == EdiFileFormat.CobraEnrollment)
                         {
-                            hasError = this.CheckEmployerPlanExists(dataRow, column, fileFormat);
+                            hasError = this.CheckCobraEmployerPlanExists(dataRow, column, fileFormat);
                         }
                         else if (fileFormat == EdiFileFormat.CobraEmployeeDeposit)
                         {
-                            hasError = this.CheckEmployeePlanExists(dataRow, column, fileFormat);
+                            hasError = this.CheckCobraEmployeePlanExists(dataRow, column, fileFormat);
                         }
 
                         break;
@@ -142,7 +142,7 @@ namespace DataProcessing
                 }
             }
             // check for duplicate posting of the row
-            hasError = CheckForDuplicatePosting(dataRow, fileFormat);
+            hasError = CheckForDuplicateCobraPosting(dataRow, fileFormat);
         }
 
         private void AddCobraErrorForRow(mbi_file_table_stage dataRow, string errCode, string errMessage,
@@ -196,8 +196,8 @@ namespace DataProcessing
             }
         }
 
-        
-        public Boolean CheckTpaExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
+
+        public Boolean CheckCobraTpaExists(mbi_file_table_stage dataRow, TypedCsvColumn column, EdiFileFormat fileFormat)
         {
             var errorMessage = "";
             var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{dataRow.TpaId}";
@@ -244,7 +244,7 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckEmployerExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
+        public Boolean CheckCobraEmployerExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
             EdiFileFormat fileFormat)
         {
             var errorMessage = "";
@@ -263,7 +263,7 @@ namespace DataProcessing
                 }
                 else
                 {
-                    DataTable dbResults = GetAllEmployers();
+                    DataTable dbResults = GetAllCobraEmployers();
                     // planid is not always present e.g. in deposit file
                     string filter = $"employer_id = '{dataRow.EmployerId}'";
                     DataRow[] dbRows = dbResults.Select(filter);
@@ -303,7 +303,7 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckEmployeeExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
+        public Boolean CheckCobraEmployeeExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
             EdiFileFormat fileFormat = EdiFileFormat.Unknown)
         {
             var errorMessage = "";
@@ -326,7 +326,7 @@ namespace DataProcessing
                 }
                 else
                 {
-                    DataTable dbResults = GetAllEmployeesForEmployer(dataRow.EmployerId);
+                    DataTable dbResults = GetAllCobraEmployeesForEmployer(dataRow.EmployerId);
                     DataRow[] dbRows =
                         dbResults.Select(
                             $"employerid = '{dataRow.EmployerId}' and employeeid = '{dataRow.EmployeeID}'");
@@ -385,7 +385,7 @@ namespace DataProcessing
                 return false;
             }
         }
-        public Boolean CheckForDuplicatePosting(mbi_file_table_stage dataRow,
+        public Boolean CheckForDuplicateCobraPosting(mbi_file_table_stage dataRow,
                   EdiFileFormat fileFormat = EdiFileFormat.Unknown)
         {
 
@@ -440,7 +440,7 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckEmployerPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
+        public Boolean CheckCobraEmployerPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
             EdiFileFormat fileFormat)
         {
             var errorMessage = "";
@@ -465,7 +465,7 @@ namespace DataProcessing
                 }
                 else
                 {
-                    DataTable dbResults = GetAllPlansForEmployer(dataRow.EmployerId);
+                    DataTable dbResults = GetAllCobraPlansForEmployer(dataRow.EmployerId);
 
                     // planid is not always present e.g. in deposit file
                     string filter = $"employer_id = '{dataRow.EmployerId}'";
@@ -565,7 +565,7 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckEmployeePlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
+        public Boolean CheckCobraEmployeePlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
             EdiFileFormat fileFormat)
         {
             var errorMessage = "";
@@ -603,7 +603,7 @@ namespace DataProcessing
                     //  //return hasError;
                     //}
 
-                    DataTable dbResults = GetAllEmployeePlansForEmployer(dataRow.EmployerId);
+                    DataTable dbResults = GetAllCobraEmployeePlansForEmployer(dataRow.EmployerId);
 
                     // planid is not always present e.g. in deposit file
                     string filter = $" employeeid = '{dataRow.EmployeeID}' ";
@@ -730,25 +730,25 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckDependentExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
+        public Boolean CheckCobraDependentExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
             EdiFileFormat fileFormat)
         {
             // dependent plans are linked to the employee
-            return CheckEmployeeExists(dataRow, column, fileFormat);
+            return CheckCobraEmployeeExists(dataRow, column, fileFormat);
         }
 
-        public Boolean CheckDependentPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
+        public Boolean CheckCobraDependentPlanExists(mbi_file_table_stage dataRow, TypedCsvColumn column,
             EdiFileFormat fileFormat)
         {
             // dependent plans are linked to the employee
-            return CheckEmployeePlanExists(dataRow, column, fileFormat);
+            return CheckCobraEmployeePlanExists(dataRow, column, fileFormat);
         }
 
         #endregion checkData
 
         #region cacheCobraData
 
-        private DataTable GetAllEmployers()
+        private DataTable GetAllCobraEmployers()
         {
             DataTable dbResults = new DataTable();
             var cacheKey =
@@ -788,7 +788,7 @@ namespace DataProcessing
         }
 
         // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
-        private DataTable GetAllEmployeesForEmployer(string employerId)
+        private DataTable GetAllCobraEmployeesForEmployer(string employerId)
         {
             DataTable dbResults = new DataTable();
             var cacheKey =
@@ -830,7 +830,7 @@ namespace DataProcessing
         } // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
         // cache all plans for ER to reduce number of queries to database - each query for a single plan takes around 150 ms so we aree saving significant time esp for ER witjh many EE
 
-        private DataTable GetAllPlansForEmployer(string employerId)
+        private DataTable GetAllCobraPlansForEmployer(string employerId)
         {
             DataTable dbResults = new DataTable();
             var cacheKey =
@@ -875,7 +875,7 @@ namespace DataProcessing
             return dbResults;
         }
 
-        private DataTable GetAllEmployeePlansForEmployer(string employerId)
+        private DataTable GetAllCobraEmployeePlansForEmployer(string employerId)
         {
             DataTable dbResults = new DataTable();
             var cacheKey =
