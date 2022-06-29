@@ -1404,7 +1404,7 @@ namespace DataProcessing
                     // add duplicated entire line as first column to ensure it isd parsed correctly
                     mappings.Add(new TypedCsvColumn("data_row", "data_row", FormatType.String, null, 0, 0, 0, 0));
                     // source filename
-                    mappings.Add(new TypedCsvColumn("cobra_import_file_name", "cobra_import_file_name", FormatType.String, null, 0, 0, 0,
+                    mappings.Add(new TypedCsvColumn("cobra_file_name", "cobra_file_name", FormatType.String, null, 0, 0, 0,
                         0));
                 }
             }
@@ -1776,10 +1776,10 @@ namespace DataProcessing
                         Boolean isResultFile = GetCobraFileFormatIsResultFile(srcFilePath);
 
                         //
-                        string tableName = isResultFile ? "[dbo].[cobra_res_file_table_stage]" : "[dbo].[cobra_import_file_table_stage]";
+                        string tableName = isResultFile ? "[dbo].[cobra_res_file_table_stage]" : "[dbo].[cobra_file_table_stage]";
                         string postImportProc = isResultFile
                             ? "dbo.process_cobra_res_file_table_stage_import"
-                            : "dbo.process_cobra_import_file_table_stage_import";
+                            : "dbo.process_cobra_file_table_stage_import";
 
                         // truncate staging table
                         DbUtils.TruncateTable(dbConn, tableName,

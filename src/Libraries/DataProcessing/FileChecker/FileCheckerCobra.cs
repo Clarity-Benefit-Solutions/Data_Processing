@@ -39,8 +39,8 @@ namespace DataProcessing
             mappings = Import.GetAlegeusFileImportMappings(fileFormat, headerType);
 
             //
-            tableName = "[dbo].[cobra_import_file_table_stage]";
-            postImportProc = "[dbo].[process_cobra_import_file_table_stage_import]";
+            tableName = "[dbo].[cobra_file_table_stage]";
+            postImportProc = "[dbo].[process_cobra_file_table_stage_import]";
             //
             Import.ImportCobraFile(DbConn, currentFilePath, OriginalSrcFilePath, this.hasHeaderRow, FileLogParams, null);
 
