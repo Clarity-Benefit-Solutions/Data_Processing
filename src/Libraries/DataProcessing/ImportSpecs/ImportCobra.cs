@@ -864,12 +864,13 @@ namespace DataProcessing
             string rowType = GetCobraRowFormatFromLine(line);
 
             // get mappings for event type & version
-            TypedCsvSchema mappings = GetCobraFileImportMappings(rowType, versionNo);
+            string escapedLine = line.Replace("\"", "\"\"");
 
             // add fixed columns to line
-            line = $"{srcRowNo},\"{line}\",{srcFileName},{line}";
+            line = $"{srcRowNo},\"{escapedLine}\",{srcFileName},{line}";
 
             // import into DB
+            TypedCsvSchema mappings = GetCobraFileImportMappings(rowType, versionNo);
             ImpExpUtils.ImportCsvLine(line, dbConn, tableName, mappings, fileLogParams, onErrorCallback);
 
         } // routine

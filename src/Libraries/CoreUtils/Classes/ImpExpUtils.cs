@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Sylvan.Data.Csv;
+using CoreUtils.Classes;
 using static CoreUtils.DbUtils;
 using SylvanCsvDataReader = Sylvan.Data.Csv.CsvDataReader;
 using CsvHelperCsvDataReader = CsvHelper.CsvDataReader;
@@ -356,12 +357,24 @@ namespace CoreUtils.Classes
                 insertColumnNames += $"{ mapping.DestinationColumn},";
                 //
                 colNo++;
-                var value = "";
+                string value = "";
                 if (columns.Length > colNo)
                 {
                     value = columns[colNo];
                 }
 
+                // trim starting and ending "
+                if (Utils.Left(value, 1) == "\"")
+                {
+                    value = value.Substring(1);
+                }
+                if (Utils.Right(value, 1) == "\"")
+                {
+                    value = Utils.Left(value, value.Length - 1);
+                }
+
+                value = value.Replace("\"\"", "\"");
+                
                 //
                 insertValuesString += $"'{Utils.DbQuote(value)}',";
             }
