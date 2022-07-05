@@ -21,6 +21,23 @@ namespace CoreUtils.Classes
 
     public class FileUtils
     {
+        public static string FixFileName(string fileName)
+        {
+            fileName = fileName.Replace("--", "_");
+            fileName = fileName.Replace("-", "_");
+            fileName = fileName.Replace("  ", "");
+            fileName = fileName.Replace(" ", "_");
+            fileName = fileName.Replace("__", "_");
+            fileName = fileName.Replace("'", "");
+            fileName = fileName.Replace(",", "");
+            fileName = fileName.Replace("\"", "");
+            fileName = fileName.Replace("//", "");
+            fileName = fileName.Replace("[", "");
+            fileName = fileName.Replace("]", "");
+            fileName = fileName.Trim();
+
+            return fileName;
+        }
         public static void EnsurePathExists(string fullFilePath)
         {
             try

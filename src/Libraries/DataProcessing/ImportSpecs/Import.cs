@@ -25,7 +25,7 @@ namespace DataProcessing
     public static partial class Import
     {
 
-      
+
         public static readonly string AppendCommasToCsvLine = ",,,,,,,,,,,,,,,,,,,,";
 
         public static void ImportCrmListFileBulkCopy(DbConnection dbConn, string srcFilePath,
@@ -136,16 +136,6 @@ namespace DataProcessing
                 platformCode = "UNKNOWN";
             }
 
-            if (platformType == PlatformType.Cobra)
-            {
-                // we dont have bencodes! just return the filename
-                newPath = $"{Path.GetDirectoryName(srcFilePath)}/";
-                newPath +=
-                    $"{testMarker}{Utils.StripUniqueIdAndHeaderTypeFromFileName(Path.GetFileNameWithoutExtension(srcFileName))}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
-                newPath = FileUtils.FixPath(newPath);
-
-                return newPath;
-            }
 
             var useThisFilePath = srcFilePath;
 
@@ -165,65 +155,109 @@ namespace DataProcessing
             string BenCode = "UNKNOWN";
             string recType = "XX";
 
-            var csvDataReaderOptions =
-                new CsvDataReaderOptions
-                {
-                    // also take header row as  data in case there uis no file header
-                    HasHeaders = false,
-                };
 
-            using var csv = SylvanCsvDataReader.Create(useThisFilePath, csvDataReaderOptions);
-            // read till we match header type for line
-            int rowNo = 0;
-            while (csv.Read())
+            using (var inputFile = new StreamReader(srcFilePath))
             {
-                rowNo++;
-                //
-                // col1: Record Type
-                var firstColValue = csv.GetString(0);
-                if (!Utils.IsBlank(firstColValue) && firstColValue.Length == 2
-                                                  && firstColValue.StartsWith("I",
-                                                      StringComparison.InvariantCultureIgnoreCase)
-                                                  && !firstColValue.Equals("IA",
-                                                      StringComparison.InvariantCultureIgnoreCase)
-                   )
+                int rowNo = 0;
+                string line;
+                while ((line = inputFile.ReadLine()) != null)
                 {
-                    recType = firstColValue.Trim();
+                    string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
 
-                    //
-                    // col2: tpaid
-                    var secondColValue = csv.GetString(1);
-
-                    // col3: employerid
-                    var thirdColValue = csv.GetString(2);
-                    if (thirdColValue.StartsWith("BEN", StringComparison.InvariantCultureIgnoreCase))
+                    if (platformType == PlatformType.Alegeus)
                     {
-                        BenCode = thirdColValue.Trim();
+                        //
+                        // col1: Record Type
+                        var firstColValue = columns[0];
+                        if (!Utils.IsBlank(firstColValue) && firstColValue.Length == 2
+                                                          && firstColValue.StartsWith("I",
+                                                              StringComparison.InvariantCultureIgnoreCase)
+                                                          && !firstColValue.Equals("IA",
+                                                              StringComparison.InvariantCultureIgnoreCase)
+                           )
+                        {
+                            recType = firstColValue.Trim();
+
+                            //
+                            // col2: tpaid
+                            var secondColValue = columns[1];
+
+                            // col3: employerid
+                            var thirdColValue = columns[2];
+                            if (thirdColValue.StartsWith("BEN", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                BenCode = thirdColValue.Trim();
+                            }
+
+                            // exit when we have both
+                            if (!Utils.IsBlank(BenCode) && !Utils.IsBlank(recType))
+                            {
+                                break;
+                            }
+                        }
                     }
-
-                    // exit when we have both
-                    if (!Utils.IsBlank(BenCode) && !Utils.IsBlank(recType))
+                    if (platformType == PlatformType.Cobra)
                     {
-                        break;
+                        //
+                        // col1: Record Type
+                        var firstColValue = columns[0];
+                        if (!Utils.IsBlank(firstColValue)
+                            && (firstColValue == "[QB]" || firstColValue == "[SPM]")
+                           )
+                        {
+                            recType = firstColValue;
+
+                            //
+                            // col2: tpaid
+                            var secondColValue = columns[1];
+                            BenCode = secondColValue.Trim();
+
+                            // exit when we have both
+                            if (!Utils.IsBlank(BenCode) && !Utils.IsBlank(recType))
+                            {
+                                break;
+                            }
+                        }
+                        else if (!Utils.IsBlank(firstColValue)
+                            && (firstColValue == "[NPM]")
+                           )
+                        {
+                            recType = firstColValue.Trim().Replace("[", "").Replace("]", "");
+
+                            //
+                            // col2: tpaid
+                            var fourthColValue = columns[3];
+                            BenCode = fourthColValue.Trim();
+                            BenCode = BenCode.Replace("/", "").Replace("\\", "").Replace("\"", "").Replace("'", "").Replace(".", "").Replace(",", "").Replace("  ", " ").Replace(" ", "-");
+
+                            // exit when we have both
+                            if (!Utils.IsBlank(BenCode) && !Utils.IsBlank(recType))
+                            {
+                                break;
+                            }
+                        }
                     }
                 }
             }
-            //
-            // remove single quotes
 
-            srcFileName = srcFileName.Replace("--", "_");
-            srcFileName = srcFileName.Replace("-", "_");
-            srcFileName = srcFileName.Replace(" ", "_");
-            srcFileName = srcFileName.Replace("__", "_");
-            srcFileName = srcFileName.Replace("'", "");
-            srcFileName = srcFileName.Replace(",", "");
-            srcFileName = srcFileName.Replace("\"", "");
-            srcFileName = srcFileName.Trim();
+            if (Utils.IsBlank(recType))
+            {
+                recType = "UNKNOWN";
+            }
+            if (Utils.IsBlank(BenCode))
+            {
+                BenCode = "UNKNOWN";
+            }
+
+            //
+            // fix file name
+            var fileName = $"{testMarker}{BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
+            fileName = FileUtils.FixFileName(srcFileName);
             //
             /*newPath = $"{Path.GetDirectoryName(srcFilePath)}/{Utils.GetUniqueIdFromFileName(srcFileName)}--";*/
             newPath = $"{Path.GetDirectoryName(srcFilePath)}/";
-            newPath +=
-                $"{testMarker}{BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
+            newPath += fileName;
+              
             newPath = FileUtils.FixPath(newPath);
 
             return newPath;
@@ -338,6 +372,6 @@ namespace DataProcessing
                 return PlatformType.Alegeus;
             }
         }
-    
+
     }
 }
