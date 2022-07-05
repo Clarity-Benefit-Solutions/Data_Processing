@@ -1100,25 +1100,33 @@ namespace DataProcessing
 
                         break;
 
+                    case FormatType.CobraYesNo:
                     case FormatType.YesNo:
-                        if (!value.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) &&
-                            !value.Equals("No", StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            this.AddCobraErrorForRow(dataRow, column.SourceColumn,
-                                $"{column.SourceColumn} must be be either Yes or No. {orgValue} is not valid");
-                        }
-
-                        break;
-
                     case FormatType.TrueFalse:
-                        if (!value.Equals("True", StringComparison.InvariantCultureIgnoreCase) &&
-                            !value.Equals("False", StringComparison.InvariantCultureIgnoreCase))
+                        switch (value.ToUpperInvariant())
+                        {
+                            case "TRUE":
+                            case "YES":
+                            case "1":
+                                value = "1";
+                                break;
+                            case "NO":
+                            case "FALSE":
+                            case "0":
+                                value = "0";
+                                break;
+                        }
+
+                        if (!value.Equals("1", StringComparison.InvariantCultureIgnoreCase) &&
+                            !value.Equals("0", StringComparison.InvariantCultureIgnoreCase))
                         {
                             this.AddCobraErrorForRow(dataRow, column.SourceColumn,
-                                $"{column.SourceColumn} must be be either Yes or No. {orgValue} is not valid");
+                                $"{column.SourceColumn} must be be either 1 (Yes) or 0 (No). {orgValue} is not valid");
                         }
 
                         break;
+
+                    
 
                     default:
                         break;
@@ -1134,7 +1142,7 @@ namespace DataProcessing
             }
 
             // pad ssn to 9 digits with leading zeros
-            if ((column.SourceColumn == "EmployeeSocialSecurityNumber" || column.SourceColumn == "EmployeeID"))
+            if ((column.SourceColumn == "EmployeeSocialSecurityNumber" || column.SourceColumn == "SSN" || column.SourceColumn == "EmployeeID" || column.FormatType == FormatType.SSN))
 
             {
                 if (!Utils.IsBlank(value))
@@ -1155,7 +1163,7 @@ namespace DataProcessing
             }
 
             // 2. check against GENERAL rules
-            if (column.FixedValue != null && value != column.FixedValue &&
+            if (!Utils.IsBlank(column.FixedValue) && value != column.FixedValue &&
                 !column.FixedValue.Split('|').Contains(value) && column.MinLength > 0)
             {
                 this.AddCobraErrorForRow(dataRow, column.SourceColumn,

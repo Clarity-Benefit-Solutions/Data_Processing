@@ -252,7 +252,7 @@ namespace DataProcessing
             //
             // fix file name
             var fileName = $"{testMarker}{BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
-            fileName = FileUtils.FixFileName(srcFileName);
+            fileName = FileUtils.FixFileName(fileName);
             //
             /*newPath = $"{Path.GetDirectoryName(srcFilePath)}/{Utils.GetUniqueIdFromFileName(srcFileName)}--";*/
             newPath = $"{Path.GetDirectoryName(srcFilePath)}/";

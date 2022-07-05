@@ -150,7 +150,7 @@ namespace CoreUtils.Classes
             this.ColumnName = sourceColumn;
             this.DestinationColumn = sourceColumn;
             this.FormatType = formatType;
-            this.FixedValue = "";
+            this.FixedValue = possibleValues;
             this.MinLength = isRequired > 0 ? 1 : 0;
             this.MaxLength = maxLength;
             this.MinValue = 0;
