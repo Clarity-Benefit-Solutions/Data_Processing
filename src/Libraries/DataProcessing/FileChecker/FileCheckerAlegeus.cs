@@ -517,6 +517,11 @@ namespace DataProcessing
                         $" and PlanStartDate='{dataRow.PlanStartDate}'" +
                         $" and EffectiveDate='{dataRow.EffectiveDate}'" +
                         $" and DepositType='{dataRow.DepositType}'" +
+                        // todo: flag only if 
+                        // check amounts also - deposit type ER / EE
+                        // EmployeeDepositAmount ?? ??
+                        // EmployerDepositAmount ?? ??
+                        //$" and DepositType='{dataRow.DepositType}'" +
                         $" and len(isnull(error_message, '')) = 0" +
                         $" order by row_id desc, mbi_file_name, source_row_no ;";
                     //
