@@ -26,7 +26,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0853958f-c1a2-4d9c-ae8d-4ae39e7a6a8c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-07-05-alegeus-filechecker-1.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Broker_Commission.EUXFFw/schema/dbo.sYMBAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Broker_Commission.EUXFFw/schema/dbo.sYMBAA.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.zip" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-06-129-cobra-filechecker-2.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-06-19-cobra-filechecker-2.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-06-129-cobra-filechecker-3.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-06-129-cobra-filechecker-3.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../src/.vs/DataProcessing/v16/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/.vs/DataProcessing/v16/.suo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/Classes/Enums.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/CoreUtils/Classes/Enums.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/DataProcessing.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/DataProcessing.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/FileChecker/FileChecker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/FileChecker/FileChecker.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/FileChecker/FileCheckerAlegeus.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/FileChecker/FileCheckerAlegeus.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/FileChecker/FileCheckerCobra.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/FileChecker/FileCheckerCobra.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Import.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Processes/IncomingFileProcessing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Processes/IncomingFileProcessing.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,19 +96,19 @@
     <property name="settings.editor.selected.configurable" value="application.passwordSafe" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\FileAndDataProcessingAndErrorLog\_SQLFiles-FileProcessing" />
-      <recent name="E:\BROKERCOMMISSION\Broker_Commission\_SQLFiles.BrokerCommissions\AllDbChanges" />
-      <recent name="E:\FileAndDataProcessingAndErrorLog\_DataGripProjects\Test-BE015" />
-      <recent name="C:\___Clarity\clarity_dev\r1_documents\db_dev\db_changes" />
-      <recent name="$PROJECT_DIR$/../../db_dev/db_changes" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\BROKERCOMMISSION\Broker_Commission\_SQLFiles.BrokerCommissions" />
       <recent name="$PROJECT_DIR$/../../db_dev/_prv" />
       <recent name="$PROJECT_DIR$/../../db_dev/db_changes" />
       <recent name="C:\___Clarity\clarity_dev\r1_documents\db_dev" />
       <recent name="C:\___Clarity\clarity_dev\r1_documents\db_dev\_prv" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\FileAndDataProcessingAndErrorLog\_SQLFiles-FileProcessing" />
+      <recent name="E:\BROKERCOMMISSION\Broker_Commission\_SQLFiles.BrokerCommissions\AllDbChanges" />
+      <recent name="E:\FileAndDataProcessingAndErrorLog\_DataGripProjects\Test-BE015" />
+      <recent name="C:\___Clarity\clarity_dev\r1_documents\db_dev\db_changes" />
+      <recent name="$PROJECT_DIR$/../../db_dev/db_changes" />
     </key>
   </component>
   <component name="RunManager" selected="Database Script.registration_log.sql">
@@ -217,26 +233,26 @@
     </state>
     <state x="549" y="220" key="FileChooserDialogImpl/0.0.1536.930@0.0.1536.930" timestamp="1650714183158" />
     <state x="589" y="204" key="FileChooserDialogImpl/62.0.1474.864@62.0.1474.864" timestamp="1654592722273" />
-    <state width="1088" height="86" key="GridCell.Tab.0.bottom" timestamp="1656533795574">
+    <state width="1088" height="145" key="GridCell.Tab.0.bottom" timestamp="1657020382022">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="832" height="259" key="GridCell.Tab.0.bottom/62.0.1218.720@62.0.1218.720" timestamp="1654525814988" />
-    <state width="1088" height="86" key="GridCell.Tab.0.bottom/62.0.1474.864@62.0.1474.864" timestamp="1656533795574" />
-    <state width="1088" height="86" key="GridCell.Tab.0.center" timestamp="1656533795573">
+    <state width="1088" height="145" key="GridCell.Tab.0.bottom/62.0.1474.864@62.0.1474.864" timestamp="1657020382022" />
+    <state width="1088" height="145" key="GridCell.Tab.0.center" timestamp="1657020382021">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="832" height="259" key="GridCell.Tab.0.center/62.0.1218.720@62.0.1218.720" timestamp="1654525814988" />
-    <state width="1088" height="86" key="GridCell.Tab.0.center/62.0.1474.864@62.0.1474.864" timestamp="1656533795573" />
-    <state width="1088" height="86" key="GridCell.Tab.0.left" timestamp="1656533795573">
+    <state width="1088" height="145" key="GridCell.Tab.0.center/62.0.1474.864@62.0.1474.864" timestamp="1657020382021" />
+    <state width="1088" height="145" key="GridCell.Tab.0.left" timestamp="1657020382021">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="832" height="259" key="GridCell.Tab.0.left/62.0.1218.720@62.0.1218.720" timestamp="1654525814987" />
-    <state width="1088" height="86" key="GridCell.Tab.0.left/62.0.1474.864@62.0.1474.864" timestamp="1656533795573" />
-    <state width="1088" height="86" key="GridCell.Tab.0.right" timestamp="1656533795574">
+    <state width="1088" height="145" key="GridCell.Tab.0.left/62.0.1474.864@62.0.1474.864" timestamp="1657020382021" />
+    <state width="1088" height="145" key="GridCell.Tab.0.right" timestamp="1657020382022">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="832" height="259" key="GridCell.Tab.0.right/62.0.1218.720@62.0.1218.720" timestamp="1654525814988" />
-    <state width="1088" height="86" key="GridCell.Tab.0.right/62.0.1474.864@62.0.1474.864" timestamp="1656533795573" />
+    <state width="1088" height="145" key="GridCell.Tab.0.right/62.0.1474.864@62.0.1474.864" timestamp="1657020382022" />
     <state x="391" y="151" key="Vcs.Push.Dialog.v2" timestamp="1656492621187">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
@@ -250,11 +266,11 @@
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state x="379" y="86" key="com.intellij.database.dbimport.ImportDialog/62.0.1474.864@62.0.1474.864" timestamp="1654540353495" />
-    <state x="642" y="204" width="863" height="596" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1656492196928">
+    <state x="642" y="204" width="863" height="596" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog" timestamp="1657018300291">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state x="541" y="170" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/62.0.1218.720@62.0.1218.720" timestamp="1654525526675" />
-    <state x="642" y="204" width="863" height="596" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/62.0.1474.864@62.0.1474.864" timestamp="1656492196928" />
+    <state x="642" y="204" width="863" height="596" key="com.intellij.database.view.ui.AbstractDbRefactoringDialog/62.0.1474.864@62.0.1474.864" timestamp="1657018300291" />
     <state x="524" y="31" width="549" height="801" key="find.popup" timestamp="1656492972574">
       <screen x="62" y="0" width="1474" height="864" />
     </state>

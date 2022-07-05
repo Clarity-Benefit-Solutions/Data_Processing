@@ -47,6 +47,7 @@
         [Utils.DisplayText("Zip")] Zip,
         [Utils.DisplayText("Phone")] Phone,
         [Utils.DisplayText("AlphaNumeric")] AlphaNumeric,
+        [Utils.DisplayText("AlphaNumericAndDashes")] AlphaNumericAndDashes,
         [Utils.DisplayText("AlphaOnly")] AlphaOnly,
         [Utils.DisplayText("AlphaAndDashes")] AlphaAndDashes,
 

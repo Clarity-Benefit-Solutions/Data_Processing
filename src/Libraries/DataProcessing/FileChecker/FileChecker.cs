@@ -392,6 +392,7 @@ namespace DataProcessing
         private static readonly Regex regexAlphaNumeric = new Regex(@"[^a-zA-Z0-9\s]");
         private static readonly Regex regexAlphaOnly = new Regex(@"[^a-zA-Z]");
         private static readonly Regex regexAlphaAndDashes = new Regex(@"[^a-zA-Z\-]");
+        private static readonly Regex regexAlphaNumericAndDashes = new Regex(@"[^a-zA-Z0-9\-]");
         private static readonly Regex regexNumericAndDashes = new Regex(@"[^0-9\-]");
         private static readonly Regex regexDouble = new Regex("[^0-9.]");
 

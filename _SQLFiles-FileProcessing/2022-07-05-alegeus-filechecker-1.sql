@@ -1,732 +1,682 @@
 use Data_Processing;
 go
-GO
 
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD VersionNumber nvarchar(200) NULL;
-go
-CREATE INDEX VersionNumber ON cobra_res_file_table_STAGE (VersionNumber);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD ClientName nvarchar(200) NULL;
-go
-CREATE INDEX ClientName ON cobra_res_file_table_STAGE (ClientName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD ClientDivisionName nvarchar(200) NULL;
-go
-CREATE INDEX ClientDivisionName ON cobra_res_file_table_STAGE (ClientDivisionName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Salutation nvarchar(200) NULL;
-go
-CREATE INDEX Salutation ON cobra_res_file_table_STAGE (Salutation);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD FirstName nvarchar(200) NULL;
-go
-CREATE INDEX FirstName ON cobra_res_file_table_STAGE (FirstName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD MiddleInitial nvarchar(200) NULL;
-go
-CREATE INDEX MiddleInitial ON cobra_res_file_table_STAGE (MiddleInitial);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD LastName nvarchar(200) NULL;
-go
-CREATE INDEX LastName ON cobra_res_file_table_STAGE (LastName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD SSN nvarchar(200) NULL;
-go
-CREATE INDEX SSN ON cobra_res_file_table_STAGE (SSN);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD IndividualID nvarchar(200) NULL;
-go
-CREATE INDEX IndividualID ON cobra_res_file_table_STAGE (IndividualID);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Email nvarchar(200) NULL;
-go
-CREATE INDEX Email ON cobra_res_file_table_STAGE (Email);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Phone nvarchar(200) NULL;
-go
-CREATE INDEX Phone ON cobra_res_file_table_STAGE (Phone);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Phone2 nvarchar(200) NULL;
-go
-CREATE INDEX Phone2 ON cobra_res_file_table_STAGE (Phone2);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Address1 nvarchar(200) NULL;
-go
-CREATE INDEX Address1 ON cobra_res_file_table_STAGE (Address1);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Address2 nvarchar(200) NULL;
-go
-CREATE INDEX Address2 ON cobra_res_file_table_STAGE (Address2);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD City nvarchar(200) NULL;
-go
-CREATE INDEX City ON cobra_res_file_table_STAGE (City);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD StateOrProvince nvarchar(200) NULL;
-go
-CREATE INDEX StateOrProvince ON cobra_res_file_table_STAGE (StateOrProvince);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PostalCode nvarchar(200) NULL;
-go
-CREATE INDEX PostalCode ON cobra_res_file_table_STAGE (PostalCode);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Country nvarchar(200) NULL;
-go
-CREATE INDEX Country ON cobra_res_file_table_STAGE (Country);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PremiumAddressSameAsPrimary nvarchar(200) NULL;
-go
-CREATE INDEX PremiumAddressSameAsPrimary ON cobra_res_file_table_STAGE (PremiumAddressSameAsPrimary);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PremiumAddress1 nvarchar(200) NULL;
-go
-CREATE INDEX PremiumAddress1 ON cobra_res_file_table_STAGE (PremiumAddress1);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PremiumAddress2 nvarchar(200) NULL;
-go
-CREATE INDEX PremiumAddress2 ON cobra_res_file_table_STAGE (PremiumAddress2);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PremiumCity nvarchar(200) NULL;
-go
-CREATE INDEX PremiumCity ON cobra_res_file_table_STAGE (PremiumCity);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PremiumStateOrProvince nvarchar(200) NULL;
-go
-CREATE INDEX PremiumStateOrProvince ON cobra_res_file_table_STAGE (PremiumStateOrProvince);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PremiumPostalCode nvarchar(200) NULL;
-go
-CREATE INDEX PremiumPostalCode ON cobra_res_file_table_STAGE (PremiumPostalCode);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PremiumCountry nvarchar(200) NULL;
-go
-CREATE INDEX PremiumCountry ON cobra_res_file_table_STAGE (PremiumCountry);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Sex nvarchar(200) NULL;
-go
-CREATE INDEX Sex ON cobra_res_file_table_STAGE (Sex);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD DOB nvarchar(200) NULL;
-go
-CREATE INDEX DOB ON cobra_res_file_table_STAGE (DOB);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD TobaccoUse nvarchar(200) NULL;
-go
-CREATE INDEX TobaccoUse ON cobra_res_file_table_STAGE (TobaccoUse);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD EmployeeType nvarchar(200) NULL;
-go
-CREATE INDEX EmployeeType ON cobra_res_file_table_STAGE (EmployeeType);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD EmployeePayrollType nvarchar(200) NULL;
-go
-CREATE INDEX EmployeePayrollType ON cobra_res_file_table_STAGE (EmployeePayrollType);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD YearsOfService nvarchar(200) NULL;
-go
-CREATE INDEX YearsOfService ON cobra_res_file_table_STAGE (YearsOfService);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PremiumCouponType nvarchar(200) NULL;
-go
-CREATE INDEX PremiumCouponType ON cobra_res_file_table_STAGE (PremiumCouponType);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD UsesHCTC nvarchar(200) NULL;
-go
-CREATE INDEX UsesHCTC ON cobra_res_file_table_STAGE (UsesHCTC);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Active nvarchar(200) NULL;
-go
-CREATE INDEX Active ON cobra_res_file_table_STAGE (Active);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD AllowMemberSSO nvarchar(200) NULL;
-go
-CREATE INDEX AllowMemberSSO ON cobra_res_file_table_STAGE (AllowMemberSSO);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD BenefitGroup nvarchar(200) NULL;
-go
-CREATE INDEX BenefitGroup ON cobra_res_file_table_STAGE (BenefitGroup);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD AccountStructure nvarchar(200) NULL;
-go
-CREATE INDEX AccountStructure ON cobra_res_file_table_STAGE (AccountStructure);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD ClientSpecificData nvarchar(200) NULL;
-go
-CREATE INDEX ClientSpecificData ON cobra_res_file_table_STAGE (ClientSpecificData);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD SSOIdentifier nvarchar(200) NULL;
-go
-CREATE INDEX SSOIdentifier ON cobra_res_file_table_STAGE (SSOIdentifier);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PlanCategory nvarchar(200) NULL;
-go
-CREATE INDEX PlanCategory ON cobra_res_file_table_STAGE (PlanCategory);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD EventType nvarchar(200) NULL;
-go
-CREATE INDEX EventType ON cobra_res_file_table_STAGE (EventType);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD EventDate nvarchar(200) NULL;
-go
-CREATE INDEX EventDate ON cobra_res_file_table_STAGE (EventDate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD EnrollmentDate nvarchar(200) NULL;
-go
-CREATE INDEX EnrollmentDate ON cobra_res_file_table_STAGE (EnrollmentDate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD EmployeeSSN nvarchar(200) NULL;
-go
-CREATE INDEX EmployeeSSN ON cobra_res_file_table_STAGE (EmployeeSSN);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD EmployeeName nvarchar(200) NULL;
-go
-CREATE INDEX EmployeeName ON cobra_res_file_table_STAGE (EmployeeName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD SecondEventOriginalFDOC nvarchar(200) NULL;
-go
-CREATE INDEX SecondEventOriginalFDOC ON cobra_res_file_table_STAGE (SecondEventOriginalFDOC);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD DateSpecificRightsNoticeWasPrinted nvarchar(200) NULL;
-go
-CREATE INDEX DateSpecificRightsNoticeWasPrinted ON cobra_res_file_table_STAGE (DateSpecificRightsNoticeWasPrinted);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PostmarkDateOfElection nvarchar(200) NULL;
-go
-CREATE INDEX PostmarkDateOfElection ON cobra_res_file_table_STAGE (PostmarkDateOfElection);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD IsPaidThroughLastDayOfCOBRA nvarchar(200) NULL;
-go
-CREATE INDEX IsPaidThroughLastDayOfCOBRA ON cobra_res_file_table_STAGE (IsPaidThroughLastDayOfCOBRA);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD NextPremiumOwedMonth nvarchar(200) NULL;
-go
-CREATE INDEX NextPremiumOwedMonth ON cobra_res_file_table_STAGE (NextPremiumOwedMonth);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD NextPremiumOwedYear nvarchar(200) NULL;
-go
-CREATE INDEX NextPremiumOwedYear ON cobra_res_file_table_STAGE (NextPremiumOwedYear);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD NextPremiumOwedAmountReceived nvarchar(200) NULL;
-go
-CREATE INDEX NextPremiumOwedAmountReceived ON cobra_res_file_table_STAGE (NextPremiumOwedAmountReceived);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD SendTakeoverLetter nvarchar(200) NULL;
-go
-CREATE INDEX SendTakeoverLetter ON cobra_res_file_table_STAGE (SendTakeoverLetter);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD IsConversionLetterSent nvarchar(200) NULL;
-go
-CREATE INDEX IsConversionLetterSent ON cobra_res_file_table_STAGE (IsConversionLetterSent);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD SendDODSubsidyExtension nvarchar(200) NULL;
-go
-CREATE INDEX SendDODSubsidyExtension ON cobra_res_file_table_STAGE (SendDODSubsidyExtension);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PlanName nvarchar(200) NULL;
-go
-CREATE INDEX PlanName ON cobra_res_file_table_STAGE (PlanName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD CoverageLevel nvarchar(200) NULL;
-go
-CREATE INDEX CoverageLevel ON cobra_res_file_table_STAGE (CoverageLevel);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD NumberOfUnit nvarchar(200) NULL;
-go
-CREATE INDEX NumberOfUnit ON cobra_res_file_table_STAGE (NumberOfUnit);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PlanName nvarchar(200) NULL;
-go
-CREATE INDEX PlanName ON cobra_res_file_table_STAGE (PlanName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD StartDate nvarchar(200) NULL;
-go
-CREATE INDEX StartDate ON cobra_res_file_table_STAGE (StartDate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD EndDate nvarchar(200) NULL;
-go
-CREATE INDEX EndDate ON cobra_res_file_table_STAGE (EndDate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD CoverageLevel nvarchar(200) NULL;
-go
-CREATE INDEX CoverageLevel ON cobra_res_file_table_STAGE (CoverageLevel);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD FirstDayOfCOBRA nvarchar(200) NULL;
-go
-CREATE INDEX FirstDayOfCOBRA ON cobra_res_file_table_STAGE (FirstDayOfCOBRA);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD LastDayOfCOBRA nvarchar(200) NULL;
-go
-CREATE INDEX LastDayOfCOBRA ON cobra_res_file_table_STAGE (LastDayOfCOBRA);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD COBRADurationMonths nvarchar(200) NULL;
-go
-CREATE INDEX COBRADurationMonths ON cobra_res_file_table_STAGE (COBRADurationMonths);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD DaysToElect nvarchar(200) NULL;
-go
-CREATE INDEX DaysToElect ON cobra_res_file_table_STAGE (DaysToElect);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD DaysToMake1stPayment nvarchar(200) NULL;
-go
-CREATE INDEX DaysToMake1stPayment ON cobra_res_file_table_STAGE (DaysToMake1stPayment);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD DaysToMakeSubsequentPayments nvarchar(200) NULL;
-go
-CREATE INDEX DaysToMakeSubsequentPayments ON cobra_res_file_table_STAGE (DaysToMakeSubsequentPayments);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD ElectionPostmarkDate nvarchar(200) NULL;
-go
-CREATE INDEX ElectionPostmarkDate ON cobra_res_file_table_STAGE (ElectionPostmarkDate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD LastDateRatesNotified nvarchar(200) NULL;
-go
-CREATE INDEX LastDateRatesNotified ON cobra_res_file_table_STAGE (LastDateRatesNotified);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD NumberOfUnits nvarchar(200) NULL;
-go
-CREATE INDEX NumberOfUnits ON cobra_res_file_table_STAGE (NumberOfUnits);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD SendPlanChangeLetterForLegacy nvarchar(200) NULL;
-go
-CREATE INDEX SendPlanChangeLetterForLegacy ON cobra_res_file_table_STAGE (SendPlanChangeLetterForLegacy);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PlanBundleName nvarchar(200) NULL;
-go
-CREATE INDEX PlanBundleName ON cobra_res_file_table_STAGE (PlanBundleName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD SSN nvarchar(200) NULL;
-go
-CREATE INDEX SSN ON cobra_res_file_table_STAGE (SSN);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Relationship nvarchar(200) NULL;
-go
-CREATE INDEX Relationship ON cobra_res_file_table_STAGE (Relationship);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Salutation nvarchar(200) NULL;
-go
-CREATE INDEX Salutation ON cobra_res_file_table_STAGE (Salutation);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD FirstName nvarchar(200) NULL;
-go
-CREATE INDEX FirstName ON cobra_res_file_table_STAGE (FirstName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD MiddleInitial nvarchar(200) NULL;
-go
-CREATE INDEX MiddleInitial ON cobra_res_file_table_STAGE (MiddleInitial);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD LastName nvarchar(200) NULL;
-go
-CREATE INDEX LastName ON cobra_res_file_table_STAGE (LastName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Email nvarchar(200) NULL;
-go
-CREATE INDEX Email ON cobra_res_file_table_STAGE (Email);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Phone nvarchar(200) NULL;
-go
-CREATE INDEX Phone ON cobra_res_file_table_STAGE (Phone);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Phone2 nvarchar(200) NULL;
-go
-CREATE INDEX Phone2 ON cobra_res_file_table_STAGE (Phone2);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD AddressSameAsQB nvarchar(200) NULL;
-go
-CREATE INDEX AddressSameAsQB ON cobra_res_file_table_STAGE (AddressSameAsQB);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Address1 nvarchar(200) NULL;
-go
-CREATE INDEX Address1 ON cobra_res_file_table_STAGE (Address1);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Address2 nvarchar(200) NULL;
-go
-CREATE INDEX Address2 ON cobra_res_file_table_STAGE (Address2);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD City nvarchar(200) NULL;
-go
-CREATE INDEX City ON cobra_res_file_table_STAGE (City);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD StateOrProvince nvarchar(200) NULL;
-go
-CREATE INDEX StateOrProvince ON cobra_res_file_table_STAGE (StateOrProvince);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PostalCode nvarchar(200) NULL;
-go
-CREATE INDEX PostalCode ON cobra_res_file_table_STAGE (PostalCode);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Country nvarchar(200) NULL;
-go
-CREATE INDEX Country ON cobra_res_file_table_STAGE (Country);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD EnrollmentDate nvarchar(200) NULL;
-go
-CREATE INDEX EnrollmentDate ON cobra_res_file_table_STAGE (EnrollmentDate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Sex nvarchar(200) NULL;
-go
-CREATE INDEX Sex ON cobra_res_file_table_STAGE (Sex);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD DOB nvarchar(200) NULL;
-go
-CREATE INDEX DOB ON cobra_res_file_table_STAGE (DOB);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD IsQMCSO nvarchar(200) NULL;
-go
-CREATE INDEX IsQMCSO ON cobra_res_file_table_STAGE (IsQMCSO);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PlanName nvarchar(200) NULL;
-go
-CREATE INDEX PlanName ON cobra_res_file_table_STAGE (PlanName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PlanName nvarchar(200) NULL;
-go
-CREATE INDEX PlanName ON cobra_res_file_table_STAGE (PlanName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD StartDate nvarchar(200) NULL;
-go
-CREATE INDEX StartDate ON cobra_res_file_table_STAGE (StartDate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD EndDate nvarchar(200) NULL;
-go
-CREATE INDEX EndDate ON cobra_res_file_table_STAGE (EndDate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD UsesFDOC nvarchar(200) NULL;
-go
-CREATE INDEX UsesFDOC ON cobra_res_file_table_STAGE (UsesFDOC);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD NoteType nvarchar(200) NULL;
-go
-CREATE INDEX NoteType ON cobra_res_file_table_STAGE (NoteType);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD DateTime nvarchar(200) NULL;
-go
-CREATE INDEX DateTime ON cobra_res_file_table_STAGE (DateTime);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD NoteText nvarchar(200) NULL;
-go
-CREATE INDEX NoteText ON cobra_res_file_table_STAGE (NoteText);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD UserName nvarchar(200) NULL;
-go
-CREATE INDEX UserName ON cobra_res_file_table_STAGE (UserName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD InsuranceType nvarchar(200) NULL;
-go
-CREATE INDEX InsuranceType ON cobra_res_file_table_STAGE (InsuranceType);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD SubsidyAmountType nvarchar(200) NULL;
-go
-CREATE INDEX SubsidyAmountType ON cobra_res_file_table_STAGE (SubsidyAmountType);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD StartDate nvarchar(200) NULL;
-go
-CREATE INDEX StartDate ON cobra_res_file_table_STAGE (StartDate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD EndDate nvarchar(200) NULL;
-go
-CREATE INDEX EndDate ON cobra_res_file_table_STAGE (EndDate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Amount nvarchar(200) NULL;
-go
-CREATE INDEX Amount ON cobra_res_file_table_STAGE (Amount);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD SubsidyType nvarchar(200) NULL;
-go
-CREATE INDEX SubsidyType ON cobra_res_file_table_STAGE (SubsidyType);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD RatePeriodSubsidy nvarchar(200) NULL;
-go
-CREATE INDEX RatePeriodSubsidy ON cobra_res_file_table_STAGE (RatePeriodSubsidy);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD CASRINSERT nvarchar(200) NULL;
-go
-CREATE INDEX CASRINSERT ON cobra_res_file_table_STAGE (CASRINSERT);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD CTSRINSERT nvarchar(200) NULL;
-go
-CREATE INDEX CTSRINSERT ON cobra_res_file_table_STAGE (CTSRINSERT);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD MNLIFEINSERT nvarchar(200) NULL;
-go
-CREATE INDEX MNLIFEINSERT ON cobra_res_file_table_STAGE (MNLIFEINSERT);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD MNCONTINSERT nvarchar(200) NULL;
-go
-CREATE INDEX MNCONTINSERT ON cobra_res_file_table_STAGE (MNCONTINSERT);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD ORSRINSERT nvarchar(200) NULL;
-go
-CREATE INDEX ORSRINSERT ON cobra_res_file_table_STAGE (ORSRINSERT);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD TXSRINSERT nvarchar(200) NULL;
-go
-CREATE INDEX TXSRINSERT ON cobra_res_file_table_STAGE (TXSRINSERT);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD NYSRINSERT nvarchar(200) NULL;
-go
-CREATE INDEX NYSRINSERT ON cobra_res_file_table_STAGE (NYSRINSERT);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD VEBASRINSERT nvarchar(200) NULL;
-go
-CREATE INDEX VEBASRINSERT ON cobra_res_file_table_STAGE (VEBASRINSERT);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD ILSRINSERT nvarchar(200) NULL;
-go
-CREATE INDEX ILSRINSERT ON cobra_res_file_table_STAGE (ILSRINSERT);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD RISRINSERT nvarchar(200) NULL;
-go
-CREATE INDEX RISRINSERT ON cobra_res_file_table_STAGE (RISRINSERT);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD GASRINSERT nvarchar(200) NULL;
-go
-CREATE INDEX GASRINSERT ON cobra_res_file_table_STAGE (GASRINSERT);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD VASRINSERT nvarchar(200) NULL;
-go
-CREATE INDEX VASRINSERT ON cobra_res_file_table_STAGE (VASRINSERT);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD DisabilityApproved nvarchar(200) NULL;
-go
-CREATE INDEX DisabilityApproved ON cobra_res_file_table_STAGE (DisabilityApproved);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PostmarkOfDisabilityExtension nvarchar(200) NULL;
-go
-CREATE INDEX PostmarkOfDisabilityExtension ON cobra_res_file_table_STAGE (PostmarkOfDisabilityExtension);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD DateDisabled nvarchar(200) NULL;
-go
-CREATE INDEX DateDisabled ON cobra_res_file_table_STAGE (DateDisabled);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD DenialReason nvarchar(200) NULL;
-go
-CREATE INDEX DenialReason ON cobra_res_file_table_STAGE (DenialReason);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PlanName nvarchar(200) NULL;
-go
-CREATE INDEX PlanName ON cobra_res_file_table_STAGE (PlanName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Rate nvarchar(200) NULL;
-go
-CREATE INDEX Rate ON cobra_res_file_table_STAGE (Rate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PlanName nvarchar(200) NULL;
-go
-CREATE INDEX PlanName ON cobra_res_file_table_STAGE (PlanName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD StartDate nvarchar(200) NULL;
-go
-CREATE INDEX StartDate ON cobra_res_file_table_STAGE (StartDate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD EndDate nvarchar(200) NULL;
-go
-CREATE INDEX EndDate ON cobra_res_file_table_STAGE (EndDate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Rate nvarchar(200) NULL;
-go
-CREATE INDEX Rate ON cobra_res_file_table_STAGE (Rate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD PlanName nvarchar(200) NULL;
-go
-CREATE INDEX PlanName ON cobra_res_file_table_STAGE (PlanName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD TermOrReinstate nvarchar(200) NULL;
-go
-CREATE INDEX TermOrReinstate ON cobra_res_file_table_STAGE (TermOrReinstate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD EffectiveDate nvarchar(200) NULL;
-go
-CREATE INDEX EffectiveDate ON cobra_res_file_table_STAGE (EffectiveDate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD Reason nvarchar(200) NULL;
-go
-CREATE INDEX Reason ON cobra_res_file_table_STAGE (Reason);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD LetterAttachmentName nvarchar(200) NULL;
-go
-CREATE INDEX LetterAttachmentName ON cobra_res_file_table_STAGE (LetterAttachmentName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD ClientName nvarchar(200) NULL;
-go
-CREATE INDEX ClientName ON cobra_res_file_table_STAGE (ClientName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD SSN nvarchar(200) NULL;
-go
-CREATE INDEX SSN ON cobra_res_file_table_STAGE (SSN);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD QualifyingEventDate nvarchar(200) NULL;
-go
-CREATE INDEX QualifyingEventDate ON cobra_res_file_table_STAGE (QualifyingEventDate);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD UserDefinedFieldName nvarchar(200) NULL;
-go
-CREATE INDEX UserDefinedFieldName ON cobra_res_file_table_STAGE (UserDefinedFieldName);
-go
-ALTER TABLE cobra_res_file_table_STAGE
-    ADD UserDefinedFieldValue nvarchar(200) NULL;
-go
-CREATE INDEX UserDefinedFieldValue ON cobra_res_file_table_STAGE (UserDefinedFieldValue);
+alter table mbi_file_table_stage
+    add org_data_row nvarchar(max)
 go
 
-exec sp_rename 'cobra_file_table.mbi_file_name', cobra_file_name, 'COLUMN'
-go
-exec sp_rename 'cobra_file_table_stage.mbi_file_name', cobra_file_name, 'COLUMN'
-go
-
-exec sp_rename 'cobra_res_file_table.res_file_name', cobra_res_file_name, 'COLUMN'
-go
-exec sp_rename 'cobra_res_file_table_stage.res_file_name', cobra_res_file_name, 'COLUMN'
+alter table mbi_file_table
+    add org_data_row nvarchar(max)
 go
 
-alter table cobra_res_file_table
-    drop column mbi_file_name
-go
-alter table dbo.cobra_res_file_table_stage
-    drop column mbi_file_name
+alter table res_file_table_stage
+    add org_error_row nvarchar(max)
 go
 
-alter table dbo.cobra_res_file_table
-    add  data_row nvarchar(max)
+alter table res_file_table
+    add org_error_row nvarchar(max)
+go
+alter table res_file_table_stage
+    add org_data_row nvarchar(max)
+go
+
+alter table res_file_table
+    add org_data_row nvarchar(max)
+go
+
+create or
+alter procedure dbo.process_mbi_file_table_stage_import as
+begin
+    
+    update [dbo].[mbi_file_table_stage]
+    set
+        /* remove extra csv commas added to line */
+        data_row = replace( data_row , ',,,,,,,,,,,,,,,,,,,,' , '' );
+    
+    /* ensure org data is saved before we fix the data given by client*/
+    update [dbo].[mbi_file_table_stage]
+    set
+        /* remove extra csv commas added to line */
+        org_data_row = data_row
+    where
+        isnull( org_data_row , '' ) = '';
+    
+    /* upsert  into main res table*/
+    MERGE dbo.mbi_file_table AS tgt
+    USING (
+              SELECT
+                  AccountStatus
+                , AccountTypeCode
+                , AddressLine1
+                , AddressLine2
+                , BirthDate
+                , City
+                , Country
+                , DeleteAccount
+                , DependentID
+                , DepositType
+                , Division
+                , EffectiveDate
+                , EligibilityDate
+                , Email
+                , EmployeeDepositAmount
+                , EmployeeID
+                , EmployeePayPeriodElection
+                , EmployeeSocialSecurityNumber
+                , EmployeeStatus
+                , EmployerDepositAmount
+                , EmployerId
+                , EmployerPayPeriodElection
+                  --                 , error_code
+                  --                 , error_message
+                  --                 , error_message_calc
+                , data_row
+                , org_data_row
+                , FirstName
+                , LastName
+                , mbi_file_name
+                , MiddleInitial
+                , MobileNumber
+                , OriginalPrefunded
+                , Phone
+                , PlanEndDate
+                , PlanId
+                , PlanStartDate
+                , Relationship
+                  --                 , res_file_name
+                  --                 , result_template
+                , row_num
+                , row_type
+                , State
+                , TerminationDate
+                , TpaId
+                , Zip
+                , source_row_no
+                , check_type
+                , error_code
+                , error_message
+                , error_message_calc
+                , Class
+                , AlternateId
+              from
+                  dbo.mbi_file_table_stage
+          ) as src
+    ON (tgt.mbi_file_name = src.mbi_file_name and tgt.row_num = src.row_num)
+    WHEN MATCHED THEN
+        UPDATE
+        SET
+            AccountStatus=src.AccountStatus,
+            AccountTypeCode=src.AccountTypeCode,
+            AddressLine1=src.AddressLine1,
+            AddressLine2=src.AddressLine2,
+            BirthDate=src.BirthDate,
+            City=src.City,
+            Country=src.Country,
+            DeleteAccount=src.DeleteAccount,
+            DependentID=src.DependentID,
+            DepositType=src.DepositType,
+            Division=src.Division,
+            EffectiveDate=src.EffectiveDate,
+            EligibilityDate=src.EligibilityDate,
+            Email=src.Email,
+            EmployeeDepositAmount=src.EmployeeDepositAmount,
+            EmployeeID=src.EmployeeID,
+            EmployeePayPeriodElection=src.EmployeePayPeriodElection,
+            EmployeeSocialSecurityNumber=src.EmployeeSocialSecurityNumber,
+            EmployeeStatus=src.EmployeeStatus,
+            EmployerDepositAmount=src.EmployerDepositAmount,
+            EmployerId=src.EmployerId,
+            EmployerPayPeriodElection=src.EmployerPayPeriodElection,
+            --             error_code=src.error_code,
+            --             error_message=src.error_message,
+            --             error_message_calc=src.error_message_calc,
+            data_row=src.data_row,
+            org_data_row = src.org_data_row,
+            FirstName=src.FirstName,
+            LastName=src.LastName,
+            mbi_file_name=src.mbi_file_name,
+            MiddleInitial=src.MiddleInitial,
+            MobileNumber=src.MobileNumber,
+            OriginalPrefunded=src.OriginalPrefunded,
+            Phone=src.Phone,
+            PlanEndDate=src.PlanEndDate,
+            PlanId=src.PlanId,
+            PlanStartDate=src.PlanStartDate,
+            Relationship=src.Relationship,
+            --             res_file_name=src.res_file_name,
+            --             result_template=src.result_template,
+            row_num=src.row_num,
+            row_type=src.row_type,
+            State=src.State,
+            TerminationDate=src.TerminationDate,
+            TpaId=src.TpaId,
+            Zip=src.Zip,
+            source_row_no=src.source_row_no,
+            check_type=src.check_type,
+            error_code=src.error_code,
+            error_message=src.error_message,
+            error_message_calc=src.error_message_calc,
+            Class= src.Class,
+            AlternateId = src.AlternateId
+    
+    WHEN NOT MATCHED THEN
+        INSERT (
+               AccountStatus,
+               AccountTypeCode,
+               AddressLine1,
+               AddressLine2,
+               BirthDate,
+               City,
+               Country,
+               DeleteAccount,
+               DependentID,
+               DepositType,
+               Division,
+               EffectiveDate,
+               EligibilityDate,
+               Email,
+               EmployeeDepositAmount,
+               EmployeeID,
+               EmployeePayPeriodElection,
+               EmployeeSocialSecurityNumber,
+               EmployeeStatus,
+               EmployerDepositAmount,
+               EmployerId,
+               EmployerPayPeriodElection,
+            --                error_code,
+            --                error_message,
+            --                error_message_calc,
+               data_row,
+               org_data_row,
+               FirstName,
+               LastName,
+               mbi_file_name,
+               MiddleInitial,
+               MobileNumber,
+               OriginalPrefunded,
+               Phone,
+               PlanEndDate,
+               PlanId,
+               PlanStartDate,
+               Relationship,
+            --                res_file_name,
+            --                result_template,
+               row_num,
+               row_type,
+               State,
+               TerminationDate,
+               TpaId,
+               Zip,
+               source_row_no,
+               check_type,
+               error_code,
+               error_message,
+               error_message_calc,
+               Class,
+               AlternateId
+        )
+        VALUES (
+               src.AccountStatus,
+               src.AccountTypeCode,
+               src.AddressLine1,
+               src.AddressLine2,
+               src.BirthDate,
+               src.City,
+               src.Country,
+               src.DeleteAccount,
+               src.DependentID,
+               src.DepositType,
+               src.Division,
+               src.EffectiveDate,
+               src.EligibilityDate,
+               src.Email,
+               src.EmployeeDepositAmount,
+               src.EmployeeID,
+               src.EmployeePayPeriodElection,
+               src.EmployeeSocialSecurityNumber,
+               src.EmployeeStatus,
+               src.EmployerDepositAmount,
+               src.EmployerId,
+               src.EmployerPayPeriodElection,
+                   --                src.error_code,
+                   --                src.error_message,
+                   --                src.error_message_calc,
+               src.data_row,
+               src.org_data_row,
+               src.FirstName,
+               src.LastName,
+               src.mbi_file_name,
+               src.MiddleInitial,
+               src.MobileNumber,
+               src.OriginalPrefunded,
+               src.Phone,
+               src.PlanEndDate,
+               src.PlanId,
+               src.PlanStartDate,
+               src.Relationship,
+                   --                src.res_file_name,
+                   --                src.result_template,
+               src.row_num,
+               src.row_type,
+               src.State,
+               src.TerminationDate,
+               src.TpaId,
+               src.Zip,
+               src.source_row_no,
+               src.check_type,
+               src.error_code,
+               src.error_message,
+               src.error_message_calc,
+               src.Class,
+               src.AlternateId
+               );
+    
+    --    truncate table [dbo].[mbi_file_table_stage];
+end
+go
+create or
+alter procedure dbo.process_res_file_table_stage_import as
+begin
+    -- Script for SelectTopNRows command from SSMS
+    declare @filename as varchar(200)
+    
+    /* get filename from import log*/
+    set @filename = (
+                        SELECT top 1
+                            ltrim( rtrim( substring( error_row , charindex( ',' , ltrim( error_row ) ) + 1 ,
+                                                     charindex( '.mbi' , error_row , 1 ) + 3 -
+                                                     charindex( ',' , ltrim( error_row ) ) /*- 4*//*sumeet keep[ mbi extension*/ ) ) )
+                        FROM
+                            [dbo].[res_file_table_stage]
+                        where
+                            [error_row] like '%.mbi%'
+                    );
+    
+    /* update filename for all rows*/
+    if (@filename is not null and @filename <> '')
+        begin
+            update [dbo].[res_file_table_stage]
+            set
+                mbi_file_name = @filename
+        end;
+    
+    update [dbo].[res_file_table_stage]
+    set
+        /* remove extra csv commas added to line */
+        data_row  = replace( data_row , ',,,,,,,,,,,,,,,,,,,,' , '' ),
+        error_row = replace( error_row , ',,,,,,,,,,,,,,,,,,,,' , '' )
+    
+    /* save org_error_row*/
+    update [dbo].[res_file_table_stage]
+    set
+        org_error_row = error_row
+    where
+        isnull( org_error_row , '' ) = '';
+    
+    update [dbo].[res_file_table_stage]
+    set
+        org_data_row = data_row
+    where
+        isnull( org_data_row , '' ) = '';
+    
+    /* update a*ny missing */
+    update [dbo].[res_file_table_stage]
+    set
+        mbi_file_name = res_file_name
+    where
+        (mbi_file_name is null or mbi_file_name = '');
+    
+    /* clear error code from header row*/
+    update dbo.res_file_table_stage
+    set
+        error_code=null,
+        error_message = null
+    where
+        row_type = 'RA';
+    
+    /* parse error code and take error message from master */
+    update [dbo].[res_file_table_stage]
+    set
+        error_code         = e.error_code,
+        error_message_calc = e.user_desc
+    FROM
+        [dbo].[res_file_table_stage] as t
+            join [dbo].[error_codes] as e
+                 on e.error_code = t.error_code;
+    
+    /* ion case we did not import error message, set it from the calc one*/
+    update [dbo].[res_file_table_stage]
+    set
+        error_message = error_message_calc
+    where
+         error_message is null
+      or error_message = '';
+    
+    /* upsert  into main res table*/
+    MERGE dbo.res_file_table AS tgt
+    USING (
+              SELECT
+                  AccountStatus
+                , AccountTypeCode
+                , AddressLine1
+                , AddressLine2
+                , BirthDate
+                , City
+                , Country
+                , DeleteAccount
+                , DependentID
+                , DepositType
+                , Division
+                , EffectiveDate
+                , EligibilityDate
+                , Email
+                , EmployeeDepositAmount
+                , EmployeeID
+                , EmployeePayPeriodElection
+                , EmployeeSocialSecurityNumber
+                , EmployeeStatus
+                , EmployerDepositAmount
+                , EmployerId
+                , EmployerPayPeriodElection
+                , error_code
+                , error_message
+                , error_message_calc
+                , error_row
+                , org_error_row
+                , org_data_row
+                , FirstName
+                , LastName
+                , mbi_file_name
+                , MiddleInitial
+                , MobileNumber
+                , OriginalPrefunded
+                , Phone
+                , PlanEndDate
+                , PlanId
+                , PlanStartDate
+                , Relationship
+                , res_file_name
+                , result_template
+                , row_num
+                , row_type
+                , State
+                , TerminationDate
+                , TpaId
+                , Zip
+                , source_row_no
+                , check_type
+                , Class
+                , AlternateId
+        
+              from
+                  dbo.res_file_table_stage
+          ) as src
+    ON (tgt.mbi_file_name = src.mbi_file_name and tgt.row_num = src.row_num)
+    WHEN MATCHED THEN
+        UPDATE
+        SET
+            AccountStatus=src.AccountStatus,
+            AccountTypeCode=src.AccountTypeCode,
+            AddressLine1=src.AddressLine1,
+            AddressLine2=src.AddressLine2,
+            BirthDate=src.BirthDate,
+            City=src.City,
+            Country=src.Country,
+            DeleteAccount=src.DeleteAccount,
+            DependentID=src.DependentID,
+            DepositType=src.DepositType,
+            Division=src.Division,
+            EffectiveDate=src.EffectiveDate,
+            EligibilityDate=src.EligibilityDate,
+            Email=src.Email,
+            EmployeeDepositAmount=src.EmployeeDepositAmount,
+            EmployeeID=src.EmployeeID,
+            EmployeePayPeriodElection=src.EmployeePayPeriodElection,
+            EmployeeSocialSecurityNumber=src.EmployeeSocialSecurityNumber,
+            EmployeeStatus=src.EmployeeStatus,
+            EmployerDepositAmount=src.EmployerDepositAmount,
+            EmployerId=src.EmployerId,
+            EmployerPayPeriodElection=src.EmployerPayPeriodElection,
+            error_code=src.error_code,
+            error_message=src.error_message,
+            error_message_calc=src.error_message_calc,
+            error_row=src.error_row,
+            org_error_row= src.org_error_row,
+            org_data_row = src.org_data_row,
+            FirstName=src.FirstName,
+            LastName=src.LastName,
+            mbi_file_name=src.mbi_file_name,
+            MiddleInitial=src.MiddleInitial,
+            MobileNumber=src.MobileNumber,
+            OriginalPrefunded=src.OriginalPrefunded,
+            Phone=src.Phone,
+            PlanEndDate=src.PlanEndDate,
+            PlanId=src.PlanId,
+            PlanStartDate=src.PlanStartDate,
+            Relationship=src.Relationship,
+            res_file_name=src.res_file_name,
+            result_template=src.result_template,
+            row_num=src.row_num,
+            row_type=src.row_type,
+            State=src.State,
+            TerminationDate=src.TerminationDate,
+            TpaId=src.TpaId,
+            Zip=src.Zip,
+            source_row_no=src.source_row_no,
+            check_type=src.check_type,
+            Class= src.Class,
+            AlternateId = src.AlternateId
+    
+    WHEN NOT MATCHED THEN
+        INSERT (
+               AccountStatus,
+               AccountTypeCode,
+               AddressLine1,
+               AddressLine2,
+               BirthDate,
+               City,
+               Country,
+               DeleteAccount,
+               DependentID,
+               DepositType,
+               Division,
+               EffectiveDate,
+               EligibilityDate,
+               Email,
+               EmployeeDepositAmount,
+               EmployeeID,
+               EmployeePayPeriodElection,
+               EmployeeSocialSecurityNumber,
+               EmployeeStatus,
+               EmployerDepositAmount,
+               EmployerId,
+               EmployerPayPeriodElection,
+               error_code,
+               error_message,
+               error_message_calc,
+               error_row,
+               org_error_row,
+               org_data_row,
+               FirstName,
+               LastName,
+               mbi_file_name,
+               MiddleInitial,
+               MobileNumber,
+               OriginalPrefunded,
+               Phone,
+               PlanEndDate,
+               PlanId,
+               PlanStartDate,
+               Relationship,
+               res_file_name,
+               result_template,
+               row_num,
+               row_type,
+               State,
+               TerminationDate,
+               TpaId,
+               Zip,
+               source_row_no,
+               check_type,
+               Class,
+               AlternateId
+        )
+        VALUES (
+               src.AccountStatus,
+               src.AccountTypeCode,
+               src.AddressLine1,
+               src.AddressLine2,
+               src.BirthDate,
+               src.City,
+               src.Country,
+               src.DeleteAccount,
+               src.DependentID,
+               src.DepositType,
+               src.Division,
+               src.EffectiveDate,
+               src.EligibilityDate,
+               src.Email,
+               src.EmployeeDepositAmount,
+               src.EmployeeID,
+               src.EmployeePayPeriodElection,
+               src.EmployeeSocialSecurityNumber,
+               src.EmployeeStatus,
+               src.EmployerDepositAmount,
+               src.EmployerId,
+               src.EmployerPayPeriodElection,
+               src.error_code,
+               src.error_message,
+               src.error_message_calc,
+               src.error_row,
+               src.org_error_row,
+               src.org_data_row,
+               src.FirstName,
+               src.LastName,
+               src.mbi_file_name,
+               src.MiddleInitial,
+               src.MobileNumber,
+               src.OriginalPrefunded,
+               src.Phone,
+               src.PlanEndDate,
+               src.PlanId,
+               src.PlanStartDate,
+               src.Relationship,
+               src.res_file_name,
+               src.result_template,
+               src.row_num,
+               src.row_type,
+               src.State,
+               src.TerminationDate,
+               src.TpaId,
+               src.Zip,
+               src.source_row_no,
+               src.check_type,
+               src.Class,
+               src.AlternateId
+               );
+    
+    --  truncate table [dbo].[res_file_table_stage];
+
+end
+go
+
+create or
+alter PROCEDURE [dbo].[proc_alegeus_ExportImportFile](
+                                                     @mbi_file_name nvarchar(2000),
+                                                     @exportType nvarchar(50),
+                                                     @batchId nvarchar(2000) )
+AS
+BEGIN
+    
+    declare @count int;
+    declare @recordsSql nvarchar(max);
+    declare @errorMsg nvarchar(2000);
+    declare @headerSql nvarchar(max);
+    declare @finalSql nvarchar(max);
+    declare @countSql nvarchar(max);
+    
+    if (@exportType) = 'passed_lines'
+        begin
+            set @recordsSql =
+                        'select ltrim(rtrim(data_row)) as file_row, source_row_no from [dbo].[mbi_file_table]  ' +
+                        ' where mbi_file_name = @mbi_file_name ' +
+                        ' and (len(isnull(error_message, ''''))) = 0 ' +
+                        ' and row_type <> ''IA'' ';
+        end;
+    if (@exportType) = 'original_file'
+        begin
+            /* sumeet: use org_data_row as that as the data we actually imported*/
+            set @recordsSql =
+                        'select ltrim(rtrim(org_data_row)) as file_row, source_row_no from [dbo].[mbi_file_table]  ' +
+                        ' where mbi_file_name = @mbi_file_name ' +
+                        --                         ' and (len(isnull(error_message, ''''))) = 0 ' +
+                        ' and row_type <> ''IA'' ';
+        end;
+    if (@exportType) = 'rejected_lines'
+        begin
+            set @recordsSql =
+                        'select ltrim(rtrim(data_row)) as file_row, source_row_no from [dbo].[mbi_file_table]  ' +
+                        ' where mbi_file_name = @mbi_file_name ' +
+                        ' and (len(isnull(error_message, ''''))) > 0 ' +
+                        ' and row_type <> ''IA'' ';
+        end;
+    if (@exportType) = 'all_lines_with_errors'
+        begin
+            set @recordsSql =
+                        'select ltrim(rtrim(concat(data_row, '','', ' +
+                        'case when len(error_message) > 0 then concat( ''PreCheck Errors: '' , error_message ) ' +
+                        ' else ''PreCheck: OK'' end ) )) as file_row ' +
+                        ', source_row_no from [dbo].[mbi_file_table]  ' +
+                        ' where mbi_file_name = @mbi_file_name ' +
+                        --  ' and (len(isnull(error_message, ''''))) = 0 ' +
+                        ' and row_type <> ''IA'' ';
+        end;
+    if (@exportType) = 'rejected_lines_with_errors'
+        begin
+            set @recordsSql =
+                        'select ltrim(rtrim(concat(data_row, '','', ' +
+                        'case when len(error_message) > 0 then concat( ''PreCheck Errors: '' , error_message ) ' +
+                        ' else ''PreCheck: OK'' end ) )) as file_row ' +
+                        ', source_row_no from [dbo].[mbi_file_table]  ' +
+                        ' where mbi_file_name = @mbi_file_name ' +
+                        ' and (len(isnull(error_message, ''''))) <> 0 ' +
+                        ' and row_type <> ''IA'' ';
+        end;
+    
+    if (isnull( @recordsSql , '' ) = '')
+        begin
+            set @errorMsg = 'Incorrect exportType: ' + @exporttype;
+            throw 500001, @errorMsg, 1;
+        end;
+    
+    /**/
+    set @countSql = 'Select @cnt=count(*) from ( ' + @recordsSql + ') as T';
+    EXECUTE sp_executesql @countSql , N'@mbi_file_name nvarchar(2000), @cnt int OUTPUT' ,
+            @mbi_file_name = @mbi_file_name , @cnt = @count OUTPUT;
+    /**/
+    set @headerSql =
+                'select top 1 ' +
+                ' replace(concat(ltrim(rtrim(data_row)), '','', @batchId), ''XX'', @cnt) as file_row, source_row_no from [dbo].[mbi_file_table]  ' +
+                ' where mbi_file_name = @mbi_file_name ' +
+                ' and row_type = ''IA'' ';
+    
+    print @headerSql;
+    set @finalSql = 'Select file_row, source_row_no from (' + @headerSql + ' UNION ALL ' + @recordsSql +
+                    ') t2 order by source_row_no';
+    
+    EXECUTE sp_executesql @finalSql , N'@mbi_file_name nvarchar(2000), @batchId nvarchar(2000), @cnt int OUTPUT' ,
+            @mbi_file_name = @mbi_file_name , @batchId = @batchId , @cnt = @count OUTPUT;
+END
 go
 
 
+select *
+from
+    dbo.mbi_file_table_stage
+where
+    org_data_row like '%07582-2077%';
+select *
+from
+    dbo.mbi_file_table_stage
+where
+    org_data_row <> data_row;

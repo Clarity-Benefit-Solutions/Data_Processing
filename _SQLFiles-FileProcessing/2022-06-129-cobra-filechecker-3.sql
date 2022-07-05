@@ -1141,7 +1141,7 @@ begin
                ,   src.QualifyingEventDate
                ,   src.UserDefinedFieldName
                ,   src.UserDefinedFieldValue
-       
+        
                );
     
     --  truncate table [dbo].[cobra_res_file_table_stage];

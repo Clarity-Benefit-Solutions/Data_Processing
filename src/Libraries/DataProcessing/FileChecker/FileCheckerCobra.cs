@@ -352,7 +352,7 @@ namespace DataProcessing
         }
 
         public Boolean CheckCobraEmployeeExists(cobra_file_table_stage dataRow, TypedCsvColumn column,
-            string versionNo )
+            string versionNo)
         {
             var errorMessage = "";
             //var cacheKey =
@@ -434,7 +434,7 @@ namespace DataProcessing
             }
         }
         public Boolean CheckForDuplicateCobraPosting(cobra_file_table_stage dataRow,
-                  string versionNo )
+                  string versionNo)
         {
             string errorMessage = "";
 
@@ -469,7 +469,7 @@ namespace DataProcessing
             //        //
             //        errorMessage = $"Potential Duplicate Posting! Was probably posted earlier on {Utils.ToIsoDateString(prvRow["CreatedAt"])} as part of file  {prvRow["cobra_file_name"]}";
             //        break;
-                
+
             //}
 
             //
@@ -1021,6 +1021,11 @@ namespace DataProcessing
                     case FormatType.AlphaNumeric:
                         // replace all non alphanumeric
                         value = regexAlphaNumeric.Replace(value, String.Empty);
+                        break;
+
+                    case FormatType.AlphaNumericAndDashes:
+                        // replace all non alphanumeric
+                        value = regexAlphaNumericAndDashes.Replace(value, String.Empty);
                         break;
 
                     case FormatType.AlphaOnly:

@@ -606,66 +606,80 @@ namespace DataProcessing
                     }
                     else
                     {
-                        DataRow dbData = dbRows[0];
-                        DateTime actualPlanStartDate = (DateTime)dbData["plan_year_start_date"];
-                        DateTime actualPlanEndDate = (DateTime)dbData["plan_year_end_date"];
-                        //DateTime actualGracePeriodEndDate = (DateTime)dbData["grace_period_end_date"];
+                        // 2022-07-05 - we need an exact match for start and end dates - loop all plans
+                        List<DataRow> matchedRows = new List<DataRow>();
+                        //
+                        foreach (var dbData in dbRows)
+                        {
 
-                        //check start and end dates 
-                        if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) &&
-                            Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
+                            DateTime actualPlanStartDate = (DateTime)dbData["planstart"];
+                            DateTime actualPlanEndDate = (DateTime)dbData["planend"];
+
+                            // exact start and end dates match
+                            if (Utils.ToDate(dataRow.PlanStartDate) == Utils.ToDate(dataRow.PlanStartDate) &&
+                                Utils.ToDate(dataRow.PlanEndDate) == Utils.ToDate(dataRow.PlanEndDate))
+                            {
+                                matchedRows.Add(dbData);
+                            }
+                        }
+
+                        // if no exact match for start and end dates, throw error
+                        if (matchedRows.Count == 0)
                         {
                             errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate}";
+                                                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                                     $" and Plan Start date {dataRow.PlanStartDate}" +
+                                                     $" and Plan End date {dataRow.PlanEndDate}" +
+                                                    $" could not be found for Employer Id {dataRow.EmployerId}";
                         }
-
-                        //check plan dates match Alegeus
-                        if (!Utils.IsBlank(dataRow.PlanStartDate) &&
-                            actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
+                        else
                         {
-                            errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate}";
-                        }
 
-                        if (!Utils.IsBlank(dataRow.PlanEndDate) &&
-                            actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate))
-                        {
-                            errorMessage =
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanStartDate}";
-                            ;
-                        }
+                            // take first matched rows - should be only usually
+                            var dbData = matchedRows.First();
+                            //
+                            DateTime actualPlanStartDate = (DateTime)dbData["planstart"];
+                            DateTime actualPlanEndDate = (DateTime)dbData["planend"];
 
-                        //check effectivedate is within plan dates
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) &&
-                            actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
-                        {
-                            errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
-                        }
+                            //check if end date is after startdate
+                            if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) &&
+                                Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
+                            {
+                                errorMessage +=
+                                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                    $" Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate} for Employer Id {dataRow.EmployerId}";
+                            }
 
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) &&
-                            actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
-                        {
-                            errorMessage =
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.EffectiveDate}";
-                            ;
-                        }
-                    }
 
-                    //
-                    _cache.Add(cacheKey, errorMessage);
-                }
-            }
+
+                            //check effectivedate is within plan dates
+                            if (!Utils.IsBlank(dataRow.EffectiveDate) &&
+                                actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
+                            {
+                                errorMessage +=
+                                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                    $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate}";
+                            }
+
+                            if (!Utils.IsBlank(dataRow.EffectiveDate) &&
+                                actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
+                            {
+                                errorMessage =
+                                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                    $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.EffectiveDate}";
+                                ;
+                            }
+                        } // matchedRows count
+                    } // filter matches
+                }  // key field checks
+
+                //
+                _cache.Add(cacheKey, errorMessage);
+            } // cache key exists
 
             //
             if (!Utils.IsBlank(errorMessage))
@@ -766,71 +780,99 @@ namespace DataProcessing
                     }
                     else
                     {
-                        DataRow dbData = dbRows[0];
+                        // 2022-07-05 - we need an exact match for start and end dates - loop all plans
+                        List<DataRow> matchedRows = new List<DataRow>();
+                        //
+                        foreach (var dbData in dbRows)
+                        {
 
-                        // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
+                            DateTime actualPlanStartDate = (DateTime)dbData["planstart"];
+                            DateTime actualPlanEndDate = (DateTime)dbData["planend"];
+                            //DateTime? actualGracePeriodEndDate = Utils.ToDate(dbData["actualGracePeriodEndDate"]?.ToString());
 
-                        DateTime actualPlanStartDate = (DateTime)dbData["planstart"];
-                        DateTime actualPlanEndDate = (DateTime)dbData["planend"];
-                        //DateTime? actualGracePeriodEndDate = Utils.ToDate(dbData["actualGracePeriodEndDate"]?.ToString());
+                            // exact start and end dates match
+                            if (Utils.ToDate(dataRow.PlanStartDate) == Utils.ToDate(dataRow.PlanStartDate) &&
+                                Utils.ToDate(dataRow.PlanEndDate) == Utils.ToDate(dataRow.PlanEndDate))
+                            {
+                                matchedRows.Add(dbData);
+                            }
+                        }
 
-                        //note: we need to ensure we got alegeus plans going back many years properly. we have data from 2004 onwards in the portal
-                        //check start and end dates 
-                        if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) &&
-                            Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
+                        // if no exact match for start and end dates, throw error
+                        if (matchedRows.Count == 0)
                         {
                             errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate} for Employee Id {dataRow.EmployeeID}";
+                                                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                                     $" and Plan Start date {dataRow.PlanStartDate}" +
+                                                     $" and Plan End date {dataRow.PlanEndDate}" +
+                                                    $" could not be found for Employee Id {dataRow.EmployeeID}";
                         }
-
-                        //check plan dates match Alegeus
-                        if (!Utils.IsBlank(dataRow.PlanStartDate) &&
-                            actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
+                        else
                         {
-                            errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate} for Employee Id {dataRow.EmployeeID}";
-                        }
+                            // take first matched rows - should be only usually
+                            var dbData = matchedRows.First();
+                            //
+                            DateTime actualPlanStartDate = (DateTime)dbData["planstart"];
+                            DateTime actualPlanEndDate = (DateTime)dbData["planend"];
 
-                        if (!Utils.IsBlank(dataRow.PlanEndDate) &&
-                            actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate)
-                            && dataRow.PlanEndDate != "20991231")
-                        {
-                            errorMessage =
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanEndDate} for Employee Id {dataRow.EmployeeID}";
-                            ;
-                        }
+                            //check end date is after startdate
+                            if (!Utils.IsBlank(dataRow.PlanStartDate) && !Utils.IsBlank(dataRow.PlanEndDate) &&
+                                Utils.ToDate(dataRow.PlanStartDate) > Utils.ToDate(dataRow.PlanEndDate))
+                            {
+                                errorMessage +=
+                                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                    $" Start Date {dataRow.PlanStartDate} must be before the Plan End Date {dataRow.PlanEndDate} for Employee Id {dataRow.EmployeeID}";
+                            }
 
-                        //check effectivedate is within plan dates
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) &&
-                            actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
-                        {
-                            errorMessage +=
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate} for Employee Id {dataRow.EmployeeID}";
-                        }
+                            // not needed - we match exact start and end dates
+                            /*if (!Utils.IsBlank(dataRow.PlanStartDate) &&
+                                actualPlanStartDate > Utils.ToDate(dataRow.PlanStartDate))
+                            {
+                                errorMessage +=
+                                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                    $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.PlanStartDate} for Employee Id {dataRow.EmployeeID}";
+                            }
 
-                        if (!Utils.IsBlank(dataRow.EffectiveDate) &&
-                            actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
-                        {
-                            errorMessage =
-                                $"The AccountTypeID {dataRow.AccountTypeCode}" +
-                                (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
-                                $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.EffectiveDate} for Employee Id {dataRow.EmployeeID}";
-                            ;
-                        }
-                    }
-                }
+                            if (!Utils.IsBlank(dataRow.PlanEndDate) &&
+                                actualPlanEndDate < Utils.ToDate(dataRow.PlanEndDate)
+                                && dataRow.PlanEndDate != "20991231")
+                            {
+                                errorMessage =
+                                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                    $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.PlanEndDate} for Employee Id {dataRow.EmployeeID}";
+                                ;
+                            }*/
+
+                            //check effectivedate is within plan dates
+                            if (!Utils.IsBlank(dataRow.EffectiveDate) &&
+                                actualPlanStartDate > Utils.ToDate(dataRow.EffectiveDate))
+                            {
+                                errorMessage +=
+                                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                    $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {dataRow.EffectiveDate} for Employee Id {dataRow.EmployeeID}";
+                            }
+
+                            if (!Utils.IsBlank(dataRow.EffectiveDate) &&
+                                actualPlanEndDate < Utils.ToDate(dataRow.EffectiveDate))
+                            {
+                                errorMessage =
+                                    $"The AccountTypeID {dataRow.AccountTypeCode}" +
+                                    (!Utils.IsBlank(dataRow.PlanId) ? $" and Plan ID {dataRow.PlanId}" : "") +
+                                    $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {dataRow.EffectiveDate} for Employee Id {dataRow.EmployeeID}";
+                                ;
+                            }
+                        } // matchedRows count
+                    } // filter matches
+                }  // key field checks
 
                 //
                 _cache.Add(cacheKey, errorMessage);
-            }
+            } // check key exists
 
             //
             if (!Utils.IsBlank(errorMessage))
@@ -943,7 +985,7 @@ namespace DataProcessing
 
             return dbResults;
         } // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
-        // cache all plans for ER to reduce number of queries to database - each query for a single plan takes around 150 ms so we aree saving significant time esp for ER witjh many EE
+          // cache all plans for ER to reduce number of queries to database - each query for a single plan takes around 150 ms so we aree saving significant time esp for ER witjh many EE
 
         private DataTable GetAllAlegeusPlansForEmployer(string employerId)
         {
@@ -960,7 +1002,7 @@ namespace DataProcessing
                 {
                     // todo: we need check exactly check against each plan - min/max are not correct
                     string queryString =
-                            $"select employer_id, account_type_code, plan_id, date(min(plan_year_start_date)) as plan_year_start_date, date(max(plan_year_end_date)) as plan_year_end_date /* , max(grace_period_end_date) grace_period_end_date*/ " +
+                            $"select employer_id, account_type_code, plan_id, date(plan_year_start_date) as planstart, date(plan_year_end_date) as planend" +
                             $" from wc.vw_wc_employer_plans_combined " +
                             $" where employer_id = '{Utils.DbQuote(employerId)}' " +
                             $" group by employer_id, account_type_code, plan_id " +
@@ -1006,7 +1048,7 @@ namespace DataProcessing
                     // todo: we need check exactly check against each plan - min/max are not correct
                     // get ALL plans
                     string queryString1 =
-                            $" select employerid, employeeid, plancode, plandesc, date(min(planstart)) as planstart, date(max(planend)) as planend " +
+                            $" select employerid, employeeid, plancode, plandesc, date(planstart) as planstart, date(planend) as planend " +
                             $" from wc.vw_wc_participant_plans_combined " +
                             $" where employerid = '{Utils.DbQuote(employerId)}' " +
                             $" group by employerid, employeeid, plancode, plandesc" +
@@ -1046,7 +1088,7 @@ namespace DataProcessing
         #region CheckUtils
 
 
-      
+
         public string EnsureValueIsOfFormatAndMatchesRules(mbi_file_table_stage dataRow, TypedCsvColumn column,
             TypedCsvSchema mappings)
         {
@@ -1093,6 +1135,11 @@ namespace DataProcessing
                     case FormatType.AlphaNumeric:
                         // replace all non alphanumeric
                         value = regexAlphaNumeric.Replace(value, String.Empty);
+                        break;
+
+                    case FormatType.AlphaNumericAndDashes:
+                        // replace all non alphanumeric
+                        value = regexAlphaNumericAndDashes.Replace(value, String.Empty);
                         break;
 
                     case FormatType.AlphaOnly:

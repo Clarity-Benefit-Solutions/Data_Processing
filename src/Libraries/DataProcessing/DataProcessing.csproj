@@ -527,7 +527,10 @@
     <Compile Include="FileChecker\FileCheckerCobra.cs" />
     <Compile Include="FileChecker\FileCheckerAlegeus.cs" />
     <Compile Include="FileChecker\FileCheckResults.cs" />
-    <Compile Include="Import.cs" />
+    <Compile Include="ImportSpecs\ImportBrokerCommissions.cs" />
+    <Compile Include="ImportSpecs\ImportCobra.cs" />
+    <Compile Include="ImportSpecs\ImportAlegeus.cs" />
+    <Compile Include="ImportSpecs\Import.cs" />
     <Compile Include="Processes\AlegeusErrorLog.cs" />
     <Compile Include="Processes\IncomingFileProcessing.cs" />
     <Compile Include="Processes\MiscFileProcessing.cs" />
