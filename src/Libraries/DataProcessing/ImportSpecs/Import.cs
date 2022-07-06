@@ -256,7 +256,7 @@ namespace DataProcessing
             fileName = $"{testMarker}{BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
             if (FileUtils.IsEmptyFile(srcFilePath))
             {
-                fileName = $"EMPTY_{fileName}";
+                fileName = $"{testMarker}EMPTY_{Path.GetFileName(srcFileName)}";
             }
 
             fileName = FileUtils.FixFileName(fileName);

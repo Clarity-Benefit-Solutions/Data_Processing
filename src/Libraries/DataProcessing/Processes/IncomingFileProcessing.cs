@@ -252,15 +252,15 @@ namespace DataProcessing
                     string emptyFilePath;
                     if (platformType == PlatformType.Cobra)
                     {
-                        emptyFilePath = $"{Vars.cobraFilesEmptyPath}/{Path.GetFileName(srcFilePath)}";
+                        emptyFilePath = $"{Vars.cobraFilesEmptyPath}/{Path.GetFileName(currentFilePath)}";
                     }
                     else if (platformType == PlatformType.Alegeus)
                     {
-                        emptyFilePath = $"{Vars.alegeusFilesEmptyPath}/{Path.GetFileName(srcFilePath)}";
+                        emptyFilePath = $"{Vars.alegeusFilesEmptyPath}/{Path.GetFileName(currentFilePath)}";
                     }
                     else
                     {
-                        emptyFilePath = $"{Vars.unknownFilesEmptyPath}/{Path.GetFileName(srcFilePath)}";
+                        emptyFilePath = $"{Vars.unknownFilesEmptyPath}/{Path.GetFileName(currentFilePath)}";
                     }
 
                     FileUtils.MoveFile(currentFilePath, emptyFilePath,
