@@ -133,7 +133,7 @@ namespace DataProcessing
             switch (rowType)
             {
                 case "[VERSION]":
-                    mappings.Add(new CobraTypedCsvColumn("VersionNumber", FormatType.String, 0, 1, "Use “1.0” for this import specification", "1.0|1.1|1.2"));
+                    mappings.Add(new CobraTypedCsvColumn("VersionNumber", FormatType.String, 0, 1, "Use “1.0” for this import specification", "1.0|1.1|1.2|1"));
                     break;
 
                 #region "QB"
