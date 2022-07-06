@@ -1112,7 +1112,7 @@ namespace DataProcessing
                         if (!Utils.IsValidEmail(value))
                         {
                             this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
-                                $"{column.SourceColumn} must be a valid Email. {orgValue} is not valid");
+                                $"{column.SourceColumn} must be a valid Email. '{orgValue}' is not valid");
                         }
 
                         break;
@@ -1169,7 +1169,7 @@ namespace DataProcessing
                         if (!Utils.IsInteger(value))
                         {
                             this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
-                                $"{column.SourceColumn} must be numbers only. {orgValue} is not valid");
+                                $"{column.SourceColumn} must be numbers only. '{orgValue}' is not valid");
                         }
 
                         break;
@@ -1180,7 +1180,7 @@ namespace DataProcessing
                         if (!Utils.IsDouble(value))
                         {
                             this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
-                                $"{column.SourceColumn} must be a Currency Value. {orgValue} is not valid");
+                                $"{column.SourceColumn} must be a Currency Value. '{orgValue}' is not valid");
                         }
 
                         // format as 0.00
@@ -1196,7 +1196,7 @@ namespace DataProcessing
                         if (!Utils.IsIsoDate(value, column.MaxLength > 0))
                         {
                             this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
-                                $"{column.SourceColumn} must be in format YYYYMMDD. {orgValue} is not valid");
+                                $"{column.SourceColumn} must be in format YYYYMMDD. '{orgValue}' is not valid");
                         }
 
                         break;
@@ -1209,7 +1209,7 @@ namespace DataProcessing
                         if (!Utils.IsIsoDateTime(value, column.MaxLength > 0))
                         {
                             this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
-                                $"{column.SourceColumn} must be in format YYYYMMDD. {orgValue} is not valid");
+                                $"{column.SourceColumn} must be in format YYYYMMDD. '{orgValue}' is not valid");
                         }
 
                         break;
@@ -1219,7 +1219,7 @@ namespace DataProcessing
                             !value.Equals("No", StringComparison.InvariantCultureIgnoreCase))
                         {
                             this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
-                                $"{column.SourceColumn} must be be either Yes or No. {orgValue} is not valid");
+                                $"{column.SourceColumn} must be be either Yes or No. '{orgValue}' is not valid");
                         }
 
                         break;
@@ -1229,7 +1229,7 @@ namespace DataProcessing
                             !value.Equals("False", StringComparison.InvariantCultureIgnoreCase))
                         {
                             this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
-                                $"{column.SourceColumn} must be be either Yes or No. {orgValue} is not valid");
+                                $"{column.SourceColumn} must be be either Yes or No. '{orgValue}' is not valid");
                         }
 
                         break;
@@ -1261,6 +1261,19 @@ namespace DataProcessing
                 }
             }
 
+            if (!Utils.IsBlank(column.FixedValue) && value != column.FixedValue && column.MinLength > 0 && (!column.FixedValue.Split('|').Contains(value)))
+            {
+                if (column.FixedValue == "<BLANK>" & value != "")
+                {
+                    value = "";
+                }
+                else
+                {
+                    this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
+                        $"{column.SourceColumn} must always be one of or ezxactly {column.FixedValue}. '{orgValue}' is not valid");
+                }
+            }
+
             // set row column value to the fixed value if it has changed
             if (value != orgValue)
             {
@@ -1269,25 +1282,19 @@ namespace DataProcessing
             }
 
             // 2. check against GENERAL rules
-            if (column.FixedValue != null && value != column.FixedValue &&
-                !column.FixedValue.Split('|').Contains(value) && column.MinLength > 0)
-            {
-                this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
-                    $"{column.SourceColumn} must always be {column.FixedValue}. {orgValue} is not valid");
-            }
-
+            
             // minLength
             if (column.MinLength > 0 && value.Length < column.MinLength)
             {
                 this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
-                    $"{column.SourceColumn} must be minimum {column.MinLength} characters long. {orgValue} is not valid");
+                    $"{column.SourceColumn} must be minimum {column.MinLength} characters long. '{orgValue}' is not valid");
             }
 
             // maxLength
             if (column.MaxLength > 0 && value.Length > column.MaxLength)
             {
                 this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
-                    $"{column.SourceColumn} must be maximum {column.MaxLength} characters long. {orgValue} is not valid");
+                    $"{column.SourceColumn} must be maximum {column.MaxLength} characters long. '{orgValue}' is not valid");
             }
 
             // min/max value
@@ -1296,20 +1303,20 @@ namespace DataProcessing
                 if (!Utils.IsNumeric(value))
                 {
                     this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
-                        $"{column.SourceColumn} must be a number. {orgValue} is not valid");
+                        $"{column.SourceColumn} must be a number. '{orgValue}' is not valid");
                 }
 
                 float numValue = Utils.ToNumber(value);
                 if (numValue < column.MinValue)
                 {
                     this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
-                        $"{column.SourceColumn} must be a number with a value greater than ${column.MinValue}. {orgValue} is not valid");
+                        $"{column.SourceColumn} must be a number with a value greater than ${column.MinValue}. '{orgValue}' is not valid");
                 }
 
                 if (numValue > column.MaxValue)
                 {
                     this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
-                        $"{column.SourceColumn} must be a number with a value less than ${column.MaxValue}. {orgValue} is not valid");
+                        $"{column.SourceColumn} must be a number with a value less than ${column.MaxValue}. '{orgValue}' is not valid");
                 }
             }
 

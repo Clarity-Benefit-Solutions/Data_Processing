@@ -148,9 +148,10 @@ namespace DataProcessing
                         case "1.0":
                             mappings.Add(new CobraTypedCsvColumn("ClientName", FormatType.String, 100, 1, "The unique Client name assigned in COBRA & Direct Billing "));
                             mappings.Add(new CobraTypedCsvColumn("ClientDivisionName", FormatType.String, 50, 1, "The unique Client Division name assigned in COBRA & Direct Billing. If there are no Divisions, then use the ClientName."));
-                            mappings.Add(new CobraTypedCsvColumn("Salutation", FormatType.String, 35, 0, "", "MR|MRS|MS|MISS|DR|"));
+                            mappings.Add(new CobraTypedCsvColumn("Salutation", FormatType.String, 35, 0, "",
+                                "MR|MRS|MS|MISS|DR|"));
                             mappings.Add(new CobraTypedCsvColumn("FirstName", FormatType.String, 50, 1, ""));
-                            mappings.Add(new CobraTypedCsvColumn("MiddleInitial", FormatType.String, 1, 1, ""));
+                            mappings.Add(new CobraTypedCsvColumn("MiddleInitial", FormatType.String, 1, 0, ""));
                             mappings.Add(new CobraTypedCsvColumn("LastName", FormatType.String, 50, 1, ""));
                             mappings.Add(new CobraTypedCsvColumn("SSN", FormatType.SSN, 9, 1, "Social Security Number"));
                             mappings.Add(new CobraTypedCsvColumn("IndividualID", FormatType.String, 50, 0, "Optional, used to store Employee ID #s or any other type of secondary identification"));
@@ -170,13 +171,18 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("PremiumStateOrProvince", FormatType.String, 50, 0, "[Deprecated – do not use]"));
                             mappings.Add(new CobraTypedCsvColumn("PremiumPostalCode", FormatType.String, 35, 0, "[Deprecated – do not use]"));
                             mappings.Add(new CobraTypedCsvColumn("PremiumCountry", FormatType.String, 50, 0, "[Deprecated – do not use]"));
-                            mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 1, "F, M, U", "F|M|U"));
+                            mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 1, "",
+                                "F|M|U|"));
                             mappings.Add(new CobraTypedCsvColumn("DOB", FormatType.CobraDate, 0, 1, "Date of Birth – needed for age based plans and also for the Medicare Letter"));
-                            mappings.Add(new CobraTypedCsvColumn("TobaccoUse", FormatType.String, 35, 1, "YES, NO, UNKNOWN"));
-                            mappings.Add(new CobraTypedCsvColumn("EmployeeType", FormatType.String, 35, 1, "FTE, PTE, H1B, CONSULTANT, SABBATICAL, PROBATIONARY, CONTINGENT, TELECOMMUTING, INTERN, GROUPLEADER, ASSOCIATE, PARTNER, UNKNOWN"));
-                            mappings.Add(new CobraTypedCsvColumn("EmployeePayrollType", FormatType.String, 35, 1, "EXEMPT, NONEXEMPT, UNKNOWN"));
+                            mappings.Add(new CobraTypedCsvColumn("TobaccoUse", FormatType.String, 35, 1, "",
+                                "YES|NO|UNKNOWN"));
+                            mappings.Add(new CobraTypedCsvColumn("EmployeeType", FormatType.String, 35, 1, "",
+                                "FTE|PTE|H1B|CONSULTANT|SABBATICAL|PROBATIONARY|CONTINGENT|TELECOMMUTING|INTERN|GROUPLEADER|ASSOCIATE|PARTNER|UNKNOWN"));
+                            mappings.Add(new CobraTypedCsvColumn("EmployeePayrollType", FormatType.String, 35, 1, "",
+                                "EXEMPT|NONEXEMPT|UNKNOWN"));
                             mappings.Add(new CobraTypedCsvColumn("YearsOfService", FormatType.Integer, 0, 0, "Not used currently and only informational"));
-                            mappings.Add(new CobraTypedCsvColumn("PremiumCouponType", FormatType.String, 35, 1, "PREMIUMNOTICE, COUPONBOOK, NONE"));
+                            mappings.Add(new CobraTypedCsvColumn("PremiumCouponType", FormatType.String, 35, 1, "",
+                                "PREMIUMNOTICE|COUPONBOOK|NONE"));
                             mappings.Add(new CobraTypedCsvColumn("UsesHCTC", FormatType.CobraYesNo, 0, 1, "TRUE if this QB uses the Health Care Tax Credit (HCTC) system"));
                             mappings.Add(new CobraTypedCsvColumn("Active", FormatType.YesNo, 0, 1, "Should always be set to TRUE", "TRUE|YES|1|Yes|True"));
                             mappings.Add(new CobraTypedCsvColumn("AllowMemberSSO", FormatType.CobraYesNo, 1, 1, "TRUE or FALSE"));
@@ -195,7 +201,8 @@ namespace DataProcessing
                         case "1.2":
                         case "1.1":
                         case "1.0":
-                            mappings.Add(new CobraTypedCsvColumn("EventType", FormatType.String, 35, 1, "DIVORCELEGASSEPARATION,DEATH,INELIGIBLEDEPENDENT,MEDICARE,TERMINATION,RETIREMENT,REDUCTIONINHOURS-STATUSCHANGE,REDUCTIONINFORCE,BANKRUPTCY,STATECONTINUATION,LOSSOFELIGIBILITY,REDUCTIONINHOURS-ENDOFLEAVE,WORKSTOPPAGE,USERRA-TERMINATION,USERRA-REDUCTIONINHOURS,INVOLUNTARYTERMINATION,TERMINATIONWITHSEVERANCE,RETIREEBANKRUPTCY"));
+                            mappings.Add(new CobraTypedCsvColumn("EventType", FormatType.String, 35, 1, "",
+                                "DIVORCELEGASSEPARATION|DEATH|INELIGIBLEDEPENDENT|MEDICARE|TERMINATION|RETIREMENT|REDUCTIONINHOURS-STATUSCHANGE|REDUCTIONINFORCE|BANKRUPTCY|STATECONTINUATION|LOSSOFELIGIBILITY|REDUCTIONINHOURS-ENDOFLEAVE|WORKSTOPPAGE|USERRA-TERMINATION|USERRA-REDUCTIONINHOURS|INVOLUNTARYTERMINATION|TERMINATIONWITHSEVERANCE|RETIREEBANKRUPTCY"));
                             mappings.Add(new CobraTypedCsvColumn("EventDate", FormatType.CobraDate, 0, 0, "The qualifying event date that the event type occurred on. Do not adjust for plan benefit termination types, just use the actual date of the event."));
                             mappings.Add(new CobraTypedCsvColumn("EnrollmentDate", FormatType.CobraDate, 0, 1, "Original enrollment date of the member’s current medical plan - used for HIPAA certificate to show length of continuous coverage"));
                             mappings.Add(new CobraTypedCsvColumn("EmployeeSSN", FormatType.SSN, 9, 1, "The original employee’s SSN. Required if the event type is a dependent type event, such as DEATH, DIVORCELEGALSEPARATION, INELIGIBLEDEPENDENT or MEDICARE."));
@@ -218,7 +225,7 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("IsPaidThroughLastDayOfCOBRA", FormatType.CobraYesNo, 0, 1, "If the QB is paid all the way through the end of COBRA then set this to TRUE, otherwise FALSE"));
                             mappings.Add(new CobraTypedCsvColumn("NextPremiumOwedMonth", FormatType.Integer, 0, 1, "The month (1-12) of the next payment that is owed"));
                             mappings.Add(new CobraTypedCsvColumn("NextPremiumOwedYear", FormatType.Integer, 0, 1, "The year (for example 2009) of the next payment that is owed"));
-                            mappings.Add(new CobraTypedCsvColumn("NextPremiumOwedAmountReceived", FormatType.CobraMoney, 0, 1, "Always set to 0"));
+                            mappings.Add(new CobraTypedCsvColumn("NextPremiumOwedAmountReceived", FormatType.CobraMoney, 0, 1, "Always set to 0", "0"));
                             mappings.Add(new CobraTypedCsvColumn("SendTakeoverLetter", FormatType.CobraYesNo, 0, 1, "Set to TRUE if a Takeover Letter is to be sent to this legacy QB. Takeover Letters are typically sent out when a QB is switching from one TPA to another."));
                             mappings.Add(new CobraTypedCsvColumn("IsConversionLetterSent", FormatType.CobraYesNo, 0, 1, "Set to TRUE if this Legacy QB has already received a Conversion Letter. Conversion Letters are sent out 180 days before the end of COBRA explaining the QB’s right to convert their coverage."));
                             mappings.Add(new CobraTypedCsvColumn("SendDODSubsidyExtension", FormatType.CobraYesNo, 0, 1, "Deprecated – any value will be ignored, set to FALSE."));
@@ -233,7 +240,8 @@ namespace DataProcessing
                         case "1.1":
                         case "1.0":
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
-                            mappings.Add(new CobraTypedCsvColumn("CoverageLevel", FormatType.String, 35, 1, "EE,EE+SPOUSE,EE+CHILD,EE+CHILDREN,EE+FAMILY,EE+1,EE+2,SPOUSEONLY,SPOUSE+CHILD,CHILDREN,EE+1Child,EE+2Children,EE+3Children,EE+4Children,EE+5orMoreChildren,EE+Spouse+1Child,EE+Spouse+2Children,EE+Spouse+3Children,EE+Spouse+4Children,EE+Spouse+5orMoreChildren,SPOUSE+1CHILD,SPOUSE+2CHILDREN,SPOUSE+3CHILDREN,SPOUSE+4CHILDREN,SPOUSE+5ORMORECHILDREN,EE+DOMESTICPARTNER,EE1UNDER19,EE+SPOUSE1UNDER19,EE+SPOUSE2UNDER19,EE+CHILDREN1UNDER19,EE+CHILDREN2UNDER19,EE+CHILDREN3UNDER19,EE+FAMILY1UNDER19,EE+FAMILY2UNDER19,EE+FAMILY3UNDER19"));
+                            mappings.Add(new CobraTypedCsvColumn("CoverageLevel", FormatType.String, 35, 1, "",
+                                "EE|EE+SPOUSE|EE+CHILD|EE+CHILDREN|EE+FAMILY|EE+1|EE+2|SPOUSEONLY|SPOUSE+CHILD|CHILDREN|EE+1Child|EE+2Children|EE+3Children|EE+4Children|EE+5orMoreChildren|EE+Spouse+1Child|EE+Spouse+2Children|EE+Spouse+3Children|EE+Spouse+4Children|EE+Spouse+5orMoreChildren|SPOUSE+1CHILD|SPOUSE+2CHILDREN|SPOUSE+3CHILDREN|SPOUSE+4CHILDREN|SPOUSE+5ORMORECHILDREN|EE+DOMESTICPARTNER|EE1UNDER19|EE+SPOUSE1UNDER19|EE+SPOUSE2UNDER19|EE+CHILDREN1UNDER19|EE+CHILDREN2UNDER19|EE+CHILDREN3UNDER19|EE+FAMILY1UNDER19|EE+FAMILY2UNDER19|EE+FAMILY3UNDER19"));
                             mappings.Add(new CobraTypedCsvColumn("NumberOfUnit", FormatType.CobraMoney, 0, 0, "Sets the # of units for this plan. Required if plan is units based (e.g. Life)."));
                             //
                             break;
@@ -248,15 +256,18 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
                             mappings.Add(new CobraTypedCsvColumn("StartDate", FormatType.CobraDate, 0, 1, "The start date that the QB will begin coverage on this plan. This should be set to the FDOC for the plan in the field above."));
                             mappings.Add(new CobraTypedCsvColumn("EndDate", FormatType.CobraDate, 0, 0, "Optional, the end date the QB will cease coverage on this plan. This should be set to the LDOC for the plan in the field above."));
-                            mappings.Add(new CobraTypedCsvColumn("CoverageLevel", FormatType.String, 35, 1, "EE, EE+SPOUSE, EE+CHILD, EE+CHILDREN, EE+FAMILY, EE+1, EE+2, SPOUSEONLY, SPOUSE+CHILD, CHILDREN,EE + 1Child, EE + 2Children, EE + 3Children, EE + 4Children, EE + 5orMoreChildren, EE + Spouse + 1Child, EE + Spouse + 2Children, EE + Spouse + 3Children, EE + Spouse + 4Children, EE + Spouse + 5orMoreChildren, SPOUSE + 1CHILD, SPOUSE + 2CHILDREN, SPOUSE + 3CHILDREN,SPOUSE + 4CHILDREN, SPOUSE + 5ORMORECHILDREN"));
+                            mappings.Add(new CobraTypedCsvColumn("CoverageLevel", FormatType.String, 35, 1, "",
+                                "EE|EE+SPOUSE|EE+CHILD|EE+CHILDREN|EE+FAMILY|EE+1|EE+2|SPOUSEONLY|SPOUSE+CHILD|CHILDREN|EE+1Child|EE+2Children|EE+3Children|EE+4Children|EE+5orMoreChildren|EE+Spouse+1Child|EE+Spouse+2Children|EE+Spouse+3Children|EE+Spouse+4Children|EE+Spouse+5orMoreChildren|SPOUSE+1CHILD|SPOUSE+2CHILDREN|SPOUSE+3CHILDREN|SPOUSE+4CHILDREN|SPOUSE+5ORMORECHILDREN|EE+DOMESTICPARTNER|EE1UNDER19|EE+SPOUSE1UNDER19|EE+SPOUSE2UNDER19|EE+CHILDREN1UNDER19|EE+CHILDREN2UNDER19|EE+CHILDREN3UNDER19|EE+FAMILY1UNDER19|EE+FAMILY2UNDER19|EE+FAMILY3UNDER19"));
                             mappings.Add(new CobraTypedCsvColumn("FirstDayOfCOBRA", FormatType.CobraDate, 0, 0, "The First Day of COBRA. Unless you wish to override the calculated FDOC, this field should be left blank. If left blank the system will determine the FDOC based on the EventDate and the plan benefit termination type."));
                             mappings.Add(new CobraTypedCsvColumn("LastDayOfCOBRA", FormatType.CobraDate, 0, 0, "The Last Day of COBRA. This field should be left blank. The system will determine the LDOC based on the FDOC and COBRADurationMonths."));
                             mappings.Add(new CobraTypedCsvColumn("COBRADurationMonths", FormatType.Integer, 0, 0, "The number of months of COBRA is usually determined by the event type. This may be left blank (preferred) and the system will determine the correct number of months. It is typically 18 months, but can be extended on Dependent Event Types and USERRA Event Types."));
                             mappings.Add(new CobraTypedCsvColumn("DaysToElect", FormatType.Integer, 0, 0, "The number of days the QB has to elect coverage under COBRA. This may be left blank (preferred) and the system will determine the correct number of days. It is typically 60 days."));
                             mappings.Add(new CobraTypedCsvColumn("DaysToMake1stPayment", FormatType.Integer, 0, 0, "The number of days the QB has to make their 1st full payment under COBRA. This may be left blank (preferred) and the system will determine the correct number of days. It is typically 45 days."));
                             mappings.Add(new CobraTypedCsvColumn("DaysToMakeSubsequentPayments", FormatType.Integer, 0, 0, "The total number of days the member has to make subsequent payments after their initial payment. This may be left blank (preferred) and the system will determine the correct number of days. It is typically 45 days."));
-                            mappings.Add(new CobraTypedCsvColumn("ElectionPostmarkDate", FormatType.CobraDate, 0, 0, "Always leave blank"));
-                            mappings.Add(new CobraTypedCsvColumn("LastDateRatesNotified", FormatType.CobraDate, 0, 0, "Always leave blank"));
+                            mappings.Add(new CobraTypedCsvColumn("ElectionPostmarkDate", FormatType.CobraDate, 0, 0, "Always leave blank",
+                                "<BLANK>"));
+                            mappings.Add(new CobraTypedCsvColumn("LastDateRatesNotified", FormatType.CobraDate, 0, 0, "Always leave blank",
+                                "<BLANK>"));
                             mappings.Add(new CobraTypedCsvColumn("NumberOfUnits", FormatType.CobraMoney, 0, 0, "Sets the # of units for this plan. Required if plan is units based (e.g. Life)."));
                             mappings.Add(new CobraTypedCsvColumn("SendPlanChangeLetterForLegacy", FormatType.CobraYesNo, 1, 1, "Set to TRUE to send a plan change letter after this record is entered."));
                             mappings.Add(new CobraTypedCsvColumn("PlanBundleName", FormatType.String, 50, 0, "Conditionally required for plans that are part of a bundle."));
@@ -271,8 +282,10 @@ namespace DataProcessing
                         case "1.1":
                         case "1.0":
                             mappings.Add(new CobraTypedCsvColumn("SSN", FormatType.SSN, 9, 0, "Social Security Number"));
-                            mappings.Add(new CobraTypedCsvColumn("Relationship", FormatType.String, 35, 1, "SPOUSE, CHILD, DOMESTICPARTNER"));
-                            mappings.Add(new CobraTypedCsvColumn("Salutation", FormatType.String, 35, 0, "", "MR|MRS|MS|MISS|DR|"));
+                            mappings.Add(new CobraTypedCsvColumn("Relationship", FormatType.String, 35, 1, "",
+                     "SPOUSE|CHILD|DOMESTICPARTNER"));
+                            mappings.Add(new CobraTypedCsvColumn("Salutation", FormatType.String, 35, 0, "",
+                                "MR|MRS|MS|MISS|DR|"));
                             mappings.Add(new CobraTypedCsvColumn("FirstName", FormatType.String, 50, 1, ""));
                             mappings.Add(new CobraTypedCsvColumn("MiddleInitial", FormatType.String, 1, 0, ""));
                             mappings.Add(new CobraTypedCsvColumn("LastName", FormatType.String, 50, 1, ""));
@@ -287,7 +300,8 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("PostalCode", FormatType.String, 35, 0, ""));
                             mappings.Add(new CobraTypedCsvColumn("Country", FormatType.String, 50, 0, "Leave empty if the dependent resides in the USA"));
                             mappings.Add(new CobraTypedCsvColumn("EnrollmentDate", FormatType.CobraDate, 0, 0, "Original enrollment date of the dependent’s medical plan - used for HIPAA certificate"));
-                            mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 0, "F, M, U (this is required if the dependent is on a sex based plan that sets rates based on the dependent’s sex)", "F|M|U"));
+                            mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 0, "F, M, U (this is required if the dependent is on a sex based plan that sets rates based on the dependent’s sex)",
+                                "F|M|U|"));
                             mappings.Add(new CobraTypedCsvColumn("DOB", FormatType.CobraDate, 0, 0, "Date of birth (this is required if the dependent is on an age based plan that sets rates based on the dependent’s age)"));
                             mappings.Add(new CobraTypedCsvColumn("IsQMCSO", FormatType.CobraYesNo, 1, 0, "TRUE if the dependent is under a Qualified Medical Child Support Order (QMCSO)"));
                             //
@@ -325,10 +339,12 @@ namespace DataProcessing
                         case "1.2":
                         case "1.1":
                         case "1.0":
-                            mappings.Add(new CobraTypedCsvColumn("NoteType", FormatType.String, 35, 1, "MANUAL, AUTONOTE"));
+                            mappings.Add(new CobraTypedCsvColumn("NoteType", FormatType.String, 35, 1, "",
+                                "MANUAL|AUTONOTE"));
                             mappings.Add(new CobraTypedCsvColumn("DateTime", FormatType.CobraDateTime, 0, 1, "Date and time of the note"));
                             mappings.Add(new CobraTypedCsvColumn("NoteText", FormatType.String, 2000, 1, ""));
-                            mappings.Add(new CobraTypedCsvColumn("UserName", FormatType.String, 0, 0, "Always leave blank"));
+                            mappings.Add(new CobraTypedCsvColumn("UserName", FormatType.String, 0, 0, "Always leave blank"
+                                 , "<BLANK>"));
                             //
                             break;
                     }
@@ -339,13 +355,17 @@ namespace DataProcessing
                         case "1.2":
                         case "1.1":
                         case "1.0":
-                            mappings.Add(new CobraTypedCsvColumn("InsuranceType", FormatType.String, 35, 1, "MEDICAL, DENTAL, VISION, PHARMACY, FSA, HCRA, EAP, GAP, 401k, LIFE, NULIFE, MSA, PBA, HSA, NUOTHER1, NUOTHER2, GRPLIFE, NUGRPLIFE, VOLLIFE, NUVOLLIFE, CANCER, MERP, DEPLIFE1, DEPLIFE2, DEPLIFE3, NUDEPLIFE1, NUDEPLIFE2, NUDEPLIFE3, MEDSTURIDER1, MEDSTURIDER2, MEDSTURIDER3, LTD, AD&D, CHIROPRACTIC, VEBA, CUSTOMBILLING, LTDNONUNITBASED, LTDUNITBASED, STDNONUNITBASED, STDUNITBASED, CRITICALILLNESS, ACCIDENTNONUNITBASED, ACCIDENTUNITBASED, VOLUNTARYOTHER, UOTHER1, UOTHER2, UOTHER3"));
-                            mappings.Add(new CobraTypedCsvColumn("SubsidyAmountType", FormatType.String, 35, 0, "?", "FLAT or PERCENTAGE is required if RatePeriodSubsidy is False"));
+                            mappings.Add(new CobraTypedCsvColumn("InsuranceType", FormatType.String, 35, 1, "",
+                                "MEDICAL, DENTAL, VISION, PHARMACY, FSA, HCRA, EAP, GAP, 401k, LIFE, NULIFE, MSA, PBA, HSA, NUOTHER1, NUOTHER2, GRPLIFE, NUGRPLIFE, VOLLIFE, NUVOLLIFE, CANCER, MERP, DEPLIFE1, DEPLIFE2, DEPLIFE3, NUDEPLIFE1, NUDEPLIFE2, NUDEPLIFE3, MEDSTURIDER1, MEDSTURIDER2, MEDSTURIDER3, LTD, AD&D, CHIROPRACTIC, VEBA, CUSTOMBILLING, LTDNONUNITBASED, LTDUNITBASED, STDNONUNITBASED, STDUNITBASED, CRITICALILLNESS, ACCIDENTNONUNITBASED, ACCIDENTUNITBASED, VOLUNTARYOTHER, UOTHER1, UOTHER2, UOTHER3"));
+                            mappings.Add(new CobraTypedCsvColumn("SubsidyAmountType", FormatType.String, 35, 0, "FLAT or PERCENTAGE is required if RatePeriodSubsidy is False",
+                                "FLAT|PERCENTAGE|"));
                             mappings.Add(new CobraTypedCsvColumn("StartDate", FormatType.CobraDate, 0, 1, "Start date of the subsidy"));
                             mappings.Add(new CobraTypedCsvColumn("EndDate", FormatType.CobraDate, 0, 1, "End date of the subsidy"));
                             mappings.Add(new CobraTypedCsvColumn("Amount", FormatType.CobraMoney, 0, 0, "Required if RatePeriodSubsidy is False. Amount if FLAT or Percentage if PERCENTAGE of the subsidy.For example, use “50” if it is a 50 % subsidy and the SubsidyAmountType is set to PERCENTAGE."));
-                            mappings.Add(new CobraTypedCsvColumn("SubsidyType", FormatType.String, 35, 0, "EMPLOYER (defaults to EMPLOYER)"));
-                            mappings.Add(new CobraTypedCsvColumn("RatePeriodSubsidy", FormatType.CobraYesNo, 0, 0, "True = '1', 'Y', 'YES', 'T' or 'TRUE'; False = '0', 'N', 'NO', 'F' or 'FALSE'; Blank value. If RatePeriodSubsidy = blank, True or False value will be applied after import by the system according to the existing logic. RatePeriodSubsidy is not allowed to import on Employer Portal. True or False value will be applied after import by the system according to the existing logic."));
+                            mappings.Add(new CobraTypedCsvColumn("SubsidyType", FormatType.String, 35, 0, "EMPLOYER (defaults to EMPLOYER)",
+                                "EMPLOYER|"));
+                            mappings.Add(new CobraTypedCsvColumn("RatePeriodSubsidy", FormatType.CobraYesNo, 0, 0, "",
+                                "TRUE|YES|1|Yes|True"));
                             //
                             break;
                     }
@@ -378,10 +398,12 @@ namespace DataProcessing
                         case "1.2":
                         case "1.1":
                         case "1.0":
-                            mappings.Add(new CobraTypedCsvColumn("DisabilityApproved", FormatType.CobraYesNo, 1, 1, "Set to TRUE if the Disability Extension is approved or FALSE if it is not"));
+                            mappings.Add(new CobraTypedCsvColumn("DisabilityApproved", FormatType.CobraYesNo, 1, 1, "Set to TRUE if the Disability Extension is approved or FALSE if it is not",
+                                 "TRUE|YES|1|Yes|True"));
                             mappings.Add(new CobraTypedCsvColumn("PostmarkOfDisabilityExtension", FormatType.CobraDate, 0, 1, "Set to the postmark date that the Disability Extension when it was received"));
                             mappings.Add(new CobraTypedCsvColumn("DateDisabled", FormatType.CobraDate, 0, 1, "The date the member was disabled"));
-                            mappings.Add(new CobraTypedCsvColumn("DenialReason", FormatType.String, 35, 0, "DISABILITYDATE, SUBMISSIONDATE – required if DisabilityApproved is FALSE"));
+                            mappings.Add(new CobraTypedCsvColumn("DenialReason", FormatType.String, 35, 0, "DISABILITYDATE, SUBMISSIONDATE – required if DisabilityApproved is FALSE",
+                                "DISABILITYDATE|SUBMISSIONDATE|"));
                             //
                             break;
                     }
@@ -477,9 +499,10 @@ namespace DataProcessing
                         case "1.0":
                             mappings.Add(new CobraTypedCsvColumn("ClientName", FormatType.String, 100, 1, "The unique Client name assigned in COBRA & Direct Billing "));
                             mappings.Add(new CobraTypedCsvColumn("ClientDivisionName", FormatType.String, 50, 1, "The unique Client Division name assigned in COBRA & Direct Billing. If there are no Divisions, then use the ClientName."));
-                            mappings.Add(new CobraTypedCsvColumn("Salutation", FormatType.String, 35, 0, "", "MR|MRS|MS|MISS|DR|"));
+                            mappings.Add(new CobraTypedCsvColumn("Salutation", FormatType.String, 35, 0, "",
+                                "MR|MRS|MS|MISS|DR|"));
                             mappings.Add(new CobraTypedCsvColumn("FirstName", FormatType.String, 50, 1, ""));
-                            mappings.Add(new CobraTypedCsvColumn("MiddleInitial", FormatType.String, 1, 1, ""));
+                            mappings.Add(new CobraTypedCsvColumn("MiddleInitial", FormatType.String, 1, 0, ""));
                             mappings.Add(new CobraTypedCsvColumn("LastName", FormatType.String, 50, 1, ""));
                             mappings.Add(new CobraTypedCsvColumn("SSN", FormatType.SSN, 9, 1, "Social Security Number"));
                             mappings.Add(new CobraTypedCsvColumn("IndividualID", FormatType.String, 50, 0, "Optional, used to store Employee ID #s or any other type of secondary identification"));
@@ -492,34 +515,40 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("StateOrProvince", FormatType.String, 50, 1, ""));
                             mappings.Add(new CobraTypedCsvColumn("PostalCode", FormatType.String, 35, 1, ""));
                             mappings.Add(new CobraTypedCsvColumn("Country", FormatType.String, 50, 0, "Leave blank if the QB resides in the USA"));
-                            mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 1, "F, M, U", "F|M|U"));
+                            mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 1, "F, M, U",
+                                "F|M|U|"));
                             mappings.Add(new CobraTypedCsvColumn("DOB", FormatType.CobraDate, 0, 1, "Date of Birth – needed for age based plans and also for the Medicare Letter"));
 
                             mappings.Add(new CobraTypedCsvColumn("BillingStartDate", FormatType.CobraDate, 0, 1, "Date to start billing SPM"));
                             mappings.Add(new CobraTypedCsvColumn("BillingEndDate", FormatType.CobraDate, 0, 1, "Date to end billing SPM"));
-                            mappings.Add(new CobraTypedCsvColumn("BillingType", FormatType.String, 35, 1, "RETIREE,PREMIUMPAY, CASHPAY, FMLA, LOANREPAYMENT,LEAVEOFABSENCE, LTDPREMIUM, STDPREMIUM, DISABILITYPREMIUM, CUSTOM"));
-                            mappings.Add(new CobraTypedCsvColumn("BillingFrequency", FormatType.String, 35, 1, "MONTHLY, WEEKLY, BIWEEKLY, QUARTERLY, YEARLY, SEMIMONTHLY"));
+                            mappings.Add(new CobraTypedCsvColumn("BillingType", FormatType.String, 35, 1, "",
+                                "RETIREE|PREMIUMPAY|CASHPAY|FMLA|LOANREPAYMENT|LEAVEOFABSENCE|LTDPREMIUM|STDPREMIUM|DISABILITYPREMIUM|CUSTOM"));
+                            mappings.Add(new CobraTypedCsvColumn("BillingFrequency", FormatType.String, 35, 1,"",
+                                "MONTHLY|WEEKLY|BIWEEKLY|QUARTERLY|YEARLY|SEMIMONTHLY"));
 
                             mappings.Add(new CobraTypedCsvColumn("IsCOBRAEligible", FormatType.YesNo, 0, 1, ""));
                             mappings.Add(new CobraTypedCsvColumn("IsCOBRAEligibleAtTermination", FormatType.YesNo, 0, 1, ""));
 
                             mappings.Add(new CobraTypedCsvColumn("SubsequentGracePeriodNrOfDays", FormatType.Integer, 0, 1, "Overrides the Subsequent Grace Period for this SPM"));
-                            mappings.Add(new CobraTypedCsvColumn("SPMSubsequentGracePeriodOptionType", FormatType.String, 0, 1, "CLIENTDEFAULT, IGNORE, CUSTOM"));
+                            mappings.Add(new CobraTypedCsvColumn("SPMSubsequentGracePeriodOptionType", FormatType.String, 0, 1, "",
+                                "CLIENTDEFAULT|IGNORE|CUSTOM"));
 
                             mappings.Add(new CobraTypedCsvColumn("IsLegacy", FormatType.YesNo, 0, 1, "TRUE if this SPM existed in a prior billing system – this is used for conditional text in the SPM Welcome Letter"));
 
-                            mappings.Add(new CobraTypedCsvColumn("TobaccoUse", FormatType.String, 35, 1, "YES, NO, UNKNOWN"));
+                            mappings.Add(new CobraTypedCsvColumn("TobaccoUse", FormatType.String, 35, 1, "","YES|NO|UNKNOWN"));
 
                             mappings.Add(new CobraTypedCsvColumn("EnrollmentDate", FormatType.CobraDate, 35, 1, "Original enrollment date of the SPM’s plan - used for HIPAA certificate."));
-                            mappings.Add(new CobraTypedCsvColumn("EmployeeType", FormatType.String, 35, 1, "FTE, PTE, H1B, CONSULTANT, SABBATICAL, PROBATIONARY, CONTINGENT, TELECOMMUTING, INTERN, GROUPLEADER, ASSOCIATE, PARTNER, UNKNOWN"));
+                            mappings.Add(new CobraTypedCsvColumn("EmployeeType", FormatType.String, 35, 1, "",
+                                "FTE|PTE|H1B|CONSULTANT|SABBATICAL|PROBATIONARY|CONTINGENT|TELECOMMUTING|INTERN|GROUPLEADER|ASSOCIATE|PARTNER|UNKNOWN"));
                             mappings.Add(new CobraTypedCsvColumn("EmployeePayrollType", FormatType.String, 35, 1, "EXEMPT, NONEXEMPT, UNKNOWN"));
 
                             mappings.Add(new CobraTypedCsvColumn("YearsOfService", FormatType.Integer, 0, 0, "Not used currently and only informational"));
-                            mappings.Add(new CobraTypedCsvColumn("PremiumCouponType", FormatType.String, 35, 1, "PREMIUMNOTICE, COUPONBOOK, NONE"));
+                            mappings.Add(new CobraTypedCsvColumn("PremiumCouponType", FormatType.String, 35, 1,"",
+                                "PREMIUMNOTICE|COUPONBOOK|NONE"));
 
-                            mappings.Add(new CobraTypedCsvColumn("Active", FormatType.YesNo, 0, 1, "Should always be set to TRUE", "TRUE|YES|1|Yes|True"));
+                            mappings.Add(new CobraTypedCsvColumn("Active", FormatType.YesNo, 0, 1, "Should always be set to TRUE",
+                                "TRUE|YES|1|Yes|True"));
                             mappings.Add(new CobraTypedCsvColumn("AllowMemberSSO", FormatType.CobraYesNo, 1, 1, "TRUE or FALSE"));
-
                             mappings.Add(new CobraTypedCsvColumn("BenefitGroup", FormatType.String, 50, 0, ""));
                             mappings.Add(new CobraTypedCsvColumn("AccountStructure", FormatType.String, 50, 0, ""));
                             mappings.Add(new CobraTypedCsvColumn("ClientSpecificData", FormatType.String, 50, 0, ""));
@@ -549,10 +578,12 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("PlanName", FormatType.String, 50, 1, "The unique Client plan name"));
                             mappings.Add(new CobraTypedCsvColumn("StartDate", FormatType.CobraDate, 0, 1, "The start date that the QB will begin coverage on this plan. This should be set to the FDOC for the plan in the field above."));
                             mappings.Add(new CobraTypedCsvColumn("EndDate", FormatType.CobraDate, 0, 0, "Optional, the end date the QB will cease coverage on this plan. This should be set to the LDOC for the plan in the field above."));
-                            mappings.Add(new CobraTypedCsvColumn("CoverageLevel", FormatType.String, 35, 1, "EE, EE+SPOUSE, EE+CHILD, EE+CHILDREN, EE+FAMILY, EE+1, EE+2, SPOUSEONLY, SPOUSE+CHILD, CHILDREN,EE + 1Child, EE + 2Children, EE + 3Children, EE + 4Children, EE + 5orMoreChildren, EE + Spouse + 1Child, EE + Spouse + 2Children, EE + Spouse + 3Children, EE + Spouse + 4Children, EE + Spouse + 5orMoreChildren, SPOUSE + 1CHILD, SPOUSE + 2CHILDREN, SPOUSE + 3CHILDREN,SPOUSE + 4CHILDREN, SPOUSE + 5ORMORECHILDREN"));
+                            mappings.Add(new CobraTypedCsvColumn("CoverageLevel", FormatType.String, 35, 1, "",
+                                "EE|EE+SPOUSE|EE+CHILD|EE+CHILDREN|EE+FAMILY|EE+1|EE+2|SPOUSEONLY|SPOUSE+CHILD|CHILDREN|EE+1Child|EE+2Children|EE+3Children|EE+4Children|EE+5orMoreChildren|EE+Spouse+1Child|EE+Spouse+2Children|EE+Spouse+3Children|EE+Spouse+4Children|EE+Spouse+5orMoreChildren|SPOUSE+1CHILD|SPOUSE+2CHILDREN|SPOUSE+3CHILDREN|SPOUSE+4CHILDREN|SPOUSE+5ORMORECHILDREN|EE+DOMESTICPARTNER|EE1UNDER19|EE+SPOUSE1UNDER19|EE+SPOUSE2UNDER19|EE+CHILDREN1UNDER19|EE+CHILDREN2UNDER19|EE+CHILDREN3UNDER19|EE+FAMILY1UNDER19|EE+FAMILY2UNDER19|EE+FAMILY3UNDER19"));
                             mappings.Add(new CobraTypedCsvColumn("FirstDayOfCoverage", FormatType.CobraDate, 0, 0, "The First Day of COBRA. Unless you wish to override the calculated FDOC, this field should be left blank. If left blank the system will determine the FDOC based on the EventDate and the plan benefit termination type."));
                             mappings.Add(new CobraTypedCsvColumn("LastDayOfCoverage", FormatType.CobraDate, 0, 0, "The Last Day of COBRA. This field should be left blank. The system will determine the LDOC based on the FDOC and COBRADurationMonths."));
-                            mappings.Add(new CobraTypedCsvColumn("LastDateRatesNotified", FormatType.CobraDate, 0, 0, "Always Leave Blank", ""));
+                            mappings.Add(new CobraTypedCsvColumn("LastDateRatesNotified", FormatType.CobraDate, 0, 0, "Always Leave Blank", 
+                                "<BLANK>"));
 
                             mappings.Add(new CobraTypedCsvColumn("SendPlanChangeLetterForLegacy", FormatType.CobraYesNo, 1, 1, "Set to TRUE to send a plan change letter after this record is entered."));
                             mappings.Add(new CobraTypedCsvColumn("NumberOfUnits", FormatType.CobraMoney, 0, 0, "Sets the # of units for this plan. Required if plan is units based (e.g. Life)."));
@@ -568,8 +599,10 @@ namespace DataProcessing
                         case "1.1":
                         case "1.0":
                             mappings.Add(new CobraTypedCsvColumn("SSN", FormatType.SSN, 9, 0, "Social Security Number"));
-                            mappings.Add(new CobraTypedCsvColumn("Relationship", FormatType.String, 35, 1, "SPOUSE, CHILD, DOMESTICPARTNER"));
-                            mappings.Add(new CobraTypedCsvColumn("Salutation", FormatType.String, 35, 0, "", "MR|MRS|MS|MISS|DR|"));
+                            mappings.Add(new CobraTypedCsvColumn("Relationship", FormatType.String, 35, 1,
+                                "SPOUSE|CHILD|DOMESTICPARTNER"));
+                            mappings.Add(new CobraTypedCsvColumn("Salutation", FormatType.String, 35, 0, "",
+                                "MR|MRS|MS|MISS|DR|"));
                             mappings.Add(new CobraTypedCsvColumn("FirstName", FormatType.String, 50, 1, ""));
                             mappings.Add(new CobraTypedCsvColumn("MiddleInitial", FormatType.String, 1, 0, ""));
                             mappings.Add(new CobraTypedCsvColumn("LastName", FormatType.String, 50, 1, ""));
@@ -584,7 +617,8 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("PostalCode", FormatType.String, 35, 0, ""));
                             mappings.Add(new CobraTypedCsvColumn("Country", FormatType.String, 50, 0, "Leave empty if the dependent resides in the USA"));
                             mappings.Add(new CobraTypedCsvColumn("EnrollmentDate", FormatType.CobraDate, 0, 1, "Original enrollment date of the dependent’s medical plan - used for HIPAA certificate"));
-                            mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 0, "F, M, U (this is required if the dependent is on a sex based plan that sets rates based on the dependent’s sex)", "F|M|U"));
+                            mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 0, "F, M, U (this is required if the dependent is on a sex based plan that sets rates based on the dependent’s sex)", 
+                                "F|M|U"));
                             mappings.Add(new CobraTypedCsvColumn("DOB", FormatType.CobraDate, 0, 0, "Date of birth (this is required if the dependent is on an age based plan that sets rates based on the dependent’s age)"));
                             mappings.Add(new CobraTypedCsvColumn("IsQMCSO", FormatType.CobraYesNo, 1, 0, "TRUE if the dependent is under a Qualified Medical Child Support Order (QMCSO)"));
                             //
@@ -611,7 +645,8 @@ namespace DataProcessing
                         case "1.2":
                         case "1.1":
                         case "1.0":
-                            mappings.Add(new CobraTypedCsvColumn("NoteType", FormatType.String, 35, 1, "MANUAL, AUTONOTE"));
+                            mappings.Add(new CobraTypedCsvColumn("NoteType", FormatType.String, 35, 1,"", 
+                                "MANUAL|AUTONOTE"));
                             mappings.Add(new CobraTypedCsvColumn("DateTime", FormatType.CobraDateTime, 0, 1, "Date and time of the note"));
                             mappings.Add(new CobraTypedCsvColumn("NoteText", FormatType.String, 2000, 1, ""));
                             mappings.Add(new CobraTypedCsvColumn("UserName", FormatType.String, 0, 0, "Always leave blank", ""));
@@ -625,12 +660,15 @@ namespace DataProcessing
                         case "1.2":
                         case "1.1":
                         case "1.0":
-                            mappings.Add(new CobraTypedCsvColumn("InsuranceType", FormatType.String, 35, 1, "MEDICAL, DENTAL, VISION, PHARMACY, FSA, HCRA, EAP, GAP, 401k, LIFE, NULIFE, MSA, PBA, HSA, NUOTHER1, NUOTHER2, GRPLIFE, NUGRPLIFE, VOLLIFE, NUVOLLIFE, CANCER, MERP, DEPLIFE1, DEPLIFE2, DEPLIFE3, NUDEPLIFE1, NUDEPLIFE2, NUDEPLIFE3, MEDSTURIDER1, MEDSTURIDER2, MEDSTURIDER3, LTD, AD&D, CHIROPRACTIC, VEBA, CUSTOMBILLING, LTDNONUNITBASED, LTDUNITBASED, STDNONUNITBASED, STDUNITBASED, CRITICALILLNESS, ACCIDENTNONUNITBASED, ACCIDENTUNITBASED, VOLUNTARYOTHER, UOTHER1, UOTHER2, UOTHER3"));
-                            mappings.Add(new CobraTypedCsvColumn("SubsidyAmountType", FormatType.String, 35, 0, "?", "FLAT or PERCENTAGE is required if RatePeriodSubsidy is False"));
+                            mappings.Add(new CobraTypedCsvColumn("InsuranceType", FormatType.String, 35, 1, "",
+                                "MEDICAL, DENTAL, VISION, PHARMACY, FSA, HCRA, EAP, GAP, 401k, LIFE, NULIFE, MSA, PBA, HSA, NUOTHER1, NUOTHER2, GRPLIFE, NUGRPLIFE, VOLLIFE, NUVOLLIFE, CANCER, MERP, DEPLIFE1, DEPLIFE2, DEPLIFE3, NUDEPLIFE1, NUDEPLIFE2, NUDEPLIFE3, MEDSTURIDER1, MEDSTURIDER2, MEDSTURIDER3, LTD, AD&D, CHIROPRACTIC, VEBA, CUSTOMBILLING, LTDNONUNITBASED, LTDUNITBASED, STDNONUNITBASED, STDUNITBASED, CRITICALILLNESS, ACCIDENTNONUNITBASED, ACCIDENTUNITBASED, VOLUNTARYOTHER, UOTHER1, UOTHER2, UOTHER3"));
+                            mappings.Add(new CobraTypedCsvColumn("SubsidyAmountType", FormatType.String, 35, 0, "FLAT or PERCENTAGE is required if RatePeriodSubsidy is False",
+                                "FLAT|PERCENTAGE|"));
                             mappings.Add(new CobraTypedCsvColumn("StartDate", FormatType.CobraDate, 0, 1, "Start date of the subsidy"));
                             mappings.Add(new CobraTypedCsvColumn("EndDate", FormatType.CobraDate, 0, 1, "End date of the subsidy"));
                             mappings.Add(new CobraTypedCsvColumn("Amount", FormatType.CobraMoney, 0, 0, "Required if RatePeriodSubsidy is False. Amount if FLAT or Percentage if PERCENTAGE of the subsidy.For example, use “50” if it is a 50 % subsidy and the SubsidyAmountType is set to PERCENTAGE."));
-                            mappings.Add(new CobraTypedCsvColumn("SubsidyType", FormatType.String, 35, 0, "EMPLOYER (defaults to EMPLOYER)"));
+                            mappings.Add(new CobraTypedCsvColumn("SubsidyType", FormatType.String, 35, 0, "EMPLOYER (defaults to EMPLOYER)",
+                                "EMPLOYER|"));
                             mappings.Add(new CobraTypedCsvColumn("RatePeriodSubsidy", FormatType.CobraYesNo, 0, 0, "True = '1', 'Y', 'YES', 'T' or 'TRUE'; False = '0', 'N', 'NO', 'F' or 'FALSE'; Blank value. If RatePeriodSubsidy = blank, True or False value will be applied after import by the system according to the existing logic. RatePeriodSubsidy is not allowed to import on Employer Portal. True or False value will be applied after import by the system according to the existing logic."));
                             //
                             break;
@@ -670,8 +708,10 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("ClientName", FormatType.String, 100, 1, "N/A"));
                             mappings.Add(new CobraTypedCsvColumn("SSN", FormatType.SSN, 9, 1, "N/A"));
                             mappings.Add(new CobraTypedCsvColumn("BillingStartDate", FormatType.CobraDate, 0, 1, "N/A"));
-                            mappings.Add(new CobraTypedCsvColumn("BillingType", FormatType.String, 35, 1, "RETIREE,PREMIUMPAY, CASHPAY, FMLA, LOANREPAYMENT,LEAVEOFABSENCE, LTDPREMIUM, STDPREMIUM, DISABILITYPREMIUM, CUSTOM"));
-                            mappings.Add(new CobraTypedCsvColumn("BillingFrequency", FormatType.String, 35, 1, "MONTHLY, WEEKLY, BIWEEKLY, QUARTERLY, YEARLY, SEMIMONTHLY"));
+                            mappings.Add(new CobraTypedCsvColumn("BillingType", FormatType.String, 35, 1, "",
+                                "RETIREE|PREMIUMPAY|CASHPAY|FMLA|LOANREPAYMENT|LEAVEOFABSENCE|LTDPREMIUM|STDPREMIUM|DISABILITYPREMIUM|CUSTOM"));
+                            mappings.Add(new CobraTypedCsvColumn("BillingFrequency", FormatType.String, 35, 1, "",
+                                "MONTHLY|WEEKLY|BIWEEKLY|QUARTERLY|YEARLY|SEMIMONTHLY"));
 
                             //
                             break;
@@ -694,9 +734,10 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("ClientName", FormatType.String, 100, 1, "The unique Client name assigned in COBRA & Direct Billing "));
                             mappings.Add(new CobraTypedCsvColumn("ClientDivisionName", FormatType.String, 50, 1, "The unique Client Division name assigned in COBRA & Direct Billing. If there are no Divisions, then use the ClientName."));
                             mappings.Add(new CobraTypedCsvColumn("FirstName", FormatType.String, 50, 1, ""));
-                            mappings.Add(new CobraTypedCsvColumn("MiddleInitial", FormatType.String, 1, 1, ""));
+                            mappings.Add(new CobraTypedCsvColumn("MiddleInitial", FormatType.String, 1, 0, ""));
                             mappings.Add(new CobraTypedCsvColumn("LastName", FormatType.String, 50, 1, ""));
-                            mappings.Add(new CobraTypedCsvColumn("Salutation", FormatType.String, 35, 0, "", "MR|MRS|MS|MISS|DR|"));
+                            mappings.Add(new CobraTypedCsvColumn("Salutation", FormatType.String, 35, 0, "",
+                                "MR|MRS|MS|MISS|DR|"));
                             mappings.Add(new CobraTypedCsvColumn("Email", FormatType.Email, 100, 0, ""));
                             mappings.Add(new CobraTypedCsvColumn("Phone", FormatType.Phone, 10, 0, ""));
                             mappings.Add(new CobraTypedCsvColumn("Phone2", FormatType.Phone, 10, 0, ""));
@@ -738,7 +779,8 @@ namespace DataProcessing
                         case "1.1":
                         case "1.0":
                             mappings.Add(new CobraTypedCsvColumn("FullName", FormatType.String, 100, 1, ""));
-                            mappings.Add(new CobraTypedCsvColumn("Relationship", FormatType.String, 35, 1, "SPOUSE, CHILD, DOMESTICPARTNER"));
+                            mappings.Add(new CobraTypedCsvColumn("Relationship", FormatType.String, 35, 1, "",
+                                "SPOUSE|CHILD|DOMESTICPARTNER"));
                             mappings.Add(new CobraTypedCsvColumn("OriginalEnrollmentDate", FormatType.CobraDate, 0, 0, "Original enrollment date of the dependent’s medical plan - used for HIPAA certificate"));
                             mappings.Add(new CobraTypedCsvColumn("LastDayOfCoverage", FormatType.CobraDate, 0, 1, "The Last Day of COBRA. This field should be left blank. The system will determine the LDOC based on the FDOC and COBRADurationMonths."));
                             //

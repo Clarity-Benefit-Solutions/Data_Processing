@@ -208,7 +208,7 @@ namespace DataProcessing
                             recType = firstColValue;
 
                             //
-                            // col2: tpaid
+                            // col2: client name
                             var secondColValue = columns[1];
                             BenCode = secondColValue.Trim();
 
@@ -224,12 +224,10 @@ namespace DataProcessing
                         {
                             recType = firstColValue.Trim().Replace("[", "").Replace("]", "");
 
-                            //
-                            // col2: tpaid
+                            // col4: client name
                             var fourthColValue = columns[3];
                             BenCode = fourthColValue.Trim();
-                            BenCode = BenCode.Replace("/", "").Replace("\\", "").Replace("\"", "").Replace("'", "").Replace(".", "").Replace(",", "").Replace("  ", " ").Replace(" ", "-");
-
+                         
                             // exit when we have both
                             if (!Utils.IsBlank(BenCode) && !Utils.IsBlank(recType))
                             {
