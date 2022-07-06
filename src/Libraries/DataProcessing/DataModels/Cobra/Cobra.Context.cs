@@ -15,10 +15,10 @@ namespace DataProcessing.DataModels.Cobra
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     
-    public partial class COBRApoint_portal_prodEntities : DbContext
+    public partial class _portal_prodEntities : DbContext
     {
-        public COBRApoint_portal_prodEntities()
-            : base("name=COBRApoint_portal_prodEntities")
+        public _portal_prodEntities()
+            : base("name=_portal_prodEntities")
         {
         }
     

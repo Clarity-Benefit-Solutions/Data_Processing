@@ -21,8 +21,7 @@ namespace DataProcessing
     public class Vars
     {
         private static string _Environment = null;
-        private static Boolean _UseVPNToConnectToPortal = false;
-
+      
         public static string Environment
         {
             get { return _Environment ?? "TEST"; }
@@ -127,8 +126,6 @@ namespace DataProcessing
         }
 
 
-
-
         public string ConnStrNameDataProcessing
         {
             get { return "Data_ProcessingEntities"; }
@@ -210,7 +207,15 @@ namespace DataProcessing
 
         #endregion
 
+
+        public string ConnStrNameHangfire
+        {
+            get { return "Hangfire"; }
+        }
+
         #region DbConnPortalWc
+
+        private static Boolean _UseVPNToConnectToPortal = false;
 
         public string ConnStrNamePortalWc
         {
@@ -227,22 +232,6 @@ namespace DataProcessing
             }
         }
 
-        public string ConnStrNameHangfire
-        {
-            get { return "Hangfire"; }
-        }
-
-        //private  PortalWc _dbCtxPortalWcDefault;
-
-        //public  PortalWc dbCtxPortalWcDefault
-        //{
-        //    get
-        //    {
-        //        if (_dbCtxPortalWcDefault == null)
-        //            _dbCtxPortalWcDefault = new PortalWc(ConnStrNamePortalWc);
-        //        return _dbCtxPortalWcDefault;
-        //    }
-        //}
 
         private DbConnection _dbConnPortalWc;
 
@@ -267,6 +256,59 @@ namespace DataProcessing
                 }
 
                 return _dbConnPortalWc;
+            }
+        }
+
+        #endregion
+
+        #region DbConnCobra
+
+        private static Boolean _UseVPNToConnectToCobra = false;
+        public static Boolean UseVPNToConnectToCobra
+        {
+            get { return _UseVPNToConnectToCobra; }
+            set { _UseVPNToConnectToCobra = value; }
+        }
+
+        public string ConnStrNameCobra
+        {
+            get
+            {
+                if (UseVPNToConnectToCobra)
+                {
+                    return "COBRApointVPN";
+                }
+                else
+                {
+                    return "COBRApoint";
+                }
+            }
+        }
+
+
+        private DbConnection _dbConnCobra;
+
+        public DbConnection dbConnCobra
+        {
+            get
+            {
+                if (_dbConnCobra == null)
+                {
+                    string connString =
+                        Utils.GetProviderConnString(ConnStrNameCobra);
+                    //
+                    _dbConnCobra = new SqlConnection(connString);
+
+                    // profiling
+#if PROFILE
+                    _dbConnCobra =
+ new StackExchange.Profiling.Data.ProfiledDbConnection(_dbConnCobra, MiniProfiler.Current);
+#endif
+
+                    if (_dbConnCobra.State != ConnectionState.Open) _dbConnCobra.Open();
+                }
+
+                return _dbConnCobra;
             }
         }
 

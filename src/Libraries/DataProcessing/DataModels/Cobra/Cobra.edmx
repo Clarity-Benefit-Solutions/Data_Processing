@@ -1713,7 +1713,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
           <Property Name="MemberID" Type="Int32" Nullable="false" />
           <Property Name="AccessUser" Type="Guid" Nullable="false" />
         </EntityType>
-        <EntityContainer Name="COBRApoint_portal_prodEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="COBRApoint" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="db_error_log" EntityType="Self.db_error_log" />
           <EntitySet Name="db_message_log" EntityType="Self.db_message_log" />
           <EntitySet Name="QBAEI_ClientList_csv" EntityType="Self.QBAEI_ClientList_csv" />
@@ -1761,7 +1761,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="COBRApointStoreContainer" CdmEntityContainer="COBRApoint_portal_prodEntities">
+        <EntityContainerMapping StorageEntityContainer="COBRApointStoreContainer" CdmEntityContainer="COBRApoint">
           <EntitySetMapping Name="db_error_log">
             <EntityTypeMapping TypeName="COBRApoint.db_error_log">
               <MappingFragment StoreEntitySet="db_error_log">

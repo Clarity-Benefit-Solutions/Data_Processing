@@ -28,6 +28,7 @@ namespace DataProcessing
 
         //
         private readonly DbConnection dbConnPortalWc;
+        private readonly DbConnection dbConnCobra;
 
         //
         public readonly FileCheckResults fileCheckResults = new FileCheckResults();
@@ -44,6 +45,7 @@ namespace DataProcessing
             this.FileLogParams = _fileLogParams;
             this.DbConn = _dbConn;
             this.dbConnPortalWc = Vars.dbConnPortalWc;
+            this.dbConnCobra = Vars.dbConnCobra;
             this.OnErrorCallback = _onErrorCallback;
         }
 
