@@ -26,30 +26,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0853958f-c1a2-4d9c-ae8d-4ae39e7a6a8c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-07-05-alegeus-filechecker-5.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Broker_Commission.EUXFFw/schema/dbo.sYMBAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Broker_Commission.EUXFFw/schema/dbo.sYMBAA.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Broker_Commission.EUXFFw/schema/dbo.sYMBAA.zip" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Broker_Commission.EUXFFw/schema/dbo.sYMBAA.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.zip" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/SSISDB.iElWkg.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/SSISDB.iElWkg/schema/INFORMATION_SCHEMA.NBgcMw.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/SSISDB.iElWkg/schema/dbo.sYMBAA.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/SSISDB.iElWkg/schema/dbo.sYMBAA.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/SSISDB.iElWkg/schema/sys.zb4BAA.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-07-05-alegeus-filechecker-5.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-07-05-alegeus-filechecker-5.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../src/.vs/DataProcessing/v16/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/.vs/DataProcessing/v16/.suo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebApp/web.config" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebApp/web.config" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Apps/DataProcessingWindowsApp/App.config" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Apps/DataProcessingWindowsApp/App.config" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Apps/DataProcessingWindowsApp/web.config" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/App.config" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/App.config" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/DataModels/Cobra/Cobra.Context.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/DataModels/Cobra/Cobra.Context.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/DataModels/Cobra/Cobra.edmx" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/DataModels/Cobra/Cobra.edmx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/FileChecker/FileCheckerCobra.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/FileChecker/FileCheckerCobra.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Vars.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Vars.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

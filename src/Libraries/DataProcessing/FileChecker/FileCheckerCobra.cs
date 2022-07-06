@@ -419,47 +419,43 @@ namespace DataProcessing
                 else
                 {
                     DataTable dbResults = GetAllCobraEEForClient(dataRow, column, versionNo, entityType);
-                    var filter = "";
-                    filter += $"SSNFormatted = '{dataRow.SSN}'";
-
-                    DataRow[] dbRows = dbResults.Select(filter);
-
-                    if (dbRows.Length == 0)
+                    if (dbResults.Rows.Count > 0)
                     {
-                        // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
-                        if (true /*|| versionNo == string.CobraDemographics*/)
-                        {
-                            // as it is an demographics file, add this employee to the ER-EE table so a check for plan enrollemnt within same run or before reaggregation from Cobra will suceed
-                            DataRow newRow = dbResults.NewRow();
-                            newRow["ClientName"] = dataRow.ClientName;
-                            newRow["SSN"] = dataRow.SSN;
-                            newRow["is_active"] = dataRow.Active == "1" ? 1 : 0;
-                            dbResults.Rows.Add(newRow);
+                        var filter = "";
+                        filter += $"SSNFormatted = '{dataRow.SSN}'";
 
-                            var cacheKey2 =
-                                $"GetAllEmployeesForClient-{this.PlatformType.ToDescription()}-{dataRow.ClientName}-AllEmployees";
-                            _cache.Add(cacheKey2, dbResults);
+                        DataRow[] dbRows = dbResults.Select(filter);
 
-                            //
-                            return false;
-                        }
-                        else
+                        if (dbRows.Length == 0)
                         {
-                            errorMessage +=
-                                $"The Employee ID {dataRow.SSN} could not be found for Client Name {dataRow.ClientName}";
+                            // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
+                            if (true /*|| versionNo == string.CobraDemographics*/)
+                            {
+                                // as it is an demographics file, add this employee to the ER-EE table so a check for plan enrollemnt within same run or before reaggregation from Cobra will suceed
+                                DataRow newRow = dbResults.NewRow();
+                                newRow["ClientName"] = dataRow.ClientName;
+                                newRow["SSN"] = dataRow.SSN;
+                                newRow["is_active"] = dataRow.Active == "1" ? 1 : 0;
+                                dbResults.Rows.Add(newRow);
+
+                                var cacheKey2 =
+                                    $"GetAllEmployeesForClient-{this.PlatformType.ToDescription()}-{dataRow.ClientName}-AllEmployees";
+                                _cache.Add(cacheKey2, dbResults);
+
+                                //
+                                return false;
+                            }
+                            else
+                            {
+                                errorMessage +=
+                                    $"A {entityType} with SSN {dataRow.SSN} could not be found for Client Name {dataRow.ClientName} and DivisionName {dataRow.ClientDivisionName}";
+                            }
                         }
                     }
                     else
                     {
-                        DataRow dbData = dbRows[0];
-                        // if employee exists as per our data, that is fine
-                        // do not check the file EmployeeStatus against what we havwe in the db
-                        //float status = Utils.ToNumber(dbData["is_active"]?.ToString());
-                        //if (status <= 0 && Utils.ToNumber(dataRow.EmployeeStatus) > 1)
-                        //{
-                        //  errorMessage +=
-                        //    $"The Employee ID {dataRow.MemberId} has status {status} which is not valid";
-                        //}
+                        errorMessage +=
+                                   $"A {entityType} with SSN {dataRow.SSN} could not be found for Client Name {dataRow.ClientName} and DivisionName {dataRow.ClientDivisionName}";
                     }
                 }
 
@@ -870,7 +866,7 @@ namespace DataProcessing
         // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
         private DataTable GetAllCobraEEForClient(cobra_file_table_stage dataRow, TypedCsvColumn column, string versionNo, string entityType)
         {
-            DataTable dbResults = null;
+            DataTable dbResults = new DataTable();
             var cacheKey =
                 $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.ClientName}-{dataRow.ClientDivisionName}-All{entityType}";
             if (_cache.ContainsKey(cacheKey))

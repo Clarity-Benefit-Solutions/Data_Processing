@@ -55,6 +55,7 @@ as
         dbo.Client as c
             left join dbo.ClientDivision d on c.ClientID = d.ClientID
 go
+select * from AllClientsAndDivisions where ClientName like 'Acelero%';
 SELECT *, replace(SSN, '-', '') as SSNFormatted
 FROM
     dbo.QB
@@ -62,3 +63,5 @@ where
     ClientId = '1289'
 ORDER by
     MemberId;
+
+SELECT *, replace(SSN, '-', '') as SSNFormatted  FROM dbo.SPM  where ClientId = '1289'  ORDER by MemberId
