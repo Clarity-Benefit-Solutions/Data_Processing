@@ -162,80 +162,84 @@ namespace DataProcessing
                 string line;
                 while ((line = inputFile.ReadLine()) != null)
                 {
-                    string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
-
-                    if (platformType == PlatformType.Alegeus)
+                    if (!Utils.IsBlank(line))
                     {
-                        //
-                        // col1: Record Type
-                        var firstColValue = columns[0];
-                        if (!Utils.IsBlank(firstColValue) && firstColValue.Length == 2
-                                                          && firstColValue.StartsWith("I",
-                                                              StringComparison.InvariantCultureIgnoreCase)
-                                                          && !firstColValue.Equals("IA",
-                                                              StringComparison.InvariantCultureIgnoreCase)
-                           )
-                        {
-                            recType = firstColValue.Trim();
+                        rowNo++;
+                        string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
 
+                        if (platformType == PlatformType.Alegeus)
+                        {
                             //
-                            // col2: tpaid
-                            var secondColValue = columns[1];
-
-                            // col3: employerid
-                            var thirdColValue = columns[2];
-                            if (thirdColValue.StartsWith("BEN", StringComparison.InvariantCultureIgnoreCase))
+                            // col1: Record Type
+                            var firstColValue = columns[0];
+                            if (!Utils.IsBlank(firstColValue) && firstColValue.Length == 2
+                                                              && firstColValue.StartsWith("I",
+                                                                  StringComparison.InvariantCultureIgnoreCase)
+                                                              && !firstColValue.Equals("IA",
+                                                                  StringComparison.InvariantCultureIgnoreCase)
+                               )
                             {
-                                BenCode = thirdColValue.Trim();
-                            }
+                                recType = firstColValue.Trim();
 
-                            // exit when we have both
-                            if (!Utils.IsBlank(BenCode) && !Utils.IsBlank(recType))
-                            {
-                                break;
+                                //
+                                // col2: tpaid
+                                var secondColValue = columns[1];
+
+                                // col3: employerid
+                                var thirdColValue = columns[2];
+                                if (thirdColValue.StartsWith("BEN", StringComparison.InvariantCultureIgnoreCase))
+                                {
+                                    BenCode = thirdColValue.Trim();
+                                }
+
+                                // exit when we have both
+                                if (!Utils.IsBlank(BenCode) && !Utils.IsBlank(recType))
+                                {
+                                    break;
+                                }
                             }
                         }
-                    }
-                    if (platformType == PlatformType.Cobra)
-                    {
-                        //
-                        // col1: Record Type
-                        var firstColValue = columns[0];
-                        if (!Utils.IsBlank(firstColValue)
-                            && (firstColValue == "[QB]" || firstColValue == "[SPM]")
-                           )
+                        if (platformType == PlatformType.Cobra)
                         {
-                            recType = firstColValue;
-
                             //
-                            // col2: client name
-                            var secondColValue = columns[1];
-                            BenCode = secondColValue.Trim();
-
-                            // exit when we have both
-                            if (!Utils.IsBlank(BenCode) && !Utils.IsBlank(recType))
+                            // col1: Record Type
+                            var firstColValue = columns[0];
+                            if (!Utils.IsBlank(firstColValue)
+                                && (firstColValue == "[QB]" || firstColValue == "[SPM]")
+                               )
                             {
-                                break;
+                                recType = firstColValue;
+
+                                //
+                                // col2: client name
+                                var secondColValue = columns[1];
+                                BenCode = secondColValue.Trim();
+
+                                // exit when we have both
+                                if (!Utils.IsBlank(BenCode) && !Utils.IsBlank(recType))
+                                {
+                                    break;
+                                }
+                            }
+                            else if (!Utils.IsBlank(firstColValue)
+                                && (firstColValue == "[NPM]")
+                               )
+                            {
+                                recType = firstColValue.Trim().Replace("[", "").Replace("]", "");
+
+                                // col4: client name
+                                var fourthColValue = columns[3];
+                                BenCode = fourthColValue.Trim();
+
+                                // exit when we have both
+                                if (!Utils.IsBlank(BenCode) && !Utils.IsBlank(recType))
+                                {
+                                    break;
+                                }
                             }
                         }
-                        else if (!Utils.IsBlank(firstColValue)
-                            && (firstColValue == "[NPM]")
-                           )
-                        {
-                            recType = firstColValue.Trim().Replace("[", "").Replace("]", "");
-
-                            // col4: client name
-                            var fourthColValue = columns[3];
-                            BenCode = fourthColValue.Trim();
-                         
-                            // exit when we have both
-                            if (!Utils.IsBlank(BenCode) && !Utils.IsBlank(recType))
-                            {
-                                break;
-                            }
-                        }
-                    }
-                }
+                    } // is not blank
+                } // while
             }
 
             if (Utils.IsBlank(recType))
@@ -248,14 +252,22 @@ namespace DataProcessing
             }
 
             //
-            // fix file name
-            var fileName = $"{testMarker}{BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
+
+            var fileName= "";
+            if (!FileUtils.IsEmptyFile(srcFilePath))
+            {
+                fileName = $"{testMarker}{BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
+            }
+            else
+            {
+                fileName = $"EMPTY_{Path.GetFileName(srcFilePath)}";
+            }
             fileName = FileUtils.FixFileName(fileName);
             //
             /*newPath = $"{Path.GetDirectoryName(srcFilePath)}/{Utils.GetUniqueIdFromFileName(srcFileName)}--";*/
             newPath = $"{Path.GetDirectoryName(srcFilePath)}/";
             newPath += fileName;
-              
+
             newPath = FileUtils.FixPath(newPath);
 
             return newPath;

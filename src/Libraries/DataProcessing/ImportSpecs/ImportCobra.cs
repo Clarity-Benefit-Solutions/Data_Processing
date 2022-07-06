@@ -873,10 +873,13 @@ namespace DataProcessing
                     string line;
                     while ((line = inputFile.ReadLine()) != null)
                     {
-                        rowNo++;
+                        if (!Utils.IsBlank(line))
+                        {
+                            rowNo++;
 
-                        // import the line with manual insert statement
-                        ImportCobraCsvLine(Path.GetFileName(srcFilePath), rowNo, line, dbConn, tableName, versionNo, fileLogParams, onErrorCallback);
+                            // import the line with manual insert statement
+                            ImportCobraCsvLine(Path.GetFileName(srcFilePath), rowNo, line, dbConn, tableName, versionNo, fileLogParams, onErrorCallback);
+                        }
                     }
                 }
                 // run postimport query to take from staging to final table

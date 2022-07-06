@@ -70,7 +70,6 @@ namespace DataProcessing
             // PrepareIncomingCobraQbFiles
             this.PrepareIncomingCobraQbFiles(dbConn, fileLogParams);
 
-
             // MoveIncomingCobraFilesToProcessingDir
             this.PreCheckAndProcessCobraFiles(dbConn, fileLogParams);
         }
@@ -87,7 +86,7 @@ namespace DataProcessing
         {
             //
             fileLogParams.SetFileNames("", "", "", "", "",
-                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
 
@@ -121,7 +120,7 @@ namespace DataProcessing
 
                     fileLogParams.SetFileNames("", Path.GetFileName(rowFolderName), rowFolderName,
                         Path.GetFileName(rowFolderName), "",
-                        $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                        $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                         "Starting", "Started Iterating Directory");
                     //
                     fileLogParams1.Bencode = rowBenCode;
@@ -134,7 +133,7 @@ namespace DataProcessing
                     //
                     // 3a. set unique fileNames for each file in source folder and add to file Log and move to Holding Dir
                     FileUtils.IterateDirectory(
-                        new string[] { rowFolderName }, DirectoryIterateType.Files, false, new string[] { "*.csv" , "*.xlsx", "*.xls", "*.txt", "*.mbi"},
+                        new string[] { rowFolderName }, DirectoryIterateType.Files, false, new string[] { "*.csv", "*.xlsx", "*.xls", "*.txt", "*.mbi" },
                         (srcFilePath, destFilePath, dummy2) =>
                         {
                             this.MoveIncomingFileToNextStepDir(srcFilePath, dbConn, fileLogParams);
@@ -168,7 +167,7 @@ namespace DataProcessing
                 //
                 fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                     Path.GetFileName(srcFilePath), srcFilePath,
-                    $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                    $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                     "Success", "Found Source File");
                 DbUtils.LogFileOperation(fileLogParams);
 
@@ -190,8 +189,9 @@ namespace DataProcessing
                     FileUtils.DeleteFile(srcFilePath, null, null);
                     srcFilePath = csvFilePath;
                 }
-                //
+
                 var platformType = Import.GetPlatformTypeForFile(srcFilePath);
+
 
                 // 4. make FilenameProperty uniform
                 var uniformFilePath = Import.GetUniformNameForFile(platformType, srcFilePath);
@@ -236,14 +236,52 @@ namespace DataProcessing
                 // 9. move source file to holding root
                 string destPathHolding = $"{destDirHolding}/{Path.GetFileName(currentFilePath)}";
                 FileUtils.MoveFile(currentFilePath, destPathHolding, null, null);
+                //
+                currentFilePath = destPathHolding;
 
                 // 10. log move to holding
                 fileLogParams.SetFileNames("", Path.GetFileName(currentFilePath), currentFilePath,
                     Path.GetFileName(destPathHolding), destPathHolding,
-                    $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                    $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                     "Success", "Moved Source File to Holding");
                 DbUtils.LogFileOperation(fileLogParams);
 
+                // rename txt and mbi files to csv
+                if (FileUtils.IsEmptyFile(currentFilePath))
+                {
+                    string emptyFilePath;
+                    if (platformType == PlatformType.Cobra)
+                    {
+                        emptyFilePath = $"{Vars.cobraFilesEmptyPath}/{Path.GetFileName(srcFilePath)}";
+                    }
+                    else if (platformType == PlatformType.Alegeus)
+                    {
+                        emptyFilePath = $"{Vars.alegeusFilesEmptyPath}/{Path.GetFileName(srcFilePath)}";
+                    }
+                    else
+                    {
+                        emptyFilePath = $"{Vars.unknownFilesEmptyPath}/{Path.GetFileName(srcFilePath)}";
+                    }
+
+                    FileUtils.MoveFile(currentFilePath, emptyFilePath,
+                        (srcFilePath2, destFilePath2, dummy4) =>
+                        {
+                            //
+                            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                            Path.GetFileName(emptyFilePath), emptyFilePath,
+                            "IncomingFileProcessing-MoveEmptyFiles", "Success",
+                            $"Moved Empty file to Archive - Done folder");
+
+                            DbUtils.LogFileOperation(fileLogParams);
+                        },
+                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+                    );
+
+                    // don't process any more
+                    return;
+                }
+
+                // only for alegeus move to headers root
                 if (platformType == PlatformType.Alegeus)
                 {
                     // 11. move Alegeus Files to headers Dir
@@ -251,8 +289,9 @@ namespace DataProcessing
                     FileUtils.MoveFile(destPathHolding, headerPath, null, null);
                     // add to fileLog
                     fileLogParams.SetFileNames("", Path.GetFileName(destPathHolding), destPathHolding,
-                        Path.GetFileName(headerPath), headerPath, "AlegeusFileProcessing-CopyToHeadersDir", "Success",
+                        Path.GetFileName(headerPath), headerPath, "IncomingFileProcessing-CopyToHeadersDir", "Success",
                         "Copied Alegeus File to headers Directory");
+
 
                 }
             }
@@ -260,7 +299,7 @@ namespace DataProcessing
             {
                 fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                     Path.GetFileName(srcFilePath), srcFilePath,
-                    $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                    $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                     "ERROR", ex2.ToString());
                 DbUtils.LogFileOperation(fileLogParams);
                 //
@@ -302,7 +341,7 @@ namespace DataProcessing
                             // Log
                             fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                                 Path.GetFileName(csvFilePath), csvFilePath,
-                                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                                $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                                 "Success", $"Converted Excel File to Csv");
                             DbUtils.LogFileOperation(fileLogParams);
 
@@ -400,7 +439,7 @@ namespace DataProcessing
 
                         // Log
                         fileLogParams?.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                            Path.GetFileName(expFilePath), expFilePath, "AlegeusFileProcessing-AddHeaderToFile",
+                            Path.GetFileName(expFilePath), expFilePath, "IncomingFileProcessing-AddHeaderToFile",
                             "Success",
                             "Added Header to File");
                         DbUtils.LogFileOperation(fileLogParams);
@@ -412,7 +451,7 @@ namespace DataProcessing
                         // add to fileLog
                         fileLogParams?.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                             Path.GetFileName(destPreCheckPath), destPreCheckPath,
-                            "AlegeusFileProcessing-MoveHeaderFileToPreCheckDir",
+                            "IncomingFileProcessing-MoveHeaderFileToPreCheckDir",
                             "Success", "Moved Header File to PreCheck Dir");
                         // do not log - gives too many lines
                         // DbUtils.LogFileOperation(FileLogParams);
@@ -421,7 +460,7 @@ namespace DataProcessing
                     {
                         fileLogParams?.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                             Path.GetFileName(srcFilePath), srcFilePath,
-                            $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                            $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                             "ERROR", ex2.ToString());
                         DbUtils.LogFileOperation(fileLogParams);
 
@@ -440,7 +479,7 @@ namespace DataProcessing
         {
             //
             fileLogParams.SetFileNames("", "", "", "", "",
-                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
@@ -466,7 +505,7 @@ namespace DataProcessing
 
                     fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
                         Path.GetFileName(srcFilePath), srcFilePath,
-                        $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                        $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                         "Starting", "Starting PreCheck");
                     DbUtils.LogFileOperation(fileLogParams);
 
@@ -478,7 +517,7 @@ namespace DataProcessing
 
             //
             fileLogParams.SetFileNames("", "", "", "", "",
-                $"AlegeusFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             DbUtils.LogFileOperation(fileLogParams);
             //
@@ -497,34 +536,8 @@ namespace DataProcessing
                 Vars.cobraFilesImportHoldingPath, DirectoryIterateType.Files, false, "*.*",
                 (srcFilePath, dummy1, dummy2) =>
                 {
-                    //check file name and move to appropriate directory
                     FileInfo fileInfo = new FileInfo(srcFilePath);
-
-                    // rename txt and mbi files to csv
-                    if (fileInfo.Length <= 30)
-                    {
-                        string destFilePath =
-                            $"{Vars.cobraFilesEmptyPath}/{fileInfo.Name}";
-
-                        FileUtils.MoveFile(srcFilePath, destFilePath,
-                            (srcFilePath2, destFilePath2, dummy4) =>
-                            {
-                                //
-                                fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath2), srcFilePath2,
-                                    Path.GetFileName(destFilePath2), destFilePath2,
-                                    "CobraProcessing-MoveEmptyFiles", "Success",
-                                    $"Moved Empty file to Archive - Done folder");
-
-                                DbUtils.LogFileOperation(fileLogParams);
-                            },
-                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
-                        );
-
-                        // don't process any more
-                        return;
-                    }
-                    // rename txt and mbi files to csv
-                    else if (fileInfo.Extension == ".txt" || fileInfo.Extension == ".mbi")
+                    if (fileInfo.Extension == ".txt" || fileInfo.Extension == ".mbi")
                     {
                         string csvFilePath =
                             $"{fileInfo.Directory}/{Path.GetFileNameWithoutExtension(fileInfo.Name)}.csv";
@@ -697,7 +710,7 @@ namespace DataProcessing
             //
 
 
-        
+
         } // routine
 
     } // end class

@@ -105,7 +105,7 @@ namespace DataProcessing
             return "";
         }
 
-        
+
         public static string GetProcessExeDir()
         {
             if (IsRunningAsWebApp())
@@ -513,6 +513,9 @@ namespace DataProcessing
 
         public string alegeusFilesEmptyPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesEmptyPath")}");
+
+        public string unknownFilesEmptyPath =>
+                    FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("unknownFilesEmptyPath")}");
 
         public string alegeusFilesRejectsPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesRejectsPath")}");

@@ -38,6 +38,19 @@ namespace CoreUtils.Classes
 
             return fileName;
         }
+
+        public static Boolean IsEmptyFile(string srcFilePath)
+        {
+            FileInfo fileInfo = new FileInfo(srcFilePath);
+
+            // rename txt and mbi files to csv
+            if (fileInfo.Length <= 100)
+            {
+                return true;
+            }
+
+            return false;
+        }
         public static void EnsurePathExists(string fullFilePath)
         {
             try
