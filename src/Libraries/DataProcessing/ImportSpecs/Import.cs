@@ -155,7 +155,6 @@ namespace DataProcessing
             string BenCode = "UNKNOWN";
             string recType = "XX";
 
-
             using (var inputFile = new StreamReader(srcFilePath))
             {
                 int rowNo = 0;
@@ -253,15 +252,13 @@ namespace DataProcessing
 
             //
 
-            var fileName= "";
-            if (!FileUtils.IsEmptyFile(srcFilePath))
+            var fileName = "";
+            fileName = $"{testMarker}{BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
+            if (FileUtils.IsEmptyFile(srcFilePath))
             {
-                fileName = $"{testMarker}{BenCode}_{recType}_{platformCode}_{Utils.ToIsoDateString(DateTime.Now)}{Path.GetExtension(srcFilePath)}";
+                fileName = $"EMPTY_{fileName}";
             }
-            else
-            {
-                fileName = $"EMPTY_{Path.GetFileName(srcFilePath)}";
-            }
+
             fileName = FileUtils.FixFileName(fileName);
             //
             /*newPath = $"{Path.GetDirectoryName(srcFilePath)}/{Utils.GetUniqueIdFromFileName(srcFileName)}--";*/
@@ -374,12 +371,10 @@ namespace DataProcessing
             else if (IsAlegeusImportFile(srcFilePath))
             {
                 return PlatformType.Alegeus;
-
             }
             else
             {
-                // presume Alegeus
-                return PlatformType.Alegeus;
+                return PlatformType.Unknown;
             }
         }
 
