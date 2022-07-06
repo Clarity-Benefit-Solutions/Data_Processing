@@ -415,6 +415,17 @@ namespace DataProcessing.DataModels.DataProcessing
 
     public partial class cobra_file_table_stage
     {
+        public string entityType
+        {
+            get
+            {
+                if (Utils.IsBlank(this.row_type))
+                {
+                    return "";
+                }
+                return this.row_type.Replace("[", "").Replace("]", "");
+            }
+        }
         public string ColumnValue(string colName)
         {
             switch (colName.ToLowerInvariant())

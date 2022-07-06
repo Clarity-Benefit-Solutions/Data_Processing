@@ -20,6 +20,31 @@ namespace DataProcessing
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public partial class FileChecker : IDisposable
     {
+        private DataRow currentEntityRow;
+        private DataRow currentClientAndDivision;
+        private string currentClientID
+        {
+            get
+            {
+                if (this.currentClientAndDivision != null)
+                {
+                    return this.currentClientAndDivision["ClientID"].ToString();
+                }
+                return "";
+            }
+        }
+        private string currentClientDivisionID
+        {
+            get
+            {
+                if (this.currentClientAndDivision != null)
+                {
+                    return this.currentClientAndDivision["ClientDivisionID"].ToString();
+                }
+                return "";
+            }
+        }
+
         #region CheckCobraFile
 
         private void CheckCobraFile(string currentFilePath)
@@ -154,64 +179,12 @@ namespace DataProcessing
                 switch (dataRow.row_type)
                 {
                     case "[QB]":
-                        // 2. specific column checking against business rules & DB
-                        switch (column.SourceColumn?.ToLowerInvariant() ?? "")
-                        {
-                            case "clientname":
-                            case "clientdivisionname":
-                                hasError = this.CheckCobraClientAndDivisionExists(dataRow, column, versionNo);
-                                break;
-
-                            case "ssn":
-                            case "individualid":
-                                hasError = this.CheckCobraEEExists(dataRow, column, versionNo, "QB");
-                                //todo: what to do if the QB alrteady exists in the DB?
-                                break;
-
-                            default:
-                                break;
-                        }
-                        break;
-
                     case "[SPM]":
-                        // 2. specific column checking against business rules & DB
-                        switch (column.SourceColumn?.ToLowerInvariant() ?? "")
-                        {
-                            case "clientname":
-                            case "clientdivisionname":
-                                hasError = this.CheckCobraClientAndDivisionExists(dataRow, column, versionNo);
-                                break;
-
-                            case "ssn":
-                            case "individualid":
-                                hasError = this.CheckCobraEEExists(dataRow, column, versionNo, "SPM");
-                                //todo: what to do if the QB alrteady exists in the DB?
-                                break;
-
-                            default:
-                                break;
-                        }
-                        break;
-
                     case "[NPM]":
-                        // 2. specific column checking against business rules & DB
-                        switch (column.SourceColumn?.ToLowerInvariant() ?? "")
-                        {
-                            case "clientname":
-                            case "clientdivisionname":
-                                hasError = this.CheckCobraClientAndDivisionExists(dataRow, column, versionNo);
-                                break;
-
-                            case "ssn":
-                            case "individualid":
-                                hasError = this.CheckCobraEEExists(dataRow, column, versionNo, "SPM");
-                                //todo: what to do if the QB alrteady exists in the DB?
-                                break;
-
-                            default:
-                                break;
-                        }
+                        this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow, column, versionNo);
+                        this.currentEntityRow = this.GetCobraEE(this.currentClientID, this.currentClientDivisionID, dataRow.entityType, dataRow);
                         break;
+
                     default:
                         break;
 
@@ -346,135 +319,89 @@ namespace DataProcessing
             return clientRows;
         }
 
-        public Boolean CheckCobraClientAndDivisionExists(cobra_file_table_stage dataRow, TypedCsvColumn column, string versionNo)
+        public DataRow GetCobraClientAndDivision(cobra_file_table_stage dataRow, TypedCsvColumn column, string versionNo)
         {
+            DataRow row = null;
             var errorMessage = "";
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.ClientName}-{dataRow.ClientDivisionName}";
-            if (_cache.ContainsKey(cacheKey))
+            DataRow[] dbRows = GetCobraClientAndDivisionRows(dataRow, column, versionNo);
+
+            if (dbRows.Length == 0)
             {
-                errorMessage = _cache.Get(cacheKey)?.ToString();
+                errorMessage = $"The Client Name {dataRow.ClientName} and DivisionName {dataRow.ClientDivisionName} could not be found";
+                this.AddCobraErrorForRow(dataRow, "ClientAndDivision", errorMessage);
             }
             else
             {
-                DataRow[] dbRows = GetCobraClientAndDivisionRows(dataRow, column, versionNo);
+                row = dbRows.First();
 
-                if (dbRows.Length == 0)
-                {
-                    errorMessage = $"The Client Name {dataRow.ClientName} and DivisionName {dataRow.ClientDivisionName} could not be found";
-                }
-                else
-                {
-                    //DataRow dbData = dbRows[0];
+            } // results.count
 
-                    //note: FileChecker: verify if Client status need to be checked
-                    //string status = dbData["Client_status"]?.ToString();
-                    //if (status != "Active" && status != "New")
-                    //{
-                    //  errorMessage =
-                    //    $"The Client Name {dataRow.ClientName} has status {status} which is not valid";
-                    //}
-
-
-                } // results.count
-            } // check client
-
-            //
-            _cache.Add(cacheKey, errorMessage);
-
-            //
-            if (!Utils.IsBlank(errorMessage))
-            {
-                this.AddCobraErrorForRow(dataRow, column.SourceColumn, $"{errorMessage}");
-                // do not check any more
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return row;
         }
 
-        public Boolean CheckCobraEEExists(cobra_file_table_stage dataRow, TypedCsvColumn column,
-            string versionNo, string entityType)
+        public DataRow GetCobraEE(string clientId, string divisionId, string entityType, cobra_file_table_stage dataRow)
         {
+            DataRow row = null;
             var errorMessage = "";
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.ClientName}-{dataRow.row_type}-{dataRow.SSN}";
-            if (_cache.ContainsKey(cacheKey))
+            // check DB
+            if (Utils.IsBlank(clientId))
             {
-                errorMessage = _cache.Get(cacheKey)?.ToString();
+                AddCobraErrorForRow(dataRow, "clientId", $"The ClientID cannot be blank");
+            }
+            else if (Utils.IsBlank(dataRow.SSN))
+            {
+                AddCobraErrorForRow(dataRow, "SSN", $"The SSN cannot be blank");
             }
             else
             {
-                // check DB
-                if (Utils.IsBlank(dataRow.ClientName))
+                DataTable dbResults = GetAllCobraEEForClient(clientId, divisionId, entityType);
+                if (dbResults.Rows.Count > 0)
                 {
-                    AddCobraErrorForRow(dataRow, "ClientName", $"The Client Name cannot be blank");
-                }
-                else if (Utils.IsBlank(dataRow.SSN))
-                {
-                    AddCobraErrorForRow(dataRow, "SSN", $"The SSN cannot be blank");
-                }
-                else
-                {
-                    DataTable dbResults = GetAllCobraEEForClient(dataRow, column, versionNo, entityType);
-                    if (dbResults.Rows.Count > 0)
+                    var filter = "";
+                    filter += $"SSNFormatted = '{dataRow.SSN}'";
+
+                    DataRow[] dbRows = dbResults.Select(filter);
+
+                    if (dbRows.Length == 0)
                     {
-                        var filter = "";
-                        filter += $"SSNFormatted = '{dataRow.SSN}'";
-
-                        DataRow[] dbRows = dbResults.Select(filter);
-
-                        if (dbRows.Length == 0)
+                        // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
+                        if (true /*|| versionNo == string.CobraDemographics*/)
                         {
-                            // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
-                            if (true /*|| versionNo == string.CobraDemographics*/)
-                            {
-                                // as it is an demographics file, add this employee to the ER-EE table so a check for plan enrollemnt within same run or before reaggregation from Cobra will suceed
-                                DataRow newRow = dbResults.NewRow();
-                                newRow["ClientName"] = dataRow.ClientName;
-                                newRow["SSN"] = dataRow.SSN;
-                                newRow["is_active"] = dataRow.Active == "1" ? 1 : 0;
-                                dbResults.Rows.Add(newRow);
+                            // as it is an demographics file, add this employee to the ER-EE table so a check for plan enrollemnt within same run or before reaggregation from Cobra will suceed
+                            DataRow newRow = dbResults.NewRow();
+                            newRow["ClientName"] = dataRow.ClientName;
+                            newRow["SSN"] = dataRow.SSN;
+                            newRow["is_active"] = dataRow.Active == "1" ? 1 : 0;
+                            dbResults.Rows.Add(newRow);
 
-                                var cacheKey2 =
-                                    $"GetAllEmployeesForClient-{this.PlatformType.ToDescription()}-{dataRow.ClientName}-AllEmployees";
-                                _cache.Add(cacheKey2, dbResults);
+                            var cacheKey2 =
+                                $"GetAllEmployeesForClient-{this.PlatformType.ToDescription()}-{dataRow.ClientName}-AllEmployees";
+                            _cache.Add(cacheKey2, dbResults);
 
-                                //
-                                return false;
-                            }
-                            else
-                            {
-                                errorMessage +=
-                                    $"A {entityType} with SSN {dataRow.SSN} could not be found for Client Name {dataRow.ClientName} and DivisionName {dataRow.ClientDivisionName}";
-                            }
+                        }
+                        else
+                        {
+                            errorMessage +=
+                                $"A {entityType} with SSN {dataRow.SSN} could not be found for Client Name {dataRow.ClientName} and DivisionName {dataRow.ClientDivisionName}";
                         }
                     }
                     else
                     {
-                        errorMessage +=
-                                   $"A {entityType} with SSN {dataRow.SSN} could not be found for Client Name {dataRow.ClientName} and DivisionName {dataRow.ClientDivisionName}";
+                        row = dbRows.First();
                     }
                 }
-
-                //
-                _cache.Add(cacheKey, errorMessage);
+                else
+                {
+                    errorMessage +=
+                               $"A {entityType} with SSN {dataRow.SSN} could not be found for Client Name {dataRow.ClientName} and DivisionName {dataRow.ClientDivisionName}";
+                }
             }
+
 
             //
-            if (!Utils.IsBlank(errorMessage))
-            {
-                this.AddCobraErrorForRow(dataRow, column.SourceColumn, $"{errorMessage}");
-                // do not check any more
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return row;
         }
+
         public Boolean CheckForDuplicateCobraPosting(cobra_file_table_stage dataRow,
                   string versionNo)
         {
@@ -864,62 +791,38 @@ namespace DataProcessing
 
 
         // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
-        private DataTable GetAllCobraEEForClient(cobra_file_table_stage dataRow, TypedCsvColumn column, string versionNo, string entityType)
+        private DataTable GetAllCobraEEForClient(string clientId, string divisionId, string entityType)
         {
             DataTable dbResults = new DataTable();
             var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{dataRow.ClientName}-{dataRow.ClientDivisionName}-All{entityType}";
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{clientId}-{divisionId}-All{entityType}";
             if (_cache.ContainsKey(cacheKey))
             {
                 dbResults = (DataTable)_cache.Get(cacheKey);
             }
             else
             {
-                if (PlatformType == PlatformType.Cobra)
-                {
-                    // get client and division id
-                    var clientId = "";
-                    var divisionId = "";
+                var IndidiviualIDField = entityType == "QB" ? "IndividualIdentifier" : "IndividualID";
+                string queryString =
+                    $"SELECT *, replace(SSN, '-', '') as SSNFormatted " +
+                    $" FROM dbo.{entityType} " +
+                    $" where ClientDivisionID = '{Utils.DbQuote(divisionId)}' " +
+                    $" ORDER by MemberId ";
+                //
+                dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnCobra,
+                    queryString, null,
+                    FileLogParams?.GetMessageLogParams());
 
-                    DataRow[] clientRows = GetCobraClientAndDivisionRows(dataRow, column, versionNo);
-                    if (clientRows != null && clientRows.Length > 0)
-                    {
-                        clientId = clientRows.First<DataRow>()["ClientID"].ToString();
-                        divisionId = clientRows.First<DataRow>()["ClientDivisionID"].ToString();
-                    }
+                // create index on MemberId
 
-                    if (Utils.IsBlank(clientId) || (!Utils.IsBlank(dataRow.ClientDivisionName) && Utils.IsBlank(divisionId)))
-                    {
-                        // no rows
-                    }
-                    else
-                    {
-                        var IndidiviualIDField = entityType == "QB" ? "IndividualIdentifier" : "IndividualID";
-                        string queryString =
-                            $"SELECT *, replace(SSN, '-', '') as SSNFormatted " +
-                            $" FROM dbo.{entityType} " +
-                            $" where ClientId = '{Utils.DbQuote(clientId)}' " +
-                            $" ORDER by MemberId ";
-                        //
-                        dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnCobra,
-                            queryString, null,
-                            FileLogParams?.GetMessageLogParams());
+                //DataColumn[] indices = new DataColumn[1];
+                //indices[0] = (DataColumn)dbResults.Columns["ClientId"];
+                //indices[1] = (DataColumn)dbResults.Columns["MemberId"];
+                //dbResults.PrimaryKey = indices;
 
-                        // create index on MemberId
+                //
+                _cache.Add(cacheKey, dbResults);
 
-                        //DataColumn[] indices = new DataColumn[1];
-                        //indices[0] = (DataColumn)dbResults.Columns["ClientId"];
-                        //indices[1] = (DataColumn)dbResults.Columns["MemberId"];
-                        //dbResults.PrimaryKey = indices;
-                    }
-
-                    //
-                    _cache.Add(cacheKey, dbResults);
-                }
-                else
-                {
-                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
-                }
             }
 
             return dbResults;

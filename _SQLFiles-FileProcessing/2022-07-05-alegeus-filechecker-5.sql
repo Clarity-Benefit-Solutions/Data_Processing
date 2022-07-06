@@ -65,3 +65,4 @@ ORDER by
     MemberId;
 
 SELECT *, replace(SSN, '-', '') as SSNFormatted  FROM dbo.SPM  where ClientId = '1289'  ORDER by MemberId
+SELECT *, replace(SSN, '-', '') as SSNFormatted  FROM dbo.NPM  where ClientDivisionID = '1289'  ORDER by MemberId
