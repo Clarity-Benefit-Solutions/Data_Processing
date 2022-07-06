@@ -207,7 +207,7 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("EnrollmentDate", FormatType.CobraDate, 0, 1, "Original enrollment date of the member’s current medical plan - used for HIPAA certificate to show length of continuous coverage"));
                             mappings.Add(new CobraTypedCsvColumn("EmployeeSSN", FormatType.SSN, 9, 1, "The original employee’s SSN. Required if the event type is a dependent type event, such as DEATH, DIVORCELEGALSEPARATION, INELIGIBLEDEPENDENT or MEDICARE."));
                             mappings.Add(new CobraTypedCsvColumn("EmployeeName", FormatType.String, 100, 1, "The original employee’s name. Required if the event type is a dependent type event, such as DEATH, DIVORCELEGALSEPARATION, INELIGIBLEDEPENDENT or MEDICARE."));
-                            mappings.Add(new CobraTypedCsvColumn("SecondEventOriginalFDOC", FormatType.CobraDate, 1, 1, "DEPRECATED – any value will be ignored"));
+                            mappings.Add(new CobraTypedCsvColumn("SecondEventOriginalFDOC", FormatType.CobraDate, 1, 0, "DEPRECATED – any value will be ignored"));
                             //
                             break;
                     }
@@ -749,7 +749,8 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("Country", FormatType.String, 50, 0, "Leave blank if the NPM resides in the USA"));
                             mappings.Add(new CobraTypedCsvColumn("UsesFamilyInAddress", FormatType.YesNo, 0, 0, "Adds: and Family to Address Labels; Defaults to FALSE"));
                             mappings.Add(new CobraTypedCsvColumn("HasWaivedAllCoverage", FormatType.YesNo, 0, 0, "Defaults to FALSE"));
-                            mappings.Add(new CobraTypedCsvColumn("SendGRNotice", FormatType.String, 35, 1, "Defaults to TRUE. If omitted, the field defaults to TRUE which has always been the behavior.  Set to FALSE if you wish for this NPM to NOT send the General Rights notice."));
+                            mappings.Add(new CobraTypedCsvColumn("SendGRNotice", FormatType.String, 35, 0, "Defaults to TRUE. If omitted, the field defaults to TRUE which has always been the behavior.  Set to FALSE if you wish for this NPM to NOT send the General Rights notice.",
+                                "TRUE|FALSE|"));
                             mappings.Add(new CobraTypedCsvColumn("HireDate", FormatType.CobraDate, 0, 0, "Required if NPM with same SSN exists. Null is valid."));
 
                             //
