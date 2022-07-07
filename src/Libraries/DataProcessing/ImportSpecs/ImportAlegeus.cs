@@ -25,8 +25,6 @@ namespace DataProcessing
     public static partial class Import
     {
 
-
-
         private static readonly Regex regexALImportHeader = new Regex("IA,");
         private static readonly Regex regexALImportRecType = new Regex("I[B-Z],");
         private static readonly Regex regexALExportHeader = new Regex("RA,");

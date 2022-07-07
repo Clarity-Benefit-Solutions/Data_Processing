@@ -281,7 +281,7 @@ namespace DataProcessing
                         case "1.2":
                         case "1.1":
                         case "1.0":
-                            mappings.Add(new CobraTypedCsvColumn("SSN", FormatType.SSN, 9, 0, "Social Security Number"));
+                            mappings.Add(new CobraTypedCsvColumn("SSN", FormatType.SSN, 9, 1, "Social Security Number"));
                             mappings.Add(new CobraTypedCsvColumn("Relationship", FormatType.String, 35, 1, "",
                      "SPOUSE|CHILD|DOMESTICPARTNER"));
                             mappings.Add(new CobraTypedCsvColumn("Salutation", FormatType.String, 35, 0, "",
@@ -300,9 +300,9 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("PostalCode", FormatType.String, 35, 0, ""));
                             mappings.Add(new CobraTypedCsvColumn("Country", FormatType.String, 50, 0, "Leave empty if the dependent resides in the USA"));
                             mappings.Add(new CobraTypedCsvColumn("EnrollmentDate", FormatType.CobraDate, 0, 0, "Original enrollment date of the dependent’s medical plan - used for HIPAA certificate"));
-                            mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 0, "F, M, U (this is required if the dependent is on a sex based plan that sets rates based on the dependent’s sex)",
+                            mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 1, "F, M, U (this is required if the dependent is on a sex based plan that sets rates based on the dependent’s sex)",
                                 "F|M|U|"));
-                            mappings.Add(new CobraTypedCsvColumn("DOB", FormatType.CobraDate, 0, 0, "Date of birth (this is required if the dependent is on an age based plan that sets rates based on the dependent’s age)"));
+                            mappings.Add(new CobraTypedCsvColumn("DOB", FormatType.CobraDate, 0, 1, "Date of birth (this is required if the dependent is on an age based plan that sets rates based on the dependent’s age)"));
                             mappings.Add(new CobraTypedCsvColumn("IsQMCSO", FormatType.CobraYesNo, 1, 0, "TRUE if the dependent is under a Qualified Medical Child Support Order (QMCSO)"));
                             //
                             break;
@@ -489,7 +489,7 @@ namespace DataProcessing
 
                 #region "SPM"
                 //////////////////////////////
-                // SPM
+                // SPM: for DirectBilling Plans
                 /// //////////////////////////////
                 case "[SPM]":
                     switch (versionNo)
@@ -598,7 +598,7 @@ namespace DataProcessing
                         case "1.2":
                         case "1.1":
                         case "1.0":
-                            mappings.Add(new CobraTypedCsvColumn("SSN", FormatType.SSN, 9, 0, "Social Security Number"));
+                            mappings.Add(new CobraTypedCsvColumn("SSN", FormatType.SSN, 9, 1, "Social Security Number"));
                             mappings.Add(new CobraTypedCsvColumn("Relationship", FormatType.String, 35, 1,
                                 "SPOUSE|CHILD|DOMESTICPARTNER"));
                             mappings.Add(new CobraTypedCsvColumn("Salutation", FormatType.String, 35, 0, "",
@@ -617,9 +617,9 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("PostalCode", FormatType.String, 35, 0, ""));
                             mappings.Add(new CobraTypedCsvColumn("Country", FormatType.String, 50, 0, "Leave empty if the dependent resides in the USA"));
                             mappings.Add(new CobraTypedCsvColumn("EnrollmentDate", FormatType.CobraDate, 0, 1, "Original enrollment date of the dependent’s medical plan - used for HIPAA certificate"));
-                            mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 0, "F, M, U (this is required if the dependent is on a sex based plan that sets rates based on the dependent’s sex)", 
+                            mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 1, "F, M, U (this is required if the dependent is on a sex based plan that sets rates based on the dependent’s sex)", 
                                 "F|M|U"));
-                            mappings.Add(new CobraTypedCsvColumn("DOB", FormatType.CobraDate, 0, 0, "Date of birth (this is required if the dependent is on an age based plan that sets rates based on the dependent’s age)"));
+                            mappings.Add(new CobraTypedCsvColumn("DOB", FormatType.CobraDate, 0, 1, "Date of birth (this is required if the dependent is on an age based plan that sets rates based on the dependent’s age)"));
                             mappings.Add(new CobraTypedCsvColumn("IsQMCSO", FormatType.CobraYesNo, 1, 0, "TRUE if the dependent is under a Qualified Medical Child Support Order (QMCSO)"));
                             //
                             break;
