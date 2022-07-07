@@ -14,6 +14,27 @@ namespace DataProcessing.DataModels.CobraPoint
     
     public partial class Client
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Client()
+        {
+            this.ClientAccesses = new HashSet<ClientAccess>();
+            this.ClientDivisions = new HashSet<ClientDivision>();
+            this.ClientFees = new HashSet<ClientFee>();
+            this.ClientNotes = new HashSet<ClientNote>();
+            this.ClientPlanQBs = new HashSet<ClientPlanQB>();
+            this.ClientPlanQBBundles = new HashSet<ClientPlanQBBundle>();
+            this.ClientPlanQBNotes = new HashSet<ClientPlanQBNote>();
+            this.ClientPlanQBRanks = new HashSet<ClientPlanQBRank>();
+            this.ClientPlanSPMs = new HashSet<ClientPlanSPM>();
+            this.ClientPlanSPMBundles = new HashSet<ClientPlanSPMBundle>();
+            this.ClientPlanSPMNotes = new HashSet<ClientPlanSPMNote>();
+            this.ClientPlanSPMRanks = new HashSet<ClientPlanSPMRank>();
+            this.ClientProcesses = new HashSet<ClientProcess>();
+            this.ClientSPMBillingFrequencyOptions = new HashSet<ClientSPMBillingFrequencyOption>();
+            this.QBs = new HashSet<QB>();
+            this.SPMs = new HashSet<SPM>();
+        }
+    
         public int ClientID { get; set; }
         public string ClientName { get; set; }
         public int ClientGroupID { get; set; }
@@ -28,11 +49,11 @@ namespace DataProcessing.DataModels.CobraPoint
         public string Phone { get; set; }
         public string Fax { get; set; }
         public Nullable<System.DateTime> BillingStartDate { get; set; }
-        public Nullable<int> SendHIPAACertWithQBSRandQBTermination { get; set; }
-        public Nullable<int> SendHIPAACertWithWelcomeLetter { get; set; }
-        public Nullable<int> AllowClientPortalAccess { get; set; }
-        public Nullable<int> AutomaticallyCreateQBSubsidyForInsignificantAmount { get; set; }
-        public Nullable<int> IgnoreSPMPaymentGracePeriods { get; set; }
+        public Nullable<bool> SendHIPAACertWithQBSRandQBTermination { get; set; }
+        public Nullable<bool> SendHIPAACertWithWelcomeLetter { get; set; }
+        public Nullable<bool> AllowClientPortalAccess { get; set; }
+        public Nullable<bool> AutomaticallyCreateQBSubsidyForInsignificantAmount { get; set; }
+        public Nullable<bool> IgnoreSPMPaymentGracePeriods { get; set; }
         public Nullable<bool> MigratedClient { get; set; }
         public string ClientPremiumNotice { get; set; }
         public string EmployeeCountRange { get; set; }
@@ -41,11 +62,56 @@ namespace DataProcessing.DataModels.CobraPoint
         public Nullable<bool> ClientAllowsAEI2009PlanEnrollmentOptions { get; set; }
         public Nullable<bool> ClientDoesOwnAEI2009SubsidyTakenReportPosting { get; set; }
         public string ClientAlternate { get; set; }
-        public Nullable<int> AllowClientSSO { get; set; }
+        public Nullable<bool> AllowClientSSO { get; set; }
         public Nullable<int> SPMInitialGracePeriodDays { get; set; }
+        public Nullable<bool> IgnoreSPMInitialGracePeriod { get; set; }
         public Nullable<decimal> SPMConvenienceFee { get; set; }
         public Nullable<decimal> SPMPartnerConvenienceFee { get; set; }
         public Nullable<decimal> QBConvenienceFee { get; set; }
         public Nullable<decimal> QBPartnerConvenienceFee { get; set; }
+        public Nullable<bool> EnableNavigationToCloudHealth { get; set; }
+        public Nullable<bool> AllowACHPayments { get; set; }
+        public Nullable<bool> AllowCreditCardPayments { get; set; }
+        public Nullable<decimal> SPMAchConvenienceFee { get; set; }
+        public Nullable<decimal> SPMAchPartnerConvenienceFee { get; set; }
+        public Nullable<decimal> QBAchConvenienceFee { get; set; }
+        public Nullable<decimal> QBAchPartnerConvenienceFee { get; set; }
+        public Nullable<bool> RemitViaACH { get; set; }
+        public string RemittanceACHAccountType { get; set; }
+        public string CloudHealthEmployerURL { get; set; }
+    
+        public virtual ClientGroup ClientGroup { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientAccess> ClientAccesses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientDivision> ClientDivisions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientFee> ClientFees { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientNote> ClientNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanQB> ClientPlanQBs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanQBBundle> ClientPlanQBBundles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanQBNote> ClientPlanQBNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanQBRank> ClientPlanQBRanks { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanSPM> ClientPlanSPMs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanSPMBundle> ClientPlanSPMBundles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanSPMNote> ClientPlanSPMNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanSPMRank> ClientPlanSPMRanks { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientProcess> ClientProcesses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientSPMBillingFrequencyOption> ClientSPMBillingFrequencyOptions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QB> QBs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPM> SPMs { get; set; }
     }
 }

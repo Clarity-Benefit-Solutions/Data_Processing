@@ -101,6 +101,7 @@ namespace DataProcessing
             // get all dbRows without caching
             var dataRows = dbDataProcessing.cobra_file_table_stage
                 .OrderBy(dataRow => dataRow.source_row_no)
+                .AsNoTracking()
                 .ToList();
 
             var versionNo = Import.GetCobraFileVersionNoFromFile(SrcFilePath);
@@ -204,7 +205,7 @@ namespace DataProcessing
                         break;
                 }
 
-          
+
             }
             // check for duplicate posting of the row
             hasError = CheckForDuplicateCobraPosting(dataRow, versionNo);
@@ -329,7 +330,9 @@ namespace DataProcessing
                     rows = rows.Where(x => x.DivisionName == dataRow.ClientDivisionName);
                 }
 
-                clientRows = rows.ToList();
+                clientRows = rows
+                            .AsNoTracking()
+                            .ToList();
 
             } // check client
               //
@@ -375,7 +378,10 @@ namespace DataProcessing
             {
                 dbResults = GetAllCobraQBForClient(clientId, divisionId);
 
-                List<QB> dbRows = dbResults.Where(x => x.SSN == dataRow.SSN || x.SSN == Utils.FormatSsnWithDashes( dataRow.SSN)).ToList();
+                List<QB> dbRows = dbResults
+                    .Where(x => x.SSN == dataRow.SSN || x.SSN == Utils.FormatSsnWithDashes(dataRow.SSN))
+                    .ToList();
+
                 row = dbRows.FirstOrDefault();
 
                 //if (row == null)
@@ -424,7 +430,10 @@ namespace DataProcessing
             {
                 dbResults = GetAllCobraSPMForClient(clientId, divisionId);
 
-                List<SPM> dbRows = dbResults.Where(x => x.SSN == dataRow.SSN || x.SSNFormatted == dataRow.SSN).ToList();
+                List<SPM> dbRows = dbResults
+                    .Where(x => x.SSN == dataRow.SSN || x.SSNFormatted == dataRow.SSN)
+                    .ToList();
+
                 row = dbRows.FirstOrDefault();
 
                 //if (row == null)
@@ -473,7 +482,9 @@ namespace DataProcessing
             {
                 dbResults = GetAllCobraNPMForClient(clientId, divisionId);
 
-                List<NPM> dbRows = dbResults.Where(x => x.SSN == dataRow.SSN || x.SSNFormatted == dataRow.SSN).ToList();
+                List<NPM> dbRows = dbResults
+                    .Where(x => x.SSN == dataRow.SSN || x.SSNFormatted == dataRow.SSN)
+                    .ToList();
                 row = dbRows.FirstOrDefault();
 
                 //if (row == null)
@@ -870,6 +881,7 @@ namespace DataProcessing
                 .Where(x => x.ClientID == clientId)
                 .Where(x => x.ClientDivisionID == divisionId)
                 .OrderBy(x => x.MemberID)
+                .AsNoTracking()
                 .ToList();
 
             return dbResults;
@@ -882,6 +894,7 @@ namespace DataProcessing
                 //.Where(x => x.ClientID == clientId)
                 .Where(x => x.ClientDivisionID == divisionId)
                 .OrderBy(x => x.MemberID)
+                .AsNoTracking()
                 .ToList();
 
             return dbResults;
@@ -894,6 +907,7 @@ namespace DataProcessing
                 .Where(x => x.ClientID == clientId)
                 .Where(x => x.ClientDivisionID == divisionId)
                 .OrderBy(x => x.MemberID)
+                .AsNoTracking()
                 .ToList();
 
             return dbResults;

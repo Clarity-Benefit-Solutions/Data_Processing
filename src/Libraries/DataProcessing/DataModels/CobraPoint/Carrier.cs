@@ -14,6 +14,17 @@ namespace DataProcessing.DataModels.CobraPoint
     
     public partial class Carrier
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Carrier()
+        {
+            this.CarrierAccesses = new HashSet<CarrierAccess>();
+            this.CarrierContacts = new HashSet<CarrierContact>();
+            this.CarrierNotes = new HashSet<CarrierNote>();
+            this.ClientPlanQBs = new HashSet<ClientPlanQB>();
+            this.ClientPlanSPMs = new HashSet<ClientPlanSPM>();
+            this.SPMPlans = new HashSet<SPMPlan>();
+        }
+    
         public int CarrierID { get; set; }
         public string CarrierName { get; set; }
         public string Address1 { get; set; }
@@ -24,5 +35,18 @@ namespace DataProcessing.DataModels.CobraPoint
         public string Country { get; set; }
         public string Phone { get; set; }
         public string CarrierFax { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CarrierAccess> CarrierAccesses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CarrierContact> CarrierContacts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CarrierNote> CarrierNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanQB> ClientPlanQBs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanSPM> ClientPlanSPMs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPMPlan> SPMPlans { get; set; }
     }
 }

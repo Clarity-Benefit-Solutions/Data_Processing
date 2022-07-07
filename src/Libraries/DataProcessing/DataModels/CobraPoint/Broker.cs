@@ -26,8 +26,8 @@ namespace DataProcessing.DataModels.CobraPoint
         public string Country { get; set; }
         public string Phone { get; set; }
         public string Fax { get; set; }
-        public Nullable<int> AllowBrokerPortalAccess { get; set; }
-        public Nullable<int> Active { get; set; }
-        public Nullable<int> AllowBrokerSSO { get; set; }
+        public Nullable<bool> AllowBrokerPortalAccess { get; set; }
+        public Nullable<bool> Active { get; set; }
+        public Nullable<bool> AllowBrokerSSO { get; set; }
     }
 }

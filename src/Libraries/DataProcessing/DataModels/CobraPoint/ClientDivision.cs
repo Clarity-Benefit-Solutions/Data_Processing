@@ -14,6 +14,21 @@ namespace DataProcessing.DataModels.CobraPoint
     
     public partial class ClientDivision
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ClientDivision()
+        {
+            this.ClientDivisionAccesses = new HashSet<ClientDivisionAccess>();
+            this.ClientDivisionContacts = new HashSet<ClientDivisionContact>();
+            this.ClientDivisionNotes = new HashSet<ClientDivisionNote>();
+            this.ClientDivisionQBPlans = new HashSet<ClientDivisionQBPlan>();
+            this.ClientDivisionQBPlanBundles = new HashSet<ClientDivisionQBPlanBundle>();
+            this.ClientDivisionSPMPlans = new HashSet<ClientDivisionSPMPlan>();
+            this.ClientDivisionSPMPlanBundles = new HashSet<ClientDivisionSPMPlanBundle>();
+            this.NPMs = new HashSet<NPM>();
+            this.QBs = new HashSet<QB>();
+            this.SPMs = new HashSet<SPM>();
+        }
+    
         public int ClientDivisionID { get; set; }
         public int ClientID { get; set; }
         public string DivisionName { get; set; }
@@ -25,9 +40,33 @@ namespace DataProcessing.DataModels.CobraPoint
         public string Country { get; set; }
         public string Phone { get; set; }
         public string Fax { get; set; }
-        public Nullable<int> ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting { get; set; }
-        public Nullable<int> SendHIPAACertWithSPMWelcomeAndTerminationLetters { get; set; }
-        public Nullable<int> AllowClientDivisionSSO { get; set; }
-        public Nullable<int> Active { get; set; }
+        public Nullable<bool> ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting { get; set; }
+        public Nullable<bool> SendHIPAACertWithSPMWelcomeAndTerminationLetters { get; set; }
+        public Nullable<bool> AllowClientDivisionSSO { get; set; }
+        public Nullable<bool> Active { get; set; }
+        public Nullable<bool> RemitViaACH { get; set; }
+        public string RemittanceACHAccountType { get; set; }
+    
+        public virtual Client Client { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientDivisionAccess> ClientDivisionAccesses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientDivisionContact> ClientDivisionContacts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientDivisionNote> ClientDivisionNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientDivisionQBPlan> ClientDivisionQBPlans { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientDivisionQBPlanBundle> ClientDivisionQBPlanBundles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientDivisionSPMPlan> ClientDivisionSPMPlans { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientDivisionSPMPlanBundle> ClientDivisionSPMPlanBundles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<NPM> NPMs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QB> QBs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPM> SPMs { get; set; }
     }
 }

@@ -12,13 +12,15 @@ namespace DataProcessing.DataModels.CobraPoint
     using System;
     using System.Collections.Generic;
     
-    public partial class db_message_log
+    public partial class CarrierAccess
     {
-        public int log_id { get; set; }
-        public string log_level { get; set; }
-        public string log_source { get; set; }
-        public string log_msg { get; set; }
-        public System.DateTime created_at { get; set; }
-        public string created_by { get; set; }
+        public int CarrierAccessID { get; set; }
+        public int CarrierID { get; set; }
+        public System.DateTime AccessDateTime { get; set; }
+        public string AccessType { get; set; }
+        public System.Guid AccessUser { get; set; }
+    
+        public virtual AdminUser AdminUser { get; set; }
+        public virtual Carrier Carrier { get; set; }
     }
 }

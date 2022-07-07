@@ -12,8 +12,6 @@ namespace DataProcessing.DataModels.CobraPoint
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using System.Data.Entity.Core.Objects;
-    using System.Linq;
     
     public partial class CobraPointEntities : DbContext
     {
@@ -27,103 +25,97 @@ namespace DataProcessing.DataModels.CobraPoint
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<db_error_log> db_error_log { get; set; }
-        public virtual DbSet<db_message_log> db_message_log { get; set; }
-        public virtual DbSet<QBAEI_ClientList_csv> QBAEI_ClientList_csv { get; set; }
+        public virtual DbSet<C__RefactorLog> C__RefactorLog { get; set; }
+        public virtual DbSet<AdminRole> AdminRoles { get; set; }
         public virtual DbSet<AdminTPAUser> AdminTPAUsers { get; set; }
         public virtual DbSet<AdminUser> AdminUsers { get; set; }
-        public virtual DbSet<AllClientsAndDivision> AllClientsAndDivisions { get; set; }
-        public virtual DbSet<AllSSOUser> AllSSOUsers { get; set; }
+        public virtual DbSet<AdminUserRole> AdminUserRoles { get; set; }
+        public virtual DbSet<Carrier> Carriers { get; set; }
+        public virtual DbSet<CarrierAccess> CarrierAccesses { get; set; }
+        public virtual DbSet<CarrierContact> CarrierContacts { get; set; }
+        public virtual DbSet<CarrierNote> CarrierNotes { get; set; }
+        public virtual DbSet<Client> Clients { get; set; }
+        public virtual DbSet<ClientAccess> ClientAccesses { get; set; }
+        public virtual DbSet<ClientDivision> ClientDivisions { get; set; }
+        public virtual DbSet<ClientDivisionAccess> ClientDivisionAccesses { get; set; }
+        public virtual DbSet<ClientDivisionContact> ClientDivisionContacts { get; set; }
+        public virtual DbSet<ClientDivisionNote> ClientDivisionNotes { get; set; }
+        public virtual DbSet<ClientDivisionQBPlan> ClientDivisionQBPlans { get; set; }
+        public virtual DbSet<ClientDivisionQBPlanBundle> ClientDivisionQBPlanBundles { get; set; }
+        public virtual DbSet<ClientDivisionSPMPlan> ClientDivisionSPMPlans { get; set; }
+        public virtual DbSet<ClientDivisionSPMPlanBundle> ClientDivisionSPMPlanBundles { get; set; }
+        public virtual DbSet<ClientFee> ClientFees { get; set; }
+        public virtual DbSet<ClientGroup> ClientGroups { get; set; }
+        public virtual DbSet<ClientNote> ClientNotes { get; set; }
+        public virtual DbSet<ClientPlanQB> ClientPlanQBs { get; set; }
+        public virtual DbSet<ClientPlanQBBundle> ClientPlanQBBundles { get; set; }
+        public virtual DbSet<ClientPlanQBCarrierSubcode> ClientPlanQBCarrierSubcodes { get; set; }
+        public virtual DbSet<ClientPlanQBEmailList> ClientPlanQBEmailLists { get; set; }
+        public virtual DbSet<ClientPlanQBNote> ClientPlanQBNotes { get; set; }
+        public virtual DbSet<ClientPlanQBRank> ClientPlanQBRanks { get; set; }
+        public virtual DbSet<ClientPlanQBRate> ClientPlanQBRates { get; set; }
+        public virtual DbSet<ClientPlanSPM> ClientPlanSPMs { get; set; }
+        public virtual DbSet<ClientPlanSPMBundle> ClientPlanSPMBundles { get; set; }
+        public virtual DbSet<ClientPlanSPMCarrierSubcode> ClientPlanSPMCarrierSubcodes { get; set; }
+        public virtual DbSet<ClientPlanSPMEmailList> ClientPlanSPMEmailLists { get; set; }
+        public virtual DbSet<ClientPlanSPMNote> ClientPlanSPMNotes { get; set; }
+        public virtual DbSet<ClientPlanSPMRank> ClientPlanSPMRanks { get; set; }
+        public virtual DbSet<ClientPlanSPMRate> ClientPlanSPMRates { get; set; }
+        public virtual DbSet<ClientProcess> ClientProcesses { get; set; }
+        public virtual DbSet<ClientSPMBillingFrequencyOption> ClientSPMBillingFrequencyOptions { get; set; }
+        public virtual DbSet<EnrollmentPeriodNote> EnrollmentPeriodNotes { get; set; }
+        public virtual DbSet<LetterAttachment> LetterAttachments { get; set; }
+        public virtual DbSet<LetterType> LetterTypes { get; set; }
+        public virtual DbSet<LoginLog> LoginLogs { get; set; }
+        public virtual DbSet<NPM> NPMs { get; set; }
+        public virtual DbSet<NPMAccess> NPMAccesses { get; set; }
+        public virtual DbSet<NPMHIPAACertData> NPMHIPAACertDatas { get; set; }
+        public virtual DbSet<NPMHIPAACertDataDependent> NPMHIPAACertDataDependents { get; set; }
+        public virtual DbSet<QB> QBs { get; set; }
+        public virtual DbSet<QBAccess> QBAccesses { get; set; }
+        public virtual DbSet<QBACH> QBACHes { get; set; }
+        public virtual DbSet<QBAEIInformation> QBAEIInformations { get; set; }
+        public virtual DbSet<QBDependent> QBDependents { get; set; }
+        public virtual DbSet<QBDependentPlan> QBDependentPlans { get; set; }
+        public virtual DbSet<QBDisabilityInformation> QBDisabilityInformations { get; set; }
+        public virtual DbSet<QBEvent> QBEvents { get; set; }
+        public virtual DbSet<QBLegacy> QBLegacies { get; set; }
+        public virtual DbSet<QBNote> QBNotes { get; set; }
+        public virtual DbSet<QBPayment> QBPayments { get; set; }
+        public virtual DbSet<QBPlan> QBPlans { get; set; }
+        public virtual DbSet<QBPlanCarrierSubcode> QBPlanCarrierSubcodes { get; set; }
+        public virtual DbSet<QBPremium> QBPremiums { get; set; }
+        public virtual DbSet<QBStateInsert> QBStateInserts { get; set; }
+        public virtual DbSet<QBSubsidySchedule> QBSubsidySchedules { get; set; }
+        public virtual DbSet<SPM> SPMs { get; set; }
+        public virtual DbSet<SPMAccess> SPMAccesses { get; set; }
+        public virtual DbSet<SPMACH> SPMACHes { get; set; }
+        public virtual DbSet<SPMDependent> SPMDependents { get; set; }
+        public virtual DbSet<SPMDependentPlan> SPMDependentPlans { get; set; }
+        public virtual DbSet<SPMNote> SPMNotes { get; set; }
+        public virtual DbSet<SPMPayment> SPMPayments { get; set; }
+        public virtual DbSet<SPMPlanCarrierSubcode> SPMPlanCarrierSubcodes { get; set; }
+        public virtual DbSet<SPMPremium> SPMPremiums { get; set; }
+        public virtual DbSet<SPMScheduledPayment> SPMScheduledPayments { get; set; }
+        public virtual DbSet<SPMSubsidySchedule> SPMSubsidySchedules { get; set; }
+        public virtual DbSet<AdminDashboard> AdminDashboards { get; set; }
+        public virtual DbSet<AllDataVersion> AllDataVersions { get; set; }
         public virtual DbSet<Broker> Brokers { get; set; }
         public virtual DbSet<BrokerClient> BrokerClients { get; set; }
         public virtual DbSet<BrokerContact> BrokerContacts { get; set; }
-        public virtual DbSet<Carrier> Carriers { get; set; }
-        public virtual DbSet<CarrierContact> CarrierContacts { get; set; }
-        public virtual DbSet<Client> Clients { get; set; }
+        public virtual DbSet<BrokerNote> BrokerNotes { get; set; }
+        public virtual DbSet<ClientCommunication> ClientCommunications { get; set; }
         public virtual DbSet<ClientContact> ClientContacts { get; set; }
-        public virtual DbSet<ClientDivision> ClientDivisions { get; set; }
-        public virtual DbSet<ClientDivisionContact> ClientDivisionContacts { get; set; }
-        public virtual DbSet<NPM> NPMs { get; set; }
-        public virtual DbSet<QB> QBs { get; set; }
-        public virtual DbSet<QBEvent> QBEvents { get; set; }
-        public virtual DbSet<QBPlan> QBPlans { get; set; }
-        public virtual DbSet<SPM> SPMs { get; set; }
-        public virtual DbSet<SPMAccess> SPMAccesses { get; set; }
-    
-        public virtual ObjectResult<string> COBRA_Update_alert()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("COBRA_Update_alert");
-        }
-    
-        public virtual int db_log_error(string err_no, string err_source, string err_msg, string sqlstate)
-        {
-            var err_noParameter = err_no != null ?
-                new ObjectParameter("err_no", err_no) :
-                new ObjectParameter("err_no", typeof(string));
-    
-            var err_sourceParameter = err_source != null ?
-                new ObjectParameter("err_source", err_source) :
-                new ObjectParameter("err_source", typeof(string));
-    
-            var err_msgParameter = err_msg != null ?
-                new ObjectParameter("err_msg", err_msg) :
-                new ObjectParameter("err_msg", typeof(string));
-    
-            var sqlstateParameter = sqlstate != null ?
-                new ObjectParameter("sqlstate", sqlstate) :
-                new ObjectParameter("sqlstate", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_log_error", err_noParameter, err_sourceParameter, err_msgParameter, sqlstateParameter);
-        }
-    
-        public virtual int db_log_message(string msg_source, string msg, string log_level, Nullable<int> recsaffected)
-        {
-            var msg_sourceParameter = msg_source != null ?
-                new ObjectParameter("msg_source", msg_source) :
-                new ObjectParameter("msg_source", typeof(string));
-    
-            var msgParameter = msg != null ?
-                new ObjectParameter("msg", msg) :
-                new ObjectParameter("msg", typeof(string));
-    
-            var log_levelParameter = log_level != null ?
-                new ObjectParameter("log_level", log_level) :
-                new ObjectParameter("log_level", typeof(string));
-    
-            var recsaffectedParameter = recsaffected.HasValue ?
-                new ObjectParameter("recsaffected", recsaffected) :
-                new ObjectParameter("recsaffected", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("db_log_message", msg_sourceParameter, msgParameter, log_levelParameter, recsaffectedParameter);
-        }
-    
-        public virtual int exp_cp_AllSSOUsers_to_Portal(string p_only_for_email)
-        {
-            var p_only_for_emailParameter = p_only_for_email != null ?
-                new ObjectParameter("p_only_for_email", p_only_for_email) :
-                new ObjectParameter("p_only_for_email", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("exp_cp_AllSSOUsers_to_Portal", p_only_for_emailParameter);
-        }
-    
-        public virtual int exp_cp_AllSSOUsers_to_Portal_PRV()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("exp_cp_AllSSOUsers_to_Portal_PRV");
-        }
-    
-        public virtual int export_cp_tables_to_portal()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("export_cp_tables_to_portal");
-        }
-    
-        public virtual int QBAEI_Create_filesandInsertintoRunLog()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("QBAEI_Create_filesandInsertintoRunLog");
-        }
-    
-        public virtual int QBAEI_Create_filesandInsertintoRunLog_notunknown()
-        {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("QBAEI_Create_filesandInsertintoRunLog_notunknown");
-        }
+        public virtual DbSet<ClientDivisionCommunication> ClientDivisionCommunications { get; set; }
+        public virtual DbSet<MemberLetterAttachment> MemberLetterAttachments { get; set; }
+        public virtual DbSet<NPMCommunication> NPMCommunications { get; set; }
+        public virtual DbSet<NPMNote> NPMNotes { get; set; }
+        public virtual DbSet<QBCommunication> QBCommunications { get; set; }
+        public virtual DbSet<QBOpenEnrollment> QBOpenEnrollments { get; set; }
+        public virtual DbSet<SPMCommunication> SPMCommunications { get; set; }
+        public virtual DbSet<SPMOpenEnrollment> SPMOpenEnrollments { get; set; }
+        public virtual DbSet<SPMPlan> SPMPlans { get; set; }
+        public virtual DbSet<AllClientsAndDivision> AllClientsAndDivisions { get; set; }
+        public virtual DbSet<COBRA_All_Data_QBs> COBRA_All_Data_QBs { get; set; }
     }
 }

@@ -28,11 +28,11 @@ namespace DataProcessing.DataModels.CobraPoint
         public string Phone { get; set; }
         public string Fax { get; set; }
         public Nullable<System.DateTime> BillingStartDate { get; set; }
-        public Nullable<int> SendHIPAACertWithQBSRandQBTermination { get; set; }
-        public Nullable<int> SendHIPAACertWithWelcomeLetter { get; set; }
-        public Nullable<int> AllowClientPortalAccess { get; set; }
-        public Nullable<int> AutomaticallyCreateQBSubsidyForInsignificantAmount { get; set; }
-        public Nullable<int> IgnoreSPMPaymentGracePeriods { get; set; }
+        public Nullable<bool> SendHIPAACertWithQBSRandQBTermination { get; set; }
+        public Nullable<bool> SendHIPAACertWithWelcomeLetter { get; set; }
+        public Nullable<bool> AllowClientPortalAccess { get; set; }
+        public Nullable<bool> AutomaticallyCreateQBSubsidyForInsignificantAmount { get; set; }
+        public Nullable<bool> IgnoreSPMPaymentGracePeriods { get; set; }
         public Nullable<bool> MigratedClient { get; set; }
         public string ClientPremiumNotice { get; set; }
         public string EmployeeCountRange { get; set; }
@@ -41,7 +41,7 @@ namespace DataProcessing.DataModels.CobraPoint
         public Nullable<bool> ClientAllowsAEI2009PlanEnrollmentOptions { get; set; }
         public Nullable<bool> ClientDoesOwnAEI2009SubsidyTakenReportPosting { get; set; }
         public string ClientAlternate { get; set; }
-        public Nullable<int> AllowClientSSO { get; set; }
+        public Nullable<bool> AllowClientSSO { get; set; }
         public Nullable<int> SPMInitialGracePeriodDays { get; set; }
         public Nullable<decimal> SPMConvenienceFee { get; set; }
         public Nullable<decimal> SPMPartnerConvenienceFee { get; set; }
@@ -57,9 +57,9 @@ namespace DataProcessing.DataModels.CobraPoint
         public string DivisionCountry { get; set; }
         public string DivisionPhone { get; set; }
         public string DivisionFaxc { get; set; }
-        public Nullable<int> ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting { get; set; }
-        public Nullable<int> DivisionSendHIPAACert { get; set; }
-        public Nullable<int> AllowClientDivisionSSO { get; set; }
-        public Nullable<int> DivisionActive { get; set; }
+        public Nullable<bool> ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting { get; set; }
+        public Nullable<bool> DivisionSendHIPAACert { get; set; }
+        public Nullable<bool> AllowClientDivisionSSO { get; set; }
+        public Nullable<bool> DivisionActive { get; set; }
     }
 }

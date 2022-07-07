@@ -14,9 +14,75 @@ namespace DataProcessing.DataModels.CobraPoint
     
     public partial class AdminUser
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public AdminUser()
+        {
+            this.AdminUserRoles = new HashSet<AdminUserRole>();
+            this.CarrierAccesses = new HashSet<CarrierAccess>();
+            this.CarrierNotes = new HashSet<CarrierNote>();
+            this.ClientAccesses = new HashSet<ClientAccess>();
+            this.ClientDivisionAccesses = new HashSet<ClientDivisionAccess>();
+            this.ClientDivisionNotes = new HashSet<ClientDivisionNote>();
+            this.ClientNotes = new HashSet<ClientNote>();
+            this.ClientPlanQBNotes = new HashSet<ClientPlanQBNote>();
+            this.ClientPlanSPMNotes = new HashSet<ClientPlanSPMNote>();
+            this.EnrollmentPeriodNotes = new HashSet<EnrollmentPeriodNote>();
+            this.NPMAccesses = new HashSet<NPMAccess>();
+            this.NPMNotes = new HashSet<NPMNote>();
+            this.QBAccesses = new HashSet<QBAccess>();
+            this.QBNotes = new HashSet<QBNote>();
+            this.QBPayments = new HashSet<QBPayment>();
+            this.QBPayments1 = new HashSet<QBPayment>();
+            this.SPMAccesses = new HashSet<SPMAccess>();
+            this.SPMNotes = new HashSet<SPMNote>();
+            this.SPMPayments = new HashSet<SPMPayment>();
+            this.SPMPayments1 = new HashSet<SPMPayment>();
+        }
+    
         public System.Guid User { get; set; }
         public string UserName { get; set; }
         public string UserEmailAddress { get; set; }
-        public Nullable<int> Active { get; set; }
+        public bool Active { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AdminUserRole> AdminUserRoles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CarrierAccess> CarrierAccesses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CarrierNote> CarrierNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientAccess> ClientAccesses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientDivisionAccess> ClientDivisionAccesses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientDivisionNote> ClientDivisionNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientNote> ClientNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanQBNote> ClientPlanQBNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanSPMNote> ClientPlanSPMNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EnrollmentPeriodNote> EnrollmentPeriodNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<NPMAccess> NPMAccesses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<NPMNote> NPMNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBAccess> QBAccesses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBNote> QBNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBPayment> QBPayments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBPayment> QBPayments1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPMAccess> SPMAccesses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPMNote> SPMNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPMPayment> SPMPayments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPMPayment> SPMPayments1 { get; set; }
     }
 }

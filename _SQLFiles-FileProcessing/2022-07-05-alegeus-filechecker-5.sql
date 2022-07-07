@@ -1,4 +1,4 @@
-use COBRApoint_portal_prod;
+use SalesForce_COBRA;
 go
 
 create view AllClientsAndDivisions

@@ -14,6 +14,23 @@ namespace DataProcessing.DataModels.CobraPoint
     
     public partial class QB
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public QB()
+        {
+            this.QBAccesses = new HashSet<QBAccess>();
+            this.QBACHes = new HashSet<QBACH>();
+            this.QBAEIInformations = new HashSet<QBAEIInformation>();
+            this.QBCommunications = new HashSet<QBCommunication>();
+            this.QBDependents = new HashSet<QBDependent>();
+            this.QBDisabilityInformations = new HashSet<QBDisabilityInformation>();
+            this.QBEvents = new HashSet<QBEvent>();
+            this.QBLegacies = new HashSet<QBLegacy>();
+            this.QBNotes = new HashSet<QBNote>();
+            this.QBPayments = new HashSet<QBPayment>();
+            this.QBPremiums = new HashSet<QBPremium>();
+            this.QBSubsidySchedules = new HashSet<QBSubsidySchedule>();
+        }
+    
         public int MemberID { get; set; }
         public int ClientID { get; set; }
         public int ClientDivisionID { get; set; }
@@ -53,5 +70,32 @@ namespace DataProcessing.DataModels.CobraPoint
         public string SSOIdentifier { get; set; }
         public Nullable<System.DateTime> LastModifiedDate { get; set; }
         public string PlanCategory { get; set; }
+    
+        public virtual Client Client { get; set; }
+        public virtual ClientDivision ClientDivision { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBAccess> QBAccesses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBACH> QBACHes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBAEIInformation> QBAEIInformations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBCommunication> QBCommunications { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBDependent> QBDependents { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBDisabilityInformation> QBDisabilityInformations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBEvent> QBEvents { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBLegacy> QBLegacies { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBNote> QBNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBPayment> QBPayments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBPremium> QBPremiums { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBSubsidySchedule> QBSubsidySchedules { get; set; }
     }
 }

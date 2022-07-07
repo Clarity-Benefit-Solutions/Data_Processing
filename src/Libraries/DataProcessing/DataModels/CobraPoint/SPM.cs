@@ -14,9 +14,23 @@ namespace DataProcessing.DataModels.CobraPoint
     
     public partial class SPM
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public SPM()
+        {
+            this.SPMAccesses = new HashSet<SPMAccess>();
+            this.SPMACHes = new HashSet<SPMACH>();
+            this.SPMCommunications = new HashSet<SPMCommunication>();
+            this.SPMDependents = new HashSet<SPMDependent>();
+            this.SPMNotes = new HashSet<SPMNote>();
+            this.SPMPayments = new HashSet<SPMPayment>();
+            this.SPMPremiums = new HashSet<SPMPremium>();
+            this.SPMScheduledPayments = new HashSet<SPMScheduledPayment>();
+            this.SPMSubsidySchedules = new HashSet<SPMSubsidySchedule>();
+        }
+    
         public int MemberID { get; set; }
         public int ClientDivisionID { get; set; }
-        public Nullable<int> Active { get; set; }
+        public bool Active { get; set; }
         public Nullable<System.DateTime> EnteredDateTime { get; set; }
         public string EnteredByUser { get; set; }
         public int ClientID { get; set; }
@@ -24,6 +38,7 @@ namespace DataProcessing.DataModels.CobraPoint
         public string FirstName { get; set; }
         public string MiddleInitial { get; set; }
         public string LastName { get; set; }
+        public string SSN { get; set; }
         public string IndividualID { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
@@ -41,28 +56,48 @@ namespace DataProcessing.DataModels.CobraPoint
         public string PayrollType { get; set; }
         public Nullable<int> YearsOfService { get; set; }
         public string PremiumCouponType { get; set; }
-        public Nullable<int> CurrentlyHasCOBRARights { get; set; }
-        public Nullable<int> WillHaveCOBRARightsOnTermination { get; set; }
-        public string BillingStartDate { get; set; }
-        public string BillingEndDate { get; set; }
+        public Nullable<bool> CurrentlyHasCOBRARights { get; set; }
+        public Nullable<bool> WillHaveCOBRARightsOnTermination { get; set; }
+        public Nullable<System.DateTime> BillingStartDate { get; set; }
+        public Nullable<System.DateTime> BillingEndDate { get; set; }
         public string BillingFrequency { get; set; }
         public string BillingType { get; set; }
-        public Nullable<int> IsSPMLegacy { get; set; }
-        public Nullable<int> Migrated { get; set; }
-        public string HIPAAEnrollmentDate { get; set; }
+        public bool IsSPMLegacy { get; set; }
+        public bool Migrated { get; set; }
+        public Nullable<System.DateTime> HIPAAEnrollmentDate { get; set; }
         public Nullable<int> GracePeriodNumberOfDays { get; set; }
         public string MethodEntered { get; set; }
-        public string PaidThroughDate { get; set; }
+        public Nullable<System.DateTime> PaidThroughDate { get; set; }
         public string BenefitGroup { get; set; }
         public string AccountStructure { get; set; }
         public string ClientCustomData { get; set; }
-        public Nullable<int> AllowSSO { get; set; }
+        public Nullable<bool> AllowSSO { get; set; }
         public string SSOIdentifier { get; set; }
-        public string LastModifiedDate { get; set; }
+        public Nullable<System.DateTime> LastModifiedDate { get; set; }
         public string PlanCategory { get; set; }
-        public string InitialGracePeriodDate { get; set; }
+        public Nullable<System.DateTime> InitialGracePeriodDate { get; set; }
         public Nullable<int> InitialGracePeriodDays { get; set; }
         public string SPMInitialGracePeriodOptionType { get; set; }
-        public string SSN { get; set; }
+    
+        public virtual Client Client { get; set; }
+        public virtual ClientDivision ClientDivision { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPMAccess> SPMAccesses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPMACH> SPMACHes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPMCommunication> SPMCommunications { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPMDependent> SPMDependents { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPMNote> SPMNotes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPMPayment> SPMPayments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPMPremium> SPMPremiums { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPMScheduledPayment> SPMScheduledPayments { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SPMSubsidySchedule> SPMSubsidySchedules { get; set; }
     }
 }

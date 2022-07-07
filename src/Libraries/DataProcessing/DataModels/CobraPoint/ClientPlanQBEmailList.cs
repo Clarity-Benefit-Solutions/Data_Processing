@@ -12,10 +12,15 @@ namespace DataProcessing.DataModels.CobraPoint
     using System;
     using System.Collections.Generic;
     
-    public partial class QBAEI_ClientList_csv
+    public partial class ClientPlanQBEmailList
     {
-        public int clientID { get; set; }
-        public string ClientName { get; set; }
-        public string ClientAlternate { get; set; }
+        public int ClientPlanQBEmailListID { get; set; }
+        public int ClientPlanQBID { get; set; }
+        public string ContactType { get; set; }
+        public Nullable<int> CarrierContactID { get; set; }
+        public Nullable<int> ClientContactID { get; set; }
+    
+        public virtual CarrierContact CarrierContact { get; set; }
+        public virtual ClientPlanQB ClientPlanQB { get; set; }
     }
 }

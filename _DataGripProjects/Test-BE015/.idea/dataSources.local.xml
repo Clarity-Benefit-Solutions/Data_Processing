@@ -31,6 +31,7 @@
         <introspection-scope>
           <node kind="database">
             <name qname="COBRApoint_portal_prod" />
+            <name qname="SalesForce_COBRA" />
             <name qname="Data_Processing" />
             <node kind="schema" qname="@" />
           </node>

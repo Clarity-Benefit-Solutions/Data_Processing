@@ -28,5 +28,7 @@ namespace DataProcessing.DataModels.CobraPoint
         public Nullable<bool> NewQBInvoluntaryTermFollowingReductionInHours { get; set; }
         public Nullable<System.DateTime> QEDateofRIH { get; set; }
         public Nullable<System.DateTime> LatestElectionPMD { get; set; }
+    
+        public virtual QB QB { get; set; }
     }
 }

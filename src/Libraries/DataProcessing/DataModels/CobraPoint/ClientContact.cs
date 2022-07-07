@@ -35,11 +35,11 @@ namespace DataProcessing.DataModels.CobraPoint
         public string State { get; set; }
         public string PostalCode { get; set; }
         public string Country { get; set; }
-        public Nullable<int> Active { get; set; }
+        public bool Active { get; set; }
         public string LoginStatus { get; set; }
         public string RegistrationCode { get; set; }
         public Nullable<System.DateTime> RegistrationDate { get; set; }
-        public Nullable<int> AllowSSO { get; set; }
+        public Nullable<bool> AllowSSO { get; set; }
         public string SSOIdentifier { get; set; }
     }
 }

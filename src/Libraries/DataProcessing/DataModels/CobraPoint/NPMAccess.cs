@@ -12,14 +12,15 @@ namespace DataProcessing.DataModels.CobraPoint
     using System;
     using System.Collections.Generic;
     
-    public partial class db_error_log
+    public partial class NPMAccess
     {
-        public int log_id { get; set; }
-        public string sql_state { get; set; }
-        public string err_no { get; set; }
-        public string err_source { get; set; }
-        public string err_msg { get; set; }
-        public System.DateTime created_at { get; set; }
-        public string created_by { get; set; }
+        public int NPMAccessID { get; set; }
+        public int MemberID { get; set; }
+        public System.DateTime AccessDateTime { get; set; }
+        public string AccessType { get; set; }
+        public System.Guid AccessUser { get; set; }
+    
+        public virtual AdminUser AdminUser { get; set; }
+        public virtual NPM NPM { get; set; }
     }
 }

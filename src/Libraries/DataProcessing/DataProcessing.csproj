@@ -331,16 +331,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CsvFileSpecs.cs" />
+    <Compile Include="DataModels\CobraPoint\AdminDashboard.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\AdminRole.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataModels\CobraPoint\AdminTPAUser.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\CobraPoint\AdminUser.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataModels\CobraPoint\AdminUserRole.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataModels\CobraPoint\AllClientsAndDivision.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\CobraPoint\AllSSOUser.cs">
+    <Compile Include="DataModels\CobraPoint\AllDataVersion.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\CobraPoint\Broker.cs">
@@ -352,13 +361,28 @@
     <Compile Include="DataModels\CobraPoint\BrokerContact.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataModels\CobraPoint\BrokerNote.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataModels\CobraPoint\Carrier.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\CarrierAccess.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\CobraPoint\CarrierContact.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataModels\CobraPoint\CarrierNote.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataModels\CobraPoint\Client.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientAccess.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientCommunication.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\CobraPoint\ClientContact.cs">
@@ -367,7 +391,85 @@
     <Compile Include="DataModels\CobraPoint\ClientDivision.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientDivisionAccess.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientDivisionCommunication.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataModels\CobraPoint\ClientDivisionContact.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientDivisionNote.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientDivisionQBPlan.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientDivisionQBPlanBundle.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientDivisionSPMPlan.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientDivisionSPMPlanBundle.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientFee.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientGroup.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientNote.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientPlanQB.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientPlanQBBundle.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientPlanQBCarrierSubcode.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientPlanQBEmailList.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientPlanQBNote.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientPlanQBRank.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientPlanQBRate.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientPlanSPM.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientPlanSPMBundle.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientPlanSPMCarrierSubcode.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientPlanSPMEmailList.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientPlanSPMNote.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientPlanSPMRank.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientPlanSPMRate.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientProcess.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\ClientSPMBillingFrequencyOption.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\CobraPoint\CobraPoint.Context.cs">
@@ -385,31 +487,139 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CobraPoint.edmx</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\CobraPoint\db_error_log.cs">
+    <Compile Include="DataModels\CobraPoint\COBRA_All_Data_QBs.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\CobraPoint\db_message_log.cs">
+    <Compile Include="DataModels\CobraPoint\C__RefactorLog.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\EnrollmentPeriodNote.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\LetterAttachment.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\LetterType.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\LoginLog.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\MemberLetterAttachment.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\CobraPoint\NPM.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataModels\CobraPoint\NPMAccess.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\NPMCommunication.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\NPMHIPAACertData.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\NPMHIPAACertDataDependent.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\NPMNote.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataModels\CobraPoint\QB.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\CobraPoint\QBAEI_ClientList_csv.cs">
+    <Compile Include="DataModels\CobraPoint\QBAccess.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\QBACH.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\QBAEIInformation.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\QBCommunication.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\QBDependent.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\QBDependentPlan.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\QBDisabilityInformation.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\CobraPoint\QBEvent.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataModels\CobraPoint\QBLegacy.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\QBNote.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\QBOpenEnrollment.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\QBPayment.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataModels\CobraPoint\QBPlan.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\QBPlanCarrierSubcode.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\QBPremium.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\QBStateInsert.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\QBSubsidySchedule.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\CobraPoint\SPM.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\CobraPoint\SPMAccess.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\SPMACH.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\SPMCommunication.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\SPMDependent.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\SPMDependentPlan.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\SPMNote.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\SPMOpenEnrollment.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\SPMPayment.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\SPMPlan.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\SPMPlanCarrierSubcode.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\SPMPremium.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\SPMScheduledPayment.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\SPMSubsidySchedule.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\DataProcessing\alegeus_file_final.cs">

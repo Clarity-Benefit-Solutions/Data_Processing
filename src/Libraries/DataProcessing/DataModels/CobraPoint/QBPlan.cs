@@ -14,6 +14,12 @@ namespace DataProcessing.DataModels.CobraPoint
     
     public partial class QBPlan
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public QBPlan()
+        {
+            this.QBPlanCarrierSubcodes = new HashSet<QBPlanCarrierSubcode>();
+        }
+    
         public int QBPlanID { get; set; }
         public int MemberID { get; set; }
         public string InsuranceType { get; set; }
@@ -36,5 +42,9 @@ namespace DataProcessing.DataModels.CobraPoint
         public Nullable<bool> IsElected { get; set; }
         public int ClientPlanQBID { get; set; }
         public Nullable<decimal> NumberOfUnits { get; set; }
+    
+        public virtual ClientPlanQB ClientPlanQB { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<QBPlanCarrierSubcode> QBPlanCarrierSubcodes { get; set; }
     }
 }

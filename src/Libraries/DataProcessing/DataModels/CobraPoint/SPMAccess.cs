@@ -14,7 +14,13 @@ namespace DataProcessing.DataModels.CobraPoint
     
     public partial class SPMAccess
     {
+        public int SPMAccessID { get; set; }
         public int MemberID { get; set; }
+        public System.DateTime AccessDateTime { get; set; }
+        public string AccessType { get; set; }
         public System.Guid AccessUser { get; set; }
+    
+        public virtual AdminUser AdminUser { get; set; }
+        public virtual SPM SPM { get; set; }
     }
 }

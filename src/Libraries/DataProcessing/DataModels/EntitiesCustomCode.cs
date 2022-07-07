@@ -24,14 +24,16 @@ namespace DataProcessing.DataModels.CobraPoint
             {
                 return Utils.IsBlank(this.SSN) ? "" : Utils.FormatSsnWithDashes(this.SSN);
             }
-        }    public string SSNNoDashes
+        }
+        public string SSNNumbersOnly
         {
             get
             {
-                return Utils.IsBlank(this.SSN) ? "" : Utils.FormatSsnWithDashes(this.SSN);
+                return Utils.IsBlank(this.SSN) ? "" : Utils.FormatSsnNumbersOnly(this.SSN);
             }
         }
-    } public partial class NPM
+    }
+    public partial class NPM
     {
         public string SSNFormatted
         {
@@ -40,8 +42,15 @@ namespace DataProcessing.DataModels.CobraPoint
                 return Utils.IsBlank(this.SSN) ? "" : Utils.FormatSsnWithDashes(this.SSN);
             }
         }
+        public string SSNNumbersOnly
+        {
+            get
+            {
+                return Utils.IsBlank(this.SSN) ? "" : Utils.FormatSsnNumbersOnly(this.SSN);
+            }
+        }
     }
-    
+
     public partial class SPM
     {
         public string SSNFormatted
@@ -49,6 +58,13 @@ namespace DataProcessing.DataModels.CobraPoint
             get
             {
                 return Utils.IsBlank(this.SSN) ? "" : Utils.FormatSsnWithDashes(this.SSN);
+            }
+        }
+        public string SSNNumbersOnly
+        {
+            get
+            {
+                return Utils.IsBlank(this.SSN) ? "" : Utils.FormatSsnNumbersOnly(this.SSN);
             }
         }
     }

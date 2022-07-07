@@ -14,6 +14,19 @@ namespace DataProcessing.DataModels.CobraPoint
     
     public partial class CarrierContact
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public CarrierContact()
+        {
+            this.ClientPlanQBs = new HashSet<ClientPlanQB>();
+            this.ClientPlanQBs1 = new HashSet<ClientPlanQB>();
+            this.ClientPlanQBs2 = new HashSet<ClientPlanQB>();
+            this.ClientPlanQBEmailLists = new HashSet<ClientPlanQBEmailList>();
+            this.ClientPlanSPMs = new HashSet<ClientPlanSPM>();
+            this.ClientPlanSPMs1 = new HashSet<ClientPlanSPM>();
+            this.ClientPlanSPMs2 = new HashSet<ClientPlanSPM>();
+            this.ClientPlanSPMEmailLists = new HashSet<ClientPlanSPMEmailList>();
+        }
+    
         public int CarrierContactID { get; set; }
         public int CarrierID { get; set; }
         public string ContactType { get; set; }
@@ -35,6 +48,26 @@ namespace DataProcessing.DataModels.CobraPoint
         public string PostalCode { get; set; }
         public string Country { get; set; }
         public string WebLink { get; set; }
-        public Nullable<int> Active { get; set; }
+        public bool Active { get; set; }
+        public Nullable<bool> RemitViaACH { get; set; }
+        public string RemittanceACHAccountType { get; set; }
+    
+        public virtual Carrier Carrier { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanQB> ClientPlanQBs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanQB> ClientPlanQBs1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanQB> ClientPlanQBs2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanQBEmailList> ClientPlanQBEmailLists { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanSPM> ClientPlanSPMs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanSPM> ClientPlanSPMs1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanSPM> ClientPlanSPMs2 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientPlanSPMEmailList> ClientPlanSPMEmailLists { get; set; }
     }
 }

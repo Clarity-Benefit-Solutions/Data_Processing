@@ -14,6 +14,12 @@ namespace DataProcessing.DataModels.CobraPoint
     
     public partial class ClientDivisionContact
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ClientDivisionContact()
+        {
+            this.ClientDivisionCommunications = new HashSet<ClientDivisionCommunication>();
+        }
+    
         public int ClientDivisionContactID { get; set; }
         public int ClientDivisionID { get; set; }
         public string ContactType { get; set; }
@@ -34,11 +40,15 @@ namespace DataProcessing.DataModels.CobraPoint
         public string State { get; set; }
         public string PostalCode { get; set; }
         public string Country { get; set; }
-        public Nullable<int> Active { get; set; }
+        public bool Active { get; set; }
         public string LoginStatus { get; set; }
         public string RegistrationCode { get; set; }
         public Nullable<System.DateTime> RegistrationDate { get; set; }
-        public Nullable<int> AllowSSO { get; set; }
+        public Nullable<bool> AllowSSO { get; set; }
         public string SSOIdentifier { get; set; }
+    
+        public virtual ClientDivision ClientDivision { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ClientDivisionCommunication> ClientDivisionCommunications { get; set; }
     }
 }
