@@ -560,7 +560,7 @@ namespace DataProcessing
         {
             var errorMessage = "";
             var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-{mbiRow.AccountTypeCode}-{mbiRow.PlanId}";
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-{mbiRow.AccountTypeCode}-{mbiRow.PlanId}-{mbiRow.PlanStartDate}-{mbiRow.PlanEndDate}-{mbiRow.EffectiveDate}";
             if (_cache.ContainsKey(cacheKey))
             {
                 errorMessage = _cache.Get(cacheKey)?.ToString();
@@ -704,7 +704,7 @@ namespace DataProcessing
         {
             var errorMessage = "";
             var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-{mbiRow.EmployeeID}-{mbiRow.AccountTypeCode}-{mbiRow.PlanId}";
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-{mbiRow.EmployeeID}-{mbiRow.AccountTypeCode}-{mbiRow.PlanId}-{mbiRow.PlanStartDate}-{mbiRow.PlanEndDate}-{mbiRow.EffectiveDate}"; 
             if (_cache.ContainsKey(cacheKey))
             {
                 errorMessage = _cache.Get(cacheKey)?.ToString();
