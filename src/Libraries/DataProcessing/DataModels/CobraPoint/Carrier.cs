@@ -7,34 +7,22 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataProcessing.DataModels.Cobra
+namespace DataProcessing.DataModels.CobraPoint
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class CarrierContact
+    public partial class Carrier
     {
-        public int CarrierContactID { get; set; }
         public int CarrierID { get; set; }
-        public string ContactType { get; set; }
-        public string Salutation { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string Title { get; set; }
-        public string Department { get; set; }
-        public string Phone { get; set; }
-        public string PhoneExtension { get; set; }
-        public string Phone2 { get; set; }
-        public string Phone2Extension { get; set; }
-        public string Fax { get; set; }
+        public string CarrierName { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public string PostalCode { get; set; }
         public string Country { get; set; }
-        public string WebLink { get; set; }
-        public Nullable<int> Active { get; set; }
+        public string Phone { get; set; }
+        public string CarrierFax { get; set; }
     }
 }

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataProcessing.DataModels.Cobra
+namespace DataProcessing.DataModels.CobraPoint
 {
     using System;
     using System.Data.Entity;
@@ -15,10 +15,10 @@ namespace DataProcessing.DataModels.Cobra
     using System.Data.Entity.Core.Objects;
     using System.Linq;
     
-    public partial class _portal_prodEntities : DbContext
+    public partial class CobraPointEntities : DbContext
     {
-        public _portal_prodEntities()
-            : base("name=_portal_prodEntities")
+        public CobraPointEntities()
+            : base("name=CobraPointEntities")
         {
         }
     
@@ -32,6 +32,7 @@ namespace DataProcessing.DataModels.Cobra
         public virtual DbSet<QBAEI_ClientList_csv> QBAEI_ClientList_csv { get; set; }
         public virtual DbSet<AdminTPAUser> AdminTPAUsers { get; set; }
         public virtual DbSet<AdminUser> AdminUsers { get; set; }
+        public virtual DbSet<AllClientsAndDivision> AllClientsAndDivisions { get; set; }
         public virtual DbSet<AllSSOUser> AllSSOUsers { get; set; }
         public virtual DbSet<Broker> Brokers { get; set; }
         public virtual DbSet<BrokerClient> BrokerClients { get; set; }

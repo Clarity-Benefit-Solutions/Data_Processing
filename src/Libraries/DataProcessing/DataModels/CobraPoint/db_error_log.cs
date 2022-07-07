@@ -7,15 +7,19 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataProcessing.DataModels.Cobra
+namespace DataProcessing.DataModels.CobraPoint
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class BrokerClient
+    public partial class db_error_log
     {
-        public int BrokerClientID { get; set; }
-        public int BrokerID { get; set; }
-        public int ClientID { get; set; }
+        public int log_id { get; set; }
+        public string sql_state { get; set; }
+        public string err_no { get; set; }
+        public string err_source { get; set; }
+        public string err_msg { get; set; }
+        public System.DateTime created_at { get; set; }
+        public string created_by { get; set; }
     }
 }

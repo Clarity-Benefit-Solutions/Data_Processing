@@ -7,15 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataProcessing.DataModels.Cobra
+namespace DataProcessing.DataModels.CobraPoint
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class QBAEI_ClientList_csv
+    public partial class AdminUser
     {
-        public int clientID { get; set; }
-        public string ClientName { get; set; }
-        public string ClientAlternate { get; set; }
+        public System.Guid User { get; set; }
+        public string UserName { get; set; }
+        public string UserEmailAddress { get; set; }
+        public Nullable<int> Active { get; set; }
     }
 }

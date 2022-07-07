@@ -4,8 +4,20 @@ using System.Reflection;
 using CoreUtils.Classes;
 
 // ReSharper disable All
+namespace DataProcessing.DataModels.CobraPoint
+{
 
-namespace DataProcessing.DataModels.DataProcessing
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    public partial class CobraPointEntities
+    {
+        public CobraPointEntities(string nameOrConnectionString)
+            : base(nameOrConnectionString)
+        {
+        }
+    }
+
+}
+    namespace DataProcessing.DataModels.DataProcessing
 {
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -16,6 +28,7 @@ namespace DataProcessing.DataModels.DataProcessing
         {
         }
     }
+
 
     public partial class res_file_table_stage
     {

@@ -7,15 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataProcessing.DataModels.Cobra
+namespace DataProcessing.DataModels.CobraPoint
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Carrier
+    public partial class ClientDivision
     {
-        public int CarrierID { get; set; }
-        public string CarrierName { get; set; }
+        public int ClientDivisionID { get; set; }
+        public int ClientID { get; set; }
+        public string DivisionName { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
         public string City { get; set; }
@@ -23,6 +24,10 @@ namespace DataProcessing.DataModels.Cobra
         public string PostalCode { get; set; }
         public string Country { get; set; }
         public string Phone { get; set; }
-        public string CarrierFax { get; set; }
+        public string Fax { get; set; }
+        public Nullable<int> ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting { get; set; }
+        public Nullable<int> SendHIPAACertWithSPMWelcomeAndTerminationLetters { get; set; }
+        public Nullable<int> AllowClientDivisionSSO { get; set; }
+        public Nullable<int> Active { get; set; }
     }
 }

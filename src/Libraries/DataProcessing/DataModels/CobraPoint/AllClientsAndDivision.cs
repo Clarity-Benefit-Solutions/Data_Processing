@@ -7,12 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataProcessing.DataModels.Cobra
+namespace DataProcessing.DataModels.CobraPoint
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Client
+    public partial class AllClientsAndDivision
     {
         public int ClientID { get; set; }
         public string ClientName { get; set; }
@@ -47,5 +47,19 @@ namespace DataProcessing.DataModels.Cobra
         public Nullable<decimal> SPMPartnerConvenienceFee { get; set; }
         public Nullable<decimal> QBConvenienceFee { get; set; }
         public Nullable<decimal> QBPartnerConvenienceFee { get; set; }
+        public Nullable<int> ClientDivisionID { get; set; }
+        public string DivisionName { get; set; }
+        public string DivisionAddress1 { get; set; }
+        public string DivisionAddress2 { get; set; }
+        public string DivisionCity { get; set; }
+        public string DivisionState { get; set; }
+        public string DivisionPostalCode { get; set; }
+        public string DivisionCountry { get; set; }
+        public string DivisionPhone { get; set; }
+        public string DivisionFaxc { get; set; }
+        public Nullable<int> ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting { get; set; }
+        public Nullable<int> DivisionSendHIPAACert { get; set; }
+        public Nullable<int> AllowClientDivisionSSO { get; set; }
+        public Nullable<int> DivisionActive { get; set; }
     }
 }

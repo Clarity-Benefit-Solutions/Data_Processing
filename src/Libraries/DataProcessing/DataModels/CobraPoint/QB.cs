@@ -7,24 +7,22 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataProcessing.DataModels.Cobra
+namespace DataProcessing.DataModels.CobraPoint
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class SPM
+    public partial class QB
     {
         public int MemberID { get; set; }
-        public int ClientDivisionID { get; set; }
-        public Nullable<int> Active { get; set; }
-        public Nullable<System.DateTime> EnteredDateTime { get; set; }
-        public string EnteredByUser { get; set; }
         public int ClientID { get; set; }
-        public string Salutation { get; set; }
+        public int ClientDivisionID { get; set; }
         public string FirstName { get; set; }
         public string MiddleInitial { get; set; }
         public string LastName { get; set; }
-        public string IndividualID { get; set; }
+        public string Salutation { get; set; }
+        public string SSN { get; set; }
+        public string IndividualIdentifier { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Phone2 { get; set; }
@@ -41,28 +39,19 @@ namespace DataProcessing.DataModels.Cobra
         public string PayrollType { get; set; }
         public Nullable<int> YearsOfService { get; set; }
         public string PremiumCouponType { get; set; }
-        public Nullable<int> CurrentlyHasCOBRARights { get; set; }
-        public Nullable<int> WillHaveCOBRARightsOnTermination { get; set; }
-        public string BillingStartDate { get; set; }
-        public string BillingEndDate { get; set; }
-        public string BillingFrequency { get; set; }
-        public string BillingType { get; set; }
-        public Nullable<int> IsSPMLegacy { get; set; }
-        public Nullable<int> Migrated { get; set; }
-        public string HIPAAEnrollmentDate { get; set; }
-        public Nullable<int> GracePeriodNumberOfDays { get; set; }
+        public bool UsesHCTC { get; set; }
+        public bool Active { get; set; }
+        public Nullable<System.DateTime> EnteredDateTime { get; set; }
+        public string EnteredByUser { get; set; }
         public string MethodEntered { get; set; }
-        public string PaidThroughDate { get; set; }
+        public Nullable<System.DateTime> PaidThroughDate { get; set; }
+        public Nullable<System.DateTime> OnlineElectionProcessedDate { get; set; }
         public string BenefitGroup { get; set; }
         public string AccountStructure { get; set; }
         public string ClientCustomData { get; set; }
-        public Nullable<int> AllowSSO { get; set; }
+        public Nullable<bool> AllowSSO { get; set; }
         public string SSOIdentifier { get; set; }
-        public string LastModifiedDate { get; set; }
+        public Nullable<System.DateTime> LastModifiedDate { get; set; }
         public string PlanCategory { get; set; }
-        public string InitialGracePeriodDate { get; set; }
-        public Nullable<int> InitialGracePeriodDays { get; set; }
-        public string SPMInitialGracePeriodOptionType { get; set; }
-        public string SSN { get; set; }
     }
 }

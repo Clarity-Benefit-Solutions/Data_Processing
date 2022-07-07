@@ -7,40 +7,34 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataProcessing.DataModels.Cobra
+namespace DataProcessing.DataModels.CobraPoint
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class NPM
+    public partial class CarrierContact
     {
-        public int MemberID { get; set; }
-        public int ClientDivisionID { get; set; }
-        public Nullable<int> Active { get; set; }
-        public System.DateTime DateEntered { get; set; }
-        public string MethodEntered { get; set; }
-        public string EnteredByUser { get; set; }
+        public int CarrierContactID { get; set; }
+        public int CarrierID { get; set; }
+        public string ContactType { get; set; }
         public string Salutation { get; set; }
         public string FirstName { get; set; }
-        public string MiddleInitial { get; set; }
         public string LastName { get; set; }
-        public string IndividualID { get; set; }
         public string Email { get; set; }
+        public string Title { get; set; }
+        public string Department { get; set; }
         public string Phone { get; set; }
+        public string PhoneExtension { get; set; }
         public string Phone2 { get; set; }
+        public string Phone2Extension { get; set; }
+        public string Fax { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
         public string City { get; set; }
         public string State { get; set; }
         public string PostalCode { get; set; }
         public string Country { get; set; }
-        public Nullable<int> UsesAndFamily { get; set; }
-        public Nullable<int> HasBecomeAQB { get; set; }
-        public Nullable<int> HasWaivedAllCoverage { get; set; }
-        public string HireDate { get; set; }
-        public Nullable<int> IsGRLetterSent { get; set; }
-        public string EnteredDateTime { get; set; }
-        public string LastModifiedDate { get; set; }
-        public string SSN { get; set; }
+        public string WebLink { get; set; }
+        public Nullable<int> Active { get; set; }
     }
 }

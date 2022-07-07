@@ -7,16 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataProcessing.DataModels.Cobra
+namespace DataProcessing.DataModels.CobraPoint
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class AdminUser
+    public partial class db_message_log
     {
-        public System.Guid User { get; set; }
-        public string UserName { get; set; }
-        public string UserEmailAddress { get; set; }
-        public Nullable<int> Active { get; set; }
+        public int log_id { get; set; }
+        public string log_level { get; set; }
+        public string log_source { get; set; }
+        public string log_msg { get; set; }
+        public System.DateTime created_at { get; set; }
+        public string created_by { get; set; }
     }
 }

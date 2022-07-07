@@ -7,16 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DataProcessing.DataModels.Cobra
+namespace DataProcessing.DataModels.CobraPoint
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class ClientDivision
+    public partial class Broker
     {
-        public int ClientDivisionID { get; set; }
-        public int ClientID { get; set; }
-        public string DivisionName { get; set; }
+        public int BrokerID { get; set; }
+        public string BrokerName { get; set; }
+        public string DBAName { get; set; }
+        public string EIN { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
         public string City { get; set; }
@@ -25,9 +26,8 @@ namespace DataProcessing.DataModels.Cobra
         public string Country { get; set; }
         public string Phone { get; set; }
         public string Fax { get; set; }
-        public Nullable<int> ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting { get; set; }
-        public Nullable<int> SendHIPAACertWithSPMWelcomeAndTerminationLetters { get; set; }
-        public Nullable<int> AllowClientDivisionSSO { get; set; }
+        public Nullable<int> AllowBrokerPortalAccess { get; set; }
         public Nullable<int> Active { get; set; }
+        public Nullable<int> AllowBrokerSSO { get; set; }
     }
 }

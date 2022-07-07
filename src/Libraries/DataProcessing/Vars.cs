@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Web.Hosting;
 using CoreUtils;
 using CoreUtils.Classes;
+using DataProcessing.DataModels.CobraPoint;
 using DataProcessing.DataModels.DataProcessing;
 using MySqlConnector;
 
@@ -138,7 +139,7 @@ namespace DataProcessing
             get
             {
                 if (_dbCtxDataProcessingDefault == null)
-                    _dbCtxDataProcessingDefault = new Data_ProcessingEntities("name=" + ConnStrNameDataProcessing);
+                    _dbCtxDataProcessingDefault = new Data_ProcessingEntities("name=" + ConnStrNameCobra);
                 return _dbCtxDataProcessingDefault;
             }
         }
@@ -276,11 +277,11 @@ namespace DataProcessing
             {
                 if (UseVPNToConnectToCobra)
                 {
-                    return "COBRApointVPN";
+                    return "CobraPointVPN";
                 }
                 else
                 {
-                    return "COBRApoint";
+                    return "CobraPoint";
                 }
             }
         }
@@ -310,6 +311,22 @@ namespace DataProcessing
 
                 return _dbConnCobra;
             }
+        }
+
+        private CobraPointEntities _dbCtxCobraDefault;
+
+        public CobraPointEntities DbCtxCobraDefault
+        {
+            get
+            {
+                if (_dbCtxCobraDefault == null)
+                    _dbCtxCobraDefault = new CobraPointEntities("name=" + ConnStrNameCobra);
+                return _dbCtxCobraDefault;
+            }
+        }
+        public CobraPointEntities dbCtxCobraNew
+        {
+            get { return new CobraPointEntities("name=" + ConnStrNameCobra); }
         }
 
         #endregion

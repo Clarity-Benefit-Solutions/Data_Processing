@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="COBRApoint.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="CobraPointModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="db_error_log">
           <Key>
             <PropertyRef Name="log_id" />
@@ -146,6 +146,62 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.AdminUser' does not hav
           <Property Name="UserName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="UserEmailAddress" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Active" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'COBRApoint_portal_prod.dbo.AllClientsAndDivisions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="AllClientsAndDivisions">
+          <Key>
+            <PropertyRef Name="ClientID" />
+            <PropertyRef Name="ClientName" />
+            <PropertyRef Name="ClientGroupID" />
+          </Key>
+          <Property Name="ClientID" Type="int" Nullable="false" />
+          <Property Name="ClientName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ClientGroupID" Type="int" Nullable="false" />
+          <Property Name="DBAName" Type="varchar" MaxLength="100" />
+          <Property Name="EIN" Type="varchar" MaxLength="50" />
+          <Property Name="Address1" Type="varchar" MaxLength="50" />
+          <Property Name="Address2" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="50" />
+          <Property Name="State" Type="varchar" MaxLength="50" />
+          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="Country" Type="varchar" MaxLength="50" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="Fax" Type="varchar" MaxLength="50" />
+          <Property Name="BillingStartDate" Type="date" />
+          <Property Name="SendHIPAACertWithQBSRandQBTermination" Type="int" />
+          <Property Name="SendHIPAACertWithWelcomeLetter" Type="int" />
+          <Property Name="AllowClientPortalAccess" Type="int" />
+          <Property Name="AutomaticallyCreateQBSubsidyForInsignificantAmount" Type="int" />
+          <Property Name="IgnoreSPMPaymentGracePeriods" Type="int" />
+          <Property Name="MigratedClient" Type="bit" />
+          <Property Name="ClientPremiumNotice" Type="varchar" MaxLength="50" />
+          <Property Name="EmployeeCountRange" Type="varchar" MaxLength="50" />
+          <Property Name="WeeklyBillingFirstDayOfWeek" Type="varchar" MaxLength="50" />
+          <Property Name="ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize" Type="bit" />
+          <Property Name="ClientAllowsAEI2009PlanEnrollmentOptions" Type="bit" />
+          <Property Name="ClientDoesOwnAEI2009SubsidyTakenReportPosting" Type="bit" />
+          <Property Name="ClientAlternate" Type="varchar" MaxLength="50" />
+          <Property Name="AllowClientSSO" Type="int" />
+          <Property Name="SPMInitialGracePeriodDays" Type="int" />
+          <Property Name="SPMConvenienceFee" Type="money" />
+          <Property Name="SPMPartnerConvenienceFee" Type="money" />
+          <Property Name="QBConvenienceFee" Type="money" />
+          <Property Name="QBPartnerConvenienceFee" Type="money" />
+          <Property Name="ClientDivisionID" Type="int" />
+          <Property Name="DivisionName" Type="varchar" MaxLength="50" />
+          <Property Name="DivisionAddress1" Type="varchar" MaxLength="50" />
+          <Property Name="DivisionAddress2" Type="varchar" MaxLength="50" />
+          <Property Name="DivisionCity" Type="varchar" MaxLength="50" />
+          <Property Name="DivisionState" Type="varchar" MaxLength="50" />
+          <Property Name="DivisionPostalCode" Type="varchar" MaxLength="50" />
+          <Property Name="DivisionCountry" Type="varchar" MaxLength="50" />
+          <Property Name="DivisionPhone" Type="varchar" MaxLength="50" />
+          <Property Name="DivisionFaxc" Type="varchar" MaxLength="50" />
+          <Property Name="ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting" Type="int" />
+          <Property Name="DivisionSendHIPAACert" Type="int" />
+          <Property Name="AllowClientDivisionSSO" Type="int" />
+          <Property Name="DivisionActive" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'COBRApoint_portal_prod.dbo.AllSSOUsers' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -708,7 +764,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
         </Function>
         <Function Name="QBAEI_Create_filesandInsertintoRunLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="QBAEI_Create_filesandInsertintoRunLog_notunknown" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
-        <EntityContainer Name="COBRApointStoreContainer">
+        <EntityContainer Name="CobraPointModelStoreContainer">
           <EntitySet Name="db_error_log" EntityType="Self.db_error_log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="db_message_log" EntityType="Self.db_message_log" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QBAEI_ClientList_csv" EntityType="Self.QBAEI_ClientList_csv" store:Type="Tables" store:Schema="dbo">
@@ -731,6 +787,57 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
     [AdminUser].[UserEmailAddress] AS [UserEmailAddress], 
     [AdminUser].[Active] AS [Active]
     FROM [dbo].[AdminUser] AS [AdminUser]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="AllClientsAndDivisions" EntityType="Self.AllClientsAndDivisions" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [AllClientsAndDivisions].[ClientID] AS [ClientID], 
+    [AllClientsAndDivisions].[ClientName] AS [ClientName], 
+    [AllClientsAndDivisions].[ClientGroupID] AS [ClientGroupID], 
+    [AllClientsAndDivisions].[DBAName] AS [DBAName], 
+    [AllClientsAndDivisions].[EIN] AS [EIN], 
+    [AllClientsAndDivisions].[Address1] AS [Address1], 
+    [AllClientsAndDivisions].[Address2] AS [Address2], 
+    [AllClientsAndDivisions].[City] AS [City], 
+    [AllClientsAndDivisions].[State] AS [State], 
+    [AllClientsAndDivisions].[PostalCode] AS [PostalCode], 
+    [AllClientsAndDivisions].[Country] AS [Country], 
+    [AllClientsAndDivisions].[Phone] AS [Phone], 
+    [AllClientsAndDivisions].[Fax] AS [Fax], 
+    [AllClientsAndDivisions].[BillingStartDate] AS [BillingStartDate], 
+    [AllClientsAndDivisions].[SendHIPAACertWithQBSRandQBTermination] AS [SendHIPAACertWithQBSRandQBTermination], 
+    [AllClientsAndDivisions].[SendHIPAACertWithWelcomeLetter] AS [SendHIPAACertWithWelcomeLetter], 
+    [AllClientsAndDivisions].[AllowClientPortalAccess] AS [AllowClientPortalAccess], 
+    [AllClientsAndDivisions].[AutomaticallyCreateQBSubsidyForInsignificantAmount] AS [AutomaticallyCreateQBSubsidyForInsignificantAmount], 
+    [AllClientsAndDivisions].[IgnoreSPMPaymentGracePeriods] AS [IgnoreSPMPaymentGracePeriods], 
+    [AllClientsAndDivisions].[MigratedClient] AS [MigratedClient], 
+    [AllClientsAndDivisions].[ClientPremiumNotice] AS [ClientPremiumNotice], 
+    [AllClientsAndDivisions].[EmployeeCountRange] AS [EmployeeCountRange], 
+    [AllClientsAndDivisions].[WeeklyBillingFirstDayOfWeek] AS [WeeklyBillingFirstDayOfWeek], 
+    [AllClientsAndDivisions].[ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize] AS [ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize], 
+    [AllClientsAndDivisions].[ClientAllowsAEI2009PlanEnrollmentOptions] AS [ClientAllowsAEI2009PlanEnrollmentOptions], 
+    [AllClientsAndDivisions].[ClientDoesOwnAEI2009SubsidyTakenReportPosting] AS [ClientDoesOwnAEI2009SubsidyTakenReportPosting], 
+    [AllClientsAndDivisions].[ClientAlternate] AS [ClientAlternate], 
+    [AllClientsAndDivisions].[AllowClientSSO] AS [AllowClientSSO], 
+    [AllClientsAndDivisions].[SPMInitialGracePeriodDays] AS [SPMInitialGracePeriodDays], 
+    [AllClientsAndDivisions].[SPMConvenienceFee] AS [SPMConvenienceFee], 
+    [AllClientsAndDivisions].[SPMPartnerConvenienceFee] AS [SPMPartnerConvenienceFee], 
+    [AllClientsAndDivisions].[QBConvenienceFee] AS [QBConvenienceFee], 
+    [AllClientsAndDivisions].[QBPartnerConvenienceFee] AS [QBPartnerConvenienceFee], 
+    [AllClientsAndDivisions].[ClientDivisionID] AS [ClientDivisionID], 
+    [AllClientsAndDivisions].[DivisionName] AS [DivisionName], 
+    [AllClientsAndDivisions].[DivisionAddress1] AS [DivisionAddress1], 
+    [AllClientsAndDivisions].[DivisionAddress2] AS [DivisionAddress2], 
+    [AllClientsAndDivisions].[DivisionCity] AS [DivisionCity], 
+    [AllClientsAndDivisions].[DivisionState] AS [DivisionState], 
+    [AllClientsAndDivisions].[DivisionPostalCode] AS [DivisionPostalCode], 
+    [AllClientsAndDivisions].[DivisionCountry] AS [DivisionCountry], 
+    [AllClientsAndDivisions].[DivisionPhone] AS [DivisionPhone], 
+    [AllClientsAndDivisions].[DivisionFaxc] AS [DivisionFaxc], 
+    [AllClientsAndDivisions].[ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting] AS [ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting], 
+    [AllClientsAndDivisions].[DivisionSendHIPAACert] AS [DivisionSendHIPAACert], 
+    [AllClientsAndDivisions].[AllowClientDivisionSSO] AS [AllowClientDivisionSSO], 
+    [AllClientsAndDivisions].[DivisionActive] AS [DivisionActive]
+    FROM [dbo].[AllClientsAndDivisions] AS [AllClientsAndDivisions]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="AllSSOUsers" EntityType="Self.AllSSOUsers" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -1174,7 +1281,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="COBRApoint" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="CobraPointModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="db_error_log">
           <Key>
             <PropertyRef Name="log_id" />
@@ -1225,6 +1332,60 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
           <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="UserEmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Active" Type="Int32" />
+        </EntityType>
+        <EntityType Name="AllClientsAndDivision">
+          <Key>
+            <PropertyRef Name="ClientID" />
+            <PropertyRef Name="ClientName" />
+            <PropertyRef Name="ClientGroupID" />
+          </Key>
+          <Property Name="ClientID" Type="Int32" Nullable="false" />
+          <Property Name="ClientName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ClientGroupID" Type="Int32" Nullable="false" />
+          <Property Name="DBAName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="EIN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BillingStartDate" Type="DateTime" Precision="0" />
+          <Property Name="SendHIPAACertWithQBSRandQBTermination" Type="Int32" />
+          <Property Name="SendHIPAACertWithWelcomeLetter" Type="Int32" />
+          <Property Name="AllowClientPortalAccess" Type="Int32" />
+          <Property Name="AutomaticallyCreateQBSubsidyForInsignificantAmount" Type="Int32" />
+          <Property Name="IgnoreSPMPaymentGracePeriods" Type="Int32" />
+          <Property Name="MigratedClient" Type="Boolean" />
+          <Property Name="ClientPremiumNotice" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeCountRange" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="WeeklyBillingFirstDayOfWeek" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize" Type="Boolean" />
+          <Property Name="ClientAllowsAEI2009PlanEnrollmentOptions" Type="Boolean" />
+          <Property Name="ClientDoesOwnAEI2009SubsidyTakenReportPosting" Type="Boolean" />
+          <Property Name="ClientAlternate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="AllowClientSSO" Type="Int32" />
+          <Property Name="SPMInitialGracePeriodDays" Type="Int32" />
+          <Property Name="SPMConvenienceFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="SPMPartnerConvenienceFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="QBConvenienceFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="QBPartnerConvenienceFee" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ClientDivisionID" Type="Int32" />
+          <Property Name="DivisionName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DivisionAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DivisionAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DivisionCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DivisionState" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DivisionPostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DivisionCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DivisionPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DivisionFaxc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting" Type="Int32" />
+          <Property Name="DivisionSendHIPAACert" Type="Int32" />
+          <Property Name="AllowClientDivisionSSO" Type="Int32" />
+          <Property Name="DivisionActive" Type="Int32" />
         </EntityType>
         <EntityType Name="AllSSOUser">
           <Key>
@@ -1713,12 +1874,13 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
           <Property Name="MemberID" Type="Int32" Nullable="false" />
           <Property Name="AccessUser" Type="Guid" Nullable="false" />
         </EntityType>
-        <EntityContainer Name="COBRApoint" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="CobraPointEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="db_error_log" EntityType="Self.db_error_log" />
           <EntitySet Name="db_message_log" EntityType="Self.db_message_log" />
           <EntitySet Name="QBAEI_ClientList_csv" EntityType="Self.QBAEI_ClientList_csv" />
           <EntitySet Name="AdminTPAUsers" EntityType="Self.AdminTPAUser" />
           <EntitySet Name="AdminUsers" EntityType="Self.AdminUser" />
+          <EntitySet Name="AllClientsAndDivisions" EntityType="Self.AllClientsAndDivision" />
           <EntitySet Name="AllSSOUsers" EntityType="Self.AllSSOUser" />
           <EntitySet Name="Brokers" EntityType="Self.Broker" />
           <EntitySet Name="BrokerClients" EntityType="Self.BrokerClient" />
@@ -1761,9 +1923,9 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="COBRApointStoreContainer" CdmEntityContainer="COBRApoint">
+        <EntityContainerMapping StorageEntityContainer="CobraPointModelStoreContainer" CdmEntityContainer="CobraPointEntities">
           <EntitySetMapping Name="db_error_log">
-            <EntityTypeMapping TypeName="COBRApoint.db_error_log">
+            <EntityTypeMapping TypeName="CobraPointModel.db_error_log">
               <MappingFragment StoreEntitySet="db_error_log">
                 <ScalarProperty Name="log_id" ColumnName="log_id" />
                 <ScalarProperty Name="sql_state" ColumnName="sql_state" />
@@ -1776,7 +1938,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="db_message_log">
-            <EntityTypeMapping TypeName="COBRApoint.db_message_log">
+            <EntityTypeMapping TypeName="CobraPointModel.db_message_log">
               <MappingFragment StoreEntitySet="db_message_log">
                 <ScalarProperty Name="log_id" ColumnName="log_id" />
                 <ScalarProperty Name="log_level" ColumnName="log_level" />
@@ -1788,7 +1950,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBAEI_ClientList_csv">
-            <EntityTypeMapping TypeName="COBRApoint.QBAEI_ClientList_csv">
+            <EntityTypeMapping TypeName="CobraPointModel.QBAEI_ClientList_csv">
               <MappingFragment StoreEntitySet="QBAEI_ClientList_csv">
                 <ScalarProperty Name="clientID" ColumnName="clientID" />
                 <ScalarProperty Name="ClientName" ColumnName="ClientName" />
@@ -1797,7 +1959,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AdminTPAUsers">
-            <EntityTypeMapping TypeName="COBRApoint.AdminTPAUser">
+            <EntityTypeMapping TypeName="CobraPointModel.AdminTPAUser">
               <MappingFragment StoreEntitySet="AdminTPAUser">
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
@@ -1805,7 +1967,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AdminUsers">
-            <EntityTypeMapping TypeName="COBRApoint.AdminUser">
+            <EntityTypeMapping TypeName="CobraPointModel.AdminUser">
               <MappingFragment StoreEntitySet="AdminUser">
                 <ScalarProperty Name="User" ColumnName="User" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
@@ -1814,8 +1976,61 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="AllClientsAndDivisions">
+            <EntityTypeMapping TypeName="CobraPointModel.AllClientsAndDivision">
+              <MappingFragment StoreEntitySet="AllClientsAndDivisions">
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="ClientGroupID" ColumnName="ClientGroupID" />
+                <ScalarProperty Name="DBAName" ColumnName="DBAName" />
+                <ScalarProperty Name="EIN" ColumnName="EIN" />
+                <ScalarProperty Name="Address1" ColumnName="Address1" />
+                <ScalarProperty Name="Address2" ColumnName="Address2" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Fax" ColumnName="Fax" />
+                <ScalarProperty Name="BillingStartDate" ColumnName="BillingStartDate" />
+                <ScalarProperty Name="SendHIPAACertWithQBSRandQBTermination" ColumnName="SendHIPAACertWithQBSRandQBTermination" />
+                <ScalarProperty Name="SendHIPAACertWithWelcomeLetter" ColumnName="SendHIPAACertWithWelcomeLetter" />
+                <ScalarProperty Name="AllowClientPortalAccess" ColumnName="AllowClientPortalAccess" />
+                <ScalarProperty Name="AutomaticallyCreateQBSubsidyForInsignificantAmount" ColumnName="AutomaticallyCreateQBSubsidyForInsignificantAmount" />
+                <ScalarProperty Name="IgnoreSPMPaymentGracePeriods" ColumnName="IgnoreSPMPaymentGracePeriods" />
+                <ScalarProperty Name="MigratedClient" ColumnName="MigratedClient" />
+                <ScalarProperty Name="ClientPremiumNotice" ColumnName="ClientPremiumNotice" />
+                <ScalarProperty Name="EmployeeCountRange" ColumnName="EmployeeCountRange" />
+                <ScalarProperty Name="WeeklyBillingFirstDayOfWeek" ColumnName="WeeklyBillingFirstDayOfWeek" />
+                <ScalarProperty Name="ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize" ColumnName="ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize" />
+                <ScalarProperty Name="ClientAllowsAEI2009PlanEnrollmentOptions" ColumnName="ClientAllowsAEI2009PlanEnrollmentOptions" />
+                <ScalarProperty Name="ClientDoesOwnAEI2009SubsidyTakenReportPosting" ColumnName="ClientDoesOwnAEI2009SubsidyTakenReportPosting" />
+                <ScalarProperty Name="ClientAlternate" ColumnName="ClientAlternate" />
+                <ScalarProperty Name="AllowClientSSO" ColumnName="AllowClientSSO" />
+                <ScalarProperty Name="SPMInitialGracePeriodDays" ColumnName="SPMInitialGracePeriodDays" />
+                <ScalarProperty Name="SPMConvenienceFee" ColumnName="SPMConvenienceFee" />
+                <ScalarProperty Name="SPMPartnerConvenienceFee" ColumnName="SPMPartnerConvenienceFee" />
+                <ScalarProperty Name="QBConvenienceFee" ColumnName="QBConvenienceFee" />
+                <ScalarProperty Name="QBPartnerConvenienceFee" ColumnName="QBPartnerConvenienceFee" />
+                <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
+                <ScalarProperty Name="DivisionName" ColumnName="DivisionName" />
+                <ScalarProperty Name="DivisionAddress1" ColumnName="DivisionAddress1" />
+                <ScalarProperty Name="DivisionAddress2" ColumnName="DivisionAddress2" />
+                <ScalarProperty Name="DivisionCity" ColumnName="DivisionCity" />
+                <ScalarProperty Name="DivisionState" ColumnName="DivisionState" />
+                <ScalarProperty Name="DivisionPostalCode" ColumnName="DivisionPostalCode" />
+                <ScalarProperty Name="DivisionCountry" ColumnName="DivisionCountry" />
+                <ScalarProperty Name="DivisionPhone" ColumnName="DivisionPhone" />
+                <ScalarProperty Name="DivisionFaxc" ColumnName="DivisionFaxc" />
+                <ScalarProperty Name="ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting" ColumnName="ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting" />
+                <ScalarProperty Name="DivisionSendHIPAACert" ColumnName="DivisionSendHIPAACert" />
+                <ScalarProperty Name="AllowClientDivisionSSO" ColumnName="AllowClientDivisionSSO" />
+                <ScalarProperty Name="DivisionActive" ColumnName="DivisionActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="AllSSOUsers">
-            <EntityTypeMapping TypeName="COBRApoint.AllSSOUser">
+            <EntityTypeMapping TypeName="CobraPointModel.AllSSOUser">
               <MappingFragment StoreEntitySet="AllSSOUsers">
                 <ScalarProperty Name="orderseq" ColumnName="orderseq" />
                 <ScalarProperty Name="entitytype" ColumnName="entitytype" />
@@ -1860,7 +2075,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Brokers">
-            <EntityTypeMapping TypeName="COBRApoint.Broker">
+            <EntityTypeMapping TypeName="CobraPointModel.Broker">
               <MappingFragment StoreEntitySet="Broker">
                 <ScalarProperty Name="BrokerID" ColumnName="BrokerID" />
                 <ScalarProperty Name="BrokerName" ColumnName="BrokerName" />
@@ -1881,7 +2096,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BrokerClients">
-            <EntityTypeMapping TypeName="COBRApoint.BrokerClient">
+            <EntityTypeMapping TypeName="CobraPointModel.BrokerClient">
               <MappingFragment StoreEntitySet="BrokerClient">
                 <ScalarProperty Name="BrokerClientID" ColumnName="BrokerClientID" />
                 <ScalarProperty Name="BrokerID" ColumnName="BrokerID" />
@@ -1890,7 +2105,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BrokerContacts">
-            <EntityTypeMapping TypeName="COBRApoint.BrokerContact">
+            <EntityTypeMapping TypeName="CobraPointModel.BrokerContact">
               <MappingFragment StoreEntitySet="BrokerContact">
                 <ScalarProperty Name="BrokerContactID" ColumnName="BrokerContactID" />
                 <ScalarProperty Name="BrokerID" ColumnName="BrokerID" />
@@ -1924,7 +2139,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Carriers">
-            <EntityTypeMapping TypeName="COBRApoint.Carrier">
+            <EntityTypeMapping TypeName="CobraPointModel.Carrier">
               <MappingFragment StoreEntitySet="Carrier">
                 <ScalarProperty Name="CarrierID" ColumnName="CarrierID" />
                 <ScalarProperty Name="CarrierName" ColumnName="CarrierName" />
@@ -1940,7 +2155,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CarrierContacts">
-            <EntityTypeMapping TypeName="COBRApoint.CarrierContact">
+            <EntityTypeMapping TypeName="CobraPointModel.CarrierContact">
               <MappingFragment StoreEntitySet="CarrierContact">
                 <ScalarProperty Name="CarrierContactID" ColumnName="CarrierContactID" />
                 <ScalarProperty Name="CarrierID" ColumnName="CarrierID" />
@@ -1968,7 +2183,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Clients">
-            <EntityTypeMapping TypeName="COBRApoint.Client">
+            <EntityTypeMapping TypeName="CobraPointModel.Client">
               <MappingFragment StoreEntitySet="Client">
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
                 <ScalarProperty Name="ClientName" ColumnName="ClientName" />
@@ -2007,7 +2222,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientContacts">
-            <EntityTypeMapping TypeName="COBRApoint.ClientContact">
+            <EntityTypeMapping TypeName="CobraPointModel.ClientContact">
               <MappingFragment StoreEntitySet="ClientContact">
                 <ScalarProperty Name="ClientContactID" ColumnName="ClientContactID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -2040,7 +2255,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientDivisions">
-            <EntityTypeMapping TypeName="COBRApoint.ClientDivision">
+            <EntityTypeMapping TypeName="CobraPointModel.ClientDivision">
               <MappingFragment StoreEntitySet="ClientDivision">
                 <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -2061,7 +2276,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientDivisionContacts">
-            <EntityTypeMapping TypeName="COBRApoint.ClientDivisionContact">
+            <EntityTypeMapping TypeName="CobraPointModel.ClientDivisionContact">
               <MappingFragment StoreEntitySet="ClientDivisionContact">
                 <ScalarProperty Name="ClientDivisionContactID" ColumnName="ClientDivisionContactID" />
                 <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
@@ -2093,7 +2308,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="NPMs">
-            <EntityTypeMapping TypeName="COBRApoint.NPM">
+            <EntityTypeMapping TypeName="CobraPointModel.NPM">
               <MappingFragment StoreEntitySet="NPM">
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
@@ -2127,7 +2342,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBs">
-            <EntityTypeMapping TypeName="COBRApoint.QB">
+            <EntityTypeMapping TypeName="CobraPointModel.QB">
               <MappingFragment StoreEntitySet="QB">
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -2172,7 +2387,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBEvents">
-            <EntityTypeMapping TypeName="COBRApoint.QBEvent">
+            <EntityTypeMapping TypeName="CobraPointModel.QBEvent">
               <MappingFragment StoreEntitySet="QBEvent">
                 <ScalarProperty Name="QBEventID" ColumnName="QBEventID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -2192,7 +2407,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBPlans">
-            <EntityTypeMapping TypeName="COBRApoint.QBPlan">
+            <EntityTypeMapping TypeName="CobraPointModel.QBPlan">
               <MappingFragment StoreEntitySet="QBPlan">
                 <ScalarProperty Name="QBPlanID" ColumnName="QBPlanID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -2220,7 +2435,7 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMs">
-            <EntityTypeMapping TypeName="COBRApoint.SPM">
+            <EntityTypeMapping TypeName="CobraPointModel.SPM">
               <MappingFragment StoreEntitySet="SPM">
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
@@ -2276,21 +2491,21 @@ warning 6002: The table/view 'COBRApoint_portal_prod.dbo.SPMAccess' does not hav
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMAccesses">
-            <EntityTypeMapping TypeName="COBRApoint.SPMAccess">
+            <EntityTypeMapping TypeName="CobraPointModel.SPMAccess">
               <MappingFragment StoreEntitySet="SPMAccess">
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="AccessUser" ColumnName="AccessUser" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="COBRA_Update_alert" FunctionName="COBRApoint.Store.COBRA_Update_alert" />
-          <FunctionImportMapping FunctionImportName="db_log_error" FunctionName="COBRApoint.Store.db_log_error" />
-          <FunctionImportMapping FunctionImportName="db_log_message" FunctionName="COBRApoint.Store.db_log_message" />
-          <FunctionImportMapping FunctionImportName="exp_cp_AllSSOUsers_to_Portal" FunctionName="COBRApoint.Store.exp_cp_AllSSOUsers_to_Portal" />
-          <FunctionImportMapping FunctionImportName="exp_cp_AllSSOUsers_to_Portal_PRV" FunctionName="COBRApoint.Store.exp_cp_AllSSOUsers_to_Portal_PRV" />
-          <FunctionImportMapping FunctionImportName="export_cp_tables_to_portal" FunctionName="COBRApoint.Store.export_cp_tables_to_portal" />
-          <FunctionImportMapping FunctionImportName="QBAEI_Create_filesandInsertintoRunLog" FunctionName="COBRApoint.Store.QBAEI_Create_filesandInsertintoRunLog" />
-          <FunctionImportMapping FunctionImportName="QBAEI_Create_filesandInsertintoRunLog_notunknown" FunctionName="COBRApoint.Store.QBAEI_Create_filesandInsertintoRunLog_notunknown" />
+          <FunctionImportMapping FunctionImportName="COBRA_Update_alert" FunctionName="CobraPointModel.Store.COBRA_Update_alert" />
+          <FunctionImportMapping FunctionImportName="db_log_error" FunctionName="CobraPointModel.Store.db_log_error" />
+          <FunctionImportMapping FunctionImportName="db_log_message" FunctionName="CobraPointModel.Store.db_log_message" />
+          <FunctionImportMapping FunctionImportName="exp_cp_AllSSOUsers_to_Portal" FunctionName="CobraPointModel.Store.exp_cp_AllSSOUsers_to_Portal" />
+          <FunctionImportMapping FunctionImportName="exp_cp_AllSSOUsers_to_Portal_PRV" FunctionName="CobraPointModel.Store.exp_cp_AllSSOUsers_to_Portal_PRV" />
+          <FunctionImportMapping FunctionImportName="export_cp_tables_to_portal" FunctionName="CobraPointModel.Store.export_cp_tables_to_portal" />
+          <FunctionImportMapping FunctionImportName="QBAEI_Create_filesandInsertintoRunLog" FunctionName="CobraPointModel.Store.QBAEI_Create_filesandInsertintoRunLog" />
+          <FunctionImportMapping FunctionImportName="QBAEI_Create_filesandInsertintoRunLog_notunknown" FunctionName="CobraPointModel.Store.QBAEI_Create_filesandInsertintoRunLog_notunknown" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

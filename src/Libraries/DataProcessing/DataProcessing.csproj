@@ -331,83 +331,86 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CsvFileSpecs.cs" />
-    <Compile Include="DataModels\Cobra\AdminTPAUser.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\AdminTPAUser.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\AdminUser.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\AdminUser.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\AllSSOUser.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\AllClientsAndDivision.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\Broker.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\AllSSOUser.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\BrokerClient.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\Broker.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\BrokerContact.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\BrokerClient.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\Carrier.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\BrokerContact.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\CarrierContact.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\Carrier.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\Client.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\CarrierContact.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\ClientContact.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\Client.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\ClientDivision.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\ClientContact.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\ClientDivisionContact.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\ClientDivision.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\Cobra.Context.cs">
+    <Compile Include="DataModels\CobraPoint\ClientDivisionContact.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataModels\CobraPoint\CobraPoint.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Cobra.Context.tt</DependentUpon>
+      <DependentUpon>CobraPoint.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\Cobra.cs">
+    <Compile Include="DataModels\CobraPoint\CobraPoint.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Cobra.tt</DependentUpon>
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\Cobra.Designer.cs">
+    <Compile Include="DataModels\CobraPoint\CobraPoint.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Cobra.edmx</DependentUpon>
+      <DependentUpon>CobraPoint.edmx</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\db_error_log.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\db_error_log.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\db_message_log.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\db_message_log.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\NPM.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\NPM.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\QB.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\QB.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\QBAEI_ClientList_csv.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\QBAEI_ClientList_csv.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\QBEvent.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\QBEvent.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\QBPlan.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\QBPlan.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\SPM.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\SPM.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\Cobra\SPMAccess.cs">
-      <DependentUpon>Cobra.tt</DependentUpon>
+    <Compile Include="DataModels\CobraPoint\SPMAccess.cs">
+      <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
     <Compile Include="DataModels\DataProcessing\alegeus_file_final.cs">
       <DependentUpon>DataProcessing.tt</DependentUpon>
@@ -550,12 +553,12 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DataProcessing.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <EntityDeploy Include="DataModels\Cobra\Cobra.edmx">
+    <EntityDeploy Include="DataModels\CobraPoint\CobraPoint.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Cobra.Designer.cs</LastGenOutput>
+      <LastGenOutput>CobraPoint.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="DataModels\Cobra\Cobra.edmx.diagram">
-      <DependentUpon>Cobra.edmx</DependentUpon>
+    <None Include="DataModels\CobraPoint\CobraPoint.edmx.diagram">
+      <DependentUpon>CobraPoint.edmx</DependentUpon>
     </None>
     <None Include="DataModels\DataProcessing\DataProcessing.edmx.diagram">
       <DependentUpon>DataProcessing.edmx</DependentUpon>
@@ -570,15 +573,15 @@
     <Folder Include="_SQLs\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DataModels\Cobra\Cobra.Context.tt">
+    <Content Include="DataModels\CobraPoint\CobraPoint.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Cobra.edmx</DependentUpon>
-      <LastGenOutput>Cobra.Context.cs</LastGenOutput>
+      <DependentUpon>CobraPoint.edmx</DependentUpon>
+      <LastGenOutput>CobraPoint.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="DataModels\Cobra\Cobra.tt">
+    <Content Include="DataModels\CobraPoint\CobraPoint.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Cobra.edmx</DependentUpon>
-      <LastGenOutput>Cobra.cs</LastGenOutput>
+      <DependentUpon>CobraPoint.edmx</DependentUpon>
+      <LastGenOutput>CobraPoint.cs</LastGenOutput>
     </Content>
     <Content Include="DataModels\DataProcessing\DataProcessing.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

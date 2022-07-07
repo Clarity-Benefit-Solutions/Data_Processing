@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using CoreUtils;
 using CoreUtils.Classes;
+using DataProcessing.DataModels.CobraPoint;
 using DataProcessing.DataModels.DataProcessing;
 
 // ReSharper disable All
@@ -29,6 +30,7 @@ namespace DataProcessing
         //
         private readonly DbConnection dbConnPortalWc;
         private readonly DbConnection dbConnCobra;
+        private readonly CobraPointEntities bbCtxCobra;
 
         //
         public readonly FileCheckResults fileCheckResults = new FileCheckResults();
@@ -46,6 +48,7 @@ namespace DataProcessing
             this.DbConn = _dbConn;
             this.dbConnPortalWc = Vars.dbConnPortalWc;
             this.dbConnCobra = Vars.dbConnCobra;
+            this.bbCtxCobra = Vars.DbCtxCobraDefault;
             this.OnErrorCallback = _onErrorCallback;
         }
 
