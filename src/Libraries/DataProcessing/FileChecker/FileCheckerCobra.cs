@@ -29,13 +29,8 @@ namespace DataProcessing
         private Client currentClient;
         private ClientDivision currentClientDivision;
 
-        AllClientsAndDivision _currentClientAndDivision;
         private AllClientsAndDivision currentClientAndDivision
         {
-            get
-            {
-                return _currentClientAndDivision;
-            }
             set
             {
                 currentClient = null;
@@ -55,9 +50,9 @@ namespace DataProcessing
         {
             get
             {
-                if (this.currentClientAndDivision != null)
+                if (this.currentClient != null)
                 {
-                    return (int)this.currentClientAndDivision.ClientID;
+                    return (int)this.currentClient.ClientID;
                 }
                 return 0;
             }
@@ -66,9 +61,9 @@ namespace DataProcessing
         {
             get
             {
-                if (this.currentClientAndDivision != null && currentClientAndDivision.ClientDivisionID != null)
+                if (this.currentClientDivision != null && currentClientDivision.ClientDivisionID != null)
                 {
-                    return (int)this.currentClientAndDivision.ClientDivisionID;
+                    return (int)this.currentClientDivision.ClientDivisionID;
                 }
                 return 0;
             }
@@ -478,7 +473,7 @@ namespace DataProcessing
             }
             else
             {
-                row = dbRows.First();
+                row = dbRows.FirstOrDefault();
 
             } // results.count
 
