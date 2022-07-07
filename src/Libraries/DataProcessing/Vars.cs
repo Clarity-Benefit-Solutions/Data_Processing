@@ -277,11 +277,11 @@ namespace DataProcessing
             {
                 if (UseVPNToConnectToCobra)
                 {
-                    return "CobraPointVPN";
+                    return "CobraPointEntities";
                 }
                 else
                 {
-                    return "CobraPoint";
+                    return "CobraPointEntities";
                 }
             }
         }

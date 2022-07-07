@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Data.Entity;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using CoreUtils;
 using CoreUtils.Classes;
+using DataProcessing.DataModels.CobraPoint;
 using DataProcessing.DataModels.DataProcessing;
 
 // ReSharper disable All
@@ -20,28 +22,31 @@ namespace DataProcessing
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public partial class FileChecker : IDisposable
     {
-        private DataRow currentEntityRow;
-        private DataRow currentClientAndDivision;
-        private string currentClientID
+        private QB currentQB;
+        private NPM currentNPM;
+        private SPM currentSPM;
+        private AllClientsAndDivision currentClientAndDivision;
+
+        private int currentClientID
         {
             get
             {
-                if (this.currentClientAndDivision != null)
+                if (this.currentClientAndDivision != null && currentClientAndDivision.ClientID != null)
                 {
-                    return this.currentClientAndDivision["ClientID"].ToString();
+                    return (int)this.currentClientAndDivision.ClientID;
                 }
-                return "";
+                return 0;
             }
         }
-        private string currentClientDivisionID
+        private int currentClientDivisionID
         {
             get
             {
-                if (this.currentClientAndDivision != null)
+                if (this.currentClientAndDivision != null && currentClientAndDivision.ClientDivisionID != null)
                 {
-                    return this.currentClientAndDivision["ClientDivisionID"].ToString();
+                    return (int)this.currentClientAndDivision.ClientDivisionID;
                 }
-                return "";
+                return 0;
             }
         }
 
@@ -156,6 +161,29 @@ namespace DataProcessing
                 var formattedValue = EnsureValueIsOfFormatAndMatchesRules(dataRow, column, mappings);
             }
 
+            // get entity being referenced
+            switch (dataRow.row_type)
+            {
+                case "[QB]":
+                    this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
+                    this.currentQB = this.GetCobraQB(this.currentClientID, this.currentClientDivisionID, dataRow);
+                    break;
+
+                case "[SPM]":
+                    this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
+                    this.currentSPM = this.GetCobraSPM(this.currentClientID, this.currentClientDivisionID, dataRow);
+                    break;
+
+                case "[NPM]":
+                    this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
+                    this.currentNPM = this.GetCobraNPM(this.currentClientID, this.currentClientDivisionID, dataRow);
+                    break;
+
+                default:
+                    break;
+
+            }
+
             // then check data for each column
             foreach (var column in mappings.Columns)
             {
@@ -176,19 +204,7 @@ namespace DataProcessing
                         break;
                 }
 
-                switch (dataRow.row_type)
-                {
-                    case "[QB]":
-                    case "[SPM]":
-                    case "[NPM]":
-                        this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow, column, versionNo);
-                        this.currentEntityRow = this.GetCobraEE(this.currentClientID, this.currentClientDivisionID, dataRow.entityType, dataRow);
-                        break;
-
-                    default:
-                        break;
-
-                }
+          
             }
             // check for duplicate posting of the row
             hasError = CheckForDuplicateCobraPosting(dataRow, versionNo);
@@ -246,7 +262,7 @@ namespace DataProcessing
         }
 
 
-        public Boolean CheckCobraTpaExists(cobra_file_table_stage dataRow, TypedCsvColumn column, string versionNo)
+        public Boolean CheckCobraTpaExists(cobra_file_table_stage dataRow)
         {
             var errorMessage = "";
             //var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{dataRow.TpaId}";
@@ -283,7 +299,7 @@ namespace DataProcessing
             //
             if (!Utils.IsBlank(errorMessage))
             {
-                this.AddCobraErrorForRow(dataRow, column.SourceColumn, $"{errorMessage}");
+                this.AddCobraErrorForRow(dataRow, "TPA", $"{errorMessage}");
                 // do not check any more
                 return true;
             }
@@ -293,25 +309,27 @@ namespace DataProcessing
             }
         }
 
-        public DataRow[] GetCobraClientAndDivisionRows(cobra_file_table_stage dataRow, TypedCsvColumn column,
-            string versionNo)
+        public List<AllClientsAndDivision> GetCobraClientAndDivisionRows(cobra_file_table_stage dataRow)
         {
-            DataRow[] clientRows = null;
+            List<AllClientsAndDivision> clientRows = null;
             // check DB
             if (Utils.IsBlank(dataRow.ClientName))
             {
-                clientRows = null;
+                clientRows = new List<AllClientsAndDivision>();
             }
             else
             {
-                DataTable dbResults = GetAllCobraClientAndDivisions();
+                DbSet<AllClientsAndDivision> dbResults = GetAllCobraClientAndDivisions();
+
                 // planid is not always present e.g. in deposit file
-                string filter = $"ClientName = '{Utils.DbQuote(dataRow.ClientName)}' ";
+                var rows = dbResults.Where(x => x.ClientName == dataRow.ClientName);
+
                 if (!Utils.IsBlank(dataRow.ClientDivisionName))
                 {
-                    filter += $" And DivisionName = '{Utils.DbQuote(dataRow.ClientDivisionName)}' ";
+                    rows = rows.Where(x => x.DivisionName == dataRow.ClientDivisionName);
                 }
-                clientRows = dbResults.Select(filter);
+
+                clientRows = rows.ToList();
 
             } // check client
               //
@@ -319,13 +337,13 @@ namespace DataProcessing
             return clientRows;
         }
 
-        public DataRow GetCobraClientAndDivision(cobra_file_table_stage dataRow, TypedCsvColumn column, string versionNo)
+        public AllClientsAndDivision GetCobraClientAndDivision(cobra_file_table_stage dataRow)
         {
-            DataRow row = null;
+            AllClientsAndDivision row = null;
             var errorMessage = "";
-            DataRow[] dbRows = GetCobraClientAndDivisionRows(dataRow, column, versionNo);
+            List<AllClientsAndDivision> dbRows = GetCobraClientAndDivisionRows(dataRow);
 
-            if (dbRows.Length == 0)
+            if (dbRows.Count == 0)
             {
                 errorMessage = $"The Client Name {dataRow.ClientName} and DivisionName {dataRow.ClientDivisionName} could not be found";
                 this.AddCobraErrorForRow(dataRow, "ClientAndDivision", errorMessage);
@@ -339,12 +357,13 @@ namespace DataProcessing
             return row;
         }
 
-        public DataRow GetCobraEE(string clientId, string divisionId, string entityType, cobra_file_table_stage dataRow)
+        public QB GetCobraQB(int clientId, int divisionId, cobra_file_table_stage dataRow)
         {
-            DataRow row = null;
-            var errorMessage = "";
+            QB row = null;
+            List<QB> dbResults = null;
+
             // check DB
-            if (Utils.IsBlank(clientId))
+            if (clientId <= 0)
             {
                 AddCobraErrorForRow(dataRow, "clientId", $"The ClientID cannot be blank");
             }
@@ -354,50 +373,133 @@ namespace DataProcessing
             }
             else
             {
-                DataTable dbResults = GetAllCobraEEForClient(clientId, divisionId, entityType);
-                if (dbResults.Rows.Count > 0)
-                {
-                    var filter = "";
-                    filter += $"SSNFormatted = '{dataRow.SSN}'";
+                dbResults = GetAllCobraQBForClient(clientId, divisionId);
 
-                    DataRow[] dbRows = dbResults.Select(filter);
+                List<QB> dbRows = dbResults.Where(x => x.SSN == dataRow.SSN || x.SSN == Utils.FormatSsnWithDashes( dataRow.SSN)).ToList();
+                row = dbRows.FirstOrDefault();
 
-                    if (dbRows.Length == 0)
-                    {
-                        // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
-                        if (true /*|| versionNo == string.CobraDemographics*/)
-                        {
-                            // as it is an demographics file, add this employee to the ER-EE table so a check for plan enrollemnt within same run or before reaggregation from Cobra will suceed
-                            DataRow newRow = dbResults.NewRow();
-                            newRow["ClientName"] = dataRow.ClientName;
-                            newRow["SSN"] = dataRow.SSN;
-                            newRow["is_active"] = dataRow.Active == "1" ? 1 : 0;
-                            dbResults.Rows.Add(newRow);
+                //if (row == null)
+                //{
+                //    // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
+                //    if (true /*|| versionNo == string.CobraDemographics*/)
+                //    {
+                //        //// as it is an demographics file, add this employee to the ER-EE table so a check for plan enrollemnt within same run or before reaggregation from Cobra will suceed
+                //        //DataRow newRow = dbResults.NewRow();
+                //        //newRow["ClientName"] = dataRow.ClientName;
+                //        //newRow["SSN"] = dataRow.SSN;
+                //        //newRow["is_active"] = dataRow.Active == "1" ? 1 : 0;
+                //        //dbResults.Rows.Add(newRow);
 
-                            var cacheKey2 =
-                                $"GetAllEmployeesForClient-{this.PlatformType.ToDescription()}-{dataRow.ClientName}-AllEmployees";
-                            _cache.Add(cacheKey2, dbResults);
+                //        //var cacheKey2 =
+                //        //    $"GetAllEmployeesForClient-{this.PlatformType.ToDescription()}-{dataRow.ClientName}-AllEmployees";
+                //        //_cache.Add(cacheKey2, dbResults);
 
-                        }
-                        else
-                        {
-                            errorMessage +=
-                                $"A {entityType} with SSN {dataRow.SSN} could not be found for Client Name {dataRow.ClientName} and DivisionName {dataRow.ClientDivisionName}";
-                        }
-                    }
-                    else
-                    {
-                        row = dbRows.First();
-                    }
-                }
-                else
-                {
-                    errorMessage +=
-                               $"A {entityType} with SSN {dataRow.SSN} could not be found for Client Name {dataRow.ClientName} and DivisionName {dataRow.ClientDivisionName}";
-                }
+                //    }
+                //    else
+                //    {
+                //       AddCobraErrorForRow(dataRow,"QB",
+                //            $"A QB with SSN {dataRow.SSN} could not be found for Client Name {dataRow.ClientName} and DivisionName {dataRow.ClientDivisionName}";
+                //    }
+                //}
             }
+            //
+            return row;
+        }
 
+        public SPM GetCobraSPM(int clientId, int divisionId, cobra_file_table_stage dataRow)
+        {
+            SPM row = null;
+            List<SPM> dbResults = null;
 
+            // check DB
+            if (clientId <= 0)
+            {
+                AddCobraErrorForRow(dataRow, "clientId", $"The ClientID cannot be blank");
+            }
+            else if (Utils.IsBlank(dataRow.SSN))
+            {
+                AddCobraErrorForRow(dataRow, "SSN", $"The SSN cannot be blank");
+            }
+            else
+            {
+                dbResults = GetAllCobraSPMForClient(clientId, divisionId);
+
+                List<SPM> dbRows = dbResults.Where(x => x.SSN == dataRow.SSN || x.SSNFormatted == dataRow.SSN).ToList();
+                row = dbRows.FirstOrDefault();
+
+                //if (row == null)
+                //{
+                //    // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
+                //    if (true /*|| versionNo == string.CobraDemographics*/)
+                //    {
+                //        //// as it is an demographics file, add this employee to the ER-EE table so a check for plan enrollemnt within same run or before reaggregation from Cobra will suceed
+                //        //DataRow newRow = dbResults.NewRow();
+                //        //newRow["ClientName"] = dataRow.ClientName;
+                //        //newRow["SSN"] = dataRow.SSN;
+                //        //newRow["is_active"] = dataRow.Active == "1" ? 1 : 0;
+                //        //dbResults.Rows.Add(newRow);
+
+                //        //var cacheKey2 =
+                //        //    $"GetAllEmployeesForClient-{this.PlatformType.ToDescription()}-{dataRow.ClientName}-AllEmployees";
+                //        //_cache.Add(cacheKey2, dbResults);
+
+                //    }
+                //    else
+                //    {
+                //       AddCobraErrorForRow(dataRow,"SPM",
+                //            $"A SPM with SSN {dataRow.SSN} could not be found for Client Name {dataRow.ClientName} and DivisionName {dataRow.ClientDivisionName}";
+                //    }
+                //}
+            }
+            //
+            return row;
+        }
+
+        public NPM GetCobraNPM(int clientId, int divisionId, cobra_file_table_stage dataRow)
+        {
+            NPM row = null;
+            List<NPM> dbResults = null;
+
+            // check DB
+            if (clientId <= 0)
+            {
+                AddCobraErrorForRow(dataRow, "clientId", $"The ClientID cannot be blank");
+            }
+            else if (Utils.IsBlank(dataRow.SSN))
+            {
+                AddCobraErrorForRow(dataRow, "SSN", $"The SSN cannot be blank");
+            }
+            else
+            {
+                dbResults = GetAllCobraNPMForClient(clientId, divisionId);
+
+                List<NPM> dbRows = dbResults.Where(x => x.SSN == dataRow.SSN || x.SSNFormatted == dataRow.SSN).ToList();
+                row = dbRows.FirstOrDefault();
+
+                //if (row == null)
+                //{
+                //    // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
+                //    if (true /*|| versionNo == string.CobraDemographics*/)
+                //    {
+                //        //// as it is an demographics file, add this employee to the ER-EE table so a check for plan enrollemnt within same run or before reaggregation from Cobra will suceed
+                //        //DataRow newRow = dbResults.NewRow();
+                //        //newRow["ClientName"] = dataRow.ClientName;
+                //        //newRow["SSN"] = dataRow.SSN;
+                //        //newRow["is_active"] = dataRow.Active == "1" ? 1 : 0;
+                //        //dbResults.Rows.Add(newRow);
+
+                //        //var cacheKey2 =
+                //        //    $"GetAllEmployeesForClient-{this.PlatformType.ToDescription()}-{dataRow.ClientName}-AllEmployees";
+                //        //_cache.Add(cacheKey2, dbResults);
+
+                //    }
+                //    else
+                //    {
+                //       AddCobraErrorForRow(dataRow,"NPM",
+                //            $"A NPM with SSN {dataRow.SSN} could not be found for Client Name {dataRow.ClientName} and DivisionName {dataRow.ClientDivisionName}";
+                //    }
+                //}
+            }
             //
             return row;
         }
@@ -613,7 +715,7 @@ namespace DataProcessing
             //        //if (versionNo == string.CobraEnrollment)
             //        //{
             //        //  //as it is an enrollment file, check the EE exists and enroll in the plan
-            //        //  var hasError = this.CheckEmployeeExists(dataRow, column, versionNo);
+            //        //  var hasError = this.CheckEmployeeExists(dataRow);
             //        //  //return hasError;
             //        //}
 
@@ -749,81 +851,50 @@ namespace DataProcessing
 
         #region cacheCobraData
 
-        private DataTable GetAllCobraClientAndDivisions()
+        private DbSet<AllClientsAndDivision> GetAllCobraClientAndDivisions()
         {
-            DataTable dbResults = new DataTable();
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-AllClients";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                dbResults = (DataTable)_cache.Get(cacheKey);
-            }
-            else
-            {
-                if (PlatformType == PlatformType.Cobra)
-                {
-                    string queryString =
-                        $"select * from dbo.AllClientsAndDivisions  " +
-                        $" order by ClientName, DivisionName ;";
-                    //
-                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnCobra,
-                        queryString, null,
-                        FileLogParams?.GetMessageLogParams());
-
-                    // create index on MemberId
-
-                    DataColumn[] indices = new DataColumn[1];
-                    indices[0] = (DataColumn)dbResults.Columns["ClientID"];
-                    indices[0] = (DataColumn)dbResults.Columns["DivisionID"];
-                    dbResults.PrimaryKey = indices;
-
-                    //
-                    _cache.Add(cacheKey, dbResults);
-                }
-                else
-                {
-                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
-                }
-            }
-
+            DbSet<AllClientsAndDivision> dbResults = null;
+            //
+            dbResults = dbCtxCobra.AllClientsAndDivisions;
+            //
             return dbResults;
         }
 
 
         // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
-        private DataTable GetAllCobraEEForClient(string clientId, string divisionId, string entityType)
+        private List<QB> GetAllCobraQBForClient(int clientId, int divisionId)
         {
-            DataTable dbResults = new DataTable();
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{clientId}-{divisionId}-All{entityType}";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                dbResults = (DataTable)_cache.Get(cacheKey);
-            }
-            else
-            {
-                var IndidiviualIDField = entityType == "QB" ? "IndividualIdentifier" : "IndividualID";
-                string queryString =
-                    $"SELECT *, replace(SSN, '-', '') as SSNFormatted " +
-                    $" FROM dbo.{entityType} " +
-                    $" where ClientDivisionID = '{Utils.DbQuote(divisionId)}' " +
-                    $" ORDER by MemberId ";
-                //
-                dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnCobra,
-                    queryString, null,
-                    FileLogParams?.GetMessageLogParams());
+            List<QB> dbResults = null;
 
-                // create index on MemberId
+            dbResults = dbCtxCobra.QBs
+                .Where(x => x.ClientID == clientId)
+                .Where(x => x.ClientDivisionID == divisionId)
+                .OrderBy(x => x.MemberID)
+                .ToList();
 
-                //DataColumn[] indices = new DataColumn[1];
-                //indices[0] = (DataColumn)dbResults.Columns["ClientId"];
-                //indices[1] = (DataColumn)dbResults.Columns["MemberId"];
-                //dbResults.PrimaryKey = indices;
+            return dbResults;
+        }
+        private List<NPM> GetAllCobraNPMForClient(int clientId, int divisionId)
+        {
+            List<NPM> dbResults = null;
 
-                //
-                _cache.Add(cacheKey, dbResults);
+            dbResults = dbCtxCobra.NPMs
+                //.Where(x => x.ClientID == clientId)
+                .Where(x => x.ClientDivisionID == divisionId)
+                .OrderBy(x => x.MemberID)
+                .ToList();
 
-            }
+            return dbResults;
+        }
+        private List<SPM> GetAllCobraSPMForClient(int clientId, int divisionId)
+        {
+            List<SPM> dbResults = null;
+
+            dbResults = dbCtxCobra.SPMs
+                .Where(x => x.ClientID == clientId)
+                .Where(x => x.ClientDivisionID == divisionId)
+                .OrderBy(x => x.MemberID)
+                .ToList();
 
             return dbResults;
         }
@@ -959,7 +1030,7 @@ namespace DataProcessing
 
                         break;
                     case FormatType.Zip:
-                        value = regexInteger.Replace(value, String.Empty);
+                        value = Utils.regexInteger.Replace(value, String.Empty);
                         if (!Utils.IsBlank(value) && value.Length > column.MaxLength)
                         {
                             value = value.Substring(0, column.MaxLength);
@@ -967,7 +1038,7 @@ namespace DataProcessing
 
                         break;
                     case FormatType.Phone:
-                        value = regexInteger.Replace(value, String.Empty);
+                        value = Utils.regexInteger.Replace(value, String.Empty);
                         if (!Utils.IsBlank(value) && value.Length > column.MaxLength)
                         {
                             value = Utils.Right(value, column.MaxLength);
@@ -976,17 +1047,17 @@ namespace DataProcessing
                         break;
                     case FormatType.AlphaNumeric:
                         // replace all non alphanumeric
-                        value = regexAlphaNumeric.Replace(value, String.Empty);
+                        value = Utils.regexAlphaNumeric.Replace(value, String.Empty);
                         break;
 
                     case FormatType.AlphaNumericAndDashes:
                         // replace all non alphanumeric
-                        value = regexAlphaNumericAndDashes.Replace(value, String.Empty);
+                        value = Utils.regexAlphaNumericAndDashes.Replace(value, String.Empty);
                         break;
 
                     case FormatType.AlphaOnly:
                         // replace all non alphanumeric
-                        value = regexAlphaOnly.Replace(value, String.Empty);
+                        value = Utils.regexAlphaOnly.Replace(value, String.Empty);
                         break;
 
                     case FormatType.FixedConstant:
@@ -996,17 +1067,17 @@ namespace DataProcessing
 
                     case FormatType.AlphaAndDashes:
                         // replace all non alphanumeric
-                        value = regexAlphaAndDashes.Replace(value, String.Empty);
+                        value = Utils.regexAlphaAndDashes.Replace(value, String.Empty);
                         break;
 
                     case FormatType.NumbersAndDashes:
                         // replace all non alphanumeric
-                        value = regexNumericAndDashes.Replace(value, String.Empty);
+                        value = Utils.regexNumericAndDashes.Replace(value, String.Empty);
                         break;
 
                     case FormatType.Integer:
                         // remove any non digits
-                        value = regexInteger.Replace(value, String.Empty);
+                        value = Utils.regexInteger.Replace(value, String.Empty);
                         //
                         if (!Utils.IsInteger(value))
                         {
@@ -1018,7 +1089,7 @@ namespace DataProcessing
 
                     case FormatType.Double:
                         // remove any non digits and non . and non ,
-                        value = regexDouble.Replace(value, String.Empty);
+                        value = Utils.regexDouble.Replace(value, String.Empty);
                         if (!Utils.IsDouble(value))
                         {
                             this.AddCobraErrorForRow(dataRow, column.SourceColumn,
@@ -1033,7 +1104,7 @@ namespace DataProcessing
 
                     case FormatType.IsoDate:
                         // remove any non digits
-                        value = regexDate.Replace(value, String.Empty);
+                        value = Utils.regexDate.Replace(value, String.Empty);
                         value = Utils.ToIsoDateString(Utils.ToDate(value));
                         if (!Utils.IsIsoDate(value, column.MaxLength > 0))
                         {
@@ -1045,7 +1116,7 @@ namespace DataProcessing
 
                     case FormatType.IsoDateTime:
                         // remove any non digits
-                        value = regexDate.Replace(value, String.Empty);
+                        value = Utils.regexDate.Replace(value, String.Empty);
                         value = Utils.ToDateTimeString(Utils.ToDateTime(value));
 
                         if (!Utils.IsIsoDateTime(value, column.MaxLength > 0))
@@ -1105,7 +1176,7 @@ namespace DataProcessing
             {
                 if (!Utils.IsBlank(value))
                 {
-                    value = regexAlphaNumeric.Replace(value, String.Empty);
+                    value = Utils.regexAlphaNumeric.Replace(value, String.Empty);
                     if (value.Length < column.MinLength)
                     {
                         value = value.PadLeft(column.MinLength, '0');

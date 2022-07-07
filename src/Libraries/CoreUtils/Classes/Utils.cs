@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
@@ -19,7 +20,7 @@ namespace CoreUtils.Classes
         {
         }
     }
-    public class EmailBrokerStatementsException: Exception
+    public class EmailBrokerStatementsException : Exception
     {
         public EmailBrokerStatementsException(string message) : base(message)
         {
@@ -208,6 +209,47 @@ namespace CoreUtils.Classes
             var charsToTake = Math.Min(length, value.Length);
             return value.Length <= length ? value : value.Substring(value.Length - charsToTake);
         }
+        public static string Mid(string value, int start, int length)
+        {
+            if (IsBlank(value))
+            {
+                return value;
+            }
+
+            var charsToTake = Math.Min(start + length, value.Length);
+
+            return value.Length <= start + length ? value : value.Substring(start - 1, value.Length - charsToTake - 1);
+        }
+        public static string FormatSsnWithDashes(string value)
+        {
+            value = value?.Trim();
+
+            if (Utils.IsBlank(value))
+            {
+                return "";
+            }
+
+            value = FormatSsnNumbersOnly(value);
+
+            value = value.PadLeft(9, '0');
+
+            return $"{Left(value, 3)}-{Mid(value, 4, 2)}-{Right(value, 4)}";
+
+        }
+        public static string FormatSsnNumbersOnly(string value)
+        {
+            value = value?.Trim();
+
+            if (Utils.IsBlank(value))
+            {
+                return "";
+            }
+
+            value = regexInteger.Replace(value, String.Empty);
+            return value;
+
+        }
+
 
         public static bool IsBlank(string value)
         {
@@ -503,7 +545,7 @@ namespace CoreUtils.Classes
             // try default Parse
             return DateTime.Parse(value);
 
-            
+
         }
 
         public static string ToDateString(DateTime? value)
@@ -516,7 +558,7 @@ namespace CoreUtils.Classes
             var str = ToIsoDateString(value);
             return str;
         }
-           public static string ToUsDateString(DateTime? value)
+        public static string ToUsDateString(DateTime? value)
         {
             if (value == null)
             {
@@ -542,7 +584,7 @@ namespace CoreUtils.Classes
             var str = value?.ToString("yyyyMMdd");
             return str;
         }
-      
+
 
         public static string ToIsoDateString(Object value)
         {
@@ -747,6 +789,16 @@ namespace CoreUtils.Classes
 
             public string text { get; set; }
         }
-    }
 
+
+        public static readonly Regex regexInteger = new Regex("[^0-9]");
+        public static readonly Regex regexDate = new Regex(@"[^a-zA-Z0-9\s:\-\//]");
+        public static readonly Regex regexAlphaNumeric = new Regex(@"[^a-zA-Z0-9\s]");
+        public static readonly Regex regexAlphaOnly = new Regex(@"[^a-zA-Z]");
+        public static readonly Regex regexAlphaAndDashes = new Regex(@"[^a-zA-Z\-]");
+        public static readonly Regex regexAlphaNumericAndDashes = new Regex(@"[^a-zA-Z0-9\-]");
+        public static readonly Regex regexNumericAndDashes = new Regex(@"[^0-9\-]");
+        public static readonly Regex regexDouble = new Regex("[^0-9.]");
+
+    }
 }

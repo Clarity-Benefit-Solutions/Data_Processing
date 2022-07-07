@@ -16,8 +16,46 @@ namespace DataProcessing.DataModels.CobraPoint
         }
     }
 
+    public partial class QB
+    {
+        public string SSNFormatted
+        {
+            get
+            {
+                return Utils.IsBlank(this.SSN) ? "" : Utils.FormatSsnWithDashes(this.SSN);
+            }
+        }    public string SSNNoDashes
+        {
+            get
+            {
+                return Utils.IsBlank(this.SSN) ? "" : Utils.FormatSsnWithDashes(this.SSN);
+            }
+        }
+    } public partial class NPM
+    {
+        public string SSNFormatted
+        {
+            get
+            {
+                return Utils.IsBlank(this.SSN) ? "" : Utils.FormatSsnWithDashes(this.SSN);
+            }
+        }
+    }
+    
+    public partial class SPM
+    {
+        public string SSNFormatted
+        {
+            get
+            {
+                return Utils.IsBlank(this.SSN) ? "" : Utils.FormatSsnWithDashes(this.SSN);
+            }
+        }
+    }
+
 }
-    namespace DataProcessing.DataModels.DataProcessing
+
+namespace DataProcessing.DataModels.DataProcessing
 {
 
     [SuppressMessage("ReSharper", "InconsistentNaming")]

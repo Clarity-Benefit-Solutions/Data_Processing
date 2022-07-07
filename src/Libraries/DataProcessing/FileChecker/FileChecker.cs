@@ -30,7 +30,7 @@ namespace DataProcessing
         //
         private readonly DbConnection dbConnPortalWc;
         private readonly DbConnection dbConnCobra;
-        private readonly CobraPointEntities bbCtxCobra;
+        private readonly CobraPointEntities dbCtxCobra;
 
         //
         public readonly FileCheckResults fileCheckResults = new FileCheckResults();
@@ -48,7 +48,7 @@ namespace DataProcessing
             this.DbConn = _dbConn;
             this.dbConnPortalWc = Vars.dbConnPortalWc;
             this.dbConnCobra = Vars.dbConnCobra;
-            this.bbCtxCobra = Vars.DbCtxCobraDefault;
+            this.dbCtxCobra = Vars.DbCtxCobraDefault;
             this.OnErrorCallback = _onErrorCallback;
         }
 
@@ -392,15 +392,7 @@ namespace DataProcessing
 
         #endregion
 
-        private static readonly Regex regexInteger = new Regex("[^0-9]");
-        private static readonly Regex regexDate = new Regex(@"[^a-zA-Z0-9\s:\-\//]");
-        private static readonly Regex regexAlphaNumeric = new Regex(@"[^a-zA-Z0-9\s]");
-        private static readonly Regex regexAlphaOnly = new Regex(@"[^a-zA-Z]");
-        private static readonly Regex regexAlphaAndDashes = new Regex(@"[^a-zA-Z\-]");
-        private static readonly Regex regexAlphaNumericAndDashes = new Regex(@"[^a-zA-Z0-9\-]");
-        private static readonly Regex regexNumericAndDashes = new Regex(@"[^0-9\-]");
-        private static readonly Regex regexDouble = new Regex("[^0-9.]");
-
+      
     }
 
 }

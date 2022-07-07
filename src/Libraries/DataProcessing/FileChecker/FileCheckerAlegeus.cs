@@ -1117,7 +1117,7 @@ namespace DataProcessing
 
                         break;
                     case FormatType.Zip:
-                        value = regexInteger.Replace(value, String.Empty);
+                        value = Utils.regexInteger.Replace(value, String.Empty);
                         if (!Utils.IsBlank(value) && value.Length > column.MaxLength)
                         {
                             value = value.Substring(0, column.MaxLength);
@@ -1125,7 +1125,7 @@ namespace DataProcessing
 
                         break;
                     case FormatType.Phone:
-                        value = regexInteger.Replace(value, String.Empty);
+                        value = Utils.regexInteger.Replace(value, String.Empty);
                         if (!Utils.IsBlank(value) && value.Length > column.MaxLength)
                         {
                             value = Utils.Right(value, column.MaxLength);
@@ -1134,17 +1134,17 @@ namespace DataProcessing
                         break;
                     case FormatType.AlphaNumeric:
                         // replace all non alphanumeric
-                        value = regexAlphaNumeric.Replace(value, String.Empty);
+                        value = Utils.regexAlphaNumeric.Replace(value, String.Empty);
                         break;
 
                     case FormatType.AlphaNumericAndDashes:
                         // replace all non alphanumeric
-                        value = regexAlphaNumericAndDashes.Replace(value, String.Empty);
+                        value = Utils.regexAlphaNumericAndDashes.Replace(value, String.Empty);
                         break;
 
                     case FormatType.AlphaOnly:
                         // replace all non alphanumeric
-                        value = regexAlphaOnly.Replace(value, String.Empty);
+                        value = Utils.regexAlphaOnly.Replace(value, String.Empty);
                         break;
 
                     case FormatType.FixedConstant:
@@ -1154,17 +1154,17 @@ namespace DataProcessing
 
                     case FormatType.AlphaAndDashes:
                         // replace all non alphanumeric
-                        value = regexAlphaAndDashes.Replace(value, String.Empty);
+                        value = Utils.regexAlphaAndDashes.Replace(value, String.Empty);
                         break;
 
                     case FormatType.NumbersAndDashes:
                         // replace all non alphanumeric
-                        value = regexNumericAndDashes.Replace(value, String.Empty);
+                        value = Utils.regexNumericAndDashes.Replace(value, String.Empty);
                         break;
 
                     case FormatType.Integer:
                         // remove any non digits
-                        value = regexInteger.Replace(value, String.Empty);
+                        value = Utils.regexInteger.Replace(value, String.Empty);
                         //
                         if (!Utils.IsInteger(value))
                         {
@@ -1176,7 +1176,7 @@ namespace DataProcessing
 
                     case FormatType.Double:
                         // remove any non digits and non . and non ,
-                        value = regexDouble.Replace(value, String.Empty);
+                        value = Utils.regexDouble.Replace(value, String.Empty);
                         if (!Utils.IsDouble(value))
                         {
                             this.AddAlegeusErrorForRow(dataRow, column.SourceColumn,
@@ -1191,7 +1191,7 @@ namespace DataProcessing
 
                     case FormatType.IsoDate:
                         // remove any non digits
-                        value = regexDate.Replace(value, String.Empty);
+                        value = Utils.regexDate.Replace(value, String.Empty);
                         value = Utils.ToIsoDateString(Utils.ToDate(value));
                         if (!Utils.IsIsoDate(value, column.MaxLength > 0))
                         {
@@ -1203,7 +1203,7 @@ namespace DataProcessing
 
                     case FormatType.IsoDateTime:
                         // remove any non digits
-                        value = regexDate.Replace(value, String.Empty);
+                        value = Utils.regexDate.Replace(value, String.Empty);
                         value = Utils.ToDateTimeString(Utils.ToDateTime(value));
 
                         if (!Utils.IsIsoDateTime(value, column.MaxLength > 0))
@@ -1253,7 +1253,7 @@ namespace DataProcessing
             {
                 if (!Utils.IsBlank(value))
                 {
-                    value = regexAlphaNumeric.Replace(value, String.Empty);
+                    value = Utils.regexAlphaNumeric.Replace(value, String.Empty);
                     if (value.Length < column.MinLength)
                     {
                         value = value.PadLeft(column.MinLength, '0');
