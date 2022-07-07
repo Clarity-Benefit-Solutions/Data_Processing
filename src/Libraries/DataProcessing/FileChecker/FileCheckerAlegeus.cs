@@ -791,13 +791,13 @@ namespace DataProcessing
                         foreach (var dbRow in dbRows)
                         {
 
-                            DateTime actualPlanStartDate = (DateTime)dbRow["planstart"];
-                            DateTime actualPlanEndDate = (DateTime)dbRow["planend"];
+                            DateTime dbRowPlanStartDate = (DateTime)dbRow["planstart"];
+                            DateTime dbRowPlanEndDate = (DateTime)dbRow["planend"];
                             //DateTime? actualGracePeriodEndDate = Utils.ToDate(dbRow["actualGracePeriodEndDate"]?.ToString());
 
                             // exact start and end dates match
-                            if (Utils.ToDate(mbiRow.PlanStartDate) == Utils.ToDate(mbiRow.PlanStartDate) &&
-                                Utils.ToDate(mbiRow.PlanEndDate) == Utils.ToDate(mbiRow.PlanEndDate))
+                            if (dbRowPlanStartDate == Utils.ToDate(mbiRow.PlanStartDate) &&
+                                dbRowPlanEndDate == Utils.ToDate(mbiRow.PlanEndDate))
                             {
                                 matchedRows.Add(dbRow);
                             }
@@ -818,8 +818,8 @@ namespace DataProcessing
                             // take first matched rows - should be only usually
                             var dbRow = matchedRows.First();
                             //
-                            DateTime actualPlanStartDate = (DateTime)dbRow["planstart"];
-                            DateTime actualPlanEndDate = (DateTime)dbRow["planend"];
+                            DateTime dbRowPlanStartDate = (DateTime)dbRow["planstart"];
+                            DateTime dbRowPlanEndDate = (DateTime)dbRow["planend"];
 
                             //check end date is after startdate
                             if (!Utils.IsBlank(mbiRow.PlanStartDate) && !Utils.IsBlank(mbiRow.PlanEndDate) &&
@@ -831,44 +831,23 @@ namespace DataProcessing
                                     $" Start Date {mbiRow.PlanStartDate} must be before the Plan End Date {mbiRow.PlanEndDate} for Employee Id {mbiRow.EmployeeID}";
                             }
 
-                            // not needed - we match exact start and end dates
-                            /*if (!Utils.IsBlank(mbiRow.PlanStartDate) &&
-                                actualPlanStartDate > Utils.ToDate(mbiRow.PlanStartDate))
-                            {
-                                errorMessage +=
-                                    $"The AccountTypeID {mbiRow.AccountTypeCode}" +
-                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID {mbiRow.PlanId}" : "") +
-                                    $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {mbiRow.PlanStartDate} for Employee Id {mbiRow.EmployeeID}";
-                            }
-
-                            if (!Utils.IsBlank(mbiRow.PlanEndDate) &&
-                                actualPlanEndDate < Utils.ToDate(mbiRow.PlanEndDate)
-                                && mbiRow.PlanEndDate != "20991231")
-                            {
-                                errorMessage =
-                                    $"The AccountTypeID {mbiRow.AccountTypeCode}" +
-                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID {mbiRow.PlanId}" : "") +
-                                    $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {mbiRow.PlanEndDate} for Employee Id {mbiRow.EmployeeID}";
-                                ;
-                            }*/
-
                             //check effectivedate is within plan dates
                             if (!Utils.IsBlank(mbiRow.EffectiveDate) &&
-                                actualPlanStartDate > Utils.ToDate(mbiRow.EffectiveDate))
+                                dbRowPlanStartDate > Utils.ToDate(mbiRow.EffectiveDate))
                             {
                                 errorMessage +=
                                     $"The AccountTypeID {mbiRow.AccountTypeCode}" +
                                     (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID {mbiRow.PlanId}" : "") +
-                                    $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {mbiRow.EffectiveDate} for Employee Id {mbiRow.EmployeeID}";
+                                    $" starts only on {Utils.ToDateString(dbRowPlanStartDate)} and is not yet started on {mbiRow.EffectiveDate} for Employee Id {mbiRow.EmployeeID}";
                             }
 
                             if (!Utils.IsBlank(mbiRow.EffectiveDate) &&
-                                actualPlanEndDate < Utils.ToDate(mbiRow.EffectiveDate))
+                                dbRowPlanEndDate < Utils.ToDate(mbiRow.EffectiveDate))
                             {
                                 errorMessage =
                                     $"The AccountTypeID {mbiRow.AccountTypeCode}" +
                                     (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID {mbiRow.PlanId}" : "") +
-                                    $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {mbiRow.EffectiveDate} for Employee Id {mbiRow.EmployeeID}";
+                                    $" ended on {Utils.ToDateString(dbRowPlanEndDate)} and is no longer active on {mbiRow.EffectiveDate} for Employee Id {mbiRow.EmployeeID}";
                                 ;
                             }
                         } // matchedRows count
