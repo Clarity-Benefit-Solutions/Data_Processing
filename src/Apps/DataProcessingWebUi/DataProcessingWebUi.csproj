@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\CoreUtils\CoreUtils.csproj" />
+    <ProjectReference Include="..\..\Libraries\DataProcessing\DataProcessing.csproj" />
   </ItemGroup>
 
   <ItemGroup>

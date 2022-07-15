@@ -13,7 +13,11 @@
 
 <p class="lead">This App automates File and Data Processing for Alegeus and COBRA Source Files.</p>
 <p class="lead">It also fetches Result &amp; Error Files from Alegeus and allows easy tracking </p>
-
+<div>
+    <label>Use Testing Subfolder Root - leave blank for @ftpSubFolderPath</label>
+    <InputText id="txtRootSubFolderpath" @onchange="setFtpSubFolderPath"></InputText>
+    <label>Please place your Input Files under Path '@rootFtpPath'</label>
+</div>
 <div>
     <div>
         <p>
@@ -33,7 +37,7 @@
             &nbsp;&nbsp;&nbsp;&nbsp; ProcessIncomingFiles
         </p>
     </div>
-     <div>
+    <div>
         <p>
 
             &nbsp;
@@ -53,7 +57,7 @@
     <div>
         <p>
             &nbsp;
-            Upload File For Checking: &nbsp;&nbsp;&nbsp;&nbsp; <InputFile OnChange="@UploadFiles" single/>
+            Upload File For Checking: &nbsp;&nbsp;&nbsp;&nbsp; <InputFile OnChange="@UploadFiles" single />
 
 
         </p>
@@ -79,9 +83,9 @@
     </p>
     <RadzenDataGrid @ref="Grid" Data="@Logs" TItem="LogFields" AllowColumnResize="true" Style="height: 200px; max-height: 400px">
         <Columns>
-            <RadzenDataGridColumn TItem="LogFields" Property="LogTime" Title="LogTime" Width="150px"/>
-            <RadzenDataGridColumn TItem="LogFields" Property="Task" Title="Task" Width="150px"/>
-            <RadzenDataGridColumn TItem="LogFields" Property="Status" Title="Status" Width="150px"/>
+            <RadzenDataGridColumn TItem="LogFields" Property="LogTime" Title="LogTime" Width="150px" />
+            <RadzenDataGridColumn TItem="LogFields" Property="Task" Title="Task" Width="150px" />
+            <RadzenDataGridColumn TItem="LogFields" Property="Status" Title="Status" Width="150px" />
         </Columns>
     </RadzenDataGrid>
 
@@ -118,16 +122,52 @@
 
 @code {
 
-    @inject IJSRuntime jsRuntime 
+    @inject IJSRuntime jsRuntime
     @inject NavigationManager navManager
 
+    
+
     private readonly string _username = "dataprocessinguser";
-        @*Utils.GetAppSetting("BasicAuthUserName");*@
+    @*Utils.GetAppSetting("BasicAuthUserName");*@
     private readonly string _password = "#gjgB0AXG^940";
-        @*Utils.GetAppSetting("BasicAuthPassword");*@
+    @*Utils.GetAppSetting("BasicAuthPassword");*@
+
 
     RadzenDataGrid<LogFields> Grid { get; set; }
     public string ResultTextAreaValue { get; set; } = String.Empty;
+
+    private string getLocalFtpRoot()
+    {
+        string path = "LocalFtpRoot";
+        HttpClient client = new HttpClient { BaseAddress = new Uri($"{ProcessingServerBaseUrl}"), Timeout = TimeSpan.FromSeconds(600) };
+        string strUrl = $"/DataProcessing/{path}";
+        var  result = client.PostAsync(strUrl, null).Result;
+
+
+        return "";
+    }
+
+    private string rootFtpPath
+    {
+        get
+        {
+            return $"{getLocalFtpRoot()}\\{ftpSubFolderPath}";
+        }
+    }
+
+    private string _ftpSubFolderPath = "";
+    private string ftpSubFolderPath
+    {
+        get
+        {
+            return _ftpSubFolderPath;
+        }
+    }
+
+    public void setFtpSubFolderPath(Microsoft.AspNetCore.Components.ChangeEventArgs args)
+    {
+        _ftpSubFolderPath = args.Value == null ? "" : args.Value.ToString();
+    }
 
     public string ProcessingServerBaseUrl
     {
@@ -151,11 +191,11 @@
 
     private JobDetails GetJobResult(string? jobId)
     {
-    // get result of the job started by the request
+        // get result of the job started by the request
         dynamic jobDetailsRequestResult = SendRequest("JobResults", $"{jobId}");
-    //
+        //
         var jobDetailsContent = jobDetailsRequestResult.Content.ReadAsStringAsync().Result;
-    //
+        //
         JobDetails jobDetails = JsonConvert.DeserializeObject<JobDetails>(jobDetailsContent);
         return jobDetails;
     }
@@ -164,7 +204,7 @@
     {
         string jobState = jobDetails != null ? jobDetails.JobState : "ERROR";
 
-    // check job state
+        // check job state
         switch (jobState.ToLower())
         {
             case @"processing":
@@ -180,10 +220,10 @@
     private void LogJobResult(string? jobId)
     {
         var jobDetails = GetJobResult(jobId);
-    //
+        //
         string jobState = jobDetails != null ? jobDetails.JobState : "ERROR";
 
-    // check job state
+        // check job state
         switch (IsJobComplete(jobDetails))
         {
             case false:
@@ -198,13 +238,13 @@
 
                 Log(logItem);
 
-    // schedule new check in N ms
+                // schedule new check in N ms
                 var timer = new System.Threading.Timer(_ => { InvokeAsync(async () => { LogJobResult(jobId); }); }, null, 1000, 0);
 
                 return;
 
             case true:
-                var jobDetailsOutcome = (OperationResult) Utils.DeserializeJson<OperationResult>(jobDetails?.JobResultDetails);
+                var jobDetailsOutcome = (OperationResult)Utils.DeserializeJson<OperationResult>(jobDetails?.JobResultDetails);
 
                 if (jobDetailsOutcome.Success != 1)
                 {
@@ -221,7 +261,7 @@
                     );
 
                 Log(logItem2);
-    //
+                //
                 return;
         }
     }
@@ -232,14 +272,14 @@
         {
             StateHasChanged();
 
-            HttpClient client = new HttpClient {BaseAddress = new Uri($"{ProcessingServerBaseUrl}"), Timeout = TimeSpan.FromSeconds(600)};
+            HttpClient client = new HttpClient { BaseAddress = new Uri($"{ProcessingServerBaseUrl}"), Timeout = TimeSpan.FromSeconds(600) };
 
-    // add auth header
+            // add auth header
             addAuthHeader(client);
 
             HttpResponseMessage result;
 
-    //HTTP GET Async
+            //HTTP GET Async
             if (objContent == null)
             {
                 string strUrl = $"/DataProcessing/{path}/{arg}";
@@ -252,20 +292,20 @@
             }
             if (!result.IsSuccessStatusCode)
             {
-    //log response status here..
+                //log response status here..
                 throw new Exception($"{result.ReasonPhrase} {result.RequestMessage}");
             }
 
-    // parse job ID
+            // parse job ID
             var content = result.Content.ReadAsStringAsync().Result;
 
-    //
+            //
             if (path.ToLower() != "JobResults".ToLower())
             {
                 JobDetails? taskJobDetails = JsonConvert.DeserializeObject<JobDetails>(content);
 
                 string? jobId = taskJobDetails?.JobId;
-    //
+                //
                 LogJobResult(jobId);
 
                 return jobId;
@@ -324,10 +364,10 @@
         Logs.Clear();
         ResultTextAreaValue = "";
         Grid.Reload();
-    //
-    //
+        //
+        //
         StateHasChanged();
-    //
+        //
     }
 
     void Log(LogFields logItem)
@@ -336,7 +376,7 @@
 
         if (!Utils.IsBlank(logItem.OutcomeDetails))
         {
-            var details = (OperationResult) Utils.DeserializeJson<OperationResult>(logItem.OutcomeDetails);
+            var details = (OperationResult)Utils.DeserializeJson<OperationResult>(logItem.OutcomeDetails);
             if (!Utils.IsBlank(details.Error) || details.Success != 1)
             {
                 status = "ERROR";
@@ -348,7 +388,7 @@
             }
         }
 
-    //
+        //
         logItem.OutcomeDetails = status;
 
         Logs.Add(logItem);
@@ -368,9 +408,9 @@
             try
             {
                 var path = Path.GetTempFileName();
-    //var path = Path.Combine(Environment.ContentRootPath,
-    //    Environment.EnvironmentName, "unsafe_uploads",
-    //    trustedFileNameForFileStorage);
+                //var path = Path.Combine(Environment.ContentRootPath,
+                //    Environment.EnvironmentName, "unsafe_uploads",
+                //    trustedFileNameForFileStorage);
 
                 await using FileStream fs = new(path, FileMode.Create);
                 await file.OpenReadStream(maxFileSize).CopyToAsync(fs);
@@ -387,65 +427,65 @@
 
                 Log(logItem);
 
-    // upload
+                // upload
                 byte[] data;
                 await using FileStream fs2 = new FileStream(path, FileMode.Open);
                 using var br = new BinaryReader(fs2);
-                data = br.ReadBytes((int) file.OpenReadStream().Length);
-    //
+                data = br.ReadBytes((int)file.OpenReadStream().Length);
+                //
                 ByteArrayContent bytes = new ByteArrayContent(data);
                 MultipartFormDataContent multiContent = new MultipartFormDataContent();
                 multiContent.Add(bytes, "file", file.Name);
 
-    // send file for checking
-                var jobId = (string) this.SendRequest("CheckFileAlegeus", "", multiContent);
+                // send file for checking
+                var jobId = (string)this.SendRequest("CheckFileAlegeus", "", multiContent);
 
-    ////// code needed for php / api client to wait till job is complete and show results to user
-    //// loop till job is complete
-    //Boolean isProcessing = true;
-    //while (isProcessing)
-    //{
-    //    JobDetails jobDetails = GetJobResult(jobId);
-    //    if (IsJobComplete(jobDetails))
-    //    {
-    ////         display the result
-    //        OperationResult? result =(OperationResult) Utils.DeserializeJson<OperationResult>(jobDetails.JobResultDetails);
-    //        if (Utils.IsBlank(result?.Error) )
-    //        {
-    //            var logItem2 = new LogFields(
-    //                DateTime.Now.ToString(CultureInfo.InvariantCulture),
-    //                "",
-    //                "Check File",
-    //                "Succeeded",
-    //                file.Name,
+                ////// code needed for php / api client to wait till job is complete and show results to user
+                //// loop till job is complete
+                //Boolean isProcessing = true;
+                //while (isProcessing)
+                //{
+                //    JobDetails jobDetails = GetJobResult(jobId);
+                //    if (IsJobComplete(jobDetails))
+                //    {
+                ////         display the result
+                //        OperationResult? result =(OperationResult) Utils.DeserializeJson<OperationResult>(jobDetails.JobResultDetails);
+                //        if (Utils.IsBlank(result?.Error) )
+                //        {
+                //            var logItem2 = new LogFields(
+                //                DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                //                "",
+                //                "Check File",
+                //                "Succeeded",
+                //                file.Name,
 
-    //                new OperationResult(1, "200", "Success", "", result?.Result.ToString()).ToString()
-    //                );
+                //                new OperationResult(1, "200", "Success", "", result?.Result.ToString()).ToString()
+                //                );
 
-    //            this.Log(logItem2);
-    //        }
-    //        else
-    //        {
-    //            var logItem2 = new LogFields(
-    //                DateTime.Now.ToString(CultureInfo.InvariantCulture),
-    //                "",
-    //                "Check File",
-    //                "Fail",
-    //                file.Name,
+                //            this.Log(logItem2);
+                //        }
+                //        else
+                //        {
+                //            var logItem2 = new LogFields(
+                //                DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                //                "",
+                //                "Check File",
+                //                "Fail",
+                //                file.Name,
 
-    //                new OperationResult(0, "400", "ERROR", "", result?.Error.ToString()).ToString()
-    //                );
+                //                new OperationResult(0, "400", "ERROR", "", result?.Error.ToString()).ToString()
+                //                );
 
-    //            this.Log(logItem2);
-    //        }
-    //         exit loop
-    //        isProcessing = false;
-    //    }
-    //    else
-    //    {
-    //        Thread.Sleep(200);
-    //    }
-    //}
+                //            this.Log(logItem2);
+                //        }
+                //         exit loop
+                //        isProcessing = false;
+                //    }
+                //    else
+                //    {
+                //        Thread.Sleep(200);
+                //    }
+                //}
             }
             catch (Exception ex)
             {
