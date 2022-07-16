@@ -15,9 +15,17 @@
 <p class="lead">It also fetches Result &amp; Error Files from Alegeus and allows easy tracking </p>
 <div>
 
-    <label>Use Testing Subfolder Root - leave blank for @ftpSubFolderPath</label>
+    <label>Use Testing Subfolder Root - leave blank for
+        <br /> 
+        <b>@rootFtpPath</b>
+    </label>
+    <p></p>
     <input @bind="ftpSubFolderPath" />
-    <label>Please place your Input Files under Path '@rootFtpPath'</label>
+    <p></p>
+    <label>Please place your Input Files under Path 
+        <br /> 
+        <b>@rootFtpPath</b>
+    </label>
 
 </div>
 <div>
@@ -144,16 +152,18 @@
         {
             string path = "LocalFtpRoot";
             HttpClient client = new HttpClient { BaseAddress = new Uri($"{ProcessingServerBaseUrl}"), Timeout = TimeSpan.FromSeconds(600) };
+            // add auth header
+            addAuthHeader(client);
+
             string strUrl = $"/DataProcessing/{path}/{ftpSubFolderPath}";
             var result = client.PostAsync(strUrl, null).Result;
+            var content = result.Content.ReadAsStringAsync().Result;
+            return content;
         }
         catch (Exception ex)
         {
             return "";
         }
-
-
-        return "";
     }
 
     private string rootFtpPath
@@ -173,19 +183,14 @@
         }
         set
         {
-            _ftpSubFolderPath = value;
-        }
-    }
-
-    public void setFtpSubFolderPath(Microsoft.AspNetCore.Components.ChangeEventArgs args)
-    {
-        if (args.Value == null)
-        {
-            _ftpSubFolderPath = "";
-        }
-        else
-        {
-            _ftpSubFolderPath = args.Value.ToString();
+            if (value == null)
+            {
+                _ftpSubFolderPath = "";
+            }
+            else
+            {
+                _ftpSubFolderPath = value;
+            }
         }
     }
 
