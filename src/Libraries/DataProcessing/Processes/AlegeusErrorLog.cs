@@ -21,13 +21,16 @@ namespace DataProcessing
 
         private Vars Vars { get; } = new Vars();
 
-        public static async Task ProcessAll()
+        public static async Task ProcessAll(string ftpSubFolderPath = "")
         {
             //
             await Task.Factory.StartNew
             (
                 () =>
                 {
+                    // set process environment
+                    Vars.ftpSubFolderPath = ftpSubFolderPath;
+                    //
                     Thread.CurrentThread.Name = "DataProcessing";
                     AlegeusErrorLog DataProcessing = new AlegeusErrorLog();
                     DataProcessing.RetrieveErrorLogs();
@@ -37,7 +40,7 @@ namespace DataProcessing
 
         public void USERVERYCAUTIOUSLY_ClearAllTables()
         {
-            if (Vars.Environment != "TEST")
+            if (Vars.RunTimeEnvironment != "TEST")
             {
                 throw new Exception($"Clear All Tables is available only in TEST Environment");
             }

@@ -14,9 +14,11 @@
 <p class="lead">This App automates File and Data Processing for Alegeus and COBRA Source Files.</p>
 <p class="lead">It also fetches Result &amp; Error Files from Alegeus and allows easy tracking </p>
 <div>
+
     <label>Use Testing Subfolder Root - leave blank for @ftpSubFolderPath</label>
-    <InputText id="txtRootSubFolderpath" @onchange="setFtpSubFolderPath"></InputText>
+    <input @bind="ftpSubFolderPath" />
     <label>Please place your Input Files under Path '@rootFtpPath'</label>
+
 </div>
 <div>
     <div>
@@ -125,7 +127,7 @@
     @inject IJSRuntime jsRuntime
     @inject NavigationManager navManager
 
-    
+
 
     private readonly string _username = "dataprocessinguser";
     @*Utils.GetAppSetting("BasicAuthUserName");*@
@@ -138,10 +140,17 @@
 
     private string getLocalFtpRoot()
     {
-        string path = "LocalFtpRoot";
-        HttpClient client = new HttpClient { BaseAddress = new Uri($"{ProcessingServerBaseUrl}"), Timeout = TimeSpan.FromSeconds(600) };
-        string strUrl = $"/DataProcessing/{path}";
-        var  result = client.PostAsync(strUrl, null).Result;
+        try
+        {
+            string path = "LocalFtpRoot";
+            HttpClient client = new HttpClient { BaseAddress = new Uri($"{ProcessingServerBaseUrl}"), Timeout = TimeSpan.FromSeconds(600) };
+            string strUrl = $"/DataProcessing/{path}/{ftpSubFolderPath}";
+            var result = client.PostAsync(strUrl, null).Result;
+        }
+        catch (Exception ex)
+        {
+            return "";
+        }
 
 
         return "";
@@ -151,7 +160,7 @@
     {
         get
         {
-            return $"{getLocalFtpRoot()}\\{ftpSubFolderPath}";
+            return $"{getLocalFtpRoot()}";
         }
     }
 
@@ -162,21 +171,41 @@
         {
             return _ftpSubFolderPath;
         }
+        set
+        {
+            _ftpSubFolderPath = value;
+        }
     }
 
     public void setFtpSubFolderPath(Microsoft.AspNetCore.Components.ChangeEventArgs args)
     {
-        _ftpSubFolderPath = args.Value == null ? "" : args.Value.ToString();
+        if (args.Value == null)
+        {
+            _ftpSubFolderPath = "";
+        }
+        else
+        {
+            _ftpSubFolderPath = args.Value.ToString();
+        }
     }
 
     public string ProcessingServerBaseUrl
     {
         get
         {
-            string baseUri = navManager.BaseUri;
-            string[] parts = baseUri.Split(":");
-            string strUrl = $"{parts[0]}:{parts[1]}:81";
-            return strUrl;
+            if (true)
+            {
+                return "https://localhost:44320";
+            }
+            else
+            {
+                string baseUri = navManager.BaseUri;
+                string[] parts = baseUri.Split(":");
+                //string strUrl = $"{parts[0]}:{parts[1]}:81";
+                string strUrl = $"http:{parts[1]}:81";
+                return strUrl;
+            }
+
         }
     }
 
@@ -282,12 +311,12 @@
             //HTTP GET Async
             if (objContent == null)
             {
-                string strUrl = $"/DataProcessing/{path}/{arg}";
+                string strUrl = $"/DataProcessing/{path}/{arg}/{ftpSubFolderPath}";
                 result = client.GetAsync(strUrl).Result;
             }
             else
             {
-                string strUrl = $"/DataProcessing/{path}";
+                string strUrl = $"/DataProcessing/{path}/{ftpSubFolderPath}";
                 result = client.PostAsync(strUrl, objContent).Result;
             }
             if (!result.IsSuccessStatusCode)
@@ -305,13 +334,16 @@
                 JobDetails? taskJobDetails = JsonConvert.DeserializeObject<JobDetails>(content);
 
                 string? jobId = taskJobDetails?.JobId;
+                if (jobId == null)
+                {
+                    jobId = "";
+                }
                 //
                 LogJobResult(jobId);
 
                 return jobId;
             }
             return result;
-            return "";
         }
         catch (Exception ex)
         {

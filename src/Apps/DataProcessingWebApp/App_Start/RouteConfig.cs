@@ -29,14 +29,20 @@ namespace DataProcessingWebApp
 
             routes.MapRoute(
                 "DataProcessingStartJob", // Route name
-                "DataProcessing/StartJob/{id}", // URL with parameters
-                new {controller = "DataProcessing", action = "StartJob", id = ""} // Parameter defaults
+                "DataProcessing/StartJob/{id}/{ftpSubFolderPath}", // URL with parameters
+                new {controller = "DataProcessing", action = "StartJob", id = "", ftpSubFolderPath =""} // Parameter defaults
+            );
+
+              routes.MapRoute(
+                "DataProcessingLocalFtpRoot", // Route name
+                "DataProcessing/LocalFtpRoot/{ftpSubFolderPath}", // URL with parameters
+                new {controller = "DataProcessing", action = "LocalFtpRoot", ftpSubFolderPath = ""} // Parameter defaults
             );
 
             routes.MapRoute(
                 "DataProcessingJobResults", // Route name
-                "DataProcessing/JobResults/{jobId}", // URL with parameters
-                new {controller = "DataProcessing", action = "JobResults", jobId = ""} // Parameter defaults
+                "DataProcessing/JobResults/{jobId}/{ftpSubFolderPath}", // URL with parameters
+                new {controller = "DataProcessing", action = "JobResults", jobId = "", ftpSubFolderPath = "" } // Parameter defaults
             );
         }
     }

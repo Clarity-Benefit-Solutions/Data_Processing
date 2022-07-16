@@ -57,11 +57,11 @@ try
                 switch (arg.ToLower())
                 {
                     case @"test":
-                        Vars.Environment = "TEST";
+                        Vars.RunTimeEnvironment = "TEST";
                         break;
 
                     case @"prod":
-                        Vars.Environment = "PROD";
+                        Vars.RunTimeEnvironment = "PROD";
                         break;
 
                     case @"usevpntoconnecttoportal":

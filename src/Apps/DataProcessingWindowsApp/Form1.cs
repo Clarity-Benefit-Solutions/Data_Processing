@@ -33,7 +33,7 @@ namespace TestApp
             this.SubscribeToEvents();
 
             //
-            if (Vars.Environment != "TEST")
+            if (Vars.RunTimeEnvironment != "TEST")
             {
                 this.cmdClearAll.Visible = false;
                 this.cmdCopyTestFiles.Visible = false;

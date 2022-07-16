@@ -17,13 +17,16 @@ namespace DataProcessing
     {
         private Vars Vars { get; } = new Vars();
 
-        public static async Task ProcessAll()
+        public static async Task ProcessAll(string ftpSubFolderPath = "")
         {
             //
             await Task.Factory.StartNew
             (
                 () =>
                 {
+                    // set process environment
+                    Vars.ftpSubFolderPath = ftpSubFolderPath;
+                    //
                     Thread.CurrentThread.Name = "IncomingFileProcessing";
                     var fileProcessing = new IncomingFileProcessing();
                     fileProcessing.ProcessAllFiles();
@@ -31,15 +34,19 @@ namespace DataProcessing
             );
         }
 
-        public static async Task CopyTestFiles()
+        public static async Task CopyTestFiles(string ftpSubFolderPath = "")
         {
             //
             await Task.Factory.StartNew
             (
                 () =>
                 {
-                    Vars Vars = new Vars();
-                    var directoryPath = $"{Vars.localFtpRoot}/..";
+                    //
+                    Vars.ftpSubFolderPath = ftpSubFolderPath;
+                    //
+                    // set process environment
+                    Vars vars = new Vars();
+                    var directoryPath = $"{vars.localFtpRoot}/..";
                     Process.Start(
                         $"{directoryPath}/copy_test_files.bat");
                 }
@@ -97,7 +104,7 @@ namespace DataProcessing
 
             // run query - we take only by environment so we can test 
             var queryString =
-                $"Select * from {tableName} where environment = '{Vars.Environment}' and is_active = 1  order by folder_name;";
+                $"Select * from {tableName} where environment = '{Vars.RunTimeEnvironment}' and is_active = 1  order by folder_name;";
             var dtHeaderFolders = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString);
 
             //3. for each header folder, get file and move to header1 folder

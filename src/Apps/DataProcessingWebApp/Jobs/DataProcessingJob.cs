@@ -43,7 +43,13 @@ namespace DataProcessingWebApp.Jobs
             listLogs.Add(logItem);
         }
 
-        public static async Task<string> StartJob(PerformContext context, string id)
+        public static string localFtpRoot(string ftpSubFolderPath = "")
+        {
+            Vars.ftpSubFolderPath = ftpSubFolderPath;
+            var vars = new Vars();
+            return vars.localFtpRoot;
+        }
+        public static async Task<string> StartJob(PerformContext context, string id, string ftpSubFolderPath  ="")
         {
             List<string> listLogs = new List<string>();
 
@@ -57,16 +63,16 @@ namespace DataProcessingWebApp.Jobs
                 switch (id.ToLower())
                 {
                     case @"processincomingfiles":
-                        await IncomingFileProcessing.ProcessAll();
+                        await IncomingFileProcessing.ProcessAll(ftpSubFolderPath);
                         break;
 
                     case @"retrieveftperrorlogs":
-                        await AlegeusErrorLog.ProcessAll();
+                        await AlegeusErrorLog.ProcessAll(ftpSubFolderPath);
                         break;
 
                     case @"copytestfiles":
                         var directoryPath = Vars.GetProcessBaseDir();
-                        await IncomingFileProcessing.CopyTestFiles();
+                        await IncomingFileProcessing.CopyTestFiles( ftpSubFolderPath );
 
                         break;
 

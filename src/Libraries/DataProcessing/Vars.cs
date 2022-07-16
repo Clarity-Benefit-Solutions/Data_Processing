@@ -21,19 +21,19 @@ namespace DataProcessing
 
     public class Vars
     {
-        private static string _Environment = null;
-      
-        public static string Environment
+        private static string _RunTimeEnvironment = null;
+
+        public static string RunTimeEnvironment
         {
-            get { return _Environment ?? "TEST"; }
+            get { return _RunTimeEnvironment ?? "TEST"; }
             set
             {
-                if (_Environment != null)
+                if (_RunTimeEnvironment != null)
                 {
-                    throw new Exception($"Environment can be set only once. It is currently {_Environment}");
+                    throw new Exception($"Environment can be set only once. It is currently {_RunTimeEnvironment}");
                 }
 
-                _Environment = value;
+                _RunTimeEnvironment = value;
             }
         }
 
@@ -48,7 +48,7 @@ namespace DataProcessing
         public string ConvertFilePathFromProdToCtx(string prodFilePath)
         {
             if (Utils.IsBlank(prodFilePath)) return prodFilePath;
-            if (Environment == "PROD")
+            if (RunTimeEnvironment == "PROD")
             {
                 return prodFilePath;
             }
@@ -68,7 +68,9 @@ namespace DataProcessing
                 var entryKey = entry.Key.ToLower();
                 // compare lower to lower and standardized slashes
                 if (prodFilePath.ToLower().StartsWith(entryKey))
+                {
                     fixedPath = entry.Value + prodFilePath.Substring(entry.Key.Length);
+                }
             }
 
             fixedPath = FileUtils.FixPath(fixedPath);
@@ -175,6 +177,7 @@ namespace DataProcessing
         }
 
         #endregion
+
         #region BrokerCommission
         public string ConnStrNameBrokerCommission
         {
@@ -400,18 +403,18 @@ namespace DataProcessing
             {
                 if (_remoteAlegeusFtpConnection == null)
                 {
-                    if (Environment == "TEST")
+                    if (RunTimeEnvironment == "TEST")
                     {
                         _remoteAlegeusFtpConnection = new SFtpConnection("BE015", 22, "alegeus", "3214@Clarity");
                     }
-                    else if (Environment == "PROD")
+                    else if (RunTimeEnvironment == "PROD")
                     {
                         _remoteAlegeusFtpConnection =
                             new SFtpConnection("ftp.wealthcareadmin.com", 22, "benefledi", "VzVR4s4y");
                     }
                     else
                     {
-                        throw new Exception($"Sorry, Current Environemtn {Environment} is Not valid ");
+                        throw new Exception($"Sorry, Current Environemtn {RunTimeEnvironment} is Not valid ");
                     }
                 }
 
@@ -443,17 +446,17 @@ namespace DataProcessing
         {
             get
             {
-                if (Environment == "TEST")
+                if (RunTimeEnvironment == "TEST")
                 {
                     _remoteCobraFtpConnection = new SFtpConnection("BE015", 22, "cobra", "3214@Clarity");
                 }
-                else if (Environment == "PROD")
+                else if (RunTimeEnvironment == "PROD")
                 {
                     _remoteCobraFtpConnection = new SFtpConnection("xxx", 22, "xx", "xx@");
                 }
                 else
                 {
-                    throw new Exception($"Sorry, Current Environemtn {Environment} is Not valid ");
+                    throw new Exception($"Sorry, Current Environemtn {RunTimeEnvironment} is Not valid ");
                 }
 
                 return _remoteCobraFtpConnection;
@@ -483,7 +486,7 @@ namespace DataProcessing
             }
 
             // try exact environment
-            string filter = $"environment In ('{Environment}') and setting_name = '{settingName}' ";
+            string filter = $"environment In ('{RunTimeEnvironment}') and setting_name = '{settingName}' ";
 
             DataRow[] dbRows = appSettings.Select(filter);
             if (dbRows.Length == 0)
@@ -496,7 +499,7 @@ namespace DataProcessing
             if (dbRows.Length == 0)
             {
                 string message =
-                    $"The App Setting {settingName} could not be found for environments ({Environment}, 'PROD')";
+                    $"The App Setting {settingName} could not be found for environments ({RunTimeEnvironment}, 'PROD')";
                 throw new Exception(message);
             }
             else
@@ -505,8 +508,50 @@ namespace DataProcessing
             }
         }
 
-        public string localFtpRoot => FileUtils.FixPath($"{GetAppSetting("FtpPath")}");
-        public string localFtpItRoot => FileUtils.FixPath($"{localFtpItRoot}/");
+        public static string ftpSubFolderPath
+        {
+            get
+            {
+                string value = Environment.GetEnvironmentVariable("ftpSubFolderPath");
+                return Utils.IsBlank(value) ? "" : value;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    value = "";
+                }
+                Environment.SetEnvironmentVariable("ftpSubFolderPath", value);
+            }
+        }
+        public string localFtpRoot
+        {
+            get
+            {
+                if (Utils.IsBlank(ftpSubFolderPath))
+                {
+                    return FileUtils.FixPath($"{GetAppSetting("FtpPath")}");
+                }
+                else
+                {
+                    return FileUtils.FixPath($"{GetAppSetting("FtpPath")}/{ftpSubFolderPath}");
+                }
+            }
+        }
+        public string localFtpItRoot
+        {
+            get
+            {
+                if (Utils.IsBlank(ftpSubFolderPath))
+                {
+                    return FileUtils.FixPath(localFtpItRoot);
+                }
+                else
+                {
+                    return FileUtils.FixPath(localFtpItRoot);
+                }
+            }
+        }
 
         public string paylocityFtpRoot => FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("paylocityFtpPath")}");
 
@@ -664,7 +709,12 @@ namespace DataProcessing
                             "\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP\\AutomatedHeaderV1_Files",
                             alegeusFileHeadersRoot
                         },*/
-                        {"\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP", localFtpRoot},
+                        {
+                            "\\\\Fs009\\user_files_d\\BENEFLEX\\DEPTS\\FTP", localFtpRoot
+                        },
+                        {
+                            "\\\\fs009\\USER_FILES_D\\BENEFLEX\\Public\\__For_FileChecker\\FTP", localFtpRoot
+                        },
                     };
                 return _prodToRunningCtxPathReplacePatterns;
             }

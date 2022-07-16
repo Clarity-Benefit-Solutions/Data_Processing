@@ -22,7 +22,7 @@ namespace DataProcessingWebApp.Controllers
 
         // GET api/<controller>/5
         [System.Web.Http.Authorize]
-        public JobDetails StartJob(string id)
+        public JobDetails StartJob(string id, string ftpSubFolderPath)
         {
             try
             {
@@ -32,13 +32,13 @@ namespace DataProcessingWebApp.Controllers
                 }
 
                 // do job in background
-                var jobId = BackgroundJob.Enqueue(() => DataProcessingJob.StartJob(null, id));
+                var jobId = BackgroundJob.Enqueue(() => DataProcessingJob.StartJob(null, id, ftpSubFolderPath));
 
-                return new JobDetails(id, jobId, $"[JobDetails ID {jobId} Queued for {id}", "STARTED");
+                return new JobDetails(id, jobId, $"[JobDetails ID {jobId} Queued for {id} and ftpSubFolderPath {ftpSubFolderPath}", "STARTED");
             }
             catch (Exception ex)
             {
-                return new JobDetails(id, "", $"[Job Could Not Be Queued as {ex}", "FAILED");
+                return new JobDetails(id, "", $"[Job {id} and ftpSubFolderPath {ftpSubFolderPath} Could Not Be Queued as {ex}", "FAILED");
             }
         }
 
@@ -47,6 +47,12 @@ namespace DataProcessingWebApp.Controllers
         public JobDetails CheckFileAlegeus(HttpPostedFileBase file)
         {
             return this.CheckFile(file, "alegeus");
+        }
+
+        [System.Web.Http.Authorize]
+        public string localFtpRoot(string ftpSubFolderPath)
+        {
+            return DataProcessingJob.localFtpRoot(ftpSubFolderPath);
         }
 
         [System.Web.Http.Authorize]
@@ -87,7 +93,7 @@ namespace DataProcessingWebApp.Controllers
         }
 
         [System.Web.Http.Authorize]
-        public JobDetails JobResults(string jobId)
+        public JobDetails JobResults(string jobId, string ftpSubFolderPath)
         {
             try
             {
@@ -105,7 +111,7 @@ namespace DataProcessingWebApp.Controllers
                 var history = "";
                 var result = "";
 
-                var jobKey = (string) (jobData?.Job?.Args?.Last() ?? "");
+                var jobKey = (string)(jobData?.Job?.Args?.Last() ?? "");
 
                 var hMonitoringApi = JobStorage.Current.GetMonitoringApi();
                 var jobState = hMonitoringApi.JobDetails(jobId);
