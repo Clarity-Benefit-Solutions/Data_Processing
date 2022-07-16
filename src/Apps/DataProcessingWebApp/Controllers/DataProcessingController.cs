@@ -111,7 +111,7 @@ namespace DataProcessingWebApp.Controllers
                 var history = "";
                 var result = "";
 
-                var jobKey = (string)(jobData?.Job?.Args?.Last() ?? "");
+                var jobKey = (string)(jobData?.Job?.Args?[1] ?? "");
 
                 var hMonitoringApi = JobStorage.Current.GetMonitoringApi();
                 var jobState = hMonitoringApi.JobDetails(jobId);
