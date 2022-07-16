@@ -56,7 +56,7 @@ namespace TestApp
 
         private void HandleUnhandledException(object sender, UnhandledExceptionEventArgs args)
         {
-            var e = (Exception) args.ExceptionObject;
+            var e = (Exception)args.ExceptionObject;
             var logItem = new LogFields(
                 DateTime.Now.ToString(CultureInfo.InvariantCulture),
                 "",
@@ -89,16 +89,16 @@ namespace TestApp
                 if (this.listLogs.InvokeRequired)
                 {
                     this.listLogs.Invoke(
-                        (Action) (() =>
-                            {
-                                this._bindingSource1.Add(logItem);
-                                this._bindingSource1.MoveLast();
+                        (Action)(() =>
+                           {
+                               this._bindingSource1.Add(logItem);
+                               this._bindingSource1.MoveLast();
 
-                                if (ex != null)
-                                {
-                                    ShowThreadExceptionDialog("Unhandled Error", ex);
-                                }
-                            }
+                               if (ex != null)
+                               {
+                                   ShowThreadExceptionDialog("Unhandled Error", ex);
+                               }
+                           }
                         )
                     );
                 }
@@ -136,7 +136,7 @@ namespace TestApp
             DbUtils.eventOnLogFileOperationCallback += this.HandleOnFileLogOperationCallback;
         }
 
-     
+
 
         private async void cmdProcessIncomingFiles_Click(object sender, EventArgs e)
         {
@@ -144,7 +144,7 @@ namespace TestApp
 
             try
             {
-                await IncomingFileProcessing.ProcessAll();
+                await IncomingFileProcessing.ProcessAll(this.ftpSubFolderPath);
             }
             catch (Exception ex)
             {
@@ -170,7 +170,7 @@ namespace TestApp
 
             try
             {
-                await AlegeusErrorLog.ProcessAll();
+                await AlegeusErrorLog.ProcessAll(this.ftpSubFolderPath);
             }
             catch (Exception ex)
             {
@@ -255,7 +255,7 @@ namespace TestApp
 
             try
             {
-                IncomingFileProcessing.CopyTestFiles();
+                IncomingFileProcessing.CopyTestFiles(this.ftpSubFolderPath);
             }
             catch (Exception ex)
             {
@@ -316,6 +316,20 @@ namespace TestApp
             {
                 this.cmdDoALL.Enabled = true;
             }
+        }
+
+        private string ftpSubFolderPath { get; set; }
+        private void txtFtpSubFolderPath_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                this.ftpSubFolderPath = txtFtpSubFolderPath.Text;
+            }
+            catch (Exception ex)
+            {
+
+            }
+
         }
     }
 

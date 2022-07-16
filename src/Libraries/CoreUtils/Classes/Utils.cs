@@ -770,7 +770,9 @@ namespace CoreUtils.Classes
             string filenameNoExt = Path.GetFileNameWithoutExtension(fileName);
             filenameNoExt = StripUniqueIdAndHeaderTypeFromFileName(filenameNoExt);
 
-            var fileId = RandomStringNumbers(3);
+            // sumeet: use timestamp instead of random numbers
+            // var fileId = RandomStringNumbers(3);
+            var fileId = DateTime.Now.ToString("HHmmssfff");
             fileName = $"{filenameNoExt}{Utils.FilePartsDelimiter}{fileId}{Path.GetExtension(fileName)}";
             //
             fileName = fileName.Trim();

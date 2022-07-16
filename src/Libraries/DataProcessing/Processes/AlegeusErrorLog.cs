@@ -92,11 +92,11 @@ namespace DataProcessing
             //echo y| del G:\FTP\AutomatedHeaderV1_Files\*.*
             //
 
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
-            //
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
             //
             FileUtils.DeleteFiles(new[] { Vars.AlegeusErrorLogMbiFilesRoot, Vars.AlegeusErrorLogResFilesRoot }
                 , false
@@ -116,21 +116,21 @@ namespace DataProcessing
                 }
             );
 
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
-            //
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
         }
 
         protected void GetFtpFilesFromAlegeus(SFtpConnection ftpConn,
             FileOperationLogParams fileLogParams)
         {
             //
-            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            fileLogParams.SetSourceFolderName(Vars.remoteAlegeusFtpRootPath);
-            //
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            //fileLogParams.SetSourceFolderName(Vars.remoteAlegeusFtpRootPath);
+            ////
             DbUtils.LogFileOperation(fileLogParams);
 
             // download mbi dir files
@@ -218,20 +218,20 @@ namespace DataProcessing
                 }
             );
 
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
-            //
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
         }
 
         protected void ImportAlegeusFiles(DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
 
             //
             FileUtils.IterateDirectory(
@@ -261,11 +261,11 @@ namespace DataProcessing
                 , null
             );
 
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
-            //
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
         }
 
 
@@ -273,10 +273,10 @@ namespace DataProcessing
             FileOperationLogParams fileLogParams)
 
         {
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
 
             //
             string queryString = null;
@@ -289,21 +289,21 @@ namespace DataProcessing
             DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
                 fileLogParams?.GetMessageLogParams());
 
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
-            //
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
         }
 
         protected void MoveFilesToArchive(DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
-            //
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
 
             // move mbiFiles to Archive
             FileUtils.MoveFiles(
@@ -344,10 +344,10 @@ namespace DataProcessing
                 }
             );
 
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
             //
         } // routine
     } // end class

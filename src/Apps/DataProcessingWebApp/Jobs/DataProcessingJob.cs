@@ -147,12 +147,12 @@ namespace DataProcessingWebApp.Jobs
                     platformType = PlatformType.Cobra;
                 }
 
-                //  log operation
-                fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                    Path.GetFileName(srcFilePath), srcFilePath,
-                    $"DataProcessingWebApp-{MethodBase.GetCurrentMethod()?.Name}",
-                    "Starting", "Starting PreCheck");
-                DbUtils.LogFileOperation(fileLogParams);
+                ////  log operation
+                //fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                //    Path.GetFileName(srcFilePath), srcFilePath,
+                //    $"DataProcessingWebApp-{MethodBase.GetCurrentMethod()?.Name}",
+                //    "Starting", "Starting PreCheck");
+                //DbUtils.LogFileOperation(fileLogParams);
 
                 // init checker
                 using var fileChecker = new FileChecker(

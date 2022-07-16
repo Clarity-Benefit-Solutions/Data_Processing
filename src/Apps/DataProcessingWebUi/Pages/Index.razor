@@ -20,7 +20,7 @@
 </div>
 <div>
     <p></p>
-    
+
     <label>Use Testing Subfolder Root - leave blank for the default path    </label>
     <input @bind="ftpSubFolderPath" />
     <br />
@@ -34,7 +34,7 @@
 <div>
     <div>
         <p>
-            &nbsp;<button id="cmdCopyTestFiles" @onclick="cmdCopyTestFiles">CopyTestFiles</button>
+            &nbsp;<button id="cmdCopyTestFiles" disabled=@IsTaskRunning @onclick="cmdCopyTestFiles">CopyTestFiles</button>
             &nbsp;&nbsp;&nbsp;&nbsp; Copy test files BEFORE starting a new process
         </p>
     </div>
@@ -46,7 +46,7 @@
     <div>
         <p>
             &nbsp;
-            <button id="cmdProcessIncomingFiles" @onclick="cmdProcessIncomingFiles">ProcessIncomingFiles</button>
+            <button id="cmdProcessIncomingFiles" disabled=@IsTaskRunning @onclick="cmdProcessIncomingFiles">ProcessIncomingFiles</button>
             &nbsp;&nbsp;&nbsp;&nbsp; ProcessIncomingFiles
         </p>
     </div>
@@ -54,7 +54,7 @@
         <p>
 
             &nbsp;
-            <button id="cmdRetrieveFtpErrorLogs" @onclick="cmdRetrieveFtpErrorLogs">RetrieveFtpErrorLogs</button>
+            <button id="cmdRetrieveFtpErrorLogs" disabled=@IsTaskRunning @onclick="cmdRetrieveFtpErrorLogs">RetrieveFtpErrorLogs</button>
             &nbsp;&nbsp;&nbsp;&nbsp;Get Alegeus Upload Results
 
         </p>
@@ -63,7 +63,7 @@
         <p>
 
             &nbsp;
-            <button id="cmdProcessParticipantEnrollmentfiles" @onclick="cmdProcessParticipantEnrollmentfiles">Process Participant Enrollment Files</button>
+            <button id="cmdProcessParticipantEnrollmentfiles" disabled=@IsTaskRunning @onclick="cmdProcessParticipantEnrollmentfiles">Process Participant Enrollment Files</button>
             &nbsp;&nbsp;&nbsp;&nbsp; Process Participant Enrollment Files
         </p>
     </div>
@@ -79,7 +79,7 @@
         <p>
 
             &nbsp;
-            <button id="cmdShowJobs" @onclick="cmdShowJobStatus">Show Job Status</button>
+            <button id="cmdShowJobs" disabled=@IsTaskRunning @onclick="cmdShowJobStatus">Show Job Status</button>
             &nbsp;&nbsp;&nbsp;&nbsp; Show Job Status
         </p>
     </div>
@@ -91,7 +91,7 @@
     <p>
 
         &nbsp;
-        <button id="cmdClear" @onclick="Clear">Clear Logs</button>
+        <button id="cmdClear" disabled=@IsTaskRunning @onclick="Clear">Clear Logs</button>
         &nbsp;&nbsp;&nbsp;&nbsp; Show Job Status
     </p>
     <RadzenDataGrid @ref="Grid" Data="@Logs" TItem="LogFields" AllowColumnResize="true" Style="height: 200px; max-height: 400px">
@@ -197,6 +197,20 @@
         }
     }
 
+    private Boolean _IsTaskRunning= false;
+    private Boolean IsTaskRunning
+    {
+        get
+        {
+            return _IsTaskRunning;
+        }
+        set
+        {
+            _IsTaskRunning = value;
+            StateHasChanged();
+        }
+    }
+
     public string ProcessingServerBaseUrl
     {
         get
@@ -259,6 +273,9 @@
         var jobDetails = GetJobResult(jobId);
         //
         string jobState = jobDetails != null ? jobDetails.JobState : "ERROR";
+
+        //
+        IsTaskRunning = !IsJobComplete(jobDetails);
 
         // check job state
         switch (IsJobComplete(jobDetails))
@@ -367,36 +384,6 @@
             Log(logItem2);
             return "";
         }
-    }
-
-    void cmdCopyTestFiles()
-    {
-        dynamic result = SendRequest("StartJob", "copytestfiles");
-    }
-
-    void cmdProcessIncomingFiles()
-    {
-        dynamic result = SendRequest("StartJob", "processincomingfiles");
-    }
-
-    void cmdProcessAlegeusFiles()
-    {
-        dynamic result = SendRequest("StartJob", "processalegeusfiles");
-    }
-
-    void cmdRetrieveFtpErrorLogs()
-    {
-        dynamic result = SendRequest("StartJob", "retrieveftperrorlogs");
-    }
-
-    void cmdProcessParticipantEnrollmentfiles()
-    {
-        dynamic result = SendRequest("StartJob", "processparticipantenrollmentfiles");
-    }
-
-    void cmdShowJobStatus()
-    {
-        jsRuntime.InvokeAsync<object>("open", $"{ProcessingServerBaseUrl}/hangfire/jobs/processing", "_blank");
     }
 
     void Clear()
@@ -542,6 +529,42 @@
             }
         }
     }
+
+    void cmdCopyTestFiles()
+    {
+        IsTaskRunning = true;
+        dynamic result = SendRequest("StartJob", "copytestfiles");
+    }
+
+    void cmdProcessIncomingFiles()
+    {
+        IsTaskRunning = true;
+        dynamic result = SendRequest("StartJob", "processincomingfiles");
+    }
+
+    void cmdProcessAlegeusFiles()
+    {
+        IsTaskRunning = true;
+        dynamic result = SendRequest("StartJob", "processalegeusfiles");
+    }
+
+    void cmdRetrieveFtpErrorLogs()
+    {
+        IsTaskRunning = true;
+        dynamic result = SendRequest("StartJob", "retrieveftperrorlogs");
+    }
+
+    void cmdProcessParticipantEnrollmentfiles()
+    {
+        IsTaskRunning = true;
+        dynamic result = SendRequest("StartJob", "processparticipantenrollmentfiles");
+    }
+
+    void cmdShowJobStatus()
+    {
+        jsRuntime.InvokeAsync<object>("open", $"{ProcessingServerBaseUrl}/hangfire/jobs/processing", "_blank");
+    }
+
 
     // @code end
 }

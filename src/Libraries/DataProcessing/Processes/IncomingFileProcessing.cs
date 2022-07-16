@@ -91,11 +91,11 @@ namespace DataProcessing
 
         protected void MoveIncomingFilesToProcessingDirs(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
-            //
-            fileLogParams.SetFileNames("", "", "", "", "",
-                $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "",
+            //    $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
 
 
             //1. Get list of folders for header from DB
@@ -125,19 +125,19 @@ namespace DataProcessing
                     // we need to set these first before setting folderName
                     var fileLogParams1 = this.Vars.dbFileProcessingLogParams;
 
-                    fileLogParams.SetFileNames("", Path.GetFileName(rowFolderName), rowFolderName,
-                        Path.GetFileName(rowFolderName), "",
-                        $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                        "Starting", "Started Iterating Directory");
-                    //
-                    fileLogParams1.Bencode = rowBenCode;
-                    fileLogParams1.TemplateType = rowTemplateType;
-                    fileLogParams1.IcType = rowIcType;
-                    fileLogParams1.ToFtp = rowtoFtp;
-                    fileLogParams1.SetSourceFolderName(rowFolderName);
-                    DbUtils.LogFileOperation(fileLogParams);
+                    //fileLogParams.SetFileNames("", Path.GetFileName(rowFolderName), rowFolderName,
+                    //    Path.GetFileName(rowFolderName), "",
+                    //    $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                    //    "Starting", "Started Iterating Directory");
+                    ////
+                    //fileLogParams1.Bencode = rowBenCode;
+                    //fileLogParams1.TemplateType = rowTemplateType;
+                    //fileLogParams1.IcType = rowIcType;
+                    //fileLogParams1.ToFtp = rowtoFtp;
+                    //fileLogParams1.SetSourceFolderName(rowFolderName);
+                    //DbUtils.LogFileOperation(fileLogParams);
 
-                    //
+                    ////
                     // 3a. set unique fileNames for each file in source folder and add to file Log and move to Holding Dir
                     FileUtils.IterateDirectory(
                         new string[] { rowFolderName }, DirectoryIterateType.Files, false, new string[] { "*.csv", "*.xlsx", "*.xls", "*.txt", "*.mbi" },
@@ -484,11 +484,11 @@ namespace DataProcessing
 
         protected void PreCheckAndProcessAlegeusFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
-            //
-            fileLogParams.SetFileNames("", "", "", "", "",
-                $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "",
+            //    $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
             //
             //
             FileUtils.IterateDirectory(this.Vars.alegeusFilesToProcessPath, DirectoryIterateType.Files, false, "*.mbi",
@@ -522,21 +522,21 @@ namespace DataProcessing
                 (directory, file, ex) => { Import.MoveFileToPlatformRejectsFolder(file, ex.ToString()); }
             );
 
-            //
-            fileLogParams.SetFileNames("", "", "", "", "",
-                $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
-            //
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "",
+            //    $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
         }
 
         protected void TriageIncomingCobraFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
-            //
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
 
             // 1. txt -> csv, mbi -> csv
             FileUtils.IterateDirectory(
@@ -585,11 +585,11 @@ namespace DataProcessing
         protected void PrepareIncomingCobraQbFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
 
         {
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
-            //
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
 
             string fileExt = "*.csv";
             //
@@ -605,11 +605,11 @@ namespace DataProcessing
                 (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
             ); // IterateDir
 
-            //
-            fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
-            //
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
         }
 
         protected void PrepareCobraQbFile(string srcFilePath, DbConnection dbConn, FileOperationLogParams fileLogParams)
@@ -667,13 +667,13 @@ namespace DataProcessing
         protected void PreCheckAndProcessCobraFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
 
-            //
-            fileLogParams.SetFileNames("", "", "", "", "",
-                $"CobraFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
-            //
-            //
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "",
+            //    $"CobraFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
+            ////
             FileUtils.IterateDirectory(
                 new string[] { Vars.cobraFilesImportHoldingPath, Vars.cobraFilesPreparedQbPath },
                 DirectoryIterateType.Files,
@@ -709,12 +709,12 @@ namespace DataProcessing
                 (directory, file, ex) => { Import.MoveFileToPlatformRejectsFolder(file, ex.ToString()); }
             );
 
-            //
-            fileLogParams.SetFileNames("", "", "", "", "",
-                $"CobraFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
-            DbUtils.LogFileOperation(fileLogParams);
-            //
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "",
+            //    $"CobraFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
 
 
 
