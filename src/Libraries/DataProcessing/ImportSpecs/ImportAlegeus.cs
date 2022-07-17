@@ -79,10 +79,10 @@ namespace DataProcessing
                             0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
                         mappings.Add(new TypedCsvColumn("EmployeeSocialSecurityNumber", "EmployeeSocialSecurityNumber",
-                            FormatType.AlphaNumeric, null, 9, 9, 0, 0));
+                            FormatType.SSN, null, 9, 9, 0, 0));
                         mappings.Add(new TypedCsvColumn("LastName", "LastName", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("FirstName", "FirstName", FormatType.AlphaOnly, null, 0, 0, 0,
                             0));
@@ -125,7 +125,7 @@ namespace DataProcessing
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
                         //
                         mappings.Add(
@@ -150,7 +150,7 @@ namespace DataProcessing
                             0));
                         mappings.Add(new TypedCsvColumn("PlanId", "PlanId", FormatType.AlphaNumericAndDashes, null, 3, 15, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
                         mappings.Add(new TypedCsvColumn("AccountTypeCode", "AccountTypeCode", FormatType.AlphaNumericAndDashes,
                             null, 3, 15, 0,
@@ -199,7 +199,7 @@ namespace DataProcessing
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
                         mappings.Add(new TypedCsvColumn("PlanId", "PlanId", FormatType.AlphaNumericAndDashes, null, 3, 15, 0,
                             0));
@@ -227,7 +227,7 @@ namespace DataProcessing
                             0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
                         mappings.Add(new TypedCsvColumn("DependentID", "DependentID", FormatType.String, null, 0, 0, 0,
                             0));
@@ -258,7 +258,7 @@ namespace DataProcessing
                             0));
                         mappings.Add(new TypedCsvColumn("DependentID", "DependentID", FormatType.String, null, 0, 0, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
 
                         //
@@ -282,7 +282,7 @@ namespace DataProcessing
                             0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
                         mappings.Add(new TypedCsvColumn("DependentID", "DependentID", FormatType.String, null, 0, 0, 0,
                             0));
@@ -302,7 +302,7 @@ namespace DataProcessing
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
                         mappings.Add(new TypedCsvColumn("DependentID", "DependentID", FormatType.String, null, 0, 0, 0,
                             0));
@@ -333,7 +333,7 @@ namespace DataProcessing
                             0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
                         mappings.Add(new TypedCsvColumn("IssueCard", "IssueCard", FormatType.String, null, 0, 0, 0, 0));
                         mappings.Add(new TypedCsvColumn("AddressLine1",
@@ -349,7 +349,7 @@ namespace DataProcessing
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
                         mappings.Add(new TypedCsvColumn("DependentID", "DependentID", FormatType.String, null, 0, 0, 0,
                             0));
@@ -386,7 +386,7 @@ namespace DataProcessing
                             0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
                         // Note: do NOT default deposit type 
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0,
@@ -411,7 +411,7 @@ namespace DataProcessing
                             0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0,
                             0, "1"));
@@ -447,7 +447,7 @@ namespace DataProcessing
                             0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0,
                             0));
@@ -471,7 +471,7 @@ namespace DataProcessing
                             0, 0, 0));
                         mappings.Add(new TypedCsvColumn("PlanEndDate", "PlanEndDate", FormatType.IsoDate, null, 0, 0, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0,
                             0));
@@ -499,7 +499,7 @@ namespace DataProcessing
                             0));
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
                         mappings.Add(new TypedCsvColumn("EligibilityDate", "EligibilityDate", FormatType.IsoDate, null,
                             0, 0, 0,
@@ -515,7 +515,7 @@ namespace DataProcessing
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
-                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.AlphaNumeric, null, 9, 9,
+                        mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
                         //
                         mappings.Add(

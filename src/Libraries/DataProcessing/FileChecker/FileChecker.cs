@@ -146,7 +146,7 @@ namespace DataProcessing
 
                             // export all rows to file
                             queryStringOrgFile =
-       $"exec [dbo].[proc_{platformName}_ExportImportFile] '{Path.GetFileName(this.SrcFilePath)}', 'original_file', {this.FileLogParams.FileLogId}";
+       $"exec [dbo].[proc_{platformName}_ExportImportFile] '{Path.GetFileName(this.SrcFilePath)}', 'passed_lines', {this.FileLogParams.FileLogId}";
 
                             //
                             ImpExpUtils.ExportSingleColumnFlatFile(destFilePath, DbConn, queryStringOrgFile,

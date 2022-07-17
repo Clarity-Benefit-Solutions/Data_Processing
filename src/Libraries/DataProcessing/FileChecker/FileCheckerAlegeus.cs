@@ -704,7 +704,7 @@ namespace DataProcessing
         {
             var errorMessage = "";
             var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-{mbiRow.EmployeeID}-{mbiRow.AccountTypeCode}-{mbiRow.PlanId}-{mbiRow.PlanStartDate}-{mbiRow.PlanEndDate}-{mbiRow.EffectiveDate}"; 
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-{mbiRow.EmployeeID}-{mbiRow.AccountTypeCode}-{mbiRow.PlanId}-{mbiRow.PlanStartDate}-{mbiRow.PlanEndDate}-{mbiRow.EffectiveDate}";
             if (_cache.ContainsKey(cacheKey))
             {
                 errorMessage = _cache.Get(cacheKey)?.ToString();
@@ -1144,36 +1144,57 @@ namespace DataProcessing
 
                     case FormatType.Integer:
                         // remove any non digits
-                        value = Utils.regexInteger.Replace(value, String.Empty);
+                        //todo: Sumeet: dont replace any invalid characters - just trim spaces and commas
+                        //value = Utils.regexInteger.Replace(value, String.Empty);
+                        value = value.Replace(",", "").Replace(" ", "");
                         //
                         if (!Utils.IsInteger(value))
                         {
                             this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn,
                                 $"{column.SourceColumn} must be numbers only. '{orgValue}' is not valid");
                         }
+                        else
+                        {
+                            // format as 0
+                            var intValue = Utils.ToInt(value);
+                            value = intValue.ToString("0");
+                        }
 
                         break;
 
                     case FormatType.Double:
                         // remove any non digits and non . and non ,
-                        value = Utils.regexDouble.Replace(value, String.Empty);
+                        //todo: Sumeet: dont replace any invalid characters - just trim spaces and commas
+                        //value = Utils.regexDouble.Replace(value, String.Empty);
+                        value = value.Replace(",", "").Replace(" ", "");
+
                         if (!Utils.IsDouble(value))
                         {
                             this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn,
                                 $"{column.SourceColumn} must be a Currency Value. '{orgValue}' is not valid");
                         }
+                        else
+                        {
 
-                        // format as 0.00
-                        var dblValue = Utils.ToDouble(value);
-                        value = dblValue.ToString("0.00");
-
+                            // format as 0.00
+                            var dblValue = Utils.ToDouble(value);
+                            value = dblValue.ToString("0.00");
+                        }
                         break;
 
                     case FormatType.IsoDate:
                         // remove any non digits
                         value = Utils.regexDate.Replace(value, String.Empty);
-                        value = Utils.ToIsoDateString(Utils.ToDate(value));
-                        if (!Utils.IsIsoDate(value, column.MaxLength > 0))
+                        try
+                        {
+                            value = Utils.ToIsoDateString(Utils.ToDate(value));
+                            if (!Utils.IsIsoDate(value, column.MaxLength > 0))
+                            {
+                                this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn,
+                                    $"{column.SourceColumn} must be in format YYYYMMDD. '{orgValue}' is not valid");
+                            }
+                        }
+                        catch (Exception ex)
                         {
                             this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn,
                                 $"{column.SourceColumn} must be in format YYYYMMDD. '{orgValue}' is not valid");
@@ -1184,12 +1205,20 @@ namespace DataProcessing
                     case FormatType.IsoDateTime:
                         // remove any non digits
                         value = Utils.regexDate.Replace(value, String.Empty);
-                        value = Utils.ToDateTimeString(Utils.ToDateTime(value));
+                        try
+                        {
+                            value = Utils.ToDateTimeString(Utils.ToDateTime(value));
 
-                        if (!Utils.IsIsoDateTime(value, column.MaxLength > 0))
+                            if (!Utils.IsIsoDateTime(value, column.MaxLength > 0))
+                            {
+                                this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn,
+                                    $"{column.SourceColumn} must be in format YYYYMMDD HHMMSS. '{orgValue}' is not valid");
+                            }
+                        }
+                        catch (Exception ex)
                         {
                             this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn,
-                                $"{column.SourceColumn} must be in format YYYYMMDD. '{orgValue}' is not valid");
+                                $"{column.SourceColumn} must be in format YYYYMMDD HHMMSS. '{orgValue}' is not valid");
                         }
 
                         break;
@@ -1228,7 +1257,7 @@ namespace DataProcessing
             }
 
             // pad ssn to 9 digits with leading zeros
-            if ((column.SourceColumn == "EmployeeSocialSecurityNumber" || column.SourceColumn == "EmployeeID"))
+            if ((column.SourceColumn == "EmployeeSocialSecurityNumber" || column.SourceColumn == "EmployeeID") || column.FormatType == FormatType.SSN)
 
             {
                 if (!Utils.IsBlank(value))

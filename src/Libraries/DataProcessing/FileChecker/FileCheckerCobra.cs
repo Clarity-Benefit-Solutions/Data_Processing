@@ -1104,36 +1104,57 @@ namespace DataProcessing
 
                     case FormatType.Integer:
                         // remove any non digits
-                        value = Utils.regexInteger.Replace(value, String.Empty);
+                        //todo: Sumeet: dont replace any invalid characters - just trim spaces and commas
+                        //value = Utils.regexInteger.Replace(value, String.Empty);
+                        value = value.Replace(",", "").Replace(" ", "");
                         //
                         if (!Utils.IsInteger(value))
                         {
                             this.AddCobraErrorForRow(dataRow, column.SourceColumn,
                                 $"{column.SourceColumn} must be numbers only. '{orgValue}' is not valid");
                         }
+                        else
+                        {
+                            // format as 0
+                            var intValue = Utils.ToInt(value);
+                            value = intValue.ToString("0");
+                        }
 
                         break;
 
                     case FormatType.Double:
                         // remove any non digits and non . and non ,
-                        value = Utils.regexDouble.Replace(value, String.Empty);
+                        //todo: Sumeet: dont replace any invalid characters - just trim spaces and commas
+                        //value = Utils.regexDouble.Replace(value, String.Empty);
+                        value = value.Replace(",", "").Replace(" ", "");
+
                         if (!Utils.IsDouble(value))
                         {
                             this.AddCobraErrorForRow(dataRow, column.SourceColumn,
                                 $"{column.SourceColumn} must be a Currency Value. '{orgValue}' is not valid");
                         }
+                        else
+                        {
 
-                        // format as 0.00
-                        var dblValue = Utils.ToDouble(value);
-                        value = dblValue.ToString("0.00");
-
+                            // format as 0.00
+                            var dblValue = Utils.ToDouble(value);
+                            value = dblValue.ToString("0.00");
+                        }
                         break;
 
                     case FormatType.IsoDate:
                         // remove any non digits
                         value = Utils.regexDate.Replace(value, String.Empty);
-                        value = Utils.ToIsoDateString(Utils.ToDate(value));
-                        if (!Utils.IsIsoDate(value, column.MaxLength > 0))
+                        try
+                        {
+                            value = Utils.ToIsoDateString(Utils.ToDate(value));
+                            if (!Utils.IsIsoDate(value, column.MaxLength > 0))
+                            {
+                                this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                                    $"{column.SourceColumn} must be in format YYYYMMDD. '{orgValue}' is not valid");
+                            }
+                        }
+                        catch (Exception ex)
                         {
                             this.AddCobraErrorForRow(dataRow, column.SourceColumn,
                                 $"{column.SourceColumn} must be in format YYYYMMDD. '{orgValue}' is not valid");
@@ -1144,12 +1165,61 @@ namespace DataProcessing
                     case FormatType.IsoDateTime:
                         // remove any non digits
                         value = Utils.regexDate.Replace(value, String.Empty);
-                        value = Utils.ToDateTimeString(Utils.ToDateTime(value));
+                        try
+                        {
+                            value = Utils.ToDateTimeString(Utils.ToDateTime(value));
 
-                        if (!Utils.IsIsoDateTime(value, column.MaxLength > 0))
+                            if (!Utils.IsIsoDateTime(value, column.MaxLength > 0))
+                            {
+                                this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                                    $"{column.SourceColumn} must be in format YYYYMMDD HHMMSS. '{orgValue}' is not valid");
+                            }
+                        }
+                        catch (Exception ex)
                         {
                             this.AddCobraErrorForRow(dataRow, column.SourceColumn,
-                                $"{column.SourceColumn} must be in format YYYYMMDD. '{orgValue}' is not valid");
+                                $"{column.SourceColumn} must be in format YYYYMMDD HHMMSS. '{orgValue}' is not valid");
+                        }
+
+                        break;
+
+                    case FormatType.CobraDate:
+                        // remove any non digits
+                        value = Utils.regexDate.Replace(value, String.Empty);
+                        try
+                        {
+                            value = Utils.ToCobraDateString(Utils.ToDateTime(value));
+
+                            if (!Utils.IsCobraDate(value, column.MaxLength > 0))
+                            {
+                                this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                                    $"{column.SourceColumn} must be in format MM/DD/YYYY. '{orgValue}' is not valid");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be in format MM/DD/YYYY. '{orgValue}' is not valid");
+                        }
+
+                        break;
+                    case FormatType.CobraDateTime:
+                        // remove any non digits
+                        value = Utils.regexDate.Replace(value, String.Empty);
+                        try
+                        {
+                            value = Utils.ToCobraDateTimeString(Utils.ToDateTime(value));
+
+                            if (!Utils.IsCobraDateTime(value, column.MaxLength > 0))
+                            {
+                                this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                                    $"{column.SourceColumn} must be in format MM/DD/YYYY HH:mm AM. '{orgValue}' is not valid");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            this.AddCobraErrorForRow(dataRow, column.SourceColumn,
+                                $"{column.SourceColumn} must be in format MM/DD/YYYY HH:mm AM. '{orgValue}' is not valid");
                         }
 
                         break;

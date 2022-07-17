@@ -478,6 +478,58 @@ namespace CoreUtils.Classes
 
             return true;
         }
+        public static bool IsCobraDateTime(string value, bool checkNotNull = true)
+        {
+            value = value?.Trim();
+            if (IsBlank(value))
+            {
+                if (checkNotNull)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            var parsed = DateTime.TryParseExact(value, "MM/DD/YYYY HH:mm AM", null, DateTimeStyles.None, out var aDate);
+            if (!parsed)
+            {
+                return false;
+            }
+
+            if (aDate == DateTime.MinValue && checkNotNull)
+            {
+                return false;
+            }
+
+            return true;
+        }
+        public static bool IsCobraDate(string value, bool checkNotNull = true)
+        {
+            value = value?.Trim();
+            if (IsBlank(value))
+            {
+                if (checkNotNull)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            var parsed = DateTime.TryParseExact(value, "MM/DD/YYYY", null, DateTimeStyles.None, out var aDate);
+            if (!parsed)
+            {
+                return false;
+            }
+
+            if (aDate == DateTime.MinValue && checkNotNull)
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         public static DateTime? ToDate(string value)
         {
@@ -542,9 +594,22 @@ namespace CoreUtils.Classes
                 return aDateUs2;
             }
 
+            // COBRA date  
+            parsed = DateTime.TryParseExact(value, "MM/DD/YYYY", null, DateTimeStyles.None, out var aDateCobra);
+            if (parsed)
+            {
+                return aDateCobra;
+            }
+
+            // COBRA date time 
+            parsed = DateTime.TryParseExact(value, "MM/DD/YYYY HH:mm AM", null, DateTimeStyles.None, out var aDateCobra2);
+            if (parsed)
+            {
+                return aDateCobra2;
+            }
+
             // try default Parse
             return DateTime.Parse(value);
-
 
         }
 
@@ -558,6 +623,17 @@ namespace CoreUtils.Classes
             var str = ToIsoDateString(value);
             return str;
         }
+        public static string ToCobraDateString(DateTime? value)
+        {
+            if (value == null)
+            {
+                return "";
+            }
+
+            var str = value?.ToString("MM/DD/YYYY");
+            return str;
+        }
+
         public static string ToUsDateString(DateTime? value)
         {
             if (value == null)
@@ -625,6 +701,17 @@ namespace CoreUtils.Classes
             return str;
         }
 
+        public static string ToCobraTimeString(DateTime? value)
+        {
+            if (value == null)
+            {
+                return "";
+            }
+
+            var str = value?.ToString("HH:mm AM");
+            return str;
+        }
+
         public static string ToDateTimeString(DateTime? value)
         {
             if (value == null)
@@ -633,6 +720,17 @@ namespace CoreUtils.Classes
             }
 
             var str = $"{ToDateString(value)} {ToTimeString(value)} ";
+            return str;
+        }
+
+        public static string ToCobraDateTimeString(DateTime? value)
+        {
+            if (value == null)
+            {
+                return "";
+            }
+
+            var str = $"{ToCobraDateString(value)} {ToCobraTimeString(value)} ";
             return str;
         }
 

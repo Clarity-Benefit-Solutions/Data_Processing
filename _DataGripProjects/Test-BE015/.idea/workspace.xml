@@ -26,18 +26,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0853958f-c1a2-4d9c-ae8d-4ae39e7a6a8c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../src/.vs/DataProcessing/v17/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/.vs/DataProcessing/v17/.suo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebApp/App_Start/RouteConfig.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebApp/App_Start/RouteConfig.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebApp/Controllers/DataProcessingController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebApp/Controllers/DataProcessingController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebApp/DataProcessingWebApp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebApp/DataProcessingWebApp.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebApp/Jobs/DataProcessingJob.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebApp/Jobs/DataProcessingJob.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebUi/DataProcessingWebUi.csproj.user" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebUi/DataProcessingWebUi.csproj.user" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebUi/Pages/Index.razor" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebUi/Pages/Index.razor" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebUi/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Apps/DataProcessingWebUi/Properties/launchSettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Apps/DataProcessingWindowsApp/Form1.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Apps/DataProcessingWindowsApp/Form1.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Apps/DataProcessingWindowsApp/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Apps/DataProcessingWindowsApp/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Processes/AlegeusErrorLog.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Processes/AlegeusErrorLog.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Processes/IncomingFileProcessing.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Processes/IncomingFileProcessing.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Vars.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/Vars.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
