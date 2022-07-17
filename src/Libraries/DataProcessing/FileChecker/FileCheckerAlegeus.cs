@@ -176,7 +176,7 @@ namespace DataProcessing
             // first fix all columns
             foreach (var column in mappings.Columns)
             {
-                  // skip some columns
+                // skip some columns
                 switch (column.SourceColumn?.ToLowerInvariant() ?? "")
                 {
                     case "":
@@ -204,7 +204,8 @@ namespace DataProcessing
             foreach (var column in mappings.Columns)
             {
                 // if previous column caused an error, skip other columns
-                if (lineHasError)
+                // if any column is not in a good format, skip further checking as therecould be unexpected errors
+                if (lineHasError || !Utils.IsBlank(mbiRow.error_message))
                 {
                     break;
                 }
@@ -261,8 +262,9 @@ namespace DataProcessing
                         break;
                 }
             }
-            // check for duplicate posting of the row
-            if (!lineHasError)
+            // if previous column caused an error, skip other columns
+            // if any column is not in a good format, skip further checking as therecould be unexpected errors
+            if (!lineHasError && Utils.IsBlank(mbiRow.error_message))
             {
                 lineHasError = CheckForDuplicateAlegeusPosting(mbiRow, fileFormat);
             }
