@@ -149,7 +149,14 @@ namespace DataProcessing
             foreach (var mbiRow in mbiRows)
             {
                 rowNo++;
-                this.CheckAlegeusRowData(fileFormat, mbiRow, mappings);
+                try
+                {
+                    this.CheckAlegeusRowData(fileFormat, mbiRow, mappings);
+                }
+                catch (Exception ex)
+                {
+                    this.AddAlegeusErrorForRow(mbiRow, "Error", ex.Message);
+                }
             }
 
             // save any changes
@@ -164,12 +171,12 @@ namespace DataProcessing
                 return;
             }
 
-            Boolean hasError;
+            Boolean lineHasError = false;
 
             // first fix all columns
             foreach (var column in mappings.Columns)
             {
-                // skip some columns
+                  // skip some columns
                 switch (column.SourceColumn?.ToLowerInvariant() ?? "")
                 {
                     case "":
@@ -196,6 +203,11 @@ namespace DataProcessing
             // then check data for each column
             foreach (var column in mappings.Columns)
             {
+                // if previous column caused an error, skip other columns
+                if (lineHasError)
+                {
+                    break;
+                }
                 // skip some columns
                 switch (column.SourceColumn?.ToLowerInvariant() ?? "")
                 {
@@ -218,33 +230,31 @@ namespace DataProcessing
                 {
                     // ER ID
                     case "tpaid":
-                        hasError = this.CheckAlegeusTpaExists(mbiRow, column, fileFormat);
+                        lineHasError = this.CheckAlegeusTpaExists(mbiRow, column, fileFormat);
                         break;
 
                     // ER ID
                     case "employerid":
                         //ER must exist before any Import files are sent
-                        hasError = this.CheckAlegeusEmployerExists(mbiRow, column, fileFormat);
+                        lineHasError = this.CheckAlegeusEmployerExists(mbiRow, column, fileFormat);
                         break;
 
                     // EE ID
                     case "employeeid":
                         //ER must exist before any Import files are sent. But for IB files, employee need not exist - he is being added
-                        hasError = this.CheckAlegeusEmployeeExists(mbiRow, column, fileFormat);
-
+                        lineHasError = this.CheckAlegeusEmployeeExists(mbiRow, column, fileFormat);
                         break;
                     // plan related
                     case "planid":
                     case @"accounttypecode":
                         if (fileFormat == EdiFileFormat.AlegeusEnrollment)
                         {
-                            hasError = this.CheckAlegeusEmployerPlanExists(mbiRow, column, fileFormat);
+                            lineHasError = this.CheckAlegeusEmployerPlanExists(mbiRow, column, fileFormat);
                         }
                         else if (fileFormat == EdiFileFormat.AlegeusEmployeeDeposit)
                         {
-                            hasError = this.CheckAlegeusEmployeePlanExists(mbiRow, column, fileFormat);
+                            lineHasError = this.CheckAlegeusEmployeePlanExists(mbiRow, column, fileFormat);
                         }
-
                         break;
 
                     default:
@@ -252,7 +262,10 @@ namespace DataProcessing
                 }
             }
             // check for duplicate posting of the row
-            hasError = CheckForDuplicateAlegeusPosting(mbiRow, fileFormat);
+            if (!lineHasError)
+            {
+                lineHasError = CheckForDuplicateAlegeusPosting(mbiRow, fileFormat);
+            }
         }
 
         private void AddAlegeusErrorForRow(mbi_file_table_stage mbiRow, string errCode, string errMessage,

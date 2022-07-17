@@ -321,6 +321,11 @@ namespace DataProcessing
                         }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                throw ex;
+            }
             finally
             {
                 if (operationResult == null)
@@ -392,7 +397,7 @@ namespace DataProcessing
 
         #endregion
 
-      
+
     }
 
 }

@@ -136,7 +136,14 @@ namespace DataProcessing
                 TypedCsvSchema mappings = Import.GetCobraFileImportMappings(rowType, versionNo);
 
                 rowNo++;
-                this.CheckCobraFileData(versionNo, dataRow, mappings);
+                try
+                {
+                    this.CheckCobraFileData(versionNo, dataRow, mappings);
+                }
+                catch (Exception ex)
+                {
+                    this.AddCobraErrorForRow(dataRow, "Error", ex.Message);
+                }
             }
 
             // save any changes
@@ -152,11 +159,17 @@ namespace DataProcessing
                 return;
             }
 
-            Boolean hasError;
+            Boolean lineHasError = false;
 
             // first fix all columns
             foreach (var column in mappings.Columns)
             {
+                // if previous column caused an error, skip other columns
+                if (lineHasError)
+                {
+                    break;
+                }
+
                 // skip some columns
                 switch (column.SourceColumn?.ToLowerInvariant() ?? "")
                 {
@@ -227,7 +240,12 @@ namespace DataProcessing
 
             }
             // check for duplicate posting of the row
-            hasError = CheckForDuplicateCobraPosting(dataRow, versionNo);
+            if (!lineHasError)
+            {
+                lineHasError = CheckForDuplicateCobraPosting(dataRow, versionNo);
+            }
+            // check for duplicate posting of the row
+
         }
 
         private void AddCobraErrorForRow(cobra_file_table_stage dataRow, string errCode, string errMessage,
