@@ -138,6 +138,10 @@ namespace DataProcessing
                 rowNo++;
                 try
                 {
+                    // clear any previous values
+                    dataRow.error_code = "";
+                    dataRow.error_message = "";
+                    //
                     this.CheckCobraFileData(versionNo, dataRow, mappings);
                 }
                 catch (Exception ex)

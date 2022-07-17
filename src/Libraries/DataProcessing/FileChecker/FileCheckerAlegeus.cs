@@ -151,6 +151,10 @@ namespace DataProcessing
                 rowNo++;
                 try
                 {
+                    // clear any previous values
+                    mbiRow.error_code = "";
+                    mbiRow.error_message = "";
+                    //
                     this.CheckAlegeusRowData(fileFormat, mbiRow, mappings);
                 }
                 catch (Exception ex)
@@ -242,6 +246,8 @@ namespace DataProcessing
 
                     // EE ID
                     case "employeeid":
+                    case "ssn":
+                    case "EmployeeSocialSecurityNumber":
                         //ER must exist before any Import files are sent. But for IB files, employee need not exist - he is being added
                         lineHasError = this.CheckAlegeusEmployeeExists(mbiRow, column, fileFormat);
                         break;
@@ -524,7 +530,9 @@ namespace DataProcessing
                     string queryString =
                         $"select * from  [mbi_file_table] " +
                         $" where " +
-                        $" TpaId='{mbiRow.TpaId}'" +
+                        /* if already checked and posted - as we import it in mbi_file_table during create headers*/
+                        $" check_type='PreCheck'" +
+                        $" and TpaId='{mbiRow.TpaId}'" +
                         $" and EmployerId='{mbiRow.EmployerId}'" +
                         $" and EmployeeID='{mbiRow.EmployeeID}'" +
                         $" and AccountTypeCode='{mbiRow.AccountTypeCode}'" +
