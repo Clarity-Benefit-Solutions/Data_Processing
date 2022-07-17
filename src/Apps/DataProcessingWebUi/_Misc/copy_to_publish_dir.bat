@@ -1,0 +1,1 @@
+cmd /k %~dp0copy_to_publish_dir_2.bat

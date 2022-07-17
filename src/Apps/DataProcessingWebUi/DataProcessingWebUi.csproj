@@ -5,20 +5,26 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>80b44024-8ccc-4709-b99e-298bb9a0029e</UserSecretsId>
-    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
-    <DockerfileContext>..\..</DockerfileContext>
+    <BaseOutputPath>E:\Temp\DataProcessingWebUIBin</BaseOutputPath>
+    <IsPublishable>False</IsPublishable>
+    <BaseIntermediateOutputPath>E:\Temp\DataProcessingWebUIObj</BaseIntermediateOutputPath>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+    <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
+    <RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Optimize>False</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.JSInterop" Version="6.0.4" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Radzen.Blazor" Version="3.17.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\CoreUtils\CoreUtils.csproj" />
-    <ProjectReference Include="..\..\Libraries\DataProcessing\DataProcessing.csproj" />
   </ItemGroup>
 
   <ItemGroup>

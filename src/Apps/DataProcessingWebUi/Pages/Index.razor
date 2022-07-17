@@ -32,7 +32,7 @@
     <p></p>
 </div>
 <div>
-    <div>
+  @*  <div>
         <p>
             &nbsp;<button id="cmdCopyTestFiles" disabled=@IsTaskRunning @onclick="cmdCopyTestFiles">CopyTestFiles</button>
             &nbsp;&nbsp;&nbsp;&nbsp; Copy test files BEFORE starting a new process
@@ -43,14 +43,15 @@
 
         </p>
     </div>
-    <div>
+   *@ 
+   <div>
         <p>
             &nbsp;
             <button id="cmdProcessIncomingFiles" disabled=@IsTaskRunning @onclick="cmdProcessIncomingFiles">ProcessIncomingFiles</button>
             &nbsp;&nbsp;&nbsp;&nbsp; ProcessIncomingFiles
         </p>
     </div>
-    <div>
+  @*  <div>
         <p>
 
             &nbsp;
@@ -59,20 +60,11 @@
 
         </p>
     </div>
-    <div>
-        <p>
-
-            &nbsp;
-            <button id="cmdProcessParticipantEnrollmentfiles" disabled=@IsTaskRunning @onclick="cmdProcessParticipantEnrollmentfiles">Process Participant Enrollment Files</button>
-            &nbsp;&nbsp;&nbsp;&nbsp; Process Participant Enrollment Files
-        </p>
-    </div>
-    <div>
+    *@
+      <div>
         <p>
             &nbsp;
             Upload File For Checking: &nbsp;&nbsp;&nbsp;&nbsp; <InputFile OnChange="@UploadFiles" single />
-
-
         </p>
     </div>
     <div>
@@ -83,6 +75,15 @@
             &nbsp;&nbsp;&nbsp;&nbsp; Show Job Status
         </p>
     </div>
+   @*  <div>
+        <p>
+
+            &nbsp;
+            <button id="cmdProcessParticipantEnrollmentfiles" disabled=@IsTaskRunning @onclick="cmdProcessParticipantEnrollmentfiles">Process Participant Enrollment Files</button>
+            &nbsp;&nbsp;&nbsp;&nbsp; Process Participant Enrollment Files
+        </p>
+    </div>*@
+ 
     <p>
         Logs
     </p>
@@ -94,14 +95,14 @@
         <button id="cmdClear" disabled=@IsTaskRunning @onclick="Clear">Clear Logs</button>
         &nbsp;&nbsp;&nbsp;&nbsp; Show Job Status
     </p>
-    <RadzenDataGrid @ref="Grid" Data="@Logs" TItem="LogFields" AllowColumnResize="true" Style="height: 200px; max-height: 400px">
+    <RadzenDataGrid @ref="Grid" Data="@Logs" TItem="LogFields" AllowColumnResize="true" Style="height: 200px; max-height: 300px; overflow-x:hidden;
+    overflow-y:visible;">
         <Columns>
             <RadzenDataGridColumn TItem="LogFields" Property="LogTime" Title="LogTime" Width="150px" />
             <RadzenDataGridColumn TItem="LogFields" Property="Task" Title="Task" Width="150px" />
             <RadzenDataGridColumn TItem="LogFields" Property="Status" Title="Status" Width="150px" />
         </Columns>
     </RadzenDataGrid>
-
 </div>
 <div>
     <p>
@@ -215,17 +216,13 @@
     {
         get
         {
-            if (true)
+            if (false)
             {
                 return "https://localhost:44320";
             }
             else
             {
-                string baseUri = navManager.BaseUri;
-                string[] parts = baseUri.Split(":");
-                //string strUrl = $"{parts[0]}:{parts[1]}:81";
-                string strUrl = $"http:{parts[1]}:81";
-                return strUrl;
+                return "http://be015:81";
             }
 
         }
