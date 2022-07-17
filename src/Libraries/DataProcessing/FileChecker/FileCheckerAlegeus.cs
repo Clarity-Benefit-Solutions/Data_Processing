@@ -246,9 +246,7 @@ namespace DataProcessing
 
                     // EE ID
                     case "employeeid":
-                    case "ssn":
-                    case "EmployeeSocialSecurityNumber":
-                        //ER must exist before any Import files are sent. But for IB files, employee need not exist - he is being added
+                        //EE must exist before any Import files are sent. But for IB files, employee need not exist - he is being added
                         lineHasError = this.CheckAlegeusEmployeeExists(mbiRow, column, fileFormat);
                         break;
                     // plan related
