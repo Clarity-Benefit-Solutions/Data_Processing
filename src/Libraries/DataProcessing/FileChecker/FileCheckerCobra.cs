@@ -198,259 +198,11 @@ namespace DataProcessing
                 var formattedValue = EnsureValueIsOfFormatAndMatchesRules(dataRow, column, mappings);
             }
 
-            // is start of a main entity
-            switch (dataRow.row_type.ToUpper())
+            // check record data and logic
+            lineHasError = this.CheckCobraRecordData(versionNo, dataRow, mappings);
+            if (lineHasError)
             {
-                case "[QB]":
-                case "[QBLOOKUP]":
-                case "[SPM]":
-                case "[SPMLOOKUP]":
-                case "[NPM]":
-                case "[NPMLOOKUP]":
-                    // clear any previous cached record
-                    this.currentQB = null;
-                    this.currentSPM = null;
-                    this.currentNPM = null;
-
-                    //get client and division 
-                    this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
-                    if (this.currentClientID <= 0)
-                    {
-                        this.AddCobraErrorForRow(dataRow, "Client And DiVision Does Not Exist", $"Client with '{dataRow.ClientName}' and Division Name '{dataRow.ClientDivisionName}' Not Found. ");
-                        return;
-                    }
-
-                    // check if it is the start of a new EntityType
-                    switch (dataRow.row_type)
-                    {
-                        case "[QB]":
-
-                            // check QB exists - if so raise error
-                            QB theQB = this.GetCobraQB(dataRow);
-                            if (theQB != null && theQB.MemberID > 0)
-                            {
-                                this.AddCobraErrorForRow(dataRow, "QB Already exists", $"Duplicate QB. QB with SSN '{theQB.SSN}' already exists");
-                                return;
-                            }
-
-                            //OK - there is no such QB in the database - we instantiate  one for checkiong events etc
-                            this.currentQB = this.CreateCobraQBForDataRow(dataRow);
-
-
-                            break;
-
-                        case "[QBLOOKUP]":
-
-                            // check QB exists - if so raise error
-                            QB theQB2 = this.GetCobraQB(dataRow);
-                            if (theQB2 != null && theQB2.MemberID > 0)
-                            {
-                                //ok
-                            }
-                            else
-                            {
-                                this.AddCobraErrorForRow(dataRow, "QB Not Found", $"QB with SSN '{theQB2.SSN}' not found");
-                                return;
-                            }
-
-                            //OK - there is no such QB in the database - we instantiate  one for checkiong events etc
-                            this.currentQB = this.CreateCobraQBForDataRow(dataRow);
-
-                            break;
-
-                        case "[SPM]":
-
-                            // check division exists
-                            this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
-
-                            // check SPM exists - if so raise error
-                            SPM theSPM = this.GetCobraSPM(dataRow);
-                            if (theSPM != null && theSPM.MemberID > 0)
-                            {
-                                this.AddCobraErrorForRow(dataRow, "SPM Already exists", $"Duplicate SPM. SPM with SSN '{theSPM.SSN}' already exists");
-                                return;
-                            }
-
-                            //OK - there is no such SPM in the database - we instantiate  one for checkiong events etc
-                            this.currentSPM = this.CreateCobraSPMForDataRow(dataRow);
-
-
-                            break;
-
-                        case "[SPMLOOKUP]":
-
-                            // check SPM exists - if so raise error
-                            SPM theSPM2 = this.GetCobraSPM(dataRow);
-                            if (theSPM2 != null && theSPM2.MemberID > 0)
-                            {
-                                //ok
-                            }
-                            else
-                            {
-                                this.AddCobraErrorForRow(dataRow, "SPM Not Found", $"SPM with SSN '{theSPM2.SSN}' not found");
-                                return;
-                            }
-
-                            //OK - there is no such SPM in the database - we instantiate  one for checkiong events etc
-                            this.currentSPM = this.CreateCobraSPMForDataRow(dataRow);
-
-                            break;
-
-                        case "[NPM]":
-
-                            // check division exists
-                            this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
-
-                            // check NPM exists - if so raise error
-                            NPM theNPM = this.GetCobraNPM(dataRow);
-                            if (theNPM != null && theNPM.MemberID > 0)
-                            {
-                                this.AddCobraErrorForRow(dataRow, "NPM Already exists", $"Duplicate NPM. NPM with SSN '{theNPM.SSN}' already exists");
-                                return;
-                            }
-
-                            //OK - there is no such NPM in the database - we instantiate  one for checkiong events etc
-                            this.currentNPM = this.CreateCobraNPMForDataRow(dataRow);
-
-
-                            break;
-
-                        case "[NPMLOOKUP]":
-
-                            // check NPM exists - if so raise error
-                            NPM theNPM2 = this.GetCobraNPM(dataRow);
-                            if (theNPM2 != null && theNPM2.MemberID > 0)
-                            {
-                                //ok
-                            }
-                            else
-                            {
-                                this.AddCobraErrorForRow(dataRow, "NPM Not Found", $"NPM with SSN '{theNPM2.SSN}' not found");
-                                return;
-                            }
-
-                            //OK - there is no such NPM in the database - we instantiate  one for checkiong events etc
-                            this.currentNPM = this.CreateCobraNPMForDataRow(dataRow);
-
-                            break;
-
-
-
-                        default:
-                            break;
-                    }
-                    break;    /* case "[QB]","[SPM]","[NPM]" */
-
-
-            } // switch (dataRow.row_type)
-
-            // check which type of entity subline it is and whether a main entity line ocurrs before this
-            switch (Utils.Left(dataRow.row_type.ToUpper(), 4))
-            {
-                case "[QB]":
-                case "[MEM":
-                    // subline of QB
-                    if (this.currentQB == null || Utils.IsBlank(this.currentQB.SSN))
-                    {
-                        this.AddCobraErrorForRow(dataRow, "No Current QB", $"Could Nopt Process this Record Type '{dataRow.row_type}' as no Valid QB is referenced above");
-                        return;
-                    }
-
-                    // check specific duplicates or missing plans
-                    switch ((dataRow.row_type.ToUpper()))
-                    {
-                        case "[QBEVENT]":
-                            // can have only one per QB
-                            break;
-
-                        case "[QBLEGACY]":
-                            break;
-
-                        case "[QBPLANINITIAL]":
-                            // check client+division has plan
-                            break;
-
-                        case "[QBPLAN]":
-                            // check client+division has plan
-                            break;
-
-                        case "[QBDEPENDENT]":
-                            // can have only one per QBcheck each dependant is added only once
-                            break;
-
-                        case "[QBDEPENDENTPLANINITIAL]":
-                            // check client+division has plan
-                            break;
-
-
-                        case "[QBDEPENDENTPLAN]":
-                            // check client+division has plan
-                            break;
-
-                        case "[QBSUBSIDYSCHEDULE]":
-                            // check client+division has subsidy schedule
-                            break;
-
-
-                        case "[QBPLANMEMBERSPECIFICRATEINITIAL]":
-                            // check client+division has rate
-                            break;
-
-
-
-                        case "[QBPLANMEMBERSPECIFICRATE]":
-                            // check client+division has rate
-                            break;
-
-
-                        case "[QBNOTE]":
-                            // ignore?
-                            break;
-
-                        case "[QBLETTERATTACHMENT]":
-                            // ignore?
-                            break;
-
-                        case "[QBPLANTERMREINSTATE]":
-                            // ignore?
-                            break;
-
-                        case "[QBSTATEINSERTS]":
-                            // ignore?
-                            break;
-
-                        case "[QBDISABILITYEXTENSION]":
-                            // ignore?
-                            break;
-
-                        case "[QBNOTE]":
-                            // ignore?
-                            break;
-
-                    }
-
-                    break;
-                case "[SPM":
-                    // subline of SPM
-                    if (this.currentSPM == null || Utils.IsBlank(this.currentSPM.SSN))
-                    {
-                        this.AddCobraErrorForRow(dataRow, "No Current SPM", $"Could Nopt Process this Record Type '{dataRow.row_type}' as no Valid SPM is referenced above");
-                        return;
-                    }
-                    break;
-                case "[NPM":
-                    // subline of NPM
-                    if (this.currentNPM == null || Utils.IsBlank(this.currentNPM.SSN))
-                    {
-                        this.AddCobraErrorForRow(dataRow, "No Current NPM", $"Could Nopt Process this Record Type '{dataRow.row_type}' as no Valid NPM is referenced above");
-                        return;
-                    }
-
-                    break;
-
-                default:
-                    this.AddCobraErrorForRow(dataRow, "Unknown Record Type", $"Record Type '{dataRow.row_type}' is invalid");
-                    return;
+                return;
             }
 
             // just check data constraints for each column
@@ -472,9 +224,8 @@ namespace DataProcessing
                     default:
                         break;
                 }
-
-
             }
+
             // check for duplicate posting of the row
             if (!lineHasError)
             {
@@ -482,6 +233,372 @@ namespace DataProcessing
             }
             // check for duplicate posting of the row
 
+        }
+
+        public Boolean CheckCobraRecordData(string versionNo, cobra_file_table_stage dataRow, TypedCsvSchema mappings)
+        {
+            // is start of a main entity
+            switch (dataRow.row_type.ToUpper())
+            {
+                case "[QB]":
+                case "[QBLEGACY]":
+                case "[QBLOOKUP]":
+                case "[SPM]":
+                case "[SPMLOOKUP]":
+                case "[NPM]":
+                case "[NPMLOOKUP]":
+                    this.CheckCobraRecordDataMainEntity(versionNo, dataRow, mappings);
+                    break;
+
+                // none of the above major entity types
+                default:
+                    Boolean lineHasError;
+                    lineHasError = CheckCobraRecordDataIsQBSubline(versionNo, dataRow, mappings);
+                    if (lineHasError)
+                    {
+                        return true;
+                    }
+
+                    lineHasError = CheckCobraRecordDataIsSPMSubline(versionNo, dataRow, mappings);
+                    if (lineHasError)
+                    {
+                        return true;
+                    }
+                    lineHasError = CheckCobraRecordDataIsNPMSubline(versionNo, dataRow, mappings);
+                    if (lineHasError)
+                    {
+                        return true;
+                    }
+
+                    // break out of switch ((dataRow.row_type.ToUpper()))
+                    break;
+            }
+
+            //
+            return false;
+        }
+        public Boolean CheckCobraRecordDataMainEntity(string versionNo, cobra_file_table_stage dataRow, TypedCsvSchema mappings)
+        {
+
+            // clear any previous cached record
+            this.currentQB = null;
+            this.currentSPM = null;
+            this.currentNPM = null;
+
+            //get client and division 
+            this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
+            if (this.currentClientID <= 0)
+            {
+                this.AddCobraErrorForRow(dataRow, "Client And DiVision Does Not Exist", $"Client with '{dataRow.ClientName}' and Division Name '{dataRow.ClientDivisionName}' Not Found. ");
+                return true;
+            }
+
+            // check if it is the start of a new EntityType
+            switch (dataRow.row_type)
+            {
+                case "[QB]":
+                case "[QBLEGACY]":
+
+                    // check QB exists - if so raise error
+                    QB theQB = this.GetCobraQB(dataRow);
+                    if (theQB != null && theQB.MemberID > 0)
+                    {
+                        this.AddCobraErrorForRow(dataRow, "QB Already exists", $"Duplicate QB. QB with SSN '{theQB.SSN}' already exists");
+                        return true;
+                    }
+
+                    //OK - there is no such QB in the database - we instantiate  one for checkiong events etc
+                    this.currentQB = this.CreateCobraQBForDataRow(dataRow);
+
+
+                    break;
+
+                case "[QBLOOKUP]":
+
+                    // check QB exists - if so raise error
+                    QB theQB2 = this.GetCobraQB(dataRow);
+                    if (theQB2 != null && theQB2.MemberID > 0)
+                    {
+                        //ok
+                    }
+                    else
+                    {
+                        this.AddCobraErrorForRow(dataRow, "QB Not Found", $"QB with SSN '{theQB2.SSN}' not found");
+                        return true;
+                    }
+
+                    //OK - there is no such QB in the database - we instantiate  one for checkiong events etc
+                    this.currentQB = this.CreateCobraQBForDataRow(dataRow);
+
+                    break;
+
+                case "[SPM]":
+
+                    // check division exists
+                    this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
+
+                    // check SPM exists - if so raise error
+                    SPM theSPM = this.GetCobraSPM(dataRow);
+                    if (theSPM != null && theSPM.MemberID > 0)
+                    {
+                        this.AddCobraErrorForRow(dataRow, "SPM Already exists", $"Duplicate SPM. SPM with SSN '{theSPM.SSN}' already exists");
+                        return true;
+                    }
+
+                    //OK - there is no such SPM in the database - we instantiate  one for checkiong events etc
+                    this.currentSPM = this.CreateCobraSPMForDataRow(dataRow);
+
+
+                    break;
+
+                case "[SPMLOOKUP]":
+
+                    // check SPM exists - if so raise error
+                    SPM theSPM2 = this.GetCobraSPM(dataRow);
+                    if (theSPM2 != null && theSPM2.MemberID > 0)
+                    {
+                        //ok
+                    }
+                    else
+                    {
+                        this.AddCobraErrorForRow(dataRow, "SPM Not Found", $"SPM with SSN '{theSPM2.SSN}' not found");
+                        return true;
+                    }
+
+                    //OK - there is no such SPM in the database - we instantiate  one for checkiong events etc
+                    this.currentSPM = this.CreateCobraSPMForDataRow(dataRow);
+
+                    break;
+
+                case "[NPM]":
+
+                    // check division exists
+                    this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
+
+                    // check NPM exists - if so raise error
+                    NPM theNPM = this.GetCobraNPM(dataRow);
+                    if (theNPM != null && theNPM.MemberID > 0)
+                    {
+                        this.AddCobraErrorForRow(dataRow, "NPM Already exists", $"Duplicate NPM. NPM with SSN '{theNPM.SSN}' already exists");
+                        return true;
+                    }
+
+                    //OK - there is no such NPM in the database - we instantiate  one for checkiong events etc
+                    this.currentNPM = this.CreateCobraNPMForDataRow(dataRow);
+
+
+                    break;
+
+                case "[NPMLOOKUP]":
+
+                    // check NPM exists - if so raise error
+                    NPM theNPM2 = this.GetCobraNPM(dataRow);
+                    if (theNPM2 != null && theNPM2.MemberID > 0)
+                    {
+                        //ok
+                    }
+                    else
+                    {
+                        this.AddCobraErrorForRow(dataRow, "NPM Not Found", $"NPM with SSN '{theNPM2.SSN}' not found");
+                        return true;
+                    }
+
+                    //OK - there is no such NPM in the database - we instantiate  one for checkiong events etc
+                    this.currentNPM = this.CreateCobraNPMForDataRow(dataRow);
+
+                    break;
+
+            }
+
+            //
+            return false;
+        }
+        public Boolean CheckCobraRecordDataIsQBSubline(string versionNo, cobra_file_table_stage dataRow, TypedCsvSchema mappings)
+        {
+            Boolean lineHasError = false;
+
+            // check which type of entity subline it is and whether a main entity line ocurrs before this
+            if (Utils.Left(dataRow.row_type.ToUpper(), 3) == "[QB" || Utils.Left(dataRow.row_type.ToUpper(), 3) != "ME")
+            {
+                // subline of QB
+                if (this.currentQB == null || Utils.IsBlank(this.currentQB.SSN))
+                {
+                    this.AddCobraErrorForRow(dataRow, "No Current QB", $"Could Not Process this Record Type '{dataRow.row_type}' as no Valid QB is referenced above");
+                    return true;
+                }
+
+                // check specific duplicates or missing plans
+                switch ((dataRow.row_type.ToUpper()))
+                {
+                    case "[QBPLANINITIAL]":
+                        // check client+division has plan
+                        lineHasError = CheckClientQBPlanExists(versionNo, dataRow, mappings);
+                        break;
+
+                    case "[QBPLAN]":
+                        // check client+division has plan
+                        lineHasError = CheckClientQBPlanExists(versionNo, dataRow, mappings);
+                        break;
+
+                    case "[QBDEPENDENTPLANINITIAL]":
+                        // check client+division has plan
+                        lineHasError = CheckClientQBPlanExists(versionNo, dataRow, mappings);
+                        break;
+
+
+                    case "[QBDEPENDENTPLAN]":
+                        // check client+division has plan
+                        lineHasError = CheckClientQBPlanExists(versionNo, dataRow, mappings);
+                        break;
+
+                    case "[QBSUBSIDYSCHEDULE]":
+                        // check client+division has subsidy schedule
+                        break;
+
+
+                    case "[QBPLANMEMBERSPECIFICRATEINITIAL]":
+                        // check client+division has rate
+                        break;
+
+                    case "[QBPLANMEMBERSPECIFICRATE]":
+                        // check client+division has rate
+                        break;
+
+                    case "[QBEVENT]":
+                        // can have only one per QB?
+                        break;
+
+                    case "[QBLEGACY]":
+                        break;
+
+                    case "[QBDEPENDENT]":
+                        // can have only one per QBcheck each dependant is added only once
+                        break;
+
+                    case "[QBNOTE]":
+                        // ignore?
+                        break;
+
+                    case "[QBLETTERATTACHMENT]":
+                        // ignore?
+                        break;
+
+                    case "[QBPLANTERMREINSTATE]":
+                        // ignore?
+                        break;
+
+                    case "[QBSTATEINSERTS]":
+                        // ignore?
+                        break;
+
+                    case "[QBDISABILITYEXTENSION]":
+                        // ignore?
+                        break;
+
+                } // switch ((dataRow.row_type.ToUpper()))
+            } // QB line types
+
+            return lineHasError;
+        }
+
+        public Boolean CheckCobraRecordDataIsSPMSubline(string versionNo, cobra_file_table_stage dataRow, TypedCsvSchema mappings)
+        {
+            Boolean lineHasError = false;
+
+            // check which type of entity subline it is and whether a main entity line ocurrs before this
+            if (Utils.Left(dataRow.row_type.ToUpper(), 4) == "[SPM")
+            {
+                // subline of SPM
+                if (this.currentSPM == null || Utils.IsBlank(this.currentSPM.SSN))
+                {
+                    this.AddCobraErrorForRow(dataRow, "No Current SPM", $"Could Not Process this Record Type '{dataRow.row_type}' as no Valid SPM is referenced above");
+                    return true;
+                }
+
+                // check specific duplicates or missing plans
+                switch ((dataRow.row_type.ToUpper()))
+                {
+
+                    default:
+                        break;
+
+                } // switch ((dataRow.row_type.ToUpper()))
+            } // SPM line types
+
+            return lineHasError;
+        }
+
+        public Boolean CheckCobraRecordDataIsNPMSubline(string versionNo, cobra_file_table_stage dataRow, TypedCsvSchema mappings)
+        {
+            Boolean lineHasError = false;
+
+            // check which type of entity subline it is and whether a main entity line ocurrs before this
+            if (Utils.Left(dataRow.row_type.ToUpper(), 4) == "[NPM")
+            {
+                // subline of NPM
+                if (this.currentNPM == null || Utils.IsBlank(this.currentNPM.SSN))
+                {
+                    this.AddCobraErrorForRow(dataRow, "No Current NPM", $"Could Not Process this Record Type '{dataRow.row_type}' as no Valid NPM is referenced above");
+                    return true;
+                }
+
+                // check specific duplicates or missing plans
+                switch ((dataRow.row_type.ToUpper()))
+                {
+
+                    default:
+                        break;
+
+                } // switch ((dataRow.row_type.ToUpper()))
+            } // NPM line types
+
+            return lineHasError;
+        }
+      
+        public Boolean CheckClientQBPlanExists(string versionNo, cobra_file_table_stage dataRow, TypedCsvSchema mappings)
+        {
+            string errorMessage = "";
+
+            // check client+division has plan
+            var clientPlans = currentClient.ClientPlanQBs
+                .Where(
+                    x => x.PlanName == dataRow.PlanName
+                    )
+                .ToList();
+            //
+            if (clientPlans.Count == 0)
+            {
+                errorMessage += $"The Plan '{dataRow.PlanName}' could not found for Client '{currentClient.ClientName}'";
+            }
+            else if (currentClientDivisionID > 0)
+            {
+                int divPlansFound = 0;
+                foreach (var clientPlan in clientPlans)
+                {
+                    var divPlans = currentClientDivision.ClientDivisionQBPlans.Where(x => x.ClientPlanQBID == clientPlan.ClientPlanQBID).ToList();
+
+                    //
+                    if (divPlans.Count > 0)
+                    {
+                        divPlansFound++;
+                    }
+                }
+                if (divPlansFound == 0)
+                {
+                    errorMessage += $"The Plan '{dataRow.PlanName}' could not found for Client '{currentClient.ClientName}' and Division '{currentClientDivision.DivisionName}'";
+                }
+            }
+            //
+            if (!Utils.IsBlank(errorMessage))
+            {
+                this.AddCobraErrorForRow(dataRow, "No Such Plan Found", $"{errorMessage}");
+                // do not check any more
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private void AddCobraErrorForRow(cobra_file_table_stage dataRow, string errCode, string errMessage,
@@ -777,7 +894,7 @@ namespace DataProcessing
             qb.Active = Utils.ToBool(dataRow.Active);
             qb.Address1 = dataRow.Address1;
             qb.Address2 = dataRow.Address2;
-            qb.AllowSSO = Utils.ToBool(dataRow.AllowSSO);
+            qb.AllowSSO = Utils.ToBool(dataRow.AllowMemberSSO);
             qb.BenefitGroup = dataRow.BenefitGroup;
             qb.City = dataRow.City;
             //qb.ClientCustomData = dataRow.ClientCustomData;
@@ -1319,7 +1436,6 @@ namespace DataProcessing
 
         #endregion checkData
 
-        #region cacheCobraData
 
         private DbSet<AllClientsAndDivision> GetAllCobraClientAndDivisions()
         {
@@ -1371,57 +1487,6 @@ namespace DataProcessing
 
             return dbResults;
         }
-
-        // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
-        // cache all plans for ER to reduce number of queries to database - each query for a single plan takes around 150 ms so we aree saving significant time esp for ER witjh many EE
-
-        private DataTable GetAllCobraPlansForClient(string ClientName)
-        {
-            DataTable dbResults = new DataTable();
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{ClientName}-AllClientPlans";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                dbResults = (DataTable)_cache.Get(cacheKey);
-            }
-            else
-            {
-                if (PlatformType == PlatformType.Cobra)
-                {
-                    // todo: we need check exactly check against each plan - min/max are not correct
-                    string queryString =
-                            $"select ClientName, account_type_code, plan_id, date(min(plan_year_start_date)) as plan_year_start_date, date(max(plan_year_end_date)) as plan_year_end_date /* , max(grace_period_end_date) grace_period_end_date*/ " +
-                            $" from wc.vw_wc_Client_plans_combined " +
-                            $" where ClientName = '{Utils.DbQuote(ClientName)}' " +
-                            $" group by ClientName, account_type_code, plan_id " +
-                            $" order by ClientName, plan_id, account_type_code "
-                        ;
-                    //
-                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnCobra,
-                        queryString, null,
-                        FileLogParams?.GetMessageLogParams());
-
-                    // create index on MemberId
-
-                    DataColumn[] indices = new DataColumn[2];
-                    indices[0] = (DataColumn)dbResults.Columns["account_type_code"];
-                    indices[1] = (DataColumn)dbResults.Columns["plan_id"];
-                    dbResults.PrimaryKey = indices;
-
-                    //
-                    _cache.Add(cacheKey, dbResults);
-                }
-                else
-                {
-                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
-                }
-            }
-
-            return dbResults;
-        }
-
-
-        #endregion cacheClientData
 
 
         #region CheckUtils
