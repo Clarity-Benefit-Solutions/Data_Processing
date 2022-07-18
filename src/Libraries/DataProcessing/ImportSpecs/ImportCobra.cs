@@ -27,6 +27,19 @@ namespace DataProcessing
 
         public static Boolean IsCobraImportFile(string srcFilePath)
         {
+            // convert excel files to csv to check
+            if (FileUtils.IsExcelFile(srcFilePath))
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
+            }
+
             // COBRA files, first line starts with [VERSION],
             string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
 
@@ -38,12 +51,131 @@ namespace DataProcessing
 
             return false;
         }
+        public static Boolean IsCobraImportLine(string line)
+        {
+            if (line != null)
+            {
+                return false;
+            }
+
+            if (Utils.IsBlank(line, true))
+            {
+                return false;
+            }
+
+            // proper line
+            if (regexCobraImportRecType.IsMatch(line?.Trim().Substring(0, 3)))
+            {
+                return true;
+            }
+
+            // exclude known irrelevant lines that are in header of footer
+            List<string> ignoreText = new List<string>() {
+                "PLEASE EMAIL COMPLETED FILE TO PROCESSING@CLARITYBENEFITSOLUTIONS.COM".ToLower() ,
+            };
+            foreach (var ignore in ignoreText)
+            {
+                if (line.ToLower().Contains(ignore.ToLower()))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+
+        }
         public static Boolean IsCobraImportQbFile(string srcFilePath)
         {
-            Boolean isCobraFile = IsCobraImportFile(srcFilePath);
+            // convert excel files to csv to check
+            if (FileUtils.IsExcelFile(srcFilePath))
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
 
-            // toDo: how to distincguih QB and NPM files?
-            return isCobraFile;
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
+            }
+
+            Boolean isCobraFile = IsCobraImportFile(srcFilePath);
+            if (!isCobraFile)
+            {
+                return false;
+            }
+
+            // COBRA files, first line starts with [VERSION],
+            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
+
+            if (contents.Contains("[QB],"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        public static Boolean IsCobraImportSpmFile(string srcFilePath)
+        {
+            // convert excel files to csv to check
+            if (FileUtils.IsExcelFile(srcFilePath))
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
+            }
+
+            Boolean isCobraFile = IsCobraImportFile(srcFilePath);
+            if (!isCobraFile)
+            {
+                return false;
+            }
+
+            // COBRA files, first line starts with [VERSION],
+            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
+
+            if (contents.Contains("[SPM],"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        public static Boolean IsCobraImportNpmFile(string srcFilePath)
+        {
+            // convert excel files to csv to check
+            if (FileUtils.IsExcelFile(srcFilePath))
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
+            }
+
+            Boolean isCobraFile = IsCobraImportFile(srcFilePath);
+            if (!isCobraFile)
+            {
+                return false;
+            }
+
+            // COBRA files, first line starts with [VERSION],
+            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
+
+            if (contents.Contains("[NPM],"))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public static string GetCobraFileVersionNoFromFile(string srcFilePath)
@@ -523,7 +655,7 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("BillingEndDate", FormatType.CobraDate, 0, 1, "Date to end billing SPM"));
                             mappings.Add(new CobraTypedCsvColumn("BillingType", FormatType.String, 35, 1, "",
                                 "RETIREE|PREMIUMPAY|CASHPAY|FMLA|LOANREPAYMENT|LEAVEOFABSENCE|LTDPREMIUM|STDPREMIUM|DISABILITYPREMIUM|CUSTOM"));
-                            mappings.Add(new CobraTypedCsvColumn("BillingFrequency", FormatType.String, 35, 1,"",
+                            mappings.Add(new CobraTypedCsvColumn("BillingFrequency", FormatType.String, 35, 1, "",
                                 "MONTHLY|WEEKLY|BIWEEKLY|QUARTERLY|YEARLY|SEMIMONTHLY"));
 
                             mappings.Add(new CobraTypedCsvColumn("IsCOBRAEligible", FormatType.YesNo, 0, 1, ""));
@@ -535,7 +667,7 @@ namespace DataProcessing
 
                             mappings.Add(new CobraTypedCsvColumn("IsLegacy", FormatType.YesNo, 0, 1, "TRUE if this SPM existed in a prior billing system – this is used for conditional text in the SPM Welcome Letter"));
 
-                            mappings.Add(new CobraTypedCsvColumn("TobaccoUse", FormatType.String, 35, 1, "","YES|NO|UNKNOWN"));
+                            mappings.Add(new CobraTypedCsvColumn("TobaccoUse", FormatType.String, 35, 1, "", "YES|NO|UNKNOWN"));
 
                             mappings.Add(new CobraTypedCsvColumn("EnrollmentDate", FormatType.CobraDate, 35, 1, "Original enrollment date of the SPM’s plan - used for HIPAA certificate."));
                             mappings.Add(new CobraTypedCsvColumn("EmployeeType", FormatType.String, 35, 1, "",
@@ -543,7 +675,7 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("EmployeePayrollType", FormatType.String, 35, 1, "EXEMPT, NONEXEMPT, UNKNOWN"));
 
                             mappings.Add(new CobraTypedCsvColumn("YearsOfService", FormatType.Integer, 0, 0, "Not used currently and only informational"));
-                            mappings.Add(new CobraTypedCsvColumn("PremiumCouponType", FormatType.String, 35, 1,"",
+                            mappings.Add(new CobraTypedCsvColumn("PremiumCouponType", FormatType.String, 35, 1, "",
                                 "PREMIUMNOTICE|COUPONBOOK|NONE"));
 
                             mappings.Add(new CobraTypedCsvColumn("Active", FormatType.YesNo, 0, 1, "Should always be set to TRUE",
@@ -582,7 +714,7 @@ namespace DataProcessing
                                 "EE|EE+SPOUSE|EE+CHILD|EE+CHILDREN|EE+FAMILY|EE+1|EE+2|SPOUSEONLY|SPOUSE+CHILD|CHILDREN|EE+1Child|EE+2Children|EE+3Children|EE+4Children|EE+5orMoreChildren|EE+Spouse+1Child|EE+Spouse+2Children|EE+Spouse+3Children|EE+Spouse+4Children|EE+Spouse+5orMoreChildren|SPOUSE+1CHILD|SPOUSE+2CHILDREN|SPOUSE+3CHILDREN|SPOUSE+4CHILDREN|SPOUSE+5ORMORECHILDREN|EE+DOMESTICPARTNER|EE1UNDER19|EE+SPOUSE1UNDER19|EE+SPOUSE2UNDER19|EE+CHILDREN1UNDER19|EE+CHILDREN2UNDER19|EE+CHILDREN3UNDER19|EE+FAMILY1UNDER19|EE+FAMILY2UNDER19|EE+FAMILY3UNDER19"));
                             mappings.Add(new CobraTypedCsvColumn("FirstDayOfCoverage", FormatType.CobraDate, 0, 0, "The First Day of COBRA. Unless you wish to override the calculated FDOC, this field should be left blank. If left blank the system will determine the FDOC based on the EventDate and the plan benefit termination type."));
                             mappings.Add(new CobraTypedCsvColumn("LastDayOfCoverage", FormatType.CobraDate, 0, 0, "The Last Day of COBRA. This field should be left blank. The system will determine the LDOC based on the FDOC and COBRADurationMonths."));
-                            mappings.Add(new CobraTypedCsvColumn("LastDateRatesNotified", FormatType.CobraDate, 0, 0, "Always Leave Blank", 
+                            mappings.Add(new CobraTypedCsvColumn("LastDateRatesNotified", FormatType.CobraDate, 0, 0, "Always Leave Blank",
                                 "<BLANK>"));
 
                             mappings.Add(new CobraTypedCsvColumn("SendPlanChangeLetterForLegacy", FormatType.CobraYesNo, 1, 1, "Set to TRUE to send a plan change letter after this record is entered."));
@@ -617,7 +749,7 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("PostalCode", FormatType.String, 35, 0, ""));
                             mappings.Add(new CobraTypedCsvColumn("Country", FormatType.String, 50, 0, "Leave empty if the dependent resides in the USA"));
                             mappings.Add(new CobraTypedCsvColumn("EnrollmentDate", FormatType.CobraDate, 0, 1, "Original enrollment date of the dependent’s medical plan - used for HIPAA certificate"));
-                            mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 1, "F, M, U (this is required if the dependent is on a sex based plan that sets rates based on the dependent’s sex)", 
+                            mappings.Add(new CobraTypedCsvColumn("Sex", FormatType.String, 1, 1, "F, M, U (this is required if the dependent is on a sex based plan that sets rates based on the dependent’s sex)",
                                 "F|M|U"));
                             mappings.Add(new CobraTypedCsvColumn("DOB", FormatType.CobraDate, 0, 1, "Date of birth (this is required if the dependent is on an age based plan that sets rates based on the dependent’s age)"));
                             mappings.Add(new CobraTypedCsvColumn("IsQMCSO", FormatType.CobraYesNo, 1, 0, "TRUE if the dependent is under a Qualified Medical Child Support Order (QMCSO)"));
@@ -645,7 +777,7 @@ namespace DataProcessing
                         case "1.2":
                         case "1.1":
                         case "1.0":
-                            mappings.Add(new CobraTypedCsvColumn("NoteType", FormatType.String, 35, 1,"", 
+                            mappings.Add(new CobraTypedCsvColumn("NoteType", FormatType.String, 35, 1, "",
                                 "MANUAL|AUTONOTE"));
                             mappings.Add(new CobraTypedCsvColumn("DateTime", FormatType.CobraDateTime, 0, 1, "Date and time of the note"));
                             mappings.Add(new CobraTypedCsvColumn("NoteText", FormatType.String, 2000, 1, ""));

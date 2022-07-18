@@ -25,10 +25,14 @@ namespace DataProcessing
     public static partial class Import
     {
 
-        private static readonly Regex regexALImportHeader = new Regex("IA,");
-        private static readonly Regex regexALImportRecType = new Regex("I[B-Z],");
-        private static readonly Regex regexALExportHeader = new Regex("RA,");
-        private static readonly Regex regexALExportRecType = new Regex("R[B-Z],");
+        private static readonly Regex regexAlegeusImportHeader = new Regex("IA,");
+        private static readonly Regex regexAlegeusImportRecType = new Regex("I[B-Z],");
+        private static readonly Regex regexAlegeusExportHeader = new Regex("RA,");
+        private static readonly Regex regexAlegeusExportRecType = new Regex("R[B-Z],");
+
+        private static readonly Regex regexCobraImportHeader = new Regex(@"\[VERSION\],");
+        private static readonly Regex regexCobraImportRecType = new Regex(@"\[.*\],");
+
 
         public static TypedCsvSchema GetAlegeusFileImportMappings(EdiFileFormat fileFormat, HeaderType headerType,
             Boolean forImport = true)
@@ -531,17 +535,43 @@ namespace DataProcessing
             return mappings;
         }
 
-        public static Boolean IsAlegeusImportRecLine(string text)
+        public static Boolean IsAlegeusImportLine(string line)
         {
-            if (text != null & text.Length >= 3)
-                return regexALImportRecType.IsMatch(text?.Trim().Substring(0, 3));
+            if (line != null)
+            {
+                return false;
+            }
 
-            return false;
+            if (Utils.IsBlank(line, true))
+            {
+                return false;
+            }
+
+            // proper line
+            if (regexAlegeusImportRecType.IsMatch(line?.Trim().Substring(0, 3)))
+            {
+                return true;
+            }
+
+            // exclude known irrelevant lines that are in header of footer
+            List<string> ignoreText = new List<string>() {
+                "PLEASE EMAIL COMPLETED FILE TO PROCESSING@CLARITYBENEFITSOLUTIONS.COM".ToLower() ,
+            };
+            foreach (var ignore in ignoreText)
+            {
+                if (line.ToLower().Contains(ignore.ToLower()))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+
         }
-        public static Boolean IsAlegeusImportHeaderLine(string text)
+        public static Boolean IsAlegeusImportHeaderLine(string line)
         {
-            if (text != null & text.Length >= 3)
-                return regexALImportHeader.IsMatch(text?.Trim().Substring(0, 3));
+            if (line != null & line.Length >= 3)
+                return regexAlegeusImportHeader.IsMatch(line?.Trim().Substring(0, 3));
 
             return false;
         }
@@ -549,14 +579,14 @@ namespace DataProcessing
         public static Boolean IsAlegeusExportRecLine(string text)
         {
             if (text != null & text.Length >= 3)
-                return regexALExportRecType.IsMatch(text?.Trim().Substring(0, 3));
+                return regexAlegeusExportRecType.IsMatch(text?.Trim().Substring(0, 3));
 
             return false;
         }
         public static Boolean IsAlegeusExportHeaderLine(string text)
         {
             if (text != null & text.Length >= 3)
-                return regexALExportHeader.IsMatch(text?.Trim().Substring(0, 3));
+                return regexAlegeusExportHeader.IsMatch(text?.Trim().Substring(0, 3));
 
             return false;
         }
@@ -719,11 +749,24 @@ namespace DataProcessing
 
         public static Boolean IsAlegeusImportFile(string srcFilePath)
         {
+            // convert excel files to csv to check
+            if (FileUtils.IsExcelFile(srcFilePath))
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
+            }
+
             using var inputFile = new StreamReader(srcFilePath);
             string line;
             while ((line = inputFile.ReadLine()!) != null)
             {
-                if (IsAlegeusImportRecLine(line))
+                if (IsAlegeusImportLine(line))
                 {
                     return true;
                 }

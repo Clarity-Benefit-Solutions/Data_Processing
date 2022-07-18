@@ -381,7 +381,7 @@ namespace DataProcessing
                                     /*rowNo == 1
                                     && */
                                     // skip if line is not of a import row Type
-                                    !Import.IsAlegeusImportRecLine(line)
+                                    !Import.IsAlegeusImportLine(line)
                                 )
                                 {
                                     return false;
@@ -560,7 +560,9 @@ namespace DataProcessing
                     }
 
                     // move qb csv file to PreparedQBRoot
-                    if (Import.IsCobraImportQbFile(srcFilePath))
+                    if (Import.IsCobraImportQbFile(srcFilePath) 
+                    /*|| Import.IsCobraImportSpmFile(srcFilePath)*/
+                    )
                     {
                         string destFilePath =
                             $"{Vars.cobraFilesPreparedQbPath}/{fileInfo.Name}";

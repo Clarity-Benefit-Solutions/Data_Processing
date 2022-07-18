@@ -251,8 +251,13 @@ namespace CoreUtils.Classes
         }
 
 
-        public static bool IsBlank(string value)
+        public static bool IsBlank(string value, Boolean trim = false)
         {
+            if (trim)
+            {
+                value = value?.Trim();
+            }
+
             if (string.IsNullOrEmpty(value))
             {
                 return true;

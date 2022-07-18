@@ -1,1 +1,1 @@
-cmd /k "E:\Temp\DataProcessingWebDeployPackage\DataProcessingWebUI.deploy.cmd" /Y
+cmd /k %~dp..\DataProcessingWebUI.deploy.cmd" /Y
