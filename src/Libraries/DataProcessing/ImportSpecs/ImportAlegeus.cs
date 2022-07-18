@@ -75,10 +75,8 @@ namespace DataProcessing
                 // IB, RB 
                 case EdiFileFormat.AlegeusDemographics:
                 case EdiFileFormat.AlegeusResultsDemographics:
-                // sumeet: presume demo for unknown rec types types
-                case EdiFileFormat.Unknown:
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusDemographics || fileFormat == EdiFileFormat.Unknown)
+                    if (fileFormat == EdiFileFormat.AlegeusDemographics)
                     {
                         // for all
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0,
@@ -531,7 +529,12 @@ namespace DataProcessing
                     }
 
                     break;
+
+                case EdiFileFormat.Unknown:
+                    // no specific mappings
+                    break;
             }
+
 
             // entrire line
             return mappings;
