@@ -209,7 +209,7 @@ namespace CoreUtils.Classes
             var charsToTake = Math.Min(length, value.Length);
             return value.Length <= length ? value : value.Substring(value.Length - charsToTake);
         }
-        public static string Mid(string value, int start, int length=-1)
+        public static string Mid(string value, int start, int length = -1)
         {
             if (IsBlank(value))
             {
@@ -386,6 +386,31 @@ namespace CoreUtils.Classes
             }
 
             return 0;
+        }
+        public static bool ToBool(string? value)
+        {
+            if (Utils.IsBlank(value))
+            {
+                return false;
+            }
+            switch (value.ToUpperInvariant())
+            {
+                case "TRUE":
+                case "T":
+                case "YES":
+                case "1":
+                    return true;
+                //
+                case "NO":
+                case "FALSE":
+                case "F":
+                case "0":
+                    return false;
+
+                default:
+                    return false;
+
+            }
         }
 
         public static bool IsValidEmail(string email)

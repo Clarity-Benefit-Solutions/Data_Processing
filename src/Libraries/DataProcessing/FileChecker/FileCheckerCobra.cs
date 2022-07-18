@@ -22,12 +22,12 @@ namespace DataProcessing
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public partial class FileChecker : IDisposable
     {
+        private Client currentClient;
+        private ClientDivision currentClientDivision;
+
         private QB currentQB;
         private NPM currentNPM;
         private SPM currentSPM;
-
-        private Client currentClient;
-        private ClientDivision currentClientDivision;
 
         private AllClientsAndDivision currentClientAndDivision
         {
@@ -198,30 +198,262 @@ namespace DataProcessing
                 var formattedValue = EnsureValueIsOfFormatAndMatchesRules(dataRow, column, mappings);
             }
 
-            // get entity being referenced
-            switch (dataRow.row_type)
+            // is start of a main entity
+            switch (dataRow.row_type.ToUpper())
             {
                 case "[QB]":
-                    this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
-                    this.currentQB = this.GetCobraQB(dataRow);
-                    break;
-
+                case "[QBLOOKUP]":
                 case "[SPM]":
-                    this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
-                    this.currentSPM = this.GetCobraSPM(dataRow);
-                    break;
-
+                case "[SPMLOOKUP]":
                 case "[NPM]":
+                case "[NPMLOOKUP]":
+                    // clear any previous cached record
+                    this.currentQB = null;
+                    this.currentSPM = null;
+                    this.currentNPM = null;
+
+                    //get client and division 
                     this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
-                    this.currentNPM = this.GetCobraNPM(dataRow);
+                    if (this.currentClientID <= 0)
+                    {
+                        this.AddCobraErrorForRow(dataRow, "Client And DiVision Does Not Exist", $"Client with '{dataRow.ClientName}' and Division Name '{dataRow.ClientDivisionName}' Not Found. ");
+                        return;
+                    }
+
+                    // check if it is the start of a new EntityType
+                    switch (dataRow.row_type)
+                    {
+                        case "[QB]":
+
+                            // check QB exists - if so raise error
+                            QB theQB = this.GetCobraQB(dataRow);
+                            if (theQB != null && theQB.MemberID > 0)
+                            {
+                                this.AddCobraErrorForRow(dataRow, "QB Already exists", $"Duplicate QB. QB with SSN '{theQB.SSN}' already exists");
+                                return;
+                            }
+
+                            //OK - there is no such QB in the database - we instantiate  one for checkiong events etc
+                            this.currentQB = this.CreateCobraQBForDataRow(dataRow);
+
+
+                            break;
+
+                        case "[QBLOOKUP]":
+
+                            // check QB exists - if so raise error
+                            QB theQB2 = this.GetCobraQB(dataRow);
+                            if (theQB2 != null && theQB2.MemberID > 0)
+                            {
+                                //ok
+                            }
+                            else
+                            {
+                                this.AddCobraErrorForRow(dataRow, "QB Not Found", $"QB with SSN '{theQB2.SSN}' not found");
+                                return;
+                            }
+
+                            //OK - there is no such QB in the database - we instantiate  one for checkiong events etc
+                            this.currentQB = this.CreateCobraQBForDataRow(dataRow);
+
+                            break;
+
+                        case "[SPM]":
+
+                            // check division exists
+                            this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
+
+                            // check SPM exists - if so raise error
+                            SPM theSPM = this.GetCobraSPM(dataRow);
+                            if (theSPM != null && theSPM.MemberID > 0)
+                            {
+                                this.AddCobraErrorForRow(dataRow, "SPM Already exists", $"Duplicate SPM. SPM with SSN '{theSPM.SSN}' already exists");
+                                return;
+                            }
+
+                            //OK - there is no such SPM in the database - we instantiate  one for checkiong events etc
+                            this.currentSPM = this.CreateCobraSPMForDataRow(dataRow);
+
+
+                            break;
+
+                        case "[SPMLOOKUP]":
+
+                            // check SPM exists - if so raise error
+                            SPM theSPM2 = this.GetCobraSPM(dataRow);
+                            if (theSPM2 != null && theSPM2.MemberID > 0)
+                            {
+                                //ok
+                            }
+                            else
+                            {
+                                this.AddCobraErrorForRow(dataRow, "SPM Not Found", $"SPM with SSN '{theSPM2.SSN}' not found");
+                                return;
+                            }
+
+                            //OK - there is no such SPM in the database - we instantiate  one for checkiong events etc
+                            this.currentSPM = this.CreateCobraSPMForDataRow(dataRow);
+
+                            break;
+
+                        case "[NPM]":
+
+                            // check division exists
+                            this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
+
+                            // check NPM exists - if so raise error
+                            NPM theNPM = this.GetCobraNPM(dataRow);
+                            if (theNPM != null && theNPM.MemberID > 0)
+                            {
+                                this.AddCobraErrorForRow(dataRow, "NPM Already exists", $"Duplicate NPM. NPM with SSN '{theNPM.SSN}' already exists");
+                                return;
+                            }
+
+                            //OK - there is no such NPM in the database - we instantiate  one for checkiong events etc
+                            this.currentNPM = this.CreateCobraNPMForDataRow(dataRow);
+
+
+                            break;
+
+                        case "[NPMLOOKUP]":
+
+                            // check NPM exists - if so raise error
+                            NPM theNPM2 = this.GetCobraNPM(dataRow);
+                            if (theNPM2 != null && theNPM2.MemberID > 0)
+                            {
+                                //ok
+                            }
+                            else
+                            {
+                                this.AddCobraErrorForRow(dataRow, "NPM Not Found", $"NPM with SSN '{theNPM2.SSN}' not found");
+                                return;
+                            }
+
+                            //OK - there is no such NPM in the database - we instantiate  one for checkiong events etc
+                            this.currentNPM = this.CreateCobraNPMForDataRow(dataRow);
+
+                            break;
+
+
+
+                        default:
+                            break;
+                    }
+                    break;    /* case "[QB]","[SPM]","[NPM]" */
+
+
+            } // switch (dataRow.row_type)
+
+            // check which type of entity subline it is and whether a main entity line ocurrs before this
+            switch (Utils.Left(dataRow.row_type.ToUpper(), 4))
+            {
+                case "[QB]":
+                case "[MEM":
+                    // subline of QB
+                    if (this.currentQB == null || Utils.IsBlank(this.currentQB.SSN))
+                    {
+                        this.AddCobraErrorForRow(dataRow, "No Current QB", $"Could Nopt Process this Record Type '{dataRow.row_type}' as no Valid QB is referenced above");
+                        return;
+                    }
+
+                    // check specific duplicates or missing plans
+                    switch ((dataRow.row_type.ToUpper()))
+                    {
+                        case "[QBEVENT]":
+                            // can have only one per QB
+                            break;
+
+                        case "[QBLEGACY]":
+                            break;
+
+                        case "[QBPLANINITIAL]":
+                            // check client+division has plan
+                            break;
+
+                        case "[QBPLAN]":
+                            // check client+division has plan
+                            break;
+
+                        case "[QBDEPENDENT]":
+                            // can have only one per QBcheck each dependant is added only once
+                            break;
+
+                        case "[QBDEPENDENTPLANINITIAL]":
+                            // check client+division has plan
+                            break;
+
+
+                        case "[QBDEPENDENTPLAN]":
+                            // check client+division has plan
+                            break;
+
+                        case "[QBSUBSIDYSCHEDULE]":
+                            // check client+division has subsidy schedule
+                            break;
+
+
+                        case "[QBPLANMEMBERSPECIFICRATEINITIAL]":
+                            // check client+division has rate
+                            break;
+
+
+
+                        case "[QBPLANMEMBERSPECIFICRATE]":
+                            // check client+division has rate
+                            break;
+
+
+                        case "[QBNOTE]":
+                            // ignore?
+                            break;
+
+                        case "[QBLETTERATTACHMENT]":
+                            // ignore?
+                            break;
+
+                        case "[QBPLANTERMREINSTATE]":
+                            // ignore?
+                            break;
+
+                        case "[QBSTATEINSERTS]":
+                            // ignore?
+                            break;
+
+                        case "[QBDISABILITYEXTENSION]":
+                            // ignore?
+                            break;
+
+                        case "[QBNOTE]":
+                            // ignore?
+                            break;
+
+                    }
+
+                    break;
+                case "[SPM":
+                    // subline of SPM
+                    if (this.currentSPM == null || Utils.IsBlank(this.currentSPM.SSN))
+                    {
+                        this.AddCobraErrorForRow(dataRow, "No Current SPM", $"Could Nopt Process this Record Type '{dataRow.row_type}' as no Valid SPM is referenced above");
+                        return;
+                    }
+                    break;
+                case "[NPM":
+                    // subline of NPM
+                    if (this.currentNPM == null || Utils.IsBlank(this.currentNPM.SSN))
+                    {
+                        this.AddCobraErrorForRow(dataRow, "No Current NPM", $"Could Nopt Process this Record Type '{dataRow.row_type}' as no Valid NPM is referenced above");
+                        return;
+                    }
+
                     break;
 
                 default:
-                    break;
-
+                    this.AddCobraErrorForRow(dataRow, "Unknown Record Type", $"Record Type '{dataRow.row_type}' is invalid");
+                    return;
             }
 
-            // then check data for each column
+            // just check data constraints for each column
             foreach (var column in mappings.Columns)
             {
                 // skip some columns
@@ -484,7 +716,7 @@ namespace DataProcessing
 
         public AllClientsAndDivision GetCobraClientAndDivision(cobra_file_table_stage dataRow)
         {
-            AllClientsAndDivision row = null;
+            AllClientsAndDivision row = new AllClientsAndDivision();
             var errorMessage = "";
             List<AllClientsAndDivision> dbRows = GetCobraClientAndDivisionRows(dataRow);
 
@@ -536,6 +768,149 @@ namespace DataProcessing
             //
             return row;
         }
+
+        public QB CreateCobraQBForDataRow(cobra_file_table_stage dataRow)
+        {
+            QB qb = new QB();
+
+            qb.AccountStructure = dataRow.AccountStructure;
+            qb.Active = Utils.ToBool(dataRow.Active);
+            qb.Address1 = dataRow.Address1;
+            qb.Address2 = dataRow.Address2;
+            qb.AllowSSO = Utils.ToBool(dataRow.AllowSSO);
+            qb.BenefitGroup = dataRow.BenefitGroup;
+            qb.City = dataRow.City;
+            //qb.ClientCustomData = dataRow.ClientCustomData;
+            qb.ClientDivisionID = this.currentClientDivisionID;
+            qb.ClientID = this.currentClientID;
+            qb.Country = dataRow.Country;
+            qb.DOB = Utils.ToDateTime(dataRow.DOB);
+            qb.Email = dataRow.Email;
+            qb.EmployeeType = dataRow.EmployeeType;
+            //qb.EnteredByUser = dataRow.EnteredByUser;
+            //qb.EnteredDateTime = dataRow.EnteredDateTime;
+            qb.FirstName = dataRow.FirstName;
+            qb.Gender = dataRow.Sex;
+            qb.IndividualIdentifier = "";
+            //qb.LastModifiedDate = dataRow.LastModifiedDate;
+            qb.LastName = dataRow.LastName;
+            qb.MemberID = int.MaxValue;
+            //qb.MethodEntered = dataRow.MethodEntered;
+            qb.MiddleInitial = dataRow.MiddleInitial;
+            //qb.OnlineElectionProcessedDate = dataRow.OnlineElectionProcessedDate;
+            //qb.PaidThroughDate = dataRow.PaidThroughDate;
+            //qb.PayrollType = dataRow.PayrollType;
+            qb.Phone = dataRow.Phone;
+            qb.Phone2 = dataRow.Phone2;
+            qb.PlanCategory = dataRow.PlanCategory;
+            qb.PostalCode = dataRow.PostalCode;
+            qb.PremiumCouponType = dataRow.PremiumCouponType;
+            qb.Salutation = dataRow.Salutation;
+            qb.SSN = dataRow.SSN;
+            qb.SSOIdentifier = dataRow.SSOIdentifier;
+            qb.State = dataRow.StateOrProvince;
+            qb.TobaccoUse = dataRow.TobaccoUse;
+            qb.UsesHCTC = Utils.ToBool(dataRow.UsesHCTC);
+            qb.YearsOfService = Utils.ToInt(dataRow.YearsOfService);
+
+
+            return qb;
+        }
+        public SPM CreateCobraSPMForDataRow(cobra_file_table_stage dataRow)
+        {
+            SPM SPM = new SPM();
+
+            SPM.AccountStructure = dataRow.AccountStructure;
+            SPM.Active = Utils.ToBool(dataRow.Active);
+            SPM.Address1 = dataRow.Address1;
+            SPM.Address2 = dataRow.Address2;
+            //SPM.AllowSSO = Utils.ToBool(dataRow.AllowSSO);
+            SPM.BenefitGroup = dataRow.BenefitGroup;
+            SPM.City = dataRow.City;
+            //SPM.ClientCustomData = dataRow.ClientCustomData;
+            SPM.ClientDivisionID = this.currentClientDivisionID;
+            SPM.ClientID = this.currentClientID;
+            SPM.Country = dataRow.Country;
+            SPM.DOB = Utils.ToDateTime(dataRow.DOB);
+            SPM.Email = dataRow.Email;
+            SPM.EmployeeType = dataRow.EmployeeType;
+            //SPM.EnteredByUser = dataRow.EnteredByUser;
+            //SPM.EnteredDateTime = dataRow.EnteredDateTime;
+            SPM.FirstName = dataRow.FirstName;
+            SPM.Gender = dataRow.Sex;
+            //SPM.IndividualIdentifier = "";
+            //SPM.LastModifiedDate = dataRow.LastModifiedDate;
+            SPM.LastName = dataRow.LastName;
+            SPM.MemberID = int.MaxValue;
+            //SPM.MethodEntered = dataRow.MethodEntered;
+            SPM.MiddleInitial = dataRow.MiddleInitial;
+            //SPM.OnlineElectionProcessedDate = dataRow.OnlineElectionProcessedDate;
+            //SPM.PaidThroughDate = dataRow.PaidThroughDate;
+            //SPM.PayrollType = dataRow.PayrollType;
+            SPM.Phone = dataRow.Phone;
+            SPM.Phone2 = dataRow.Phone2;
+            SPM.PlanCategory = dataRow.PlanCategory;
+            SPM.PostalCode = dataRow.PostalCode;
+            SPM.PremiumCouponType = dataRow.PremiumCouponType;
+            SPM.Salutation = dataRow.Salutation;
+            SPM.SSN = dataRow.SSN;
+            SPM.SSOIdentifier = dataRow.SSOIdentifier;
+            SPM.State = dataRow.StateOrProvince;
+            SPM.TobaccoUse = dataRow.TobaccoUse;
+            //SPM.UsesHCTC = Utils.ToBool(dataRow.UsesHCTC);
+            SPM.YearsOfService = Utils.ToInt(dataRow.YearsOfService);
+
+
+            return SPM;
+        }
+        public NPM CreateCobraNPMForDataRow(cobra_file_table_stage dataRow)
+        {
+            NPM npm = new NPM();
+
+            //npm.AccountStructure = dataRow.AccountStructure;
+            npm.Active = Utils.ToBool(dataRow.Active);
+            npm.Address1 = dataRow.Address1;
+            npm.Address2 = dataRow.Address2;
+            //npm.AllowSSO = Utils.ToBool(dataRow.AllowSSO);
+            //npm.BenefitGroup = dataRow.BenefitGroup;
+            npm.City = dataRow.City;
+            //NPM.ClientCustomData = dataRow.ClientCustomData;
+            npm.ClientDivisionID = this.currentClientDivisionID;
+            //npm.ClientID = this.currentClientID;
+            npm.Country = dataRow.Country;
+            //npm.DOB = Utils.ToDateTime(dataRow.DOB);
+            npm.Email = dataRow.Email;
+            //npm.EmployeeType = dataRow.EmployeeType;
+            //NPM.EnteredByUser = dataRow.EnteredByUser;
+            //NPM.EnteredDateTime = dataRow.EnteredDateTime;
+            npm.FirstName = dataRow.FirstName;
+            //npm.Gender = dataRow.Sex;
+            //npm.IndividualIdentifier = "";
+            //NPM.LastModifiedDate = dataRow.LastModifiedDate;
+            npm.LastName = dataRow.LastName;
+            npm.MemberID = int.MaxValue;
+            //NPM.MethodEntered = dataRow.MethodEntered;
+            npm.MiddleInitial = dataRow.MiddleInitial;
+            //NPM.OnlineElectionProcessedDate = dataRow.OnlineElectionProcessedDate;
+            //NPM.PaidThroughDate = dataRow.PaidThroughDate;
+            //NPM.PayrollType = dataRow.PayrollType;
+            npm.Phone = dataRow.Phone;
+            npm.Phone2 = dataRow.Phone2;
+            //npm.PlanCategory = dataRow.PlanCategory;
+            npm.PostalCode = dataRow.PostalCode;
+            //npm.PremiumCouponType = dataRow.PremiumCouponType;
+            npm.Salutation = dataRow.Salutation;
+            npm.SSN = dataRow.SSN;
+            //npm.SSOIdentifier = dataRow.SSOIdentifier;
+            npm.State = dataRow.StateOrProvince;
+            //npm.TobaccoUse = dataRow.TobaccoUse;
+            //npm.UsesHCTC = Utils.ToBool(dataRow.UsesHCTC);
+            //npm.YearsOfService = Utils.ToInt(dataRow.YearsOfService);
+
+
+            return npm;
+        }
+
         public SPM GetCobraSPM(cobra_file_table_stage dataRow)
         {
             SPM row = null;
