@@ -161,7 +161,7 @@
         ProcessingError,
     }
 
-    public enum EdiFileFormat
+    public enum EdiRowFormat
     {
         [Utils.DisplayText("EdiFileFormat.Unknown")]
         Unknown = 0,

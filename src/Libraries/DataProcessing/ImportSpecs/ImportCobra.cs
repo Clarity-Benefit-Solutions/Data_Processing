@@ -230,7 +230,7 @@ namespace DataProcessing
         {
             var mappings = new TypedCsvSchema();
 
-            Boolean isResultFile = false;// GetAlegeusFileFormatIsResultFile(fileFormat);
+            Boolean isResultFile = false;// GetAlegeusFileFormatIsResultFile(rowFormat);
 
             // add src file path as res_file_name and mbi_file_name
             if (forImport)
@@ -935,7 +935,7 @@ namespace DataProcessing
                     break;
                 #endregion
                 default:
-                    var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : fileFormat : {rowType} is invalid";
+                    var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : rowFormat : {rowType} is invalid";
                     throw new Exception(message);
             }
 
@@ -981,7 +981,7 @@ namespace DataProcessing
                     "ImportCobraFile", $"Starting: Import {fileName}", "Starting");
 
                 // split text fileinto multiple files
-                Dictionary<EdiFileFormat, Object[]> files = new Dictionary<EdiFileFormat, Object[]>();
+                Dictionary<EdiRowFormat, Object[]> files = new Dictionary<EdiRowFormat, Object[]>();
 
                 var versionNo = GetCobraFileVersionNoFromFile(srcFilePath);
                 //

@@ -27,7 +27,7 @@ namespace CoreUtils.Classes
 
         private static readonly Regex RegexCSVParser = new Regex(",(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))");
 
-        public static Dictionary<EdiFileFormat, List<int>> GetAlegeusFileFormats(string srcFilePath, bool hasHeaders,
+        public static Dictionary<EdiRowFormat, List<int>> GetAlegeusFileFormats(string srcFilePath, bool hasHeaders,
             FileOperationLogParams fileLogParams)
         {
             // open csvdatareader, read the file, and check the 2nd row
@@ -40,7 +40,7 @@ namespace CoreUtils.Classes
             using var csv = SylvanCsvDataReader.Create(srcFilePath, csvDataReaderOptions);
             //
             var rowNo = 0;
-            Dictionary<EdiFileFormat, List<int>> fileFormats = new Dictionary<EdiFileFormat, List<int>>();
+            Dictionary<EdiRowFormat, List<int>> fileFormats = new Dictionary<EdiRowFormat, List<int>>();
 
             // note: the splitting of file is not working - just import as a single file format
             const int rowsToRead = 9999;
@@ -50,22 +50,22 @@ namespace CoreUtils.Classes
                 if (rowNo <= rowsToRead)
                 {
                     var firstColValue = csv.GetString(0);
-                    var fileFormat = GetAlegeusRowFormat(firstColValue);
+                    var rowFormat = GetAlegeusRowFormat(firstColValue);
                     // don't take header and unknown as we will not send them across  or parse them
                     if (
                         // sumeet: 2022-07-18-take invalid row types also as client may have made a typos
-                        /*fileFormat != EdiFileFormat.Unknown &&*/
-                        fileFormat != EdiFileFormat.AlegeusHeader &&
-                        fileFormat != EdiFileFormat.AlegeusResultsHeader)
+                        /*rowFormat != EdiFileFormat.Unknown &&*/
+                        rowFormat != EdiRowFormat.AlegeusHeader &&
+                        rowFormat != EdiRowFormat.AlegeusResultsHeader)
                     {
                         
-                        if (fileFormats.ContainsKey(fileFormat))
+                        if (fileFormats.ContainsKey(rowFormat))
                         {
-                            fileFormats[fileFormat].Add(rowNo);
+                            fileFormats[rowFormat].Add(rowNo);
                         }
                         else
                         {
-                            fileFormats.Add(fileFormat, new List<int> { rowNo });
+                            fileFormats.Add(rowFormat, new List<int> { rowNo });
                         }
                     }
                 }
@@ -75,123 +75,123 @@ namespace CoreUtils.Classes
             return fileFormats;
         }
 
-        public static EdiFileFormat GetAlegeusRowFormat(object[] rowValues)
+        public static EdiRowFormat GetAlegeusRowFormat(object[] rowValues)
         {
             if (rowValues == null || rowValues.Length == 0)
             {
-                return EdiFileFormat.Unknown;
+                return EdiRowFormat.Unknown;
             }
 
             var firstFieldValue = rowValues[0].ToString();
             return GetAlegeusRowFormat(firstFieldValue);
         }
 
-        public static EdiFileFormat GetAlegeusRowFormat(string firstFieldValue)
+        public static EdiRowFormat GetAlegeusRowFormat(string firstFieldValue)
         {
             if (!Utils.IsBlank(firstFieldValue) && firstFieldValue.Length == 2)
             {
                 switch (firstFieldValue)
                 {
                     case "IA":
-                        return EdiFileFormat.AlegeusHeader;
+                        return EdiRowFormat.AlegeusHeader;
 
                     case "IB":
-                        return EdiFileFormat.AlegeusDemographics;
+                        return EdiRowFormat.AlegeusDemographics;
 
                     case "IC":
-                        return EdiFileFormat.AlegeusEnrollment;
+                        return EdiRowFormat.AlegeusEnrollment;
 
                     case "ID":
-                        return EdiFileFormat.AlegeusDependentDemographics;
+                        return EdiRowFormat.AlegeusDependentDemographics;
 
                     case "IE":
-                        return EdiFileFormat.AlegeusDependentLink;
+                        return EdiRowFormat.AlegeusDependentLink;
 
                     case "IF":
-                        return EdiFileFormat.AlegeusCardCreation;
+                        return EdiRowFormat.AlegeusCardCreation;
 
                     case "IG":
-                        return EdiFileFormat.AlegeusEmployerDeposit;
+                        return EdiRowFormat.AlegeusEmployerDeposit;
 
                     case "IH":
-                        return EdiFileFormat.AlegeusEmployeeDeposit;
+                        return EdiRowFormat.AlegeusEmployeeDeposit;
 
                     case "II":
-                        return EdiFileFormat.AlegeusEmployeeCardFees;
+                        return EdiRowFormat.AlegeusEmployeeCardFees;
 
                     case "IJ":
-                        return EdiFileFormat.AlegeusCardStatusChange;
+                        return EdiRowFormat.AlegeusCardStatusChange;
 
                     case "IK":
-                        return EdiFileFormat.AlegeusAdjudication;
+                        return EdiRowFormat.AlegeusAdjudication;
 
                     case "IL":
-                        return EdiFileFormat.AlegeusImportRecordForExport;
+                        return EdiRowFormat.AlegeusImportRecordForExport;
 
                     case "IM":
-                        return EdiFileFormat.AlegeusCoverageMcc;
+                        return EdiRowFormat.AlegeusCoverageMcc;
 
                     case "IN":
-                        return EdiFileFormat.AlegeusCoverageOption;
+                        return EdiRowFormat.AlegeusCoverageOption;
 
                     case "IQ":
-                        return EdiFileFormat.AlegeusNewEmployeeId;
+                        return EdiRowFormat.AlegeusNewEmployeeId;
 
                     case "IR":
-                        return EdiFileFormat.AlegeusCoverageGeneralSetup;
+                        return EdiRowFormat.AlegeusCoverageGeneralSetup;
 
                     case "IS":
-                        return EdiFileFormat.AlegeusEmployerDemographics;
+                        return EdiRowFormat.AlegeusEmployerDemographics;
 
                     case "IT":
-                        return EdiFileFormat.AlegeusEmployerLogicalAccount;
+                        return EdiRowFormat.AlegeusEmployerLogicalAccount;
 
                     case "IU":
-                        return EdiFileFormat.AlegeusEmployerStandardPlan;
+                        return EdiRowFormat.AlegeusEmployerStandardPlan;
 
                     case "IV":
-                        return EdiFileFormat.AlegeusEmployerPhysicalAccount;
+                        return EdiRowFormat.AlegeusEmployerPhysicalAccount;
 
                     case "IW":
-                        return EdiFileFormat.AlegeusEmployeeAutoReview;
+                        return EdiRowFormat.AlegeusEmployeeAutoReview;
 
                     case "IX":
-                        return EdiFileFormat.AlegeusEmployerSplitPlan;
+                        return EdiRowFormat.AlegeusEmployerSplitPlan;
 
                     case "IZ":
-                        return EdiFileFormat.AlegeusEmployeeHrInfo;
+                        return EdiRowFormat.AlegeusEmployeeHrInfo;
 
                     // results files
                     case "RA":
-                        return EdiFileFormat.AlegeusResultsHeader;
+                        return EdiRowFormat.AlegeusResultsHeader;
 
                     case "RB":
-                        return EdiFileFormat.AlegeusResultsDemographics;
+                        return EdiRowFormat.AlegeusResultsDemographics;
 
                     case "RC":
-                        return EdiFileFormat.AlegeusResultsEnrollment;
+                        return EdiRowFormat.AlegeusResultsEnrollment;
 
                     case "RD":
-                        return EdiFileFormat.AlegeusResultsDependentDemographics;
+                        return EdiRowFormat.AlegeusResultsDependentDemographics;
 
                     case "RE":
-                        return EdiFileFormat.AlegeusResultsDependentLink;
+                        return EdiRowFormat.AlegeusResultsDependentLink;
 
                     case "RF":
-                        return EdiFileFormat.AlegeusResultsCardCreation;
+                        return EdiRowFormat.AlegeusResultsCardCreation;
 
                     case "RH":
-                        return EdiFileFormat.AlegeusResultsEmployeeDeposit;
+                        return EdiRowFormat.AlegeusResultsEmployeeDeposit;
 
                     case "RI":
-                        return EdiFileFormat.AlegeusResultsEmployeeCardFees;
+                        return EdiRowFormat.AlegeusResultsEmployeeCardFees;
 
                     case "RZ":
-                        return EdiFileFormat.AlegeusResultsEmployeeHrInfo;
+                        return EdiRowFormat.AlegeusResultsEmployeeHrInfo;
                 }
             }
 
-            return EdiFileFormat.Unknown;
+            return EdiRowFormat.Unknown;
         }
 
         public static void ImportSingleColumnFlatFile(DbConnection dbConn,

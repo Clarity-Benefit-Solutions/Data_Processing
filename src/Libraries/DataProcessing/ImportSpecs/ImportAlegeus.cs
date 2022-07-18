@@ -34,12 +34,12 @@ namespace DataProcessing
         private static readonly Regex regexCobraImportRecType = new Regex(@"\[.*\],");
 
 
-        public static TypedCsvSchema GetAlegeusFileImportMappings(EdiFileFormat fileFormat, HeaderType headerType,
+        public static TypedCsvSchema GetAlegeusFileImportMappings(EdiRowFormat rowFormat, HeaderType headerType,
             Boolean forImport = true)
         {
             var mappings = new TypedCsvSchema();
 
-            Boolean isResultFile = GetAlegeusFileFormatIsResultFile(fileFormat);
+            Boolean isResultFile = GetAlegeusFileFormatIsResultFile(rowFormat);
 
             // add src file path as res_file_name and mbi_file_name
             if (forImport)
@@ -69,14 +69,14 @@ namespace DataProcessing
             // the row_type
             mappings.Add(new TypedCsvColumn("row_type", "row_type", FormatType.String, null, 0, 0, 0, 0));
 
-            switch (fileFormat)
+            switch (rowFormat)
             {
                 /////////////////////////////////////////////////////
                 // IB, RB 
-                case EdiFileFormat.AlegeusDemographics:
-                case EdiFileFormat.AlegeusResultsDemographics:
+                case EdiRowFormat.AlegeusDemographics:
+                case EdiRowFormat.AlegeusResultsDemographics:
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusDemographics)
+                    if (rowFormat == EdiRowFormat.AlegeusDemographics)
                     {
                         // for all
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0,
@@ -125,7 +125,7 @@ namespace DataProcessing
                     }
 
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusResultsDemographics)
+                    if (rowFormat == EdiRowFormat.AlegeusResultsDemographics)
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
@@ -142,11 +142,11 @@ namespace DataProcessing
 
                 /////////////////////////////////////////////////////
                 // IC, RC
-                case EdiFileFormat.AlegeusEnrollment:
-                case EdiFileFormat.AlegeusResultsEnrollment:
+                case EdiRowFormat.AlegeusEnrollment:
+                case EdiRowFormat.AlegeusResultsEnrollment:
 
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusEnrollment)
+                    if (rowFormat == EdiRowFormat.AlegeusEnrollment)
                     {
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0,
                             0));
@@ -199,7 +199,7 @@ namespace DataProcessing
                     }
 
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusResultsEnrollment)
+                    if (rowFormat == EdiRowFormat.AlegeusResultsEnrollment)
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
@@ -221,11 +221,11 @@ namespace DataProcessing
 
                 /////////////////////////////////////////////////////
                 // ID, RD
-                case EdiFileFormat.AlegeusDependentDemographics:
-                case EdiFileFormat.AlegeusResultsDependentDemographics:
+                case EdiRowFormat.AlegeusDependentDemographics:
+                case EdiRowFormat.AlegeusResultsDependentDemographics:
 
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusDependentDemographics)
+                    if (rowFormat == EdiRowFormat.AlegeusDependentDemographics)
                     {
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0,
                             0));
@@ -256,7 +256,7 @@ namespace DataProcessing
                     }
 
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusResultsDependentDemographics)
+                    if (rowFormat == EdiRowFormat.AlegeusResultsDependentDemographics)
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
@@ -276,11 +276,11 @@ namespace DataProcessing
 
                 /////////////////////////////////////////////////////
                 // IE, RE
-                case EdiFileFormat.AlegeusDependentLink:
-                case EdiFileFormat.AlegeusResultsDependentLink:
+                case EdiRowFormat.AlegeusDependentLink:
+                case EdiRowFormat.AlegeusResultsDependentLink:
 
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusDependentLink)
+                    if (rowFormat == EdiRowFormat.AlegeusDependentLink)
                     {
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0,
                             0));
@@ -302,7 +302,7 @@ namespace DataProcessing
                     }
 
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusResultsDependentLink)
+                    if (rowFormat == EdiRowFormat.AlegeusResultsDependentLink)
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
@@ -327,11 +327,11 @@ namespace DataProcessing
                     break;
                 /////////////////////////////////////////////////////
                 // IF, RF
-                case EdiFileFormat.AlegeusCardCreation:
-                case EdiFileFormat.AlegeusResultsCardCreation:
+                case EdiRowFormat.AlegeusCardCreation:
+                case EdiRowFormat.AlegeusResultsCardCreation:
 
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusCardCreation)
+                    if (rowFormat == EdiRowFormat.AlegeusCardCreation)
                     {
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0,
                             0));
@@ -349,7 +349,7 @@ namespace DataProcessing
                     }
 
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusResultsDependentLink)
+                    if (rowFormat == EdiRowFormat.AlegeusResultsDependentLink)
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
@@ -374,10 +374,10 @@ namespace DataProcessing
 
                 /////////////////////////////////////////////////////
                 //  IH, RH
-                case EdiFileFormat.AlegeusEmployeeDeposit:
-                case EdiFileFormat.AlegeusResultsEmployeeDeposit:
+                case EdiRowFormat.AlegeusEmployeeDeposit:
+                case EdiRowFormat.AlegeusResultsEmployeeDeposit:
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusEmployeeDeposit)
+                    if (rowFormat == EdiRowFormat.AlegeusEmployeeDeposit)
                     {
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0,
                             0));
@@ -404,7 +404,7 @@ namespace DataProcessing
                     }
 
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusResultsEmployeeDeposit)
+                    if (rowFormat == EdiRowFormat.AlegeusResultsEmployeeDeposit)
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
@@ -434,10 +434,10 @@ namespace DataProcessing
                 /////////////////////////////////////////////////////
                 // LATER: FileChecker: mapping for II,RI: take from FinanceApp?
                 //  II, RI
-                case EdiFileFormat.AlegeusEmployeeCardFees:
-                case EdiFileFormat.AlegeusResultsEmployeeCardFees:
+                case EdiRowFormat.AlegeusEmployeeCardFees:
+                case EdiRowFormat.AlegeusResultsEmployeeCardFees:
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusEmployeeDeposit)
+                    if (rowFormat == EdiRowFormat.AlegeusEmployeeDeposit)
                     {
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0,
                             0));
@@ -464,7 +464,7 @@ namespace DataProcessing
                     }
 
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusResultsEmployeeDeposit)
+                    if (rowFormat == EdiRowFormat.AlegeusResultsEmployeeDeposit)
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
@@ -494,10 +494,10 @@ namespace DataProcessing
 
                 /////////////////////////////////////////////////////
                 // IZ, RZ
-                case EdiFileFormat.AlegeusEmployeeHrInfo:
-                case EdiFileFormat.AlegeusResultsEmployeeHrInfo:
+                case EdiRowFormat.AlegeusEmployeeHrInfo:
+                case EdiRowFormat.AlegeusResultsEmployeeHrInfo:
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusEmployeeHrInfo)
+                    if (rowFormat == EdiRowFormat.AlegeusEmployeeHrInfo)
                     {
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0,
                             0));
@@ -515,7 +515,7 @@ namespace DataProcessing
                     }
 
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusResultsEmployeeDeposit)
+                    if (rowFormat == EdiRowFormat.AlegeusResultsEmployeeDeposit)
                     {
                         mappings.Add(new TypedCsvColumn("EmployerId", "EmployerId", FormatType.String, null, 5, 15, 0,
                             0));
@@ -530,7 +530,7 @@ namespace DataProcessing
 
                     break;
 
-                case EdiFileFormat.Unknown:
+                case EdiRowFormat.Unknown:
                     // no specific mappings
                     break;
             }
@@ -649,10 +649,10 @@ namespace DataProcessing
 
                 var expectedMappingColumnsCount = 0;
                 var firstColValue = columns[0];
-                var fileFormat = ImpExpUtils.GetAlegeusRowFormat(firstColValue);
+                var rowFormat = ImpExpUtils.GetAlegeusRowFormat(firstColValue);
 
                 // we only care for Import Headers
-                if (Import.GetAlegeusFileFormatIsResultFile(fileFormat))
+                if (Import.GetAlegeusFileFormatIsResultFile(rowFormat))
                 {
                     return HeaderType.New;
                 }
@@ -660,15 +660,15 @@ namespace DataProcessing
 
                 // get file format
                 // note: we are also detecting header type from conettn for prev Own and NoChange header folders
-                switch (fileFormat)
+                switch (rowFormat)
                 {
                     // ignore unknown and header lines
-                    case EdiFileFormat.Unknown:
-                    case EdiFileFormat.AlegeusHeader:
-                    case EdiFileFormat.AlegeusResultsHeader:
+                    case EdiRowFormat.Unknown:
+                    case EdiRowFormat.AlegeusHeader:
+                    case EdiRowFormat.AlegeusResultsHeader:
                         continue;
 
-                    case EdiFileFormat.AlegeusDemographics:
+                    case EdiRowFormat.AlegeusDemographics:
                         switch (columnCount)
                         {
                             case 19:
@@ -687,7 +687,7 @@ namespace DataProcessing
                         ;
                         break;
 
-                    case EdiFileFormat.AlegeusEnrollment:
+                    case EdiRowFormat.AlegeusEnrollment:
                         switch (columnCount)
                         {
                             case 14:
@@ -709,7 +709,7 @@ namespace DataProcessing
                         ;
                         break;
 
-                    case EdiFileFormat.AlegeusEmployeeDeposit:
+                    case EdiRowFormat.AlegeusEmployeeDeposit:
                         switch (columnCount)
                         {
                             case 11:
@@ -733,7 +733,7 @@ namespace DataProcessing
                 if (expectedMappingColumnsCount <= 0)
                 {
                     // what mappings do we expect for this format
-                    var mappings = GetAlegeusFileImportMappings(fileFormat, HeaderType.NotApplicable, true);
+                    var mappings = GetAlegeusFileImportMappings(rowFormat, HeaderType.NotApplicable, true);
 
                     // check we have the exact columns that we expected
                     expectedMappingColumnsCount =
@@ -741,7 +741,7 @@ namespace DataProcessing
                     if (columnCount != expectedMappingColumnsCount)
                     {
                         string message =
-                            $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source file with format {fileFormat.ToDescription()} has {columnCount} columns instead of the expected {expectedMappingColumnsCount}. Could Not Determine Header Type for {srcFilePath}";
+                            $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source file with format {rowFormat.ToDescription()} has {columnCount} columns instead of the expected {expectedMappingColumnsCount}. Could Not Determine Header Type for {srcFilePath}";
                         throw new IncorrectFileFormatException(message);
                     }
                 }
@@ -750,9 +750,9 @@ namespace DataProcessing
             }
         }
 
-        public static Boolean GetAlegeusFileFormatIsResultFile(EdiFileFormat fileFormat)
+        public static Boolean GetAlegeusFileFormatIsResultFile(EdiRowFormat rowFormat)
         {
-            String fileFormatDesc = fileFormat.ToDescription();
+            String fileFormatDesc = rowFormat.ToDescription();
             if (fileFormatDesc.IndexOf("Result", StringComparison.InvariantCultureIgnoreCase) >= 0)
             {
                 return true;
@@ -794,7 +794,7 @@ namespace DataProcessing
                   , OnErrorCallback onErrorCallback)
         {
             //
-            Dictionary<EdiFileFormat, List<int>> fileFormats = ImpExpUtils.GetAlegeusFileFormats(
+            Dictionary<EdiRowFormat, List<int>> fileFormats = ImpExpUtils.GetAlegeusFileFormats(
                 srcFilePath, hasHeaderRow, fileLogParams
             );
 
@@ -827,7 +827,7 @@ namespace DataProcessing
         }
 
         //doesnt work - mappings not clear
-        public static void ImportAlegeusFile(Dictionary<EdiFileFormat, List<int>> fileFormats,
+        public static void ImportAlegeusFile(Dictionary<EdiRowFormat, List<int>> fileFormats,
             DbConnection dbConn, string srcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams
             , OnErrorCallback onErrorCallback)
         {
@@ -838,17 +838,17 @@ namespace DataProcessing
                     "ImportAlegeusFile", $"Starting: Import {fileName}", "Starting");
 
                 // split text fileinto multiple files
-                Dictionary<EdiFileFormat, Object[]> files = new Dictionary<EdiFileFormat, Object[]>();
+                Dictionary<EdiRowFormat, Object[]> files = new Dictionary<EdiRowFormat, Object[]>();
 
                 //
-                foreach (EdiFileFormat fileFormat in fileFormats.Keys)
+                foreach (EdiRowFormat rowFormat in fileFormats.Keys)
                 {
                     // get temp file for each format
                     string splitFileName = Path.GetTempFileName();
                     FileUtils.EnsurePathExists(splitFileName);
                     //
                     var splitFileWriter = new StreamWriter(splitFileName, false);
-                    files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
+                    files.Add(rowFormat, new Object[] { splitFileWriter, splitFileName });
                 }
 
                 // open file for reading
@@ -861,7 +861,7 @@ namespace DataProcessing
                     {
                         rowNo++;
 
-                        foreach (EdiFileFormat fileFormat2 in fileFormats.Keys)
+                        foreach (EdiRowFormat fileFormat2 in fileFormats.Keys)
                         {
                             if (fileFormats[fileFormat2].Contains(rowNo)
                                 || (line?.Substring(0, 2) == "RA" || line?.Substring(0, 2) == "IA"))
@@ -906,7 +906,7 @@ namespace DataProcessing
             }
         }
 
-        public static void ImportAlegeusFile(EdiFileFormat fileFormat, DbConnection dbConn,
+        public static void ImportAlegeusFile(EdiRowFormat rowFormat, DbConnection dbConn,
             string srcFilePath, string orgSrcFilePath, Boolean hasHeaderRow, FileOperationLogParams fileLogParams
             , OnErrorCallback onErrorCallback)
         {
@@ -915,8 +915,8 @@ namespace DataProcessing
                 // check mappinsg and type opf file (Import or Result)
 
                 var headerType = GetAlegeusHeaderTypeFromFile(srcFilePath, true);
-                TypedCsvSchema mappings = GetAlegeusFileImportMappings(fileFormat, headerType);
-                Boolean isResultFile = GetAlegeusFileFormatIsResultFile(fileFormat);
+                TypedCsvSchema mappings = GetAlegeusFileImportMappings(rowFormat, headerType);
+                Boolean isResultFile = GetAlegeusFileFormatIsResultFile(rowFormat);
 
                 //
                 var newPath =
@@ -947,7 +947,7 @@ namespace DataProcessing
                 // callback for complete
                 if (onErrorCallback != null)
                 {
-                    onErrorCallback(orgSrcFilePath, fileFormat.ToDescription(), ex);
+                    onErrorCallback(orgSrcFilePath, rowFormat.ToDescription(), ex);
                 }
                 else
                 {

@@ -57,7 +57,7 @@ namespace DataProcessing
         public string SrcFilePath { get; set; }
         public string OriginalSrcFilePath { get; set; }
         public PlatformType PlatformType { get; set; }
-        public EdiFileFormat EdiFileFormat { get; set; }
+        public EdiRowFormat EdiFileFormat { get; set; }
         public FileOperationLogParams FileLogParams { get; set; }
 
         public DbConnection DbConn { get; set; }
@@ -367,7 +367,7 @@ namespace DataProcessing
             if (this.PlatformType == PlatformType.Alegeus)
             {
                 //
-                Dictionary<EdiFileFormat, List<int>> fileFormats =
+                Dictionary<EdiRowFormat, List<int>> fileFormats =
                     ImpExpUtils.GetAlegeusFileFormats(this.SrcFilePath, false, this.FileLogParams);
 
                 //

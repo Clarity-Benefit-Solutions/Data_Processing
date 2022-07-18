@@ -22,7 +22,7 @@ namespace DataProcessing
     {
         #region CheckAlegeusFile
 
-        private void CheckAlegeusFile(Dictionary<EdiFileFormat, List<int>> fileFormats)
+        private void CheckAlegeusFile(Dictionary<EdiRowFormat, List<int>> fileFormats)
         {
             // 2. import the file
             string fileName = Path.GetFileName(SrcFilePath) ?? string.Empty;
@@ -30,17 +30,17 @@ namespace DataProcessing
                 "CheckFile", $"Starting: Check {fileName}", "Starting");
 
             // split text fileinto multiple files
-            Dictionary<EdiFileFormat, object[]> files = new Dictionary<EdiFileFormat, object[]>();
+            Dictionary<EdiRowFormat, object[]> files = new Dictionary<EdiRowFormat, object[]>();
 
             //
-            foreach (EdiFileFormat fileFormat in fileFormats.Keys)
+            foreach (EdiRowFormat rowFormat in fileFormats.Keys)
             {
                 // get temp file for each format
                 string splitFileName = Path.GetTempFileName();
                 FileUtils.EnsurePathExists(splitFileName);
                 //
                 var splitFileWriter = new StreamWriter(splitFileName, false);
-                files.Add(fileFormat, new Object[] { splitFileWriter, splitFileName });
+                files.Add(rowFormat, new Object[] { splitFileWriter, splitFileName });
             }
 
             // open file for reading
@@ -53,7 +53,7 @@ namespace DataProcessing
                 {
                     rowNo++;
 
-                    foreach (EdiFileFormat fileFormat2 in fileFormats.Keys)
+                    foreach (EdiRowFormat fileFormat2 in fileFormats.Keys)
                     {
                         if (
                             fileFormats[fileFormat2].Contains(rowNo)
@@ -86,14 +86,14 @@ namespace DataProcessing
             }
         }
 
-        private void CheckAlegeusFile(EdiFileFormat fileFormat, string currentFilePath)
+        private void CheckAlegeusFile(EdiRowFormat rowFormat, string currentFilePath)
         {
             string tableName = "";
             TypedCsvSchema mappings = new TypedCsvSchema();
             string postImportProc = "";
 
             // check mappings and type of file (Import or Result)
-            Boolean isResultFile = Import.GetAlegeusFileFormatIsResultFile(fileFormat);
+            Boolean isResultFile = Import.GetAlegeusFileFormatIsResultFile(rowFormat);
             if (isResultFile)
             {
                 return;
@@ -103,14 +103,14 @@ namespace DataProcessing
             var headerType = Import.GetAlegeusHeaderTypeFromFile(currentFilePath, true);
 
             // get columns for file based on header type
-            mappings = Import.GetAlegeusFileImportMappings(fileFormat, headerType);
+            mappings = Import.GetAlegeusFileImportMappings(rowFormat, headerType);
 
             //
             tableName = "[dbo].[mbi_file_table_stage]";
             postImportProc = "[dbo].[process_mbi_file_table_stage_import]";
 
             //todo: need to check changed code
-            Import.ImportAlegeusFile(fileFormat, DbConn, currentFilePath, OriginalSrcFilePath, this.hasHeaderRow, FileLogParams, null);
+            Import.ImportAlegeusFile(rowFormat, DbConn, currentFilePath, OriginalSrcFilePath, this.hasHeaderRow, FileLogParams, null);
 
             //
             // update check type for table
@@ -123,7 +123,7 @@ namespace DataProcessing
             );
 
             // check file data from the table based on mappings
-            CheckAlegeusFileData(fileFormat, mappings);
+            CheckAlegeusFileData(rowFormat, mappings);
 
             // run post import proc to take data from stage into final table
             string queryString = $"exec {postImportProc};";
@@ -133,7 +133,7 @@ namespace DataProcessing
             );
         }
 
-        private void CheckAlegeusFileData(EdiFileFormat fileFormat, TypedCsvSchema mappings)
+        private void CheckAlegeusFileData(EdiRowFormat rowFormat, TypedCsvSchema mappings)
         {
             // ensure previously cached data is not used so
             // so create a new db context to ensure stale data will NOT be used
@@ -155,7 +155,7 @@ namespace DataProcessing
                     mbiRow.error_code = "";
                     mbiRow.error_message = "";
                     //
-                    this.CheckAlegeusRowData(fileFormat, mbiRow, mappings);
+                    this.CheckAlegeusRowData(mbiRow, mappings);
                 }
                 catch (Exception ex)
                 {
@@ -167,13 +167,22 @@ namespace DataProcessing
             dbDataProcessing.SaveChanges();
         }
 
-        private void CheckAlegeusRowData(EdiFileFormat fileFormat, mbi_file_table_stage mbiRow, TypedCsvSchema mappings)
+        private void CheckAlegeusRowData(mbi_file_table_stage mbiRow, TypedCsvSchema mappings)
         {
             // don't check header mbiRow
-            if (mbiRow.row_type == "IA" || mbiRow.row_type == "RA")
+
+            var rowFormat = ImpExpUtils.GetAlegeusRowFormat(mbiRow.row_type);
+            switch (rowFormat)
             {
-                return;
+                case EdiRowFormat.AlegeusHeader:
+                case EdiRowFormat.AlegeusResultsHeader:
+                    return;
+
+                case EdiRowFormat.Unknown:
+                    this.AddAlegeusErrorForRow(mbiRow, "Invalid Record Type", $"Record Type '{mbiRow.row_type}' is invalid");
+                    return;
             }
+
 
             Boolean lineHasError = false;
 
@@ -235,30 +244,30 @@ namespace DataProcessing
                 {
                     // ER ID
                     case "tpaid":
-                        lineHasError = this.CheckAlegeusTpaExists(mbiRow, column, fileFormat);
+                        lineHasError = this.CheckAlegeusTpaExists(mbiRow, column, rowFormat);
                         break;
 
                     // ER ID
                     case "employerid":
                         //ER must exist before any Import files are sent
-                        lineHasError = this.CheckAlegeusEmployerExists(mbiRow, column, fileFormat);
+                        lineHasError = this.CheckAlegeusEmployerExists(mbiRow, column, rowFormat);
                         break;
 
                     // EE ID
                     case "employeeid":
                         //EE must exist before any Import files are sent. But for IB files, employee need not exist - he is being added
-                        lineHasError = this.CheckAlegeusEmployeeExists(mbiRow, column, fileFormat);
+                        lineHasError = this.CheckAlegeusEmployeeExists(mbiRow, column, rowFormat);
                         break;
                     // plan related
                     case "planid":
                     case @"accounttypecode":
-                        if (fileFormat == EdiFileFormat.AlegeusEnrollment)
+                        if (rowFormat == EdiRowFormat.AlegeusEnrollment)
                         {
-                            lineHasError = this.CheckAlegeusEmployerPlanExists(mbiRow, column, fileFormat);
+                            lineHasError = this.CheckAlegeusEmployerPlanExists(mbiRow, column, rowFormat);
                         }
-                        else if (fileFormat == EdiFileFormat.AlegeusEmployeeDeposit)
+                        else if (rowFormat == EdiRowFormat.AlegeusEmployeeDeposit)
                         {
-                            lineHasError = this.CheckAlegeusEmployeePlanExists(mbiRow, column, fileFormat);
+                            lineHasError = this.CheckAlegeusEmployeePlanExists(mbiRow, column, rowFormat);
                         }
                         break;
 
@@ -270,7 +279,7 @@ namespace DataProcessing
             // if any column is not in a good format, skip further checking as therecould be unexpected errors
             if (!lineHasError && Utils.IsBlank(mbiRow.error_message))
             {
-                lineHasError = CheckForDuplicateAlegeusPosting(mbiRow, fileFormat);
+                lineHasError = CheckForDuplicateAlegeusPosting(mbiRow, rowFormat);
             }
         }
 
@@ -326,7 +335,7 @@ namespace DataProcessing
         }
 
 
-        public Boolean CheckAlegeusTpaExists(mbi_file_table_stage mbiRow, TypedCsvColumn column, EdiFileFormat fileFormat)
+        public Boolean CheckAlegeusTpaExists(mbi_file_table_stage mbiRow, TypedCsvColumn column, EdiRowFormat rowFormat)
         {
             var errorMessage = "";
             var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{mbiRow.TpaId}";
@@ -347,7 +356,7 @@ namespace DataProcessing
                         }
                         else if (mbiRow.TpaId != "BENEFL")
                         {
-                            errorMessage = $"TPA ID {mbiRow.TpaId} is invalid. It must always be BENEFL";
+                            errorMessage = $"TPA ID '{mbiRow.TpaId}' is invalid. It must always be BENEFL";
                         }
                     }
                 }
@@ -374,7 +383,7 @@ namespace DataProcessing
         }
 
         public Boolean CheckAlegeusEmployerExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
-            EdiFileFormat fileFormat)
+            EdiRowFormat rowFormat)
         {
             var errorMessage = "";
             var cacheKey =
@@ -399,7 +408,7 @@ namespace DataProcessing
 
                     if (dbRows.Length == 0)
                     {
-                        errorMessage = $"The Employer ID {mbiRow.EmployerId} could not be found";
+                        errorMessage = $"The Employer ID '{mbiRow.EmployerId}' could not be found";
                     }
                     else
                     {
@@ -433,7 +442,7 @@ namespace DataProcessing
         }
 
         public Boolean CheckAlegeusEmployeeExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
-            EdiFileFormat fileFormat = EdiFileFormat.Unknown)
+            EdiRowFormat rowFormat = EdiRowFormat.Unknown)
         {
             var errorMessage = "";
             var cacheKey =
@@ -462,7 +471,7 @@ namespace DataProcessing
                     if (dbRows.Length == 0)
                     {
                         // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
-                        if (fileFormat == EdiFileFormat.AlegeusDemographics)
+                        if (rowFormat == EdiRowFormat.AlegeusDemographics)
                         {
                             // as it is an demographics file, add this employee to the ER-EE table so a check for plan enrollemnt within same run or before reaggregation from Alegeus will suceed
                             DataRow newRow = dbResults.NewRow();
@@ -481,7 +490,7 @@ namespace DataProcessing
                         else
                         {
                             errorMessage +=
-                                $"The Employee ID {mbiRow.EmployeeID} could not be found for Employer Id {mbiRow.EmployerId}";
+                                $"The Employee ID '{mbiRow.EmployeeID}' could not be found for Employer Id '{mbiRow.EmployerId}'";
                         }
                     }
                     else
@@ -515,16 +524,16 @@ namespace DataProcessing
             }
         }
         public Boolean CheckForDuplicateAlegeusPosting(mbi_file_table_stage mbiRow,
-                  EdiFileFormat fileFormat = EdiFileFormat.Unknown)
+                  EdiRowFormat rowFormat = EdiRowFormat.Unknown)
         {
 
 
             string errorMessage = "";
 
             //
-            switch (fileFormat)
+            switch (rowFormat)
             {
-                case EdiFileFormat.AlegeusEmployeeDeposit:
+                case EdiRowFormat.AlegeusEmployeeDeposit:
                     string queryString =
                         $"select * from  [mbi_file_table] " +
                         $" where " +
@@ -557,7 +566,7 @@ namespace DataProcessing
 
                     DataRow prvRow = dbResults.Rows[0];
                     //
-                    errorMessage = $"Potential Duplicate Posting! Was probably posted earlier on {Utils.ToIsoDateString(prvRow["CreatedAt"])} as part of file  {prvRow["mbi_file_name"]}";
+                    errorMessage = $"Potential Duplicate Posting! Was probably posted earlier on '{Utils.ToIsoDateString(prvRow["CreatedAt"])}' as part of file  '{prvRow["mbi_file_name"]}'";
                     break;
                 default:
                     break;
@@ -577,7 +586,7 @@ namespace DataProcessing
         }
 
         public Boolean CheckAlegeusEmployerPlanExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
-            EdiFileFormat fileFormat)
+            EdiRowFormat rowFormat)
         {
             var errorMessage = "";
             var cacheKey =
@@ -621,9 +630,9 @@ namespace DataProcessing
                     if (dbRows.Length == 0)
                     {
                         errorMessage +=
-                            $"The AccountTypeID {mbiRow.AccountTypeCode}" +
-                            (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID {mbiRow.PlanId}" : "") +
-                            $" could not be found for Employer Id {mbiRow.EmployerId}";
+                            $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                            (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                            $" could not be found for Employer Id '{mbiRow.EmployerId}' ";
                         ;
                     }
                     else
@@ -649,11 +658,11 @@ namespace DataProcessing
                         if (matchedRows.Count == 0)
                         {
                             errorMessage +=
-                                                    $"The AccountTypeID {mbiRow.AccountTypeCode}" +
-                                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID {mbiRow.PlanId}" : "") +
-                                                     $" and Plan Start date {mbiRow.PlanStartDate}" +
-                                                     $" and Plan End date {mbiRow.PlanEndDate}" +
-                                                    $" could not be found for Employer Id {mbiRow.EmployerId}";
+                                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                                     $" and Plan Start date '{mbiRow.PlanStartDate}'" +
+                                                     $" and Plan End date '{mbiRow.PlanEndDate}'" +
+                                                    $" could not be found for Employer Id '{mbiRow.EmployerId}'";
                         }
                         else
                         {
@@ -669,9 +678,9 @@ namespace DataProcessing
                                 Utils.ToDate(mbiRow.PlanStartDate) > Utils.ToDate(mbiRow.PlanEndDate))
                             {
                                 errorMessage +=
-                                    $"The AccountTypeID {mbiRow.AccountTypeCode}" +
-                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID {mbiRow.PlanId}" : "") +
-                                    $" Start Date {mbiRow.PlanStartDate} must be before the Plan End Date {mbiRow.PlanEndDate} for Employer Id {mbiRow.EmployerId}";
+                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                    $" Start Date '{mbiRow.PlanStartDate}' must be before the Plan End Date '{mbiRow.PlanEndDate}' for Employer Id '{mbiRow.EmployerId}'";
                             }
 
 
@@ -682,9 +691,9 @@ namespace DataProcessing
                                 if (dbRowPlanStartDate > Utils.ToDate(mbiRow.EffectiveDate))
                                 {
                                     errorMessage +=
-                                        $"The AccountTypeID {mbiRow.AccountTypeCode}" +
-                                        (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID {mbiRow.PlanId}" : "") +
-                                        $" starts only on {Utils.ToDateString(dbRowPlanStartDate)} and is not yet started on {mbiRow.EffectiveDate}";
+                                        $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                        (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                        $" starts only on '{Utils.ToDateString(dbRowPlanStartDate)}' and is not yet started on '{mbiRow.EffectiveDate}'";
                                 }
                             }
 
@@ -693,9 +702,9 @@ namespace DataProcessing
                                 if (dbRowPlanEndDate < Utils.ToDate(mbiRow.EffectiveDate))
                                 {
                                     errorMessage =
-                                        $"The AccountTypeID {mbiRow.AccountTypeCode}" +
-                                        (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID {mbiRow.PlanId}" : "") +
-                                        $" ended on {Utils.ToDateString(dbRowPlanEndDate)} and is no longer active on {mbiRow.EffectiveDate}";
+                                        $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                        (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                        $" ended on '{Utils.ToDateString(dbRowPlanEndDate)}' and is no longer active on '{mbiRow.EffectiveDate}' ";
                                     ;
                                 }
                             }
@@ -721,7 +730,7 @@ namespace DataProcessing
         }
 
         public Boolean CheckAlegeusEmployeePlanExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
-            EdiFileFormat fileFormat)
+            EdiRowFormat rowFormat)
         {
             var errorMessage = "";
             var cacheKey =
@@ -751,10 +760,10 @@ namespace DataProcessing
                 else
                 {
                     //// if we are enrolling an employee in a plan, only check if ER has this EE
-                    //if (fileFormat == EdiFileFormat.AlegeusEnrollment)
+                    //if (rowFormat == EdiFileFormat.AlegeusEnrollment)
                     //{
                     //  //as it is an enrollment file, check the EE exists and enroll in the plan
-                    //  var hasError = this.CheckEmployeeExists(mbiRow, column, fileFormat);
+                    //  var hasError = this.CheckEmployeeExists(mbiRow, column, rowFormat);
                     //  //return hasError;
                     //}
 
@@ -776,7 +785,7 @@ namespace DataProcessing
 
                     if (dbRows.Length == 0)
                     {
-                        if (fileFormat == EdiFileFormat.AlegeusEnrollment)
+                        if (rowFormat == EdiRowFormat.AlegeusEnrollment)
                         {
                             // as it is an enrollment, enroll the EE in this plan demographics file, 
                             DataRow newRow = dbResults.NewRow();
@@ -799,9 +808,9 @@ namespace DataProcessing
                         }
 
                         errorMessage +=
-                            $"The AccountTypeID {mbiRow.AccountTypeCode}" +
-                            (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID {mbiRow.PlanId}" : "") +
-                            $" could not be found for Employee Id {mbiRow.EmployeeID}";
+                            $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                            (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                            $" could not be found for Employee Id '{mbiRow.EmployeeID}'";
                         ;
                     }
                     else
@@ -828,11 +837,11 @@ namespace DataProcessing
                         if (matchedRows.Count == 0)
                         {
                             errorMessage +=
-                                                    $"The AccountTypeID {mbiRow.AccountTypeCode}" +
-                                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID {mbiRow.PlanId}" : "") +
-                                                     $" and Plan Start date {mbiRow.PlanStartDate}" +
-                                                     $" and Plan End date {mbiRow.PlanEndDate}" +
-                                                    $" could not be found for Employee Id {mbiRow.EmployeeID}";
+                                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                                     $" and Plan Start date '{mbiRow.PlanStartDate}'" +
+                                                     $" and Plan End date '{mbiRow.PlanEndDate}'" +
+                                                    $" could not be found for Employee Id '{mbiRow.EmployeeID}'";
                         }
                         else
                         {
@@ -847,9 +856,9 @@ namespace DataProcessing
                                 Utils.ToDate(mbiRow.PlanStartDate) > Utils.ToDate(mbiRow.PlanEndDate))
                             {
                                 errorMessage +=
-                                    $"The AccountTypeID {mbiRow.AccountTypeCode}" +
-                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID {mbiRow.PlanId}" : "") +
-                                    $" Start Date {mbiRow.PlanStartDate} must be before the Plan End Date {mbiRow.PlanEndDate} for Employee Id {mbiRow.EmployeeID}";
+                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                    $" Start Date '{mbiRow.PlanStartDate}' must be before the Plan End Date '{mbiRow.PlanEndDate}' for Employee Id '{mbiRow.EmployeeID}'";
                             }
 
                             //check effectivedate is within plan dates
@@ -857,18 +866,18 @@ namespace DataProcessing
                                 dbRowPlanStartDate > Utils.ToDate(mbiRow.EffectiveDate))
                             {
                                 errorMessage +=
-                                    $"The AccountTypeID {mbiRow.AccountTypeCode}" +
-                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID {mbiRow.PlanId}" : "") +
-                                    $" starts only on {Utils.ToDateString(dbRowPlanStartDate)} and is not yet started on {mbiRow.EffectiveDate} for Employee Id {mbiRow.EmployeeID}";
+                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                    $" starts only on '{Utils.ToDateString(dbRowPlanStartDate)}' and is not yet started on '{mbiRow.EffectiveDate}' for Employee Id '{mbiRow.EmployeeID}' ";
                             }
 
                             if (!Utils.IsBlank(mbiRow.EffectiveDate) &&
                                 dbRowPlanEndDate < Utils.ToDate(mbiRow.EffectiveDate))
                             {
                                 errorMessage =
-                                    $"The AccountTypeID {mbiRow.AccountTypeCode}" +
-                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID {mbiRow.PlanId}" : "") +
-                                    $" ended on {Utils.ToDateString(dbRowPlanEndDate)} and is no longer active on {mbiRow.EffectiveDate} for Employee Id {mbiRow.EmployeeID}";
+                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                    $" ended on '{Utils.ToDateString(dbRowPlanEndDate)}' and is no longer active on '{mbiRow.EffectiveDate}' for Employee Id '{mbiRow.EmployeeID}'";
                                 ;
                             }
                         } // matchedRows count
@@ -893,17 +902,17 @@ namespace DataProcessing
         }
 
         public Boolean CheckAlegeusDependentExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
-            EdiFileFormat fileFormat)
+            EdiRowFormat rowFormat)
         {
             // dependent plans are linked to the employee
-            return CheckAlegeusEmployeeExists(mbiRow, column, fileFormat);
+            return CheckAlegeusEmployeeExists(mbiRow, column, rowFormat);
         }
 
         public Boolean CheckAlegeusDependentPlanExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
-            EdiFileFormat fileFormat)
+            EdiRowFormat rowFormat)
         {
             // dependent plans are linked to the employee
-            return CheckAlegeusEmployeePlanExists(mbiRow, column, fileFormat);
+            return CheckAlegeusEmployeePlanExists(mbiRow, column, rowFormat);
         }
 
         #endregion checkData

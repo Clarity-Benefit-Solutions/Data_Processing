@@ -26,15 +26,15 @@ namespace DataProcessing
     {
 
         
-        public static TypedCsvSchema GetBrokerCommissionFileImportMappings(EdiFileFormat fileFormat, HeaderType headerType, Boolean forImport = true)
+        public static TypedCsvSchema GetBrokerCommissionFileImportMappings(EdiRowFormat rowFormat, HeaderType headerType, Boolean forImport = true)
         {
             var mappings = new TypedCsvSchema();
 
-            switch (fileFormat)
+            switch (rowFormat)
             {
                 /////////////////////////////////////////////////////
                 // IB, RB 
-                case EdiFileFormat.BrokerCommissionQBRawData:
+                case EdiRowFormat.BrokerCommissionQBRawData:
                     // Type	Date	Num	Name	Memo	Agent	Qty	Sales Price	Amount	Open Balance
 
                     // for all
@@ -53,7 +53,7 @@ namespace DataProcessing
 
                 default:
                     var message =
-                                 $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : fileFormat : {fileFormat.ToDescription()} is invalid";
+                                 $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : rowFormat : {rowFormat.ToDescription()} is invalid";
                     throw new Exception(message);
 
             }
@@ -67,7 +67,7 @@ namespace DataProcessing
             , OnErrorCallback onErrorCallback)
         {
             //
-            EdiFileFormat fileFormat = EdiFileFormat.BrokerCommissionQBRawData;
+            EdiRowFormat rowFormat = EdiRowFormat.BrokerCommissionQBRawData;
 
 
             // 2. import the file
@@ -76,7 +76,7 @@ namespace DataProcessing
                 // check mappinsg and type opf file (Import or Result)
 
                 var headerType = HeaderType.NotApplicable;
-                TypedCsvSchema mappings = GetBrokerCommissionFileImportMappings(fileFormat, headerType);
+                TypedCsvSchema mappings = GetBrokerCommissionFileImportMappings(rowFormat, headerType);
                 Boolean isResultFile = false;
 
                 //
@@ -111,7 +111,7 @@ namespace DataProcessing
                 // callback for complete
                 if (onErrorCallback != null)
                 {
-                    onErrorCallback(srcFilePath, fileFormat.ToDescription(), ex);
+                    onErrorCallback(srcFilePath, rowFormat.ToDescription(), ex);
                 }
                 else
                 {
