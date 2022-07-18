@@ -209,11 +209,15 @@ namespace CoreUtils.Classes
             var charsToTake = Math.Min(length, value.Length);
             return value.Length <= length ? value : value.Substring(value.Length - charsToTake);
         }
-        public static string Mid(string value, int start, int length)
+        public static string Mid(string value, int start, int length=-1)
         {
             if (IsBlank(value))
             {
                 return value;
+            }
+            if (length < 0)
+            {
+                length = value.Length;
             }
 
             var charsToTake = Math.Min(start + length, value.Length);

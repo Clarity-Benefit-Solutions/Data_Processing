@@ -62,9 +62,9 @@ namespace DataProcessing
                         {
                             // get temp file for each format
                             var splitFileWriter = (StreamWriter)files[fileFormat2][0];
-                            // if there is prvUnwrittenLine it was probably a header line - write to the file that 
 
-                            splitFileWriter.WriteLine(line);
+                            // if there is prvUnwrittenLine it was probably a header line - write to the file that 
+                            splitFileWriter.WriteLine($"{rowNo}{Import.SourceRowNoSeparator}{line}");
                             continue;
                         }
                     }
@@ -100,7 +100,7 @@ namespace DataProcessing
             }
 
             // get header type from filename
-            var headerType = Import.GetAlegeusHeaderTypeFromFile(currentFilePath);
+            var headerType = Import.GetAlegeusHeaderTypeFromFile(currentFilePath, true);
 
             // get columns for file based on header type
             mappings = Import.GetAlegeusFileImportMappings(fileFormat, headerType);

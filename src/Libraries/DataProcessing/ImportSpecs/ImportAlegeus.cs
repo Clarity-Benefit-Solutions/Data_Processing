@@ -75,8 +75,10 @@ namespace DataProcessing
                 // IB, RB 
                 case EdiFileFormat.AlegeusDemographics:
                 case EdiFileFormat.AlegeusResultsDemographics:
+                // sumeet: presume demo for unknown rec types types
+                case EdiFileFormat.Unknown:
                     //
-                    if (fileFormat == EdiFileFormat.AlegeusDemographics)
+                    if (fileFormat == EdiFileFormat.AlegeusDemographics || fileFormat == EdiFileFormat.Unknown)
                     {
                         // for all
                         mappings.Add(new TypedCsvColumn("TpaId", "TpaId", FormatType.FixedConstant, "BENEFL", 0, 0, 0,
@@ -537,7 +539,7 @@ namespace DataProcessing
 
         public static Boolean IsAlegeusImportLine(string line)
         {
-            if (line != null)
+            if (line == null)
             {
                 return false;
             }
@@ -555,7 +557,9 @@ namespace DataProcessing
 
             // exclude known irrelevant lines that are in header of footer
             List<string> ignoreText = new List<string>() {
-                "PLEASE EMAIL COMPLETED FILE TO PROCESSING@CLARITYBENEFITSOLUTIONS.COM".ToLower() ,
+                "PLEASE EMAIL COMPLETED FILE TO",
+                "CLARITY WILL UPDATE",
+                "PROCESSING@CLARITYBENEFITSOLUTIONS.COM",
             };
             foreach (var ignore in ignoreText)
             {
@@ -591,7 +595,7 @@ namespace DataProcessing
             return false;
         }
 
-        public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath)
+        public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath, Boolean ignoreInvalidHeaderTypes)
         {
             var headerType = HeaderType.NotApplicable;
             // convert excel files to csv to check
@@ -618,9 +622,16 @@ namespace DataProcessing
                 {
                     if (headerType == HeaderType.NotApplicable)
                     {
-                        string message =
-                            $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Could Not Determine Header Type for  {srcFilePath}";
-                        throw new IncorrectFileFormatException(message);
+                        if (ignoreInvalidHeaderTypes)
+                        {
+                            return HeaderType.Old;
+                        }
+                        else
+                        {
+                            string message =
+                              $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Could Not Determine Header Type for  {srcFilePath}";
+                            throw new IncorrectFileFormatException(message);
+                        }
                     }
 
                     return headerType;
@@ -900,7 +911,7 @@ namespace DataProcessing
             {
                 // check mappinsg and type opf file (Import or Result)
 
-                var headerType = GetAlegeusHeaderTypeFromFile(srcFilePath);
+                var headerType = GetAlegeusHeaderTypeFromFile(srcFilePath, true);
                 TypedCsvSchema mappings = GetAlegeusFileImportMappings(fileFormat, headerType);
                 Boolean isResultFile = GetAlegeusFileFormatIsResultFile(fileFormat);
 

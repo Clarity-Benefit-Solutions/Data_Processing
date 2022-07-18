@@ -27,6 +27,7 @@ namespace DataProcessing
 
 
         public static readonly string AppendCommasToCsvLine = ",,,,,,,,,,,,,,,,,,,,";
+        public static readonly string SourceRowNoSeparator = "<SOURCEROWNO>|";
 
         public static void ImportCrmListFileBulkCopy(DbConnection dbConn, string srcFilePath,
           Boolean hasHeaderRow, string tableName, FileOperationLogParams fileLogParams
@@ -70,8 +71,7 @@ namespace DataProcessing
         }
 
 
-        public static string PrefixLineWithEntireLineAndFileName(string srcFilePath, string orgSrcFilePath,
-            FileOperationLogParams fileLogParams)
+        public static string PrefixLineWithEntireLineAndFileName(string srcFilePath, string orgSrcFilePath, FileOperationLogParams fileLogParams)
         {
             string fileName = Path.GetFileName(orgSrcFilePath);
             //FileLogParams?.SetFileNames(Utils.GetUniqueIdFromFileName(fileName), fileName, orgSrcFilePath, "", "", $"{ MethodBase.GetCurrentMethod()?.Name}", $"Adding Entire Line as Last Column", "Starting");
@@ -87,7 +87,16 @@ namespace DataProcessing
                 int rowNo = 0;
                 while ((line = inputFile.ReadLine()) != null)
                 {
-                    rowNo++;
+                    var index = line.IndexOf(SourceRowNoSeparator);
+                    if (index >= 0)
+                    {
+                        rowNo = Utils.ToInt(line.Substring(0, index));
+                        line = line.Substring(index + SourceRowNoSeparator.Length);
+                    }
+                    else
+                    {
+                        rowNo++;
+                    }
                     // for each header row, ensure enough columns are created as header columns are less than the data columns and then the csv data reader errors when asked for columns that are in the data schema but not in the header itself
                     if (line.Substring(0, 2) == "IA" || line.Substring(0, 2) == "RA")
                     {

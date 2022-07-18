@@ -69,7 +69,7 @@
 
     public enum HeaderType
     {
-        [Utils.DisplayText("HeaderType.NotApplicable")]
+        [Utils.DisplayText("HeaderType.Unknown")]
         NotApplicable = 0,
         [Utils.DisplayText("HeaderType.Own")] Own,
         [Utils.DisplayText("HeaderType.Old")] Old,

@@ -357,7 +357,7 @@ namespace DataProcessing
                         }
 
                         // 2. get header type for file
-                        var headerType = Import.GetAlegeusHeaderTypeFromFile(srcFilePath);
+                        var headerType = Import.GetAlegeusHeaderTypeFromFile(srcFilePath, false);
 
                         //3. truncate staging table
                         var tableName = "[dbo].[alegeus_file_staging]";
@@ -377,9 +377,6 @@ namespace DataProcessing
                                 }
 
                                 if (
-                                    //confirmed: with danielle - we skip all lines that do not start with valid record type? 
-                                    /*rowNo == 1
-                                    && */
                                     // skip if line is not of a import row Type
                                     !Import.IsAlegeusImportLine(line)
                                 )

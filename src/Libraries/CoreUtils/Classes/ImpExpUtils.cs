@@ -42,6 +42,7 @@ namespace CoreUtils.Classes
             var rowNo = 0;
             Dictionary<EdiFileFormat, List<int>> fileFormats = new Dictionary<EdiFileFormat, List<int>>();
 
+            // note: the splitting of file is not working - just import as a single file format
             const int rowsToRead = 9999;
             while (csv.Read())
             {
@@ -50,11 +51,14 @@ namespace CoreUtils.Classes
                 {
                     var firstColValue = csv.GetString(0);
                     var fileFormat = GetAlegeusRowFormat(firstColValue);
-
                     // don't take header and unknown as we will not send them across  or parse them
-                    if (fileFormat != EdiFileFormat.Unknown && fileFormat != EdiFileFormat.AlegeusHeader &&
+                    if (
+                        // sumeet: 2022-07-18-take invalid row types also as client may have made a typos
+                        /*fileFormat != EdiFileFormat.Unknown &&*/
+                        fileFormat != EdiFileFormat.AlegeusHeader &&
                         fileFormat != EdiFileFormat.AlegeusResultsHeader)
                     {
+                        
                         if (fileFormats.ContainsKey(fileFormat))
                         {
                             fileFormats[fileFormat].Add(rowNo);
