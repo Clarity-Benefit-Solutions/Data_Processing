@@ -1,5 +1,5 @@
-create or
-alter procedure dbo.process_res_file_table_stage_import as
+create
+ procedure dbo.process_res_file_table_stage_import as
 begin
     -- Script for SelectTopNRows command from SSMS
     declare @filename as varchar(200)
@@ -33,8 +33,15 @@ begin
     /* save org_error_row*/
     update [dbo].[res_file_table_stage]
     set
-        org_error_row = error_row,
-        org_data_row  = data_row;
+        org_error_row = error_row
+    where
+        isnull( org_error_row , '' ) = '';
+    
+    update [dbo].[res_file_table_stage]
+    set
+        org_data_row = data_row
+    where
+        isnull( org_data_row , '' ) = '';
     
     /* update a*ny missing */
     update [dbo].[res_file_table_stage]
@@ -128,7 +135,7 @@ begin
               from
                   dbo.res_file_table_stage
           ) as src
-    ON (tgt.mbi_file_name = src.mbi_file_name and tgt.row_num = src.row_num)
+    ON (tgt.mbi_file_name = src.mbi_file_name and tgt.source_row_no = src.source_row_no)
     WHEN MATCHED THEN
         UPDATE
         SET

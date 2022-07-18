@@ -1,4 +1,5 @@
-create   procedure dbo.process_res_file_table_stage_import as
+create 
+ procedure dbo.process_res_file_table_stage_import as
 begin
     -- Script for SelectTopNRows command from SSMS
     declare @filename as varchar(200)
@@ -20,13 +21,27 @@ begin
         begin
             update [dbo].[res_file_table_stage]
             set
-                mbi_file_name = @filename,
-                /* remove extra csv commas added to line */
-                data_row      = replace( data_row , ',,,,,,,,,,,,,,,,,,,,' , '' ),
-                error_row     = replace( error_row , ',,,,,,,,,,,,,,,,,,,,' , '' )
-            FROM
-                [dbo].[res_file_table_stage]
+                mbi_file_name = @filename
         end;
+    
+    update [dbo].[res_file_table_stage]
+    set
+        /* remove extra csv commas added to line */
+        data_row  = replace( data_row , ',,,,,,,,,,,,,,,,,,,,' , '' ),
+        error_row = replace( error_row , ',,,,,,,,,,,,,,,,,,,,' , '' )
+    
+    /* save org_error_row*/
+    update [dbo].[res_file_table_stage]
+    set
+        org_error_row = error_row
+    where
+        isnull( org_error_row , '' ) = '';
+    
+    update [dbo].[res_file_table_stage]
+    set
+        org_data_row = data_row
+    where
+        isnull( org_data_row , '' ) = '';
     
     /* update a*ny missing */
     update [dbo].[res_file_table_stage]
@@ -91,6 +106,8 @@ begin
                 , error_message
                 , error_message_calc
                 , error_row
+                , org_error_row
+                , org_data_row
                 , FirstName
                 , LastName
                 , mbi_file_name
@@ -148,6 +165,8 @@ begin
             error_message=src.error_message,
             error_message_calc=src.error_message_calc,
             error_row=src.error_row,
+            org_error_row= src.org_error_row,
+            org_data_row = src.org_data_row,
             FirstName=src.FirstName,
             LastName=src.LastName,
             mbi_file_name=src.mbi_file_name,
@@ -200,6 +219,8 @@ begin
                error_message,
                error_message_calc,
                error_row,
+               org_error_row,
+               org_data_row,
                FirstName,
                LastName,
                mbi_file_name,
@@ -251,6 +272,8 @@ begin
                src.error_message,
                src.error_message_calc,
                src.error_row,
+               src.org_error_row,
+               src.org_data_row,
                src.FirstName,
                src.LastName,
                src.mbi_file_name,
