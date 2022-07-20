@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using CoreUtils;
+using CoreUtils.Classes;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -6,8 +8,6 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using CoreUtils;
-using CoreUtils.Classes;
 
 // ReSharper disable All
 

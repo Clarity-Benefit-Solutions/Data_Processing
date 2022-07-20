@@ -1,7 +1,7 @@
-﻿using System;
+﻿using CoreUtils.Classes;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using CoreUtils.Classes;
 
 // ReSharper disable All
 namespace DataProcessing.DataModels.CobraPoint

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Sylvan.Data.Csv;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
-using Sylvan.Data.Csv;
 
 namespace CoreUtils.Classes
 {
@@ -145,7 +145,7 @@ namespace CoreUtils.Classes
     public class CobraTypedCsvColumn : TypedCsvColumn
     {
         public CobraTypedCsvColumn(string sourceColumn, FormatType formatType = FormatType.Any,
-           int maxLength = 0, int isRequired=0, string notes = "", string possibleValues = "") : base()
+           int maxLength = 0, int isRequired = 0, string notes = "", string possibleValues = "") : base()
         {
             this.ColumnName = sourceColumn;
             this.DestinationColumn = sourceColumn;

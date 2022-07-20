@@ -1,19 +1,14 @@
-﻿using System;
+﻿using Sylvan.Data.Csv;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using CsvHelper;
-using CsvHelper.Configuration;
-using Sylvan.Data.Csv;
-using CoreUtils.Classes;
 using static CoreUtils.DbUtils;
 using SylvanCsvDataReader = Sylvan.Data.Csv.CsvDataReader;
-using CsvHelperCsvDataReader = CsvHelper.CsvDataReader;
 
 namespace CoreUtils.Classes
 {
@@ -58,7 +53,7 @@ namespace CoreUtils.Classes
                         rowFormat != EdiRowFormat.AlegeusHeader &&
                         rowFormat != EdiRowFormat.AlegeusResultsHeader)
                     {
-                        
+
                         if (fileFormats.ContainsKey(rowFormat))
                         {
                             fileFormats[rowFormat].Add(rowNo);
@@ -378,7 +373,7 @@ namespace CoreUtils.Classes
                 }
 
                 value = value.Replace("\"\"", "\"");
-                
+
                 //
                 insertValuesString += $"'{Utils.DbQuote(value)}',";
             }

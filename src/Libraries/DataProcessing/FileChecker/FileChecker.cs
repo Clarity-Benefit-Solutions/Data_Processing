@@ -1,16 +1,12 @@
-﻿using System;
+﻿using CoreUtils;
+using CoreUtils.Classes;
+using DataProcessing.DataModels.CobraPoint;
+using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
-using CoreUtils;
-using CoreUtils.Classes;
-using DataProcessing.DataModels.CobraPoint;
-using DataProcessing.DataModels.DataProcessing;
 
 // ReSharper disable All
 

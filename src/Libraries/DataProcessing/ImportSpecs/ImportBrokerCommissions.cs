@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Diagnostics.Eventing.Reader;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
-using CoreUtils;
+﻿using CoreUtils;
 using CoreUtils.Classes;
-using Org.BouncyCastle.Crypto.Engines;
-using Sylvan.Data.Csv;
+using System;
+using System.Data.Common;
+using System.Reflection;
 //using ETLBox.Connection;
 //using ETLBox.DataFlow;
 //using ETLBox.DataFlow.Connectors;
-using SylvanCsvDataReader = Sylvan.Data.Csv.CsvDataReader;
 
 // ReSharper disable All
 
@@ -25,7 +16,7 @@ namespace DataProcessing
     public static partial class Import
     {
 
-        
+
         public static TypedCsvSchema GetBrokerCommissionFileImportMappings(EdiRowFormat rowFormat, HeaderType headerType, Boolean forImport = true)
         {
             var mappings = new TypedCsvSchema();
@@ -120,6 +111,6 @@ namespace DataProcessing
             }
         }
 
-    
+
     }
 }

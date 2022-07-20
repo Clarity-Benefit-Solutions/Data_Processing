@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using CoreUtils.Classes;
+﻿using CoreUtils.Classes;
+using System.Collections.Generic;
 
 namespace DataProcessing
 {

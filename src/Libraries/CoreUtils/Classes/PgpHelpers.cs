@@ -1,10 +1,10 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Org.BouncyCastle.Bcpg;
+﻿using Org.BouncyCastle.Bcpg;
 using Org.BouncyCastle.Bcpg.OpenPgp;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities.IO;
+using System;
+using System.IO;
+using System.Linq;
 
 /*
  * 
@@ -268,11 +268,11 @@ namespace CoreUtils.Classes
             // the first object might be a PGP marker packet.
             if (o is PgpEncryptedDataList)
             {
-                enc = (PgpEncryptedDataList) o;
+                enc = (PgpEncryptedDataList)o;
             }
             else
             {
-                enc = (PgpEncryptedDataList) pgpF.NextPgpObject();
+                enc = (PgpEncryptedDataList)pgpF.NextPgpObject();
             }
 
             // decrypt
@@ -303,7 +303,7 @@ namespace CoreUtils.Classes
 
             if (message is PgpCompressedData)
             {
-                var cData = (PgpCompressedData) message;
+                var cData = (PgpCompressedData)message;
                 PgpObjectFactory of = null;
 
                 using (var compDataIn = cData.GetDataStream())
@@ -316,7 +316,7 @@ namespace CoreUtils.Classes
                 {
                     message = of.NextPgpObject();
                     PgpLiteralData Ld = null;
-                    Ld = (PgpLiteralData) message;
+                    Ld = (PgpLiteralData)message;
                     using (Stream output = File.Create(outputFile))
                     {
                         var unc = Ld.GetInputStream();
@@ -326,7 +326,7 @@ namespace CoreUtils.Classes
                 else
                 {
                     PgpLiteralData Ld = null;
-                    Ld = (PgpLiteralData) message;
+                    Ld = (PgpLiteralData)message;
                     using (Stream output = File.Create(outputFile))
                     {
                         var unc = Ld.GetInputStream();
@@ -336,7 +336,7 @@ namespace CoreUtils.Classes
             }
             else if (message is PgpLiteralData)
             {
-                var ld = (PgpLiteralData) message;
+                var ld = (PgpLiteralData)message;
                 var outFileName = ld.FileName;
 
                 using (Stream fOut = File.Create(outputFile))
@@ -392,13 +392,13 @@ namespace CoreUtils.Classes
             // world you would probably want to be a bit smarter about this.
             // iterate through the key rings.
             foreach (PgpPublicKeyRing kRing in pgpPub.GetKeyRings())
-            foreach (PgpPublicKey k in kRing.GetPublicKeys())
-            {
-                if (k.IsEncryptionKey)
+                foreach (PgpPublicKey k in kRing.GetPublicKeys())
                 {
-                    return k;
+                    if (k.IsEncryptionKey)
+                    {
+                        return k;
+                    }
                 }
-            }
 
             throw new ArgumentException("Can't find encryption key in key ring.");
         }

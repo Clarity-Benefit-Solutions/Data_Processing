@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
+using NeoSmart.Caching.Sqlite;
+using System;
 using System.IO;
 using System.Runtime.Caching;
 using System.Runtime.Serialization.Formatters.Binary;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Logging;
-using NeoSmart.Caching.Sqlite;
 
 namespace CoreUtils.Classes
 {

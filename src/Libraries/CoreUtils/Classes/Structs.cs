@@ -41,7 +41,7 @@ namespace CoreUtils.Classes
 
         public MessageLogParams Clone()
         {
-            var cloned = (MessageLogParams) this.MemberwiseClone();
+            var cloned = (MessageLogParams)this.MemberwiseClone();
             //
             return cloned;
         }
@@ -62,7 +62,7 @@ namespace CoreUtils.Classes
 
         public MessageLogParams SetStepAndCommand(string stepName, string command)
         {
-            var cloned = (MessageLogParams) this.MemberwiseClone();
+            var cloned = (MessageLogParams)this.MemberwiseClone();
             //
             cloned.StepName = stepName;
             cloned.Command = command;
@@ -135,7 +135,7 @@ namespace CoreUtils.Classes
 
         public FileOperationLogParams Clone()
         {
-            var cloned = (FileOperationLogParams) this.MemberwiseClone();
+            var cloned = (FileOperationLogParams)this.MemberwiseClone();
             cloned.DbMessageLogParams = this.DbMessageLogParams;
             //
             return cloned;

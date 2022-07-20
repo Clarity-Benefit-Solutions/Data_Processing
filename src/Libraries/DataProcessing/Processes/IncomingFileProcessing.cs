@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CoreUtils;
+using CoreUtils.Classes;
+using System;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
@@ -6,9 +8,6 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using CoreUtils;
-using CoreUtils.Classes;
-using DataProcessing;
 
 namespace DataProcessing
 {
@@ -557,7 +556,7 @@ namespace DataProcessing
                     }
 
                     // move qb csv file to PreparedQBRoot
-                    if (Import.IsCobraImportQbFile(srcFilePath) 
+                    if (Import.IsCobraImportQbFile(srcFilePath)
                     /*|| Import.IsCobraImportSpmFile(srcFilePath)*/
                     )
                     {

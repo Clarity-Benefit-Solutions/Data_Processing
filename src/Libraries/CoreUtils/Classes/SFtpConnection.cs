@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Renci.SshNet;
+using Renci.SshNet.Sftp;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Renci.SshNet;
-using Renci.SshNet.Sftp;
 
 namespace CoreUtils.Classes
 {

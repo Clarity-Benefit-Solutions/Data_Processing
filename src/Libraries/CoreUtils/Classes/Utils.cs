@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.CompilerServices;
+using Newtonsoft.Json;
+using System;
 using System.Configuration;
 using System.Data.Entity.Core.EntityClient;
 using System.Globalization;
@@ -7,9 +10,6 @@ using System.Linq;
 using System.Net.Mail;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-using Newtonsoft.Json;
 
 namespace CoreUtils.Classes
 {

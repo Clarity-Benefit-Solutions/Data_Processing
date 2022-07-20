@@ -1,4 +1,9 @@
-﻿using System;
+﻿using CoreUtils;
+using CoreUtils.Classes;
+using DataProcessing.DataModels.CobraPoint;
+using DataProcessing.DataModels.DataProcessing;
+using MySqlConnector;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -7,11 +12,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Web.Hosting;
-using CoreUtils;
-using CoreUtils.Classes;
-using DataProcessing.DataModels.CobraPoint;
-using DataProcessing.DataModels.DataProcessing;
-using MySqlConnector;
 
 
 // ReSharper disable All

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Data.Entity;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using CoreUtils;
+﻿using CoreUtils;
 using CoreUtils.Classes;
 using DataProcessing.DataModels.CobraPoint;
 using DataProcessing.DataModels.DataProcessing;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 // ReSharper disable All
 
@@ -38,7 +34,7 @@ namespace DataProcessing
         private QB currentQB;
         private NPM currentNPM;
         private SPM currentSPM;
-        
+
 
         private int currentClientID
         {
@@ -304,7 +300,7 @@ namespace DataProcessing
 
                     // check QB exists - if so raise error
                     QB theQB = this.GetCobraQB(dataRow);
-                    if (theQB != null && theQB.MemberID > 0 && this.FailIfMainEntityAlreadyExists )
+                    if (theQB != null && theQB.MemberID > 0 && this.FailIfMainEntityAlreadyExists)
                     {
                         this.AddCobraErrorForRow(dataRow, "QB Already exists", $"Duplicate QB. QB with SSN '{theQB.SSN}' already exists");
                         return true;
@@ -557,7 +553,7 @@ namespace DataProcessing
 
             return lineHasError;
         }
-      
+
         public Boolean CheckClientQBPlanExists(string versionNo, cobra_file_table_stage dataRow, TypedCsvSchema mappings)
         {
             string errorMessage = "";
@@ -824,7 +820,7 @@ namespace DataProcessing
                             .AsNoTracking()
                             .ToList();
 
-                
+
 
             } // check client
               //
@@ -1452,7 +1448,7 @@ namespace DataProcessing
         #endregion checkData
 
 
-     
+
 
 
         // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
