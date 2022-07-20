@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="CobraPointModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="CobraPoint.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="__RefactorLog">
           <Key>
             <PropertyRef Name="OperationKey" />
@@ -1732,62 +1732,6 @@ warning 6013: The table/view 'SalesForce_COBRA.dbo.SPMTimeLine' does not have a 
           <Property Name="MemberID" Type="int" />
         </EntityType>-->
         <!--Errors Found During Generation:
-warning 6002: The table/view 'SalesForce_COBRA.dbo.AllClientsAndDivisions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="AllClientsAndDivisions">
-          <Key>
-            <PropertyRef Name="ClientID" />
-            <PropertyRef Name="ClientName" />
-            <PropertyRef Name="ClientGroupID" />
-          </Key>
-          <Property Name="ClientID" Type="int" Nullable="false" />
-          <Property Name="ClientName" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="ClientGroupID" Type="int" Nullable="false" />
-          <Property Name="DBAName" Type="varchar" MaxLength="100" />
-          <Property Name="EIN" Type="varchar" MaxLength="50" />
-          <Property Name="Address1" Type="varchar" MaxLength="50" />
-          <Property Name="Address2" Type="varchar" MaxLength="50" />
-          <Property Name="City" Type="varchar" MaxLength="50" />
-          <Property Name="State" Type="varchar" MaxLength="50" />
-          <Property Name="PostalCode" Type="varchar" MaxLength="50" />
-          <Property Name="Country" Type="varchar" MaxLength="50" />
-          <Property Name="Phone" Type="varchar" MaxLength="50" />
-          <Property Name="Fax" Type="varchar" MaxLength="50" />
-          <Property Name="BillingStartDate" Type="date" />
-          <Property Name="SendHIPAACertWithQBSRandQBTermination" Type="bit" />
-          <Property Name="SendHIPAACertWithWelcomeLetter" Type="bit" />
-          <Property Name="AllowClientPortalAccess" Type="bit" />
-          <Property Name="AutomaticallyCreateQBSubsidyForInsignificantAmount" Type="bit" />
-          <Property Name="IgnoreSPMPaymentGracePeriods" Type="bit" />
-          <Property Name="MigratedClient" Type="bit" />
-          <Property Name="ClientPremiumNotice" Type="varchar" MaxLength="50" />
-          <Property Name="EmployeeCountRange" Type="varchar" MaxLength="50" />
-          <Property Name="WeeklyBillingFirstDayOfWeek" Type="varchar" MaxLength="50" />
-          <Property Name="ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize" Type="bit" />
-          <Property Name="ClientAllowsAEI2009PlanEnrollmentOptions" Type="bit" />
-          <Property Name="ClientDoesOwnAEI2009SubsidyTakenReportPosting" Type="bit" />
-          <Property Name="ClientAlternate" Type="varchar" MaxLength="50" />
-          <Property Name="AllowClientSSO" Type="bit" />
-          <Property Name="SPMInitialGracePeriodDays" Type="int" />
-          <Property Name="SPMConvenienceFee" Type="money" />
-          <Property Name="SPMPartnerConvenienceFee" Type="money" />
-          <Property Name="QBConvenienceFee" Type="money" />
-          <Property Name="QBPartnerConvenienceFee" Type="money" />
-          <Property Name="ClientDivisionID" Type="int" />
-          <Property Name="DivisionName" Type="varchar" MaxLength="50" />
-          <Property Name="DivisionAddress1" Type="varchar" MaxLength="50" />
-          <Property Name="DivisionAddress2" Type="varchar" MaxLength="50" />
-          <Property Name="DivisionCity" Type="varchar" MaxLength="50" />
-          <Property Name="DivisionState" Type="varchar" MaxLength="50" />
-          <Property Name="DivisionPostalCode" Type="varchar" MaxLength="50" />
-          <Property Name="DivisionCountry" Type="varchar" MaxLength="50" />
-          <Property Name="DivisionPhone" Type="varchar" MaxLength="50" />
-          <Property Name="DivisionFaxc" Type="varchar" MaxLength="50" />
-          <Property Name="ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting" Type="bit" />
-          <Property Name="DivisionSendHIPAACert" Type="bit" />
-          <Property Name="AllowClientDivisionSSO" Type="bit" />
-          <Property Name="DivisionActive" Type="bit" />
-        </EntityType>
-        <!--Errors Found During Generation:
 warning 6002: The table/view 'SalesForce_COBRA.dbo.COBRA_All_Data_QBs' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="COBRA_All_Data_QBs">
           <Key>
@@ -3225,7 +3169,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="CobraPointModelStoreContainer">
+        <EntityContainer Name="CobraPointStoreContainer">
           <EntitySet Name="__RefactorLog" EntityType="Self.__RefactorLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AdminRole" EntityType="Self.AdminRole" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AdminTPAUsers" EntityType="Self.AdminTPAUsers" Schema="dbo" store:Type="Tables" />
@@ -3608,57 +3552,6 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
     [SPMPlan].[RatePeriodEffectiveDate] AS [RatePeriodEffectiveDate], 
     [SPMPlan].[RatePeriodEnddate] AS [RatePeriodEnddate]
     FROM [dbo].[SPMPlan] AS [SPMPlan]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="AllClientsAndDivisions" EntityType="Self.AllClientsAndDivisions" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [AllClientsAndDivisions].[ClientID] AS [ClientID], 
-    [AllClientsAndDivisions].[ClientName] AS [ClientName], 
-    [AllClientsAndDivisions].[ClientGroupID] AS [ClientGroupID], 
-    [AllClientsAndDivisions].[DBAName] AS [DBAName], 
-    [AllClientsAndDivisions].[EIN] AS [EIN], 
-    [AllClientsAndDivisions].[Address1] AS [Address1], 
-    [AllClientsAndDivisions].[Address2] AS [Address2], 
-    [AllClientsAndDivisions].[City] AS [City], 
-    [AllClientsAndDivisions].[State] AS [State], 
-    [AllClientsAndDivisions].[PostalCode] AS [PostalCode], 
-    [AllClientsAndDivisions].[Country] AS [Country], 
-    [AllClientsAndDivisions].[Phone] AS [Phone], 
-    [AllClientsAndDivisions].[Fax] AS [Fax], 
-    [AllClientsAndDivisions].[BillingStartDate] AS [BillingStartDate], 
-    [AllClientsAndDivisions].[SendHIPAACertWithQBSRandQBTermination] AS [SendHIPAACertWithQBSRandQBTermination], 
-    [AllClientsAndDivisions].[SendHIPAACertWithWelcomeLetter] AS [SendHIPAACertWithWelcomeLetter], 
-    [AllClientsAndDivisions].[AllowClientPortalAccess] AS [AllowClientPortalAccess], 
-    [AllClientsAndDivisions].[AutomaticallyCreateQBSubsidyForInsignificantAmount] AS [AutomaticallyCreateQBSubsidyForInsignificantAmount], 
-    [AllClientsAndDivisions].[IgnoreSPMPaymentGracePeriods] AS [IgnoreSPMPaymentGracePeriods], 
-    [AllClientsAndDivisions].[MigratedClient] AS [MigratedClient], 
-    [AllClientsAndDivisions].[ClientPremiumNotice] AS [ClientPremiumNotice], 
-    [AllClientsAndDivisions].[EmployeeCountRange] AS [EmployeeCountRange], 
-    [AllClientsAndDivisions].[WeeklyBillingFirstDayOfWeek] AS [WeeklyBillingFirstDayOfWeek], 
-    [AllClientsAndDivisions].[ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize] AS [ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize], 
-    [AllClientsAndDivisions].[ClientAllowsAEI2009PlanEnrollmentOptions] AS [ClientAllowsAEI2009PlanEnrollmentOptions], 
-    [AllClientsAndDivisions].[ClientDoesOwnAEI2009SubsidyTakenReportPosting] AS [ClientDoesOwnAEI2009SubsidyTakenReportPosting], 
-    [AllClientsAndDivisions].[ClientAlternate] AS [ClientAlternate], 
-    [AllClientsAndDivisions].[AllowClientSSO] AS [AllowClientSSO], 
-    [AllClientsAndDivisions].[SPMInitialGracePeriodDays] AS [SPMInitialGracePeriodDays], 
-    [AllClientsAndDivisions].[SPMConvenienceFee] AS [SPMConvenienceFee], 
-    [AllClientsAndDivisions].[SPMPartnerConvenienceFee] AS [SPMPartnerConvenienceFee], 
-    [AllClientsAndDivisions].[QBConvenienceFee] AS [QBConvenienceFee], 
-    [AllClientsAndDivisions].[QBPartnerConvenienceFee] AS [QBPartnerConvenienceFee], 
-    [AllClientsAndDivisions].[ClientDivisionID] AS [ClientDivisionID], 
-    [AllClientsAndDivisions].[DivisionName] AS [DivisionName], 
-    [AllClientsAndDivisions].[DivisionAddress1] AS [DivisionAddress1], 
-    [AllClientsAndDivisions].[DivisionAddress2] AS [DivisionAddress2], 
-    [AllClientsAndDivisions].[DivisionCity] AS [DivisionCity], 
-    [AllClientsAndDivisions].[DivisionState] AS [DivisionState], 
-    [AllClientsAndDivisions].[DivisionPostalCode] AS [DivisionPostalCode], 
-    [AllClientsAndDivisions].[DivisionCountry] AS [DivisionCountry], 
-    [AllClientsAndDivisions].[DivisionPhone] AS [DivisionPhone], 
-    [AllClientsAndDivisions].[DivisionFaxc] AS [DivisionFaxc], 
-    [AllClientsAndDivisions].[ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting] AS [ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting], 
-    [AllClientsAndDivisions].[DivisionSendHIPAACert] AS [DivisionSendHIPAACert], 
-    [AllClientsAndDivisions].[AllowClientDivisionSSO] AS [AllowClientDivisionSSO], 
-    [AllClientsAndDivisions].[DivisionActive] AS [DivisionActive]
-    FROM [dbo].[AllClientsAndDivisions] AS [AllClientsAndDivisions]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="COBRA_All_Data_QBs" EntityType="Self.COBRA_All_Data_QBs" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -4153,7 +4046,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="CobraPointModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="CobraPoint" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="C__RefactorLog">
           <Key>
             <PropertyRef Name="OperationKey" />
@@ -5973,60 +5866,6 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
           <NavigationProperty Name="Carrier" Relationship="Self.FK_SPMPlan_Carrier" FromRole="SPMPlan" ToRole="Carrier" />
           <NavigationProperty Name="ClientPlanSPM" Relationship="Self.FK_SPMPlan_ClientPlanSPM" FromRole="SPMPlan" ToRole="ClientPlanSPM" />
         </EntityType>
-        <EntityType Name="AllClientsAndDivision">
-          <Key>
-            <PropertyRef Name="ClientID" />
-            <PropertyRef Name="ClientName" />
-            <PropertyRef Name="ClientGroupID" />
-          </Key>
-          <Property Name="ClientID" Type="Int32" Nullable="false" />
-          <Property Name="ClientName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ClientGroupID" Type="Int32" Nullable="false" />
-          <Property Name="DBAName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="EIN" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Address1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Address2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Fax" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="BillingStartDate" Type="DateTime" Precision="0" />
-          <Property Name="SendHIPAACertWithQBSRandQBTermination" Type="Boolean" />
-          <Property Name="SendHIPAACertWithWelcomeLetter" Type="Boolean" />
-          <Property Name="AllowClientPortalAccess" Type="Boolean" />
-          <Property Name="AutomaticallyCreateQBSubsidyForInsignificantAmount" Type="Boolean" />
-          <Property Name="IgnoreSPMPaymentGracePeriods" Type="Boolean" />
-          <Property Name="MigratedClient" Type="Boolean" />
-          <Property Name="ClientPremiumNotice" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="EmployeeCountRange" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="WeeklyBillingFirstDayOfWeek" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize" Type="Boolean" />
-          <Property Name="ClientAllowsAEI2009PlanEnrollmentOptions" Type="Boolean" />
-          <Property Name="ClientDoesOwnAEI2009SubsidyTakenReportPosting" Type="Boolean" />
-          <Property Name="ClientAlternate" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="AllowClientSSO" Type="Boolean" />
-          <Property Name="SPMInitialGracePeriodDays" Type="Int32" />
-          <Property Name="SPMConvenienceFee" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="SPMPartnerConvenienceFee" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="QBConvenienceFee" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="QBPartnerConvenienceFee" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="ClientDivisionID" Type="Int32" />
-          <Property Name="DivisionName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DivisionAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DivisionAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DivisionCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DivisionState" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DivisionPostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DivisionCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DivisionPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DivisionFaxc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting" Type="Boolean" />
-          <Property Name="DivisionSendHIPAACert" Type="Boolean" />
-          <Property Name="AllowClientDivisionSSO" Type="Boolean" />
-          <Property Name="DivisionActive" Type="Boolean" />
-        </EntityType>
         <EntityType Name="COBRA_All_Data_QBs">
           <Key>
             <PropertyRef Name="Division" />
@@ -7454,7 +7293,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="CobraPointEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="CobraPointEntities2" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="C__RefactorLog" EntityType="Self.C__RefactorLog" />
           <EntitySet Name="AdminRoles" EntityType="Self.AdminRole" />
           <EntitySet Name="AdminTPAUsers" EntityType="Self.AdminTPAUser" />
@@ -7545,7 +7384,6 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
           <EntitySet Name="SPMCommunications" EntityType="Self.SPMCommunication" />
           <EntitySet Name="SPMOpenEnrollments" EntityType="Self.SPMOpenEnrollment" />
           <EntitySet Name="SPMPlans" EntityType="Self.SPMPlan" />
-          <EntitySet Name="AllClientsAndDivisions" EntityType="Self.AllClientsAndDivision" />
           <EntitySet Name="COBRA_All_Data_QBs" EntityType="Self.COBRA_All_Data_QBs" />
           <AssociationSet Name="FK_AdminUserRole_AdminRole" Association="Self.FK_AdminUserRole_AdminRole">
             <End Role="AdminRole" EntitySet="AdminRoles" />
@@ -8021,16 +7859,16 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="CobraPointModelStoreContainer" CdmEntityContainer="CobraPointEntities">
+        <EntityContainerMapping StorageEntityContainer="CobraPointStoreContainer" CdmEntityContainer="CobraPointEntities2">
           <EntitySetMapping Name="C__RefactorLog">
-            <EntityTypeMapping TypeName="CobraPointModel.C__RefactorLog">
+            <EntityTypeMapping TypeName="CobraPoint.C__RefactorLog">
               <MappingFragment StoreEntitySet="__RefactorLog">
                 <ScalarProperty Name="OperationKey" ColumnName="OperationKey" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AdminRoles">
-            <EntityTypeMapping TypeName="CobraPointModel.AdminRole">
+            <EntityTypeMapping TypeName="CobraPoint.AdminRole">
               <MappingFragment StoreEntitySet="AdminRole">
                 <ScalarProperty Name="AdminRoleID" ColumnName="AdminRoleID" />
                 <ScalarProperty Name="RoleName" ColumnName="RoleName" />
@@ -8040,7 +7878,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AdminTPAUsers">
-            <EntityTypeMapping TypeName="CobraPointModel.AdminTPAUser">
+            <EntityTypeMapping TypeName="CobraPoint.AdminTPAUser">
               <MappingFragment StoreEntitySet="AdminTPAUsers">
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
@@ -8048,7 +7886,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AdminUsers">
-            <EntityTypeMapping TypeName="CobraPointModel.AdminUser">
+            <EntityTypeMapping TypeName="CobraPoint.AdminUser">
               <MappingFragment StoreEntitySet="AdminUser">
                 <ScalarProperty Name="User" ColumnName="User" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
@@ -8058,7 +7896,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AdminUserRoles">
-            <EntityTypeMapping TypeName="CobraPointModel.AdminUserRole">
+            <EntityTypeMapping TypeName="CobraPoint.AdminUserRole">
               <MappingFragment StoreEntitySet="AdminUserRole">
                 <ScalarProperty Name="AdminUserRoleID" ColumnName="AdminUserRoleID" />
                 <ScalarProperty Name="User" ColumnName="User" />
@@ -8067,7 +7905,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Carriers">
-            <EntityTypeMapping TypeName="CobraPointModel.Carrier">
+            <EntityTypeMapping TypeName="CobraPoint.Carrier">
               <MappingFragment StoreEntitySet="Carrier">
                 <ScalarProperty Name="CarrierID" ColumnName="CarrierID" />
                 <ScalarProperty Name="CarrierName" ColumnName="CarrierName" />
@@ -8083,7 +7921,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CarrierAccesses">
-            <EntityTypeMapping TypeName="CobraPointModel.CarrierAccess">
+            <EntityTypeMapping TypeName="CobraPoint.CarrierAccess">
               <MappingFragment StoreEntitySet="CarrierAccess">
                 <ScalarProperty Name="CarrierAccessID" ColumnName="CarrierAccessID" />
                 <ScalarProperty Name="CarrierID" ColumnName="CarrierID" />
@@ -8094,7 +7932,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CarrierContacts">
-            <EntityTypeMapping TypeName="CobraPointModel.CarrierContact">
+            <EntityTypeMapping TypeName="CobraPoint.CarrierContact">
               <MappingFragment StoreEntitySet="CarrierContact">
                 <ScalarProperty Name="CarrierContactID" ColumnName="CarrierContactID" />
                 <ScalarProperty Name="CarrierID" ColumnName="CarrierID" />
@@ -8124,7 +7962,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CarrierNotes">
-            <EntityTypeMapping TypeName="CobraPointModel.CarrierNote">
+            <EntityTypeMapping TypeName="CobraPoint.CarrierNote">
               <MappingFragment StoreEntitySet="CarrierNote">
                 <ScalarProperty Name="CarrierNoteID" ColumnName="CarrierNoteID" />
                 <ScalarProperty Name="CarrierID" ColumnName="CarrierID" />
@@ -8136,7 +7974,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Clients">
-            <EntityTypeMapping TypeName="CobraPointModel.Client">
+            <EntityTypeMapping TypeName="CobraPoint.Client">
               <MappingFragment StoreEntitySet="Client">
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
                 <ScalarProperty Name="ClientName" ColumnName="ClientName" />
@@ -8186,7 +8024,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientAccesses">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientAccess">
+            <EntityTypeMapping TypeName="CobraPoint.ClientAccess">
               <MappingFragment StoreEntitySet="ClientAccess">
                 <ScalarProperty Name="ClientAccessID" ColumnName="ClientAccessID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -8197,7 +8035,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientDivisions">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientDivision">
+            <EntityTypeMapping TypeName="CobraPoint.ClientDivision">
               <MappingFragment StoreEntitySet="ClientDivision">
                 <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -8220,7 +8058,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientDivisionAccesses">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientDivisionAccess">
+            <EntityTypeMapping TypeName="CobraPoint.ClientDivisionAccess">
               <MappingFragment StoreEntitySet="ClientDivisionAccess">
                 <ScalarProperty Name="ClientDivisionAccessID" ColumnName="ClientDivisionAccessID" />
                 <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
@@ -8231,7 +8069,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientDivisionContacts">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientDivisionContact">
+            <EntityTypeMapping TypeName="CobraPoint.ClientDivisionContact">
               <MappingFragment StoreEntitySet="ClientDivisionContact">
                 <ScalarProperty Name="ClientDivisionContactID" ColumnName="ClientDivisionContactID" />
                 <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
@@ -8263,7 +8101,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientDivisionNotes">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientDivisionNote">
+            <EntityTypeMapping TypeName="CobraPoint.ClientDivisionNote">
               <MappingFragment StoreEntitySet="ClientDivisionNote">
                 <ScalarProperty Name="ClientDivisionNoteID" ColumnName="ClientDivisionNoteID" />
                 <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
@@ -8275,7 +8113,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientDivisionQBPlans">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientDivisionQBPlan">
+            <EntityTypeMapping TypeName="CobraPoint.ClientDivisionQBPlan">
               <MappingFragment StoreEntitySet="ClientDivisionQBPlan">
                 <ScalarProperty Name="ClientDivisionQBPlanID" ColumnName="ClientDivisionQBPlanID" />
                 <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
@@ -8285,7 +8123,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientDivisionQBPlanBundles">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientDivisionQBPlanBundle">
+            <EntityTypeMapping TypeName="CobraPoint.ClientDivisionQBPlanBundle">
               <MappingFragment StoreEntitySet="ClientDivisionQBPlanBundle">
                 <ScalarProperty Name="ClientDivisionQBPlanBundleID" ColumnName="ClientDivisionQBPlanBundleID" />
                 <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
@@ -8295,7 +8133,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientDivisionSPMPlans">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientDivisionSPMPlan">
+            <EntityTypeMapping TypeName="CobraPoint.ClientDivisionSPMPlan">
               <MappingFragment StoreEntitySet="ClientDivisionSPMPlan">
                 <ScalarProperty Name="ClientDivisionSPMPlanID" ColumnName="ClientDivisionSPMPlanID" />
                 <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
@@ -8305,7 +8143,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientDivisionSPMPlanBundles">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientDivisionSPMPlanBundle">
+            <EntityTypeMapping TypeName="CobraPoint.ClientDivisionSPMPlanBundle">
               <MappingFragment StoreEntitySet="ClientDivisionSPMPlanBundle">
                 <ScalarProperty Name="ClientDivisionSPMPlanBundleID" ColumnName="ClientDivisionSPMPlanBundleID" />
                 <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
@@ -8315,7 +8153,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientFees">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientFee">
+            <EntityTypeMapping TypeName="CobraPoint.ClientFee">
               <MappingFragment StoreEntitySet="ClientFee">
                 <ScalarProperty Name="ClientFeeID" ColumnName="ClientFeeID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -8335,7 +8173,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientGroups">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientGroup">
+            <EntityTypeMapping TypeName="CobraPoint.ClientGroup">
               <MappingFragment StoreEntitySet="ClientGroup">
                 <ScalarProperty Name="ClientGroupID" ColumnName="ClientGroupID" />
                 <ScalarProperty Name="ClientGroupName" ColumnName="ClientGroupName" />
@@ -8345,7 +8183,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientNotes">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientNote">
+            <EntityTypeMapping TypeName="CobraPoint.ClientNote">
               <MappingFragment StoreEntitySet="ClientNote">
                 <ScalarProperty Name="ClientNoteID" ColumnName="ClientNoteID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -8357,7 +8195,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientPlanQBs">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientPlanQB">
+            <EntityTypeMapping TypeName="CobraPoint.ClientPlanQB">
               <MappingFragment StoreEntitySet="ClientPlanQB">
                 <ScalarProperty Name="ClientPlanQBID" ColumnName="ClientPlanQBID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -8388,7 +8226,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientPlanQBBundles">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientPlanQBBundle">
+            <EntityTypeMapping TypeName="CobraPoint.ClientPlanQBBundle">
               <MappingFragment StoreEntitySet="ClientPlanQBBundle">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ClientPlanQBBundleID" ColumnName="ClientPlanQBBundleID" />
@@ -8401,7 +8239,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientPlanQBCarrierSubcodes">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientPlanQBCarrierSubcode">
+            <EntityTypeMapping TypeName="CobraPoint.ClientPlanQBCarrierSubcode">
               <MappingFragment StoreEntitySet="ClientPlanQBCarrierSubcode">
                 <ScalarProperty Name="ClientPlanQBCarrierSubcodeID" ColumnName="ClientPlanQBCarrierSubcodeID" />
                 <ScalarProperty Name="ClientPlanQBID" ColumnName="ClientPlanQBID" />
@@ -8414,7 +8252,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientPlanQBEmailLists">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientPlanQBEmailList">
+            <EntityTypeMapping TypeName="CobraPoint.ClientPlanQBEmailList">
               <MappingFragment StoreEntitySet="ClientPlanQBEmailList">
                 <ScalarProperty Name="ClientPlanQBEmailListID" ColumnName="ClientPlanQBEmailListID" />
                 <ScalarProperty Name="ClientPlanQBID" ColumnName="ClientPlanQBID" />
@@ -8425,7 +8263,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientPlanQBNotes">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientPlanQBNote">
+            <EntityTypeMapping TypeName="CobraPoint.ClientPlanQBNote">
               <MappingFragment StoreEntitySet="ClientPlanQBNote">
                 <ScalarProperty Name="ClientPlanQBNoteID" ColumnName="ClientPlanQBNoteID" />
                 <ScalarProperty Name="NoteDateTime" ColumnName="NoteDateTime" />
@@ -8438,7 +8276,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientPlanQBRanks">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientPlanQBRank">
+            <EntityTypeMapping TypeName="CobraPoint.ClientPlanQBRank">
               <MappingFragment StoreEntitySet="ClientPlanQBRank">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ClientId" ColumnName="ClientId" />
@@ -8449,7 +8287,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientPlanQBRates">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientPlanQBRate">
+            <EntityTypeMapping TypeName="CobraPoint.ClientPlanQBRate">
               <MappingFragment StoreEntitySet="ClientPlanQBRate">
                 <ScalarProperty Name="ClientPlanQBRateID" ColumnName="ClientPlanQBRateID" />
                 <ScalarProperty Name="RateType" ColumnName="RateType" />
@@ -8472,7 +8310,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientPlanSPMs">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientPlanSPM">
+            <EntityTypeMapping TypeName="CobraPoint.ClientPlanSPM">
               <MappingFragment StoreEntitySet="ClientPlanSPM">
                 <ScalarProperty Name="ClientPlanSPMID" ColumnName="ClientPlanSPMID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -8500,7 +8338,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientPlanSPMBundles">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientPlanSPMBundle">
+            <EntityTypeMapping TypeName="CobraPoint.ClientPlanSPMBundle">
               <MappingFragment StoreEntitySet="ClientPlanSPMBundle">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ClientPlanSPMBundleID" ColumnName="ClientPlanSPMBundleID" />
@@ -8513,7 +8351,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientPlanSPMCarrierSubcodes">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientPlanSPMCarrierSubcode">
+            <EntityTypeMapping TypeName="CobraPoint.ClientPlanSPMCarrierSubcode">
               <MappingFragment StoreEntitySet="ClientPlanSPMCarrierSubcode">
                 <ScalarProperty Name="ClientPlanSPMCarrierSubcodeID" ColumnName="ClientPlanSPMCarrierSubcodeID" />
                 <ScalarProperty Name="ClientPlanSPMID" ColumnName="ClientPlanSPMID" />
@@ -8526,7 +8364,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientPlanSPMEmailLists">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientPlanSPMEmailList">
+            <EntityTypeMapping TypeName="CobraPoint.ClientPlanSPMEmailList">
               <MappingFragment StoreEntitySet="ClientPlanSPMEmailList">
                 <ScalarProperty Name="ClientPlanSPMEmailListID" ColumnName="ClientPlanSPMEmailListID" />
                 <ScalarProperty Name="ClientPlanSPMID" ColumnName="ClientPlanSPMID" />
@@ -8537,7 +8375,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientPlanSPMNotes">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientPlanSPMNote">
+            <EntityTypeMapping TypeName="CobraPoint.ClientPlanSPMNote">
               <MappingFragment StoreEntitySet="ClientPlanSPMNote">
                 <ScalarProperty Name="ClientPlanSPNNoteID" ColumnName="ClientPlanSPNNoteID" />
                 <ScalarProperty Name="NoteDateTime" ColumnName="NoteDateTime" />
@@ -8550,7 +8388,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientPlanSPMRanks">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientPlanSPMRank">
+            <EntityTypeMapping TypeName="CobraPoint.ClientPlanSPMRank">
               <MappingFragment StoreEntitySet="ClientPlanSPMRank">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ClientId" ColumnName="ClientId" />
@@ -8561,7 +8399,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientPlanSPMRates">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientPlanSPMRate">
+            <EntityTypeMapping TypeName="CobraPoint.ClientPlanSPMRate">
               <MappingFragment StoreEntitySet="ClientPlanSPMRate">
                 <ScalarProperty Name="ClientPlanSPMRateID" ColumnName="ClientPlanSPMRateID" />
                 <ScalarProperty Name="ClientPlanSPMID" ColumnName="ClientPlanSPMID" />
@@ -8584,7 +8422,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientProcesses">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientProcess">
+            <EntityTypeMapping TypeName="CobraPoint.ClientProcess">
               <MappingFragment StoreEntitySet="ClientProcess">
                 <ScalarProperty Name="ClientProcessID" ColumnName="ClientProcessID" />
                 <ScalarProperty Name="SuppressQBCarrierNotificationDelivery" ColumnName="SuppressQBCarrierNotificationDelivery" />
@@ -8595,7 +8433,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientSPMBillingFrequencyOptions">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientSPMBillingFrequencyOption">
+            <EntityTypeMapping TypeName="CobraPoint.ClientSPMBillingFrequencyOption">
               <MappingFragment StoreEntitySet="ClientSPMBillingFrequencyOption">
                 <ScalarProperty Name="ClientSPMBillingFrequencyOptionID" ColumnName="ClientSPMBillingFrequencyOptionID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -8609,7 +8447,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="EnrollmentPeriodNotes">
-            <EntityTypeMapping TypeName="CobraPointModel.EnrollmentPeriodNote">
+            <EntityTypeMapping TypeName="CobraPoint.EnrollmentPeriodNote">
               <MappingFragment StoreEntitySet="EnrollmentPeriodNote">
                 <ScalarProperty Name="EnrollmentPeriodNoteID" ColumnName="EnrollmentPeriodNoteID" />
                 <ScalarProperty Name="EnrollmentPeriodID" ColumnName="EnrollmentPeriodID" />
@@ -8621,7 +8459,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="LetterAttachments">
-            <EntityTypeMapping TypeName="CobraPointModel.LetterAttachment">
+            <EntityTypeMapping TypeName="CobraPoint.LetterAttachment">
               <MappingFragment StoreEntitySet="LetterAttachment">
                 <ScalarProperty Name="LetterAttachmentID" ColumnName="LetterAttachmentID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -8629,7 +8467,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="LetterTypes">
-            <EntityTypeMapping TypeName="CobraPointModel.LetterType">
+            <EntityTypeMapping TypeName="CobraPoint.LetterType">
               <MappingFragment StoreEntitySet="LetterType">
                 <ScalarProperty Name="LetterTypeID" ColumnName="LetterTypeID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -8637,7 +8475,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="LoginLogs">
-            <EntityTypeMapping TypeName="CobraPointModel.LoginLog">
+            <EntityTypeMapping TypeName="CobraPoint.LoginLog">
               <MappingFragment StoreEntitySet="LoginLog">
                 <ScalarProperty Name="LoginLogID" ColumnName="LoginLogID" />
                 <ScalarProperty Name="User" ColumnName="User" />
@@ -8651,7 +8489,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="NPMs">
-            <EntityTypeMapping TypeName="CobraPointModel.NPM">
+            <EntityTypeMapping TypeName="CobraPoint.NPM">
               <MappingFragment StoreEntitySet="NPM">
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
@@ -8685,7 +8523,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="NPMAccesses">
-            <EntityTypeMapping TypeName="CobraPointModel.NPMAccess">
+            <EntityTypeMapping TypeName="CobraPoint.NPMAccess">
               <MappingFragment StoreEntitySet="NPMAccess">
                 <ScalarProperty Name="NPMAccessID" ColumnName="NPMAccessID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -8696,7 +8534,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="NPMHIPAACertDatas">
-            <EntityTypeMapping TypeName="CobraPointModel.NPMHIPAACertData">
+            <EntityTypeMapping TypeName="CobraPoint.NPMHIPAACertData">
               <MappingFragment StoreEntitySet="NPMHIPAACertData">
                 <ScalarProperty Name="NPMHIPAACertDataID" ColumnName="NPMHIPAACertDataID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -8708,7 +8546,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="NPMHIPAACertDataDependents">
-            <EntityTypeMapping TypeName="CobraPointModel.NPMHIPAACertDataDependent">
+            <EntityTypeMapping TypeName="CobraPoint.NPMHIPAACertDataDependent">
               <MappingFragment StoreEntitySet="NPMHIPAACertDataDependent">
                 <ScalarProperty Name="NPMHIPAACertDataDependentID" ColumnName="NPMHIPAACertDataDependentID" />
                 <ScalarProperty Name="NPMHIPAACertDataID" ColumnName="NPMHIPAACertDataID" />
@@ -8722,7 +8560,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBs">
-            <EntityTypeMapping TypeName="CobraPointModel.QB">
+            <EntityTypeMapping TypeName="CobraPoint.QB">
               <MappingFragment StoreEntitySet="QB">
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -8767,7 +8605,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBAccesses">
-            <EntityTypeMapping TypeName="CobraPointModel.QBAccess">
+            <EntityTypeMapping TypeName="CobraPoint.QBAccess">
               <MappingFragment StoreEntitySet="QBAccess">
                 <ScalarProperty Name="QBAccessID" ColumnName="QBAccessID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -8778,7 +8616,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBACHes">
-            <EntityTypeMapping TypeName="CobraPointModel.QBACH">
+            <EntityTypeMapping TypeName="CobraPoint.QBACH">
               <MappingFragment StoreEntitySet="QBACH">
                 <ScalarProperty Name="QBACHID" ColumnName="QBACHID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -8789,7 +8627,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBAEIInformations">
-            <EntityTypeMapping TypeName="CobraPointModel.QBAEIInformation">
+            <EntityTypeMapping TypeName="CobraPoint.QBAEIInformation">
               <MappingFragment StoreEntitySet="QBAEIInformation">
                 <ScalarProperty Name="QBAEIInformationID" ColumnName="QBAEIInformationID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -8799,7 +8637,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBDependents">
-            <EntityTypeMapping TypeName="CobraPointModel.QBDependent">
+            <EntityTypeMapping TypeName="CobraPoint.QBDependent">
               <MappingFragment StoreEntitySet="QBDependent">
                 <ScalarProperty Name="QBDependentID" ColumnName="QBDependentID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -8829,7 +8667,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBDependentPlans">
-            <EntityTypeMapping TypeName="CobraPointModel.QBDependentPlan">
+            <EntityTypeMapping TypeName="CobraPoint.QBDependentPlan">
               <MappingFragment StoreEntitySet="QBDependentPlan">
                 <ScalarProperty Name="QBDependentPlanID" ColumnName="QBDependentPlanID" />
                 <ScalarProperty Name="QBDependentID" ColumnName="QBDependentID" />
@@ -8846,7 +8684,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBDisabilityInformations">
-            <EntityTypeMapping TypeName="CobraPointModel.QBDisabilityInformation">
+            <EntityTypeMapping TypeName="CobraPoint.QBDisabilityInformation">
               <MappingFragment StoreEntitySet="QBDisabilityInformation">
                 <ScalarProperty Name="QBDisabilityInformationID" ColumnName="QBDisabilityInformationID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -8857,7 +8695,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBEvents">
-            <EntityTypeMapping TypeName="CobraPointModel.QBEvent">
+            <EntityTypeMapping TypeName="CobraPoint.QBEvent">
               <MappingFragment StoreEntitySet="QBEvent">
                 <ScalarProperty Name="QBEventID" ColumnName="QBEventID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -8877,7 +8715,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBLegacies">
-            <EntityTypeMapping TypeName="CobraPointModel.QBLegacy">
+            <EntityTypeMapping TypeName="CobraPoint.QBLegacy">
               <MappingFragment StoreEntitySet="QBLegacy">
                 <ScalarProperty Name="QBLegacyID" ColumnName="QBLegacyID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -8903,7 +8741,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBNotes">
-            <EntityTypeMapping TypeName="CobraPointModel.QBNote">
+            <EntityTypeMapping TypeName="CobraPoint.QBNote">
               <MappingFragment StoreEntitySet="QBNote">
                 <ScalarProperty Name="QBNoteID" ColumnName="QBNoteID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -8915,7 +8753,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBPayments">
-            <EntityTypeMapping TypeName="CobraPointModel.QBPayment">
+            <EntityTypeMapping TypeName="CobraPoint.QBPayment">
               <MappingFragment StoreEntitySet="QBPayment">
                 <ScalarProperty Name="QBPaymentID" ColumnName="QBPaymentID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -8946,7 +8784,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBPlans">
-            <EntityTypeMapping TypeName="CobraPointModel.QBPlan">
+            <EntityTypeMapping TypeName="CobraPoint.QBPlan">
               <MappingFragment StoreEntitySet="QBPlan">
                 <ScalarProperty Name="QBPlanID" ColumnName="QBPlanID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -8974,7 +8812,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBPlanCarrierSubcodes">
-            <EntityTypeMapping TypeName="CobraPointModel.QBPlanCarrierSubcode">
+            <EntityTypeMapping TypeName="CobraPoint.QBPlanCarrierSubcode">
               <MappingFragment StoreEntitySet="QBPlanCarrierSubcode">
                 <ScalarProperty Name="QBPlanCarrierSubcodeID" ColumnName="QBPlanCarrierSubcodeID" />
                 <ScalarProperty Name="QBPlanID" ColumnName="QBPlanID" />
@@ -8987,7 +8825,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBPremiums">
-            <EntityTypeMapping TypeName="CobraPointModel.QBPremium">
+            <EntityTypeMapping TypeName="CobraPoint.QBPremium">
               <MappingFragment StoreEntitySet="QBPremium">
                 <ScalarProperty Name="QBPremiumID" ColumnName="QBPremiumID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -9000,7 +8838,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBStateInserts">
-            <EntityTypeMapping TypeName="CobraPointModel.QBStateInsert">
+            <EntityTypeMapping TypeName="CobraPoint.QBStateInsert">
               <MappingFragment StoreEntitySet="QBStateInsert">
                 <ScalarProperty Name="QBStateInsertID" ColumnName="QBStateInsertID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -9010,7 +8848,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBSubsidySchedules">
-            <EntityTypeMapping TypeName="CobraPointModel.QBSubsidySchedule">
+            <EntityTypeMapping TypeName="CobraPoint.QBSubsidySchedule">
               <MappingFragment StoreEntitySet="QBSubsidySchedule">
                 <ScalarProperty Name="QBSubsidyScheduleID" ColumnName="QBSubsidyScheduleID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -9024,7 +8862,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMs">
-            <EntityTypeMapping TypeName="CobraPointModel.SPM">
+            <EntityTypeMapping TypeName="CobraPoint.SPM">
               <MappingFragment StoreEntitySet="SPM">
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
@@ -9080,7 +8918,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMAccesses">
-            <EntityTypeMapping TypeName="CobraPointModel.SPMAccess">
+            <EntityTypeMapping TypeName="CobraPoint.SPMAccess">
               <MappingFragment StoreEntitySet="SPMAccess">
                 <ScalarProperty Name="SPMAccessID" ColumnName="SPMAccessID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -9091,7 +8929,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMACHes">
-            <EntityTypeMapping TypeName="CobraPointModel.SPMACH">
+            <EntityTypeMapping TypeName="CobraPoint.SPMACH">
               <MappingFragment StoreEntitySet="SPMACH">
                 <ScalarProperty Name="SPMACHID" ColumnName="SPMACHID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -9102,7 +8940,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMDependents">
-            <EntityTypeMapping TypeName="CobraPointModel.SPMDependent">
+            <EntityTypeMapping TypeName="CobraPoint.SPMDependent">
               <MappingFragment StoreEntitySet="SPMDependent">
                 <ScalarProperty Name="SPMDependentID" ColumnName="SPMDependentID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -9129,7 +8967,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMDependentPlans">
-            <EntityTypeMapping TypeName="CobraPointModel.SPMDependentPlan">
+            <EntityTypeMapping TypeName="CobraPoint.SPMDependentPlan">
               <MappingFragment StoreEntitySet="SPMDependentPlan">
                 <ScalarProperty Name="SPMDependentPlanID" ColumnName="SPMDependentPlanID" />
                 <ScalarProperty Name="SPMDependentID" ColumnName="SPMDependentID" />
@@ -9145,7 +8983,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMNotes">
-            <EntityTypeMapping TypeName="CobraPointModel.SPMNote">
+            <EntityTypeMapping TypeName="CobraPoint.SPMNote">
               <MappingFragment StoreEntitySet="SPMNote">
                 <ScalarProperty Name="SPMNoteID" ColumnName="SPMNoteID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -9157,7 +8995,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMPayments">
-            <EntityTypeMapping TypeName="CobraPointModel.SPMPayment">
+            <EntityTypeMapping TypeName="CobraPoint.SPMPayment">
               <MappingFragment StoreEntitySet="SPMPayment">
                 <ScalarProperty Name="SPMPaymentID" ColumnName="SPMPaymentID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -9188,7 +9026,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMPlanCarrierSubcodes">
-            <EntityTypeMapping TypeName="CobraPointModel.SPMPlanCarrierSubcode">
+            <EntityTypeMapping TypeName="CobraPoint.SPMPlanCarrierSubcode">
               <MappingFragment StoreEntitySet="SPMPlanCarrierSubcode">
                 <ScalarProperty Name="SPMPlanCarrierSubcodeID" ColumnName="SPMPlanCarrierSubcodeID" />
                 <ScalarProperty Name="SPMPlanID" ColumnName="SPMPlanID" />
@@ -9201,7 +9039,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMPremiums">
-            <EntityTypeMapping TypeName="CobraPointModel.SPMPremium">
+            <EntityTypeMapping TypeName="CobraPoint.SPMPremium">
               <MappingFragment StoreEntitySet="SPMPremium">
                 <ScalarProperty Name="SPMPremiumID" ColumnName="SPMPremiumID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -9214,7 +9052,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMScheduledPayments">
-            <EntityTypeMapping TypeName="CobraPointModel.SPMScheduledPayment">
+            <EntityTypeMapping TypeName="CobraPoint.SPMScheduledPayment">
               <MappingFragment StoreEntitySet="SPMScheduledPayment">
                 <ScalarProperty Name="SPMSchedulePaymentID" ColumnName="SPMSchedulePaymentID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -9227,7 +9065,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMSubsidySchedules">
-            <EntityTypeMapping TypeName="CobraPointModel.SPMSubsidySchedule">
+            <EntityTypeMapping TypeName="CobraPoint.SPMSubsidySchedule">
               <MappingFragment StoreEntitySet="SPMSubsidySchedule">
                 <ScalarProperty Name="SPMSubsidyScheduleID" ColumnName="SPMSubsidyScheduleID" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
@@ -9241,7 +9079,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AdminDashboards">
-            <EntityTypeMapping TypeName="CobraPointModel.AdminDashboard">
+            <EntityTypeMapping TypeName="CobraPoint.AdminDashboard">
               <MappingFragment StoreEntitySet="AdminDashboard">
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
@@ -9290,7 +9128,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="AllDataVersions">
-            <EntityTypeMapping TypeName="CobraPointModel.AllDataVersion">
+            <EntityTypeMapping TypeName="CobraPoint.AllDataVersion">
               <MappingFragment StoreEntitySet="AllDataVersion">
                 <ScalarProperty Name="Version" ColumnName="Version" />
                 <ScalarProperty Name="ExportDate" ColumnName="ExportDate" />
@@ -9298,7 +9136,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Brokers">
-            <EntityTypeMapping TypeName="CobraPointModel.Broker">
+            <EntityTypeMapping TypeName="CobraPoint.Broker">
               <MappingFragment StoreEntitySet="Broker">
                 <ScalarProperty Name="BrokerID" ColumnName="BrokerID" />
                 <ScalarProperty Name="BrokerName" ColumnName="BrokerName" />
@@ -9319,7 +9157,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BrokerClients">
-            <EntityTypeMapping TypeName="CobraPointModel.BrokerClient">
+            <EntityTypeMapping TypeName="CobraPoint.BrokerClient">
               <MappingFragment StoreEntitySet="BrokerClient">
                 <ScalarProperty Name="BrokerClientID" ColumnName="BrokerClientID" />
                 <ScalarProperty Name="BrokerID" ColumnName="BrokerID" />
@@ -9328,7 +9166,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BrokerContacts">
-            <EntityTypeMapping TypeName="CobraPointModel.BrokerContact">
+            <EntityTypeMapping TypeName="CobraPoint.BrokerContact">
               <MappingFragment StoreEntitySet="BrokerContact">
                 <ScalarProperty Name="BrokerContactID" ColumnName="BrokerContactID" />
                 <ScalarProperty Name="BrokerID" ColumnName="BrokerID" />
@@ -9362,7 +9200,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="BrokerNotes">
-            <EntityTypeMapping TypeName="CobraPointModel.BrokerNote">
+            <EntityTypeMapping TypeName="CobraPoint.BrokerNote">
               <MappingFragment StoreEntitySet="BrokerNote">
                 <ScalarProperty Name="BrokerNoteID" ColumnName="BrokerNoteID" />
                 <ScalarProperty Name="BrokerID" ColumnName="BrokerID" />
@@ -9374,7 +9212,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientCommunications">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientCommunication">
+            <EntityTypeMapping TypeName="CobraPoint.ClientCommunication">
               <MappingFragment StoreEntitySet="ClientCommunication">
                 <ScalarProperty Name="ClientCommunicationID" ColumnName="ClientCommunicationID" />
                 <ScalarProperty Name="ClientContactID" ColumnName="ClientContactID" />
@@ -9388,7 +9226,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientContacts">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientContact">
+            <EntityTypeMapping TypeName="CobraPoint.ClientContact">
               <MappingFragment StoreEntitySet="ClientContact">
                 <ScalarProperty Name="ClientContactID" ColumnName="ClientContactID" />
                 <ScalarProperty Name="ClientID" ColumnName="ClientID" />
@@ -9421,7 +9259,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ClientDivisionCommunications">
-            <EntityTypeMapping TypeName="CobraPointModel.ClientDivisionCommunication">
+            <EntityTypeMapping TypeName="CobraPoint.ClientDivisionCommunication">
               <MappingFragment StoreEntitySet="ClientDivisionCommunication">
                 <ScalarProperty Name="ClientDivisionCommunicationID" ColumnName="ClientDivisionCommunicationID" />
                 <ScalarProperty Name="ClientDivisionContactID" ColumnName="ClientDivisionContactID" />
@@ -9435,7 +9273,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="MemberLetterAttachments">
-            <EntityTypeMapping TypeName="CobraPointModel.MemberLetterAttachment">
+            <EntityTypeMapping TypeName="CobraPoint.MemberLetterAttachment">
               <MappingFragment StoreEntitySet="MemberLetterAttachment">
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="LetterAttachmentID" ColumnName="LetterAttachmentID" />
@@ -9445,7 +9283,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="NPMCommunications">
-            <EntityTypeMapping TypeName="CobraPointModel.NPMCommunication">
+            <EntityTypeMapping TypeName="CobraPoint.NPMCommunication">
               <MappingFragment StoreEntitySet="NPMCommunication">
                 <ScalarProperty Name="NPMCommunicationID" ColumnName="NPMCommunicationID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -9460,7 +9298,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="NPMNotes">
-            <EntityTypeMapping TypeName="CobraPointModel.NPMNote">
+            <EntityTypeMapping TypeName="CobraPoint.NPMNote">
               <MappingFragment StoreEntitySet="NPMNote">
                 <ScalarProperty Name="NPMNoteID" ColumnName="NPMNoteID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -9472,7 +9310,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBCommunications">
-            <EntityTypeMapping TypeName="CobraPointModel.QBCommunication">
+            <EntityTypeMapping TypeName="CobraPoint.QBCommunication">
               <MappingFragment StoreEntitySet="QBCommunication">
                 <ScalarProperty Name="QBCommunicationID" ColumnName="QBCommunicationID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -9487,7 +9325,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="QBOpenEnrollments">
-            <EntityTypeMapping TypeName="CobraPointModel.QBOpenEnrollment">
+            <EntityTypeMapping TypeName="CobraPoint.QBOpenEnrollment">
               <MappingFragment StoreEntitySet="QBOpenEnrollment">
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="MemberEntityType" ColumnName="MemberEntityType" />
@@ -9515,7 +9353,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMCommunications">
-            <EntityTypeMapping TypeName="CobraPointModel.SPMCommunication">
+            <EntityTypeMapping TypeName="CobraPoint.SPMCommunication">
               <MappingFragment StoreEntitySet="SPMCommunication">
                 <ScalarProperty Name="SPMCommunicationID" ColumnName="SPMCommunicationID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -9530,7 +9368,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMOpenEnrollments">
-            <EntityTypeMapping TypeName="CobraPointModel.SPMOpenEnrollment">
+            <EntityTypeMapping TypeName="CobraPoint.SPMOpenEnrollment">
               <MappingFragment StoreEntitySet="SPMOpenEnrollment">
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
                 <ScalarProperty Name="MemberEntityType" ColumnName="MemberEntityType" />
@@ -9558,7 +9396,7 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SPMPlans">
-            <EntityTypeMapping TypeName="CobraPointModel.SPMPlan">
+            <EntityTypeMapping TypeName="CobraPoint.SPMPlan">
               <MappingFragment StoreEntitySet="SPMPlan">
                 <ScalarProperty Name="SPMPlanID" ColumnName="SPMPlanID" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -9584,61 +9422,8 @@ error 6004: The table 'SalesForce_COBRA.dbo.MemberRemittanceTotalByPost' is refe
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="AllClientsAndDivisions">
-            <EntityTypeMapping TypeName="CobraPointModel.AllClientsAndDivision">
-              <MappingFragment StoreEntitySet="AllClientsAndDivisions">
-                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
-                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
-                <ScalarProperty Name="ClientGroupID" ColumnName="ClientGroupID" />
-                <ScalarProperty Name="DBAName" ColumnName="DBAName" />
-                <ScalarProperty Name="EIN" ColumnName="EIN" />
-                <ScalarProperty Name="Address1" ColumnName="Address1" />
-                <ScalarProperty Name="Address2" ColumnName="Address2" />
-                <ScalarProperty Name="City" ColumnName="City" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />
-                <ScalarProperty Name="Country" ColumnName="Country" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Fax" ColumnName="Fax" />
-                <ScalarProperty Name="BillingStartDate" ColumnName="BillingStartDate" />
-                <ScalarProperty Name="SendHIPAACertWithQBSRandQBTermination" ColumnName="SendHIPAACertWithQBSRandQBTermination" />
-                <ScalarProperty Name="SendHIPAACertWithWelcomeLetter" ColumnName="SendHIPAACertWithWelcomeLetter" />
-                <ScalarProperty Name="AllowClientPortalAccess" ColumnName="AllowClientPortalAccess" />
-                <ScalarProperty Name="AutomaticallyCreateQBSubsidyForInsignificantAmount" ColumnName="AutomaticallyCreateQBSubsidyForInsignificantAmount" />
-                <ScalarProperty Name="IgnoreSPMPaymentGracePeriods" ColumnName="IgnoreSPMPaymentGracePeriods" />
-                <ScalarProperty Name="MigratedClient" ColumnName="MigratedClient" />
-                <ScalarProperty Name="ClientPremiumNotice" ColumnName="ClientPremiumNotice" />
-                <ScalarProperty Name="EmployeeCountRange" ColumnName="EmployeeCountRange" />
-                <ScalarProperty Name="WeeklyBillingFirstDayOfWeek" ColumnName="WeeklyBillingFirstDayOfWeek" />
-                <ScalarProperty Name="ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize" ColumnName="ClientRequiresAEI2009SubsidyEligibleAttestationToSubsidize" />
-                <ScalarProperty Name="ClientAllowsAEI2009PlanEnrollmentOptions" ColumnName="ClientAllowsAEI2009PlanEnrollmentOptions" />
-                <ScalarProperty Name="ClientDoesOwnAEI2009SubsidyTakenReportPosting" ColumnName="ClientDoesOwnAEI2009SubsidyTakenReportPosting" />
-                <ScalarProperty Name="ClientAlternate" ColumnName="ClientAlternate" />
-                <ScalarProperty Name="AllowClientSSO" ColumnName="AllowClientSSO" />
-                <ScalarProperty Name="SPMInitialGracePeriodDays" ColumnName="SPMInitialGracePeriodDays" />
-                <ScalarProperty Name="SPMConvenienceFee" ColumnName="SPMConvenienceFee" />
-                <ScalarProperty Name="SPMPartnerConvenienceFee" ColumnName="SPMPartnerConvenienceFee" />
-                <ScalarProperty Name="QBConvenienceFee" ColumnName="QBConvenienceFee" />
-                <ScalarProperty Name="QBPartnerConvenienceFee" ColumnName="QBPartnerConvenienceFee" />
-                <ScalarProperty Name="ClientDivisionID" ColumnName="ClientDivisionID" />
-                <ScalarProperty Name="DivisionName" ColumnName="DivisionName" />
-                <ScalarProperty Name="DivisionAddress1" ColumnName="DivisionAddress1" />
-                <ScalarProperty Name="DivisionAddress2" ColumnName="DivisionAddress2" />
-                <ScalarProperty Name="DivisionCity" ColumnName="DivisionCity" />
-                <ScalarProperty Name="DivisionState" ColumnName="DivisionState" />
-                <ScalarProperty Name="DivisionPostalCode" ColumnName="DivisionPostalCode" />
-                <ScalarProperty Name="DivisionCountry" ColumnName="DivisionCountry" />
-                <ScalarProperty Name="DivisionPhone" ColumnName="DivisionPhone" />
-                <ScalarProperty Name="DivisionFaxc" ColumnName="DivisionFaxc" />
-                <ScalarProperty Name="ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting" ColumnName="ClientDivisionDoesOwnAEI2009SubsidyTakenReportPosting" />
-                <ScalarProperty Name="DivisionSendHIPAACert" ColumnName="DivisionSendHIPAACert" />
-                <ScalarProperty Name="AllowClientDivisionSSO" ColumnName="AllowClientDivisionSSO" />
-                <ScalarProperty Name="DivisionActive" ColumnName="DivisionActive" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="COBRA_All_Data_QBs">
-            <EntityTypeMapping TypeName="CobraPointModel.COBRA_All_Data_QBs">
+            <EntityTypeMapping TypeName="CobraPoint.COBRA_All_Data_QBs">
               <MappingFragment StoreEntitySet="COBRA_All_Data_QBs">
                 <ScalarProperty Name="CompanyIdentifier" ColumnName="CompanyIdentifier" />
                 <ScalarProperty Name="Division" ColumnName="Division" />

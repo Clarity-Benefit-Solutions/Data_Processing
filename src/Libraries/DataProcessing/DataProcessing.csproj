@@ -346,9 +346,6 @@
     <Compile Include="DataModels\CobraPoint\AdminUserRole.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataModels\CobraPoint\AllClientsAndDivision.cs">
-      <DependentUpon>CobraPoint.tt</DependentUpon>
-    </Compile>
     <Compile Include="DataModels\CobraPoint\AllDataVersion.cs">
       <DependentUpon>CobraPoint.tt</DependentUpon>
     </Compile>

@@ -115,7 +115,6 @@ namespace DataProcessing.DataModels.CobraPoint
         public virtual DbSet<SPMCommunication> SPMCommunications { get; set; }
         public virtual DbSet<SPMOpenEnrollment> SPMOpenEnrollments { get; set; }
         public virtual DbSet<SPMPlan> SPMPlans { get; set; }
-        public virtual DbSet<AllClientsAndDivision> AllClientsAndDivisions { get; set; }
         public virtual DbSet<COBRA_All_Data_QBs> COBRA_All_Data_QBs { get; set; }
     }
 }

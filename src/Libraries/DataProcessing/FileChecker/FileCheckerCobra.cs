@@ -22,6 +22,12 @@ namespace DataProcessing
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public partial class FileChecker : IDisposable
     {
+        private class ClientAndDivision
+        {
+            public Client Client;
+            public ClientDivision ClientDivision;
+
+        }
         private Client currentClient;
         private ClientDivision currentClientDivision;
 
@@ -29,23 +35,7 @@ namespace DataProcessing
         private NPM currentNPM;
         private SPM currentSPM;
 
-        private AllClientsAndDivision currentClientAndDivision
-        {
-            set
-            {
-                currentClient = null;
-                currentClientDivision = null;
-                if (value != null && value.ClientID > 0)
-                {
-                    currentClient = GetCobraClient(value.ClientID);
-                    if (value.ClientDivisionID != null && value.ClientDivisionID > 0)
-                    {
-                        currentClientDivision = currentClient.ClientDivisions.Where(x => x.ClientDivisionID == value.ClientDivisionID).ToList().FirstOrDefault();
-                    }
-                }
-            }
-        }
-
+       
         private int currentClientID
         {
             get
@@ -61,9 +51,9 @@ namespace DataProcessing
         {
             get
             {
-                if (this.currentClientDivision != null && currentClientDivision.ClientDivisionID != null)
+                if (this.currentClientDivision != null && currentClientDivision.ClientDivisionID > 0)
                 {
-                    return (int)this.currentClientDivision.ClientDivisionID;
+                    return this.currentClientDivision.ClientDivisionID;
                 }
                 return 0;
             }
@@ -120,7 +110,7 @@ namespace DataProcessing
             // get all dbRows without caching
             var dataRows = dbDataProcessing.cobra_file_table_stage
                 .OrderBy(dataRow => dataRow.source_row_no)
-                .AsNoTracking()
+                //.AsNoTracking()
                 .ToList();
 
             var versionNo = Import.GetCobraFileVersionNoFromFile(SrcFilePath);
@@ -240,6 +230,9 @@ namespace DataProcessing
             // is start of a main entity
             switch (dataRow.row_type.ToUpper())
             {
+                case "[VERSION]":
+                    break;
+
                 case "[QB]":
                 case "[QBLEGACY]":
                 case "[QBLOOKUP]":
@@ -286,7 +279,7 @@ namespace DataProcessing
             this.currentNPM = null;
 
             //get client and division 
-            this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
+            this.SetCobraClientAndDivision(dataRow);
             if (this.currentClientID <= 0)
             {
                 this.AddCobraErrorForRow(dataRow, "Client And DiVision Does Not Exist", $"Client with '{dataRow.ClientName}' and Division Name '{dataRow.ClientDivisionName}' Not Found. ");
@@ -335,7 +328,7 @@ namespace DataProcessing
                 case "[SPM]":
 
                     // check division exists
-                    this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
+                    this.SetCobraClientAndDivision(dataRow);
 
                     // check SPM exists - if so raise error
                     SPM theSPM = this.GetCobraSPM(dataRow);
@@ -373,7 +366,7 @@ namespace DataProcessing
                 case "[NPM]":
 
                     // check division exists
-                    this.currentClientAndDivision = this.GetCobraClientAndDivision(dataRow);
+                    this.SetCobraClientAndDivision(dataRow);
 
                     // check NPM exists - if so raise error
                     NPM theNPM = this.GetCobraNPM(dataRow);
@@ -801,29 +794,27 @@ namespace DataProcessing
         }
 
 
-        public List<AllClientsAndDivision> GetCobraClientAndDivisionRows(cobra_file_table_stage dataRow)
+        public List<Client> GetCobraClient(cobra_file_table_stage dataRow)
         {
-            List<AllClientsAndDivision> clientRows = null;
+            List<Client> clientRows = null;
             // check DB
             if (Utils.IsBlank(dataRow.ClientName))
             {
-                clientRows = new List<AllClientsAndDivision>();
+                clientRows = new List<Client>();
             }
             else
             {
-                DbSet<AllClientsAndDivision> dbResults = GetAllCobraClientAndDivisions();
+                DbSet<Client> dbResults = GetAllCobraClients();
 
                 // planid is not always present e.g. in deposit file
                 var rows = dbResults.Where(x => x.ClientName == dataRow.ClientName);
 
-                if (!Utils.IsBlank(dataRow.ClientDivisionName))
-                {
-                    rows = rows.Where(x => x.DivisionName == dataRow.ClientDivisionName);
-                }
-
+                //
                 clientRows = rows
                             .AsNoTracking()
                             .ToList();
+
+                
 
             } // check client
               //
@@ -831,24 +822,38 @@ namespace DataProcessing
             return clientRows;
         }
 
-        public AllClientsAndDivision GetCobraClientAndDivision(cobra_file_table_stage dataRow)
+        public void SetCobraClientAndDivision(cobra_file_table_stage dataRow)
         {
-            AllClientsAndDivision row = new AllClientsAndDivision();
+            Client row = new Client();
             var errorMessage = "";
-            List<AllClientsAndDivision> dbRows = GetCobraClientAndDivisionRows(dataRow);
+            List<Client> dbRows = GetCobraClient(dataRow);
 
             if (dbRows.Count == 0)
             {
-                errorMessage = $"The Client Name {dataRow.ClientName} and DivisionName {dataRow.ClientDivisionName} could not be found";
+                errorMessage = $"The Client Name '{dataRow.ClientName}' could not be found";
                 this.AddCobraErrorForRow(dataRow, "ClientAndDivision", errorMessage);
             }
             else
             {
                 row = dbRows.FirstOrDefault();
+                if (row == null || row.ClientID <= 0)
+                {
+                    this.currentClient = null;
+                    this.currentClientDivision = null;
+                }
+                else if (!Utils.IsBlank(dataRow.ClientDivisionName))
+                {
+                    this.currentClient = row;
+
+                    //
+                    var div = row.ClientDivisions.Where(x => x.DivisionName == dataRow.ClientDivisionName).ToList().FirstOrDefault();
+                    if (div != null || div.ClientDivisionID > 0)
+                    {
+                        this.currentClientDivision = div;
+                    }
+                }
 
             } // results.count
-
-            return row;
         }
 
         public QB GetCobraQB(cobra_file_table_stage dataRow)
@@ -1437,14 +1442,7 @@ namespace DataProcessing
         #endregion checkData
 
 
-        private DbSet<AllClientsAndDivision> GetAllCobraClientAndDivisions()
-        {
-            DbSet<AllClientsAndDivision> dbResults = null;
-            //
-            dbResults = dbCtxCobra.AllClientsAndDivisions;
-            //
-            return dbResults;
-        }
+     
 
 
         // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE

@@ -4,216 +4,215 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5e34243c0c26424aafd0d920cc9bafc4" Name="Diagram1">
-        <EntityTypeShape EntityType="CobraPointModel.C__RefactorLog" Width="1.5" PointX="0.75" PointY="2.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.AdminRole" Width="1.5" PointX="0.75" PointY="32.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.AdminTPAUser" Width="1.5" PointX="13.75" PointY="2.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.AdminUser" Width="1.5" PointX="0.75" PointY="35.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.AdminUserRole" Width="1.5" PointX="3" PointY="37.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.Carrier" Width="1.5" PointX="4.5" PointY="49.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.CarrierAccess" Width="1.5" PointX="3" PointY="34.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.CarrierContact" Width="1.5" PointX="4.5" PointY="54.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.CarrierNote" Width="1.5" PointX="3" PointY="40.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.Client" Width="1.5" PointX="1.5" PointY="17" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientAccess" Width="1.5" PointX="6" PointY="37.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientDivision" Width="1.5" PointX="1.5" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientDivisionAccess" Width="1.5" PointX="6" PointY="33.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientDivisionContact" Width="1.5" PointX="11.75" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientDivisionNote" Width="1.5" PointX="6" PointY="41.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientDivisionQBPlan" Width="1.5" PointX="15" PointY="34.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientDivisionQBPlanBundle" Width="1.5" PointX="3.75" PointY="8.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientDivisionSPMPlan" Width="1.5" PointX="15" PointY="38.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientDivisionSPMPlanBundle" Width="1.5" PointX="3.75" PointY="5.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientFee" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientGroup" Width="1.5" PointX="1.5" PointY="6.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientNote" Width="1.5" PointX="9" PointY="37.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientPlanQB" Width="1.5" PointX="6.75" PointY="51.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientPlanQBBundle" Width="1.5" PointX="12" PointY="43.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientPlanQBCarrierSubcode" Width="1.5" PointX="9" PointY="55.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientPlanQBEmailList" Width="1.5" PointX="12" PointY="55.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientPlanQBNote" Width="1.5" PointX="9" PointY="33.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientPlanQBRank" Width="1.5" PointX="3.75" PointY="26.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientPlanQBRate" Width="1.5" PointX="9" PointY="61.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientPlanSPM" Width="1.5" PointX="6.75" PointY="60.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientPlanSPMBundle" Width="1.5" PointX="12" PointY="47.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientPlanSPMCarrierSubcode" Width="1.5" PointX="9" PointY="67.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientPlanSPMEmailList" Width="1.5" PointX="9" PointY="58.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientPlanSPMNote" Width="1.5" PointX="9" PointY="41.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientPlanSPMRank" Width="1.5" PointX="3.75" PointY="63.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientPlanSPMRate" Width="1.5" PointX="9" PointY="78" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientProcess" Width="1.5" PointX="3.75" PointY="70.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientSPMBillingFrequencyOption" Width="1.5" PointX="3.75" PointY="73.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.EnrollmentPeriodNote" Width="1.5" PointX="3" PointY="66.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.LetterAttachment" Width="1.5" PointX="8.75" PointY="13.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.LetterType" Width="1.5" PointX="8.75" PointY="9.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.LoginLog" Width="1.5" PointX="13.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.NPM" Width="1.5" PointX="0.75" PointY="43" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.NPMAccess" Width="1.5" PointX="3" PointY="30.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.NPMHIPAACertData" Width="1.5" PointX="3" PointY="87.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.NPMHIPAACertDataDependent" Width="1.5" PointX="5.25" PointY="87.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QB" Width="1.5" PointX="3.75" PointY="14.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBAccess" Width="1.5" PointX="3" PointY="44.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBACH" Width="1.5" PointX="6" PointY="7.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBAEIInformation" Width="1.5" PointX="6" PointY="10.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBDependent" Width="1.5" PointX="9.75" PointY="86.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBDependentPlan" Width="1.5" PointX="12" PointY="51" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBDisabilityInformation" Width="1.5" PointX="6" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBEvent" Width="1.5" PointX="6" PointY="69.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBLegacy" Width="1.5" PointX="6" PointY="74.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBNote" Width="1.5" PointX="6" PointY="29.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBPayment" Width="1.5" PointX="12" PointY="35.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBPlan" Width="1.5" PointX="9" PointY="71" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBPlanCarrierSubcode" Width="1.5" PointX="11.25" PointY="62.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBPremium" Width="1.5" PointX="6" PointY="80.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBStateInsert" Width="1.5" PointX="13.75" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBSubsidySchedule" Width="1.5" PointX="6" PointY="83.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.SPM" Width="1.5" PointX="6.75" PointY="15.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.SPMAccess" Width="1.5" PointX="6" PointY="45.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.SPMACH" Width="1.5" PointX="9" PointY="5.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.SPMDependent" Width="1.5" PointX="9.75" PointY="94" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.SPMDependentPlan" Width="1.5" PointX="12" PointY="67.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.SPMNote" Width="1.5" PointX="9" PointY="29.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.SPMPayment" Width="1.5" PointX="12" PointY="27.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.SPMPlanCarrierSubcode" Width="1.5" PointX="9" PointY="83.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.SPMPremium" Width="1.5" PointX="9" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.SPMScheduledPayment" Width="1.5" PointX="9" PointY="48.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.SPMSubsidySchedule" Width="1.5" PointX="9" PointY="101.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.AdminDashboard" Width="1.5" PointX="13.75" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.AllDataVersion" Width="1.5" PointX="15.75" PointY="2.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.Broker" Width="1.5" PointX="15.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.BrokerClient" Width="1.5" PointX="15.75" PointY="16.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.BrokerContact" Width="1.5" PointX="17.75" PointY="2.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.BrokerNote" Width="1.5" PointX="16.75" PointY="10.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientCommunication" Width="1.5" PointX="11" PointY="13" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientContact" Width="1.5" PointX="17.75" PointY="13.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.ClientDivisionCommunication" Width="1.5" PointX="14" PointY="12.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.MemberLetterAttachment" Width="1.5" PointX="11" PointY="9.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.NPMCommunication" Width="1.5" PointX="15" PointY="30.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.NPMNote" Width="1.5" PointX="9" PointY="45.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBCommunication" Width="1.5" PointX="11" PointY="17.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.QBOpenEnrollment" Width="1.5" PointX="15.75" PointY="20.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.SPMCommunication" Width="1.5" PointX="11" PointY="22" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.SPMOpenEnrollment" Width="1.5" PointX="17.75" PointY="20.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.SPMPlan" Width="1.5" PointX="14" PointY="59.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.AllClientsAndDivision" Width="1.5" PointX="19.75" PointY="2.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CobraPointModel.COBRA_All_Data_QBs" Width="1.5" PointX="19.75" PointY="13.75" IsExpanded="true" />
-        <AssociationConnector Association="CobraPointModel.FK_AdminUserRole_AdminRole" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_AdminUserRole_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_CarrierAccess_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_CarrierNote_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientAccess_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientDivisionAccess_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientDivisionNote_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientNote_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanQBNote_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanSPMNote_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_EnrollmentPeriodNote_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_NPMAccess_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_NPMNote_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBAccess_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBNote_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBPayment_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBPayment_AdminUser1" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMAccess_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMNote_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMPayment_AdminUser" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMPayment_AdminUser1" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_CarrierAccess_Carrier" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_CarrierContact_Carrier" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_CarrierNote_Carrier" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanQB_Carrier" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanSPM_Carrier" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMPlan_Carrier" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanQB_CarrierContact" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanQB_CarrierContact1" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanQB_CarrierContact2" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanQBEmailList_CarrierContact" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanSPM_CarrierContact" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanSPM_CarrierContact1" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanSPM_CarrierContact2" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanSPMEmailList_CarrierContact" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_Client_ClientGroup" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientAccess_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientDivision_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientFee_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientNote_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanQB_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanQBBundle_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanQBNote_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanQBRank_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanSPM_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanSPMBundle_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanSPMNote_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanSPMRank_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientProcess_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientSPMBillingFrequencyOption_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QB_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPM_Client" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientDivisionAccess_ClientDivision" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientDivisionContact_ClientDivision" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientDivisionNote_ClientDivision" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientDivisionQBPlan_ClientDivision" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientDivisionQBPlanBundle_ClientDivision" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientDivisionSPMPlan_ClientDivision" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientDivisionSPMPlanBundle_ClientDivision" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_NPM_ClientDivision" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QB_ClientDivision" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPM_ClientDivision" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientDivisionCommunication_ClientDivision" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientDivisionQBPlan_ClientPlanQB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientDivisionSPMPlan_ClientPlanSPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanQBBundle_ClientPlanQB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanQBCarrierSubcode_ClientPlanQB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanQBEmailList_ClientPlanQB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanQBNote_ClientPlanQB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanQBRate_ClientPlanQB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBDependentPlan_ClientPlanQB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBPlan_ClientPlanQB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBPlanCarrierSubcode_ClientPlanQB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanSPMBundle_ClientPlanSPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanSPMCarrierSubcode_ClientPlanSPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanSPMEmailList_ClientPlanSPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanSPMNote_ClientPlanSPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientPlanSPMRate_ClientPlanSPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMDependentPlan_ClientPlanSPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMPlan_ClientPlanSPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMPlanCarrierSubcode_ClientPlanSPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientCommunication_LetterAttachmentID" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_ClientDivisionCommunication_LetterAttachmentID" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_MemberLetterAttachment_LetterAttachment" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_NPMCommunication_LetterAttachmentID" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBCommunication_LetterAttachmentID" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMCommunication_LetterAttachmentID" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_MemberLetterAttachment_LetterType" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_NPMAccess_NPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_NPMCommunication_NPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_NPMHIPAACertData_NPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_NPMNote_NPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_NPMHIPAACertDataDependent_NPMHIPAACertData" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBAccess_QB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBACH_QB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBAEIInformation_QB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBCommunication_QB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBDependent_QB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBDisabilityInformation_QB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBEvent_QB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBLegacy_QB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBNote_QB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBPayment_QB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBPremium_QB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBSubsidySchedule_QB" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBDependentPlan_QBDependent" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_QBPlanCarrierSubcode_QBPlan" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMAccess_SPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMACH_SPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMCommunication_SPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMDependent_SPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMNote_SPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMPayment_SPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMPremium_SPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMScheduledPayment_SPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMSubsidySchedule_SPM" ManuallyRouted="false" />
-        <AssociationConnector Association="CobraPointModel.FK_SPMDependentPlan_SPMDependent" ManuallyRouted="false" />
+      <Diagram DiagramId="609e5234f2d94a8990612dd2a7c9d1ee" Name="Diagram1">
+        <EntityTypeShape EntityType="CobraPoint.C__RefactorLog" Width="1.5" PointX="0.75" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.AdminRole" Width="1.5" PointX="0.75" PointY="32.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.AdminTPAUser" Width="1.5" PointX="13.75" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.AdminUser" Width="1.5" PointX="0.75" PointY="35.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.AdminUserRole" Width="1.5" PointX="3" PointY="37.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.Carrier" Width="1.5" PointX="4.5" PointY="49.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.CarrierAccess" Width="1.5" PointX="3" PointY="34.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.CarrierContact" Width="1.5" PointX="4.5" PointY="54.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.CarrierNote" Width="1.5" PointX="3" PointY="40.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.Client" Width="1.5" PointX="1.5" PointY="17" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientAccess" Width="1.5" PointX="6" PointY="37.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientDivision" Width="1.5" PointX="1.5" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientDivisionAccess" Width="1.5" PointX="6" PointY="33.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientDivisionContact" Width="1.5" PointX="11.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientDivisionNote" Width="1.5" PointX="6" PointY="41.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientDivisionQBPlan" Width="1.5" PointX="15" PointY="34.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientDivisionQBPlanBundle" Width="1.5" PointX="3.75" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientDivisionSPMPlan" Width="1.5" PointX="15" PointY="38.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientDivisionSPMPlanBundle" Width="1.5" PointX="3.75" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientFee" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientGroup" Width="1.5" PointX="1.5" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientNote" Width="1.5" PointX="9" PointY="37.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientPlanQB" Width="1.5" PointX="6.75" PointY="51.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientPlanQBBundle" Width="1.5" PointX="12" PointY="43.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientPlanQBCarrierSubcode" Width="1.5" PointX="9" PointY="55.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientPlanQBEmailList" Width="1.5" PointX="12" PointY="55.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientPlanQBNote" Width="1.5" PointX="9" PointY="33.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientPlanQBRank" Width="1.5" PointX="3.75" PointY="26.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientPlanQBRate" Width="1.5" PointX="9" PointY="61.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientPlanSPM" Width="1.5" PointX="6.75" PointY="60.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientPlanSPMBundle" Width="1.5" PointX="12" PointY="47.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientPlanSPMCarrierSubcode" Width="1.5" PointX="9" PointY="67.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientPlanSPMEmailList" Width="1.5" PointX="9" PointY="58.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientPlanSPMNote" Width="1.5" PointX="9" PointY="41.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientPlanSPMRank" Width="1.5" PointX="3.75" PointY="63.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientPlanSPMRate" Width="1.5" PointX="9" PointY="78" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientProcess" Width="1.5" PointX="3.75" PointY="70.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientSPMBillingFrequencyOption" Width="1.5" PointX="3.75" PointY="73.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.EnrollmentPeriodNote" Width="1.5" PointX="3" PointY="66.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.LetterAttachment" Width="1.5" PointX="8.75" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.LetterType" Width="1.5" PointX="8.75" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.LoginLog" Width="1.5" PointX="13.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.NPM" Width="1.5" PointX="0.75" PointY="43" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.NPMAccess" Width="1.5" PointX="3" PointY="30.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.NPMHIPAACertData" Width="1.5" PointX="3" PointY="87.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.NPMHIPAACertDataDependent" Width="1.5" PointX="5.25" PointY="87.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QB" Width="1.5" PointX="3.75" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBAccess" Width="1.5" PointX="3" PointY="44.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBACH" Width="1.5" PointX="6" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBAEIInformation" Width="1.5" PointX="6" PointY="10.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBDependent" Width="1.5" PointX="9.75" PointY="86.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBDependentPlan" Width="1.5" PointX="12" PointY="51" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBDisabilityInformation" Width="1.5" PointX="6" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBEvent" Width="1.5" PointX="6" PointY="69.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBLegacy" Width="1.5" PointX="6" PointY="74.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBNote" Width="1.5" PointX="6" PointY="29.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBPayment" Width="1.5" PointX="12" PointY="35.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBPlan" Width="1.5" PointX="9" PointY="71" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBPlanCarrierSubcode" Width="1.5" PointX="11.25" PointY="62.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBPremium" Width="1.5" PointX="6" PointY="80.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBStateInsert" Width="1.5" PointX="13.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBSubsidySchedule" Width="1.5" PointX="6" PointY="83.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.SPM" Width="1.5" PointX="6.75" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.SPMAccess" Width="1.5" PointX="6" PointY="45.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.SPMACH" Width="1.5" PointX="9" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.SPMDependent" Width="1.5" PointX="9.75" PointY="94" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.SPMDependentPlan" Width="1.5" PointX="12" PointY="67.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.SPMNote" Width="1.5" PointX="9" PointY="29.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.SPMPayment" Width="1.5" PointX="12" PointY="27.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.SPMPlanCarrierSubcode" Width="1.5" PointX="9" PointY="83.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.SPMPremium" Width="1.5" PointX="9" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.SPMScheduledPayment" Width="1.5" PointX="9" PointY="48.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.SPMSubsidySchedule" Width="1.5" PointX="9" PointY="101.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.AdminDashboard" Width="1.5" PointX="13.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.AllDataVersion" Width="1.5" PointX="15.75" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.Broker" Width="1.5" PointX="15.75" PointY="5.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.BrokerClient" Width="1.5" PointX="15.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.BrokerContact" Width="1.5" PointX="17.75" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.BrokerNote" Width="1.5" PointX="16.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientCommunication" Width="1.5" PointX="11" PointY="13" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientContact" Width="1.5" PointX="17.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.ClientDivisionCommunication" Width="1.5" PointX="14" PointY="12.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.MemberLetterAttachment" Width="1.5" PointX="11" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.NPMCommunication" Width="1.5" PointX="15" PointY="30.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.NPMNote" Width="1.5" PointX="9" PointY="45.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBCommunication" Width="1.5" PointX="11" PointY="17.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.QBOpenEnrollment" Width="1.5" PointX="15.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.SPMCommunication" Width="1.5" PointX="11" PointY="22" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.SPMOpenEnrollment" Width="1.5" PointX="17.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.SPMPlan" Width="1.5" PointX="14" PointY="59.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CobraPoint.COBRA_All_Data_QBs" Width="1.5" PointX="19.75" PointY="2.75" IsExpanded="true" />
+        <AssociationConnector Association="CobraPoint.FK_AdminUserRole_AdminRole" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_AdminUserRole_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_CarrierAccess_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_CarrierNote_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientAccess_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientDivisionAccess_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientDivisionNote_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientNote_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanQBNote_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanSPMNote_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_EnrollmentPeriodNote_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_NPMAccess_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_NPMNote_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBAccess_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBNote_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBPayment_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBPayment_AdminUser1" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMAccess_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMNote_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMPayment_AdminUser" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMPayment_AdminUser1" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_CarrierAccess_Carrier" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_CarrierContact_Carrier" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_CarrierNote_Carrier" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanQB_Carrier" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanSPM_Carrier" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMPlan_Carrier" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanQB_CarrierContact" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanQB_CarrierContact1" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanQB_CarrierContact2" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanQBEmailList_CarrierContact" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanSPM_CarrierContact" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanSPM_CarrierContact1" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanSPM_CarrierContact2" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanSPMEmailList_CarrierContact" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_Client_ClientGroup" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientAccess_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientDivision_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientFee_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientNote_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanQB_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanQBBundle_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanQBNote_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanQBRank_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanSPM_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanSPMBundle_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanSPMNote_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanSPMRank_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientProcess_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientSPMBillingFrequencyOption_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QB_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPM_Client" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientDivisionAccess_ClientDivision" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientDivisionContact_ClientDivision" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientDivisionNote_ClientDivision" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientDivisionQBPlan_ClientDivision" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientDivisionQBPlanBundle_ClientDivision" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientDivisionSPMPlan_ClientDivision" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientDivisionSPMPlanBundle_ClientDivision" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_NPM_ClientDivision" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QB_ClientDivision" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPM_ClientDivision" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientDivisionCommunication_ClientDivision" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientDivisionQBPlan_ClientPlanQB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientDivisionSPMPlan_ClientPlanSPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanQBBundle_ClientPlanQB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanQBCarrierSubcode_ClientPlanQB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanQBEmailList_ClientPlanQB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanQBNote_ClientPlanQB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanQBRate_ClientPlanQB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBDependentPlan_ClientPlanQB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBPlan_ClientPlanQB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBPlanCarrierSubcode_ClientPlanQB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanSPMBundle_ClientPlanSPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanSPMCarrierSubcode_ClientPlanSPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanSPMEmailList_ClientPlanSPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanSPMNote_ClientPlanSPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientPlanSPMRate_ClientPlanSPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMDependentPlan_ClientPlanSPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMPlan_ClientPlanSPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMPlanCarrierSubcode_ClientPlanSPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientCommunication_LetterAttachmentID" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_ClientDivisionCommunication_LetterAttachmentID" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_MemberLetterAttachment_LetterAttachment" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_NPMCommunication_LetterAttachmentID" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBCommunication_LetterAttachmentID" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMCommunication_LetterAttachmentID" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_MemberLetterAttachment_LetterType" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_NPMAccess_NPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_NPMCommunication_NPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_NPMHIPAACertData_NPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_NPMNote_NPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_NPMHIPAACertDataDependent_NPMHIPAACertData" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBAccess_QB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBACH_QB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBAEIInformation_QB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBCommunication_QB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBDependent_QB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBDisabilityInformation_QB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBEvent_QB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBLegacy_QB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBNote_QB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBPayment_QB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBPremium_QB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBSubsidySchedule_QB" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBDependentPlan_QBDependent" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_QBPlanCarrierSubcode_QBPlan" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMAccess_SPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMACH_SPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMCommunication_SPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMDependent_SPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMNote_SPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMPayment_SPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMPremium_SPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMScheduledPayment_SPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMSubsidySchedule_SPM" ManuallyRouted="false" />
+        <AssociationConnector Association="CobraPoint.FK_SPMDependentPlan_SPMDependent" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
