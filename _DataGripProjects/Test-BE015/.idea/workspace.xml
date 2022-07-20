@@ -26,15 +26,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0853958f-c1a2-4d9c-ae8d-4ae39e7a6a8c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-07-20-cobra-filechecker-1.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Broker_Commission.EUXFFw/schema/dbo.sYMBAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Broker_Commission.EUXFFw/schema/dbo.sYMBAA.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.zip" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/b72e394e-8e1a-4ad1-8d55-9b2e32274a19/storage_v2/_src_/database/Data_Processing.yJraQQ/schema/dbo.sYMBAA.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-07-20-cobra-filechecker-2.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/.vs/DataProcessing/FileContentIndex/25c3234b-9974-4b5f-825d-0a2e2354047e.vsidx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../src/.vs/DataProcessing/FileContentIndex/a68d4408-f3e9-437c-a7ff-58d8b93e48a1.vsidx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-07-20-cobra-filechecker-1.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../../_SQLFiles-FileProcessing/2022-07-20-cobra-filechecker-1.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/.vs/DataProcessing/FileContentIndex/946db72b-d89a-4676-a6eb-05dba8eff5c2.vsidx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../../src/.vs/DataProcessing/v17/.suo" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/.vs/DataProcessing/v17/.suo" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/FileChecker/FileCheckerCobra.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Libraries/DataProcessing/FileChecker/FileCheckerCobra.cs" afterDir="false" />
     </list>
@@ -227,26 +222,26 @@
     </state>
     <state x="549" y="220" key="FileChooserDialogImpl/0.0.1536.930@0.0.1536.930" timestamp="1650714183158" />
     <state x="589" y="204" key="FileChooserDialogImpl/62.0.1474.864@62.0.1474.864" timestamp="1654592722273" />
-    <state width="817" height="137" key="GridCell.Tab.0.bottom" timestamp="1658323386085">
+    <state width="817" height="137" key="GridCell.Tab.0.bottom" timestamp="1658323910808">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="832" height="259" key="GridCell.Tab.0.bottom/62.0.1218.720@62.0.1218.720" timestamp="1654525814988" />
-    <state width="817" height="137" key="GridCell.Tab.0.bottom/62.0.1474.864@62.0.1474.864" timestamp="1658323386085" />
-    <state width="817" height="137" key="GridCell.Tab.0.center" timestamp="1658323386085">
+    <state width="817" height="137" key="GridCell.Tab.0.bottom/62.0.1474.864@62.0.1474.864" timestamp="1658323910808" />
+    <state width="817" height="137" key="GridCell.Tab.0.center" timestamp="1658323910808">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="832" height="259" key="GridCell.Tab.0.center/62.0.1218.720@62.0.1218.720" timestamp="1654525814988" />
-    <state width="817" height="137" key="GridCell.Tab.0.center/62.0.1474.864@62.0.1474.864" timestamp="1658323386085" />
-    <state width="817" height="137" key="GridCell.Tab.0.left" timestamp="1658323386084">
+    <state width="817" height="137" key="GridCell.Tab.0.center/62.0.1474.864@62.0.1474.864" timestamp="1658323910808" />
+    <state width="817" height="137" key="GridCell.Tab.0.left" timestamp="1658323910808">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="832" height="259" key="GridCell.Tab.0.left/62.0.1218.720@62.0.1218.720" timestamp="1654525814987" />
-    <state width="817" height="137" key="GridCell.Tab.0.left/62.0.1474.864@62.0.1474.864" timestamp="1658323386084" />
-    <state width="817" height="137" key="GridCell.Tab.0.right" timestamp="1658323386085">
+    <state width="817" height="137" key="GridCell.Tab.0.left/62.0.1474.864@62.0.1474.864" timestamp="1658323910808" />
+    <state width="817" height="137" key="GridCell.Tab.0.right" timestamp="1658323910808">
       <screen x="62" y="0" width="1474" height="864" />
     </state>
     <state width="832" height="259" key="GridCell.Tab.0.right/62.0.1218.720@62.0.1218.720" timestamp="1654525814988" />
-    <state width="817" height="137" key="GridCell.Tab.0.right/62.0.1474.864@62.0.1474.864" timestamp="1658323386085" />
+    <state width="817" height="137" key="GridCell.Tab.0.right/62.0.1474.864@62.0.1474.864" timestamp="1658323910808" />
     <state x="391" y="151" key="Vcs.Push.Dialog.v2" timestamp="1656492621187">
       <screen x="62" y="0" width="1474" height="864" />
     </state>

@@ -23,4 +23,3 @@ begin
     truncate table dbo_error_log_results_workflow_local;
 end;
 go
-

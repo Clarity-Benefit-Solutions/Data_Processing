@@ -28,14 +28,18 @@ namespace DataProcessing
             public ClientDivision ClientDivision;
 
         }
+        // set to true to raise errors on duplicate QB
+        private bool FailIfMainEntityAlreadyExists = false;
+        //
+
         private Client currentClient;
         private ClientDivision currentClientDivision;
 
         private QB currentQB;
         private NPM currentNPM;
         private SPM currentSPM;
+        
 
-       
         private int currentClientID
         {
             get
@@ -227,6 +231,8 @@ namespace DataProcessing
 
         public Boolean CheckCobraRecordData(string versionNo, cobra_file_table_stage dataRow, TypedCsvSchema mappings)
         {
+            Boolean lineHasError;
+
             // is start of a main entity
             switch (dataRow.row_type.ToUpper())
             {
@@ -240,12 +246,16 @@ namespace DataProcessing
                 case "[SPMLOOKUP]":
                 case "[NPM]":
                 case "[NPMLOOKUP]":
-                    this.CheckCobraRecordDataMainEntity(versionNo, dataRow, mappings);
+                    lineHasError = this.CheckCobraRecordDataMainEntity(versionNo, dataRow, mappings);
+                    if (lineHasError)
+                    {
+                        return true;
+                    }
+
                     break;
 
                 // none of the above major entity types
                 default:
-                    Boolean lineHasError;
                     lineHasError = CheckCobraRecordDataIsQBSubline(versionNo, dataRow, mappings);
                     if (lineHasError)
                     {
@@ -294,7 +304,7 @@ namespace DataProcessing
 
                     // check QB exists - if so raise error
                     QB theQB = this.GetCobraQB(dataRow);
-                    if (theQB != null && theQB.MemberID > 0)
+                    if (theQB != null && theQB.MemberID > 0 && this.FailIfMainEntityAlreadyExists )
                     {
                         this.AddCobraErrorForRow(dataRow, "QB Already exists", $"Duplicate QB. QB with SSN '{theQB.SSN}' already exists");
                         return true;
@@ -332,7 +342,7 @@ namespace DataProcessing
 
                     // check SPM exists - if so raise error
                     SPM theSPM = this.GetCobraSPM(dataRow);
-                    if (theSPM != null && theSPM.MemberID > 0)
+                    if (theSPM != null && theSPM.MemberID > 0 && this.FailIfMainEntityAlreadyExists)
                     {
                         this.AddCobraErrorForRow(dataRow, "SPM Already exists", $"Duplicate SPM. SPM with SSN '{theSPM.SSN}' already exists");
                         return true;
@@ -370,7 +380,7 @@ namespace DataProcessing
 
                     // check NPM exists - if so raise error
                     NPM theNPM = this.GetCobraNPM(dataRow);
-                    if (theNPM != null && theNPM.MemberID > 0)
+                    if (theNPM != null && theNPM.MemberID > 0 && this.FailIfMainEntityAlreadyExists)
                     {
                         this.AddCobraErrorForRow(dataRow, "NPM Already exists", $"Duplicate NPM. NPM with SSN '{theNPM.SSN}' already exists");
                         return true;
