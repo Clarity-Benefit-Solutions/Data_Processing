@@ -90,7 +90,7 @@ namespace DataProcessing
                         rowNo++;
                     }
                     // for each header row, ensure enough columns are created as header columns are less than the data columns and then the csv data reader errors when asked for columns that are in the data schema but not in the header itself
-                    if (line.Substring(0, 2) == "IA" || line.Substring(0, 2) == "RA")
+                    if (line.Length >= 2 && (line.Substring(0, 2) == "IA" || line.Substring(0, 2) == "RA"))
                     {
                         line += AppendCommasToCsvLine;
                     }

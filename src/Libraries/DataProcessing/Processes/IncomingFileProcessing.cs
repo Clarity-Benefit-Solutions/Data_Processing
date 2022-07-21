@@ -23,6 +23,8 @@ namespace DataProcessing
             (
                 () =>
                 {
+                    //Debug.Assert(false);
+
                     // set process environment
                     Vars.ftpSubFolderPath = ftpSubFolderPath;
                     //
@@ -180,8 +182,27 @@ namespace DataProcessing
                 // 2. archive source in source subfolder
                 string srcArchiveDir = $"{Path.GetDirectoryName(srcFilePath)}/Archive/{Utils.ToIsoDateString(DateTime.Now)}";
                 string srcArchivePath = $"{srcArchiveDir}/{Path.GetFileName(srcFilePath)}";
+
+                // handle long paths
+                if (srcArchivePath.Length >= 250)
+                {
+                    srcArchivePath = $"{Utils.Left(srcArchivePath, 250)}{Path.GetExtension(srcArchivePath)}";
+
+                }
                 //
-                FileUtils.CopyFile(srcFilePath, srcArchivePath, null, null);
+                try
+                {
+                    FileUtils.CopyFile(srcFilePath, srcArchivePath, null, null);
+                }
+                catch (Exception ex)
+                {
+                    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                        Path.GetFileName(srcFilePath), srcFilePath,
+                        $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                        "Error", $"Archiving File Error: {ex.Message}");
+
+                    DbUtils.LogFileOperation(fileLogParams);
+                }
 
                 // 2B. Convert excel file to csv now itself so any password protected files that cannot be opened will be rejected. Also we can look inside the file easier
                 // convert from xl is needed
