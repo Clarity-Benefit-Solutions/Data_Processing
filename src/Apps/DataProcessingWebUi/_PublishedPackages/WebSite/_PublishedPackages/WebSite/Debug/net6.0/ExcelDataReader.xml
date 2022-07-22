@@ -6,7 +6,7 @@
     <members>
         <member name="T:ExcelDataReader.CellRange">
             <summary>
-            A range for cells using 0 index positions. 
+            A range for cells using 0 index positions.
             </summary>
         </member>
         <member name="P:ExcelDataReader.CellRange.FromColumn">
@@ -71,7 +71,7 @@
         </member>
         <member name="P:ExcelDataReader.Core.BinaryFormat.XlsBiffBlankCell.IsBiff2Cell">
             <summary>
-            Gets a value indicating whether the cell's record identifier is BIFF2-specific. 
+            Gets a value indicating whether the cell's record identifier is BIFF2-specific.
             The shared binary layout of BIFF2 cells are different from BIFF3+.
             </summary>
         </member>
@@ -226,17 +226,17 @@
         </member>
         <member name="F:ExcelDataReader.Core.BinaryFormat.XlsBiffFormulaCell.FormulaValueType.Boolean">
             <summary>
-            Indicates that the <see cref="P:ExcelDataReader.Core.BinaryFormat.XlsBiffFormulaCell.BooleanValue"/> property is valid.
+            Indicates that the <see cref="P:ExcelDataReader.Core.BinaryFormat.XlsBiffFormulaCell.BooleanValue" /> property is valid.
             </summary>
         </member>
         <member name="F:ExcelDataReader.Core.BinaryFormat.XlsBiffFormulaCell.FormulaValueType.Error">
             <summary>
-            Indicates that the <see cref="P:ExcelDataReader.Core.BinaryFormat.XlsBiffFormulaCell.ErrorValue"/> property is valid.
+            Indicates that the <see cref="P:ExcelDataReader.Core.BinaryFormat.XlsBiffFormulaCell.ErrorValue" /> property is valid.
             </summary>
         </member>
         <member name="F:ExcelDataReader.Core.BinaryFormat.XlsBiffFormulaCell.FormulaValueType.Number">
             <summary>
-            Indicates that the <see cref="P:ExcelDataReader.Core.BinaryFormat.XlsBiffFormulaCell.XNumValue"/> property is valid.
+            Indicates that the <see cref="P:ExcelDataReader.Core.BinaryFormat.XlsBiffFormulaCell.XNumValue" /> property is valid.
             </summary>
         </member>
         <member name="P:ExcelDataReader.Core.BinaryFormat.XlsBiffFormulaCell.Flags">
@@ -389,7 +389,7 @@
         </member>
         <member name="T:ExcelDataReader.Core.BinaryFormat.XlsBiffNumberCell">
             <summary>
-            Represents a floating-point number 
+            Represents a floating-point number
             </summary>
         </member>
         <member name="P:ExcelDataReader.Core.BinaryFormat.XlsBiffNumberCell.Value">
@@ -576,7 +576,7 @@
         <member name="T:ExcelDataReader.Core.BinaryFormat.XlsBiffUncalced">
             <summary>
             If present the Calculate Message was in the status bar when Excel saved the file.
-            This occurs if the sheet changed, the Manual calculation option was on, and the Recalculate Before Save option was off.    
+            This occurs if the sheet changed, the Manual calculation option was on, and the Recalculate Before Save option was off.
             </summary>
         </member>
         <member name="T:ExcelDataReader.Core.BinaryFormat.XlsBiffWindow1">
@@ -631,7 +631,7 @@
         </member>
         <member name="T:ExcelDataReader.Core.BinaryFormat.XlsByteString">
             <summary>
-            Word-sized string, stored as single bytes with encoding from CodePage record. Used in BIFF2-5 
+            Word-sized string, stored as single bytes with encoding from CodePage record. Used in BIFF2-5
             </summary>
         </member>
         <member name="P:ExcelDataReader.Core.BinaryFormat.XlsByteString.CharacterCount">
@@ -691,10 +691,10 @@
             <summary>
             Advances the read position a number of bytes, potentially spanning
             multiple records.
-            NOTE: If the new read position ends on a record boundary, 
+            NOTE: If the new read position ends on a record boundary,
             the next record will not be read, and the read position will point
             at the end of the record! Must call EnsureRecord() as needed
-            to read the next continue record and reset the read position. 
+            to read the next continue record and reset the read position.
             </summary>
             <param name="bytes">Number of bytes to skip</param>
         </member>
@@ -716,7 +716,7 @@
         </member>
         <member name="P:ExcelDataReader.Core.BinaryFormat.XlsSSTStringHeader.HasExtString">
             <summary>
-            Gets a value indicating whether the string has an extended record. 
+            Gets a value indicating whether the string has an extended record.
             </summary>
         </member>
         <member name="P:ExcelDataReader.Core.BinaryFormat.XlsSSTStringHeader.HasFormatting">
@@ -951,7 +951,7 @@
         </member>
         <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.IsSignatureValid">
             <summary>
-            Gets a value indicating whether the signature is valid. 
+            Gets a value indicating whether the signature is valid.
             </summary>
         </member>
         <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.ClassId">
@@ -996,7 +996,7 @@
         </member>
         <member name="P:ExcelDataReader.Core.CompoundFormat.CompoundHeader.DirectorySectorCount">
             <summary>
-            Gets or sets the number of directory sectors. If Major Version is 3, the Number of 
+            Gets or sets the number of directory sectors. If Major Version is 3, the Number of
             Directory Sectors MUST be zero. This field is not supported for version 3 compound files
             </summary>
         </member>
@@ -1047,7 +1047,7 @@
         </member>
         <member name="M:ExcelDataReader.Core.CsvFormat.CsvAnalyzer.Analyze(System.IO.Stream,System.Char[],System.Text.Encoding,System.Int32,System.Int32@,System.Char@,System.Text.Encoding@,System.Int32@,System.Int32@)">
             <summary>
-            Reads completely through a CSV stream to determine encoding, separator, field count and row count. 
+            Reads completely through a CSV stream to determine encoding, separator, field count and row count.
             Uses fallbackEncoding if there is no BOM. Throws DecoderFallbackException if there are invalid characters in the stream.
             Returns the separator whose average field count is closest to its max field count.
             </summary>
@@ -1068,12 +1068,12 @@
             </summary>
             <param name="encoding">The encoding.</param>
             <returns>
-                <see langword="true"/> if the specified encoding is single byte; otherwise, <see langword="false"/>.
+                <see langword="true" /> if the specified encoding is single byte; otherwise, <see langword="false" />.
             </returns>
         </member>
         <member name="M:ExcelDataReader.Core.Helpers.AdjustOADateTime(System.Double,System.Boolean)">
             <summary>
-            Convert a double from Excel to an OA DateTime double. 
+            Convert a double from Excel to an OA DateTime double.
             The returned value is normalized to the '1900' date mode and adjusted for the 1900 leap year bug.
             </summary>
         </member>
@@ -1095,7 +1095,7 @@
         </member>
         <member name="M:ExcelDataReader.Core.NumberFormat.NumberFormatString.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:ExcelDataReader.Core.NumberFormat.NumberFormatString"/> class.
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Core.NumberFormat.NumberFormatString" /> class.
             </summary>
             <param name="formatString">The number format string.</param>
         </member>
@@ -1121,13 +1121,13 @@
         </member>
         <member name="M:ExcelDataReader.Core.NumberFormat.Parser.ParseNumberTokens(System.Collections.Generic.List{System.String},System.Int32,System.Collections.Generic.List{System.String}@,System.Boolean@,System.Collections.Generic.List{System.String}@)">
             <summary>
-            Parses as many placeholders and literals needed to format a number with optional decimals. 
+            Parses as many placeholders and literals needed to format a number with optional decimals.
             Returns number of tokens parsed, or 0 if the tokens didn't form a number.
             </summary>
         </member>
         <member name="T:ExcelDataReader.Core.OfficeCrypto.AgileEncryptedPackageStream">
             <summary>
-            A seekable stream for reading an EncryptedPackage blob using OpenXml Agile Encryption. 
+            A seekable stream for reading an EncryptedPackage blob using OpenXml Agile Encryption.
             </summary>
         </member>
         <member name="T:ExcelDataReader.Core.OfficeCrypto.AgileEncryption">
@@ -1240,7 +1240,7 @@
         </member>
         <member name="M:ExcelDataReader.Core.ZipWorker.#ctor(System.IO.Stream)">
             <summary>
-            Initializes a new instance of the <see cref="T:ExcelDataReader.Core.ZipWorker"/> class. 
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Core.ZipWorker" /> class.
             </summary>
             <param name="fileStream">The zip file stream.</param>
         </member>
@@ -1300,7 +1300,7 @@
         </member>
         <member name="P:ExcelDataReader.ExcelReaderConfiguration.FallbackEncoding">
             <summary>
-            Gets or sets a value indicating the encoding to use when the input XLS lacks a CodePage record, 
+            Gets or sets a value indicating the encoding to use when the input XLS lacks a CodePage record,
             or when the input CSV lacks a BOM and does not parse as UTF8. Default: cp1252. (XLS BIFF2-5 and CSV only)
             </summary>
         </member>
@@ -1333,7 +1333,7 @@
         </member>
         <member name="M:ExcelDataReader.ExcelReaderFactory.CreateReader(System.IO.Stream,ExcelDataReader.ExcelReaderConfiguration)">
             <summary>
-            Creates an instance of <see cref="T:ExcelDataReader.ExcelBinaryReader"/> or <see cref="T:ExcelDataReader.ExcelOpenXmlReader"/>
+            Creates an instance of <see cref="T:ExcelDataReader.ExcelBinaryReader" /> or <see cref="T:ExcelDataReader.ExcelOpenXmlReader" />
             </summary>
             <param name="fileStream">The file stream.</param>
             <param name="configuration">The configuration object.</param>
@@ -1341,7 +1341,7 @@
         </member>
         <member name="M:ExcelDataReader.ExcelReaderFactory.CreateBinaryReader(System.IO.Stream,ExcelDataReader.ExcelReaderConfiguration)">
             <summary>
-            Creates an instance of <see cref="T:ExcelDataReader.ExcelBinaryReader"/>
+            Creates an instance of <see cref="T:ExcelDataReader.ExcelBinaryReader" />
             </summary>
             <param name="fileStream">The file stream.</param>
             <param name="configuration">The configuration object.</param>
@@ -1349,10 +1349,10 @@
         </member>
         <member name="M:ExcelDataReader.ExcelReaderFactory.CreateOpenXmlReader(System.IO.Stream,ExcelDataReader.ExcelReaderConfiguration)">
             <summary>
-            Creates an instance of <see cref="T:ExcelDataReader.ExcelOpenXmlReader"/>
+            Creates an instance of <see cref="T:ExcelDataReader.ExcelOpenXmlReader" />
             </summary>
             <param name="fileStream">The file stream.</param>
-            <param name="configuration">The reader configuration -or- <see langword="null"/> to use the default configuration.</param>
+            <param name="configuration">The reader configuration -or- <see langword="null" /> to use the default configuration.</param>
             <returns>The excel data reader.</returns>
         </member>
         <member name="M:ExcelDataReader.ExcelReaderFactory.CreateCsvReader(System.IO.Stream,ExcelDataReader.ExcelReaderConfiguration)">
@@ -1360,7 +1360,7 @@
             Creates an instance of ExcelCsvReader
             </summary>
             <param name="fileStream">The file stream.</param>
-            <param name="configuration">The reader configuration -or- <see langword="null"/> to use the default configuration.</param>
+            <param name="configuration">The reader configuration -or- <see langword="null" /> to use the default configuration.</param>
             <returns>The excel data reader.</returns>
         </member>
         <member name="T:ExcelDataReader.Exceptions.CompoundDocumentException">
@@ -1370,13 +1370,13 @@
         </member>
         <member name="M:ExcelDataReader.Exceptions.CompoundDocumentException.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.CompoundDocumentException"/> class.
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.CompoundDocumentException" /> class.
             </summary>
             <param name="message">The error message</param>
         </member>
         <member name="M:ExcelDataReader.Exceptions.CompoundDocumentException.#ctor(System.String,System.Exception)">
             <summary>
-            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.CompoundDocumentException"/> class.
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.CompoundDocumentException" /> class.
             </summary>
             <param name="message">The error message</param>
             <param name="inner">The inner exception</param>
@@ -1388,25 +1388,25 @@
         </member>
         <member name="M:ExcelDataReader.Exceptions.ExcelReaderException.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.ExcelReaderException"/> class.
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.ExcelReaderException" /> class.
             </summary>
         </member>
         <member name="M:ExcelDataReader.Exceptions.ExcelReaderException.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.ExcelReaderException"/> class.
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.ExcelReaderException" /> class.
             </summary>
             <param name="message">The error message</param>
         </member>
         <member name="M:ExcelDataReader.Exceptions.ExcelReaderException.#ctor(System.String,System.Exception)">
             <summary>
-            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.ExcelReaderException"/> class.
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.ExcelReaderException" /> class.
             </summary>
             <param name="message">The error message</param>
             <param name="inner">The inner exception</param>
         </member>
         <member name="M:ExcelDataReader.Exceptions.ExcelReaderException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
             <summary>
-            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.ExcelReaderException"/> class.
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.ExcelReaderException" /> class.
             </summary>
             <param name="info">The serialization info</param>
             <param name="context">The streaming context</param>
@@ -1418,25 +1418,25 @@
         </member>
         <member name="M:ExcelDataReader.Exceptions.HeaderException.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.HeaderException"/> class.
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.HeaderException" /> class.
             </summary>
         </member>
         <member name="M:ExcelDataReader.Exceptions.HeaderException.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.HeaderException"/> class.
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.HeaderException" /> class.
             </summary>
             <param name="message">The error message</param>
         </member>
         <member name="M:ExcelDataReader.Exceptions.HeaderException.#ctor(System.String,System.Exception)">
             <summary>
-            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.HeaderException"/> class.
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.HeaderException" /> class.
             </summary>
             <param name="message">The error message</param>
             <param name="inner">The inner exception</param>
         </member>
         <member name="M:ExcelDataReader.Exceptions.HeaderException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
             <summary>
-            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.HeaderException"/> class.
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.HeaderException" /> class.
             </summary>
             <param name="info">The serialization info</param>
             <param name="context">The streaming context</param>
@@ -1448,18 +1448,18 @@
         </member>
         <member name="M:ExcelDataReader.Exceptions.InvalidPasswordException.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.InvalidPasswordException"/> class.
+            Initializes a new instance of the <see cref="T:ExcelDataReader.Exceptions.InvalidPasswordException" /> class.
             </summary>
             <param name="message">The error message</param>
         </member>
         <member name="T:ExcelDataReader.HeaderFooter">
             <summary>
-            Header and footer text. 
+            Header and footer text.
             </summary>
         </member>
         <member name="P:ExcelDataReader.HeaderFooter.HasDifferentFirst">
             <summary>
-            Gets a value indicating whether the header and footer are different on the first page. 
+            Gets a value indicating whether the header and footer are different on the first page.
             </summary>
         </member>
         <member name="P:ExcelDataReader.HeaderFooter.HasDifferentOddEven">
@@ -1469,32 +1469,32 @@
         </member>
         <member name="P:ExcelDataReader.HeaderFooter.FirstHeader">
             <summary>
-            Gets the header used for the first page if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentFirst"/> is <see langword="true"/>.
+            Gets the header used for the first page if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentFirst" /> is <see langword="true" />.
             </summary>
         </member>
         <member name="P:ExcelDataReader.HeaderFooter.FirstFooter">
             <summary>
-            Gets the footer used for the first page if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentFirst"/> is <see langword="true"/>.
+            Gets the footer used for the first page if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentFirst" /> is <see langword="true" />.
             </summary>
         </member>
         <member name="P:ExcelDataReader.HeaderFooter.OddHeader">
             <summary>
-            Gets the header used for odd pages -or- all pages if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentOddEven"/> is <see langword="false"/>. 
+            Gets the header used for odd pages -or- all pages if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentOddEven" /> is <see langword="false" />.
             </summary>
         </member>
         <member name="P:ExcelDataReader.HeaderFooter.OddFooter">
             <summary>
-            Gets the footer used for odd pages -or- all pages if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentOddEven"/> is <see langword="false"/>. 
+            Gets the footer used for odd pages -or- all pages if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentOddEven" /> is <see langword="false" />.
             </summary>
         </member>
         <member name="P:ExcelDataReader.HeaderFooter.EvenHeader">
             <summary>
-            Gets the header used for even pages if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentOddEven"/> is <see langword="true"/>. 
+            Gets the header used for even pages if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentOddEven" /> is <see langword="true" />.
             </summary>
         </member>
         <member name="P:ExcelDataReader.HeaderFooter.EvenFooter">
             <summary>
-            Gets the footer used for even pages if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentOddEven"/> is <see langword="true"/>. 
+            Gets the footer used for even pages if <see cref="P:ExcelDataReader.HeaderFooter.HasDifferentOddEven" /> is <see langword="true" />.
             </summary>
         </member>
         <member name="T:ExcelDataReader.IExcelDataReader">
@@ -1519,7 +1519,7 @@
         </member>
         <member name="P:ExcelDataReader.IExcelDataReader.HeaderFooter">
             <summary>
-            Gets the sheet header and footer -or- <see langword="null"/> if none set.
+            Gets the sheet header and footer -or- <see langword="null" /> if none set.
             </summary>
         </member>
         <member name="P:ExcelDataReader.IExcelDataReader.MergeCells">
@@ -1549,7 +1549,7 @@
         </member>
         <member name="M:ExcelDataReader.IExcelDataReader.GetNumberFormatString(System.Int32)">
             <summary>
-            Gets the number format for the specified field -or- <see langword="null"/> if there is no value.
+            Gets the number format for the specified field -or- <see langword="null" /> if there is no value.
             </summary>
             <param name="i">The index of the field to find.</param>
             <returns>The number format string of the specified field.</returns>

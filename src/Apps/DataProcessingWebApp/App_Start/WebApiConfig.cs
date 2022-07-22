@@ -2,7 +2,6 @@
 
 namespace DataProcessingWebApp
 {
-
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
@@ -19,5 +18,4 @@ namespace DataProcessingWebApp
             //);
         }
     }
-
 }

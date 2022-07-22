@@ -1,27 +1,25 @@
-﻿using Org.BouncyCastle.Bcpg;
+﻿using System;
+using System.IO;
+using System.Linq;
+using Org.BouncyCastle.Bcpg;
 using Org.BouncyCastle.Bcpg.OpenPgp;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.Utilities.IO;
-using System;
-using System.IO;
-using System.Linq;
 
 /*
- * 
- * 
- * PGPEncryptDecrypt.EncryptFile(inputFileName, 
+ *
+ *
+ * PGPEncryptDecrypt.EncryptFile(inputFileName,
                outputFileName,
                recipientKeyFileName,
                shouldArmor,
                shouldCheckIntegrity);
 Decrypt a file:
 
-
-
  * */
+
 namespace CoreUtils.Classes
 {
-
     // BouncyCastle Code copied from https://stackoverflow.com/questions/10209291/pgp-encrypt-and-decrypt
 
     public static class PGPEncryptDecrypt
@@ -133,6 +131,48 @@ namespace CoreUtils.Classes
             }
         }
 
+        private static Stream ChainCompressedOut(Stream encryptedOut)
+        {
+            var compressedDataGenerator = new PgpCompressedDataGenerator(CompressionAlgorithmTag.Zip);
+            return compressedDataGenerator.Open(encryptedOut);
+        }
+
+        private static Stream ChainEncryptedOut(Stream outputStream, PgpEncryptionKeys m_encryptionKeys)
+        {
+            PgpEncryptedDataGenerator encryptedDataGenerator;
+            encryptedDataGenerator =
+                new PgpEncryptedDataGenerator(SymmetricKeyAlgorithmTag.TripleDes, new SecureRandom());
+            encryptedDataGenerator.AddMethod(m_encryptionKeys.PublicKey);
+            return encryptedDataGenerator.Open(outputStream, new byte[PGPEncryptDecrypt.BufferSize]);
+        }
+
+        private static Stream ChainLiteralOut(Stream compressedOut, FileInfo file)
+        {
+            var pgpLiteralDataGenerator = new PgpLiteralDataGenerator();
+            return pgpLiteralDataGenerator.Open(compressedOut, PgpLiteralData.Binary, file);
+        }
+
+        private static PgpSignatureGenerator InitSignatureGenerator(Stream compressedOut,
+            PgpEncryptionKeys m_encryptionKeys)
+        {
+            const bool IsCritical = false;
+            const bool IsNested = false;
+            var tag = m_encryptionKeys.SecretKey.PublicKey.Algorithm;
+            var pgpSignatureGenerator = new PgpSignatureGenerator(tag, HashAlgorithmTag.Sha1);
+            pgpSignatureGenerator.InitSign(PgpSignature.BinaryDocument, m_encryptionKeys.PrivateKey);
+            foreach (string userId in m_encryptionKeys.SecretKey.PublicKey.GetUserIds())
+            {
+                var subPacketGenerator = new PgpSignatureSubpacketGenerator();
+                subPacketGenerator.SetSignerUserId(IsCritical, userId);
+                pgpSignatureGenerator.SetHashedSubpackets(subPacketGenerator.Generate());
+                // Just the first one!
+                break;
+            }
+
+            pgpSignatureGenerator.GenerateOnePassVersion(IsNested).Encode(compressedOut);
+            return pgpSignatureGenerator;
+        }
+
         private static void OutputEncrypted(string inputFile, Stream outputStream, PgpEncryptionKeys encryptionKeys)
         {
             using (var encryptedOut = ChainEncryptedOut(outputStream, encryptionKeys))
@@ -165,48 +205,6 @@ namespace CoreUtils.Classes
             }
 
             signatureGenerator.Generate().Encode(compressedOut);
-        }
-
-        private static Stream ChainEncryptedOut(Stream outputStream, PgpEncryptionKeys m_encryptionKeys)
-        {
-            PgpEncryptedDataGenerator encryptedDataGenerator;
-            encryptedDataGenerator =
-                new PgpEncryptedDataGenerator(SymmetricKeyAlgorithmTag.TripleDes, new SecureRandom());
-            encryptedDataGenerator.AddMethod(m_encryptionKeys.PublicKey);
-            return encryptedDataGenerator.Open(outputStream, new byte[PGPEncryptDecrypt.BufferSize]);
-        }
-
-        private static Stream ChainCompressedOut(Stream encryptedOut)
-        {
-            var compressedDataGenerator = new PgpCompressedDataGenerator(CompressionAlgorithmTag.Zip);
-            return compressedDataGenerator.Open(encryptedOut);
-        }
-
-        private static Stream ChainLiteralOut(Stream compressedOut, FileInfo file)
-        {
-            var pgpLiteralDataGenerator = new PgpLiteralDataGenerator();
-            return pgpLiteralDataGenerator.Open(compressedOut, PgpLiteralData.Binary, file);
-        }
-
-        private static PgpSignatureGenerator InitSignatureGenerator(Stream compressedOut,
-            PgpEncryptionKeys m_encryptionKeys)
-        {
-            const bool IsCritical = false;
-            const bool IsNested = false;
-            var tag = m_encryptionKeys.SecretKey.PublicKey.Algorithm;
-            var pgpSignatureGenerator = new PgpSignatureGenerator(tag, HashAlgorithmTag.Sha1);
-            pgpSignatureGenerator.InitSign(PgpSignature.BinaryDocument, m_encryptionKeys.PrivateKey);
-            foreach (string userId in m_encryptionKeys.SecretKey.PublicKey.GetUserIds())
-            {
-                var subPacketGenerator = new PgpSignatureSubpacketGenerator();
-                subPacketGenerator.SetSignerUserId(IsCritical, userId);
-                pgpSignatureGenerator.SetHashedSubpackets(subPacketGenerator.Generate());
-                // Just the first one!
-                break;
-            }
-
-            pgpSignatureGenerator.GenerateOnePassVersion(IsNested).Encode(compressedOut);
-            return pgpSignatureGenerator;
         }
 
         #endregion Encrypt and Sign
@@ -382,6 +380,18 @@ namespace CoreUtils.Classes
         * A simple routine that opens a key ring file and loads the first available key suitable for encryption.
         */
 
+        private static PgpPrivateKey FindSecretKey(PgpSecretKeyRingBundle pgpSec, long keyId, char[] pass)
+        {
+            var pgpSecKey = pgpSec.GetSecretKey(keyId);
+
+            if (pgpSecKey == null)
+            {
+                return null;
+            }
+
+            return pgpSecKey.ExtractPrivateKey(pass);
+        }
+
         private static PgpPublicKey ReadPublicKey(Stream inputStream)
         {
             inputStream = PgpUtilities.GetDecoderStream(inputStream);
@@ -407,21 +417,8 @@ namespace CoreUtils.Classes
         * Search a secret key ring collection for a secret key corresponding to keyId if it exists.
         */
 
-        private static PgpPrivateKey FindSecretKey(PgpSecretKeyRingBundle pgpSec, long keyId, char[] pass)
-        {
-            var pgpSecKey = pgpSec.GetSecretKey(keyId);
-
-            if (pgpSecKey == null)
-            {
-                return null;
-            }
-
-            return pgpSecKey.ExtractPrivateKey(pass);
-        }
-
         #endregion Private helpers
     }
-
 
     public class PgpEncryptionKeys
     {
@@ -456,10 +453,8 @@ namespace CoreUtils.Classes
             this.PrivateKey = this.ReadPrivateKey(passPhrase);
         }
 
-        public PgpPublicKey PublicKey { get; }
-
         public PgpPrivateKey PrivateKey { get; }
-
+        public PgpPublicKey PublicKey { get; }
         public PgpSecretKey SecretKey { get; }
 
         #region Private Key
@@ -478,24 +473,6 @@ namespace CoreUtils.Classes
         #endregion Private Key
 
         #region Secret Key
-
-        private PgpSecretKey ReadSecretKey(string privateKeyPath)
-        {
-            using (Stream keyIn = File.OpenRead(privateKeyPath))
-            {
-                using (var inputStream = PgpUtilities.GetDecoderStream(keyIn))
-                {
-                    var secretKeyRingBundle = new PgpSecretKeyRingBundle(inputStream);
-                    var foundKey = this.GetFirstSecretKey(secretKeyRingBundle);
-                    if (foundKey != null)
-                    {
-                        return foundKey;
-                    }
-                }
-            }
-
-            throw new ArgumentException("Can't find signing key in key ring.");
-        }
 
         /// <summary>
         ///     Return the first key we can use to encrypt.
@@ -518,9 +495,44 @@ namespace CoreUtils.Classes
             return null;
         }
 
+        private PgpSecretKey ReadSecretKey(string privateKeyPath)
+        {
+            using (Stream keyIn = File.OpenRead(privateKeyPath))
+            {
+                using (var inputStream = PgpUtilities.GetDecoderStream(keyIn))
+                {
+                    var secretKeyRingBundle = new PgpSecretKeyRingBundle(inputStream);
+                    var foundKey = this.GetFirstSecretKey(secretKeyRingBundle);
+                    if (foundKey != null)
+                    {
+                        return foundKey;
+                    }
+                }
+            }
+
+            throw new ArgumentException("Can't find signing key in key ring.");
+        }
+
         #endregion Secret Key
 
         #region Public Key
+
+        private PgpPublicKey GetFirstPublicKey(PgpPublicKeyRingBundle publicKeyRingBundle)
+        {
+            foreach (PgpPublicKeyRing kRing in publicKeyRingBundle.GetKeyRings())
+            {
+                var key = kRing.GetPublicKeys()
+                    .Cast<PgpPublicKey>()
+                    .Where(k => k.IsEncryptionKey)
+                    .FirstOrDefault();
+                if (key != null)
+                {
+                    return key;
+                }
+            }
+
+            return null;
+        }
 
         private PgpPublicKey ReadPublicKey(string publicKeyPath)
         {
@@ -540,24 +552,6 @@ namespace CoreUtils.Classes
             throw new ArgumentException("No encryption key found in public key ring.");
         }
 
-        private PgpPublicKey GetFirstPublicKey(PgpPublicKeyRingBundle publicKeyRingBundle)
-        {
-            foreach (PgpPublicKeyRing kRing in publicKeyRingBundle.GetKeyRings())
-            {
-                var key = kRing.GetPublicKeys()
-                    .Cast<PgpPublicKey>()
-                    .Where(k => k.IsEncryptionKey)
-                    .FirstOrDefault();
-                if (key != null)
-                {
-                    return key;
-                }
-            }
-
-            return null;
-        }
-
         #endregion Public Key
     }
-
 }

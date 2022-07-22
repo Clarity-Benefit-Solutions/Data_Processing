@@ -1,24 +1,649 @@
-﻿using CoreUtils;
-using CoreUtils.Classes;
-using DataProcessing.DataModels.DataProcessing;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using CoreUtils;
+using CoreUtils.Classes;
+using DataProcessing.DataModels.DataProcessing;
 
 // ReSharper disable All
 
 // ReSharper disable once CheckNamespace
 namespace DataProcessing
 {
-
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public partial class FileChecker : IDisposable
     {
         #region CheckAlegeusFile
+
+        public Boolean CheckAlegeusDependentExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
+            EdiRowFormat rowFormat)
+        {
+            // dependent plans are linked to the employee
+            return CheckAlegeusEmployeeExists(mbiRow, column, rowFormat);
+        }
+
+        public Boolean CheckAlegeusDependentPlanExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
+            EdiRowFormat rowFormat)
+        {
+            // dependent plans are linked to the employee
+            return CheckAlegeusEmployeePlanExists(mbiRow, column, rowFormat);
+        }
+
+        public Boolean CheckAlegeusEmployeeExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
+            EdiRowFormat rowFormat = EdiRowFormat.Unknown)
+        {
+            var errorMessage = "";
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-{mbiRow.EmployeeID}";
+            if (_cache.ContainsKey(cacheKey))
+            {
+                errorMessage = _cache.Get(cacheKey)?.ToString();
+            }
+            else
+            {
+                // check DB
+                if (Utils.IsBlank(mbiRow.EmployerId))
+                {
+                    AddAlegeusErrorForRow(mbiRow, "EmployerId", $"The Employer ID cannot be blank");
+                }
+                else if (Utils.IsBlank(mbiRow.EmployeeID))
+                {
+                    AddAlegeusErrorForRow(mbiRow, "EmployeeId", $"The Employee ID cannot be blank");
+                }
+                else
+                {
+                    DataTable dbResults = GetAllAlegeusEmployeesForEmployer(mbiRow.EmployerId);
+                    DataRow[] dbRows =
+                        dbResults.Select(
+                            $"employerid = '{mbiRow.EmployerId}' and employeeid = '{mbiRow.EmployeeID}'");
+                    if (dbRows.Length == 0)
+                    {
+                        // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
+                        if (rowFormat == EdiRowFormat.AlegeusDemographics)
+                        {
+                            // as it is an demographics file, add this employee to the ER-EE table so a check for plan enrollemnt within same run or before reaggregation from Alegeus will suceed
+                            DataRow newRow = dbResults.NewRow();
+                            newRow["employerid"] = mbiRow.EmployerId;
+                            newRow["employeeid"] = mbiRow.EmployeeID;
+                            newRow["is_active"] = mbiRow.EmployeeStatus == "2" ? 1 : 0;
+                            dbResults.Rows.Add(newRow);
+
+                            var cacheKey2 =
+                                $"GetAllEmployeesForEmployer-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-AllEmployees";
+                            _cache.Add(cacheKey2, dbResults);
+
+                            //
+                            return false;
+                        }
+                        else
+                        {
+                            errorMessage +=
+                                $"The Employee ID '{mbiRow.EmployeeID}' could not be found for Employer Id '{mbiRow.EmployerId}'";
+                        }
+                    }
+                    else
+                    {
+                        DataRow dbRow = dbRows[0];
+                        // if employee exists as per our data, that is fine
+                        // do not check the file EmployeeStatus against what we havwe in the db
+                        //float status = Utils.ToNumber(dbRow["is_active"]?.ToString());
+                        //if (status <= 0 && Utils.ToNumber(mbiRow.EmployeeStatus) > 1)
+                        //{
+                        //  errorMessage +=
+                        //    $"The Employee ID {mbiRow.EmployeeID} has status {status} which is not valid";
+                        //}
+                    }
+                }
+
+                //
+                _cache.Add(cacheKey, errorMessage);
+            }
+
+            //
+            if (!Utils.IsBlank(errorMessage))
+            {
+                this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn, $"{errorMessage}");
+                // do not check any more
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public Boolean CheckAlegeusEmployeePlanExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
+            EdiRowFormat rowFormat)
+        {
+            var errorMessage = "";
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-{mbiRow.EmployeeID}-{mbiRow.AccountTypeCode}-{mbiRow.PlanId}-{mbiRow.PlanStartDate}-{mbiRow.PlanEndDate}-{mbiRow.EffectiveDate}";
+            if (_cache.ContainsKey(cacheKey))
+            {
+                errorMessage = _cache.Get(cacheKey)?.ToString();
+            }
+            else
+            {
+                // check DB
+                if (Utils.IsBlank(mbiRow.EmployerId))
+                {
+                    errorMessage += $"The Employer ID cannot be blank";
+                    ;
+                }
+                else if (Utils.IsBlank(mbiRow.EmployeeID))
+                {
+                    errorMessage += $"The Employer ID cannot be blank";
+                    ;
+                }
+                else if (Utils.IsBlank(mbiRow.AccountTypeCode))
+                {
+                    errorMessage += $"The AccountTypeCode cannot be blank";
+                    ;
+                }
+                else
+                {
+                    //// if we are enrolling an employee in a plan, only check if ER has this EE
+                    //if (rowFormat == EdiFileFormat.AlegeusEnrollment)
+                    //{
+                    //  //as it is an enrollment file, check the EE exists and enroll in the plan
+                    //  var hasError = this.CheckEmployeeExists(mbiRow, column, rowFormat);
+                    //  //return hasError;
+                    //}
+
+                    DataTable dbResults = GetAllAlegeusEmployeePlansForEmployer(mbiRow.EmployerId);
+
+                    // planid is not always present e.g. in deposit file
+                    string filter = $" employeeid = '{mbiRow.EmployeeID}' ";
+                    if (!Utils.IsBlank(mbiRow.AccountTypeCode))
+                    {
+                        filter += $" and plancode = '{mbiRow.AccountTypeCode}' ";
+                    }
+
+                    if (!Utils.IsBlank(mbiRow.PlanId))
+                    {
+                        filter += $" and plandesc = '{mbiRow.PlanId}' ";
+                    }
+
+                    DataRow[] dbRows = dbResults.Select(filter);
+
+                    if (dbRows.Length == 0)
+                    {
+                        if (rowFormat == EdiRowFormat.AlegeusEnrollment)
+                        {
+                            // as it is an enrollment, enroll the EE in this plan demographics file,
+                            DataRow newRow = dbResults.NewRow();
+                            newRow["employerid"] = mbiRow.EmployerId;
+                            newRow["employeeid"] = mbiRow.EmployeeID;
+                            newRow["plancode"] = mbiRow.AccountTypeCode;
+                            newRow["plandesc"] = mbiRow.PlanId;
+                            newRow["planstart"] = Utils.ToDateTime(mbiRow.PlanStartDate);
+                            newRow["planend"] = Utils.ToDateTime(mbiRow.PlanEndDate);
+
+                            dbResults.Rows.Add(newRow);
+
+                            var cacheKey2 =
+                                $"GetAllEmployeePlansForEmployer-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-AllEmployeePlans";
+                            //
+                            _cache.Add(cacheKey2, dbResults);
+
+                            //
+                            return false;
+                        }
+
+                        errorMessage +=
+                            $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                            (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                            $" could not be found for Employee Id '{mbiRow.EmployeeID}'";
+                        ;
+                    }
+                    else
+                    {
+                        // 2022-07-05 - we need an exact match for start and end dates - loop all plans
+                        List<DataRow> matchedRows = new List<DataRow>();
+                        //
+                        foreach (var dbRow in dbRows)
+                        {
+                            DateTime dbRowPlanStartDate = (DateTime)dbRow["planstart"];
+                            DateTime dbRowPlanEndDate = (DateTime)dbRow["planend"];
+                            //DateTime? actualGracePeriodEndDate = Utils.ToDate(dbRow["actualGracePeriodEndDate"]?.ToString());
+
+                            // exact start and end dates match
+                            if (dbRowPlanStartDate == Utils.ToDate(mbiRow.PlanStartDate) &&
+                                dbRowPlanEndDate == Utils.ToDate(mbiRow.PlanEndDate))
+                            {
+                                matchedRows.Add(dbRow);
+                            }
+                        }
+
+                        // if no exact match for start and end dates, throw error
+                        if (matchedRows.Count == 0)
+                        {
+                            errorMessage +=
+                                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                                     $" and Plan Start date '{mbiRow.PlanStartDate}'" +
+                                                     $" and Plan End date '{mbiRow.PlanEndDate}'" +
+                                                    $" could not be found for Employee Id '{mbiRow.EmployeeID}'";
+                        }
+                        else
+                        {
+                            // take first matched rows - should be only usually
+                            var dbRow = matchedRows.First();
+                            //
+                            DateTime dbRowPlanStartDate = (DateTime)dbRow["planstart"];
+                            DateTime dbRowPlanEndDate = (DateTime)dbRow["planend"];
+
+                            //check end date is after startdate
+                            if (!Utils.IsBlank(mbiRow.PlanStartDate) && !Utils.IsBlank(mbiRow.PlanEndDate) &&
+                                Utils.ToDate(mbiRow.PlanStartDate) > Utils.ToDate(mbiRow.PlanEndDate))
+                            {
+                                errorMessage +=
+                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                    $" Start Date '{mbiRow.PlanStartDate}' must be before the Plan End Date '{mbiRow.PlanEndDate}' for Employee Id '{mbiRow.EmployeeID}'";
+                            }
+
+                            //check effectivedate is within plan dates
+                            if (!Utils.IsBlank(mbiRow.EffectiveDate) &&
+                                dbRowPlanStartDate > Utils.ToDate(mbiRow.EffectiveDate))
+                            {
+                                errorMessage +=
+                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                    $" starts only on '{Utils.ToDateString(dbRowPlanStartDate)}' and is not yet started on '{mbiRow.EffectiveDate}' for Employee Id '{mbiRow.EmployeeID}' ";
+                            }
+
+                            if (!Utils.IsBlank(mbiRow.EffectiveDate) &&
+                                dbRowPlanEndDate < Utils.ToDate(mbiRow.EffectiveDate))
+                            {
+                                errorMessage =
+                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                    $" ended on '{Utils.ToDateString(dbRowPlanEndDate)}' and is no longer active on '{mbiRow.EffectiveDate}' for Employee Id '{mbiRow.EmployeeID}'";
+                                ;
+                            }
+                        } // matchedRows count
+                    } // filter matches
+                }  // key field checks
+
+                //
+                _cache.Add(cacheKey, errorMessage);
+            } // check key exists
+
+            //
+            if (!Utils.IsBlank(errorMessage))
+            {
+                this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn, $"{errorMessage}");
+                // do not check any more
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public Boolean CheckAlegeusEmployerExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
+            EdiRowFormat rowFormat)
+        {
+            var errorMessage = "";
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}";
+            if (_cache.ContainsKey(cacheKey))
+            {
+                errorMessage = _cache.Get(cacheKey)?.ToString();
+            }
+            else
+            {
+                // check DB
+                if (Utils.IsBlank(mbiRow.EmployerId))
+                {
+                    errorMessage = $"The Employer ID cannot be blank";
+                }
+                else
+                {
+                    DataTable dbResults = GetAllAlegeusEmployers();
+                    // planid is not always present e.g. in deposit file
+                    string filter = $"employer_id = '{mbiRow.EmployerId}'";
+                    DataRow[] dbRows = dbResults.Select(filter);
+
+                    if (dbRows.Length == 0)
+                    {
+                        errorMessage = $"The Employer ID '{mbiRow.EmployerId}' could not be found";
+                    }
+                    else
+                    {
+                        //DataRow dbRow = dbRows[0];
+
+                        //note: FileChecker: verify if employer status need to be checked
+                        //string status = dbRow["employer_status"]?.ToString();
+                        //if (status != "Active" && status != "New")
+                        //{
+                        //  errorMessage =
+                        //    $"The Employer ID {mbiRow.EmployerId} has status {status} which is not valid";
+                        //}
+                    }
+                }
+
+                //
+                _cache.Add(cacheKey, errorMessage);
+            }
+
+            //
+            if (!Utils.IsBlank(errorMessage))
+            {
+                this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn, $"{errorMessage}");
+                // do not check any more
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public Boolean CheckAlegeusEmployerPlanExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
+            EdiRowFormat rowFormat)
+        {
+            var errorMessage = "";
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-{mbiRow.AccountTypeCode}-{mbiRow.PlanId}-{mbiRow.PlanStartDate}-{mbiRow.PlanEndDate}-{mbiRow.EffectiveDate}";
+            if (_cache.ContainsKey(cacheKey))
+            {
+                errorMessage = _cache.Get(cacheKey)?.ToString();
+            }
+            else
+            {
+                // check DB
+                if (Utils.IsBlank(mbiRow.EmployerId))
+                {
+                    errorMessage += $"The Employer ID cannot be blank";
+                    ;
+                }
+                else if (Utils.IsBlank(mbiRow.AccountTypeCode))
+                {
+                    errorMessage += $"The AccountTypeCode cannot be blank";
+                    ;
+                }
+                else
+                {
+                    //todo: check this logic
+                    DataTable dbResults = GetAllAlegeusPlansForEmployer(mbiRow.EmployerId);
+
+                    // planid is not always present e.g. in deposit file
+                    string filter = $"employer_id = '{mbiRow.EmployerId}'";
+                    if (!Utils.IsBlank(mbiRow.AccountTypeCode))
+                    {
+                        filter += $" and account_type_code = '{mbiRow.AccountTypeCode}' ";
+                    }
+
+                    if (!Utils.IsBlank(mbiRow.PlanId))
+                    {
+                        filter += $" and plan_id = '{mbiRow.PlanId}' ";
+                    }
+
+                    DataRow[] dbRows = dbResults.Select(filter);
+
+                    if (dbRows.Length == 0)
+                    {
+                        errorMessage +=
+                            $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                            (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                            $" could not be found for Employer Id '{mbiRow.EmployerId}' ";
+                        ;
+                    }
+                    else
+                    {
+                        // 2022-07-05 - we need an exact match for start and end dates - loop all plans
+                        List<DataRow> matchedRows = new List<DataRow>();
+                        //
+                        foreach (var dbRow in dbRows)
+                        {
+                            DateTime dbRowPlanStartDate = (DateTime)dbRow["planstart"];
+                            DateTime dbRowPlanEndDate = (DateTime)dbRow["planend"];
+
+                            // exact start and end dates match
+                            if (dbRowPlanStartDate == Utils.ToDate(mbiRow.PlanStartDate) &&
+                                dbRowPlanEndDate == Utils.ToDate(mbiRow.PlanEndDate))
+                            {
+                                matchedRows.Add(dbRow);
+                            }
+                        }
+
+                        // if no exact match for start and end dates, throw error
+                        if (matchedRows.Count == 0)
+                        {
+                            errorMessage +=
+                                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                                     $" and Plan Start date '{mbiRow.PlanStartDate}'" +
+                                                     $" and Plan End date '{mbiRow.PlanEndDate}'" +
+                                                    $" could not be found for Employer Id '{mbiRow.EmployerId}'";
+                        }
+                        else
+                        {
+                            // take first matched rows - should be only usually
+                            var dbRow = matchedRows.First();
+                            //
+                            DateTime dbRowPlanStartDate = (DateTime)dbRow["planstart"];
+                            DateTime dbRowPlanEndDate = (DateTime)dbRow["planend"];
+
+                            //check if end date is after startdate
+                            if (!Utils.IsBlank(mbiRow.PlanStartDate) && !Utils.IsBlank(mbiRow.PlanEndDate) &&
+                                Utils.ToDate(mbiRow.PlanStartDate) > Utils.ToDate(mbiRow.PlanEndDate))
+                            {
+                                errorMessage +=
+                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                    $" Start Date '{mbiRow.PlanStartDate}' must be before the Plan End Date '{mbiRow.PlanEndDate}' for Employer Id '{mbiRow.EmployerId}'";
+                            }
+
+                            //check effectivedate is within plan dates
+                            if (!Utils.IsBlank(mbiRow.EffectiveDate))
+                            {
+                                if (dbRowPlanStartDate > Utils.ToDate(mbiRow.EffectiveDate))
+                                {
+                                    errorMessage +=
+                                        $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                        (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                        $" starts only on '{Utils.ToDateString(dbRowPlanStartDate)}' and is not yet started on '{mbiRow.EffectiveDate}'";
+                                }
+                            }
+
+                            if (!Utils.IsBlank(mbiRow.EffectiveDate))
+                            {
+                                if (dbRowPlanEndDate < Utils.ToDate(mbiRow.EffectiveDate))
+                                {
+                                    errorMessage =
+                                        $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
+                                        (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
+                                        $" ended on '{Utils.ToDateString(dbRowPlanEndDate)}' and is no longer active on '{mbiRow.EffectiveDate}' ";
+                                    ;
+                                }
+                            }
+                        } // matchedRows count
+                    } // filter matches
+                }  // key field checks
+
+                //
+                _cache.Add(cacheKey, errorMessage);
+            } // cache key exists
+
+            //
+            if (!Utils.IsBlank(errorMessage))
+            {
+                this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn, $"{errorMessage}");
+                // do not check any more
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public Boolean CheckAlegeusTpaExists(mbi_file_table_stage mbiRow, TypedCsvColumn column, EdiRowFormat rowFormat)
+        {
+            var errorMessage = "";
+            var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{mbiRow.TpaId}";
+            if (_cache.ContainsKey(cacheKey))
+            {
+                errorMessage = _cache.Get(cacheKey)?.ToString();
+            }
+            else
+            {
+                if (PlatformType == PlatformType.Alegeus)
+                {
+                    // check DB
+                    if (Utils.IsBlank(column.FixedValue))
+                    {
+                        if (Utils.IsBlank(mbiRow.TpaId))
+                        {
+                            errorMessage = "TPA ID cannot be blank. It must always be BENEFL";
+                        }
+                        else if (mbiRow.TpaId != "BENEFL")
+                        {
+                            errorMessage = $"TPA ID '{mbiRow.TpaId}' is invalid. It must always be BENEFL";
+                        }
+                    }
+                }
+                else
+                {
+                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
+                }
+
+                //
+                _cache.Add(cacheKey, errorMessage);
+            }
+
+            //
+            if (!Utils.IsBlank(errorMessage))
+            {
+                this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn, $"{errorMessage}");
+                // do not check any more
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public Boolean CheckForDuplicateAlegeusPosting(mbi_file_table_stage mbiRow,
+                  EdiRowFormat rowFormat = EdiRowFormat.Unknown)
+        {
+            string errorMessage = "";
+
+            //
+            switch (rowFormat)
+            {
+                case EdiRowFormat.AlegeusEmployeeDeposit:
+                    string queryString =
+                        $"select * from  [mbi_file_table] " +
+                        $" where " +
+                        /* if already checked and posted - as we import it in mbi_file_table during create headers*/
+                        $" check_type='PreCheck'" +
+                        $" and TpaId='{mbiRow.TpaId}'" +
+                        $" and EmployerId='{mbiRow.EmployerId}'" +
+                        $" and EmployeeID='{mbiRow.EmployeeID}'" +
+                        $" and AccountTypeCode='{mbiRow.AccountTypeCode}'" +
+                        $" and PlanEndDate='{mbiRow.PlanEndDate}'" +
+                        $" and PlanStartDate='{mbiRow.PlanStartDate}'" +
+                        $" and EffectiveDate='{mbiRow.EffectiveDate}'" +
+                        $" and DepositType='{mbiRow.DepositType}'" +
+                        // todo: flag only if
+                        // check amounts also - deposit type ER / EE
+                        // EmployeeDepositAmount ?? ??
+                        // EmployerDepositAmount ?? ??
+                        //$" and DepositType='{mbiRow.DepositType}'" +
+                        $" and len(isnull(error_message, '')) = 0" +
+                        $" order by row_id desc, mbi_file_name, source_row_no ;";
+                    //
+                    DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, DbConn,
+                         queryString, null,
+                         FileLogParams?.GetMessageLogParams());
+                    //
+                    if (dbResults.Rows.Count == 0)
+                    {
+                        return false;
+                    }
+
+                    DataRow prvRow = dbResults.Rows[0];
+                    //
+                    errorMessage = $"Potential Duplicate Posting! Was probably posted earlier on '{Utils.ToIsoDateString(prvRow["CreatedAt"])}' as part of file  '{prvRow["mbi_file_name"]}'";
+                    break;
+
+                default:
+                    break;
+            }
+
+            //
+            if (!Utils.IsBlank(errorMessage))
+            {
+                this.AddAlegeusErrorForRow(mbiRow, "DuplicatePosting", $"{errorMessage}");
+                // do not check any more
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void AddAlegeusErrorForRow(mbi_file_table_stage mbiRow, string errCode, string errMessage,
+            Boolean markAsCompleteFail = false)
+        {
+            // add to mbiRow so it will be saved back to DB for mbiRow by mbiRow data
+
+            if (Utils.IsBlank(mbiRow.error_code))
+            {
+                mbiRow.error_code = errCode;
+            }
+            else
+            {
+                mbiRow.error_code = ErrorSeparator + errCode;
+            }
+
+            if (Utils.IsBlank(mbiRow.error_message))
+            {
+                mbiRow.error_message = errMessage;
+            }
+            else
+            {
+                mbiRow.error_message = ErrorSeparator + errMessage;
+            }
+
+            if (mbiRow.error_code.StartsWith(ErrorSeparator))
+            {
+                mbiRow.error_code = mbiRow.error_code.Substring(1);
+            }
+
+            if (mbiRow.error_message.StartsWith(ErrorSeparator))
+            {
+                mbiRow.error_message = mbiRow.error_message.Substring(1);
+            }
+
+            //
+            int key = mbiRow.source_row_no ?? 0;
+            if (this.fileCheckResults.ContainsKey(key))
+            {
+                this.fileCheckResults[key] = $"{mbiRow.source_row_no}: {errCode} : {errMessage}";
+            }
+            else
+            {
+                this.fileCheckResults.Add(key, $"{mbiRow.source_row_no}: {errCode} : {errMessage}");
+            }
+
+            //
+            if (markAsCompleteFail)
+            {
+                this.fileCheckResults.MarkAsCompleteFail = true;
+            }
+        }
 
         private void CheckAlegeusFile(Dictionary<EdiRowFormat, List<int>> fileFormats)
         {
@@ -61,7 +686,7 @@ namespace DataProcessing
                             // get temp file for each format
                             var splitFileWriter = (StreamWriter)files[fileFormat2][0];
 
-                            // if there is prvUnwrittenLine it was probably a header line - write to the file that 
+                            // if there is prvUnwrittenLine it was probably a header line - write to the file that
                             splitFileWriter.WriteLine($"{rowNo}{Import.SourceRowNoSeparator}{line}");
                             continue;
                         }
@@ -181,7 +806,6 @@ namespace DataProcessing
                     return;
             }
 
-
             Boolean lineHasError = false;
 
             // first fix all columns
@@ -281,647 +905,15 @@ namespace DataProcessing
             }
         }
 
-        private void AddAlegeusErrorForRow(mbi_file_table_stage mbiRow, string errCode, string errMessage,
-            Boolean markAsCompleteFail = false)
-        {
-            // add to mbiRow so it will be saved back to DB for mbiRow by mbiRow data
-
-            if (Utils.IsBlank(mbiRow.error_code))
-            {
-                mbiRow.error_code = errCode;
-            }
-            else
-            {
-                mbiRow.error_code = ErrorSeparator + errCode;
-            }
-
-            if (Utils.IsBlank(mbiRow.error_message))
-            {
-                mbiRow.error_message = errMessage;
-            }
-            else
-            {
-                mbiRow.error_message = ErrorSeparator + errMessage;
-            }
-
-            if (mbiRow.error_code.StartsWith(ErrorSeparator))
-            {
-                mbiRow.error_code = mbiRow.error_code.Substring(1);
-            }
-
-            if (mbiRow.error_message.StartsWith(ErrorSeparator))
-            {
-                mbiRow.error_message = mbiRow.error_message.Substring(1);
-            }
-
-            //
-            int key = mbiRow.source_row_no ?? 0;
-            if (this.fileCheckResults.ContainsKey(key))
-            {
-                this.fileCheckResults[key] = $"{mbiRow.source_row_no}: {errCode} : {errMessage}";
-            }
-            else
-            {
-                this.fileCheckResults.Add(key, $"{mbiRow.source_row_no}: {errCode} : {errMessage}");
-            }
-
-            //
-            if (markAsCompleteFail)
-            {
-                this.fileCheckResults.MarkAsCompleteFail = true;
-            }
-        }
-
-
-        public Boolean CheckAlegeusTpaExists(mbi_file_table_stage mbiRow, TypedCsvColumn column, EdiRowFormat rowFormat)
-        {
-            var errorMessage = "";
-            var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{mbiRow.TpaId}";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                errorMessage = _cache.Get(cacheKey)?.ToString();
-            }
-            else
-            {
-                if (PlatformType == PlatformType.Alegeus)
-                {
-                    // check DB
-                    if (Utils.IsBlank(column.FixedValue))
-                    {
-                        if (Utils.IsBlank(mbiRow.TpaId))
-                        {
-                            errorMessage = "TPA ID cannot be blank. It must always be BENEFL";
-                        }
-                        else if (mbiRow.TpaId != "BENEFL")
-                        {
-                            errorMessage = $"TPA ID '{mbiRow.TpaId}' is invalid. It must always be BENEFL";
-                        }
-                    }
-                }
-                else
-                {
-                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
-                }
-
-                //
-                _cache.Add(cacheKey, errorMessage);
-            }
-
-            //
-            if (!Utils.IsBlank(errorMessage))
-            {
-                this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn, $"{errorMessage}");
-                // do not check any more
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public Boolean CheckAlegeusEmployerExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
-            EdiRowFormat rowFormat)
-        {
-            var errorMessage = "";
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                errorMessage = _cache.Get(cacheKey)?.ToString();
-            }
-            else
-            {
-                // check DB
-                if (Utils.IsBlank(mbiRow.EmployerId))
-                {
-                    errorMessage = $"The Employer ID cannot be blank";
-                }
-                else
-                {
-                    DataTable dbResults = GetAllAlegeusEmployers();
-                    // planid is not always present e.g. in deposit file
-                    string filter = $"employer_id = '{mbiRow.EmployerId}'";
-                    DataRow[] dbRows = dbResults.Select(filter);
-
-                    if (dbRows.Length == 0)
-                    {
-                        errorMessage = $"The Employer ID '{mbiRow.EmployerId}' could not be found";
-                    }
-                    else
-                    {
-                        //DataRow dbRow = dbRows[0];
-
-                        //note: FileChecker: verify if employer status need to be checked
-                        //string status = dbRow["employer_status"]?.ToString();
-                        //if (status != "Active" && status != "New")
-                        //{
-                        //  errorMessage =
-                        //    $"The Employer ID {mbiRow.EmployerId} has status {status} which is not valid";
-                        //}
-                    }
-                }
-
-                //
-                _cache.Add(cacheKey, errorMessage);
-            }
-
-            //
-            if (!Utils.IsBlank(errorMessage))
-            {
-                this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn, $"{errorMessage}");
-                // do not check any more
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public Boolean CheckAlegeusEmployeeExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
-            EdiRowFormat rowFormat = EdiRowFormat.Unknown)
-        {
-            var errorMessage = "";
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-{mbiRow.EmployeeID}";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                errorMessage = _cache.Get(cacheKey)?.ToString();
-            }
-            else
-            {
-                // check DB
-                if (Utils.IsBlank(mbiRow.EmployerId))
-                {
-                    AddAlegeusErrorForRow(mbiRow, "EmployerId", $"The Employer ID cannot be blank");
-                }
-                else if (Utils.IsBlank(mbiRow.EmployeeID))
-                {
-                    AddAlegeusErrorForRow(mbiRow, "EmployeeId", $"The Employee ID cannot be blank");
-                }
-                else
-                {
-                    DataTable dbResults = GetAllAlegeusEmployeesForEmployer(mbiRow.EmployerId);
-                    DataRow[] dbRows =
-                        dbResults.Select(
-                            $"employerid = '{mbiRow.EmployerId}' and employeeid = '{mbiRow.EmployeeID}'");
-                    if (dbRows.Length == 0)
-                    {
-                        // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
-                        if (rowFormat == EdiRowFormat.AlegeusDemographics)
-                        {
-                            // as it is an demographics file, add this employee to the ER-EE table so a check for plan enrollemnt within same run or before reaggregation from Alegeus will suceed
-                            DataRow newRow = dbResults.NewRow();
-                            newRow["employerid"] = mbiRow.EmployerId;
-                            newRow["employeeid"] = mbiRow.EmployeeID;
-                            newRow["is_active"] = mbiRow.EmployeeStatus == "2" ? 1 : 0;
-                            dbResults.Rows.Add(newRow);
-
-                            var cacheKey2 =
-                                $"GetAllEmployeesForEmployer-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-AllEmployees";
-                            _cache.Add(cacheKey2, dbResults);
-
-                            //
-                            return false;
-                        }
-                        else
-                        {
-                            errorMessage +=
-                                $"The Employee ID '{mbiRow.EmployeeID}' could not be found for Employer Id '{mbiRow.EmployerId}'";
-                        }
-                    }
-                    else
-                    {
-                        DataRow dbRow = dbRows[0];
-                        // if employee exists as per our data, that is fine
-                        // do not check the file EmployeeStatus against what we havwe in the db
-                        //float status = Utils.ToNumber(dbRow["is_active"]?.ToString());
-                        //if (status <= 0 && Utils.ToNumber(mbiRow.EmployeeStatus) > 1)
-                        //{
-                        //  errorMessage +=
-                        //    $"The Employee ID {mbiRow.EmployeeID} has status {status} which is not valid";
-                        //}
-                    }
-                }
-
-                //
-                _cache.Add(cacheKey, errorMessage);
-            }
-
-            //
-            if (!Utils.IsBlank(errorMessage))
-            {
-                this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn, $"{errorMessage}");
-                // do not check any more
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        public Boolean CheckForDuplicateAlegeusPosting(mbi_file_table_stage mbiRow,
-                  EdiRowFormat rowFormat = EdiRowFormat.Unknown)
-        {
-
-
-            string errorMessage = "";
-
-            //
-            switch (rowFormat)
-            {
-                case EdiRowFormat.AlegeusEmployeeDeposit:
-                    string queryString =
-                        $"select * from  [mbi_file_table] " +
-                        $" where " +
-                        /* if already checked and posted - as we import it in mbi_file_table during create headers*/
-                        $" check_type='PreCheck'" +
-                        $" and TpaId='{mbiRow.TpaId}'" +
-                        $" and EmployerId='{mbiRow.EmployerId}'" +
-                        $" and EmployeeID='{mbiRow.EmployeeID}'" +
-                        $" and AccountTypeCode='{mbiRow.AccountTypeCode}'" +
-                        $" and PlanEndDate='{mbiRow.PlanEndDate}'" +
-                        $" and PlanStartDate='{mbiRow.PlanStartDate}'" +
-                        $" and EffectiveDate='{mbiRow.EffectiveDate}'" +
-                        $" and DepositType='{mbiRow.DepositType}'" +
-                        // todo: flag only if 
-                        // check amounts also - deposit type ER / EE
-                        // EmployeeDepositAmount ?? ??
-                        // EmployerDepositAmount ?? ??
-                        //$" and DepositType='{mbiRow.DepositType}'" +
-                        $" and len(isnull(error_message, '')) = 0" +
-                        $" order by row_id desc, mbi_file_name, source_row_no ;";
-                    //
-                    DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, DbConn,
-                         queryString, null,
-                         FileLogParams?.GetMessageLogParams());
-                    //
-                    if (dbResults.Rows.Count == 0)
-                    {
-                        return false;
-                    }
-
-                    DataRow prvRow = dbResults.Rows[0];
-                    //
-                    errorMessage = $"Potential Duplicate Posting! Was probably posted earlier on '{Utils.ToIsoDateString(prvRow["CreatedAt"])}' as part of file  '{prvRow["mbi_file_name"]}'";
-                    break;
-                default:
-                    break;
-            }
-
-            //
-            if (!Utils.IsBlank(errorMessage))
-            {
-                this.AddAlegeusErrorForRow(mbiRow, "DuplicatePosting", $"{errorMessage}");
-                // do not check any more
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public Boolean CheckAlegeusEmployerPlanExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
-            EdiRowFormat rowFormat)
-        {
-            var errorMessage = "";
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-{mbiRow.AccountTypeCode}-{mbiRow.PlanId}-{mbiRow.PlanStartDate}-{mbiRow.PlanEndDate}-{mbiRow.EffectiveDate}";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                errorMessage = _cache.Get(cacheKey)?.ToString();
-            }
-            else
-            {
-                // check DB
-                if (Utils.IsBlank(mbiRow.EmployerId))
-                {
-                    errorMessage += $"The Employer ID cannot be blank";
-                    ;
-                }
-                else if (Utils.IsBlank(mbiRow.AccountTypeCode))
-                {
-                    errorMessage += $"The AccountTypeCode cannot be blank";
-                    ;
-                }
-                else
-                {
-                    //todo: check this logic
-                    DataTable dbResults = GetAllAlegeusPlansForEmployer(mbiRow.EmployerId);
-
-                    // planid is not always present e.g. in deposit file
-                    string filter = $"employer_id = '{mbiRow.EmployerId}'";
-                    if (!Utils.IsBlank(mbiRow.AccountTypeCode))
-                    {
-                        filter += $" and account_type_code = '{mbiRow.AccountTypeCode}' ";
-                    }
-
-                    if (!Utils.IsBlank(mbiRow.PlanId))
-                    {
-                        filter += $" and plan_id = '{mbiRow.PlanId}' ";
-                    }
-
-                    DataRow[] dbRows = dbResults.Select(filter);
-
-                    if (dbRows.Length == 0)
-                    {
-                        errorMessage +=
-                            $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
-                            (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
-                            $" could not be found for Employer Id '{mbiRow.EmployerId}' ";
-                        ;
-                    }
-                    else
-                    {
-                        // 2022-07-05 - we need an exact match for start and end dates - loop all plans
-                        List<DataRow> matchedRows = new List<DataRow>();
-                        //
-                        foreach (var dbRow in dbRows)
-                        {
-
-                            DateTime dbRowPlanStartDate = (DateTime)dbRow["planstart"];
-                            DateTime dbRowPlanEndDate = (DateTime)dbRow["planend"];
-
-                            // exact start and end dates match
-                            if (dbRowPlanStartDate == Utils.ToDate(mbiRow.PlanStartDate) &&
-                                dbRowPlanEndDate == Utils.ToDate(mbiRow.PlanEndDate))
-                            {
-                                matchedRows.Add(dbRow);
-                            }
-                        }
-
-                        // if no exact match for start and end dates, throw error
-                        if (matchedRows.Count == 0)
-                        {
-                            errorMessage +=
-                                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
-                                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
-                                                     $" and Plan Start date '{mbiRow.PlanStartDate}'" +
-                                                     $" and Plan End date '{mbiRow.PlanEndDate}'" +
-                                                    $" could not be found for Employer Id '{mbiRow.EmployerId}'";
-                        }
-                        else
-                        {
-
-                            // take first matched rows - should be only usually
-                            var dbRow = matchedRows.First();
-                            //
-                            DateTime dbRowPlanStartDate = (DateTime)dbRow["planstart"];
-                            DateTime dbRowPlanEndDate = (DateTime)dbRow["planend"];
-
-                            //check if end date is after startdate
-                            if (!Utils.IsBlank(mbiRow.PlanStartDate) && !Utils.IsBlank(mbiRow.PlanEndDate) &&
-                                Utils.ToDate(mbiRow.PlanStartDate) > Utils.ToDate(mbiRow.PlanEndDate))
-                            {
-                                errorMessage +=
-                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
-                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
-                                    $" Start Date '{mbiRow.PlanStartDate}' must be before the Plan End Date '{mbiRow.PlanEndDate}' for Employer Id '{mbiRow.EmployerId}'";
-                            }
-
-
-
-                            //check effectivedate is within plan dates
-                            if (!Utils.IsBlank(mbiRow.EffectiveDate))
-                            {
-                                if (dbRowPlanStartDate > Utils.ToDate(mbiRow.EffectiveDate))
-                                {
-                                    errorMessage +=
-                                        $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
-                                        (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
-                                        $" starts only on '{Utils.ToDateString(dbRowPlanStartDate)}' and is not yet started on '{mbiRow.EffectiveDate}'";
-                                }
-                            }
-
-                            if (!Utils.IsBlank(mbiRow.EffectiveDate))
-                            {
-                                if (dbRowPlanEndDate < Utils.ToDate(mbiRow.EffectiveDate))
-                                {
-                                    errorMessage =
-                                        $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
-                                        (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
-                                        $" ended on '{Utils.ToDateString(dbRowPlanEndDate)}' and is no longer active on '{mbiRow.EffectiveDate}' ";
-                                    ;
-                                }
-                            }
-                        } // matchedRows count
-                    } // filter matches
-                }  // key field checks
-
-                //
-                _cache.Add(cacheKey, errorMessage);
-            } // cache key exists
-
-            //
-            if (!Utils.IsBlank(errorMessage))
-            {
-                this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn, $"{errorMessage}");
-                // do not check any more
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public Boolean CheckAlegeusEmployeePlanExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
-            EdiRowFormat rowFormat)
-        {
-            var errorMessage = "";
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-{mbiRow.EmployeeID}-{mbiRow.AccountTypeCode}-{mbiRow.PlanId}-{mbiRow.PlanStartDate}-{mbiRow.PlanEndDate}-{mbiRow.EffectiveDate}";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                errorMessage = _cache.Get(cacheKey)?.ToString();
-            }
-            else
-            {
-                // check DB
-                if (Utils.IsBlank(mbiRow.EmployerId))
-                {
-                    errorMessage += $"The Employer ID cannot be blank";
-                    ;
-                }
-                else if (Utils.IsBlank(mbiRow.EmployeeID))
-                {
-                    errorMessage += $"The Employer ID cannot be blank";
-                    ;
-                }
-                else if (Utils.IsBlank(mbiRow.AccountTypeCode))
-                {
-                    errorMessage += $"The AccountTypeCode cannot be blank";
-                    ;
-                }
-                else
-                {
-                    //// if we are enrolling an employee in a plan, only check if ER has this EE
-                    //if (rowFormat == EdiFileFormat.AlegeusEnrollment)
-                    //{
-                    //  //as it is an enrollment file, check the EE exists and enroll in the plan
-                    //  var hasError = this.CheckEmployeeExists(mbiRow, column, rowFormat);
-                    //  //return hasError;
-                    //}
-
-                    DataTable dbResults = GetAllAlegeusEmployeePlansForEmployer(mbiRow.EmployerId);
-
-                    // planid is not always present e.g. in deposit file
-                    string filter = $" employeeid = '{mbiRow.EmployeeID}' ";
-                    if (!Utils.IsBlank(mbiRow.AccountTypeCode))
-                    {
-                        filter += $" and plancode = '{mbiRow.AccountTypeCode}' ";
-                    }
-
-                    if (!Utils.IsBlank(mbiRow.PlanId))
-                    {
-                        filter += $" and plandesc = '{mbiRow.PlanId}' ";
-                    }
-
-                    DataRow[] dbRows = dbResults.Select(filter);
-
-                    if (dbRows.Length == 0)
-                    {
-                        if (rowFormat == EdiRowFormat.AlegeusEnrollment)
-                        {
-                            // as it is an enrollment, enroll the EE in this plan demographics file, 
-                            DataRow newRow = dbResults.NewRow();
-                            newRow["employerid"] = mbiRow.EmployerId;
-                            newRow["employeeid"] = mbiRow.EmployeeID;
-                            newRow["plancode"] = mbiRow.AccountTypeCode;
-                            newRow["plandesc"] = mbiRow.PlanId;
-                            newRow["planstart"] = Utils.ToDateTime(mbiRow.PlanStartDate);
-                            newRow["planend"] = Utils.ToDateTime(mbiRow.PlanEndDate);
-
-                            dbResults.Rows.Add(newRow);
-
-                            var cacheKey2 =
-                                $"GetAllEmployeePlansForEmployer-{this.PlatformType.ToDescription()}-{mbiRow.EmployerId}-AllEmployeePlans";
-                            //
-                            _cache.Add(cacheKey2, dbResults);
-
-                            //
-                            return false;
-                        }
-
-                        errorMessage +=
-                            $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
-                            (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
-                            $" could not be found for Employee Id '{mbiRow.EmployeeID}'";
-                        ;
-                    }
-                    else
-                    {
-                        // 2022-07-05 - we need an exact match for start and end dates - loop all plans
-                        List<DataRow> matchedRows = new List<DataRow>();
-                        //
-                        foreach (var dbRow in dbRows)
-                        {
-
-                            DateTime dbRowPlanStartDate = (DateTime)dbRow["planstart"];
-                            DateTime dbRowPlanEndDate = (DateTime)dbRow["planend"];
-                            //DateTime? actualGracePeriodEndDate = Utils.ToDate(dbRow["actualGracePeriodEndDate"]?.ToString());
-
-                            // exact start and end dates match
-                            if (dbRowPlanStartDate == Utils.ToDate(mbiRow.PlanStartDate) &&
-                                dbRowPlanEndDate == Utils.ToDate(mbiRow.PlanEndDate))
-                            {
-                                matchedRows.Add(dbRow);
-                            }
-                        }
-
-                        // if no exact match for start and end dates, throw error
-                        if (matchedRows.Count == 0)
-                        {
-                            errorMessage +=
-                                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
-                                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
-                                                     $" and Plan Start date '{mbiRow.PlanStartDate}'" +
-                                                     $" and Plan End date '{mbiRow.PlanEndDate}'" +
-                                                    $" could not be found for Employee Id '{mbiRow.EmployeeID}'";
-                        }
-                        else
-                        {
-                            // take first matched rows - should be only usually
-                            var dbRow = matchedRows.First();
-                            //
-                            DateTime dbRowPlanStartDate = (DateTime)dbRow["planstart"];
-                            DateTime dbRowPlanEndDate = (DateTime)dbRow["planend"];
-
-                            //check end date is after startdate
-                            if (!Utils.IsBlank(mbiRow.PlanStartDate) && !Utils.IsBlank(mbiRow.PlanEndDate) &&
-                                Utils.ToDate(mbiRow.PlanStartDate) > Utils.ToDate(mbiRow.PlanEndDate))
-                            {
-                                errorMessage +=
-                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
-                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
-                                    $" Start Date '{mbiRow.PlanStartDate}' must be before the Plan End Date '{mbiRow.PlanEndDate}' for Employee Id '{mbiRow.EmployeeID}'";
-                            }
-
-                            //check effectivedate is within plan dates
-                            if (!Utils.IsBlank(mbiRow.EffectiveDate) &&
-                                dbRowPlanStartDate > Utils.ToDate(mbiRow.EffectiveDate))
-                            {
-                                errorMessage +=
-                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
-                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
-                                    $" starts only on '{Utils.ToDateString(dbRowPlanStartDate)}' and is not yet started on '{mbiRow.EffectiveDate}' for Employee Id '{mbiRow.EmployeeID}' ";
-                            }
-
-                            if (!Utils.IsBlank(mbiRow.EffectiveDate) &&
-                                dbRowPlanEndDate < Utils.ToDate(mbiRow.EffectiveDate))
-                            {
-                                errorMessage =
-                                    $"The AccountTypeID '{mbiRow.AccountTypeCode}'" +
-                                    (!Utils.IsBlank(mbiRow.PlanId) ? $" and Plan ID '{mbiRow.PlanId}'" : "") +
-                                    $" ended on '{Utils.ToDateString(dbRowPlanEndDate)}' and is no longer active on '{mbiRow.EffectiveDate}' for Employee Id '{mbiRow.EmployeeID}'";
-                                ;
-                            }
-                        } // matchedRows count
-                    } // filter matches
-                }  // key field checks
-
-                //
-                _cache.Add(cacheKey, errorMessage);
-            } // check key exists
-
-            //
-            if (!Utils.IsBlank(errorMessage))
-            {
-                this.AddAlegeusErrorForRow(mbiRow, column.SourceColumn, $"{errorMessage}");
-                // do not check any more
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public Boolean CheckAlegeusDependentExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
-            EdiRowFormat rowFormat)
-        {
-            // dependent plans are linked to the employee
-            return CheckAlegeusEmployeeExists(mbiRow, column, rowFormat);
-        }
-
-        public Boolean CheckAlegeusDependentPlanExists(mbi_file_table_stage mbiRow, TypedCsvColumn column,
-            EdiRowFormat rowFormat)
-        {
-            // dependent plans are linked to the employee
-            return CheckAlegeusEmployeePlanExists(mbiRow, column, rowFormat);
-        }
-
-        #endregion checkData
+        #endregion CheckAlegeusFile
 
         #region cacheAlegeusData
 
-        private DataTable GetAllAlegeusEmployers()
+        private DataTable GetAllAlegeusEmployeePlansForEmployer(string employerId)
         {
             DataTable dbResults = new DataTable();
             var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-AllEmployers";
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployeePlans";
             if (_cache.ContainsKey(cacheKey))
             {
                 dbResults = (DataTable)_cache.Get(cacheKey);
@@ -930,21 +922,29 @@ namespace DataProcessing
             {
                 if (PlatformType == PlatformType.Alegeus)
                 {
-                    string queryString =
-                        $"select employer_id, employer_name, employer_status from wc.wc_employers " +
-                        $" order by employer_id ;";
+                    // todo: we need check exactly check against each plan - min/max are not correct
+                    // get ALL plans
+                    string queryString1 =
+                            $" select employerid, employeeid, plancode, plandesc, date(planstart) as planstart, date(planend) as planend " +
+                            $" from wc.vw_wc_participant_plans_combined " +
+                            $" where employerid = '{Utils.DbQuote(employerId)}' " +
+                            $" order by employerid, employeeid, plancode, plandesc"
+                        ;
                     //
-                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
-                        queryString, null,
+                    DataTable dt1 = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        queryString1, null,
                         FileLogParams?.GetMessageLogParams());
 
                     // create index on EmployeeID
 
-                    //DataColumn[] indices = new DataColumn[1];
-                    //indices[0] = (DataColumn)dbResults.Columns["employerid"];
-                    //dbResults.PrimaryKey = indices;
+                    //DataColumn[] indices = new DataColumn[3];
+                    //indices[0] = (DataColumn)dt1.Columns["employeeid"];
+                    //indices[1] = (DataColumn)dt1.Columns["plancode"];
+                    //indices[2] = (DataColumn)dt1.Columns["plandesc"];
+                    //dt1.PrimaryKey = indices;
 
                     //
+                    dbResults = dt1;
                     _cache.Add(cacheKey, dbResults);
                 }
                 else
@@ -996,8 +996,49 @@ namespace DataProcessing
             }
 
             return dbResults;
-        } // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
-          // cache all plans for ER to reduce number of queries to database - each query for a single plan takes around 150 ms so we aree saving significant time esp for ER witjh many EE
+        }
+
+        private DataTable GetAllAlegeusEmployers()
+        {
+            DataTable dbResults = new DataTable();
+            var cacheKey =
+                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-AllEmployers";
+            if (_cache.ContainsKey(cacheKey))
+            {
+                dbResults = (DataTable)_cache.Get(cacheKey);
+            }
+            else
+            {
+                if (PlatformType == PlatformType.Alegeus)
+                {
+                    string queryString =
+                        $"select employer_id, employer_name, employer_status from wc.wc_employers " +
+                        $" order by employer_id ;";
+                    //
+                    dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
+                        queryString, null,
+                        FileLogParams?.GetMessageLogParams());
+
+                    // create index on EmployeeID
+
+                    //DataColumn[] indices = new DataColumn[1];
+                    //indices[0] = (DataColumn)dbResults.Columns["employerid"];
+                    //dbResults.PrimaryKey = indices;
+
+                    //
+                    _cache.Add(cacheKey, dbResults);
+                }
+                else
+                {
+                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
+                }
+            }
+
+            return dbResults;
+        }
+
+        // cache all EE for ER to reduce number of queries to database - each query for a single EE takes around 150 ms so we aree saving significant time esp for ER witjh many EE
+        // cache all plans for ER to reduce number of queries to database - each query for a single plan takes around 150 ms so we aree saving significant time esp for ER witjh many EE
 
         private DataTable GetAllAlegeusPlansForEmployer(string employerId)
         {
@@ -1043,59 +1084,9 @@ namespace DataProcessing
             return dbResults;
         }
 
-        private DataTable GetAllAlegeusEmployeePlansForEmployer(string employerId)
-        {
-            DataTable dbResults = new DataTable();
-            var cacheKey =
-                $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{employerId}-AllEmployeePlans";
-            if (_cache.ContainsKey(cacheKey))
-            {
-                dbResults = (DataTable)_cache.Get(cacheKey);
-            }
-            else
-            {
-                if (PlatformType == PlatformType.Alegeus)
-                {
-                    // todo: we need check exactly check against each plan - min/max are not correct
-                    // get ALL plans
-                    string queryString1 =
-                            $" select employerid, employeeid, plancode, plandesc, date(planstart) as planstart, date(planend) as planend " +
-                            $" from wc.vw_wc_participant_plans_combined " +
-                            $" where employerid = '{Utils.DbQuote(employerId)}' " +
-                            $" order by employerid, employeeid, plancode, plandesc"
-                        ;
-                    //
-                    DataTable dt1 = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConnPortalWc,
-                        queryString1, null,
-                        FileLogParams?.GetMessageLogParams());
-
-                    // create index on EmployeeID
-
-                    //DataColumn[] indices = new DataColumn[3];
-                    //indices[0] = (DataColumn)dt1.Columns["employeeid"];
-                    //indices[1] = (DataColumn)dt1.Columns["plancode"];
-                    //indices[2] = (DataColumn)dt1.Columns["plandesc"];
-                    //dt1.PrimaryKey = indices;
-
-                    //
-                    dbResults = dt1;
-                    _cache.Add(cacheKey, dbResults);
-                }
-                else
-                {
-                    throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
-                }
-            }
-
-            return dbResults;
-        }
-
-        #endregion cacheEmployerData
-
+        #endregion cacheAlegeusData
 
         #region CheckUtils
-
-
 
         public string EnsureValueIsOfFormatAndMatchesRules(mbi_file_table_stage mbiRow, TypedCsvColumn column,
             TypedCsvSchema mappings)
@@ -1124,6 +1115,7 @@ namespace DataProcessing
                         }
 
                         break;
+
                     case FormatType.Zip:
                         value = Utils.regexInteger.Replace(value, String.Empty);
                         if (!Utils.IsBlank(value) && value.Length > column.MaxLength)
@@ -1132,6 +1124,7 @@ namespace DataProcessing
                         }
 
                         break;
+
                     case FormatType.Phone:
                         value = Utils.regexInteger.Replace(value, String.Empty);
                         if (!Utils.IsBlank(value) && value.Length > column.MaxLength)
@@ -1140,6 +1133,7 @@ namespace DataProcessing
                         }
 
                         break;
+
                     case FormatType.AlphaNumeric:
                         // replace all non alphanumeric
                         value = Utils.regexAlphaNumeric.Replace(value, String.Empty);
@@ -1203,7 +1197,6 @@ namespace DataProcessing
                         }
                         else
                         {
-
                             // format as 0.00
                             var dblValue = Utils.ToDouble(value);
                             value = dblValue.ToString("0.00");
@@ -1396,6 +1389,6 @@ namespace DataProcessing
             return value;
         }
 
-        #endregion
+        #endregion CheckUtils
     }
 }

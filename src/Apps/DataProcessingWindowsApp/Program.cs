@@ -8,7 +8,6 @@ using DataProcessing;
 
 namespace TestApp
 {
-
     internal static class Program
     {
         /// <summary>
@@ -28,12 +27,12 @@ namespace TestApp
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
             Application.ThreadException += UIThreadException;
 
-            //            
+            //
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             string filePath = $"{Vars.GetProcessExeDir()}/_Output_{DateTime.Now.ToString("yyyy-MM-dd HH-mm")}.log";
-try
+            try
             {
                 // write output to logfile
                 var swConsoleOut = new StreamWriter(filePath, true);
@@ -44,7 +43,6 @@ try
             {
                 Console.WriteLine($"Could Not Log to File {filePath} as {ex.ToString()}");
             }
-
 
             // handle startup args for scheduled processing
 
@@ -122,7 +120,6 @@ try
 #endif
         }
 
-
         public static void UIThreadException(object sender, ThreadExceptionEventArgs t)
         {
             var result = DialogResult.Cancel;
@@ -150,5 +147,4 @@ try
             }
         }
     }
-
 }

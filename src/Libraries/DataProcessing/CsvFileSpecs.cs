@@ -4,7 +4,6 @@
 
 namespace DataProcessing
 {
-
     public class CsvFileSpecs
     {
         private string _bencode;
@@ -20,6 +19,13 @@ namespace DataProcessing
         {
             get { return this._bencode?.Replace("\"", ""); }
             set { this._bencode = value; }
+        }
+
+        [Index(6)]
+        public string client_start_date
+        {
+            get { return this._clientStartDate?.Replace("\"", ""); }
+            set { this._clientStartDate = value; }
         }
 
         [Index(1)]
@@ -43,13 +49,6 @@ namespace DataProcessing
             set { this._empServices = value; }
         }
 
-        [Index(4)]
-        public string Primary_contact_name
-        {
-            get { return this._primaryContactName?.Replace("\"", ""); }
-            set { this._primaryContactName = value; }
-        }
-
         [Index(5)]
         public string Primary_contact_email
         {
@@ -57,11 +56,11 @@ namespace DataProcessing
             set { this._primaryContactEmail = value; }
         }
 
-        [Index(6)]
-        public string client_start_date
+        [Index(4)]
+        public string Primary_contact_name
         {
-            get { return this._clientStartDate?.Replace("\"", ""); }
-            set { this._clientStartDate = value; }
+            get { return this._primaryContactName?.Replace("\"", ""); }
+            set { this._primaryContactName = value; }
         }
 
         //
@@ -70,5 +69,4 @@ namespace DataProcessing
             return @"BENCODE,CRM,CRM_email,emp_services,Primary_contact_name,Primary_contact_email,client_start_date";
         }
     }
-
 }

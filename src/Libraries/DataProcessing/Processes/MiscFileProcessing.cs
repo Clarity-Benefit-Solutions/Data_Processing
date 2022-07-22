@@ -1,6 +1,4 @@
-﻿using CoreUtils;
-using CoreUtils.Classes;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -8,12 +6,13 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using CoreUtils;
+using CoreUtils.Classes;
 
 // ReSharper disable All
 
 namespace DataProcessing
 {
-
     [SuppressMessage("ReSharper", "StringLiteralTypo")]
     public class MiscFileProcessing
     {
@@ -73,84 +72,54 @@ namespace DataProcessing
 
             //ParticipantEnrollmentCopyLastFileToStandardPath
             ParticipantEnrollmentCopyLastFileToStandardPath(ftpConn, fileLogParams);
-
         }
 
-        protected void ParticipantEnrollmentDeleteStagingFiles(DbConnection dbConn,
-            FileOperationLogParams fileLogParams)
-        {
-            ////1. Clear all files in AutomatedHeaderV1_Files
-            ////echo y| del G:\FTP\AutomatedHeaderV1_Files\*.*
-            ////
-
-            ////
-            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-            //  "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            //DbUtils.LogFileOperation(fileLogParams);
-            ////
-            ////
-            //FileUtils.DeleteFiles(new[] { Vars.AlegeusErrorLogMbiFilesRoot, Vars.AlegeusErrorLogResFilesRoot }
-            //  , false
-            //  , new[] { "*.mbi", "*.dne", "*.txt", "*.res" },
-            //  (srcFilePath, destFilePath, dummy2) =>
-            //  {
-            //    // add to fileLog
-            //    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-            //      Path.GetFileName(destFilePath), destFilePath, "ErrorLog-DeleteStagingFiles", "Success",
-            //      "Delete File in Dir");
-            //    // do not log - gives too many lines
-            //    //DbUtils.LogFileOperation(FileLogParams);
-            //  },
-            //  (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
-            //);
-
-            ////
-            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-            //  "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
-            //DbUtils.LogFileOperation(fileLogParams);
-            ////
-        }
-
-
-        protected void ParticipantEnrollmentGetFtpFilesFromAlegeus(SFtpConnection ftpConn,
-            FileOperationLogParams fileLogParams)
+        protected void ParticipantEnrollmentCopyLastFileToStandardPath(SFtpConnection ftpConn,
+         FileOperationLogParams fileLogParams)
         {
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            fileLogParams.SetSourceFolderName(Vars.remoteAlegeusFtpRootPath);
+            fileLogParams.SetSourceFolderName(Vars.alegeusParticipantEnrollmentFilesDownloadPath);
             //
             DbUtils.LogFileOperation(fileLogParams);
-            string tempDownLoadPath = FileUtils.FixPath(Path.GetTempPath());
+            FileUtils.EnsurePathExists(Vars.alegeusParticipantEnrollmentFilesDownloadPath);
 
-            ftpConn.CopyOrMoveFiles(
-                /* Note: 2022-04-27: Linda S verified files can be deleted from remote after it has been downloaded*/
-                // todo: test download and delete
-                //FtpFileOperation.Download,
-                FtpFileOperation.DownloadAndDelete,
-                new string[] { Vars.remoteAlegeusFtpRootPath }, false,
-                new string[] { "Enrolled_Participant_Report_*.csv.pgp" },
-                tempDownLoadPath, "", "",
-                (srcFilePath, destFilePath, file, fileContents) =>
-                {
-                    // move to final path
-                    string downloadedFilePath =
-                        $"{Vars.alegeusParticipantEnrollmentFilesDownloadPath}/{Path.GetFileName(destFilePath)}";
-                    //
-                    FileUtils.MoveFile(destFilePath, downloadedFilePath, null, null);
+            //get list of all decrypted files
+            List<string> files = FileUtils.GetListOfFiles(
+                new string[] { Vars.alegeusParticipantEnrollmentFilesDecryptedPath },
+                false,
+                new string[] { "Enrolled_Participant_Report*.csv" }
+                );
 
-                    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                        Path.GetFileName(destFilePath), destFilePath, $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                        "Success", $"Got Participant Enrollment File from FTP");
-                    DbUtils.LogFileOperation(fileLogParams);
-                },
-                (directory, file, ex) =>
-                {
-                    DbUtils.LogError(directory, file, ex, fileLogParams);
-                    throw ex;
-                }
-            );
+            // sort by name asc
+            files.Sort((x, y) => string.Compare(x, y));
 
+            // the last file will be the latest one
+            var srcFilePath = files.Last();
+
+            //
+            var destFilePath = $"{Path.GetDirectoryName(srcFilePath)}/EPR_ENROLLED_PARTICIPANT.csv";
+            FileUtils.CopyFile(srcFilePath, destFilePath, null, null);
+
+            // log
+            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                Path.GetFileName(destFilePath), destFilePath,
+                $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+                "Success", $"Saved Decrypted File as Latest File");
+
+            DbUtils.LogFileOperation(fileLogParams);
+            //  //
+            destFilePath = $"\\\\fs009\\FTP-IT\\ToBoomi\\EPR_ENROLLED_PARTICIPANT.csv";
+            FileUtils.CopyFile(srcFilePath, destFilePath, null, null);
+
+            // log
+            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                Path.GetFileName(destFilePath), destFilePath,
+                $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+                "Success", $"Copied Latest File To FTP IT");
+
+            DbUtils.LogFileOperation(fileLogParams);
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
@@ -237,52 +206,81 @@ namespace DataProcessing
             DbUtils.LogFileOperation(fileLogParams);
             //
         }
-        protected void ParticipantEnrollmentCopyLastFileToStandardPath(SFtpConnection ftpConn,
-         FileOperationLogParams fileLogParams)
+
+        protected void ParticipantEnrollmentDeleteStagingFiles(DbConnection dbConn,
+                            FileOperationLogParams fileLogParams)
+        {
+            ////1. Clear all files in AutomatedHeaderV1_Files
+            ////echo y| del G:\FTP\AutomatedHeaderV1_Files\*.*
+            ////
+
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //  "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
+            ////
+            //FileUtils.DeleteFiles(new[] { Vars.AlegeusErrorLogMbiFilesRoot, Vars.AlegeusErrorLogResFilesRoot }
+            //  , false
+            //  , new[] { "*.mbi", "*.dne", "*.txt", "*.res" },
+            //  (srcFilePath, destFilePath, dummy2) =>
+            //  {
+            //    // add to fileLog
+            //    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+            //      Path.GetFileName(destFilePath), destFilePath, "ErrorLog-DeleteStagingFiles", "Success",
+            //      "Delete File in Dir");
+            //    // do not log - gives too many lines
+            //    //DbUtils.LogFileOperation(FileLogParams);
+            //  },
+            //  (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+            //);
+
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //  "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
+        }
+
+        protected void ParticipantEnrollmentGetFtpFilesFromAlegeus(SFtpConnection ftpConn,
+            FileOperationLogParams fileLogParams)
         {
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                 "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            fileLogParams.SetSourceFolderName(Vars.alegeusParticipantEnrollmentFilesDownloadPath);
+            fileLogParams.SetSourceFolderName(Vars.remoteAlegeusFtpRootPath);
             //
             DbUtils.LogFileOperation(fileLogParams);
-            FileUtils.EnsurePathExists(Vars.alegeusParticipantEnrollmentFilesDownloadPath);
+            string tempDownLoadPath = FileUtils.FixPath(Path.GetTempPath());
 
-            //get list of all decrypted files
-            List<string> files = FileUtils.GetListOfFiles(
-                new string[] { Vars.alegeusParticipantEnrollmentFilesDecryptedPath },
-                false,
-                new string[] { "Enrolled_Participant_Report*.csv" }
-                );
+            ftpConn.CopyOrMoveFiles(
+                /* Note: 2022-04-27: Linda S verified files can be deleted from remote after it has been downloaded*/
+                // todo: test download and delete
+                //FtpFileOperation.Download,
+                FtpFileOperation.DownloadAndDelete,
+                new string[] { Vars.remoteAlegeusFtpRootPath }, false,
+                new string[] { "Enrolled_Participant_Report_*.csv.pgp" },
+                tempDownLoadPath, "", "",
+                (srcFilePath, destFilePath, file, fileContents) =>
+                {
+                    // move to final path
+                    string downloadedFilePath =
+                        $"{Vars.alegeusParticipantEnrollmentFilesDownloadPath}/{Path.GetFileName(destFilePath)}";
+                    //
+                    FileUtils.MoveFile(destFilePath, downloadedFilePath, null, null);
 
-            // sort by name asc
-            files.Sort((x, y) => string.Compare(x, y));
+                    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                        Path.GetFileName(destFilePath), destFilePath, $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+                        "Success", $"Got Participant Enrollment File from FTP");
+                    DbUtils.LogFileOperation(fileLogParams);
+                },
+                (directory, file, ex) =>
+                {
+                    DbUtils.LogError(directory, file, ex, fileLogParams);
+                    throw ex;
+                }
+            );
 
-            // the last file will be the latest one
-            var srcFilePath = files.Last();
-
-            // 
-            var destFilePath = $"{Path.GetDirectoryName(srcFilePath)}/EPR_ENROLLED_PARTICIPANT.csv";
-            FileUtils.CopyFile(srcFilePath, destFilePath, null, null);
-
-            // log
-            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                Path.GetFileName(destFilePath), destFilePath,
-                $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Success", $"Saved Decrypted File as Latest File");
-
-            DbUtils.LogFileOperation(fileLogParams);
-            //  // 
-            destFilePath = $"\\\\fs009\\FTP-IT\\ToBoomi\\EPR_ENROLLED_PARTICIPANT.csv";
-            FileUtils.CopyFile(srcFilePath, destFilePath, null, null);
-
-            // log
-            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                Path.GetFileName(destFilePath), destFilePath,
-                $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                "Success", $"Copied Latest File To FTP IT");
-
-            DbUtils.LogFileOperation(fileLogParams);
             //
             fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
                 "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
@@ -330,5 +328,4 @@ namespace DataProcessing
             ////
         }
     }
-
 }

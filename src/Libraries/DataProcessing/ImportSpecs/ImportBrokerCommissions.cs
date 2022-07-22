@@ -1,22 +1,19 @@
-﻿using CoreUtils;
-using CoreUtils.Classes;
-using System;
+﻿using System;
 using System.Data.Common;
 using System.Reflection;
+using CoreUtils;
+using CoreUtils.Classes;
+
 //using ETLBox.Connection;
 //using ETLBox.DataFlow;
 //using ETLBox.DataFlow.Connectors;
 
 // ReSharper disable All
 
-
 namespace DataProcessing
 {
-
     public static partial class Import
     {
-
-
         public static TypedCsvSchema GetBrokerCommissionFileImportMappings(EdiRowFormat rowFormat, HeaderType headerType, Boolean forImport = true)
         {
             var mappings = new TypedCsvSchema();
@@ -24,7 +21,7 @@ namespace DataProcessing
             switch (rowFormat)
             {
                 /////////////////////////////////////////////////////
-                // IB, RB 
+                // IB, RB
                 case EdiRowFormat.BrokerCommissionQBRawData:
                     // Type	Date	Num	Name	Memo	Agent	Qty	Sales Price	Amount	Open Balance
 
@@ -46,7 +43,6 @@ namespace DataProcessing
                     var message =
                                  $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : rowFormat : {rowFormat.ToDescription()} is invalid";
                     throw new Exception(message);
-
             }
 
             // entrire line
@@ -59,7 +55,6 @@ namespace DataProcessing
         {
             //
             EdiRowFormat rowFormat = EdiRowFormat.BrokerCommissionQBRawData;
-
 
             // 2. import the file
             try
@@ -110,7 +105,5 @@ namespace DataProcessing
                 }
             }
         }
-
-
     }
 }

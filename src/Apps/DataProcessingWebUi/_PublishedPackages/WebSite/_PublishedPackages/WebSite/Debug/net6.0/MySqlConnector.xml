@@ -37,7 +37,7 @@
         </member>
         <member name="T:MySqlConnector.Core.CommandListPosition">
             <summary>
-            <see cref="T:MySqlConnector.Core.CommandListPosition"/> encapsulates a list of <see cref="T:MySqlConnector.Core.IMySqlCommand"/> and the current position within that list.
+            <see cref="T:MySqlConnector.Core.CommandListPosition" /> encapsulates a list of <see cref="T:MySqlConnector.Core.IMySqlCommand" /> and the current position within that list.
             </summary>
         </member>
         <member name="P:MySqlConnector.Core.CommandListPosition.Commands">
@@ -63,16 +63,16 @@
         </member>
         <member name="M:MySqlConnector.Core.ConnectionPool.GetProcedureCache">
             <summary>
-            Returns the stored procedure cache for this <see cref="T:MySqlConnector.Core.ConnectionPool"/>, lazily creating it on demand.
-            This method may return a different object after <see cref="M:MySqlConnector.Core.ConnectionPool.ClearAsync(MySqlConnector.Protocol.Serialization.IOBehavior,System.Threading.CancellationToken)"/> has been called. The returned
+            Returns the stored procedure cache for this <see cref="T:MySqlConnector.Core.ConnectionPool" />, lazily creating it on demand.
+            This method may return a different object after <see cref="M:MySqlConnector.Core.ConnectionPool.ClearAsync(MySqlConnector.Protocol.Serialization.IOBehavior,System.Threading.CancellationToken)" /> has been called. The returned
             object is shared between multiple threads and is only safe to use after taking a <c>lock</c> on the
             object itself.
             </summary>
         </member>
         <member name="M:MySqlConnector.Core.ConnectionPool.RecoverLeakedSessionsAsync(MySqlConnector.Protocol.Serialization.IOBehavior)">
             <summary>
-            Examines all the <see cref="T:MySqlConnector.Core.ServerSession"/> objects in <see cref="F:MySqlConnector.Core.ConnectionPool.m_leasedSessions"/> to determine if any
-            have an owning <see cref="T:MySqlConnector.MySqlConnection"/> that has been garbage-collected. If so, assumes that the connection
+            Examines all the <see cref="T:MySqlConnector.Core.ServerSession" /> objects in <see cref="F:MySqlConnector.Core.ConnectionPool.m_leasedSessions" /> to determine if any
+            have an owning <see cref="T:MySqlConnector.MySqlConnection" /> that has been garbage-collected. If so, assumes that the connection
             was not properly disposed and returns the session to the pool.
             </summary>
         </member>
@@ -84,12 +84,12 @@
         </member>
         <member name="T:MySqlConnector.Core.ICancellableCommand">
             <summary>
-            <see cref="T:MySqlConnector.Core.IMySqlCommand"/> provides an internal abstraction over operations that can be cancelled: <see cref="T:MySqlConnector.MySqlCommand"/> and <see cref="T:MySqlConnector.MySqlBatch"/>.
+            <see cref="T:MySqlConnector.Core.IMySqlCommand" /> provides an internal abstraction over operations that can be cancelled: <see cref="T:MySqlConnector.MySqlCommand" /> and <see cref="T:MySqlConnector.MySqlBatch" />.
             </summary>
         </member>
         <member name="M:MySqlConnector.Core.ICancellableCommandExtensions.GetNextId">
             <summary>
-            Returns a unique ID for all implementations of <see cref="T:MySqlConnector.Core.ICancellableCommand"/>.
+            Returns a unique ID for all implementations of <see cref="T:MySqlConnector.Core.ICancellableCommand" />.
             </summary>
         </member>
         <member name="M:MySqlConnector.Core.ICancellableCommandExtensions.GetCommandTimeUntilCanceled(MySqlConnector.Core.ICancellableCommand)">
@@ -100,8 +100,8 @@
         </member>
         <member name="M:MySqlConnector.Core.ICancellableCommandExtensions.ResetCommandTimeout(MySqlConnector.Core.ICancellableCommand)">
             <summary>
-            Causes the effective command timeout to be reset back to the value specified by <see cref="P:MySqlConnector.Core.ICancellableCommand.CommandTimeout"/>
-            plus <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.CancellationTimeout"/>. This allows for the command to time out, a cancellation to attempt
+            Causes the effective command timeout to be reset back to the value specified by <see cref="P:MySqlConnector.Core.ICancellableCommand.CommandTimeout" />
+            plus <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.CancellationTimeout" />. This allows for the command to time out, a cancellation to attempt
             to happen, then the "hard" timeout to occur.
             </summary>
             <remarks>As per the <a href="https://msdn.microsoft.com/en-us/library/system.data.sqlclient.sqlcommand.commandtimeout.aspx">MSDN documentation</a>,
@@ -109,44 +109,44 @@
             execution or processing of the results. A time-out can still occur after the first row is returned, and does not include user processing time, only network
             read time. For example, with a 30 second time out, if Read requires two network packets, then it has 30 seconds to read both network packets. If you call
             Read again, it will have another 30 seconds to read any data that it requires."
-            The <see cref="M:MySqlConnector.Core.ICancellableCommandExtensions.ResetCommandTimeout(MySqlConnector.Core.ICancellableCommand)"/> method is called by public ADO.NET API methods to reset the effective time remaining at the beginning of a new
+            The <see cref="M:MySqlConnector.Core.ICancellableCommandExtensions.ResetCommandTimeout(MySqlConnector.Core.ICancellableCommand)" /> method is called by public ADO.NET API methods to reset the effective time remaining at the beginning of a new
             method call.</remarks>
         </member>
         <member name="T:MySqlConnector.Core.ICommandPayloadCreator">
             <summary>
-            <see cref="T:MySqlConnector.Core.ICommandPayloadCreator"/> creates the data for an "execute query" command for one or more <see cref="T:MySqlConnector.Core.IMySqlCommand"/> objects in a command list.
+            <see cref="T:MySqlConnector.Core.ICommandPayloadCreator" /> creates the data for an "execute query" command for one or more <see cref="T:MySqlConnector.Core.IMySqlCommand" /> objects in a command list.
             </summary>
         </member>
         <member name="M:MySqlConnector.Core.ICommandPayloadCreator.WriteQueryCommand(MySqlConnector.Core.CommandListPosition@,System.Collections.Generic.IDictionary{System.String,MySqlConnector.Core.CachedProcedure},MySqlConnector.Protocol.Serialization.ByteBufferWriter,System.Boolean)">
             <summary>
-            Writes the payload for an "execute query" command to <paramref name="writer"/>.
+            Writes the payload for an "execute query" command to <paramref name="writer" />.
             </summary>
             <param name="commandListPosition">The command list and its current position. This will be updated to the position of the next command to write (or past the end if there are no more commands).</param>
-            <param name="cachedProcedures">A <see cref="T:MySqlConnector.Core.CachedProcedure"/> for all the stored procedures in the command list, if any.</param>
-            <param name="writer">The <see cref="T:MySqlConnector.Protocol.Serialization.ByteBufferWriter"/> to write the payload to.</param>
+            <param name="cachedProcedures">A <see cref="T:MySqlConnector.Core.CachedProcedure" /> for all the stored procedures in the command list, if any.</param>
+            <param name="writer">The <see cref="T:MySqlConnector.Protocol.Serialization.ByteBufferWriter" /> to write the payload to.</param>
             <param name="appendSemicolon">Whether a statement-separating semicolon should be appended if it's missing.</param>
             <returns><c>true</c> if a command was written; otherwise, <c>false</c> (if there were no more commands in the list).</returns>
         </member>
         <member name="M:MySqlConnector.Core.ILoadBalancer.LoadBalance(System.Collections.Generic.IReadOnlyList{System.String})">
             <summary>
-            Returns an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing <paramref name="hosts"/> in the order they
+            Returns an <see cref="T:System.Collections.Generic.IEnumerable`1" /> containing <paramref name="hosts" /> in the order they
             should be tried to satisfy the load balancing policy.
             </summary>
         </member>
         <member name="T:MySqlConnector.Core.IMySqlCommand">
             <summary>
-            <see cref="T:MySqlConnector.Core.IMySqlCommand"/> provides an internal abstraction over <see cref="T:MySqlConnector.MySqlCommand"/> and <see cref="T:MySqlConnector.MySqlBatchCommand"/>.
+            <see cref="T:MySqlConnector.Core.IMySqlCommand" /> provides an internal abstraction over <see cref="T:MySqlConnector.MySqlCommand" /> and <see cref="T:MySqlConnector.MySqlBatchCommand" />.
             </summary>
         </member>
         <member name="T:MySqlConnector.Core.IValuesEnumerator">
             <summary>
-            <see cref="T:MySqlConnector.Core.IValuesEnumerator"/> provides an abstraction over iterating through a sequence of
+            <see cref="T:MySqlConnector.Core.IValuesEnumerator" /> provides an abstraction over iterating through a sequence of
             rows, where each row can fill an array of field values.
             </summary>
         </member>
         <member name="T:MySqlConnector.Core.ParsedStatement">
             <summary>
-            <see cref="T:MySqlConnector.Core.ParsedStatement"/> represents an individual SQL statement that's been parsed
+            <see cref="T:MySqlConnector.Core.ParsedStatement" /> represents an individual SQL statement that's been parsed
             from a string possibly containing multiple semicolon-delimited SQL statements.
             </summary>
         </member>
@@ -169,26 +169,26 @@
         </member>
         <member name="T:MySqlConnector.Core.ParsedStatements">
             <summary>
-            <see cref="T:MySqlConnector.Core.ParsedStatements"/> wraps a collection of <see cref="T:MySqlConnector.Core.ParsedStatement"/> objects.
-            It implements <see cref="T:System.IDisposable"/> to return the memory backing the statements to a shared pool.
+            <see cref="T:MySqlConnector.Core.ParsedStatements" /> wraps a collection of <see cref="T:MySqlConnector.Core.ParsedStatement" /> objects.
+            It implements <see cref="T:System.IDisposable" /> to return the memory backing the statements to a shared pool.
             </summary>
         </member>
         <member name="T:MySqlConnector.Core.PreparedStatement">
             <summary>
-            <see cref="T:MySqlConnector.Core.PreparedStatement"/> is a statement that has been prepared on the MySQL Server.
+            <see cref="T:MySqlConnector.Core.PreparedStatement" /> is a statement that has been prepared on the MySQL Server.
             </summary>
         </member>
         <member name="M:MySqlConnector.Core.ServerSession.SafeDispose``1(``0@)">
             <summary>
-            Disposes and sets <paramref name="disposable"/> to <c>null</c>, ignoring any
-            <see cref="T:System.IO.IOException"/> or <see cref="T:System.Net.Sockets.SocketException"/> that is thrown.
+            Disposes and sets <paramref name="disposable" /> to <c>null</c>, ignoring any
+            <see cref="T:System.IO.IOException" /> or <see cref="T:System.Net.Sockets.SocketException" /> that is thrown.
             </summary>
-            <typeparam name="T">An <see cref="T:System.IDisposable"/> type.</typeparam>
+            <typeparam name="T">An <see cref="T:System.IDisposable" /> type.</typeparam>
             <param name="disposable">The object to dispose.</param>
         </member>
         <member name="M:MySqlConnector.Core.SingleCommandPayloadCreator.WriteQueryPayload(MySqlConnector.Core.IMySqlCommand,System.Collections.Generic.IDictionary{System.String,MySqlConnector.Core.CachedProcedure},MySqlConnector.Protocol.Serialization.ByteBufferWriter,System.Boolean)">
             <summary>
-            Writes the text of <paramref name="command"/> to <paramref name="writer"/>, encoded in UTF-8.
+            Writes the text of <paramref name="command" /> to <paramref name="writer" />, encoded in UTF-8.
             </summary>
             <param name="command">The command.</param>
             <param name="cachedProcedures">The cached procedures.</param>
@@ -213,7 +213,7 @@
         </member>
         <member name="T:MySqlConnector.Logging.IMySqlConnectorLogger">
             <summary>
-            Implementations of <see cref="T:MySqlConnector.Logging.IMySqlConnectorLogger"/> write logs to a particular target.
+            Implementations of <see cref="T:MySqlConnector.Logging.IMySqlConnectorLogger" /> write logs to a particular target.
             </summary>
         </member>
         <member name="M:MySqlConnector.Logging.IMySqlConnectorLogger.IsEnabled(MySqlConnector.Logging.MySqlConnectorLogLevel)">
@@ -228,19 +228,19 @@
             Writes a log message to the target.
             </summary>
             <param name="level">The log level.</param>
-            <param name="message">The log message. See documentation for <paramref name="args"/> for notes on interpreting <c>{0}</c> within this string.</param>
-            <param name="args">If not <c>null</c> or empty, then <paramref name="message"/> includes formatting placeholders (e.g., <c>{0}</c>)
-            which must be replaced with the arguments in <paramref name="args"/>, using <see cref="M:System.String.Format(System.IFormatProvider,System.String,System.Object[])"/> or similar.
-            If <c>null</c> or an empty array, then <paramref name="message"/> is a literal string; any curly braces within it must be treated as literal characters,
+            <param name="message">The log message. See documentation for <paramref name="args" /> for notes on interpreting <c>{0}</c> within this string.</param>
+            <param name="args">If not <c>null</c> or empty, then <paramref name="message" /> includes formatting placeholders (e.g., <c>{0}</c>)
+            which must be replaced with the arguments in <paramref name="args" />, using <see cref="M:System.String.Format(System.IFormatProvider,System.String,System.Object[])" /> or similar.
+            If <c>null</c> or an empty array, then <paramref name="message" /> is a literal string; any curly braces within it must be treated as literal characters,
             not formatting placeholders.</param>
-            <param name="exception">If not <c>null</c>, an <see cref="T:System.Exception"/> associated with the log message.</param>
+            <param name="exception">If not <c>null</c>, an <see cref="T:System.Exception" /> associated with the log message.</param>
             <remarks>This method may be called from multiple threads and must be thread-safe. This method may be called
-            even if <see cref="M:MySqlConnector.Logging.IMySqlConnectorLogger.IsEnabled(MySqlConnector.Logging.MySqlConnectorLogLevel)"/> would return <c>false</c> for <paramref name="level"/>; the implementation must
+            even if <see cref="M:MySqlConnector.Logging.IMySqlConnectorLogger.IsEnabled(MySqlConnector.Logging.MySqlConnectorLogLevel)" /> would return <c>false</c> for <paramref name="level" />; the implementation must
             check if logging is enabled for that level.</remarks>
         </member>
         <member name="T:MySqlConnector.Logging.IMySqlConnectorLoggerProvider">
             <summary>
-            Implementations of <see cref="T:MySqlConnector.Logging.IMySqlConnectorLoggerProvider"/> create logger instances.
+            Implementations of <see cref="T:MySqlConnector.Logging.IMySqlConnectorLoggerProvider" /> create logger instances.
             </summary>
         </member>
         <member name="M:MySqlConnector.Logging.IMySqlConnectorLoggerProvider.CreateLogger(System.String)">
@@ -255,15 +255,15 @@
         </member>
         <member name="P:MySqlConnector.Logging.MySqlConnectorLogManager.Provider">
             <summary>
-            Allows the <see cref="T:MySqlConnector.Logging.IMySqlConnectorLoggerProvider"/> to be set for this library. <see cref="P:MySqlConnector.Logging.MySqlConnectorLogManager.Provider"/> can
+            Allows the <see cref="T:MySqlConnector.Logging.IMySqlConnectorLoggerProvider" /> to be set for this library. <see cref="P:MySqlConnector.Logging.MySqlConnectorLogManager.Provider" /> can
             be set once, and must be set before any other library methods are used.
             </summary>
         </member>
         <member name="T:MySqlConnector.Logging.NoOpLogger">
             <summary>
-            <see cref="T:MySqlConnector.Logging.NoOpLogger"/> is an implementation of <see cref="T:MySqlConnector.Logging.IMySqlConnectorLogger"/> that does nothing.
+            <see cref="T:MySqlConnector.Logging.NoOpLogger" /> is an implementation of <see cref="T:MySqlConnector.Logging.IMySqlConnectorLogger" /> that does nothing.
             </summary>
-            <remarks>This is the default logging implementation unless <see cref="P:MySqlConnector.Logging.MySqlConnectorLogManager.Provider"/> is set.</remarks>
+            <remarks>This is the default logging implementation unless <see cref="P:MySqlConnector.Logging.MySqlConnectorLogManager.Provider" /> is set.</remarks>
         </member>
         <member name="M:MySqlConnector.Logging.NoOpLogger.IsEnabled(MySqlConnector.Logging.MySqlConnectorLogLevel)">
             <summary>
@@ -277,7 +277,7 @@
         </member>
         <member name="P:MySqlConnector.Logging.NoOpLogger.Instance">
             <summary>
-            Returns a singleton instance of <see cref="T:MySqlConnector.Logging.NoOpLogger"/>.
+            Returns a singleton instance of <see cref="T:MySqlConnector.Logging.NoOpLogger" />.
             </summary>
         </member>
         <member name="T:MySqlConnector.Logging.NoOpLoggerProvider">
@@ -287,23 +287,23 @@
         </member>
         <member name="M:MySqlConnector.Logging.NoOpLoggerProvider.CreateLogger(System.String)">
             <summary>
-            Returns a <see cref="T:MySqlConnector.Logging.NoOpLogger"/>.
+            Returns a <see cref="T:MySqlConnector.Logging.NoOpLogger" />.
             </summary>
         </member>
         <member name="T:MySqlConnector.MySqlAttribute">
             <summary>
-            <see cref="T:MySqlConnector.MySqlAttribute"/> represents an attribute that can be sent with a MySQL query.
+            <see cref="T:MySqlConnector.MySqlAttribute" /> represents an attribute that can be sent with a MySQL query.
             </summary>
             <remarks>See <a href="https://dev.mysql.com/doc/refman/8.0/en/query-attributes.html">Query Attributes</a> for information on using query attributes.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlAttribute.#ctor">
             <summary>
-            Initializes a new <see cref="T:MySqlConnector.MySqlAttribute"/>.
+            Initializes a new <see cref="T:MySqlConnector.MySqlAttribute" />.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlAttribute.#ctor(System.String,System.Object)">
             <summary>
-            Initializes a new <see cref="T:MySqlConnector.MySqlAttribute"/> with the specified attribute name and value.
+            Initializes a new <see cref="T:MySqlConnector.MySqlAttribute" /> with the specified attribute name and value.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlAttribute.AttributeName">
@@ -318,7 +318,7 @@
         </member>
         <member name="T:MySqlConnector.MySqlAttributeCollection">
             <summary>
-            <see cref="T:MySqlConnector.MySqlAttributeCollection"/> represents a collection of query attributes that can be added to a <see cref="T:MySqlConnector.MySqlCommand"/>.
+            <see cref="T:MySqlConnector.MySqlAttributeCollection" /> represents a collection of query attributes that can be added to a <see cref="T:MySqlConnector.MySqlCommand" />.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlAttributeCollection.Count">
@@ -328,7 +328,7 @@
         </member>
         <member name="M:MySqlConnector.MySqlAttributeCollection.Add(MySqlConnector.MySqlAttribute)">
             <summary>
-            Adds a new <see cref="T:MySqlConnector.MySqlAttribute"/> to the collection.
+            Adds a new <see cref="T:MySqlConnector.MySqlAttribute" /> to the collection.
             </summary>
             <param name="attribute">The attribute to add.</param>
             <remarks>The attribute name must not be empty, and must not already exist in the collection.</remarks>
@@ -345,7 +345,7 @@
             Gets the attribute at the specified index.
             </summary>
             <param name="index">The index.</param>
-            <returns>The <see cref="T:MySqlConnector.MySqlAttribute"/> at that index.</returns>
+            <returns>The <see cref="T:MySqlConnector.MySqlAttribute" /> at that index.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlAttributeCollection.Clear">
             <summary>
@@ -371,7 +371,7 @@
         </member>
         <member name="T:MySqlConnector.MySqlBatch">
              <summary>
-             <para><see cref="T:MySqlConnector.MySqlBatch"/> implements the new
+             <para><see cref="T:MySqlConnector.MySqlBatch" /> implements the new
              <a href="https://github.com/dotnet/runtime/issues/28633">ADO.NET batching API</a>.
              <strong>It is currently experimental</strong> and may change in the future.</para>
              <para>When using MariaDB (10.2 or later), the commands will be sent in a single batch, reducing network
@@ -381,7 +381,7 @@
              <code>
              using var connection = new MySqlConnection("...connection string...");
              await connection.OpenAsync();
-            
+
              using var batch = new MySqlBatch(connection)
              {
              	BatchCommands =
@@ -413,19 +413,19 @@
               await batch.ExecuteNonQueryAsync();
              </code>
              </summary>
-             <remarks>The proposed ADO.NET API that <see cref="T:MySqlConnector.MySqlBatch"/> is based on is not finalized. This API is experimental and may change in the future.</remarks>
+             <remarks>The proposed ADO.NET API that <see cref="T:MySqlConnector.MySqlBatch" /> is based on is not finalized. This API is experimental and may change in the future.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlBatch.#ctor">
             <summary>
-            Initializes a new <see cref="T:MySqlConnector.MySqlBatch"/> object. The <see cref="P:MySqlConnector.MySqlBatch.Connection"/> property must be set before this object can be used.
+            Initializes a new <see cref="T:MySqlConnector.MySqlBatch" /> object. The <see cref="P:MySqlConnector.MySqlBatch.Connection" /> property must be set before this object can be used.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlBatch.#ctor(MySqlConnector.MySqlConnection,MySqlConnector.MySqlTransaction)">
             <summary>
-            Initializes a new <see cref="T:MySqlConnector.MySqlBatch"/> object, setting the <see cref="P:MySqlConnector.MySqlBatch.Connection"/> and <see cref="P:MySqlConnector.MySqlBatch.Transaction"/> if specified.
+            Initializes a new <see cref="T:MySqlConnector.MySqlBatch" /> object, setting the <see cref="P:MySqlConnector.MySqlBatch.Connection" /> and <see cref="P:MySqlConnector.MySqlBatch.Transaction" /> if specified.
             </summary>
-            <param name="connection">(Optional) The <see cref="T:MySqlConnector.MySqlConnection"/> to use.</param>
-            <param name="transaction">(Optional) The <see cref="T:MySqlConnector.MySqlTransaction"/> to use.</param>
+            <param name="connection">(Optional) The <see cref="T:MySqlConnector.MySqlConnection" /> to use.</param>
+            <param name="transaction">(Optional) The <see cref="T:MySqlConnector.MySqlTransaction" /> to use.</param>
         </member>
         <member name="P:MySqlConnector.MySqlBatch.BatchCommands">
             <summary>
@@ -434,44 +434,44 @@
         </member>
         <member name="M:MySqlConnector.MySqlBatch.ExecuteReader(System.Data.CommandBehavior)">
             <summary>
-            Executes all the commands in the batch, returning a <see cref="T:MySqlConnector.MySqlDataReader"/> that can iterate
-            over the result sets. If multiple resultsets are returned, use <see cref="M:MySqlConnector.MySqlDataReader.NextResult"/>
+            Executes all the commands in the batch, returning a <see cref="T:MySqlConnector.MySqlDataReader" /> that can iterate
+            over the result sets. If multiple resultsets are returned, use <see cref="M:MySqlConnector.MySqlDataReader.NextResult" />
             to access them.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlBatch.ExecuteReaderAsync(System.Threading.CancellationToken)">
             <summary>
-            Executes all the commands in the batch, returning a <see cref="T:MySqlConnector.MySqlDataReader"/> that can iterate
-            over the result sets. If multiple resultsets are returned, use <see cref="M:MySqlConnector.MySqlDataReader.NextResultAsync(System.Threading.CancellationToken)"/>
+            Executes all the commands in the batch, returning a <see cref="T:MySqlConnector.MySqlDataReader" /> that can iterate
+            over the result sets. If multiple resultsets are returned, use <see cref="M:MySqlConnector.MySqlDataReader.NextResultAsync(System.Threading.CancellationToken)" />
             to access them.
             </summary>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> containing the result of the asynchronous operation.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1" /> containing the result of the asynchronous operation.</returns>
         </member>
         <member name="T:MySqlConnector.MySqlBulkCopy">
              <summary>
-             <para><see cref="T:MySqlConnector.MySqlBulkCopy"/> lets you efficiently load a MySQL Server table with data from another source.
+             <para><see cref="T:MySqlConnector.MySqlBulkCopy" /> lets you efficiently load a MySQL Server table with data from another source.
              It is similar to the <a href="https://docs.microsoft.com/en-us/dotnet/api/system.data.sqlclient.sqlbulkcopy">SqlBulkCopy</a> class
              for SQL Server.</para>
              <para>Due to <a href="https://mysqlconnector.net/troubleshooting/load-data-local-infile/">security features</a>
              in MySQL Server, the connection string <em>must</em> have <c>AllowLoadLocalInfile=true</c> in order
              to use this class.</para>
-             <para>For data that is in CSV or TSV format, use <see cref="T:MySqlConnector.MySqlBulkLoader"/> to bulk load the file.</para>
+             <para>For data that is in CSV or TSV format, use <see cref="T:MySqlConnector.MySqlBulkLoader" /> to bulk load the file.</para>
              <para>Example code:</para>
              <code>
              // NOTE: to copy data between tables in the same database, use INSERT ... SELECT
              // https://dev.mysql.com/doc/refman/8.0/en/insert-select.html
              var dataTable = GetDataTableFromExternalSource();
-            
+
              // open the connection
              using var connection = new MySqlConnection("...;AllowLoadLocalInfile=True");
              await connection.OpenAsync();
-            
+
              // bulk copy the data
              var bulkCopy = new MySqlBulkCopy(connection);
              bulkCopy.DestinationTableName = "some_table_name";
              var result = await bulkCopy.WriteToServerAsync(dataTable);
-            
+
              // check for problems
              if (result.Warnings.Count != 0) { /* handle potential data loss warnings */ }
              </code>
@@ -483,10 +483,10 @@
         </member>
         <member name="M:MySqlConnector.MySqlBulkCopy.#ctor(MySqlConnector.MySqlConnection,MySqlConnector.MySqlTransaction)">
             <summary>
-            Initializes a <see cref="T:MySqlConnector.MySqlBulkCopy"/> object with the specified connection, and optionally the active transaction.
+            Initializes a <see cref="T:MySqlConnector.MySqlBulkCopy" /> object with the specified connection, and optionally the active transaction.
             </summary>
-            <param name="connection">The <see cref="T:MySqlConnector.MySqlConnection"/> to use.</param>
-            <param name="transaction">(Optional) The <see cref="T:MySqlConnector.MySqlTransaction"/> to use.</param>
+            <param name="connection">The <see cref="T:MySqlConnector.MySqlConnection" /> to use.</param>
+            <param name="transaction">(Optional) The <see cref="T:MySqlConnector.MySqlTransaction" /> to use.</param>
         </member>
         <member name="P:MySqlConnector.MySqlBulkCopy.BulkCopyTimeout">
             <summary>
@@ -506,18 +506,18 @@
         </member>
         <member name="E:MySqlConnector.MySqlBulkCopy.MySqlRowsCopied">
             <summary>
-            This event is raised every time that the number of rows specified by the <see cref="P:MySqlConnector.MySqlBulkCopy.NotifyAfter"/> property have been processed.
+            This event is raised every time that the number of rows specified by the <see cref="P:MySqlConnector.MySqlBulkCopy.NotifyAfter" /> property have been processed.
             </summary>
             <remarks>
             <para>Receipt of a RowsCopied event does not imply that any rows have been sent to the server or committed.</para>
-            <para>The <see cref="P:MySqlConnector.MySqlRowsCopiedEventArgs.Abort"/> property can be set to <c>true</c> by the event handler to abort the copy.</para>
+            <para>The <see cref="P:MySqlConnector.MySqlRowsCopiedEventArgs.Abort" /> property can be set to <c>true</c> by the event handler to abort the copy.</para>
             </remarks>
         </member>
         <member name="P:MySqlConnector.MySqlBulkCopy.ColumnMappings">
             <summary>
-            A collection of <see cref="T:MySqlConnector.MySqlBulkCopyColumnMapping"/> objects. If the columns being copied from the
+            A collection of <see cref="T:MySqlConnector.MySqlBulkCopyColumnMapping" /> objects. If the columns being copied from the
             data source line up one-to-one with the columns in the destination table then populating this collection is
-            unnecessary. Otherwise, this should be filled with a collection of <see cref="T:MySqlConnector.MySqlBulkCopyColumnMapping"/> objects
+            unnecessary. Otherwise, this should be filled with a collection of <see cref="T:MySqlConnector.MySqlBulkCopyColumnMapping" /> objects
             specifying how source columns are to be mapped onto destination columns. If one column mapping is specified,
             then all must be specified.
             </summary>
@@ -529,73 +529,73 @@
         </member>
         <member name="M:MySqlConnector.MySqlBulkCopy.WriteToServer(System.Data.DataTable)">
             <summary>
-            Copies all rows in the supplied <see cref="T:System.Data.DataTable"/> to the destination table specified by the
-            <see cref="P:MySqlConnector.MySqlBulkCopy.DestinationTableName"/> property of the <see cref="T:MySqlConnector.MySqlBulkCopy"/> object.
+            Copies all rows in the supplied <see cref="T:System.Data.DataTable" /> to the destination table specified by the
+            <see cref="P:MySqlConnector.MySqlBulkCopy.DestinationTableName" /> property of the <see cref="T:MySqlConnector.MySqlBulkCopy" /> object.
             </summary>
-            <param name="dataTable">The <see cref="T:System.Data.DataTable"/> to copy.</param>
-            <returns>A <see cref="T:MySqlConnector.MySqlBulkCopyResult"/> with the result of the bulk copy operation.</returns>
+            <param name="dataTable">The <see cref="T:System.Data.DataTable" /> to copy.</param>
+            <returns>A <see cref="T:MySqlConnector.MySqlBulkCopyResult" /> with the result of the bulk copy operation.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlBulkCopy.WriteToServerAsync(System.Data.DataTable,System.Threading.CancellationToken)">
             <summary>
-            Asynchronously copies all rows in the supplied <see cref="T:System.Data.DataTable"/> to the destination table specified by the
-            <see cref="P:MySqlConnector.MySqlBulkCopy.DestinationTableName"/> property of the <see cref="T:MySqlConnector.MySqlBulkCopy"/> object.
+            Asynchronously copies all rows in the supplied <see cref="T:System.Data.DataTable" /> to the destination table specified by the
+            <see cref="P:MySqlConnector.MySqlBulkCopy.DestinationTableName" /> property of the <see cref="T:MySqlConnector.MySqlBulkCopy" /> object.
             </summary>
-            <param name="dataTable">The <see cref="T:System.Data.DataTable"/> to copy.</param>
+            <param name="dataTable">The <see cref="T:System.Data.DataTable" /> to copy.</param>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:MySqlConnector.MySqlBulkCopyResult"/> with the result of the bulk copy operation.</returns>
+            <returns>A <see cref="T:MySqlConnector.MySqlBulkCopyResult" /> with the result of the bulk copy operation.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlBulkCopy.WriteToServer(System.Collections.Generic.IEnumerable{System.Data.DataRow},System.Int32)">
             <summary>
-            Copies all rows in the supplied sequence of <see cref="T:System.Data.DataRow"/> objects to the destination table specified by the
-            <see cref="P:MySqlConnector.MySqlBulkCopy.DestinationTableName"/> property of the <see cref="T:MySqlConnector.MySqlBulkCopy"/> object. The number of columns
-            to be read from the <see cref="T:System.Data.DataRow"/> objects must be specified in advance.
+            Copies all rows in the supplied sequence of <see cref="T:System.Data.DataRow" /> objects to the destination table specified by the
+            <see cref="P:MySqlConnector.MySqlBulkCopy.DestinationTableName" /> property of the <see cref="T:MySqlConnector.MySqlBulkCopy" /> object. The number of columns
+            to be read from the <see cref="T:System.Data.DataRow" /> objects must be specified in advance.
             </summary>
-            <param name="dataRows">The collection of <see cref="T:System.Data.DataRow"/> objects.</param>
+            <param name="dataRows">The collection of <see cref="T:System.Data.DataRow" /> objects.</param>
             <param name="columnCount">The number of columns to copy (in each row).</param>
-            <returns>A <see cref="T:MySqlConnector.MySqlBulkCopyResult"/> with the result of the bulk copy operation.</returns>
+            <returns>A <see cref="T:MySqlConnector.MySqlBulkCopyResult" /> with the result of the bulk copy operation.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlBulkCopy.WriteToServerAsync(System.Collections.Generic.IEnumerable{System.Data.DataRow},System.Int32,System.Threading.CancellationToken)">
             <summary>
-            Asynchronously copies all rows in the supplied sequence of <see cref="T:System.Data.DataRow"/> objects to the destination table specified by the
-            <see cref="P:MySqlConnector.MySqlBulkCopy.DestinationTableName"/> property of the <see cref="T:MySqlConnector.MySqlBulkCopy"/> object. The number of columns
-            to be read from the <see cref="T:System.Data.DataRow"/> objects must be specified in advance.
+            Asynchronously copies all rows in the supplied sequence of <see cref="T:System.Data.DataRow" /> objects to the destination table specified by the
+            <see cref="P:MySqlConnector.MySqlBulkCopy.DestinationTableName" /> property of the <see cref="T:MySqlConnector.MySqlBulkCopy" /> object. The number of columns
+            to be read from the <see cref="T:System.Data.DataRow" /> objects must be specified in advance.
             </summary>
-            <param name="dataRows">The collection of <see cref="T:System.Data.DataRow"/> objects.</param>
+            <param name="dataRows">The collection of <see cref="T:System.Data.DataRow" /> objects.</param>
             <param name="columnCount">The number of columns to copy (in each row).</param>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:MySqlConnector.MySqlBulkCopyResult"/> with the result of the bulk copy operation.</returns>
+            <returns>A <see cref="T:MySqlConnector.MySqlBulkCopyResult" /> with the result of the bulk copy operation.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlBulkCopy.WriteToServer(System.Data.IDataReader)">
             <summary>
-            Copies all rows in the supplied <see cref="T:System.Data.IDataReader"/> to the destination table specified by the
-            <see cref="P:MySqlConnector.MySqlBulkCopy.DestinationTableName"/> property of the <see cref="T:MySqlConnector.MySqlBulkCopy"/> object.
+            Copies all rows in the supplied <see cref="T:System.Data.IDataReader" /> to the destination table specified by the
+            <see cref="P:MySqlConnector.MySqlBulkCopy.DestinationTableName" /> property of the <see cref="T:MySqlConnector.MySqlBulkCopy" /> object.
             </summary>
-            <param name="dataReader">The <see cref="T:System.Data.IDataReader"/> to copy from.</param>
-            <returns>A <see cref="T:MySqlConnector.MySqlBulkCopyResult"/> with the result of the bulk copy operation.</returns>
+            <param name="dataReader">The <see cref="T:System.Data.IDataReader" /> to copy from.</param>
+            <returns>A <see cref="T:MySqlConnector.MySqlBulkCopyResult" /> with the result of the bulk copy operation.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlBulkCopy.WriteToServerAsync(System.Data.IDataReader,System.Threading.CancellationToken)">
             <summary>
-            Asynchronously copies all rows in the supplied <see cref="T:System.Data.IDataReader"/> to the destination table specified by the
-            <see cref="P:MySqlConnector.MySqlBulkCopy.DestinationTableName"/> property of the <see cref="T:MySqlConnector.MySqlBulkCopy"/> object.
+            Asynchronously copies all rows in the supplied <see cref="T:System.Data.IDataReader" /> to the destination table specified by the
+            <see cref="P:MySqlConnector.MySqlBulkCopy.DestinationTableName" /> property of the <see cref="T:MySqlConnector.MySqlBulkCopy" /> object.
             </summary>
-            <param name="dataReader">The <see cref="T:System.Data.IDataReader"/> to copy from.</param>
+            <param name="dataReader">The <see cref="T:System.Data.IDataReader" /> to copy from.</param>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:MySqlConnector.MySqlBulkCopyResult"/> with the result of the bulk copy operation.</returns>
+            <returns>A <see cref="T:MySqlConnector.MySqlBulkCopyResult" /> with the result of the bulk copy operation.</returns>
         </member>
         <member name="T:MySqlConnector.MySqlBulkCopyColumnMapping">
             <summary>
-            <para>Use <see cref="T:MySqlConnector.MySqlBulkCopyColumnMapping"/> to specify how to map columns in the source data to
-            columns in the destination table when using <see cref="T:MySqlConnector.MySqlBulkCopy"/>.</para>
-            <para>Set <see cref="P:MySqlConnector.MySqlBulkCopyColumnMapping.SourceOrdinal"/> to the index of the source column to map. Set <see cref="P:MySqlConnector.MySqlBulkCopyColumnMapping.DestinationColumn"/> to
+            <para>Use <see cref="T:MySqlConnector.MySqlBulkCopyColumnMapping" /> to specify how to map columns in the source data to
+            columns in the destination table when using <see cref="T:MySqlConnector.MySqlBulkCopy" />.</para>
+            <para>Set <see cref="P:MySqlConnector.MySqlBulkCopyColumnMapping.SourceOrdinal" /> to the index of the source column to map. Set <see cref="P:MySqlConnector.MySqlBulkCopyColumnMapping.DestinationColumn" /> to
             either the name of a column in the destination table, or the name of a user-defined variable.
-            If a user-defined variable, you can use <see cref="P:MySqlConnector.MySqlBulkCopyColumnMapping.Expression"/> to specify a MySQL expression that assigns
+            If a user-defined variable, you can use <see cref="P:MySqlConnector.MySqlBulkCopyColumnMapping.Expression" /> to specify a MySQL expression that assigns
             its value to destination column.</para>
-            <para>Source columns that don't have an entry in <see cref="P:MySqlConnector.MySqlBulkCopy.ColumnMappings"/> will be ignored
-            (unless the <see cref="P:MySqlConnector.MySqlBulkCopy.ColumnMappings"/> collection is empty, in which case all columns will be mapped
+            <para>Source columns that don't have an entry in <see cref="P:MySqlConnector.MySqlBulkCopy.ColumnMappings" /> will be ignored
+            (unless the <see cref="P:MySqlConnector.MySqlBulkCopy.ColumnMappings" /> collection is empty, in which case all columns will be mapped
             one-to-one).</para>
             <para>MySqlConnector will transmit all binary data as hex, so any expression that operates on it
             must decode it with the <c>UNHEX</c> function first. (This will be performed automatically if no
-            <see cref="P:MySqlConnector.MySqlBulkCopyColumnMapping.Expression"/> is specified, but will be necessary to specify manually for more complex expressions.)</para>
+            <see cref="P:MySqlConnector.MySqlBulkCopyColumnMapping.Expression" /> is specified, but will be necessary to specify manually for more complex expressions.)</para>
             <para>Example code:</para>
             <code>
             new MySqlBulkCopyColumnMapping
@@ -614,12 +614,12 @@
         </member>
         <member name="M:MySqlConnector.MySqlBulkCopyColumnMapping.#ctor">
             <summary>
-            Initializes <see cref="T:MySqlConnector.MySqlBulkCopyColumnMapping"/> with the default values.
+            Initializes <see cref="T:MySqlConnector.MySqlBulkCopyColumnMapping" /> with the default values.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlBulkCopyColumnMapping.#ctor(System.Int32,System.String,System.String)">
             <summary>
-            Initializes <see cref="T:MySqlConnector.MySqlBulkCopyColumnMapping"/> to the specified values.
+            Initializes <see cref="T:MySqlConnector.MySqlBulkCopyColumnMapping" /> to the specified values.
             </summary>
             <param name="sourceOrdinal">The ordinal position of the source column.</param>
             <param name="destinationColumn">The name of the destination column.</param>
@@ -637,20 +637,20 @@
         </member>
         <member name="P:MySqlConnector.MySqlBulkCopyColumnMapping.Expression">
             <summary>
-            An optional expression for setting a destination column. To use an expression, the <see cref="P:MySqlConnector.MySqlBulkCopyColumnMapping.DestinationColumn"/> should
+            An optional expression for setting a destination column. To use an expression, the <see cref="P:MySqlConnector.MySqlBulkCopyColumnMapping.DestinationColumn" /> should
             be set to the name of a user-defined variable and this expression should set a column using that variable.
             </summary>
-            <remarks>To populate a binary column, you must set <see cref="P:MySqlConnector.MySqlBulkCopyColumnMapping.DestinationColumn"/> to a variable name, and <see cref="P:MySqlConnector.MySqlBulkCopyColumnMapping.Expression"/> to an
+            <remarks>To populate a binary column, you must set <see cref="P:MySqlConnector.MySqlBulkCopyColumnMapping.DestinationColumn" /> to a variable name, and <see cref="P:MySqlConnector.MySqlBulkCopyColumnMapping.Expression" /> to an
             expression that uses <code>UNHEX</code> to set the column value, e.g., <code>`destColumn` = UNHEX(@variableName)</code>.</remarks>
         </member>
         <member name="T:MySqlConnector.MySqlBulkCopyResult">
             <summary>
-            Represents the result of a <see cref="T:MySqlConnector.MySqlBulkCopy"/> operation.
+            Represents the result of a <see cref="T:MySqlConnector.MySqlBulkCopy" /> operation.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlBulkCopyResult.Warnings">
             <summary>
-            The warnings, if any. Users of <see cref="T:MySqlConnector.MySqlBulkCopy"/> should check that this collection is empty to avoid
+            The warnings, if any. Users of <see cref="T:MySqlConnector.MySqlBulkCopy" /> should check that this collection is empty to avoid
             potential data loss from failed data type conversions.
             </summary>
         </member>
@@ -661,7 +661,7 @@
         </member>
         <member name="T:MySqlConnector.MySqlBulkLoader">
             <summary>
-            <para><see cref="T:MySqlConnector.MySqlBulkLoader"/> lets you efficiently load a MySQL Server Table with data from a CSV or TSV file or <see cref="T:System.IO.Stream"/>.</para>
+            <para><see cref="T:MySqlConnector.MySqlBulkLoader" /> lets you efficiently load a MySQL Server Table with data from a CSV or TSV file or <see cref="T:System.IO.Stream" />.</para>
             <para>Example code:</para>
             <code>
             using var connection = new MySqlConnection("...;AllowLoadLocalInfile=True");
@@ -696,17 +696,17 @@
         </member>
         <member name="P:MySqlConnector.MySqlBulkLoader.ConflictOption">
             <summary>
-            A <see cref="T:MySqlConnector.MySqlBulkLoaderConflictOption"/> value that specifies how conflicts are resolved (default <see cref="F:MySqlConnector.MySqlBulkLoaderConflictOption.None"/>).
+            A <see cref="T:MySqlConnector.MySqlBulkLoaderConflictOption" /> value that specifies how conflicts are resolved (default <see cref="F:MySqlConnector.MySqlBulkLoaderConflictOption.None" />).
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlBulkLoader.Connection">
             <summary>
-            The <see cref="T:MySqlConnector.MySqlConnection"/> to use.
+            The <see cref="T:MySqlConnector.MySqlConnection" /> to use.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlBulkLoader.EscapeCharacter">
             <summary>
-            (Optional) The character used to escape instances of <see cref="P:MySqlConnector.MySqlBulkLoader.FieldQuotationCharacter"/> within field values.
+            (Optional) The character used to escape instances of <see cref="P:MySqlConnector.MySqlBulkLoader.FieldQuotationCharacter" /> within field values.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlBulkLoader.Expressions">
@@ -731,8 +731,8 @@
         </member>
         <member name="P:MySqlConnector.MySqlBulkLoader.FileName">
             <summary>
-            The name of the local (if <see cref="P:MySqlConnector.MySqlBulkLoader.Local"/> is <c>true</c>) or remote (otherwise) file to load.
-            Either this or <see cref="P:MySqlConnector.MySqlBulkLoader.SourceStream"/> must be set.
+            The name of the local (if <see cref="P:MySqlConnector.MySqlBulkLoader.Local" /> is <c>true</c>) or remote (otherwise) file to load.
+            Either this or <see cref="P:MySqlConnector.MySqlBulkLoader.SourceStream" /> must be set.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlBulkLoader.LinePrefix">
@@ -757,13 +757,13 @@
         </member>
         <member name="P:MySqlConnector.MySqlBulkLoader.Priority">
             <summary>
-            A <see cref="T:MySqlConnector.MySqlBulkLoaderPriority"/> giving the priority to load with (default <see cref="F:MySqlConnector.MySqlBulkLoaderPriority.None"/>).
+            A <see cref="T:MySqlConnector.MySqlBulkLoaderPriority" /> giving the priority to load with (default <see cref="F:MySqlConnector.MySqlBulkLoaderPriority.None" />).
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlBulkLoader.SourceStream">
             <summary>
-            A <see cref="T:System.IO.Stream"/> containing the data to load. Either this or <see cref="P:MySqlConnector.MySqlBulkLoader.FileName"/> must be set.
-            The <see cref="P:MySqlConnector.MySqlBulkLoader.Local"/> property must be <c>true</c> if this is set.
+            A <see cref="T:System.IO.Stream" /> containing the data to load. Either this or <see cref="P:MySqlConnector.MySqlBulkLoader.FileName" /> must be set.
+            The <see cref="P:MySqlConnector.MySqlBulkLoader.Local" /> property must be <c>true</c> if this is set.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlBulkLoader.TableName">
@@ -778,9 +778,9 @@
         </member>
         <member name="M:MySqlConnector.MySqlBulkLoader.#ctor(MySqlConnector.MySqlConnection)">
             <summary>
-            Initializes a new instance of the <see cref="T:MySqlConnector.MySqlBulkLoader"/> class with the specified <see cref="T:MySqlConnector.MySqlConnection"/>.
+            Initializes a new instance of the <see cref="T:MySqlConnector.MySqlBulkLoader" /> class with the specified <see cref="T:MySqlConnector.MySqlConnection" />.
             </summary>
-            <param name="connection">The <see cref="T:MySqlConnector.MySqlConnection"/> to use.</param>
+            <param name="connection">The <see cref="T:MySqlConnector.MySqlConnection" /> to use.</param>
         </member>
         <member name="M:MySqlConnector.MySqlBulkLoader.Load">
             <summary>
@@ -792,14 +792,14 @@
             <summary>
             Asynchronously loads all data in the source file or stream into the destination table.
             </summary>
-            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> that will be completed with the number of rows inserted.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1" /> that will be completed with the number of rows inserted.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlBulkLoader.LoadAsync(System.Threading.CancellationToken)">
             <summary>
             Asynchronously loads all data in the source file or stream into the destination table.
             </summary>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> that will be completed with the number of rows inserted.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1" /> that will be completed with the number of rows inserted.</returns>
         </member>
         <member name="F:MySqlConnector.MySqlCertificateStoreLocation.None">
             <summary>
@@ -818,59 +818,59 @@
         </member>
         <member name="T:MySqlConnector.MySqlCommand">
             <summary>
-            <see cref="T:MySqlConnector.MySqlCommand"/> represents a SQL statement or stored procedure name
+            <see cref="T:MySqlConnector.MySqlCommand" /> represents a SQL statement or stored procedure name
             to execute against a MySQL database.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlCommand.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:MySqlConnector.MySqlCommand"/> class.
+            Initializes a new instance of the <see cref="T:MySqlConnector.MySqlCommand" /> class.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlCommand.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:MySqlConnector.MySqlCommand"/> class, setting <see cref="P:MySqlConnector.MySqlCommand.CommandText"/> to <paramref name="commandText"/>.
+            Initializes a new instance of the <see cref="T:MySqlConnector.MySqlCommand" /> class, setting <see cref="P:MySqlConnector.MySqlCommand.CommandText" /> to <paramref name="commandText" />.
             </summary>
-            <param name="commandText">The text to assign to <see cref="P:MySqlConnector.MySqlCommand.CommandText"/>.</param>
+            <param name="commandText">The text to assign to <see cref="P:MySqlConnector.MySqlCommand.CommandText" />.</param>
         </member>
         <member name="M:MySqlConnector.MySqlCommand.#ctor(MySqlConnector.MySqlConnection,MySqlConnector.MySqlTransaction)">
             <summary>
-            Initializes a new instance of the <see cref="T:MySqlConnector.MySqlCommand"/> class with the specified <see cref="T:MySqlConnector.MySqlConnection"/> and <see cref="T:MySqlConnector.MySqlTransaction"/>.
+            Initializes a new instance of the <see cref="T:MySqlConnector.MySqlCommand" /> class with the specified <see cref="T:MySqlConnector.MySqlConnection" /> and <see cref="T:MySqlConnector.MySqlTransaction" />.
             </summary>
-            <param name="connection">The <see cref="T:MySqlConnector.MySqlConnection"/> to use.</param>
-            <param name="transaction">The active <see cref="T:MySqlConnector.MySqlTransaction"/>, if any.</param>
+            <param name="connection">The <see cref="T:MySqlConnector.MySqlConnection" /> to use.</param>
+            <param name="transaction">The active <see cref="T:MySqlConnector.MySqlTransaction" />, if any.</param>
         </member>
         <member name="M:MySqlConnector.MySqlCommand.#ctor(System.String,MySqlConnector.MySqlConnection)">
             <summary>
-            Initializes a new instance of the <see cref="T:MySqlConnector.MySqlCommand"/> class with the specified command text and <see cref="T:MySqlConnector.MySqlConnection"/>.
+            Initializes a new instance of the <see cref="T:MySqlConnector.MySqlCommand" /> class with the specified command text and <see cref="T:MySqlConnector.MySqlConnection" />.
             </summary>
-            <param name="commandText">The text to assign to <see cref="P:MySqlConnector.MySqlCommand.CommandText"/>.</param>
-            <param name="connection">The <see cref="T:MySqlConnector.MySqlConnection"/> to use.</param>
+            <param name="commandText">The text to assign to <see cref="P:MySqlConnector.MySqlCommand.CommandText" />.</param>
+            <param name="connection">The <see cref="T:MySqlConnector.MySqlConnection" /> to use.</param>
         </member>
         <member name="M:MySqlConnector.MySqlCommand.#ctor(System.String,MySqlConnector.MySqlConnection,MySqlConnector.MySqlTransaction)">
             <summary>
-            Initializes a new instance of the <see cref="T:MySqlConnector.MySqlCommand"/> class with the specified command text,<see cref="T:MySqlConnector.MySqlConnection"/>, and <see cref="T:MySqlConnector.MySqlTransaction"/>.
+            Initializes a new instance of the <see cref="T:MySqlConnector.MySqlCommand" /> class with the specified command text,<see cref="T:MySqlConnector.MySqlConnection" />, and <see cref="T:MySqlConnector.MySqlTransaction" />.
             </summary>
-            <param name="commandText">The text to assign to <see cref="P:MySqlConnector.MySqlCommand.CommandText"/>.</param>
-            <param name="connection">The <see cref="T:MySqlConnector.MySqlConnection"/> to use.</param>
-            <param name="transaction">The active <see cref="T:MySqlConnector.MySqlTransaction"/>, if any.</param>
+            <param name="commandText">The text to assign to <see cref="P:MySqlConnector.MySqlCommand.CommandText" />.</param>
+            <param name="connection">The <see cref="T:MySqlConnector.MySqlConnection" /> to use.</param>
+            <param name="transaction">The active <see cref="T:MySqlConnector.MySqlTransaction" />, if any.</param>
         </member>
         <member name="P:MySqlConnector.MySqlCommand.Parameters">
             <summary>
-            The collection of <see cref="T:MySqlConnector.MySqlParameter"/> objects for this command.
+            The collection of <see cref="T:MySqlConnector.MySqlParameter" /> objects for this command.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlCommand.Attributes">
             <summary>
-            The collection of <see cref="T:MySqlConnector.MySqlAttribute"/> objects for this command.
+            The collection of <see cref="T:MySqlConnector.MySqlAttribute" /> objects for this command.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlCommand.Cancel">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:MySqlConnector.MySqlCommand.ExecuteNonQuery">
             <summary>
-            Executes this command on the associated <see cref="T:MySqlConnector.MySqlConnection"/>.
+            Executes this command on the associated <see cref="T:MySqlConnector.MySqlConnection" />.
             </summary>
             <returns>The number of rows affected.</returns>
             <remarks>For UPDATE, INSERT, and DELETE statements, the return value is the number of rows affected by the command.
@@ -878,30 +878,30 @@
             or zero if the last statement is a SELECT. For all other types of statements, the return value is -1.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlCommand.ExecuteScalar">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:MySqlConnector.MySqlCommand.Prepare">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:MySqlConnector.MySqlCommand.CommandText">
             <summary>
             Gets or sets the command text to execute.
             </summary>
-            <remarks>If <see cref="P:MySqlConnector.MySqlCommand.CommandType"/> is <see cref="F:System.Data.CommandType.Text"/>, this is one or more SQL statements to execute.
-            If <see cref="P:MySqlConnector.MySqlCommand.CommandType"/> is <see cref="F:System.Data.CommandType.StoredProcedure"/>, this is the name of the stored procedure; any
+            <remarks>If <see cref="P:MySqlConnector.MySqlCommand.CommandType" /> is <see cref="F:System.Data.CommandType.Text" />, this is one or more SQL statements to execute.
+            If <see cref="P:MySqlConnector.MySqlCommand.CommandType" /> is <see cref="F:System.Data.CommandType.StoredProcedure" />, this is the name of the stored procedure; any
             special characters in the stored procedure name must be quoted or escaped.</remarks>
         </member>
         <member name="P:MySqlConnector.MySqlCommand.CommandTimeout">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:MySqlConnector.MySqlCommand.CommandType">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:MySqlConnector.MySqlCommand.DesignTimeVisible">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:MySqlConnector.MySqlCommand.UpdatedRowSource">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:MySqlConnector.MySqlCommand.LastInsertedId">
             <summary>
@@ -913,7 +913,7 @@
         </member>
         <member name="M:MySqlConnector.MySqlCommand.ExecuteNonQueryAsync(System.Threading.CancellationToken)">
             <summary>
-            Executes this command asynchronously on the associated <see cref="T:MySqlConnector.MySqlConnection"/>.
+            Executes this command asynchronously on the associated <see cref="T:MySqlConnector.MySqlConnection" />.
             </summary>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
             <returns>A task representing the asynchronous operation.</returns>
@@ -923,74 +923,74 @@
         </member>
         <member name="M:MySqlConnector.MySqlCommand.MySqlConnector#Core#ICancellableCommand#RegisterCancel(System.Threading.CancellationToken)">
             <summary>
-            Registers <see cref="M:MySqlConnector.MySqlCommand.Cancel"/> as a callback with <paramref name="cancellationToken"/> if cancellation is supported.
+            Registers <see cref="M:MySqlConnector.MySqlCommand.Cancel" /> as a callback with <paramref name="cancellationToken" /> if cancellation is supported.
             </summary>
-            <param name="cancellationToken">The <see cref="T:System.Threading.CancellationToken"/>.</param>
+            <param name="cancellationToken">The <see cref="T:System.Threading.CancellationToken" />.</param>
             <returns>An object that must be disposed to revoke the cancellation registration.</returns>
             <remarks>This method is more efficient than calling <code>token.Register(Command.Cancel)</code> because it avoids
             unnecessary allocations.</remarks>
         </member>
         <member name="T:MySqlConnector.MySqlConnection">
             <summary>
-            <see cref="T:MySqlConnector.MySqlConnection"/> represents a connection to a MySQL database.
+            <see cref="T:MySqlConnector.MySqlConnection" /> represents a connection to a MySQL database.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.BeginTransaction">
             <summary>
             Begins a database transaction.
             </summary>
-            <returns>A <see cref="T:MySqlConnector.MySqlTransaction"/> representing the new database transaction.</returns>
+            <returns>A <see cref="T:MySqlConnector.MySqlTransaction" /> representing the new database transaction.</returns>
             <remarks>Transactions may not be nested.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.BeginTransaction(System.Data.IsolationLevel)">
             <summary>
             Begins a database transaction.
             </summary>
-            <param name="isolationLevel">The <see cref="T:System.Data.IsolationLevel"/> for the transaction.</param>
-            <returns>A <see cref="T:MySqlConnector.MySqlTransaction"/> representing the new database transaction.</returns>
+            <param name="isolationLevel">The <see cref="T:System.Data.IsolationLevel" /> for the transaction.</param>
+            <returns>A <see cref="T:MySqlConnector.MySqlTransaction" /> representing the new database transaction.</returns>
             <remarks>Transactions may not be nested.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.BeginTransaction(System.Data.IsolationLevel,System.Boolean)">
             <summary>
             Begins a database transaction.
             </summary>
-            <param name="isolationLevel">The <see cref="T:System.Data.IsolationLevel"/> for the transaction.</param>
+            <param name="isolationLevel">The <see cref="T:System.Data.IsolationLevel" /> for the transaction.</param>
             <param name="isReadOnly">If <c>true</c>, changes to tables used in the transaction are prohibited; otherwise, they are permitted.</param>
-            <returns>A <see cref="T:MySqlConnector.MySqlTransaction"/> representing the new database transaction.</returns>
+            <returns>A <see cref="T:MySqlConnector.MySqlTransaction" /> representing the new database transaction.</returns>
             <remarks>Transactions may not be nested.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.BeginDbTransaction(System.Data.IsolationLevel)">
             <summary>
             Begins a database transaction.
             </summary>
-            <param name="isolationLevel">The <see cref="T:System.Data.IsolationLevel"/> for the transaction.</param>
-            <returns>A <see cref="T:MySqlConnector.MySqlTransaction"/> representing the new database transaction.</returns>
+            <param name="isolationLevel">The <see cref="T:System.Data.IsolationLevel" /> for the transaction.</param>
+            <returns>A <see cref="T:MySqlConnector.MySqlTransaction" /> representing the new database transaction.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.BeginTransactionAsync(System.Threading.CancellationToken)">
             <summary>
             Begins a database transaction asynchronously.
             </summary>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> representing the new database transaction.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1" /> representing the new database transaction.</returns>
             <remarks>Transactions may not be nested.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.BeginTransactionAsync(System.Data.IsolationLevel,System.Threading.CancellationToken)">
             <summary>
             Begins a database transaction asynchronously.
             </summary>
-            <param name="isolationLevel">The <see cref="T:System.Data.IsolationLevel"/> for the transaction.</param>
+            <param name="isolationLevel">The <see cref="T:System.Data.IsolationLevel" /> for the transaction.</param>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> representing the new database transaction.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1" /> representing the new database transaction.</returns>
             <remarks>Transactions may not be nested.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.BeginTransactionAsync(System.Data.IsolationLevel,System.Boolean,System.Threading.CancellationToken)">
             <summary>
             Begins a database transaction asynchronously.
             </summary>
-            <param name="isolationLevel">The <see cref="T:System.Data.IsolationLevel"/> for the transaction.</param>
+            <param name="isolationLevel">The <see cref="T:System.Data.IsolationLevel" /> for the transaction.</param>
             <param name="isReadOnly">If <c>true</c>, changes to tables used in the transaction are prohibited; otherwise, they are permitted.</param>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> representing the new database transaction.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1" /> representing the new database transaction.</returns>
             <remarks>Transactions may not be nested.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.ResetConnectionAsync(System.Threading.CancellationToken)">
@@ -1012,7 +1012,7 @@
             <summary>
             Gets or sets the delegate used to provide client certificates for connecting to a server.
             </summary>
-            <remarks>The provided <see cref="T:System.Security.Cryptography.X509Certificates.X509CertificateCollection"/> should be filled with the client certificate(s) needed to connect to the server.</remarks>
+            <remarks>The provided <see cref="T:System.Security.Cryptography.X509Certificates.X509CertificateCollection" /> should be filled with the client certificate(s) needed to connect to the server.</remarks>
         </member>
         <member name="P:MySqlConnector.MySqlConnection.ProvidePasswordCallback">
             <summary>
@@ -1022,7 +1022,7 @@
             <para>This delegate is executed when a new database connection is opened that requires a password. Due to
             connection pooling, this delegate is only executed when a new physical connection is established with a database
             server, not when a connection is retrieved from the pool.</para>
-            <para>The <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.Password"/> option takes precedence over this
+            <para>The <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.Password" /> option takes precedence over this
             delegate if it is specified.</para>
             <para>Using this delegate can make more efficient use of connection pooling for servers that require
             frequently-changing passwords or authentication tokens. Changing the password in the connection string
@@ -1033,23 +1033,23 @@
             <summary>
             Gets or sets the delegate used to verify that the server's certificate is valid.
             </summary>
-            <remarks><see cref="P:MySqlConnector.MySqlConnectionStringBuilder.SslMode"/> must be set to <see cref="F:MySqlConnector.MySqlSslMode.Preferred"/>
-            or <see cref="F:MySqlConnector.MySqlSslMode.Required"/> in order for this delegate to be invoked. See the documentation for
-            <see cref="P:MySqlConnector.MySqlConnection.RemoteCertificateValidationCallback"/> for more information on the values passed to this delegate.</remarks>
+            <remarks><see cref="P:MySqlConnector.MySqlConnectionStringBuilder.SslMode" /> must be set to <see cref="F:MySqlConnector.MySqlSslMode.Preferred" />
+            or <see cref="F:MySqlConnector.MySqlSslMode.Required" /> in order for this delegate to be invoked. See the documentation for
+            <see cref="P:MySqlConnector.MySqlConnection.RemoteCertificateValidationCallback" /> for more information on the values passed to this delegate.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.ClearPool(MySqlConnector.MySqlConnection)">
             <summary>
-            Clears the connection pool that <paramref name="connection"/> belongs to.
+            Clears the connection pool that <paramref name="connection" /> belongs to.
             </summary>
-            <param name="connection">The <see cref="T:MySqlConnector.MySqlConnection"/> whose connection pool will be cleared.</param>
+            <param name="connection">The <see cref="T:MySqlConnector.MySqlConnection" /> whose connection pool will be cleared.</param>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.ClearPoolAsync(MySqlConnector.MySqlConnection,System.Threading.CancellationToken)">
             <summary>
-            Asynchronously clears the connection pool that <paramref name="connection"/> belongs to.
+            Asynchronously clears the connection pool that <paramref name="connection" /> belongs to.
             </summary>
-            <param name="connection">The <see cref="T:MySqlConnector.MySqlConnection"/> whose connection pool will be cleared.</param>
+            <param name="connection">The <see cref="T:MySqlConnector.MySqlConnection" /> whose connection pool will be cleared.</param>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.ClearAllPools">
             <summary>
@@ -1061,79 +1061,79 @@
             Asynchronously clears all connection pools.
             </summary>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.GetSchema">
             <summary>
-            Returns schema information for the data source of this <see cref="T:MySqlConnector.MySqlConnection"/>.
+            Returns schema information for the data source of this <see cref="T:MySqlConnector.MySqlConnection" />.
             </summary>
-            <returns>A <see cref="T:System.Data.DataTable"/> containing schema information.</returns>
+            <returns>A <see cref="T:System.Data.DataTable" /> containing schema information.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.GetSchema(System.String)">
             <summary>
-            Returns schema information for the data source of this <see cref="T:MySqlConnector.MySqlConnection"/>.
+            Returns schema information for the data source of this <see cref="T:MySqlConnector.MySqlConnection" />.
             </summary>
             <param name="collectionName">The name of the schema to return.</param>
-            <returns>A <see cref="T:System.Data.DataTable"/> containing schema information.</returns>
+            <returns>A <see cref="T:System.Data.DataTable" /> containing schema information.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.GetSchema(System.String,System.String[])">
             <summary>
-            Returns schema information for the data source of this <see cref="T:MySqlConnector.MySqlConnection"/>.
+            Returns schema information for the data source of this <see cref="T:MySqlConnector.MySqlConnection" />.
             </summary>
             <param name="collectionName">The name of the schema to return.</param>
             <param name="restrictionValues">The restrictions to apply to the schema; this parameter is currently ignored.</param>
-            <returns>A <see cref="T:System.Data.DataTable"/> containing schema information.</returns>
+            <returns>A <see cref="T:System.Data.DataTable" /> containing schema information.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.GetSchemaAsync(System.Threading.CancellationToken)">
             <summary>
-            Asynchronously returns schema information for the data source of this <see cref="T:MySqlConnector.MySqlConnection"/>.
+            Asynchronously returns schema information for the data source of this <see cref="T:MySqlConnector.MySqlConnection" />.
             </summary>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> containing schema information.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1" /> containing schema information.</returns>
             <remarks>The proposed ADO.NET API that this is based on is not finalized; this API may change in the future.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.GetSchemaAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Asynchronously returns schema information for the data source of this <see cref="T:MySqlConnector.MySqlConnection"/>.
+            Asynchronously returns schema information for the data source of this <see cref="T:MySqlConnector.MySqlConnection" />.
             </summary>
             <param name="collectionName">The name of the schema to return.</param>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> containing schema information.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1" /> containing schema information.</returns>
             <remarks>The proposed ADO.NET API that this is based on is not finalized; this API may change in the future.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.GetSchemaAsync(System.String,System.String[],System.Threading.CancellationToken)">
             <summary>
-            Asynchronously returns schema information for the data source of this <see cref="T:MySqlConnector.MySqlConnection"/>.
+            Asynchronously returns schema information for the data source of this <see cref="T:MySqlConnector.MySqlConnection" />.
             </summary>
             <param name="collectionName">The name of the schema to return.</param>
             <param name="restrictionValues">The restrictions to apply to the schema; this parameter is currently ignored.</param>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> containing schema information.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1" /> containing schema information.</returns>
             <remarks>The proposed ADO.NET API that this is based on is not finalized; this API may change in the future.</remarks>
         </member>
         <member name="P:MySqlConnector.MySqlConnection.ConnectionTimeout">
             <summary>
             Gets the time (in seconds) to wait while trying to establish a connection
             before terminating the attempt and generating an error. This value
-            is controlled by <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.ConnectionTimeout"/>,
+            is controlled by <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.ConnectionTimeout" />,
             which defaults to 15 seconds.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.CreateBatch">
             <summary>
-            Creates a <see cref="T:MySqlConnector.MySqlBatch"/> object for executing batched commands.
+            Creates a <see cref="T:MySqlConnector.MySqlBatch" /> object for executing batched commands.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlConnection.CloneWith(System.String)">
             <summary>
             Returns an unopened copy of this connection with a new connection string. If the <c>Password</c>
-            in <paramref name="connectionString"/> is not set, the password from this connection will be used.
+            in <paramref name="connectionString" /> is not set, the password from this connection will be used.
             This allows creating a new connection with the same security information while changing other options,
             such as database or pooling.
             </summary>
             <param name="connectionString">The new connection string to be used.</param>
-            <returns>A new <see cref="T:MySqlConnector.MySqlConnection"/> with different connection string options but
-            the same password as this connection (unless overridden by <paramref name="connectionString"/>).</returns>
+            <returns>A new <see cref="T:MySqlConnector.MySqlConnection" /> with different connection string options but
+            the same password as this connection (unless overridden by <paramref name="connectionString" />).</returns>
         </member>
         <member name="T:MySqlConnector.MySqlConnectionProtocol">
             <summary>
@@ -1162,18 +1162,18 @@
         </member>
         <member name="T:MySqlConnector.MySqlConnectionStringBuilder">
             <summary>
-            <see cref="T:MySqlConnector.MySqlConnectionStringBuilder"/> allows you to construct a MySQL connection string by setting properties on the builder then reading the <see cref="P:System.Data.Common.DbConnectionStringBuilder.ConnectionString"/> property.
+            <see cref="T:MySqlConnector.MySqlConnectionStringBuilder" /> allows you to construct a MySQL connection string by setting properties on the builder then reading the <see cref="P:System.Data.Common.DbConnectionStringBuilder.ConnectionString" /> property.
             </summary>
             <remarks>See <a href="https://mysqlconnector.net/connection-options/">Connection String Options</a> for more documentation on the options.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlConnectionStringBuilder.#ctor">
             <summary>
-            Initializes a new <see cref="T:MySqlConnector.MySqlConnectionStringBuilder"/>.
+            Initializes a new <see cref="T:MySqlConnector.MySqlConnectionStringBuilder" />.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlConnectionStringBuilder.#ctor(System.String)">
             <summary>
-            Initializes a new <see cref="T:MySqlConnector.MySqlConnectionStringBuilder"/> with properties set from the specified connection string.
+            Initializes a new <see cref="T:MySqlConnector.MySqlConnectionStringBuilder" /> with properties set from the specified connection string.
             </summary>
             <param name="connectionString">The connection string to use to set property values on this object.</param>
         </member>
@@ -1215,7 +1215,7 @@
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.PipeName">
             <summary>
-            The name of the Windows named pipe to use to connect to the server. You must also set <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.ConnectionProtocol"/> to <see cref="F:MySqlConnector.MySqlConnectionProtocol.NamedPipe"/> to used named pipes.
+            The name of the Windows named pipe to use to connect to the server. You must also set <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.ConnectionProtocol" /> to <see cref="F:MySqlConnector.MySqlConnectionProtocol.NamedPipe" /> to used named pipes.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.SslMode">
@@ -1230,37 +1230,37 @@
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.CertificatePassword">
             <summary>
-            The password for the certificate specified using the <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.CertificateFile"/> option. Not required if the certificate file is not password protected.
+            The password for the certificate specified using the <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.CertificateFile" /> option. Not required if the certificate file is not password protected.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.SslCert">
             <summary>
-            The path to the client’s SSL certificate file in PEM format. <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.SslKey"/> must also be specified, and <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.CertificateFile"/> should not be.
+            The path to the client’s SSL certificate file in PEM format. <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.SslKey" /> must also be specified, and <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.CertificateFile" /> should not be.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.SslKey">
             <summary>
-            The path to the client’s SSL private key in PEM format. <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.SslCert"/> must also be specified, and <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.CertificateFile"/> should not be.
+            The path to the client’s SSL private key in PEM format. <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.SslCert" /> must also be specified, and <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.CertificateFile" /> should not be.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.CACertificateFile">
             <summary>
-            Use <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.SslCa"/> instead.
+            Use <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.SslCa" /> instead.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.SslCa">
             <summary>
-            The path to a CA certificate file in a PEM Encoded (.pem) format. This should be used with a value for the <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.SslMode"/> property of <see cref="F:MySqlConnector.MySqlSslMode.VerifyCA"/> or <see cref="F:MySqlConnector.MySqlSslMode.VerifyFull"/> to enable verification of a CA certificate that is not trusted by the operating system’s certificate store.
+            The path to a CA certificate file in a PEM Encoded (.pem) format. This should be used with a value for the <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.SslMode" /> property of <see cref="F:MySqlConnector.MySqlSslMode.VerifyCA" /> or <see cref="F:MySqlConnector.MySqlSslMode.VerifyFull" /> to enable verification of a CA certificate that is not trusted by the operating system’s certificate store.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.CertificateStoreLocation">
             <summary>
-            Uses a certificate from the specified Certificate Store on the machine. The default value of <see cref="F:MySqlConnector.MySqlCertificateStoreLocation.None"/> means the certificate store is not used; a value of <see cref="F:MySqlConnector.MySqlCertificateStoreLocation.CurrentUser"/> or <see cref="F:MySqlConnector.MySqlCertificateStoreLocation.LocalMachine"/> uses the specified store.
+            Uses a certificate from the specified Certificate Store on the machine. The default value of <see cref="F:MySqlConnector.MySqlCertificateStoreLocation.None" /> means the certificate store is not used; a value of <see cref="F:MySqlConnector.MySqlCertificateStoreLocation.CurrentUser" /> or <see cref="F:MySqlConnector.MySqlCertificateStoreLocation.LocalMachine" /> uses the specified store.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.CertificateThumbprint">
             <summary>
-            Specifies which certificate should be used from the Certificate Store specified in <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.CertificateStoreLocation"/>. This option must be used to indicate which certificate in the store should be used for authentication.
+            Specifies which certificate should be used from the Certificate Store specified in <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.CertificateStoreLocation" />. This option must be used to indicate which certificate in the store should be used for authentication.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.TlsVersion">
@@ -1305,7 +1305,7 @@
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.MinimumPoolSize">
             <summary>
-            The minimum number of connections to leave in the pool if <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.ConnectionIdleTimeout"/> is reached.
+            The minimum number of connections to leave in the pool if <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.ConnectionIdleTimeout" /> is reached.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.MaximumPoolSize">
@@ -1330,7 +1330,7 @@
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.AllowZeroDateTime">
             <summary>
-            Returns <c>DATETIME</c> fields as <see cref="T:MySqlConnector.MySqlDateTime"/> objects instead of <see cref="T:System.DateTime"/> objects.
+            Returns <c>DATETIME</c> fields as <see cref="T:MySqlConnector.MySqlDateTime" /> objects instead of <see cref="T:System.DateTime" /> objects.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.ApplicationName">
@@ -1340,7 +1340,7 @@
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.AutoEnlist">
             <summary>
-            Automatically enlists this connection in any active <see cref="T:System.Transactions.TransactionScope"/>.
+            Automatically enlists this connection in any active <see cref="T:System.Transactions.TransactionScope" />.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.CharacterSet">
@@ -1356,12 +1356,12 @@
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.ConvertZeroDateTime">
             <summary>
-            Whether invalid <c>DATETIME</c> fields should be converted to <see cref="F:System.DateTime.MinValue"/>.
+            Whether invalid <c>DATETIME</c> fields should be converted to <see cref="F:System.DateTime.MinValue" />.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.DateTimeKind">
             <summary>
-            The <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.DateTimeKind"/> to use when deserializing <c>DATETIME</c> values.
+            The <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.DateTimeKind" /> to use when deserializing <c>DATETIME</c> values.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.DefaultCommandTimeout">
@@ -1371,7 +1371,7 @@
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.CancellationTimeout">
             <summary>
-            The length of time (in seconds) to wait for a query to be canceled when <see cref="P:MySqlConnector.MySqlCommand.CommandTimeout"/> expires, or zero for no timeout.
+            The length of time (in seconds) to wait for a query to be canceled when <see cref="P:MySqlConnector.MySqlCommand.CommandTimeout" /> expires, or zero for no timeout.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.ForceSynchronous">
@@ -1381,17 +1381,17 @@
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.GuidFormat">
             <summary>
-            Determines which column type (if any) should be read as a <see cref="T:System.Guid"/>.
+            Determines which column type (if any) should be read as a <see cref="T:System.Guid" />.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.IgnoreCommandTransaction">
             <summary>
-            Does not check the <see cref="P:MySqlConnector.MySqlCommand.Transaction"/> property for validity when executing a command.
+            Does not check the <see cref="P:MySqlConnector.MySqlCommand.Transaction" /> property for validity when executing a command.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.IgnorePrepare">
             <summary>
-            Ignores calls to <see cref="M:MySqlConnector.MySqlCommand.Prepare"/> and <c>PrepareAsync</c>.
+            Ignores calls to <see cref="M:MySqlConnector.MySqlCommand.Prepare" /> and <c>PrepareAsync</c>.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.InteractiveSession">
@@ -1411,12 +1411,12 @@
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.OldGuids">
             <summary>
-            Use the <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.GuidFormat"/> property instead.
+            Use the <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.GuidFormat" /> property instead.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.PersistSecurityInfo">
             <summary>
-            If true, preserves security-sensitive information in the connection string retrieved from any open <see cref="T:MySqlConnector.MySqlConnection"/>.
+            If true, preserves security-sensitive information in the connection string retrieved from any open <see cref="T:MySqlConnector.MySqlConnection" />.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.Pipelining">
@@ -1441,7 +1441,7 @@
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.TreatTinyAsBoolean">
             <summary>
-            Returns <c>TINYINT(1)</c> fields as <see cref="T:System.Boolean"/> values.
+            Returns <c>TINYINT(1)</c> fields as <see cref="T:System.Boolean" /> values.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.UseAffectedRows">
@@ -1456,12 +1456,12 @@
         </member>
         <member name="P:MySqlConnector.MySqlConnectionStringBuilder.UseXaTransactions">
             <summary>
-            Use XA transactions to implement <see cref="T:System.Transactions.TransactionScope"/> distributed transactions.
+            Use XA transactions to implement <see cref="T:System.Transactions.TransactionScope" /> distributed transactions.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlConnectionStringBuilder.ContainsKey(System.String)">
             <summary>
-            Whether this <see cref="T:MySqlConnector.MySqlConnectionStringBuilder"/> contains a set option with the specified name.
+            Whether this <see cref="T:MySqlConnector.MySqlConnectionStringBuilder" /> contains a set option with the specified name.
             </summary>
             <param name="keyword">The option name.</param>
             <returns><c>true</c> if an option with that name is set; otherwise, <c>false</c>.</returns>
@@ -1481,64 +1481,64 @@
         </member>
         <member name="M:MySqlConnector.MySqlConnectionStringBuilder.GetProperties(System.Collections.Hashtable)">
             <summary>
-            Fills in <paramref name="propertyDescriptors"/> with information about the available properties on this object.
+            Fills in <paramref name="propertyDescriptors" /> with information about the available properties on this object.
             </summary>
-            <param name="propertyDescriptors">The collection of <see cref="T:System.ComponentModel.PropertyDescriptor"/> objects to populate.</param>
+            <param name="propertyDescriptors">The collection of <see cref="T:System.ComponentModel.PropertyDescriptor" /> objects to populate.</param>
         </member>
         <member name="T:MySqlConnector.MySqlConnectorFactory">
             <summary>
-            An implementation of <see cref="T:System.Data.Common.DbProviderFactory"/> that creates MySqlConnector objects.
+            An implementation of <see cref="T:System.Data.Common.DbProviderFactory" /> that creates MySqlConnector objects.
             </summary>
         </member>
         <member name="F:MySqlConnector.MySqlConnectorFactory.Instance">
             <summary>
-            Provides an instance of <see cref="T:System.Data.Common.DbProviderFactory"/> that can create MySqlConnector objects.
+            Provides an instance of <see cref="T:System.Data.Common.DbProviderFactory" /> that can create MySqlConnector objects.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlConnectorFactory.CreateCommand">
             <summary>
-            Creates a new <see cref="T:MySqlConnector.MySqlCommand"/> object.
+            Creates a new <see cref="T:MySqlConnector.MySqlCommand" /> object.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlConnectorFactory.CreateConnection">
             <summary>
-            Creates a new <see cref="T:MySqlConnector.MySqlConnection"/> object.
+            Creates a new <see cref="T:MySqlConnector.MySqlConnection" /> object.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlConnectorFactory.CreateConnectionStringBuilder">
             <summary>
-            Creates a new <see cref="T:MySqlConnector.MySqlConnectionStringBuilder"/> object.
+            Creates a new <see cref="T:MySqlConnector.MySqlConnectionStringBuilder" /> object.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlConnectorFactory.CreateParameter">
             <summary>
-            Creates a new <see cref="T:MySqlConnector.MySqlParameter"/> object.
+            Creates a new <see cref="T:MySqlConnector.MySqlParameter" /> object.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlConnectorFactory.CreateCommandBuilder">
             <summary>
-            Creates a new <see cref="T:MySqlConnector.MySqlCommandBuilder"/> object.
+            Creates a new <see cref="T:MySqlConnector.MySqlCommandBuilder" /> object.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlConnectorFactory.CreateDataAdapter">
             <summary>
-            Creates a new <see cref="T:MySqlConnector.MySqlDataAdapter"/> object.
+            Creates a new <see cref="T:MySqlConnector.MySqlDataAdapter" /> object.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectorFactory.CanCreateDataSourceEnumerator">
             <summary>
             Returns <c>false</c>.
             </summary>
-            <remarks><see cref="T:System.Data.Common.DbDataSourceEnumerator"/> is not supported by MySqlConnector.</remarks>
+            <remarks><see cref="T:System.Data.Common.DbDataSourceEnumerator" /> is not supported by MySqlConnector.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlConnectorFactory.CreateBatch">
             <summary>
-            Creates a new <see cref="T:MySqlConnector.MySqlBatch"/> object.
+            Creates a new <see cref="T:MySqlConnector.MySqlBatch" /> object.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlConnectorFactory.CreateBatchCommand">
             <summary>
-            Creates a new <see cref="T:MySqlConnector.MySqlBatchCommand"/> object.
+            Creates a new <see cref="T:MySqlConnector.MySqlBatchCommand" /> object.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlConnectorFactory.CanCreateBatch">
@@ -1548,12 +1548,12 @@
         </member>
         <member name="T:MySqlConnector.MySqlConversionException">
             <summary>
-            <see cref="T:MySqlConnector.MySqlConversionException"/> is thrown when a MySQL value can't be converted to another type.
+            <see cref="T:MySqlConnector.MySqlConversionException" /> is thrown when a MySQL value can't be converted to another type.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlConversionException.#ctor(System.String)">
             <summary>
-            Initializes a new instance of <see cref="T:MySqlConnector.MySqlConversionException"/>.
+            Initializes a new instance of <see cref="T:MySqlConnector.MySqlConversionException" />.
             </summary>
             <param name="message">The exception message.</param>
         </member>
@@ -1567,42 +1567,42 @@
         </member>
         <member name="M:MySqlConnector.MySqlDataReader.GetSchemaTable">
             <summary>
-            Returns a <see cref="T:System.Data.DataTable"/> that contains metadata about the columns in the result set.
+            Returns a <see cref="T:System.Data.DataTable" /> that contains metadata about the columns in the result set.
             </summary>
-            <returns>A <see cref="T:System.Data.DataTable"/> containing metadata about the columns in the result set.</returns>
+            <returns>A <see cref="T:System.Data.DataTable" /> containing metadata about the columns in the result set.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlDataReader.GetSchemaTableAsync(System.Threading.CancellationToken)">
             <summary>
-            Returns a <see cref="T:System.Data.DataTable"/> that contains metadata about the columns in the result set.
+            Returns a <see cref="T:System.Data.DataTable" /> that contains metadata about the columns in the result set.
             </summary>
             <param name="cancellationToken">A token to cancel the operation.</param>
-            <returns>A <see cref="T:System.Data.DataTable"/> containing metadata about the columns in the result set.</returns>
-            <remarks>This method runs synchronously; prefer to call <see cref="M:MySqlConnector.MySqlDataReader.GetSchemaTable"/> to avoid the overhead of allocating an unnecessary <c>Task</c>.</remarks>
+            <returns>A <see cref="T:System.Data.DataTable" /> containing metadata about the columns in the result set.</returns>
+            <remarks>This method runs synchronously; prefer to call <see cref="M:MySqlConnector.MySqlDataReader.GetSchemaTable" /> to avoid the overhead of allocating an unnecessary <c>Task</c>.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlDataReader.GetColumnSchema">
             <summary>
             Returns metadata about the columns in the result set.
             </summary>
-            <returns>A <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1"/> containing metadata about the result set.</returns>
+            <returns>A <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1" /> containing metadata about the result set.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlDataReader.GetColumnSchemaAsync(System.Threading.CancellationToken)">
             <summary>
             Returns metadata about the columns in the result set.
             </summary>
             <param name="cancellationToken">A token to cancel the operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task"/> containing <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1"/> containing metadata about the result set.</returns>
-            <remarks>This method runs synchronously; prefer to call <see cref="M:MySqlConnector.MySqlDataReader.GetColumnSchema"/> to avoid the overhead of allocating an unnecessary <c>Task</c>.</remarks>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> containing <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1" /> containing metadata about the result set.</returns>
+            <remarks>This method runs synchronously; prefer to call <see cref="M:MySqlConnector.MySqlDataReader.GetColumnSchema" /> to avoid the overhead of allocating an unnecessary <c>Task</c>.</remarks>
         </member>
         <member name="T:MySqlConnector.MySqlDateTime">
             <summary>
             Represents a MySQL date/time value. This type can be used to store <c>DATETIME</c> values such
-            as <c>0000-00-00</c> that can be stored in MySQL (when <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.AllowZeroDateTime"/>
-            is true) but can't be stored in a <see cref="T:System.DateTime"/> value.
+            as <c>0000-00-00</c> that can be stored in MySQL (when <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.AllowZeroDateTime" />
+            is true) but can't be stored in a <see cref="T:System.DateTime" /> value.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlDateTime.#ctor(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
             <summary>
-            Initializes a new instance of <see cref="T:MySqlConnector.MySqlDateTime"/>.
+            Initializes a new instance of <see cref="T:MySqlConnector.MySqlDateTime" />.
             </summary>
             <param name="year">The year.</param>
             <param name="month">The (one-based) month.</param>
@@ -1614,19 +1614,19 @@
         </member>
         <member name="M:MySqlConnector.MySqlDateTime.#ctor(System.DateTime)">
             <summary>
-            Initializes a new instance of <see cref="T:MySqlConnector.MySqlDateTime"/> from a <see cref="T:System.DateTime"/>.
+            Initializes a new instance of <see cref="T:MySqlConnector.MySqlDateTime" /> from a <see cref="T:System.DateTime" />.
             </summary>
-            <param name="dt">The <see cref="T:System.DateTime"/> whose values will be copied.</param>
+            <param name="dt">The <see cref="T:System.DateTime" /> whose values will be copied.</param>
         </member>
         <member name="M:MySqlConnector.MySqlDateTime.#ctor(MySqlConnector.MySqlDateTime)">
             <summary>
-            Initializes a new instance of <see cref="T:MySqlConnector.MySqlDateTime"/> from another <see cref="T:MySqlConnector.MySqlDateTime"/>.
+            Initializes a new instance of <see cref="T:MySqlConnector.MySqlDateTime" /> from another <see cref="T:MySqlConnector.MySqlDateTime" />.
             </summary>
-            <param name="other">The <see cref="T:MySqlConnector.MySqlDateTime"/> whose values will be copied.</param>
+            <param name="other">The <see cref="T:MySqlConnector.MySqlDateTime" /> whose values will be copied.</param>
         </member>
         <member name="P:MySqlConnector.MySqlDateTime.IsValidDateTime">
             <summary>
-            Returns <c>true</c> if this value is a valid <see cref="T:System.DateTime"/>.
+            Returns <c>true</c> if this value is a valid <see cref="T:System.DateTime" />.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlDateTime.Year">
@@ -1671,23 +1671,23 @@
         </member>
         <member name="M:MySqlConnector.MySqlDateTime.GetDateTime">
             <summary>
-            Returns a <see cref="T:System.DateTime"/> value (if <see cref="P:MySqlConnector.MySqlDateTime.IsValidDateTime"/> is <c>true</c>), or throws a
-            <see cref="T:MySqlConnector.MySqlConversionException"/>.
+            Returns a <see cref="T:System.DateTime" /> value (if <see cref="P:MySqlConnector.MySqlDateTime.IsValidDateTime" /> is <c>true</c>), or throws a
+            <see cref="T:MySqlConnector.MySqlConversionException" />.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlDateTime.ToString">
             <summary>
-            Converts this object to a <see cref="T:System.String"/>.
+            Converts this object to a <see cref="T:System.String" />.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlDateTime.op_Explicit(MySqlConnector.MySqlDateTime)~System.DateTime">
             <summary>
-            Converts this object to a <see cref="T:System.DateTime"/>.
+            Converts this object to a <see cref="T:System.DateTime" />.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlDateTime.Equals(System.Object)">
             <summary>
-            Returns <c>true</c> if this <see cref="T:MySqlConnector.MySqlDateTime"/> is equal to <paramref name="obj"/>.
+            Returns <c>true</c> if this <see cref="T:MySqlConnector.MySqlDateTime" /> is equal to <paramref name="obj" />.
             </summary>
             <param name="obj">The object to compare against for equality.</param>
             <returns><c>true</c> if the objects are equal, otherwise <c>false</c>.</returns>
@@ -1699,20 +1699,20 @@
         </member>
         <member name="M:MySqlConnector.MySqlDateTime.System#IComparable#CompareTo(System.Object)">
             <summary>
-            Compares this object to another <see cref="T:MySqlConnector.MySqlDateTime"/>.
+            Compares this object to another <see cref="T:MySqlConnector.MySqlDateTime" />.
             </summary>
             <param name="obj">The object to compare to.</param>
-            <returns>An <see cref="T:System.Int32"/> giving the results of the comparison: a negative value if this
-            object is less than <paramref name="obj"/>, zero if this object is equal, or a positive value if this
+            <returns>An <see cref="T:System.Int32" /> giving the results of the comparison: a negative value if this
+            object is less than <paramref name="obj" />, zero if this object is equal, or a positive value if this
             object is greater.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlDateTime.System#IComparable{MySqlConnector#MySqlDateTime}#CompareTo(MySqlConnector.MySqlDateTime)">
             <summary>
-            Compares this object to another <see cref="T:MySqlConnector.MySqlDateTime"/>.
+            Compares this object to another <see cref="T:MySqlConnector.MySqlDateTime" />.
             </summary>
-            <param name="other">The <see cref="T:MySqlConnector.MySqlDateTime"/> to compare to.</param>
-            <returns>An <see cref="T:System.Int32"/> giving the results of the comparison: a negative value if this
-            object is less than <paramref name="other"/>, zero if this object is equal, or a positive value if this
+            <param name="other">The <see cref="T:MySqlConnector.MySqlDateTime" /> to compare to.</param>
+            <returns>An <see cref="T:System.Int32" /> giving the results of the comparison: a negative value if this
+            object is less than <paramref name="other" />, zero if this object is equal, or a positive value if this
             object is greater.</returns>
         </member>
         <member name="T:MySqlConnector.MySqlDateTimeKind">
@@ -1737,29 +1737,29 @@
         </member>
         <member name="T:MySqlConnector.MySqlDecimal">
             <summary>
-            <see cref="T:MySqlConnector.MySqlDecimal"/> represents a MySQL <c>DECIMAL</c> value that is too large to fit in a .NET <see cref="T:System.Decimal"/>.
+            <see cref="T:MySqlConnector.MySqlDecimal" /> represents a MySQL <c>DECIMAL</c> value that is too large to fit in a .NET <see cref="T:System.Decimal" />.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlDecimal.Value">
             <summary>
-            Gets the value of this <see cref="T:MySqlConnector.MySqlDecimal"/> as a <see cref="T:System.Decimal"/>.
+            Gets the value of this <see cref="T:MySqlConnector.MySqlDecimal" /> as a <see cref="T:System.Decimal" />.
             </summary>
-            <remarks>This method will throw an <see cref="T:System.OverflowException"/> if the value is too large to be represented.</remarks>
+            <remarks>This method will throw an <see cref="T:System.OverflowException" /> if the value is too large to be represented.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlDecimal.ToDouble">
             <summary>
-            Gets the value of this <see cref="T:MySqlConnector.MySqlDecimal"/> as a <see cref="T:System.Double"/>.
+            Gets the value of this <see cref="T:MySqlConnector.MySqlDecimal" /> as a <see cref="T:System.Double" />.
             </summary>
             <remarks>The return value may have lost precision.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlDecimal.ToString">
             <summary>
-            Gets the original value of this <see cref="T:MySqlConnector.MySqlDecimal"/> as a <see cref="T:System.String"/>.
+            Gets the original value of this <see cref="T:MySqlConnector.MySqlDecimal" /> as a <see cref="T:System.String" />.
             </summary>
         </member>
         <member name="T:MySqlConnector.MySqlError">
             <summary>
-            <see cref="T:MySqlConnector.MySqlError"/> represents an error or warning that occurred during the execution of a SQL statement.
+            <see cref="T:MySqlConnector.MySqlError" /> represents an error or warning that occurred during the execution of a SQL statement.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlError.Level">
@@ -1769,12 +1769,12 @@
         </member>
         <member name="P:MySqlConnector.MySqlError.Code">
             <summary>
-            The numeric error code. Prefer to use <see cref="P:MySqlConnector.MySqlError.ErrorCode"/>.
+            The numeric error code. Prefer to use <see cref="P:MySqlConnector.MySqlError.ErrorCode" />.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlError.ErrorCode">
             <summary>
-            The <see cref="T:MySqlConnector.MySqlErrorCode"/> for the error or warning.
+            The <see cref="T:MySqlConnector.MySqlErrorCode" /> for the error or warning.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlError.Message">
@@ -1789,17 +1789,17 @@
         </member>
         <member name="F:MySqlConnector.MySqlErrorCode.ProvidePasswordCallbackFailed">
             <summary>
-            The delegate provided to <see cref="P:MySqlConnector.MySqlConnection.ProvidePasswordCallback"/> failed.
+            The delegate provided to <see cref="P:MySqlConnector.MySqlConnection.ProvidePasswordCallback" /> failed.
             </summary>
         </member>
         <member name="F:MySqlConnector.MySqlErrorCode.BulkCopyFailed">
             <summary>
-            Not all rows from the source supplied to <see cref="T:MySqlConnector.MySqlBulkCopy"/> were copied to <see cref="P:MySqlConnector.MySqlBulkCopy.DestinationTableName"/>.
+            Not all rows from the source supplied to <see cref="T:MySqlConnector.MySqlBulkCopy" /> were copied to <see cref="P:MySqlConnector.MySqlBulkCopy.DestinationTableName" />.
             </summary>
         </member>
         <member name="F:MySqlConnector.MySqlErrorCode.CommandTimeoutExpired">
             <summary>
-            The timeout period specified by <see cref="P:MySqlConnector.MySqlCommand.CommandTimeout"/> elapsed before the operation completed.
+            The timeout period specified by <see cref="P:MySqlConnector.MySqlCommand.CommandTimeout" /> elapsed before the operation completed.
             </summary>
         </member>
         <member name="F:MySqlConnector.MySqlErrorCode.HashCheck">
@@ -5219,18 +5219,18 @@
         </member>
         <member name="T:MySqlConnector.MySqlException">
             <summary>
-            <see cref="T:MySqlConnector.MySqlException"/> is thrown when MySQL Server returns an error code, or there is a
+            <see cref="T:MySqlConnector.MySqlException" /> is thrown when MySQL Server returns an error code, or there is a
             communication error with the server.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlException.Number">
             <summary>
-            A <see cref="T:MySqlConnector.MySqlErrorCode"/> value identifying the kind of error. Prefer to use the <see cref="P:MySqlConnector.MySqlException.ErrorCode"/> property.
+            A <see cref="T:MySqlConnector.MySqlErrorCode" /> value identifying the kind of error. Prefer to use the <see cref="P:MySqlConnector.MySqlException.ErrorCode" /> property.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlException.ErrorCode">
             <summary>
-            A <see cref="T:MySqlConnector.MySqlErrorCode"/> value identifying the kind of error.
+            A <see cref="T:MySqlConnector.MySqlErrorCode" /> value identifying the kind of error.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlException.SqlState">
@@ -5246,9 +5246,9 @@
         </member>
         <member name="M:MySqlConnector.MySqlException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
             <summary>
-            Sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with information about the exception.
+            Sets the <see cref="T:System.Runtime.Serialization.SerializationInfo" /> with information about the exception.
             </summary>
-            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that will be set.</param>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo" /> that will be set.</param>
             <param name="context">The context.</param>
         </member>
         <member name="P:MySqlConnector.MySqlException.Data">
@@ -5263,18 +5263,18 @@
         </member>
         <member name="M:MySqlConnector.MySqlGeometry.FromWkb(System.Int32,System.ReadOnlySpan{System.Byte})">
             <summary>
-            Constructs a <see cref="T:MySqlConnector.MySqlGeometry"/> from a SRID and Well-known Binary bytes.
+            Constructs a <see cref="T:MySqlConnector.MySqlGeometry" /> from a SRID and Well-known Binary bytes.
             </summary>
             <param name="srid">The SRID (Spatial Reference System ID).</param>
             <param name="wkb">The Well-known Binary serialization of the geometry.</param>
-            <returns>A new <see cref="T:MySqlConnector.MySqlGeometry"/> containing the specified geometry.</returns>
+            <returns>A new <see cref="T:MySqlConnector.MySqlGeometry" /> containing the specified geometry.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlGeometry.FromMySql(System.ReadOnlySpan{System.Byte})">
             <summary>
-            Constructs a <see cref="T:MySqlConnector.MySqlGeometry"/> from MySQL's internal format.
+            Constructs a <see cref="T:MySqlConnector.MySqlGeometry" /> from MySQL's internal format.
             </summary>
             <param name="value">The raw bytes of MySQL's internal GEOMETRY format.</param>
-            <returns>A new <see cref="T:MySqlConnector.MySqlGeometry"/> containing the specified geometry.</returns>
+            <returns>A new <see cref="T:MySqlConnector.MySqlGeometry" /> containing the specified geometry.</returns>
             <remarks>See <a href="https://dev.mysql.com/doc/refman/8.0/en/gis-data-formats.html#gis-internal-format">Internal Geometry Storage Format</a>.</remarks>
         </member>
         <member name="P:MySqlConnector.MySqlGeometry.SRID">
@@ -5333,17 +5333,17 @@
         <member name="F:MySqlConnector.MySqlGuidFormat.LittleEndianBinary16">
             <summary>
             All <c>BINARY(16)</c> columns are read/written as a <c>Guid</c> using little-endian byte order, i.e. the byte order
-            used by <see cref="M:System.Guid.ToByteArray"/> and <see cref="M:System.Guid.#ctor(System.Byte[])"/>.
+            used by <see cref="M:System.Guid.ToByteArray" /> and <see cref="M:System.Guid.#ctor(System.Byte[])" />.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlHelper.EscapeString(System.String)">
             <summary>
-            Escapes single and double quotes, and backslashes in <paramref name="value"/>.
+            Escapes single and double quotes, and backslashes in <paramref name="value" />.
             </summary>
         </member>
         <member name="T:MySqlConnector.MySqlInfoMessageEventArgs">
             <summary>
-            <see cref="T:MySqlConnector.MySqlInfoMessageEventArgs"/> contains the data supplied to the <see cref="T:MySqlConnector.MySqlInfoMessageEventHandler"/> event handler.
+            <see cref="T:MySqlConnector.MySqlInfoMessageEventArgs" /> contains the data supplied to the <see cref="T:MySqlConnector.MySqlInfoMessageEventHandler" /> event handler.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlInfoMessageEventArgs.Errors">
@@ -5353,10 +5353,10 @@
         </member>
         <member name="T:MySqlConnector.MySqlInfoMessageEventHandler">
             <summary>
-            Defines the event handler for <see cref="E:MySqlConnector.MySqlConnection.InfoMessage"/>.
+            Defines the event handler for <see cref="E:MySqlConnector.MySqlConnection.InfoMessage" />.
             </summary>
-            <param name="sender">The sender. This is the associated <see cref="T:MySqlConnector.MySqlConnection"/>.</param>
-            <param name="args">The <see cref="T:MySqlConnector.MySqlInfoMessageEventArgs"/> containing the errors.</param>
+            <param name="sender">The sender. This is the associated <see cref="T:MySqlConnector.MySqlConnection" />.</param>
+            <param name="args">The <see cref="T:MySqlConnector.MySqlInfoMessageEventArgs" /> containing the errors.</param>
         </member>
         <member name="F:MySqlConnector.MySqlLoadBalance.RoundRobin">
             <summary>
@@ -5380,40 +5380,40 @@
         </member>
         <member name="T:MySqlConnector.MySqlProtocolException">
             <summary>
-            <see cref="T:MySqlConnector.MySqlProtocolException"/> is thrown when there is an internal protocol error communicating with MySQL Server.
+            <see cref="T:MySqlConnector.MySqlProtocolException" /> is thrown when there is an internal protocol error communicating with MySQL Server.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlProtocolException.CreateForPacketOutOfOrder(System.Int32,System.Int32)">
             <summary>
-            Creates a new <see cref="T:MySqlConnector.MySqlProtocolException"/> for an out-of-order packet.
+            Creates a new <see cref="T:MySqlConnector.MySqlProtocolException" /> for an out-of-order packet.
             </summary>
             <param name="expectedSequenceNumber">The expected packet sequence number.</param>
             <param name="packetSequenceNumber">The actual packet sequence number.</param>
-            <returns>A new <see cref="T:MySqlConnector.MySqlProtocolException"/>.</returns>
+            <returns>A new <see cref="T:MySqlConnector.MySqlProtocolException" />.</returns>
         </member>
         <member name="T:MySqlConnector.MySqlProvidePasswordContext">
             <summary>
-            Provides context for the <see cref="P:MySqlConnector.MySqlConnection.ProvidePasswordCallback"/> delegate.
+            Provides context for the <see cref="P:MySqlConnector.MySqlConnection.ProvidePasswordCallback" /> delegate.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlProvidePasswordContext.Server">
             <summary>
-            The server to which MySqlConnector is connecting. This is a host name from the <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.Server"/> option.
+            The server to which MySqlConnector is connecting. This is a host name from the <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.Server" /> option.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlProvidePasswordContext.Port">
             <summary>
-            The server port. This corresponds to <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.Port"/>.
+            The server port. This corresponds to <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.Port" />.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlProvidePasswordContext.UserId">
             <summary>
-            The user ID being used for authentication. This corresponds to <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.UserID"/>.
+            The user ID being used for authentication. This corresponds to <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.UserID" />.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlProvidePasswordContext.Database">
             <summary>
-            The optional initial database; this value may be the empty string. This corresponds to <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.Database"/>.
+            The optional initial database; this value may be the empty string. This corresponds to <see cref="P:MySqlConnector.MySqlConnectionStringBuilder.Database" />.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlRowsCopiedEventArgs.Abort">
@@ -5428,7 +5428,7 @@
         </member>
         <member name="T:MySqlConnector.MySqlRowsCopiedEventHandler">
             <summary>
-            Represents the method that handles the <see cref="E:MySqlConnector.MySqlBulkCopy.MySqlRowsCopied"/> event of a <see cref="T:MySqlConnector.MySqlBulkCopy"/>.
+            Represents the method that handles the <see cref="E:MySqlConnector.MySqlBulkCopy.MySqlRowsCopied" /> event of a <see cref="T:MySqlConnector.MySqlBulkCopy" />.
             </summary>
         </member>
         <member name="T:MySqlConnector.MySqlServerRedirectionMode">
@@ -5483,7 +5483,7 @@
         </member>
         <member name="T:MySqlConnector.MySqlTransaction">
             <summary>
-            <see cref="T:MySqlConnector.MySqlTransaction"/> represents an in-progress transaction on a MySQL Server.
+            <see cref="T:MySqlConnector.MySqlTransaction" /> represents an in-progress transaction on a MySQL Server.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlTransaction.Commit">
@@ -5496,7 +5496,7 @@
             Asynchronously commits the database transaction.
             </summary>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlTransaction.Rollback">
             <summary>
@@ -5508,45 +5508,45 @@
             Asynchronously rolls back the database transaction.
             </summary>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
         </member>
         <member name="M:MySqlConnector.MySqlTransaction.Release(System.String)">
             <summary>
-            Removes the named transaction savepoint with the specified <paramref name="savepointName"/>. No commit or rollback occurs.
+            Removes the named transaction savepoint with the specified <paramref name="savepointName" />. No commit or rollback occurs.
             </summary>
             <param name="savepointName">The savepoint name.</param>
             <remarks>The proposed ADO.NET API that this is based on is not finalized; this API may change in the future.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlTransaction.ReleaseAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Asynchronously removes the named transaction savepoint with the specified <paramref name="savepointName"/>. No commit or rollback occurs.
+            Asynchronously removes the named transaction savepoint with the specified <paramref name="savepointName" />. No commit or rollback occurs.
             </summary>
             <param name="savepointName">The savepoint name.</param>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
             <remarks>The proposed ADO.NET API that this is based on is not finalized; this API may change in the future.</remarks>
         </member>
         <member name="M:MySqlConnector.MySqlTransaction.Rollback(System.String)">
             <summary>
-            Rolls back the current transaction to the savepoint with the specified <paramref name="savepointName"/> without aborting the transaction.
+            Rolls back the current transaction to the savepoint with the specified <paramref name="savepointName" /> without aborting the transaction.
             </summary>
             <param name="savepointName">The savepoint name.</param>
-            <remarks><para>The name must have been created with <see cref="M:MySqlConnector.MySqlTransaction.Save(System.String)"/>, but not released by calling <see cref="M:MySqlConnector.MySqlTransaction.Release(System.String)"/>.</para>
+            <remarks><para>The name must have been created with <see cref="M:MySqlConnector.MySqlTransaction.Save(System.String)" />, but not released by calling <see cref="M:MySqlConnector.MySqlTransaction.Release(System.String)" />.</para>
             <para>The proposed ADO.NET API that this is based on is not finalized; this API may change in the future.</para></remarks>
         </member>
         <member name="M:MySqlConnector.MySqlTransaction.RollbackAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Asynchronously rolls back the current transaction to the savepoint with the specified <paramref name="savepointName"/> without aborting the transaction.
+            Asynchronously rolls back the current transaction to the savepoint with the specified <paramref name="savepointName" /> without aborting the transaction.
             </summary>
             <param name="savepointName">The savepoint name.</param>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
-            <remarks><para>The name must have been created with <see cref="M:MySqlConnector.MySqlTransaction.SaveAsync(System.String,System.Threading.CancellationToken)"/>, but not released by calling <see cref="M:MySqlConnector.MySqlTransaction.ReleaseAsync(System.String,System.Threading.CancellationToken)"/>.</para>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
+            <remarks><para>The name must have been created with <see cref="M:MySqlConnector.MySqlTransaction.SaveAsync(System.String,System.Threading.CancellationToken)" />, but not released by calling <see cref="M:MySqlConnector.MySqlTransaction.ReleaseAsync(System.String,System.Threading.CancellationToken)" />.</para>
             <para>The proposed ADO.NET API that this is based on is not finalized; this API may change in the future.</para></remarks>
         </member>
         <member name="M:MySqlConnector.MySqlTransaction.Save(System.String)">
             <summary>
-            Sets a named transaction savepoint with the specified <paramref name="savepointName"/>. If the current transaction
+            Sets a named transaction savepoint with the specified <paramref name="savepointName" />. If the current transaction
             already has a savepoint with the same name, the old savepoint is deleted and a new one is set.
             </summary>
             <param name="savepointName">The savepoint name.</param>
@@ -5554,28 +5554,28 @@
         </member>
         <member name="M:MySqlConnector.MySqlTransaction.SaveAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Asynchronously sets a named transaction savepoint with the specified <paramref name="savepointName"/>. If the current transaction
+            Asynchronously sets a named transaction savepoint with the specified <paramref name="savepointName" />. If the current transaction
             already has a savepoint with the same name, the old savepoint is deleted and a new one is set.
             </summary>
             <param name="savepointName">The savepoint name.</param>
             <param name="cancellationToken">A token to cancel the asynchronous operation.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
             <remarks>The proposed ADO.NET API that this is based on is not finalized; this API may change in the future.</remarks>
         </member>
         <member name="P:MySqlConnector.MySqlTransaction.Connection">
             <summary>
-            Gets the <see cref="T:MySqlConnector.MySqlConnection"/> that this transaction is associated with.
+            Gets the <see cref="T:MySqlConnector.MySqlConnection" /> that this transaction is associated with.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlTransaction.DbConnection">
             <summary>
-            Gets the <see cref="T:MySqlConnector.MySqlConnection"/> that this transaction is associated with.
+            Gets the <see cref="T:MySqlConnector.MySqlConnection" /> that this transaction is associated with.
             </summary>
         </member>
         <member name="P:MySqlConnector.MySqlTransaction.IsolationLevel">
             <summary>
-            Gets the <see cref="P:MySqlConnector.MySqlTransaction.IsolationLevel"/> of this transaction. This value is set from <see cref="M:MySqlConnector.MySqlConnection.BeginTransaction(System.Data.IsolationLevel)"/>
-            or any other overload that specifies an <see cref="P:MySqlConnector.MySqlTransaction.IsolationLevel"/>.
+            Gets the <see cref="P:MySqlConnector.MySqlTransaction.IsolationLevel" /> of this transaction. This value is set from <see cref="M:MySqlConnector.MySqlConnection.BeginTransaction(System.Data.IsolationLevel)" />
+            or any other overload that specifies an <see cref="P:MySqlConnector.MySqlTransaction.IsolationLevel" />.
             </summary>
         </member>
         <member name="M:MySqlConnector.MySqlTransaction.Dispose(System.Boolean)">
@@ -5588,7 +5588,7 @@
             <summary>
             Asynchronously releases any resources associated with this transaction. If it was not committed, it will be rolled back.
             </summary>
-            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation.</returns>
+            <returns>A <see cref="T:System.Threading.Tasks.Task" /> representing the asynchronous operation.</returns>
         </member>
         <member name="T:MySqlConnector.Protocol.CharacterSet">
             <summary>
@@ -5668,7 +5668,7 @@
         </member>
         <member name="M:MySqlConnector.Protocol.Payloads.EofPayload.IsEof(MySqlConnector.Protocol.PayloadData)">
             <summary>
-            Returns <c>true</c> if <paramref name="payload"/> contains an <a href="https://dev.mysql.com/doc/internals/en/packet-EOF_Packet.html">EOF packet</a>.
+            Returns <c>true</c> if <paramref name="payload" /> contains an <a href="https://dev.mysql.com/doc/internals/en/packet-EOF_Packet.html">EOF packet</a>.
             Note that EOF packets can appear in places where a length-encoded integer (which starts with the same signature byte) may appear, so the length
             has to be checked to verify that it is an EOF packet.
             </summary>
@@ -5822,8 +5822,8 @@
         </member>
         <member name="T:MySqlConnector.Protocol.Serialization.ArraySegmentHolder`1">
             <summary>
-            <see cref="T:MySqlConnector.Protocol.Serialization.ArraySegmentHolder`1"/> is a class that holds an instance of <see cref="T:System.ArraySegment`1"/>.
-            Its primary difference from <see cref="T:System.ArraySegment`1"/> is that it's a reference type, so mutations
+            <see cref="T:MySqlConnector.Protocol.Serialization.ArraySegmentHolder`1" /> is a class that holds an instance of <see cref="T:System.ArraySegment`1" />.
+            Its primary difference from <see cref="T:System.ArraySegment`1" /> is that it's a reference type, so mutations
             to this object are visible to other objects that hold a reference to it.
             </summary>
         </member>
@@ -5840,10 +5840,10 @@
              <summary>
              Helper class to translate NegotiateStream framing for SPNEGO token
              into MySQL protocol packets.
-            
+
              Serves as underlying stream for System.Net.NegotiateStream
              to perform MariaDB's auth_gssapi_client authentication.
-            
+
              NegotiateStream protocol is described in e.g here
              https://winprotocoldoc.blob.core.windows.net/productionwindowsarchives/MS-NNS/[MS-NNS].pdf
              We only use Handshake Messages for authentication.
@@ -5851,7 +5851,7 @@
         </member>
         <member name="P:MySqlConnector.Protocol.Serialization.IByteHandler.RemainingTimeout">
             <summary>
-            The remaining timeout (in milliseconds) for the next I/O read. Use <see cref="F:MySqlConnector.Utilities.Constants.InfiniteTimeout"/> to represent no (or, infinite) timeout.
+            The remaining timeout (in milliseconds) for the next I/O read. Use <see cref="F:MySqlConnector.Utilities.Constants.InfiniteTimeout" /> to represent no (or, infinite) timeout.
             </summary>
         </member>
         <member name="M:MySqlConnector.Protocol.Serialization.IByteHandler.ReadBytesAsync(System.Memory{System.Byte},MySqlConnector.Protocol.Serialization.IOBehavior)">
@@ -5859,16 +5859,16 @@
             Reads data from this byte handler.
             </summary>
             <param name="buffer">The buffer to read into.</param>
-            <param name="ioBehavior">The <see cref="T:MySqlConnector.Protocol.Serialization.IOBehavior"/> to use when reading data.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.ValueTask`1"/> holding the number of bytes read. If reading failed, this will be zero.</returns>
+            <param name="ioBehavior">The <see cref="T:MySqlConnector.Protocol.Serialization.IOBehavior" /> to use when reading data.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.ValueTask`1" /> holding the number of bytes read. If reading failed, this will be zero.</returns>
         </member>
         <member name="M:MySqlConnector.Protocol.Serialization.IByteHandler.WriteBytesAsync(System.ReadOnlyMemory{System.Byte},MySqlConnector.Protocol.Serialization.IOBehavior)">
             <summary>
             Writes data to this byte handler.
             </summary>
             <param name="data">The data to write.</param>
-            <param name="ioBehavior">The <see cref="T:MySqlConnector.Protocol.Serialization.IOBehavior"/> to use when writing.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.ValueTask`1"/>. The value of this object is not defined.</returns>
+            <param name="ioBehavior">The <see cref="T:MySqlConnector.Protocol.Serialization.IOBehavior" /> to use when writing.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.ValueTask`1" />. The value of this object is not defined.</returns>
         </member>
         <member name="T:MySqlConnector.Protocol.Serialization.IOBehavior">
             <summary>
@@ -5900,29 +5900,29 @@
         </member>
         <member name="P:MySqlConnector.Protocol.Serialization.IPayloadHandler.ByteHandler">
             <summary>
-            Gets or sets the underlying <see cref="T:MySqlConnector.Protocol.Serialization.IByteHandler"/> that data is read from and written to.
+            Gets or sets the underlying <see cref="T:MySqlConnector.Protocol.Serialization.IByteHandler" /> that data is read from and written to.
             </summary>
         </member>
         <member name="M:MySqlConnector.Protocol.Serialization.IPayloadHandler.ReadPayloadAsync(MySqlConnector.Protocol.Serialization.ArraySegmentHolder{System.Byte},MySqlConnector.Protocol.Serialization.ProtocolErrorBehavior,MySqlConnector.Protocol.Serialization.IOBehavior)">
             <summary>
             Reads the next payload.
             </summary>
-            <param name="cache">An <see cref="T:MySqlConnector.Protocol.Serialization.ArraySegmentHolder`1"/> that will cache any buffers allocated during this
+            <param name="cache">An <see cref="T:MySqlConnector.Protocol.Serialization.ArraySegmentHolder`1" /> that will cache any buffers allocated during this
             read. (To disable caching, pass <code>new ArraySegmentHolder&lt;byte&gt;</code> so the cache will be garbage-collected
             when this method returns.)</param>
-            <param name="protocolErrorBehavior">The <see cref="T:MySqlConnector.Protocol.Serialization.ProtocolErrorBehavior"/> to use if there is a protocol error.</param>
-            <param name="ioBehavior">The <see cref="T:MySqlConnector.Protocol.Serialization.IOBehavior"/> to use when reading data.</param>
-            <returns>An <see cref="T:System.ArraySegment`1"/> containing the data that was read. This
-            <see cref="T:System.ArraySegment`1"/> will be valid to read from until the next time <see cref="M:MySqlConnector.Protocol.Serialization.IPayloadHandler.ReadPayloadAsync(MySqlConnector.Protocol.Serialization.ArraySegmentHolder{System.Byte},MySqlConnector.Protocol.Serialization.ProtocolErrorBehavior,MySqlConnector.Protocol.Serialization.IOBehavior)"/> or
-            <see cref="M:MySqlConnector.Protocol.Serialization.IPayloadHandler.WritePayloadAsync(System.ReadOnlyMemory{System.Byte},MySqlConnector.Protocol.Serialization.IOBehavior)"/> is called.</returns>
+            <param name="protocolErrorBehavior">The <see cref="T:MySqlConnector.Protocol.Serialization.ProtocolErrorBehavior" /> to use if there is a protocol error.</param>
+            <param name="ioBehavior">The <see cref="T:MySqlConnector.Protocol.Serialization.IOBehavior" /> to use when reading data.</param>
+            <returns>An <see cref="T:System.ArraySegment`1" /> containing the data that was read. This
+            <see cref="T:System.ArraySegment`1" /> will be valid to read from until the next time <see cref="M:MySqlConnector.Protocol.Serialization.IPayloadHandler.ReadPayloadAsync(MySqlConnector.Protocol.Serialization.ArraySegmentHolder{System.Byte},MySqlConnector.Protocol.Serialization.ProtocolErrorBehavior,MySqlConnector.Protocol.Serialization.IOBehavior)" /> or
+            <see cref="M:MySqlConnector.Protocol.Serialization.IPayloadHandler.WritePayloadAsync(System.ReadOnlyMemory{System.Byte},MySqlConnector.Protocol.Serialization.IOBehavior)" /> is called.</returns>
         </member>
         <member name="M:MySqlConnector.Protocol.Serialization.IPayloadHandler.WritePayloadAsync(System.ReadOnlyMemory{System.Byte},MySqlConnector.Protocol.Serialization.IOBehavior)">
             <summary>
             Writes a payload.
             </summary>
             <param name="payload">The data to write.</param>
-            <param name="ioBehavior">The <see cref="T:MySqlConnector.Protocol.Serialization.IOBehavior"/> to use when writing.</param>
-            <returns>A <see cref="T:System.Threading.Tasks.ValueTask`1"/>. The value of this object is not defined.</returns>
+            <param name="ioBehavior">The <see cref="T:MySqlConnector.Protocol.Serialization.IOBehavior" /> to use when writing.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.ValueTask`1" />. The value of this object is not defined.</returns>
         </member>
         <member name="T:MySqlConnector.Protocol.Serialization.ProtocolErrorBehavior">
             <summary>
@@ -6000,7 +6000,7 @@
             Calculates the Adler32 checksum with the bytes taken from the span.
             </summary>
             <param name="buffer">The readonly span of bytes.</param>
-            <returns>The <see cref="T:System.UInt32"/>.</returns>
+            <returns>The <see cref="T:System.UInt32" />.</returns>
         </member>
         <member name="F:MySqlConnector.Utilities.Constants.InfiniteTimeout">
             <summary>
@@ -6009,32 +6009,32 @@
         </member>
         <member name="T:MySqlConnector.Utilities.ResizableArray`1">
             <summary>
-            A wrapper around a resizable array. This type is intended to be used with <see cref="T:MySqlConnector.Utilities.ResizableArraySegment`1"/>.
+            A wrapper around a resizable array. This type is intended to be used with <see cref="T:MySqlConnector.Utilities.ResizableArraySegment`1" />.
             </summary>
         </member>
         <member name="M:MySqlConnector.Utilities.ResizableArray`1.DoResize(System.Int32)">
             <summary>
-            Do not call this method directly; use <see cref="M:MySqlConnector.Utilities.Utility.Resize``1(MySqlConnector.Utilities.ResizableArray{``0}@,System.Int32)"/>.
+            Do not call this method directly; use <see cref="M:MySqlConnector.Utilities.Utility.Resize``1(MySqlConnector.Utilities.ResizableArray{``0}@,System.Int32)" />.
             </summary>
         </member>
         <member name="T:MySqlConnector.Utilities.ResizableArraySegment`1">
             <summary>
-            An <see cref="T:System.ArraySegment`1"/> that supports having its underlying array reallocated and resized.
+            An <see cref="T:System.ArraySegment`1" /> that supports having its underlying array reallocated and resized.
             </summary>
         </member>
         <member name="M:MySqlConnector.Utilities.TimerQueue.Add(System.Int32,System.Action)">
             <summary>
-            Adds a timer that will invoke <paramref name="action"/> in approximately <paramref name="delay"/> milliseconds.
+            Adds a timer that will invoke <paramref name="action" /> in approximately <paramref name="delay" /> milliseconds.
             </summary>
-            <param name="delay">The time (in milliseconds) to wait before invoking <paramref name="action"/>.</param>
+            <param name="delay">The time (in milliseconds) to wait before invoking <paramref name="action" />.</param>
             <param name="action">The callback to invoke.</param>
-            <returns>A timer ID that can be passed to <see cref="M:MySqlConnector.Utilities.TimerQueue.Remove(System.UInt32)"/> to cancel the timer.</returns>
+            <returns>A timer ID that can be passed to <see cref="M:MySqlConnector.Utilities.TimerQueue.Remove(System.UInt32)" /> to cancel the timer.</returns>
         </member>
         <member name="M:MySqlConnector.Utilities.TimerQueue.Remove(System.UInt32)">
             <summary>
             Cancels the timer with the specified ID.
             </summary>
-            <param name="id">The timer ID (returned from <see cref="M:MySqlConnector.Utilities.TimerQueue.Add(System.Int32,System.Action)"/>).</param>
+            <param name="id">The timer ID (returned from <see cref="M:MySqlConnector.Utilities.TimerQueue.Add(System.Int32,System.Action)" />).</param>
             <returns><c>true</c> if the timer was removed; otherwise, <c>false</c>. This method will return <c>false</c> if the specified timer has already fired.</returns>
         </member>
         <member name="M:MySqlConnector.Utilities.Utility.GetRsaParameters(System.String)">
@@ -6044,44 +6044,44 @@
         </member>
         <member name="M:MySqlConnector.Utilities.Utility.Slice``1(System.ArraySegment{``0},System.Int32)">
             <summary>
-            Returns a new <see cref="T:System.ArraySegment`1"/> that starts at index <paramref name="index"/> into <paramref name="arraySegment"/>.
+            Returns a new <see cref="T:System.ArraySegment`1" /> that starts at index <paramref name="index" /> into <paramref name="arraySegment" />.
             </summary>
-            <param name="arraySegment">The <see cref="T:System.ArraySegment`1"/> from which to create a slice.</param>
-            <param name="index">The non-negative, zero-based starting index of the new slice (relative to <see cref="P:System.ArraySegment`1.Offset"/> of <paramref name="arraySegment"/>.</param>
-            <returns>A new <see cref="T:System.ArraySegment`1"/> starting at the <paramref name="index"/>th element of <paramref name="arraySegment"/> and continuing to the end of <paramref name="arraySegment"/>.</returns>
+            <param name="arraySegment">The <see cref="T:System.ArraySegment`1" /> from which to create a slice.</param>
+            <param name="index">The non-negative, zero-based starting index of the new slice (relative to <see cref="P:System.ArraySegment`1.Offset" /> of <paramref name="arraySegment" />.</param>
+            <returns>A new <see cref="T:System.ArraySegment`1" /> starting at the <paramref name="index" />th element of <paramref name="arraySegment" /> and continuing to the end of <paramref name="arraySegment" />.</returns>
         </member>
         <member name="M:MySqlConnector.Utilities.Utility.Slice``1(System.ArraySegment{``0},System.Int32,System.Int32)">
             <summary>
-            Returns a new <see cref="T:System.ArraySegment`1"/> that starts at index <paramref name="index"/> into <paramref name="arraySegment"/> and has a length of <paramref name="length"/>.
+            Returns a new <see cref="T:System.ArraySegment`1" /> that starts at index <paramref name="index" /> into <paramref name="arraySegment" /> and has a length of <paramref name="length" />.
             </summary>
-            <param name="arraySegment">The <see cref="T:System.ArraySegment`1"/> from which to create a slice.</param>
-            <param name="index">The non-negative, zero-based starting index of the new slice (relative to <see cref="P:System.ArraySegment`1.Offset"/> of <paramref name="arraySegment"/>.</param>
+            <param name="arraySegment">The <see cref="T:System.ArraySegment`1" /> from which to create a slice.</param>
+            <param name="index">The non-negative, zero-based starting index of the new slice (relative to <see cref="P:System.ArraySegment`1.Offset" /> of <paramref name="arraySegment" />.</param>
             <param name="length">The non-negative length of the new slice.</param>
-            <returns>A new <see cref="T:System.ArraySegment`1"/> of length <paramref name="length"/>, starting at the <paramref name="index"/>th element of <paramref name="arraySegment"/>.</returns>
+            <returns>A new <see cref="T:System.ArraySegment`1" /> of length <paramref name="length" />, starting at the <paramref name="index" />th element of <paramref name="arraySegment" />.</returns>
         </member>
         <member name="M:MySqlConnector.Utilities.Utility.ArraySlice(System.Byte[],System.Int32,System.Int32)">
             <summary>
-            Returns a new <see cref="T:System.Byte"/> array that is a slice of <paramref name="input"/> starting at <paramref name="offset"/>.
+            Returns a new <see cref="T:System.Byte" /> array that is a slice of <paramref name="input" /> starting at <paramref name="offset" />.
             </summary>
             <param name="input">The array to slice.</param>
             <param name="offset">The offset at which to slice.</param>
             <param name="length">The length of the slice.</param>
-            <returns>A new <see cref="T:System.Byte"/> array that is a slice of <paramref name="input"/> from <paramref name="offset"/> to the end.</returns>
+            <returns>A new <see cref="T:System.Byte" /> array that is a slice of <paramref name="input" /> from <paramref name="offset" /> to the end.</returns>
         </member>
         <member name="M:MySqlConnector.Utilities.Utility.FindNextIndex(System.ReadOnlySpan{System.Byte},System.Int32,System.ReadOnlySpan{System.Byte})">
             <summary>
-            Finds the next index of <paramref name="pattern"/> in <paramref name="data"/>, starting at index <paramref name="offset"/>.
+            Finds the next index of <paramref name="pattern" /> in <paramref name="data" />, starting at index <paramref name="offset" />.
             </summary>
             <param name="data">The array to search.</param>
             <param name="offset">The offset at which to start searching.</param>
-            <param name="pattern">The pattern to find in <paramref name="data"/>.</param>
-            <returns>The offset of <paramref name="pattern"/> within <paramref name="data"/>, or <c>-1</c> if <paramref name="pattern"/> was not found.</returns>
+            <param name="pattern">The pattern to find in <paramref name="data" />.</param>
+            <returns>The offset of <paramref name="pattern" /> within <paramref name="data" />, or <c>-1</c> if <paramref name="pattern" /> was not found.</returns>
         </member>
         <member name="M:MySqlConnector.Utilities.Utility.Resize``1(MySqlConnector.Utilities.ResizableArray{``0}@,System.Int32)">
             <summary>
-            Resizes <paramref name="resizableArray"/> to hold at least <paramref name="newLength"/> items.
+            Resizes <paramref name="resizableArray" /> to hold at least <paramref name="newLength" /> items.
             </summary>
-            <remarks><paramref name="resizableArray"/> may be <c>null</c>, in which case a new <see cref="T:MySqlConnector.Utilities.ResizableArray`1"/> will be allocated.</remarks>
+            <remarks><paramref name="resizableArray" /> may be <c>null</c>, in which case a new <see cref="T:MySqlConnector.Utilities.ResizableArray`1" /> will be allocated.</remarks>
         </member>
         <member name="T:System.Diagnostics.CodeAnalysis.AllowNullAttribute">
             <summary>Specifies that null is allowed as an input even if the corresponding type disallows it.</summary>
@@ -6090,7 +6090,7 @@
             <summary>Specifies that an output will not be null even if the corresponding type allows it.</summary>
         </member>
         <member name="T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute">
-            <summary>Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue"/>, the parameter will not be null even if the corresponding type allows it.</summary>
+            <summary>Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue" />, the parameter will not be null even if the corresponding type allows it.</summary>
         </member>
         <member name="M:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.#ctor(System.Boolean)">
             <summary>Initializes the attribute with the specified return value condition.</summary>

@@ -1,6 +1,4 @@
-﻿using CoreUtils;
-using CoreUtils.Classes;
-using System;
+﻿using System;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
@@ -8,32 +6,14 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using CoreUtils;
+using CoreUtils.Classes;
 
 namespace DataProcessing
 {
-
     public class IncomingFileProcessing
     {
         private Vars Vars { get; } = new Vars();
-
-        public static async Task ProcessAll(string ftpSubFolderPath = "")
-        {
-            //
-            await Task.Factory.StartNew
-            (
-                () =>
-                {
-                    //Debug.Assert(false);
-
-                    // set process environment
-                    Vars.ftpSubFolderPath = ftpSubFolderPath;
-                    //
-                    Thread.CurrentThread.Name = "IncomingFileProcessing";
-                    var fileProcessing = new IncomingFileProcessing();
-                    fileProcessing.ProcessAllFiles();
-                }
-            );
-        }
 
         public static async Task CopyTestFiles(string ftpSubFolderPath = "")
         {
@@ -54,6 +34,25 @@ namespace DataProcessing
             );
         }
 
+        public static async Task ProcessAll(string ftpSubFolderPath = "")
+        {
+            //
+            await Task.Factory.StartNew
+            (
+                () =>
+                {
+                    //Debug.Assert(false);
+
+                    // set process environment
+                    Vars.ftpSubFolderPath = ftpSubFolderPath;
+                    //
+                    Thread.CurrentThread.Name = "IncomingFileProcessing";
+                    var fileProcessing = new IncomingFileProcessing();
+                    fileProcessing.ProcessAllFiles();
+                }
+            );
+        }
+
         public void ProcessAllFiles()
         {
             //
@@ -70,24 +69,162 @@ namespace DataProcessing
             this.ProcessIncomingAlegeusFiles(dbConn, fileLogParams);
         }
 
-        protected void ProcessIncomingCobraFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
+        protected void AddAlegeusHeaderForAllFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
+
         {
-            // TriageIncomingCobraFiles
-            this.TriageIncomingCobraFiles(dbConn, fileLogParams);
+            // Iterate all files in header dir
+            FileUtils.IterateDirectory(this.Vars.alegeusFileHeadersRoot, DirectoryIterateType.Files, false,
+                new string[] { "*.mbi", "*.csv", "*.txt", "*.xls", "*.xlsx" },
+                (srcFilePath, destFilePath, dummy2) =>
+                {
+                    try
+                    {
+                        // 1. if excel file, convert to csv and delete it
+                        if (FileUtils.IsExcelFile(srcFilePath))
+                        {
+                            var csvFilePath =
+                                $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileNameWithoutExtension(srcFilePath)}.csv";
 
-            // PrepareIncomingCobraQbFiles
-            this.PrepareIncomingCobraQbFiles(dbConn, fileLogParams);
+                            FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                                Import.GetPasswordsToOpenExcelFiles(srcFilePath),
+                                null,
+                                null);
 
-            // MoveIncomingCobraFilesToProcessingDir
-            this.PreCheckAndProcessCobraFiles(dbConn, fileLogParams);
-        }
-        protected void ProcessIncomingAlegeusFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
-        {
-            //AddAlegeusHeaderForAllFiles
-            this.AddAlegeusHeaderForAllFiles(dbConn, fileLogParams);
+                            FileUtils.DeleteFile(srcFilePath, null, null);
+                            // Log
+                            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                                Path.GetFileName(csvFilePath), csvFilePath,
+                                $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                                "Success", $"Converted Excel File to Csv");
+                            DbUtils.LogFileOperation(fileLogParams);
 
-            //PreCheckAndProcessAlegeusFiles
-            this.PreCheckAndProcessAlegeusFiles(dbConn, fileLogParams);
+                            //
+                            srcFilePath = csvFilePath;
+                        }
+
+                        // 2. get header type for file
+                        var headerType = Import.GetAlegeusHeaderTypeFromFile(srcFilePath, false);
+
+                        //3. truncate staging table
+                        var tableName = "[dbo].[alegeus_file_staging]";
+                        DbUtils.TruncateTable(dbConn, tableName,
+                            fileLogParams?.GetMessageLogParams());
+
+                        //4. import file
+                        //
+                        ImpExpUtils.ImportSingleColumnFlatFile(dbConn, srcFilePath, srcFilePath, tableName,
+                            "folder_name",
+                            "data_row",
+                            (filePath1, rowNo, line) =>
+                            {
+                                if (Utils.IsBlank(line))
+                                {
+                                    return false;
+                                }
+
+                                if (
+                                    // skip if line is not of a import row Type
+                                    !Import.IsAlegeusImportLine(line)
+                                )
+                                {
+                                    return false;
+                                }
+
+                                return true;
+                            },
+                            fileLogParams,
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+                        );
+
+                        // 5. create headers
+                        string procName;
+                        switch (headerType)
+                        {
+                            case HeaderType.Own:
+                                procName = "dbo.[proc_alegeus_AlterHeadersOwn]";
+                                break;
+
+                            case HeaderType.Old:
+                                procName = "dbo.[proc_alegeus_AlterHeaders2015]";
+                                break;
+
+                            case HeaderType.NoChange:
+                                procName = "dbo.[proc_alegeus_AlterHeadersNone]";
+                                break;
+
+                            case HeaderType.New:
+                                procName = "dbo.[proc_alegeus_AlterHeaders2019]";
+                                break;
+                            //todo: how to add headers for segmented funding?
+                            case HeaderType.SegmentedFunding:
+                                procName = "dbo.[proc_alegeus_AlterHeaders2019]";
+                                break;
+
+                            default:
+                                var message =
+                                    $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : headerType : {headerType} is invalid";
+                                throw new Exception(message);
+                        }
+
+                        //
+                        if (!Utils.IsBlank(procName))
+                        {
+                            var queryString = " ";
+                            queryString += $" EXEC {procName};" + "\r\n";
+                            // run fix headers query
+                            DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
+                                fileLogParams?.GetMessageLogParams());
+                        }
+
+                        //6. Export File with proper headers
+                        var expFilePath =
+                            $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileNameWithoutExtension(srcFilePath)}.mbi";
+
+                        // delete src file to avoid duplicates
+                        FileUtils.DeleteFile(srcFilePath, null, null);
+
+                        var outputTableName = "[dbo].[alegeus_file_final]";
+                        var queryStringExp = $"Select * from {outputTableName} order by row_num asc";
+                        ImpExpUtils.ExportSingleColumnFlatFile(expFilePath, dbConn, queryStringExp,
+                            "file_row", null, fileLogParams,
+                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+                        );
+
+                        // Log
+                        fileLogParams?.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                            Path.GetFileName(expFilePath), expFilePath, "IncomingFileProcessing-AddHeaderToFile",
+                            "Success",
+                            "Added Header to File");
+                        DbUtils.LogFileOperation(fileLogParams);
+
+                        // 7. move file to PreCheck
+                        string destPreCheckPath = $"{Vars.alegeusFilesToProcessPath}/{Path.GetFileNameWithoutExtension(expFilePath)}.mbi";
+                        FileUtils.MoveFile(expFilePath, destPreCheckPath, null, null);
+
+                        // add to fileLog
+                        fileLogParams?.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                            Path.GetFileName(destPreCheckPath), destPreCheckPath,
+                            "IncomingFileProcessing-MoveHeaderFileToPreCheckDir",
+                            "Success", "Moved Header File to PreCheck Dir");
+                        // do not log - gives too many lines
+                        // DbUtils.LogFileOperation(FileLogParams);
+                    }
+                    catch (Exception ex2)
+                    {
+                        fileLogParams?.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                            Path.GetFileName(srcFilePath), srcFilePath,
+                            $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                            "ERROR", ex2.ToString());
+                        DbUtils.LogFileOperation(fileLogParams);
+
+                        // reject file
+                        var completeFilePath = srcFilePath;
+                        Import.MoveFileToPlatformRejectsFolder(completeFilePath, ex2.ToString(), Vars.alegeusFilesRejectsPath);
+                        ;
+                    }
+                },
+                (directory, file, ex) => { Import.MoveFileToPlatformRejectsFolder(file, ex.ToString()); }
+            );
         }
 
         protected void MoveIncomingFilesToProcessingDirs(DbConnection dbConn, FileOperationLogParams fileLogParams)
@@ -98,12 +235,11 @@ namespace DataProcessing
             //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             //DbUtils.LogFileOperation(fileLogParams);
 
-
             //1. Get list of folders for header from DB
             //decide table name
             var tableName = "dbo.[FTP_Source_Folders]";
 
-            // run query - we take only by environment so we can test 
+            // run query - we take only by environment so we can test
             var queryString =
                 $"Select * from {tableName} where environment = '{Vars.RunTimeEnvironment}' and is_active = 1  order by folder_name;";
             var dtHeaderFolders = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, dbConn, queryString);
@@ -158,10 +294,8 @@ namespace DataProcessing
                             }
                         }
                     );
-
                 }
             } // each dr
-
         }
 
         protected void MoveIncomingFileToNextStepDir(string srcFilePath, DbConnection dbConn, FileOperationLogParams fileLogParams)
@@ -187,7 +321,6 @@ namespace DataProcessing
                 if (srcArchivePath.Length >= 250)
                 {
                     srcArchivePath = $"{Utils.Left(srcArchivePath, 250)}{Path.GetExtension(srcArchivePath)}";
-
                 }
                 //
                 try
@@ -219,25 +352,21 @@ namespace DataProcessing
 
                 var platformType = Import.GetPlatformTypeForFile(srcFilePath);
 
-
                 // 4. make FilenameProperty uniform
                 var uniformFilePath = Import.GetUniformNameForFile(platformType, srcFilePath);
                 if (Path.GetFileName(srcFilePath) != Path.GetFileName(uniformFilePath))
                 {
                     FileUtils.MoveFile(srcFilePath, uniformFilePath, null, null);
                     currentFilePath = uniformFilePath;
-
                 }
 
                 // 5. add uniqueId to file so we can track it across folders and operations
                 var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(uniformFilePath, true, true, fileLogParams);
                 currentFilePath = uniqueIdFilePath;
 
-
                 // 6. Suffix uniquePath to Archived Source file so we can trace back from passed/reject file
                 string srcArchiveCombinedPath = $"{srcArchivePath}---{Path.GetFileName(uniqueIdFilePath)}";
                 FileUtils.MoveFile(srcArchivePath, srcArchiveCombinedPath, null, null);
-
 
                 // 7. move source to platform holding dir
                 string destDirHolding;
@@ -318,8 +447,6 @@ namespace DataProcessing
                     fileLogParams.SetFileNames("", Path.GetFileName(destPathHolding), destPathHolding,
                         Path.GetFileName(headerPath), headerPath, "IncomingFileProcessing-CopyToHeadersDir", "Success",
                         "Copied Alegeus File to headers Directory");
-
-
                 }
             }
             catch (Exception ex2)
@@ -341,162 +468,6 @@ namespace DataProcessing
                 Import.MoveFileToPlatformRejectsFolder(completeFilePath, ex2.ToString());
                 ;
             }
-        }
-
-        protected void AddAlegeusHeaderForAllFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
-
-        {
-            // Iterate all files in header dir
-            FileUtils.IterateDirectory(this.Vars.alegeusFileHeadersRoot, DirectoryIterateType.Files, false,
-                new string[] { "*.mbi", "*.csv", "*.txt", "*.xls", "*.xlsx" },
-                (srcFilePath, destFilePath, dummy2) =>
-                {
-                    try
-                    {
-                        // 1. if excel file, convert to csv and delete it
-                        if (FileUtils.IsExcelFile(srcFilePath))
-                        {
-                            var csvFilePath =
-                                $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileNameWithoutExtension(srcFilePath)}.csv";
-
-                            FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
-                                Import.GetPasswordsToOpenExcelFiles(srcFilePath),
-                                null,
-                                null);
-
-                            FileUtils.DeleteFile(srcFilePath, null, null);
-                            // Log
-                            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                                Path.GetFileName(csvFilePath), csvFilePath,
-                                $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                                "Success", $"Converted Excel File to Csv");
-                            DbUtils.LogFileOperation(fileLogParams);
-
-                            //
-                            srcFilePath = csvFilePath;
-                        }
-
-                        // 2. get header type for file
-                        var headerType = Import.GetAlegeusHeaderTypeFromFile(srcFilePath, false);
-
-                        //3. truncate staging table
-                        var tableName = "[dbo].[alegeus_file_staging]";
-                        DbUtils.TruncateTable(dbConn, tableName,
-                            fileLogParams?.GetMessageLogParams());
-
-                        //4. import file
-                        //
-                        ImpExpUtils.ImportSingleColumnFlatFile(dbConn, srcFilePath, srcFilePath, tableName,
-                            "folder_name",
-                            "data_row",
-                            (filePath1, rowNo, line) =>
-                            {
-                                if (Utils.IsBlank(line))
-                                {
-                                    return false;
-                                }
-
-                                if (
-                                    // skip if line is not of a import row Type
-                                    !Import.IsAlegeusImportLine(line)
-                                )
-                                {
-                                    return false;
-                                }
-
-                                return true;
-                            },
-                            fileLogParams,
-                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
-                        );
-
-                        // 5. create headers
-                        string procName;
-                        switch (headerType)
-                        {
-                            case HeaderType.Own:
-                                procName = "dbo.[proc_alegeus_AlterHeadersOwn]";
-                                break;
-                            case HeaderType.Old:
-                                procName = "dbo.[proc_alegeus_AlterHeaders2015]";
-                                break;
-                            case HeaderType.NoChange:
-                                procName = "dbo.[proc_alegeus_AlterHeadersNone]";
-                                break;
-                            case HeaderType.New:
-                                procName = "dbo.[proc_alegeus_AlterHeaders2019]";
-                                break;
-                            //todo: how to add headers for segmented funding?
-                            case HeaderType.SegmentedFunding:
-                                procName = "dbo.[proc_alegeus_AlterHeaders2019]";
-                                break;
-                            default:
-                                var message =
-                                    $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : headerType : {headerType} is invalid";
-                                throw new Exception(message);
-                        }
-
-                        //                   
-                        if (!Utils.IsBlank(procName))
-                        {
-                            var queryString = " ";
-                            queryString += $" EXEC {procName};" + "\r\n";
-                            // run fix headers query
-                            DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
-                                fileLogParams?.GetMessageLogParams());
-                        }
-
-                        //6. Export File with proper headers
-                        var expFilePath =
-                            $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileNameWithoutExtension(srcFilePath)}.mbi";
-
-                        // delete src file to avoid duplicates
-                        FileUtils.DeleteFile(srcFilePath, null, null);
-
-
-                        var outputTableName = "[dbo].[alegeus_file_final]";
-                        var queryStringExp = $"Select * from {outputTableName} order by row_num asc";
-                        ImpExpUtils.ExportSingleColumnFlatFile(expFilePath, dbConn, queryStringExp,
-                            "file_row", null, fileLogParams,
-                            (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
-                        );
-
-                        // Log
-                        fileLogParams?.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                            Path.GetFileName(expFilePath), expFilePath, "IncomingFileProcessing-AddHeaderToFile",
-                            "Success",
-                            "Added Header to File");
-                        DbUtils.LogFileOperation(fileLogParams);
-
-                        // 7. move file to PreCheck
-                        string destPreCheckPath = $"{Vars.alegeusFilesToProcessPath}/{Path.GetFileNameWithoutExtension(expFilePath)}.mbi";
-                        FileUtils.MoveFile(expFilePath, destPreCheckPath, null, null);
-
-                        // add to fileLog
-                        fileLogParams?.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                            Path.GetFileName(destPreCheckPath), destPreCheckPath,
-                            "IncomingFileProcessing-MoveHeaderFileToPreCheckDir",
-                            "Success", "Moved Header File to PreCheck Dir");
-                        // do not log - gives too many lines
-                        // DbUtils.LogFileOperation(FileLogParams);
-                    }
-                    catch (Exception ex2)
-                    {
-                        fileLogParams?.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                            Path.GetFileName(srcFilePath), srcFilePath,
-                            $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                            "ERROR", ex2.ToString());
-                        DbUtils.LogFileOperation(fileLogParams);
-
-                        // reject file
-                        var completeFilePath = srcFilePath;
-                        Import.MoveFileToPlatformRejectsFolder(completeFilePath, ex2.ToString(), Vars.alegeusFilesRejectsPath);
-                        ;
-                    }
-
-                },
-                (directory, file, ex) => { Import.MoveFileToPlatformRejectsFolder(file, ex.ToString()); }
-            );
         }
 
         protected void PreCheckAndProcessAlegeusFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
@@ -521,7 +492,7 @@ namespace DataProcessing
                             srcFilePath = mbiFilePath;
                         }
                     }
-                    // check the file 
+                    // check the file
                     using var fileChecker = new FileChecker(srcFilePath, PlatformType.Alegeus,
                         this.Vars.dbConnDataProcessing, fileLogParams,
                         (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
@@ -547,85 +518,53 @@ namespace DataProcessing
             ////
         }
 
-        protected void TriageIncomingCobraFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
+        protected void PreCheckAndProcessCobraFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
         {
             ////
-            //fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            //fileLogParams.SetFileNames("", "", "", "", "",
+            //    $"CobraFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
             //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             //DbUtils.LogFileOperation(fileLogParams);
             ////
-
-            // 1. txt -> csv, mbi -> csv
-            FileUtils.IterateDirectory(
-                Vars.cobraFilesImportHoldingPath, DirectoryIterateType.Files, false, "*.*",
-                (srcFilePath, dummy1, dummy2) =>
-                {
-                    FileInfo fileInfo = new FileInfo(srcFilePath);
-                    if (fileInfo.Extension == ".txt" || fileInfo.Extension == ".mbi")
-                    {
-                        string csvFilePath =
-                            $"{fileInfo.Directory}/{Path.GetFileNameWithoutExtension(fileInfo.Name)}.csv";
-
-                        FileUtils.MoveFile(srcFilePath, csvFilePath, null, null);
-                        fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                            Path.GetFileName(csvFilePath), csvFilePath,
-                            $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Success",
-                            $"Renamed file to *.csv");
-                        DbUtils.LogFileOperation(fileLogParams);
-                        //
-                        srcFilePath = csvFilePath;
-                    }
-
-                    // move qb csv file to PreparedQBRoot
-                    if (Import.IsCobraImportQbFile(srcFilePath)
-                    /*|| Import.IsCobraImportSpmFile(srcFilePath)*/
-                    )
-                    {
-                        string destFilePath =
-                            $"{Vars.cobraFilesPreparedQbPath}/{fileInfo.Name}";
-
-                        //
-                        FileUtils.MoveFile(srcFilePath, destFilePath, null, null);
-
-                        fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                            Path.GetFileName(destFilePath), destFilePath,
-                            "CobraProcessing-MoveQBCsvFilesToPreparedQB", "Success",
-                            $"Moved QB File to MoveQBCsvFilesToPreparedQB folder");
-
-                        DbUtils.LogFileOperation(fileLogParams);
-
-                    }
-                }
-                ,
-                 null
-                ); // iterate
-        } // routine
-
-        protected void PrepareIncomingCobraQbFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
-
-        {
             ////
-            //fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            //DbUtils.LogFileOperation(fileLogParams);
-            ////
-
-            string fileExt = "*.csv";
-            //
             FileUtils.IterateDirectory(
-                new string[] { Vars.cobraFilesPreparedQbPath, Vars.cobraFilesDecryptPath },
-                DirectoryIterateType.Files, false,
-                new string[] { fileExt },
+                new string[] { Vars.cobraFilesImportHoldingPath, Vars.cobraFilesPreparedQbPath },
+                DirectoryIterateType.Files,
+                false,
+                new string[] { "*.*" },
                 (srcFilePath, destFilePath, dummy2) =>
                 {
-                    this.PrepareCobraQbFile(srcFilePath, dbConn, fileLogParams);
+                    // ensure file ext is csv
+                    if (Path.GetExtension(srcFilePath).ToLower() != ".csv")
+                    {
+                        string csvFilePath = $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileNameWithoutExtension(srcFilePath)}.csv";
+                        if (Path.GetFileName(csvFilePath) != Path.GetFileName(srcFilePath))
+                        {
+                            FileUtils.MoveFile(srcFilePath, csvFilePath, null, null);
+                            srcFilePath = csvFilePath;
+                        }
+                    }
+                    // check the file
+                    using var fileChecker = new FileChecker(srcFilePath, PlatformType.Cobra,
+                        this.Vars.dbConnDataProcessing, fileLogParams,
+                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+                    );
 
+                    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                        Path.GetFileName(srcFilePath), srcFilePath,
+                        $"CobraFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+                        "Starting", "Starting PreCheck");
+                    DbUtils.LogFileOperation(fileLogParams);
+
+                    //
+                    fileChecker.CheckFileAndProcess(FileCheckType.AllData, FileCheckProcessType.MoveToDestDirectories);
                 },
-                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
-            ); // IterateDir
+                (directory, file, ex) => { Import.MoveFileToPlatformRejectsFolder(file, ex.ToString()); }
+            );
 
             ////
-            //fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            //fileLogParams.SetFileNames("", "", "", "", "",
+            //    $"CobraFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
             //    "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             //DbUtils.LogFileOperation(fileLogParams);
             ////
@@ -683,62 +622,109 @@ namespace DataProcessing
             DbUtils.LogFileOperation(fileLogParams);
         }
 
-        protected void PreCheckAndProcessCobraFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
-        {
+        protected void PrepareIncomingCobraQbFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
 
+        {
             ////
-            //fileLogParams.SetFileNames("", "", "", "", "",
-            //    $"CobraFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            //fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
             //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
             //DbUtils.LogFileOperation(fileLogParams);
             ////
-            ////
+
+            string fileExt = "*.csv";
+            //
             FileUtils.IterateDirectory(
-                new string[] { Vars.cobraFilesImportHoldingPath, Vars.cobraFilesPreparedQbPath },
-                DirectoryIterateType.Files,
-                false,
-                new string[] { "*.*" },
+                new string[] { Vars.cobraFilesPreparedQbPath, Vars.cobraFilesDecryptPath },
+                DirectoryIterateType.Files, false,
+                new string[] { fileExt },
                 (srcFilePath, destFilePath, dummy2) =>
                 {
-                    // ensure file ext is csv
-                    if (Path.GetExtension(srcFilePath).ToLower() != ".csv")
-                    {
-                        string csvFilePath = $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileNameWithoutExtension(srcFilePath)}.csv";
-                        if (Path.GetFileName(csvFilePath) != Path.GetFileName(srcFilePath))
-                        {
-                            FileUtils.MoveFile(srcFilePath, csvFilePath, null, null);
-                            srcFilePath = csvFilePath;
-                        }
-                    }
-                    // check the file 
-                    using var fileChecker = new FileChecker(srcFilePath, PlatformType.Cobra,
-                        this.Vars.dbConnDataProcessing, fileLogParams,
-                        (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
-                    );
-
-                    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                        Path.GetFileName(srcFilePath), srcFilePath,
-                        $"CobraFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
-                        "Starting", "Starting PreCheck");
-                    DbUtils.LogFileOperation(fileLogParams);
-
-                    //
-                    fileChecker.CheckFileAndProcess(FileCheckType.AllData, FileCheckProcessType.MoveToDestDirectories);
+                    this.PrepareCobraQbFile(srcFilePath, dbConn, fileLogParams);
                 },
-                (directory, file, ex) => { Import.MoveFileToPlatformRejectsFolder(file, ex.ToString()); }
-            );
+                (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
+            ); // IterateDir
 
             ////
-            //fileLogParams.SetFileNames("", "", "", "", "",
-            //    $"CobraFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            //fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
             //    "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             //DbUtils.LogFileOperation(fileLogParams);
             ////
+        }
 
+        protected void ProcessIncomingAlegeusFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
+        {
+            //AddAlegeusHeaderForAllFiles
+            this.AddAlegeusHeaderForAllFiles(dbConn, fileLogParams);
 
+            //PreCheckAndProcessAlegeusFiles
+            this.PreCheckAndProcessAlegeusFiles(dbConn, fileLogParams);
+        }
 
+        protected void ProcessIncomingCobraFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
+        {
+            // TriageIncomingCobraFiles
+            this.TriageIncomingCobraFiles(dbConn, fileLogParams);
+
+            // PrepareIncomingCobraQbFiles
+            this.PrepareIncomingCobraQbFiles(dbConn, fileLogParams);
+
+            // MoveIncomingCobraFilesToProcessingDir
+            this.PreCheckAndProcessCobraFiles(dbConn, fileLogParams);
+        }
+
+        protected void TriageIncomingCobraFiles(DbConnection dbConn, FileOperationLogParams fileLogParams)
+        {
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
+
+            // 1. txt -> csv, mbi -> csv
+            FileUtils.IterateDirectory(
+                Vars.cobraFilesImportHoldingPath, DirectoryIterateType.Files, false, "*.*",
+                (srcFilePath, dummy1, dummy2) =>
+                {
+                    FileInfo fileInfo = new FileInfo(srcFilePath);
+                    if (fileInfo.Extension == ".txt" || fileInfo.Extension == ".mbi")
+                    {
+                        string csvFilePath =
+                            $"{fileInfo.Directory}/{Path.GetFileNameWithoutExtension(fileInfo.Name)}.csv";
+
+                        FileUtils.MoveFile(srcFilePath, csvFilePath, null, null);
+                        fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                            Path.GetFileName(csvFilePath), csvFilePath,
+                            $"CobraProcessing-{MethodBase.GetCurrentMethod()?.Name}", "Success",
+                            $"Renamed file to *.csv");
+                        DbUtils.LogFileOperation(fileLogParams);
+                        //
+                        srcFilePath = csvFilePath;
+                    }
+
+                    // move qb csv file to PreparedQBRoot
+                    if (Import.IsCobraImportQbFile(srcFilePath)
+                    /*|| Import.IsCobraImportSpmFile(srcFilePath)*/
+                    )
+                    {
+                        string destFilePath =
+                            $"{Vars.cobraFilesPreparedQbPath}/{fileInfo.Name}";
+
+                        //
+                        FileUtils.MoveFile(srcFilePath, destFilePath, null, null);
+
+                        fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                            Path.GetFileName(destFilePath), destFilePath,
+                            "CobraProcessing-MoveQBCsvFilesToPreparedQB", "Success",
+                            $"Moved QB File to MoveQBCsvFilesToPreparedQB folder");
+
+                        DbUtils.LogFileOperation(fileLogParams);
+                    }
+                }
+                ,
+                 null
+                ); // iterate
         } // routine
 
+        // routine
     } // end class
-
 } // end namespace

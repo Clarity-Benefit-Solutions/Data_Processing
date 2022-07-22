@@ -1,11 +1,31 @@
-﻿using Sylvan.Data.Csv;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
+using Sylvan.Data.Csv;
 
 namespace CoreUtils.Classes
 {
+    public class CobraTypedCsvColumn : TypedCsvColumn
+    {
+        public CobraTypedCsvColumn(string sourceColumn, FormatType formatType = FormatType.Any,
+           int maxLength = 0, int isRequired = 0, string notes = "", string possibleValues = "") : base()
+        {
+            this.ColumnName = sourceColumn;
+            this.DestinationColumn = sourceColumn;
+            this.FormatType = formatType;
+            this.FixedValue = possibleValues;
+            this.MinLength = isRequired > 0 ? 1 : 0;
+            this.MaxLength = maxLength;
+            this.MinValue = 0;
+            this.MaxValue = 0;
+            this.DefaultValue = "";
+
+            //
+            this.AllowDBNull = true;
+            this.DataType = Type.GetType("String");
+        }
+    }
 
     // utility class that wraps DbColumn (to use with Sylvan.CsvReader) and adds props needed for fileCheck and bulkCopy to DB
     public class TypedCsvColumn : DbColumn
@@ -13,6 +33,7 @@ namespace CoreUtils.Classes
         public TypedCsvColumn() : base()
         {
         }
+
         public TypedCsvColumn(int sourceOrdinal, int destinationOrdinal, FormatType formatType = FormatType.Any,
             int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0, string defaultValue = "")
         {
@@ -49,12 +70,15 @@ namespace CoreUtils.Classes
             this.DataType = Type.GetType("String");
         }
 
+        public string DefaultValue { get; set; }
         public string DestinationColumn { get; set; }
-        public string FixedValue { get; set; }
         public int DestinationOrdinal { get; set; }
+        public string FixedValue { get; set; }
         public FormatType FormatType { get; set; }
-        public int MinLength { get; set; }
         public int MaxLength { get; set; }
+        public int MaxValue { get; set; }
+        public int MinLength { get; set; }
+        public int MinValue { get; set; }
 
         public string SourceColumn
         {
@@ -65,11 +89,6 @@ namespace CoreUtils.Classes
         {
             get { return this.ColumnOrdinal ?? -1; }
         }
-
-        public int MaxValue { get; set; }
-        public string DefaultValue { get; set; }
-
-        public int MinValue { get; set; }
     }
 
     public class TypedCsvSchema : ICsvSchemaProvider, IEnumerable
@@ -86,6 +105,26 @@ namespace CoreUtils.Classes
             get { return this.Columns.Count; }
         }
 
+        public TypedCsvSchema Add(int sourceOrdinal, int destinationOrdinal, FormatType formatType = FormatType.Any,
+            int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0)
+        {
+            this.Columns.Add(new TypedCsvColumn(sourceOrdinal, destinationOrdinal, formatType, minLength, maxLength));
+            return this;
+        }
+
+        public TypedCsvSchema Add(TypedCsvColumn column)
+        {
+            this.Columns.Add(column);
+            return this;
+        }
+
+        public TypedCsvSchema Add(string sourceColumn, string destinationColumn, FormatType formatType = FormatType.Any,
+            int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0)
+        {
+            this.Columns.Add(
+                new TypedCsvColumn(sourceColumn, destinationColumn, formatType, null, minLength, maxLength));
+            return this;
+        }
 
         public DbColumn GetColumn(string name, int ordinal)
         {
@@ -118,51 +157,5 @@ namespace CoreUtils.Classes
         {
             return this.Columns.GetEnumerator();
         }
-
-
-        public TypedCsvSchema Add(int sourceOrdinal, int destinationOrdinal, FormatType formatType = FormatType.Any,
-            int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0)
-        {
-            this.Columns.Add(new TypedCsvColumn(sourceOrdinal, destinationOrdinal, formatType, minLength, maxLength));
-            return this;
-        }
-
-        public TypedCsvSchema Add(TypedCsvColumn column)
-        {
-            this.Columns.Add(column);
-            return this;
-        }
-
-        public TypedCsvSchema Add(string sourceColumn, string destinationColumn, FormatType formatType = FormatType.Any,
-            int minLength = 0, int maxLength = 0, int minValue = 0, int maxValue = 0)
-        {
-            this.Columns.Add(
-                new TypedCsvColumn(sourceColumn, destinationColumn, formatType, null, minLength, maxLength));
-            return this;
-        }
     }
-
-    public class CobraTypedCsvColumn : TypedCsvColumn
-    {
-        public CobraTypedCsvColumn(string sourceColumn, FormatType formatType = FormatType.Any,
-           int maxLength = 0, int isRequired = 0, string notes = "", string possibleValues = "") : base()
-        {
-            this.ColumnName = sourceColumn;
-            this.DestinationColumn = sourceColumn;
-            this.FormatType = formatType;
-            this.FixedValue = possibleValues;
-            this.MinLength = isRequired > 0 ? 1 : 0;
-            this.MaxLength = maxLength;
-            this.MinValue = 0;
-            this.MaxValue = 0;
-            this.DefaultValue = "";
-
-            //
-            this.AllowDBNull = true;
-            this.DataType = Type.GetType("String");
-        }
-
-
-    }
-
 } // NAMESPACE

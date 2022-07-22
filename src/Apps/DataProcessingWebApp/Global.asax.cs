@@ -7,9 +7,21 @@ using StackExchange.Profiling;
 
 namespace DataProcessingWebApp
 {
-
     public class Global : HttpApplication
     {
+        protected void Application_BeginRequest()
+        {
+        }
+
+        protected void Application_EndRequest()
+        {
+        }
+
+        private void Application_End(object sender, EventArgs e)
+        {
+            // Debug.Assert(true);
+        }
+
         private void Application_Start(object sender, EventArgs e)
         {
             // Code that runs on application startup
@@ -20,19 +32,5 @@ namespace DataProcessingWebApp
             //
             MiniProfiler.StartNew("DataProcessingWebApp");
         }
-
-        private void Application_End(object sender, EventArgs e)
-        {
-            // Debug.Assert(true);
-        }
-
-        protected void Application_BeginRequest()
-        {
-        }
-
-        protected void Application_EndRequest()
-        {
-        }
     }
-
 }

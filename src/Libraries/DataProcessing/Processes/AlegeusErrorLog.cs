@@ -1,11 +1,11 @@
-﻿using CoreUtils;
-using CoreUtils.Classes;
-using System;
+﻿using System;
 using System.Data.Common;
 using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using CoreUtils;
+using CoreUtils.Classes;
 
 // ReSharper disable All
 
@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace DataProcessing
 {
-
     public class AlegeusErrorLog
     {
         private const int DAYS_TO_KEEP_REMOTE_FILE = 3;
@@ -37,22 +36,6 @@ namespace DataProcessing
             );
         }
 
-        public void USERVERYCAUTIOUSLY_ClearAllTables()
-        {
-            if (Vars.RunTimeEnvironment != "TEST")
-            {
-                throw new Exception($"Clear All Tables is available only in TEST Environment");
-            }
-
-            var dbConn = Vars.dbConnDataProcessing;
-            var fileLogParams = Vars.dbFileProcessingLogParams;
-
-            var queryString = "exec [Data_Processing].dbo.zz_truncate_all;";
-
-            DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null, fileLogParams.DbMessageLogParams,
-                false, false);
-        }
-
         public void RetrieveErrorLogs()
         {
             // init logParams
@@ -62,7 +45,7 @@ namespace DataProcessing
             var dbConn = Vars.dbConnDataProcessing;
             var ftpConn = Vars.RemoteAlegeusFtpConnection;
 
-            // 
+            //
 
             //DeleteStagingFiles
             DeleteStagingFiles(dbConn, fileLogParams);
@@ -82,6 +65,22 @@ namespace DataProcessing
 
             //MoveFilesToArchive
             MoveFilesToArchive(dbConn, fileLogParams);
+        }
+
+        public void USERVERYCAUTIOUSLY_ClearAllTables()
+        {
+            if (Vars.RunTimeEnvironment != "TEST")
+            {
+                throw new Exception($"Clear All Tables is available only in TEST Environment");
+            }
+
+            var dbConn = Vars.dbConnDataProcessing;
+            var fileLogParams = Vars.dbFileProcessingLogParams;
+
+            var queryString = "exec [Data_Processing].dbo.zz_truncate_all;";
+
+            DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null, fileLogParams.DbMessageLogParams,
+                false, false);
         }
 
         protected void DeleteStagingFiles(DbConnection dbConn,
@@ -157,7 +156,7 @@ namespace DataProcessing
                                 fileLogParams.SetFileNames("", srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
                                     Path.GetFileName(uniqueIdFilePath),
                                     $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                                    "Success", $"Deleted mbi/dne File as Older Than {DAYS_TO_KEEP_REMOTE_FILE } days");
+                                    "Success", $"Deleted mbi/dne File as Older Than {DAYS_TO_KEEP_REMOTE_FILE} days");
                                 DbUtils.LogFileOperation(fileLogParams);
                             }
                             , (directory, file, ex) =>
@@ -200,7 +199,7 @@ namespace DataProcessing
                                 fileLogParams.SetFileNames("", srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
                                     Path.GetFileName(uniqueIdFilePath),
                                     $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-                                    "Success", $"Deleted Res File as Older Than {DAYS_TO_KEEP_REMOTE_FILE } days");
+                                    "Success", $"Deleted Res File as Older Than {DAYS_TO_KEEP_REMOTE_FILE} days");
                                 DbUtils.LogFileOperation(fileLogParams);
                             }
                             , (directory, file, ex) =>
@@ -267,34 +266,6 @@ namespace DataProcessing
             ////
         }
 
-
-        protected void TrackAllNewFtpFileErrors(DbConnection dbConn,
-            FileOperationLogParams fileLogParams)
-
-        {
-            ////
-            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
-            //DbUtils.LogFileOperation(fileLogParams);
-
-            //
-            string queryString = null;
-
-            // 1: insert into dbo_tracked_errors_local
-            queryString = @" 
-            exec [dbo].[Data_Processing_track_new_ftp_errors]
-              ";
-            // run query
-            DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
-                fileLogParams?.GetMessageLogParams());
-
-            ////
-            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
-            //    "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
-            //DbUtils.LogFileOperation(fileLogParams);
-            ////
-        }
-
         protected void MoveFilesToArchive(DbConnection dbConn,
             FileOperationLogParams fileLogParams)
         {
@@ -348,7 +319,35 @@ namespace DataProcessing
             //    "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
             //DbUtils.LogFileOperation(fileLogParams);
             //
-        } // routine
-    } // end class
+        }
 
+        protected void TrackAllNewFtpFileErrors(DbConnection dbConn,
+                    FileOperationLogParams fileLogParams)
+
+        {
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Starting", $"Starting: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+
+            //
+            string queryString = null;
+
+            // 1: insert into dbo_tracked_errors_local
+            queryString = @"
+            exec [dbo].[Data_Processing_track_new_ftp_errors]
+              ";
+            // run query
+            DbUtils.DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
+                fileLogParams?.GetMessageLogParams());
+
+            ////
+            //fileLogParams.SetFileNames("", "", "", "", "", $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
+            //    "Success", $"Completed: {MethodBase.GetCurrentMethod()?.Name}");
+            //DbUtils.LogFileOperation(fileLogParams);
+            ////
+        }
+
+        // routine
+    } // end class
 } // end namespace

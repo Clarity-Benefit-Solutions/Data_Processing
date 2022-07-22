@@ -1,25 +1,35 @@
-﻿using ExcelDataReader;
-using ExcelDataReader.Exceptions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using ExcelDataReader;
+using ExcelDataReader.Exceptions;
 
 namespace CoreUtils.Classes
 {
-
-    public delegate void SingleFileCallback(string filePath1, string filePath2, string fileContents);
-
     public delegate bool ImportThisLineCallback(string filePath1, int rowNo, string line);
 
     public delegate void OnErrorCallback(string arg1, string arg2, Exception ex);
 
+    public delegate void SingleFileCallback(string filePath1, string filePath2, string fileContents);
 
     public class FileUtils
     {
+        public static void EnsurePathExists(string fullFilePath)
+        {
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(fullFilePath)!);
+            }
+            catch (Exception)
+            {
+                //ignore
+            }
+        }
+
         public static string FixFileName(string fileName)
         {
             fileName = fileName.Replace("--", "_");
@@ -38,36 +48,25 @@ namespace CoreUtils.Classes
             return fileName;
         }
 
-        public static Boolean IsEmptyFile(string srcFilePath)
-        {
-            FileInfo fileInfo = new FileInfo(srcFilePath);
-
-            // rename txt and mbi files to csv
-            if (fileInfo.Length <= 100)
-            {
-                return true;
-            }
-
-            return false;
-        }
-        public static void EnsurePathExists(string fullFilePath)
-        {
-            try
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(fullFilePath)!);
-            }
-            catch (Exception)
-            {
-                //ignore
-            }
-        }
-
         public static bool IgnoreFile(string srcFilePath)
         {
             var srcFileInfo = new FileInfo(srcFilePath);
             var fileName = srcFileInfo.Name;
 
             if (fileName.StartsWith("."))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static Boolean IsEmptyFile(string srcFilePath)
+        {
+            FileInfo fileInfo = new FileInfo(srcFilePath);
+
+            // rename txt and mbi files to csv
+            if (fileInfo.Length <= 100)
             {
                 return true;
             }
@@ -107,8 +106,462 @@ namespace CoreUtils.Classes
 
         #region IOOperations
 
+        public static void CopyFile(string sourceFilePath, string destFilePath, SingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                DoSingleFileOperation(FileOperation.Copy, sourceFilePath, destFilePath, fileCallback, onErrorCallback);
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(sourceFilePath, destFilePath, ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public static void CopyFiles(string[] sourceDirectories, bool subDirsAlso, string[] fileMasks,
+            string destDirectory,
+            string destFileName, string destFileExt, SingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                if (sourceDirectories == null || sourceDirectories.Length == 0)
+                {
+                    var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : sourceDirectories should be set";
+                    throw new Exception(message);
+                }
+
+                // iterate for each fileMask
+                foreach (var sourceDirectory in sourceDirectories)
+                {
+                    DoMultipleFilesOperation(FileOperation.Copy, sourceDirectory, subDirsAlso, fileMasks, destDirectory,
+                        destFileName, destFileExt, fileCallback, onErrorCallback);
+                }
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public static void CopyFiles(string sourceDirectory, bool subDirsAlso, string[] fileMasks, string destDirectory,
+            string destFileName, string destFileExt, SingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                DoMultipleFilesOperation(FileOperation.Copy, sourceDirectory, subDirsAlso, fileMasks, destDirectory,
+                    destFileName, destFileExt, fileCallback, onErrorCallback);
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(sourceDirectory, fileMasks.Join(","), ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public static void CopyFiles(string sourceDirectory, bool subDirsAlso, string fileMask, string destDirectory,
+            string destFileName, string destFileExt, SingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                DoMultipleFilesOperation(FileOperation.Copy, sourceDirectory, subDirsAlso, fileMask, destDirectory,
+                    destFileName, destFileExt, fileCallback, onErrorCallback);
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(sourceDirectory, fileMask, ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public static void DeleteFile(string sourceFilePath, SingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                DoSingleFileOperation(FileOperation.Delete, sourceFilePath, "", fileCallback, onErrorCallback);
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(sourceFilePath, "", ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public static void DeleteFileIfExists(string sourceFilePath, SingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                DoSingleFileOperation(FileOperation.DeleteIfExists, sourceFilePath, "", fileCallback, onErrorCallback);
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(sourceFilePath, "", ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public static void DeleteFiles(string[] sourceDirectories, bool subDirsAlso, string[] fileMasks,
+            SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                if (sourceDirectories == null || sourceDirectories.Length == 0)
+                {
+                    var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : sourceDirectories should be set";
+                    throw new Exception(message);
+                }
+
+                // iterate for each fileMask
+                foreach (var sourceDirectory in sourceDirectories)
+                {
+                    DoMultipleFilesOperation(FileOperation.Delete, sourceDirectory, subDirsAlso, fileMasks, "", "", "",
+                        fileCallback, onErrorCallback);
+                }
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public static void DeleteFiles(string sourceDirectory, bool subDirsAlso, string[] fileMasks,
+            SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                DoMultipleFilesOperation(FileOperation.Delete, sourceDirectory, subDirsAlso, fileMasks, "", "", "",
+                    fileCallback, onErrorCallback);
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(sourceDirectory, fileMasks.Join(","), ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public static void DeleteFiles(string sourceDirectory, bool subDirsAlso, string fileMask,
+            SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                DoMultipleFilesOperation(FileOperation.Delete, sourceDirectory, subDirsAlso, fileMask, "", "", "",
+                    fileCallback, onErrorCallback);
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(sourceDirectory, fileMask, ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public static void DoSingleFileOperation(FileOperation fileOperation, string sourceFilePath,
+            string destFilePath, SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
+        {
+            //
+            try
+            {
+                sourceFilePath = FileUtils.FixPath(sourceFilePath);
+                destFilePath = FileUtils.FixPath(destFilePath);
+
+                if (!Utils.IsBlank(destFilePath))
+                {
+                    var destFileDirInfo = new DirectoryInfo(Path.GetDirectoryName(destFilePath) ?? string.Empty);
+                    if (!destFileDirInfo.Exists)
+                    {
+                        destFileDirInfo.Create();
+                    }
+                }
+
+                var fileContents = "";
+
+                // validate
+                if (!File.Exists(sourceFilePath))
+                {
+                    if (fileOperation == FileOperation.DeleteIfExists)
+                    {
+                        return;
+                    }
+
+                    var message =
+                        $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source File: {sourceFilePath} does not exist";
+                    throw new Exception(message);
+                }
+
+                if (!Utils.IsBlank(destFilePath) && File.Exists(destFilePath))
+                {
+                    File.Delete(destFilePath);
+                }
+
+                // do operation
+                if (fileOperation == FileOperation.Move)
+                {
+                    if (FixPath(destFilePath) != FixPath(sourceFilePath))
+                    {
+                        File.Move(sourceFilePath, destFilePath);
+                        fileContents = "";
+                    }
+                }
+                else if (fileOperation == FileOperation.Copy)
+                {
+                    if (FixPath(destFilePath) != FixPath(sourceFilePath))
+                    {
+                        File.Copy(sourceFilePath, destFilePath, true);
+                        fileContents = "";
+                    }
+                }
+                else if (fileOperation == FileOperation.Delete || fileOperation == FileOperation.DeleteIfExists)
+                {
+                    File.Delete(sourceFilePath);
+                    destFilePath = "";
+                    fileContents = "";
+                }
+                else if (fileOperation == FileOperation.Read)
+                {
+                    fileContents = File.ReadAllText(sourceFilePath);
+                    destFilePath = "";
+                }
+                else
+                {
+                    var message =
+                        $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : fileOperation : {fileOperation} is invalid";
+                    throw new Exception(message);
+                }
+
+                // callback for complete
+                if (fileCallback != null)
+                {
+                    fileCallback(sourceFilePath, destFilePath, fileContents);
+                }
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(sourceFilePath, destFilePath, ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public static string FixPath(string filePath, bool makeLowerCase = false)
+        {
+            // do not fix path is starts with // i.e. is a UNC path
+            if (filePath.StartsWith("\\\\"))
+            {
+                return filePath;
+            }
+
+            filePath = filePath.Replace("\\", "/");
+            filePath = filePath.Replace("//", "/");
+            // remove last slash
+            if (filePath.Length > 1 && Utils.Right(filePath, 1) == "/")
+            {
+                filePath = filePath.Remove(filePath.Length - 1, 1);
+            }
+
+            if (makeLowerCase)
+            {
+                filePath = filePath.ToLower();
+            }
+
+            return filePath;
+        }
+
+        public static string GetDestFilePath(string sourceFilePath, string destDir, string replaceNamePattern,
+            string replaceNameString, string newExt)
+        {
+            var sourceFileInfo = new FileInfo(sourceFilePath);
+            if (!sourceFileInfo.Exists)
+            {
+                var message =
+                    $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source File: {sourceFilePath} does not exist";
+                throw new Exception(message);
+            }
+
+            //
+            var newName = Path.GetFileNameWithoutExtension(sourceFileInfo.Name);
+            if (!Utils.IsBlank(replaceNamePattern))
+            {
+                newName = Regex.Replace(newName, replaceNamePattern, replaceNameString);
+            }
+
+            if (Utils.IsBlank(newExt))
+            {
+                newExt = sourceFileInfo.Extension;
+            }
+
+            var destFilePath = $"{destDir}/{newName}{newExt}";
+            return destFilePath;
+        }
+
+        public static string GetDestFilePath(string sourceFilePath, string newExt)
+        {
+            var sourceFileInfo = new FileInfo(sourceFilePath);
+            if (!sourceFileInfo.Exists)
+            {
+                var message =
+                    $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source File: {sourceFilePath} does not exist";
+                throw new Exception(message);
+            }
+
+            //
+            var newName = Path.GetFileNameWithoutExtension(sourceFileInfo.Name);
+
+            if (Utils.IsBlank(newExt))
+            {
+                newExt = sourceFileInfo.Extension;
+            }
+
+            var destFilePath = $"{sourceFileInfo.Directory}/{newName}{newExt}";
+            return destFilePath;
+        }
+
+        public static string GetFlatFileContents(string srcFilePath, int firstNLinesOnly = 0)
+        {
+            var srcFileInfo = new FileInfo(srcFilePath);
+
+            // validate
+            if (!srcFileInfo.Exists)
+            {
+                var message =
+                    $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source File: {srcFilePath} does not exist";
+                throw new Exception(message);
+            }
+
+            if (FileUtils.IsExcelFile(srcFilePath))
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    "",
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
+            }
+
+            var contents = "";
+            // read each line and insert
+            using var inputFile = new StreamReader(srcFilePath);
+            string line;
+            var rowNo = 0;
+            while ((line = inputFile.ReadLine()!) != null)
+            {
+                rowNo++;
+                contents += line;
+
+                if (firstNLinesOnly != 0 && rowNo >= firstNLinesOnly)
+                {
+                    return contents;
+                }
+            }
+
+            return contents;
+        }
+
+        public static List<string> GetListOfFiles(string[] sourceDirectories, bool subDirsAlso, string[] fileMasks)
+        {
+            List<string> files = new List<string>();
+
+            try
+            {
+                IterateDirectory(sourceDirectories, DirectoryIterateType.Files, subDirsAlso, fileMasks,
+                    (srcFilePath, destFilePath, fileContents) =>
+                    {
+                        files.Add(srcFilePath);
+                    },
+                    (directory, file, ex) =>
+                    {
+                        throw ex;
+                    }
+
+                );
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return files;
+        }
+
         public static void IterateDirectory(string[] sourceDirectories, DirectoryIterateType iterateType,
-            bool subDirsAlso, string[] fileMasks, SingleFileCallback fileCallback,
+                                                                                                                                    bool subDirsAlso, string[] fileMasks, SingleFileCallback fileCallback,
             OnErrorCallback onErrorCallback)
         {
             try
@@ -244,7 +697,6 @@ namespace CoreUtils.Classes
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -260,8 +712,29 @@ namespace CoreUtils.Classes
             }
         }
 
+        public static void MoveFile(string sourceFilePath, string destFilePath, SingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                DoSingleFileOperation(FileOperation.Move, sourceFilePath, destFilePath, fileCallback, onErrorCallback);
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(sourceFilePath, destFilePath, ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
         public static void MoveFiles(string[] sourceDirectories, bool subDirsAlso, string[] fileMasks,
-            string destDirectory, string destFileName, string destFileExt, SingleFileCallback fileCallback,
+                    string destDirectory, string destFileName, string destFileExt, SingleFileCallback fileCallback,
             OnErrorCallback onErrorCallback)
         {
             try
@@ -316,347 +789,6 @@ namespace CoreUtils.Classes
             }
         }
 
-        public static List<string> GetListOfFiles(string[] sourceDirectories, bool subDirsAlso, string[] fileMasks)
-        {
-            List<string> files = new List<string>();
-
-            try
-            {
-                IterateDirectory(sourceDirectories, DirectoryIterateType.Files, subDirsAlso, fileMasks,
-                    (srcFilePath, destFilePath, fileContents) =>
-                    {
-                        files.Add(srcFilePath);
-                    },
-                    (directory, file, ex) =>
-                    {
-                        throw ex;
-                    }
-
-                );
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-
-            return files;
-        }
-
-        public static void CopyFiles(string[] sourceDirectories, bool subDirsAlso, string[] fileMasks,
-            string destDirectory,
-            string destFileName, string destFileExt, SingleFileCallback fileCallback,
-            OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                if (sourceDirectories == null || sourceDirectories.Length == 0)
-                {
-                    var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : sourceDirectories should be set";
-                    throw new Exception(message);
-                }
-
-                // iterate for each fileMask
-                foreach (var sourceDirectory in sourceDirectories)
-                {
-                    DoMultipleFilesOperation(FileOperation.Copy, sourceDirectory, subDirsAlso, fileMasks, destDirectory,
-                        destFileName, destFileExt, fileCallback, onErrorCallback);
-                }
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        public static void CopyFiles(string sourceDirectory, bool subDirsAlso, string[] fileMasks, string destDirectory,
-            string destFileName, string destFileExt, SingleFileCallback fileCallback,
-            OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                DoMultipleFilesOperation(FileOperation.Copy, sourceDirectory, subDirsAlso, fileMasks, destDirectory,
-                    destFileName, destFileExt, fileCallback, onErrorCallback);
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(sourceDirectory, fileMasks.Join(","), ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        public static void CopyFiles(string sourceDirectory, bool subDirsAlso, string fileMask, string destDirectory,
-            string destFileName, string destFileExt, SingleFileCallback fileCallback,
-            OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                DoMultipleFilesOperation(FileOperation.Copy, sourceDirectory, subDirsAlso, fileMask, destDirectory,
-                    destFileName, destFileExt, fileCallback, onErrorCallback);
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(sourceDirectory, fileMask, ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        public static void DeleteFiles(string[] sourceDirectories, bool subDirsAlso, string[] fileMasks,
-            SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                if (sourceDirectories == null || sourceDirectories.Length == 0)
-                {
-                    var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : sourceDirectories should be set";
-                    throw new Exception(message);
-                }
-
-                // iterate for each fileMask
-                foreach (var sourceDirectory in sourceDirectories)
-                {
-                    DoMultipleFilesOperation(FileOperation.Delete, sourceDirectory, subDirsAlso, fileMasks, "", "", "",
-                        fileCallback, onErrorCallback);
-                }
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        public static void DeleteFiles(string sourceDirectory, bool subDirsAlso, string[] fileMasks,
-            SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                DoMultipleFilesOperation(FileOperation.Delete, sourceDirectory, subDirsAlso, fileMasks, "", "", "",
-                    fileCallback, onErrorCallback);
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(sourceDirectory, fileMasks.Join(","), ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        public static void DeleteFiles(string sourceDirectory, bool subDirsAlso, string fileMask,
-            SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                DoMultipleFilesOperation(FileOperation.Delete, sourceDirectory, subDirsAlso, fileMask, "", "", "",
-                    fileCallback, onErrorCallback);
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(sourceDirectory, fileMask, ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        public static void MoveFile(string sourceFilePath, string destFilePath, SingleFileCallback fileCallback,
-            OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                DoSingleFileOperation(FileOperation.Move, sourceFilePath, destFilePath, fileCallback, onErrorCallback);
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(sourceFilePath, destFilePath, ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        public static void CopyFile(string sourceFilePath, string destFilePath, SingleFileCallback fileCallback,
-            OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                DoSingleFileOperation(FileOperation.Copy, sourceFilePath, destFilePath, fileCallback, onErrorCallback);
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(sourceFilePath, destFilePath, ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        public static string FixPath(string filePath, bool makeLowerCase = false)
-        {
-            // do not fix path is starts with // i.e. is a UNC path
-            if (filePath.StartsWith("\\\\"))
-            {
-                return filePath;
-            }
-
-            filePath = filePath.Replace("\\", "/");
-            filePath = filePath.Replace("//", "/");
-            // remove last slash
-            if (filePath.Length > 1 && Utils.Right(filePath, 1) == "/")
-            {
-                filePath = filePath.Remove(filePath.Length - 1, 1);
-            }
-
-            if (makeLowerCase)
-            {
-                filePath = filePath.ToLower();
-            }
-
-            return filePath;
-        }
-
-
-        public static string GetDestFilePath(string sourceFilePath, string destDir, string replaceNamePattern,
-            string replaceNameString, string newExt)
-        {
-            var sourceFileInfo = new FileInfo(sourceFilePath);
-            if (!sourceFileInfo.Exists)
-            {
-                var message =
-                    $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source File: {sourceFilePath} does not exist";
-                throw new Exception(message);
-            }
-
-            //
-            var newName = Path.GetFileNameWithoutExtension(sourceFileInfo.Name);
-            if (!Utils.IsBlank(replaceNamePattern))
-            {
-                newName = Regex.Replace(newName, replaceNamePattern, replaceNameString);
-            }
-
-            if (Utils.IsBlank(newExt))
-            {
-                newExt = sourceFileInfo.Extension;
-            }
-
-            var destFilePath = $"{destDir}/{newName}{newExt}";
-            return destFilePath;
-        }
-
-        public static string GetDestFilePath(string sourceFilePath, string newExt)
-        {
-            var sourceFileInfo = new FileInfo(sourceFilePath);
-            if (!sourceFileInfo.Exists)
-            {
-                var message =
-                    $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source File: {sourceFilePath} does not exist";
-                throw new Exception(message);
-            }
-
-            //
-            var newName = Path.GetFileNameWithoutExtension(sourceFileInfo.Name);
-
-            if (Utils.IsBlank(newExt))
-            {
-                newExt = sourceFileInfo.Extension;
-            }
-
-            var destFilePath = $"{sourceFileInfo.Directory}/{newName}{newExt}";
-            return destFilePath;
-        }
-
-
-        public static void DeleteFile(string sourceFilePath, SingleFileCallback fileCallback,
-            OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                DoSingleFileOperation(FileOperation.Delete, sourceFilePath, "", fileCallback, onErrorCallback);
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(sourceFilePath, "", ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        public static void DeleteFileIfExists(string sourceFilePath, SingleFileCallback fileCallback,
-            OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                DoSingleFileOperation(FileOperation.DeleteIfExists, sourceFilePath, "", fileCallback, onErrorCallback);
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(sourceFilePath, "", ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
         public static void ReadFile(string sourceFilePath, SingleFileCallback fileCallback,
             OnErrorCallback onErrorCallback)
         {
@@ -677,7 +809,6 @@ namespace CoreUtils.Classes
                 }
             }
         }
-
 
         private static void DoMultipleFilesOperation(FileOperation fileOperation, string sourceDirectory,
             bool subDirsAlso, string[] fileMasks, string destDirectory, string destFileName, string destFileExt,
@@ -722,7 +853,7 @@ namespace CoreUtils.Classes
                     // handle each found file
                     (foundFile, dummy, dummy2) =>
                     {
-                        // 
+                        //
                         var fileInfo = new FileInfo(foundFile);
                         var destFileNameOnly =
                             Path.GetFileNameWithoutExtension(Utils.IsBlank(destFileName)
@@ -734,7 +865,7 @@ namespace CoreUtils.Classes
                         DoSingleFileOperation(fileOperation, foundFile, destFullFilePath, fileCallback,
                             onErrorCallback);
                     },
-                    // at end 
+                    // at end
                     (directory, file, ex) =>
                     {
                         if (onErrorCallback == null)
@@ -760,145 +891,7 @@ namespace CoreUtils.Classes
             }
         }
 
-        public static void DoSingleFileOperation(FileOperation fileOperation, string sourceFilePath,
-            string destFilePath, SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
-        {
-            //
-            try
-            {
-                sourceFilePath = FileUtils.FixPath(sourceFilePath);
-                destFilePath = FileUtils.FixPath(destFilePath);
-
-
-                if (!Utils.IsBlank(destFilePath))
-                {
-                    var destFileDirInfo = new DirectoryInfo(Path.GetDirectoryName(destFilePath) ?? string.Empty);
-                    if (!destFileDirInfo.Exists)
-                    {
-                        destFileDirInfo.Create();
-                    }
-                }
-
-                var fileContents = "";
-
-                // validate
-                if (!File.Exists(sourceFilePath))
-                {
-                    if (fileOperation == FileOperation.DeleteIfExists)
-                    {
-                        return;
-                    }
-
-                    var message =
-                        $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source File: {sourceFilePath} does not exist";
-                    throw new Exception(message);
-                }
-
-                if (!Utils.IsBlank(destFilePath) && File.Exists(destFilePath))
-                {
-                    File.Delete(destFilePath);
-                }
-
-                // do operation
-                if (fileOperation == FileOperation.Move)
-                {
-                    if (FixPath(destFilePath) != FixPath(sourceFilePath))
-                    {
-                        File.Move(sourceFilePath, destFilePath);
-                        fileContents = "";
-                    }
-                }
-                else if (fileOperation == FileOperation.Copy)
-                {
-                    if (FixPath(destFilePath) != FixPath(sourceFilePath))
-                    {
-                        File.Copy(sourceFilePath, destFilePath, true);
-                        fileContents = "";
-                    }
-                }
-                else if (fileOperation == FileOperation.Delete || fileOperation == FileOperation.DeleteIfExists)
-                {
-                    File.Delete(sourceFilePath);
-                    destFilePath = "";
-                    fileContents = "";
-                }
-                else if (fileOperation == FileOperation.Read)
-                {
-                    fileContents = File.ReadAllText(sourceFilePath);
-                    destFilePath = "";
-                }
-                else
-                {
-                    var message =
-                        $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : fileOperation : {fileOperation} is invalid";
-                    throw new Exception(message);
-                }
-
-                // callback for complete
-                if (fileCallback != null)
-                {
-                    fileCallback(sourceFilePath, destFilePath, fileContents);
-                }
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(sourceFilePath, destFilePath, ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        public static string GetFlatFileContents(string srcFilePath, int firstNLinesOnly = 0)
-        {
-            var srcFileInfo = new FileInfo(srcFilePath);
-
-            // validate
-            if (!srcFileInfo.Exists)
-            {
-                var message =
-                    $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source File: {srcFilePath} does not exist";
-                throw new Exception(message);
-            }
-
-            if (FileUtils.IsExcelFile(srcFilePath))
-            {
-                var csvFilePath = Path.GetTempFileName() + ".csv";
-
-
-                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
-                    "",
-                    null,
-                    null);
-
-                srcFilePath = csvFilePath;
-            }
-
-            var contents = "";
-            // read each line and insert
-            using var inputFile = new StreamReader(srcFilePath);
-            string line;
-            var rowNo = 0;
-            while ((line = inputFile.ReadLine()!) != null)
-            {
-                rowNo++;
-                contents += line;
-
-                if (firstNLinesOnly != 0 && rowNo >= firstNLinesOnly)
-                {
-                    return contents;
-                }
-            }
-
-            return contents;
-        }
-
-        #endregion
+        #endregion IOOperations
 
         #region FileConversions
 
@@ -910,9 +903,8 @@ namespace CoreUtils.Classes
                 sourceDir, DirectoryIterateType.Files, subDirsAlso, "*.xls*"
                 , /*fileCallBack*/ (foundFile, dummy, dummy2) =>
                 {
-
                 } /*end fileCallBack*/
-                , /*onErrorCallback*/ // at end 
+                , /*onErrorCallback*/ // at end
                 (directory, file, ex) =>
                 {
                     DbUtils.LogError(directory, file, ex, fileLogParams);
@@ -920,16 +912,6 @@ namespace CoreUtils.Classes
             ); //FileUtils.IterateDirectory;
         } //end method
 
-        public static Boolean IsExcelFile(string srcFilePath)
-        {
-            var fileExt = Path.GetExtension(srcFilePath).ToLower();
-            if (fileExt == ".xlsx" || fileExt == ".xls")
-            {
-                return true;
-            }
-
-            return false;
-        }
         public static void ConvertExcelFileToCsv(string sourceFilePath, string destFilePath, string password,
             SingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
@@ -1069,7 +1051,17 @@ namespace CoreUtils.Classes
             }
         }
 
-        #endregion
-    }
+        public static Boolean IsExcelFile(string srcFilePath)
+        {
+            var fileExt = Path.GetExtension(srcFilePath).ToLower();
+            if (fileExt == ".xlsx" || fileExt == ".xls")
+            {
+                return true;
+            }
 
+            return false;
+        }
+
+        #endregion FileConversions
+    }
 }

@@ -17,13 +17,18 @@ body {
 
 input,
 select,
-textarea { max-width: 280px; }
-
+textarea {
+    max-width: 280px;
+}
 
 /* Responsive: Portrait tablets and up */
 
 @media screen and (min-width: 768px) {
-    .jumbotron { margin-top: 20px; }
+    .jumbotron {
+        margin-top: 20px;
+    }
 
-    .body-content { padding: 0; }
+    .body-content {
+        padding: 0;
+    }
 }

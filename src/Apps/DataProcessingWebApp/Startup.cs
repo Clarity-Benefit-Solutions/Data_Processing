@@ -20,7 +20,6 @@ using Serilog.Exceptions;
 
 namespace DataProcessingWebApp
 {
-
     public class Startup
     {
         public static IEnumerable<IDisposable> GetHangfireConfiguration()
@@ -48,7 +47,7 @@ namespace DataProcessingWebApp
                 .UseSerilogLogProvider()
                 .UseSimpleAssemblyNameTypeSerializer()
                 .UseRecommendedSerializerSettings()
-                .UseConsole(new ConsoleOptions {FollowJobRetentionPolicy = true, TimestampColor = "Red"})
+                .UseConsole(new ConsoleOptions { FollowJobRetentionPolicy = true, TimestampColor = "Red" })
                 .UseSqlServerStorage(vars.ConnStrNameHangfire, new SqlServerStorageOptions
                 {
                     CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
@@ -63,7 +62,7 @@ namespace DataProcessingWebApp
             GlobalJobFilters.Filters.Add(new ProlongExpirationTimeAttribute());
 
             // no job retries
-            GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute {Attempts = 0});
+            GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 });
 
             Log.Warning("Completed Hangfire Configuration");
 
@@ -113,5 +112,4 @@ namespace DataProcessingWebApp
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     }
-
 }

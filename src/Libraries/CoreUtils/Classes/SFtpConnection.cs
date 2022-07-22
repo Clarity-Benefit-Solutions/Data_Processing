@@ -1,15 +1,13 @@
-﻿using Renci.SshNet;
-using Renci.SshNet.Sftp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Renci.SshNet;
+using Renci.SshNet.Sftp;
 
 namespace CoreUtils.Classes
 {
-
     public delegate void FtpSingleFileCallback(string file1, string file2, SftpFile fileInfo, string fileContents);
-
 
     public class SFtpConnection
     {
@@ -49,16 +47,16 @@ namespace CoreUtils.Classes
             }
         }
 
-        public string ConnectionString { get; }
         public object ActiveConnection { get; }
+        public string ConnectionString { get; }
+        public ConnectionInfo ConnInfo { get; }
         public string Host { get; }
         public int Port { get; }
+        public string PrivateKeyPassPhrase { get; }
+        public string PrivateKeyPath { get; }
+        public string RootPath { get; }
         public string UserName { get; }
         public string UserPassword { get; }
-        public string PrivateKeyPath { get; }
-        public string PrivateKeyPassPhrase { get; }
-        public string RootPath { get; }
-        public ConnectionInfo ConnInfo { get; }
 
         private SftpClient EnsureConnection()
         {
@@ -84,8 +82,200 @@ namespace CoreUtils.Classes
 
         #region IOOperations
 
+        public void CopyOrMoveFile(FtpFileOperation fileOperation, string sourceFilePath, string destFilePath, SftpFile file,
+            FtpSingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
+        {
+            this.DoSingleFtpFileOperation(fileOperation, sourceFilePath, destFilePath, file, fileCallback, onErrorCallback);
+        }
+
+        public void CopyOrMoveFiles(FtpFileOperation fileOperation, string[] sourceDirectories, bool subDirsAlso,
+            string[] fileMasks,
+            string destDirectory, string destFileName, string destFileExt, FtpSingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
+        {
+            if (sourceDirectories == null || sourceDirectories.Length == 0)
+            {
+                var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : sourceDirectories should be set";
+                throw new Exception(message);
+            }
+
+            // iterate for each fileMask
+            foreach (var sourceDirectory in sourceDirectories)
+            {
+                this.DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMasks, destDirectory,
+                    destFileName, destFileExt, fileCallback, onErrorCallback);
+            }
+        }
+
+        public void CopyOrMoveFiles(FtpFileOperation fileOperation, string sourceDirectory, bool subDirsAlso,
+            string fileMask, string destDirectory,
+            string destFileName, string destFileExt, FtpSingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
+        {
+            this.DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMask, destDirectory,
+                destFileName, destFileExt, fileCallback, onErrorCallback);
+        }
+
+        public void DeleteFileIfExists(string sourceFilePath, SftpFile file, FtpSingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
+        {
+            this.DoSingleFtpFileOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceFilePath, "", file, fileCallback,
+                onErrorCallback);
+        }
+
+        public void DeleteFiles(string[] sourceDirectories, bool subDirsAlso, string[] fileMasks,
+            FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                if (sourceDirectories == null || sourceDirectories.Length == 0)
+                {
+                    var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : sourceDirectories should be set";
+                    throw new Exception(message);
+                }
+
+                // iterate for each fileMask
+                foreach (var sourceDirectory in sourceDirectories)
+                {
+                    this.DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory,
+                        subDirsAlso,
+                        fileMasks, "", "", "",
+                        fileCallback, onErrorCallback);
+                }
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public void DeleteFiles(string sourceDirectory, bool subDirsAlso, string[] fileMasks,
+            FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
+        {
+            this.DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory, subDirsAlso,
+                fileMasks,
+                "", "", "",
+                fileCallback, onErrorCallback);
+        }
+
+        public void DeleteFiles(string sourceDirectory, bool subDirsAlso, string fileMask,
+            FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
+        {
+            this.DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory, subDirsAlso,
+                fileMask,
+                "", "", "",
+                fileCallback, onErrorCallback);
+        }
+
+        public void DoSingleFtpFileOperation(FtpFileOperation fileOperation, string sourceFilePath, string destFilePath, SftpFile file, FtpSingleFileCallback fileCallback,
+            OnErrorCallback onErrorCallback)
+        {
+            try
+            {
+                //
+                this.EnsureConnection();
+                //
+
+                var fileContents = "";
+
+                // if we are uploading, sourceFile is a local path
+                if (fileOperation == FtpFileOperation.ReadRemoteFile)
+                {
+                    var tempFilePath = Path.GetTempFileName();
+                    using var stream = File.Open(tempFilePath, FileMode.Open);
+                    //
+                    this.client.DownloadFile(sourceFilePath, stream);
+                    fileContents = File.ReadAllText(tempFilePath);
+                    //
+                    File.Delete(tempFilePath);
+                    //
+                }
+                else if (fileOperation == FtpFileOperation.DeleteRemoteFileIfExists)
+                {
+                    this.client.DeleteFile(sourceFilePath);
+                }
+                else if (fileOperation == FtpFileOperation.Upload || fileOperation == FtpFileOperation.UploadAndDelete)
+                {
+                    var srcFileInfo = new FileInfo(sourceFilePath);
+                    if (!srcFileInfo.Exists)
+                    {
+                        var message =
+                            $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source File: {sourceFilePath} does not exist";
+                        throw new Exception(message);
+                    }
+
+                    using var stream = File.Open(sourceFilePath, FileMode.Open);
+                    this.client.UploadFile(stream, destFilePath);
+
+                    if (fileOperation == FtpFileOperation.UploadAndDelete)
+                    {
+                        srcFileInfo.Delete();
+                    }
+                }
+                else if (fileOperation == FtpFileOperation.Download ||
+                         fileOperation == FtpFileOperation.DownloadAndDelete)
+                {
+                    var fileInfo = new FileInfo(destFilePath);
+                    if (fileInfo.Exists)
+                    {
+                        fileInfo.Delete();
+                    }
+
+                    using var stream = File.Open(destFilePath, FileMode.OpenOrCreate);
+                    this.client.DownloadFile(sourceFilePath, stream);
+
+                    if (fileOperation == FtpFileOperation.DownloadAndDelete)
+                    {
+                        this.client.DeleteFile(sourceFilePath);
+                    }
+                }
+                else
+                {
+                    var message =
+                        $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : fileOperation : {fileOperation} is invalid";
+                    throw new Exception(message);
+                }
+
+                // callback for complete
+                if (fileCallback != null)
+                {
+                    fileCallback(sourceFilePath, destFilePath, file, fileContents);
+                }
+            }
+            catch (Exception ex)
+            {
+                // callback for complete
+                if (onErrorCallback != null)
+                {
+                    onErrorCallback(sourceFilePath, destFilePath, ex);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        public SftpFile GetRemoteFileInfo(string sourceFilePath)
+        {
+            //
+            this.EnsureConnection();
+            //
+
+            return this.client.Get(sourceFilePath);
+        }
+
         public void IterateDirectory(string[] sourceDirectories, DirectoryIterateType iterateType,
-            bool subDirsAlso, string[] fileMasks,
+                                                                                    bool subDirsAlso, string[] fileMasks,
             FtpSingleFileCallback fileCallback,
             OnErrorCallback onErrorCallback)
         {
@@ -222,101 +412,6 @@ namespace CoreUtils.Classes
             }
         }
 
-        public void CopyOrMoveFiles(FtpFileOperation fileOperation, string[] sourceDirectories, bool subDirsAlso,
-            string[] fileMasks,
-            string destDirectory, string destFileName, string destFileExt, FtpSingleFileCallback fileCallback,
-            OnErrorCallback onErrorCallback)
-        {
-            if (sourceDirectories == null || sourceDirectories.Length == 0)
-            {
-                var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : sourceDirectories should be set";
-                throw new Exception(message);
-            }
-
-            // iterate for each fileMask
-            foreach (var sourceDirectory in sourceDirectories)
-            {
-                this.DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMasks, destDirectory,
-                    destFileName, destFileExt, fileCallback, onErrorCallback);
-            }
-        }
-
-        public void CopyOrMoveFiles(FtpFileOperation fileOperation, string sourceDirectory, bool subDirsAlso,
-            string fileMask, string destDirectory,
-            string destFileName, string destFileExt, FtpSingleFileCallback fileCallback,
-            OnErrorCallback onErrorCallback)
-        {
-            this.DoMultipleFilesOperation(fileOperation, sourceDirectory, subDirsAlso, fileMask, destDirectory,
-                destFileName, destFileExt, fileCallback, onErrorCallback);
-        }
-
-        public void CopyOrMoveFile(FtpFileOperation fileOperation, string sourceFilePath, string destFilePath, SftpFile file,
-            FtpSingleFileCallback fileCallback,
-            OnErrorCallback onErrorCallback)
-        {
-            this.DoSingleFtpFileOperation(fileOperation, sourceFilePath, destFilePath, file, fileCallback, onErrorCallback);
-        }
-
-
-        public void DeleteFiles(string[] sourceDirectories, bool subDirsAlso, string[] fileMasks,
-            FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                if (sourceDirectories == null || sourceDirectories.Length == 0)
-                {
-                    var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : sourceDirectories should be set";
-                    throw new Exception(message);
-                }
-
-                // iterate for each fileMask
-                foreach (var sourceDirectory in sourceDirectories)
-                {
-                    this.DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory,
-                        subDirsAlso,
-                        fileMasks, "", "", "",
-                        fileCallback, onErrorCallback);
-                }
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(sourceDirectories.Join(","), fileMasks.Join(","), ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        public void DeleteFiles(string sourceDirectory, bool subDirsAlso, string[] fileMasks,
-            FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
-        {
-            this.DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory, subDirsAlso,
-                fileMasks,
-                "", "", "",
-                fileCallback, onErrorCallback);
-        }
-
-        public void DeleteFiles(string sourceDirectory, bool subDirsAlso, string fileMask,
-            FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
-        {
-            this.DoMultipleFilesOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceDirectory, subDirsAlso,
-                fileMask,
-                "", "", "",
-                fileCallback, onErrorCallback);
-        }
-
-        public void DeleteFileIfExists(string sourceFilePath, SftpFile file, FtpSingleFileCallback fileCallback,
-            OnErrorCallback onErrorCallback)
-        {
-            this.DoSingleFtpFileOperation(FtpFileOperation.DeleteRemoteFileIfExists, sourceFilePath, "", file, fileCallback,
-                onErrorCallback);
-        }
-
         public void ReadFile(string sourceFilePath, SftpFile file, FtpSingleFileCallback fileCallback, OnErrorCallback onErrorCallback)
         {
             this.DoSingleFtpFileOperation(FtpFileOperation.ReadRemoteFile, sourceFilePath, "", file, fileCallback,
@@ -349,7 +444,7 @@ namespace CoreUtils.Classes
                 // handle each found file
                 (foundFile, dummy, file, fileContents) =>
                 {
-                    // 
+                    //
                     var destFileNameOnly =
                         Path.GetFileNameWithoutExtension(Utils.IsBlank(destFileName) ? foundFile : destFileName);
 
@@ -359,7 +454,7 @@ namespace CoreUtils.Classes
                     this.DoSingleFtpFileOperation(fileOperation, foundFile, destFullFilePath, file, fileCallback,
                         onErrorCallback);
                 },
-                // at end 
+                // at end
                 (directory, file, ex) =>
                 {
                     if (onErrorCallback == null)
@@ -372,107 +467,6 @@ namespace CoreUtils.Classes
             );
         }
 
-        public SftpFile GetRemoteFileInfo(string sourceFilePath)
-        {
-            //
-            this.EnsureConnection();
-            //
-
-            return this.client.Get(sourceFilePath);
-        }
-
-        public void DoSingleFtpFileOperation(FtpFileOperation fileOperation, string sourceFilePath, string destFilePath, SftpFile file, FtpSingleFileCallback fileCallback,
-            OnErrorCallback onErrorCallback)
-        {
-            try
-            {
-                //
-                this.EnsureConnection();
-                //
-
-                var fileContents = "";
-
-                // if we are uploading, sourceFile is a local path
-                if (fileOperation == FtpFileOperation.ReadRemoteFile)
-                {
-                    var tempFilePath = Path.GetTempFileName();
-                    using var stream = File.Open(tempFilePath, FileMode.Open);
-                    //
-                    this.client.DownloadFile(sourceFilePath, stream);
-                    fileContents = File.ReadAllText(tempFilePath);
-                    //
-                    File.Delete(tempFilePath);
-                    //
-
-                }
-
-                else if (fileOperation == FtpFileOperation.DeleteRemoteFileIfExists)
-                {
-                    this.client.DeleteFile(sourceFilePath);
-                }
-                else if (fileOperation == FtpFileOperation.Upload || fileOperation == FtpFileOperation.UploadAndDelete)
-                {
-                    var srcFileInfo = new FileInfo(sourceFilePath);
-                    if (!srcFileInfo.Exists)
-                    {
-                        var message =
-                            $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : Source File: {sourceFilePath} does not exist";
-                        throw new Exception(message);
-                    }
-
-                    using var stream = File.Open(sourceFilePath, FileMode.Open);
-                    this.client.UploadFile(stream, destFilePath);
-
-                    if (fileOperation == FtpFileOperation.UploadAndDelete)
-                    {
-                        srcFileInfo.Delete();
-                    }
-                }
-                else if (fileOperation == FtpFileOperation.Download ||
-                         fileOperation == FtpFileOperation.DownloadAndDelete)
-                {
-                    var fileInfo = new FileInfo(destFilePath);
-                    if (fileInfo.Exists)
-                    {
-                        fileInfo.Delete();
-                    }
-
-                    using var stream = File.Open(destFilePath, FileMode.OpenOrCreate);
-                    this.client.DownloadFile(sourceFilePath, stream);
-
-                    if (fileOperation == FtpFileOperation.DownloadAndDelete)
-                    {
-                        this.client.DeleteFile(sourceFilePath);
-                    }
-                }
-                else
-                {
-                    var message =
-                        $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : fileOperation : {fileOperation} is invalid";
-                    throw new Exception(message);
-                }
-
-                // callback for complete
-                if (fileCallback != null)
-                {
-                    fileCallback(sourceFilePath, destFilePath, file, fileContents);
-                }
-            }
-            catch (Exception ex)
-            {
-                // callback for complete
-                if (onErrorCallback != null)
-                {
-                    onErrorCallback(sourceFilePath, destFilePath, ex);
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
-        #endregion
+        #endregion IOOperations
     }
-
 }

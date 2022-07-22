@@ -29,7 +29,7 @@
         </member>
         <member name="P:ExcelDataReader.ExcelDataSetConfiguration.ConfigureDataTable">
             <summary>
-            Gets or sets a callback to obtain configuration options for a DataTable. 
+            Gets or sets a callback to obtain configuration options for a DataTable.
             </summary>
         </member>
         <member name="P:ExcelDataReader.ExcelDataSetConfiguration.FilterSheet">

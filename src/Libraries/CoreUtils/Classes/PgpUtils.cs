@@ -2,21 +2,19 @@
 using System.Reflection;
 
 /*
- * 
- * 
- * PGPEncryptDecrypt.EncryptFile(inputFileName, 
+ *
+ *
+ * PGPEncryptDecrypt.EncryptFile(inputFileName,
                outputFileName,
                recipientKeyFileName,
                shouldArmor,
                shouldCheckIntegrity);
 Decrypt a file:
 
-
-
  * */
+
 namespace CoreUtils.Classes
 {
-
     public class PgpUtils
     {
         public static void PgpDecryptFile(string srcFilePath, string destFilePath, string privateKeyFileName,
@@ -61,7 +59,6 @@ namespace CoreUtils.Classes
                 }
             }
         }
-
 
         public static void PgpEncryptFile(string srcFilePath, string destFilePath, string recipientKeyFileName,
             bool shouldArmor, bool shouldCheckIntegrity, SingleFileCallback fileCallback,
@@ -110,5 +107,4 @@ namespace CoreUtils.Classes
             }
         }
     }
-
 }

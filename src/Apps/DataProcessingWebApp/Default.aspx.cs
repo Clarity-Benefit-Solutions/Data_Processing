@@ -2,7 +2,6 @@
 
 namespace DataProcessingWebApp
 {
-
     public partial class _Default : Page
     {
         //private string _username = Utils.GetAppSetting("BasicAuthUserName");
@@ -53,7 +52,6 @@ namespace DataProcessingWebApp
         //        //
         //        if (path.ToLower() != "JobResults".ToLower())
         //        {
-
         //            JobDetails taskJobDetails = (JobDetails)Utils.DeserializeJson<JobDetails>(content);
         //            string jobId = (string)taskJobDetails.JobId;
 
@@ -121,7 +119,7 @@ namespace DataProcessingWebApp
         //        }
 
         //    }
-        //    else //web api sent error response 
+        //    else //web api sent error response
         //    {
         //        //log response status here..
         //        throw new Exception($"{result.ReasonPhrase} {result.RequestMessage}");
@@ -165,5 +163,4 @@ namespace DataProcessingWebApp
         //    //
         //}
     }
-
 }

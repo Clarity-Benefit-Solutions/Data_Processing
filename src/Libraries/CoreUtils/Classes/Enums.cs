@@ -1,26 +1,32 @@
 ﻿namespace CoreUtils.Classes
 {
-
-    public enum FileOperation
+    public enum Channel
     {
-        Move = 1,
-        Copy,
-        Delete,
-        DeleteIfExists,
-        Read,
+        Unknown = 0,
+
+        [Utils.DisplayText("Channel.SFTP")]
+        SFtp
     }
 
-
-    public enum FtpFileOperation
+    public enum CobraFileType
     {
-        Download,
-        Upload,
-        DownloadAndDelete,
-        UploadAndDelete,
-        DeleteRemoteFileIfExists,
-        ReadRemoteFile,
+        [Utils.DisplayText("CobraFileType.NotApplicable")]
+        Unknown = 0,
+
+        [Utils.DisplayText("CobraFileType.QB")] Qb,
+        [Utils.DisplayText("CobraFileType.NPM")] Npm,
+        [Utils.DisplayText("CobraFileType.SPM")] Spm,
     }
 
+    public enum CobraFileVersionNo
+    {
+        [Utils.DisplayText("CobraFileVersionNo.NA")]
+        NotApplicable = 0,
+
+        [Utils.DisplayText("CobraFileVersionNo.v1_1")] v1_1,
+        [Utils.DisplayText("CobraFileVersionNo.v1_2")] v1_2,
+        [Utils.DisplayText("CobraFileVersionNo.v1_3")] v1_3,
+    }
 
     public enum DbOperation
     {
@@ -36,129 +42,6 @@
 
         [Utils.DisplayText("DirectoryIterateType.Directories")]
         Directories,
-    }
-
-    public enum FormatType
-    {
-        [Utils.DisplayText("")] Any = 0,
-        [Utils.DisplayText("String")] String,
-        [Utils.DisplayText("SSN")] SSN,
-        [Utils.DisplayText("Email")] Email,
-        [Utils.DisplayText("Zip")] Zip,
-        [Utils.DisplayText("Phone")] Phone,
-        [Utils.DisplayText("AlphaNumeric")] AlphaNumeric,
-        [Utils.DisplayText("AlphaNumericAndDashes")] AlphaNumericAndDashes,
-        [Utils.DisplayText("AlphaOnly")] AlphaOnly,
-        [Utils.DisplayText("AlphaAndDashes")] AlphaAndDashes,
-
-        [Utils.DisplayText("NumbersAndDashes")]
-        NumbersAndDashes,
-        [Utils.DisplayText("Integer")] Integer,
-        [Utils.DisplayText("Double")] Double,
-        [Utils.DisplayText("one decimal, no commas, #0.00")] CobraMoney,
-        [Utils.DisplayText("FixedConstant")] FixedConstant,
-        [Utils.DisplayText("YYYYMMDD")] IsoDate,
-        [Utils.DisplayText("MM/DD/YYYY")] CobraDate,
-
-        [Utils.DisplayText("YYYYMMDD HHMMNNSS")] IsoDateTime,
-        [Utils.DisplayText("MM/DD/YYYY HH:mm AM")] CobraDateTime,
-        [Utils.DisplayText("Yes Or No")] YesNo,
-        [Utils.DisplayText("YES Or NO")] CobraYesNo,
-        [Utils.DisplayText("True Or False")] TrueFalse,
-    }
-
-    public enum HeaderType
-    {
-        [Utils.DisplayText("HeaderType.Unknown")]
-        NotApplicable = 0,
-        [Utils.DisplayText("HeaderType.Own")] Own,
-        [Utils.DisplayText("HeaderType.Old")] Old,
-        [Utils.DisplayText("HeaderType.New")] New,
-
-        [Utils.DisplayText("HeaderType.SegmentedFunding")]
-        SegmentedFunding,
-
-        [Utils.DisplayText("HeaderType.NoChange")]
-        NoChange,
-    }
-
-    public enum CobraFileType
-    {
-        [Utils.DisplayText("CobraFileType.NotApplicable")]
-        Unknown = 0,
-        [Utils.DisplayText("CobraFileType.QB")] Qb,
-        [Utils.DisplayText("CobraFileType.NPM")] Npm,
-        [Utils.DisplayText("CobraFileType.SPM")] Spm,
-    }
-    public enum CobraFileVersionNo
-    {
-        [Utils.DisplayText("CobraFileVersionNo.NA")]
-        NotApplicable = 0,
-        [Utils.DisplayText("CobraFileVersionNo.v1_1")] v1_1,
-        [Utils.DisplayText("CobraFileVersionNo.v1_2")] v1_2,
-        [Utils.DisplayText("CobraFileVersionNo.v1_3")] v1_3,
-    }
-
-    public class CobraFileTypeAndVersionNo
-    {
-        public CobraFileType fileType = CobraFileType.Unknown;
-        public string versionNo = "";
-    }
-
-    public enum PlatformType
-    {
-        Unknown = 0,
-
-        [Utils.DisplayText("Platform.Alegeus")]
-        Alegeus,
-
-        Cobra,
-        //
-    }
-    public enum Channel
-    {
-        Unknown = 0,
-
-        [Utils.DisplayText("Channel.SFTP")]
-        SFtp
-    }
-
-    public enum FileCheckType
-    {
-        [Utils.DisplayText("FileCheckType.FormatOnly")]
-        FormatOnly = 1,
-
-        [Utils.DisplayText("FileCheckType.AllData")]
-        AllData,
-        //
-    }
-
-    public enum FileCheckProcessType
-    {
-        [Utils.DisplayText("FileCheckProcessType.MoveToDestDirectories")]
-        MoveToDestDirectories = 1,
-
-        [Utils.DisplayText("FileCheckProcessType.ReturnResults")]
-        ReturnResults,
-        //
-    }
-
-    public enum OperationResultType
-    {
-        [Utils.DisplayText("OperationResultType.Unknown")]
-        Unknown = 0,
-
-        [Utils.DisplayText("OperationResultType.Ok")]
-        Ok = 1,
-
-        [Utils.DisplayText("OperationResultType.PartialFail")]
-        PartialFail,
-
-        [Utils.DisplayText("OperationResultType.CompleteFail")]
-        CompleteFail,
-
-        [Utils.DisplayText("OperationResultType.ProcessingError")]
-        ProcessingError,
     }
 
     public enum EdiRowFormat
@@ -285,4 +168,125 @@
         CobraDemographics
     }
 
+    public enum FileCheckProcessType
+    {
+        [Utils.DisplayText("FileCheckProcessType.MoveToDestDirectories")]
+        MoveToDestDirectories = 1,
+
+        [Utils.DisplayText("FileCheckProcessType.ReturnResults")]
+        ReturnResults,
+
+        //
+    }
+
+    public enum FileCheckType
+    {
+        [Utils.DisplayText("FileCheckType.FormatOnly")]
+        FormatOnly = 1,
+
+        [Utils.DisplayText("FileCheckType.AllData")]
+        AllData,
+
+        //
+    }
+
+    public enum FileOperation
+    {
+        Move = 1,
+        Copy,
+        Delete,
+        DeleteIfExists,
+        Read,
+    }
+
+    public enum FormatType
+    {
+        [Utils.DisplayText("")] Any = 0,
+        [Utils.DisplayText("String")] String,
+        [Utils.DisplayText("SSN")] SSN,
+        [Utils.DisplayText("Email")] Email,
+        [Utils.DisplayText("Zip")] Zip,
+        [Utils.DisplayText("Phone")] Phone,
+        [Utils.DisplayText("AlphaNumeric")] AlphaNumeric,
+        [Utils.DisplayText("AlphaNumericAndDashes")] AlphaNumericAndDashes,
+        [Utils.DisplayText("AlphaOnly")] AlphaOnly,
+        [Utils.DisplayText("AlphaAndDashes")] AlphaAndDashes,
+
+        [Utils.DisplayText("NumbersAndDashes")]
+        NumbersAndDashes,
+
+        [Utils.DisplayText("Integer")] Integer,
+        [Utils.DisplayText("Double")] Double,
+        [Utils.DisplayText("one decimal, no commas, #0.00")] CobraMoney,
+        [Utils.DisplayText("FixedConstant")] FixedConstant,
+        [Utils.DisplayText("YYYYMMDD")] IsoDate,
+        [Utils.DisplayText("MM/DD/YYYY")] CobraDate,
+
+        [Utils.DisplayText("YYYYMMDD HHMMNNSS")] IsoDateTime,
+        [Utils.DisplayText("MM/DD/YYYY HH:mm AM")] CobraDateTime,
+        [Utils.DisplayText("Yes Or No")] YesNo,
+        [Utils.DisplayText("YES Or NO")] CobraYesNo,
+        [Utils.DisplayText("True Or False")] TrueFalse,
+    }
+
+    public enum FtpFileOperation
+    {
+        Download,
+        Upload,
+        DownloadAndDelete,
+        UploadAndDelete,
+        DeleteRemoteFileIfExists,
+        ReadRemoteFile,
+    }
+
+    public enum HeaderType
+    {
+        [Utils.DisplayText("HeaderType.Unknown")]
+        NotApplicable = 0,
+
+        [Utils.DisplayText("HeaderType.Own")] Own,
+        [Utils.DisplayText("HeaderType.Old")] Old,
+        [Utils.DisplayText("HeaderType.New")] New,
+
+        [Utils.DisplayText("HeaderType.SegmentedFunding")]
+        SegmentedFunding,
+
+        [Utils.DisplayText("HeaderType.NoChange")]
+        NoChange,
+    }
+
+    public enum OperationResultType
+    {
+        [Utils.DisplayText("OperationResultType.Unknown")]
+        Unknown = 0,
+
+        [Utils.DisplayText("OperationResultType.Ok")]
+        Ok = 1,
+
+        [Utils.DisplayText("OperationResultType.PartialFail")]
+        PartialFail,
+
+        [Utils.DisplayText("OperationResultType.CompleteFail")]
+        CompleteFail,
+
+        [Utils.DisplayText("OperationResultType.ProcessingError")]
+        ProcessingError,
+    }
+
+    public enum PlatformType
+    {
+        Unknown = 0,
+
+        [Utils.DisplayText("Platform.Alegeus")]
+        Alegeus,
+
+        Cobra,
+        //
+    }
+
+    public class CobraFileTypeAndVersionNo
+    {
+        public CobraFileType fileType = CobraFileType.Unknown;
+        public string versionNo = "";
+    }
 }

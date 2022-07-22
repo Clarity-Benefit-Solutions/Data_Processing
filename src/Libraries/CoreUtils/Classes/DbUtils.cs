@@ -1,5 +1,4 @@
-﻿using CoreUtils.Classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -7,76 +6,81 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using CoreUtils.Classes;
 
 // ReSharper disable All
 
 namespace CoreUtils
 {
-
     public class DbUtils
     {
         public delegate void OnLogOperationCallback(MessageLogParams logParams);
 
+        public static event EventHandler<FileOperationLogParams> eventOnLogFileOperationCallback;
 
         public static event EventHandler<MessageLogParams> EventOnLogOperationCallback;
 
-        public static void RaiseOnLogOperationCallback(MessageLogParams logParams)
+        public static string AddUniqueIdToFileAndLogToDb(string srcFilePath, Boolean fixFileNameLength, Boolean forceNewFileId, FileOperationLogParams fileLogParams)
         {
-            // Make a temporary copy of the event to avoid possibility of
-            // a race condition if the last subscriber unsubscribes
-            // immediately after the null check and before the event is raised.
-            EventHandler<MessageLogParams> raiseEvent = EventOnLogOperationCallback;
+            // get filename without leading fileid
 
-            // Event will be null if there are no subscribers
-            if (raiseEvent != null)
+            // ignore some files
+            if (FileUtils.IgnoreFile(srcFilePath))
             {
-                object obj = new Object();
-                // Call to raise the event.
-                raiseEvent(obj, logParams);
+                return srcFilePath;
             }
+
+            var srcFileName = Path.GetFileName(srcFilePath);
+            // if file has uniqueID and headerttype already, nothing to do
+            if (!Utils.IsBlank(Utils.GetUniqueIdFromFileName(srcFileName)) && !forceNewFileId)
+            {
+                return srcFilePath;
+            }
+
+            FileInfo srcFileInfo = new FileInfo(srcFilePath);
+            string oldFileName = srcFileInfo.Name;
+
+            //string newFileName = AddUniqueIdAndHeaderTypeToFileName(oldFileName, headerType);
+            string newFileName = Utils.AddUniqueIdToFileName(oldFileName);
+            string newFileId = Utils.GetUniqueIdFromFileName(newFileName);
+
+            // fix for alegeus - max 30 chars incvluding extension
+            string newFileNameFixed = newFileName;
+            if (fixFileNameLength)
+            {
+                newFileNameFixed =
+                    $" {Utils.Left(Path.GetFileNameWithoutExtension(newFileName), Utils.MaxFilenameLengthFtp - 4)}{Path.GetExtension(newFileName)}";
+            }
+
+            //get full path of dest file with uniqueID
+            string newFilePath = $"{srcFileInfo.Directory}/{newFileName}";
+
+            // move prv file to new file with fileid prefixed so we can track it as it moves
+            srcFilePath = FileUtils.FixPath(srcFilePath);
+            newFilePath = FileUtils.FixPath(newFilePath);
+            if (!srcFilePath.Equals(newFilePath))
+            {
+                FileUtils.MoveFile(srcFilePath, newFilePath, null, null);
+                //srcFileInfo.MoveTo(newFilePath);
+
+                //
+                fileLogParams.SetFileNames(newFileId, srcFileInfo.Name, srcFilePath, newFileName, newFilePath,
+                    "New UniqueID created for Source File", "Success",
+                    $"Set {newFileId} for Source File: {oldFileName} and copied to {newFilePath}");
+                fileLogParams.setOriginalFileUploadedOn(srcFileInfo.CreationTime);
+
+                // add to fileLog
+                fileLogParams.ReInitIds();
+
+                //
+                LogFileOperation(fileLogParams);
+
+                return newFilePath;
+            }
+
+            //
+            return srcFilePath;
         }
-
-        public static event EventHandler<FileOperationLogParams> eventOnLogFileOperationCallback;
-
-        public static void RaiseOnLogFileOperationCallback(FileOperationLogParams logParams)
-        {
-            // Make a temporary copy of the event to avoid possibility of
-            // a race condition if the last subscriber unsubscribes
-            // immediately after the null check and before the event is raised.
-            EventHandler<FileOperationLogParams> raiseEvent = eventOnLogFileOperationCallback;
-
-            // Event will be null if there are no subscribers
-            if (raiseEvent != null)
-            {
-                object obj = new Object();
-                // Call to raise the event.
-                raiseEvent(obj, logParams);
-            }
-        }
-
-        public static void TruncateTable(DbConnection dbConn, string tableName, MessageLogParams logParams)
-        {
-            // validate
-            if (dbConn is null)
-            {
-                string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : dbConn should be set";
-                throw new Exception(message);
-            }
-
-            if (Utils.IsBlank(tableName))
-            {
-                string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : queryString should be set";
-                throw new Exception(message);
-            }
-
-            // use dbQuery
-            string queryString = $"TRUNCATE TABLE {Utils.DbQuote(tableName)} ; ";
-
-            // do query
-            DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
-                logParams?.SetStepAndCommand(MethodBase.GetCurrentMethod()?.Name, queryString));
-        }
-
 
         public static Object DbQuery(DbOperation dbOperation, DbConnection dbConn, string queryString,
             DbParameters queryParams = null, MessageLogParams logParams = null, Boolean isSP = false,
@@ -141,7 +145,7 @@ namespace CoreUtils
                         dt.Columns.Add(column);
                     }
 
-                    // Read rows from DataReader and populate the DataTable 
+                    // Read rows from DataReader and populate the DataTable
                     while (reader.Read())
                     {
                         DataRow dataRow = dt.NewRow();
@@ -185,21 +189,37 @@ namespace CoreUtils
             return retVal;
         }
 
-        public static void LogMessage(MessageLogParams logParams)
+        // return last fileLogId from file_processing_log for old or new filename equal to picked up filename so the file can be tracked across operations
+        public static int GetFileOperationFileLogId(string srcFileName, FileOperationLogParams logParams)
         {
-            // log Query
-            if (logParams.DbConnection != null && !Utils.IsBlank(logParams.LogTableName))
+            string fileName = Path.GetFileNameWithoutExtension(srcFileName);
+
+            if (!Utils.IsBlank(fileName))
             {
-                string logQuery = $"INSERT INTO {logParams.LogTableName} " +
-                                  $"             (platform, module_name, submodule_name, step_type, step_name, command) " +
-                                  $"             values ('{Utils.DbQuote(logParams.Platform)}','{Utils.DbQuote(logParams.ModuleName)}', '{Utils.DbQuote(logParams.SubModuleName)}', '{Utils.DbQuote(logParams.StepType)}', '{Utils.DbQuote(logParams.StepName)}', '{Utils.DbQuote(logParams.Command)}')";
+                string logQuery = $"select dbo.getFileLogId('{Utils.DbQuote(fileName)}');";
 
                 // pass new dbLogParams() to ensure no recursion of logging!
-                DbQuery(DbOperation.ExecuteNonQuery, logParams.DbConnection, logQuery, null, null);
+                int fileLogId = (int)DbQuery(DbOperation.ExecuteScalar, logParams.DbConnection, logQuery, null, null,
+                    false);
+                return fileLogId;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public static void LogError(string arg1, string arg2, Exception ex, FileOperationLogParams fileLogParams)
+        {
+            if (fileLogParams == null)
+            {
+                throw ex;
             }
 
-            // raise event
-            RaiseOnLogOperationCallback(logParams);
+            fileLogParams.SetTaskOutcome("ERROR",
+                $"ERROR {fileLogParams.ProcessingTask}: {arg1} - {arg2} - {ex.ToString()}");
+            //
+            LogFileOperation(fileLogParams);
         }
 
         public static void LogFileOperation(FileOperationLogParams fileLogParams)
@@ -259,110 +279,84 @@ namespace CoreUtils
             // raise event
             RaiseOnLogFileOperationCallback(fileLogParams);
 
-            // clear fileids so we get from db for next file  
+            // clear fileids so we get from db for next file
             fileLogParams.ReInitIds();
         }
 
-        public static void LogError(string arg1, string arg2, Exception ex, FileOperationLogParams fileLogParams)
+        public static void LogMessage(MessageLogParams logParams)
         {
-            if (fileLogParams == null)
+            // log Query
+            if (logParams.DbConnection != null && !Utils.IsBlank(logParams.LogTableName))
             {
-                throw ex;
-            }
-
-            fileLogParams.SetTaskOutcome("ERROR",
-                $"ERROR {fileLogParams.ProcessingTask}: {arg1} - {arg2} - {ex.ToString()}");
-            //
-            LogFileOperation(fileLogParams);
-        }
-
-
-        // return last fileLogId from file_processing_log for old or new filename equal to picked up filename so the file can be tracked across operations
-        public static int GetFileOperationFileLogId(string srcFileName, FileOperationLogParams logParams)
-        {
-            string fileName = Path.GetFileNameWithoutExtension(srcFileName);
-
-            if (!Utils.IsBlank(fileName))
-            {
-                string logQuery = $"select dbo.getFileLogId('{Utils.DbQuote(fileName)}');";
+                string logQuery = $"INSERT INTO {logParams.LogTableName} " +
+                                  $"             (platform, module_name, submodule_name, step_type, step_name, command) " +
+                                  $"             values ('{Utils.DbQuote(logParams.Platform)}','{Utils.DbQuote(logParams.ModuleName)}', '{Utils.DbQuote(logParams.SubModuleName)}', '{Utils.DbQuote(logParams.StepType)}', '{Utils.DbQuote(logParams.StepName)}', '{Utils.DbQuote(logParams.Command)}')";
 
                 // pass new dbLogParams() to ensure no recursion of logging!
-                int fileLogId = (int)DbQuery(DbOperation.ExecuteScalar, logParams.DbConnection, logQuery, null, null,
-                    false);
-                return fileLogId;
+                DbQuery(DbOperation.ExecuteNonQuery, logParams.DbConnection, logQuery, null, null);
             }
-            else
+
+            // raise event
+            RaiseOnLogOperationCallback(logParams);
+        }
+
+        public static void RaiseOnLogFileOperationCallback(FileOperationLogParams logParams)
+        {
+            // Make a temporary copy of the event to avoid possibility of
+            // a race condition if the last subscriber unsubscribes
+            // immediately after the null check and before the event is raised.
+            EventHandler<FileOperationLogParams> raiseEvent = eventOnLogFileOperationCallback;
+
+            // Event will be null if there are no subscribers
+            if (raiseEvent != null)
             {
-                return 0;
+                object obj = new Object();
+                // Call to raise the event.
+                raiseEvent(obj, logParams);
             }
         }
 
-
-        public static string AddUniqueIdToFileAndLogToDb(string srcFilePath, Boolean fixFileNameLength, Boolean forceNewFileId, FileOperationLogParams fileLogParams)
+        public static void RaiseOnLogOperationCallback(MessageLogParams logParams)
         {
-            // get filename without leading fileid
+            // Make a temporary copy of the event to avoid possibility of
+            // a race condition if the last subscriber unsubscribes
+            // immediately after the null check and before the event is raised.
+            EventHandler<MessageLogParams> raiseEvent = EventOnLogOperationCallback;
 
-            // ignore some files
-            if (FileUtils.IgnoreFile(srcFilePath))
+            // Event will be null if there are no subscribers
+            if (raiseEvent != null)
             {
-                return srcFilePath;
+                object obj = new Object();
+                // Call to raise the event.
+                raiseEvent(obj, logParams);
+            }
+        }
+
+        public static void TruncateTable(DbConnection dbConn, string tableName, MessageLogParams logParams)
+        {
+            // validate
+            if (dbConn is null)
+            {
+                string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : dbConn should be set";
+                throw new Exception(message);
             }
 
-            var srcFileName = Path.GetFileName(srcFilePath);
-            // if file has uniqueID and headerttype already, nothing to do
-            if (!Utils.IsBlank(Utils.GetUniqueIdFromFileName(srcFileName)) && !forceNewFileId)
+            if (Utils.IsBlank(tableName))
             {
-                return srcFilePath;
+                string message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : queryString should be set";
+                throw new Exception(message);
             }
 
-            FileInfo srcFileInfo = new FileInfo(srcFilePath);
-            string oldFileName = srcFileInfo.Name;
+            // use dbQuery
+            string queryString = $"TRUNCATE TABLE {Utils.DbQuote(tableName)} ; ";
 
-            //string newFileName = AddUniqueIdAndHeaderTypeToFileName(oldFileName, headerType);
-            string newFileName = Utils.AddUniqueIdToFileName(oldFileName);
-            string newFileId = Utils.GetUniqueIdFromFileName(newFileName);
-
-            // fix for alegeus - max 30 chars incvluding extension
-            string newFileNameFixed = newFileName;
-            if (fixFileNameLength)
-            {
-                newFileNameFixed =
-                    $" {Utils.Left(Path.GetFileNameWithoutExtension(newFileName), Utils.MaxFilenameLengthFtp - 4)}{Path.GetExtension(newFileName)}";
-            }
-
-            //get full path of dest file with uniqueID
-            string newFilePath = $"{srcFileInfo.Directory}/{newFileName}";
-
-            // move prv file to new file with fileid prefixed so we can track it as it moves
-            srcFilePath = FileUtils.FixPath(srcFilePath);
-            newFilePath = FileUtils.FixPath(newFilePath);
-            if (!srcFilePath.Equals(newFilePath))
-            {
-                FileUtils.MoveFile(srcFilePath, newFilePath, null, null);
-                //srcFileInfo.MoveTo(newFilePath);
-
-                //
-                fileLogParams.SetFileNames(newFileId, srcFileInfo.Name, srcFilePath, newFileName, newFilePath,
-                    "New UniqueID created for Source File", "Success",
-                    $"Set {newFileId} for Source File: {oldFileName} and copied to {newFilePath}");
-                fileLogParams.setOriginalFileUploadedOn(srcFileInfo.CreationTime);
-
-                // add to fileLog
-                fileLogParams.ReInitIds();
-
-                //
-                LogFileOperation(fileLogParams);
-
-                return newFilePath;
-            }
-
-            //
-            return srcFilePath;
+            // do query
+            DbQuery(DbOperation.ExecuteNonQuery, dbConn, queryString, null,
+                logParams?.SetStepAndCommand(MethodBase.GetCurrentMethod()?.Name, queryString));
         }
 
         public class DbParameters : List<SqlParameter>
         {
         }
     }
-
 }

@@ -6,13 +6,10 @@ using Microsoft.AspNet.FriendlyUrls.Resolvers;
 
 namespace DataProcessingWebApp
 {
-
     public partial class ViewSwitcher : UserControl
     {
-        protected string CurrentView { get; private set; }
-
         protected string AlternateView { get; private set; }
-
+        protected string CurrentView { get; private set; }
         protected string SwitchUrl { get; private set; }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -35,10 +32,9 @@ namespace DataProcessingWebApp
             }
 
             var url = this.GetRouteUrl(switchViewRouteName,
-                new {view = this.AlternateView, __FriendlyUrls_SwitchViews = true});
+                new { view = this.AlternateView, __FriendlyUrls_SwitchViews = true });
             url += "?ReturnUrl=" + HttpUtility.UrlEncode(this.Request.RawUrl);
             this.SwitchUrl = url;
         }
     }
-
 }

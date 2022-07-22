@@ -1,14 +1,13 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Logging;
-using NeoSmart.Caching.Sqlite;
-using System;
+﻿using System;
 using System.IO;
 using System.Runtime.Caching;
 using System.Runtime.Serialization.Formatters.Binary;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
+using NeoSmart.Caching.Sqlite;
 
 namespace CoreUtils.Classes
 {
-
     public class ExtendedCache
     {
         private long _countOfSetOperations;
@@ -64,6 +63,12 @@ namespace CoreUtils.Classes
             this.MemoryCache = MemoryCache.Default;
         }
 
+        public DistributedCacheEntryOptions CacheEntryOptions { get; }
+
+        public ILogger<SqliteCache> Logger { get; }
+
+        public TimeSpan SlidingExpiration { get; } = TimeSpan.FromHours(1);
+
         // for large object storage to avoid overloading memory as it is slower
         private SqliteCache DiskCache { get; }
 
@@ -71,12 +76,6 @@ namespace CoreUtils.Classes
         private MemoryCache MemoryCache { get; }
 
         private SqliteCacheOptions Options { get; }
-
-        public ILogger<SqliteCache> Logger { get; }
-
-        public TimeSpan SlidingExpiration { get; } = TimeSpan.FromHours(1);
-
-        public DistributedCacheEntryOptions CacheEntryOptions { get; }
 
         // stores string in DiskCache
         public object Add(string key, object item)
@@ -142,6 +141,30 @@ namespace CoreUtils.Classes
             return item;
         }
 
+        public bool ContainsKey(string key)
+        {
+            // try mem cache
+            var item = this.MemoryCache.Get(key);
+            if (item != null)
+            {
+                return true;
+            }
+
+            if (this.DiskCache == null)
+            {
+                return false;
+            }
+
+            // try DiskCache
+            var byteArray = this.DiskCache.Get(key);
+            if (byteArray == null || byteArray.Length == 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public object Get(string key)
         {
             // try mem cache
@@ -172,30 +195,5 @@ namespace CoreUtils.Classes
             var item = binForm.Deserialize(memStream);
             return item;
         }
-
-        public bool ContainsKey(string key)
-        {
-            // try mem cache
-            var item = this.MemoryCache.Get(key);
-            if (item != null)
-            {
-                return true;
-            }
-
-            if (this.DiskCache == null)
-            {
-                return false;
-            }
-
-            // try DiskCache
-            var byteArray = this.DiskCache.Get(key);
-            if (byteArray == null || byteArray.Length == 0)
-            {
-                return false;
-            }
-
-            return true;
-        }
     }
-
 }

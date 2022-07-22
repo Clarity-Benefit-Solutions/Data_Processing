@@ -1,9 +1,4 @@
-﻿using CoreUtils;
-using CoreUtils.Classes;
-using DataProcessing.DataModels.CobraPoint;
-using DataProcessing.DataModels.DataProcessing;
-using MySqlConnector;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -12,13 +7,16 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Web.Hosting;
-
+using CoreUtils;
+using CoreUtils.Classes;
+using DataProcessing.DataModels.CobraPoint;
+using DataProcessing.DataModels.DataProcessing;
+using MySqlConnector;
 
 // ReSharper disable All
 
 namespace DataProcessing
 {
-
     public class Vars
     {
         private static string _RunTimeEnvironment = null;
@@ -78,7 +76,7 @@ namespace DataProcessing
             return fixedPath;
         }
 
-        #endregion
+        #endregion LocalRootPaths
 
         #region DBDataProcessing
 
@@ -107,7 +105,6 @@ namespace DataProcessing
             return "";
         }
 
-
         public static string GetProcessExeDir()
         {
             if (IsRunningAsWebApp())
@@ -127,7 +124,6 @@ namespace DataProcessing
 
             return "";
         }
-
 
         public string ConnStrNameDataProcessing
         {
@@ -176,9 +172,10 @@ namespace DataProcessing
             }
         }
 
-        #endregion
+        #endregion DBDataProcessing
 
         #region BrokerCommission
+
         public string ConnStrNameBrokerCommission
         {
             get { return "Broker_CommissionConnectionString"; }
@@ -209,8 +206,7 @@ namespace DataProcessing
             }
         }
 
-        #endregion
-
+        #endregion BrokerCommission
 
         public string ConnStrNameHangfire
         {
@@ -235,7 +231,6 @@ namespace DataProcessing
                 }
             }
         }
-
 
         private DbConnection _dbConnPortalWc;
 
@@ -263,11 +258,12 @@ namespace DataProcessing
             }
         }
 
-        #endregion
+        #endregion DbConnPortalWc
 
         #region DbConnCobra
 
         private static Boolean _UseVPNToConnectToCobra = false;
+
         public static Boolean UseVPNToConnectToCobra
         {
             get { return _UseVPNToConnectToCobra; }
@@ -288,7 +284,6 @@ namespace DataProcessing
                 }
             }
         }
-
 
         private DbConnection _dbConnCobra;
 
@@ -327,12 +322,13 @@ namespace DataProcessing
                 return _dbCtxCobraDefault;
             }
         }
+
         public CobraPointEntities dbCtxCobraNew
         {
             get { return new CobraPointEntities("name=" + ConnStrNameCobra); }
         }
 
-        #endregion
+        #endregion DbConnCobra
 
         #region DbLogging
 
@@ -391,7 +387,7 @@ namespace DataProcessing
             }
         }
 
-        #endregion
+        #endregion DbLogging
 
         #region remoteFtp
 
@@ -463,12 +459,11 @@ namespace DataProcessing
             }
         }
 
-        #endregion
+        #endregion remoteFtp
 
         #region FileProcessingPaths
 
         private static DataTable appSettings;
-
 
         public string GetAppSetting(string settingName)
         {
@@ -524,6 +519,7 @@ namespace DataProcessing
                 Environment.SetEnvironmentVariable("ftpSubFolderPath", value);
             }
         }
+
         public string localFtpRoot
         {
             get
@@ -538,6 +534,7 @@ namespace DataProcessing
                 }
             }
         }
+
         public string localFtpItRoot
         {
             get
@@ -601,10 +598,8 @@ namespace DataProcessing
         public string unknownFilesRejectsPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("unknownFilesRejectsPath")}");
 
-
         public string alegeusFilesImportHoldingArchivePath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesImportHoldingArchivePath")}");
-
 
         public string alegeusFileHeadersRoot =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFileHeadersPath")}");
@@ -630,14 +625,13 @@ namespace DataProcessing
         public string alegeusFilesToReProcessPath =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusFilesToReProcessPath")}");
 
-
         public string alegeusParticipantEnrollmentFilesDownloadPath =>
             FileUtils.FixPath($"{GetAppSetting("alegeusParticipantEnrollmentFilesDownloadPath")}");
 
         public string alegeusParticipantEnrollmentFilesDecryptedPath =>
             FileUtils.FixPath($"{GetAppSetting("alegeusParticipantEnrollmentFilesDecryptedPath")}");
 
-        #endregion
+        #endregion FileProcessingPaths
 
         #region ErrorLogPaths
 
@@ -650,10 +644,8 @@ namespace DataProcessing
         public string AlegeusErrorLogResFilesRoot =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusErrorLogResFilesPath")}");
 
-
         public string AlegeusErrorLogResFilesArchiveRoot =>
             FileUtils.FixPath($"{localFtpRoot}/{GetAppSetting("alegeusErrorLogResFilesArchivePath")}");
-
 
         public string[] cobraIgnoreFtpSourceDirs
         {
@@ -668,7 +660,6 @@ namespace DataProcessing
                 return dirs;
             }
         }
-
 
         public string[] alegeusIgnoreFtpSourceDirs
         {
@@ -720,7 +711,6 @@ namespace DataProcessing
             }
         }
 
-        #endregion
+        #endregion ErrorLogPaths
     }
-
 }

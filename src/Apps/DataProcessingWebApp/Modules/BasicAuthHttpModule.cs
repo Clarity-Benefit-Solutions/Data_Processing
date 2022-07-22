@@ -8,36 +8,19 @@ using CoreUtils.Classes;
 
 namespace DataProcessingWebApp.Modules
 {
-
     public class BasicAuthHttpModule : IHttpModule
     {
         private const string Realm = "DataProcessing Realm";
+
+        public void Dispose()
+        {
+        }
 
         public void Init(HttpApplication context)
         {
             // Register event handlers
             context.AuthenticateRequest += OnApplicationAuthenticateRequest;
             context.EndRequest += OnApplicationEndRequest;
-        }
-
-        public void Dispose()
-        {
-        }
-
-        private static void SetPrincipal(IPrincipal principal)
-        {
-            Thread.CurrentPrincipal = principal;
-            if (HttpContext.Current != null)
-            {
-                HttpContext.Current.User = principal;
-            }
-        }
-
-        private static bool CheckPassword(string username, string password)
-        {
-            return
-                username == Utils.GetAppSetting("BasicAuthUserName")
-                && password == Utils.GetAppSetting("BasicAuthPassword");
         }
 
         private static void AuthenticateUser(string credentials)
@@ -80,6 +63,13 @@ namespace DataProcessingWebApp.Modules
             }
         }
 
+        private static bool CheckPassword(string username, string password)
+        {
+            return
+                username == Utils.GetAppSetting("BasicAuthUserName")
+                && password == Utils.GetAppSetting("BasicAuthPassword");
+        }
+
         private static void OnApplicationAuthenticateRequest(object sender, EventArgs e)
         {
             var request = HttpContext.Current.Request;
@@ -101,7 +91,7 @@ namespace DataProcessingWebApp.Modules
             }
         }
 
-        // If the request was unauthorized, add the WWW-Authenticate header 
+        // If the request was unauthorized, add the WWW-Authenticate header
         // to the response.
         private static void OnApplicationEndRequest(object sender, EventArgs e)
         {
@@ -117,6 +107,14 @@ namespace DataProcessingWebApp.Modules
                     $"Basic realm=\"{BasicAuthHttpModule.Realm}\"");
             }
         }
-    }
 
+        private static void SetPrincipal(IPrincipal principal)
+        {
+            Thread.CurrentPrincipal = principal;
+            if (HttpContext.Current != null)
+            {
+                HttpContext.Current.User = principal;
+            }
+        }
+    }
 }

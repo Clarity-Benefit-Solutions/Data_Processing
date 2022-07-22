@@ -1,9 +1,8 @@
-﻿using CoreUtils.Classes;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using CoreUtils.Classes;
 
 namespace DataProcessing
 {
-
     /// <inheritdoc />
     public class FileCheckResults : Dictionary<int, string>
     {
@@ -37,5 +36,4 @@ namespace DataProcessing
             }
         }
     }
-
 }

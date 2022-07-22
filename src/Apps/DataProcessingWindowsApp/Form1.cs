@@ -9,14 +9,12 @@ using DataProcessing;
 
 namespace TestApp
 {
-
     public partial class Form1 : Form
     {
         private readonly BindingSource _bindingSource1 = new BindingSource();
         private Dispatcher _uiDispatcher = Dispatcher.CurrentDispatcher;
 
         private Vars vars = new Vars();
-
 
         public Form1()
         {
@@ -41,82 +39,7 @@ namespace TestApp
             }
         }
 
-        private void Form1_Closed(object sender, EventArgs e)
-        {
-            Application.Exit();
-            Environment.Exit(1);
-        }
-
-        private void SubscribeToUnhandledExceptions()
-        {
-            var currentDomain = AppDomain.CurrentDomain;
-            currentDomain.UnhandledException += this.HandleUnhandledException;
-        }
-
-
-        private void HandleUnhandledException(object sender, UnhandledExceptionEventArgs args)
-        {
-            var e = (Exception)args.ExceptionObject;
-            var logItem = new LogFields(
-                DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                "",
-                "Unhandled Exception",
-                "Unhandled Exception", "",
-                $"Unhandled Exception: {e}"
-            );
-
-            this.HandleOnFileLogOperationCallback(null, logItem, null);
-        }
-
-        private void HandleOnFileLogOperationCallback(object sender, FileOperationLogParams logParams)
-        {
-            var logItem = new LogFields(
-                DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                logParams.FileId,
-                logParams.ProcessingTask,
-                logParams.ProcessingTaskOutcome,
-                logParams.OriginalFileName,
-                logParams.ProcessingTaskOutcomeDetails
-            );
-
-            this.HandleOnFileLogOperationCallback(sender, logItem, null);
-        }
-
-        private void HandleOnFileLogOperationCallback(object sender, LogFields logItem, Exception ex)
-        {
-            if (this.Visible)
-            {
-                if (this.listLogs.InvokeRequired)
-                {
-                    this.listLogs.Invoke(
-                        (Action)(() =>
-                           {
-                               this._bindingSource1.Add(logItem);
-                               this._bindingSource1.MoveLast();
-
-                               if (ex != null)
-                               {
-                                   ShowThreadExceptionDialog("Unhandled Error", ex);
-                               }
-                           }
-                        )
-                    );
-                }
-                else
-                {
-                    // thread - safe equivalent 
-                    this._bindingSource1.Add(logItem);
-                    this._bindingSource1.MoveLast();
-
-                    if (ex != null)
-                    {
-                        ShowThreadExceptionDialog("Unhandled Error", ex);
-                    }
-                }
-            }
-
-            Console.Out.WriteLine(logItem.ToString());
-        }
+        private string ftpSubFolderPath { get; set; }
 
         public static DialogResult ShowThreadExceptionDialog(string title, Exception e)
         {
@@ -134,65 +57,6 @@ namespace TestApp
 
             // Subscribe to the event
             DbUtils.eventOnLogFileOperationCallback += this.HandleOnFileLogOperationCallback;
-        }
-
-
-
-        private async void cmdProcessIncomingFiles_Click(object sender, EventArgs e)
-        {
-            this.cmdProcessIncomingFiles.Enabled = false;
-
-            try
-            {
-                await IncomingFileProcessing.ProcessAll(this.ftpSubFolderPath);
-            }
-            catch (Exception ex)
-            {
-                this.HandleOnFileLogOperationCallback(sender,
-                    new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                        "",
-                        "Unhandled Exception",
-                        "Unhandled Exception", "",
-                        $"Unhandled Exception: {ex}"
-                    ),
-                    ex
-                );
-            }
-            finally
-            {
-                this.cmdProcessIncomingFiles.Enabled = true;
-            }
-        }
-
-        private async void cmdRetrieveFtpErrorLogs_Click(object sender, EventArgs e)
-        {
-            this.cmdRetrieveFtpErrorLogs.Enabled = false;
-
-            try
-            {
-                await AlegeusErrorLog.ProcessAll(this.ftpSubFolderPath);
-            }
-            catch (Exception ex)
-            {
-                this.HandleOnFileLogOperationCallback(sender,
-                    new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                        "",
-                        "Unhandled Exception",
-                        "Unhandled Exception", "",
-                        $"Unhandled Exception: {ex}"
-                    ),
-                    ex
-                );
-            }
-            finally
-            {
-                this.cmdRetrieveFtpErrorLogs.Enabled = true;
-            }
-        }
-
-        private void cmdClearLog_Click(object sender, EventArgs e)
-        {
-            this._bindingSource1.Clear();
         }
 
         private void cmdClearAll_Click(object sender, EventArgs e)
@@ -221,31 +85,9 @@ namespace TestApp
             }
         }
 
-        private void cmdOpenAccessDB_Click(object sender, EventArgs e)
+        private void cmdClearLog_Click(object sender, EventArgs e)
         {
-            this.cmdOpenAccessDB.Enabled = false;
-
-            try
-            {
-                var directoryPath = Vars.GetProcessBaseDir();
-                Process.Start($"{directoryPath}/../../../_MsAccessFiles/AlegeusErrorLogSystemv4v_Control-New.accdb");
-            }
-            catch (Exception ex)
-            {
-                this.HandleOnFileLogOperationCallback(sender,
-                    new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
-                        "",
-                        "Unhandled Exception",
-                        "Unhandled Exception", "",
-                        $"Unhandled Exception: {ex}"
-                    ),
-                    ex
-                );
-            }
-            finally
-            {
-                this.cmdOpenAccessDB.Enabled = true;
-            }
+            this._bindingSource1.Clear();
         }
 
         private void cmdCopyTestFiles_Click(object sender, EventArgs e)
@@ -318,7 +160,161 @@ namespace TestApp
             }
         }
 
-        private string ftpSubFolderPath { get; set; }
+        private void cmdOpenAccessDB_Click(object sender, EventArgs e)
+        {
+            this.cmdOpenAccessDB.Enabled = false;
+
+            try
+            {
+                var directoryPath = Vars.GetProcessBaseDir();
+                Process.Start($"{directoryPath}/../../../_MsAccessFiles/AlegeusErrorLogSystemv4v_Control-New.accdb");
+            }
+            catch (Exception ex)
+            {
+                this.HandleOnFileLogOperationCallback(sender,
+                    new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                        "",
+                        "Unhandled Exception",
+                        "Unhandled Exception", "",
+                        $"Unhandled Exception: {ex}"
+                    ),
+                    ex
+                );
+            }
+            finally
+            {
+                this.cmdOpenAccessDB.Enabled = true;
+            }
+        }
+
+        private async void cmdProcessIncomingFiles_Click(object sender, EventArgs e)
+        {
+            this.cmdProcessIncomingFiles.Enabled = false;
+
+            try
+            {
+                await IncomingFileProcessing.ProcessAll(this.ftpSubFolderPath);
+            }
+            catch (Exception ex)
+            {
+                this.HandleOnFileLogOperationCallback(sender,
+                    new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                        "",
+                        "Unhandled Exception",
+                        "Unhandled Exception", "",
+                        $"Unhandled Exception: {ex}"
+                    ),
+                    ex
+                );
+            }
+            finally
+            {
+                this.cmdProcessIncomingFiles.Enabled = true;
+            }
+        }
+
+        private async void cmdRetrieveFtpErrorLogs_Click(object sender, EventArgs e)
+        {
+            this.cmdRetrieveFtpErrorLogs.Enabled = false;
+
+            try
+            {
+                await AlegeusErrorLog.ProcessAll(this.ftpSubFolderPath);
+            }
+            catch (Exception ex)
+            {
+                this.HandleOnFileLogOperationCallback(sender,
+                    new LogFields(DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                        "",
+                        "Unhandled Exception",
+                        "Unhandled Exception", "",
+                        $"Unhandled Exception: {ex}"
+                    ),
+                    ex
+                );
+            }
+            finally
+            {
+                this.cmdRetrieveFtpErrorLogs.Enabled = true;
+            }
+        }
+
+        private void Form1_Closed(object sender, EventArgs e)
+        {
+            Application.Exit();
+            Environment.Exit(1);
+        }
+
+        private void HandleOnFileLogOperationCallback(object sender, FileOperationLogParams logParams)
+        {
+            var logItem = new LogFields(
+                DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                logParams.FileId,
+                logParams.ProcessingTask,
+                logParams.ProcessingTaskOutcome,
+                logParams.OriginalFileName,
+                logParams.ProcessingTaskOutcomeDetails
+            );
+
+            this.HandleOnFileLogOperationCallback(sender, logItem, null);
+        }
+
+        private void HandleOnFileLogOperationCallback(object sender, LogFields logItem, Exception ex)
+        {
+            if (this.Visible)
+            {
+                if (this.listLogs.InvokeRequired)
+                {
+                    this.listLogs.Invoke(
+                        (Action)(() =>
+                           {
+                               this._bindingSource1.Add(logItem);
+                               this._bindingSource1.MoveLast();
+
+                               if (ex != null)
+                               {
+                                   ShowThreadExceptionDialog("Unhandled Error", ex);
+                               }
+                           }
+                        )
+                    );
+                }
+                else
+                {
+                    // thread - safe equivalent
+                    this._bindingSource1.Add(logItem);
+                    this._bindingSource1.MoveLast();
+
+                    if (ex != null)
+                    {
+                        ShowThreadExceptionDialog("Unhandled Error", ex);
+                    }
+                }
+            }
+
+            Console.Out.WriteLine(logItem.ToString());
+        }
+
+        private void HandleUnhandledException(object sender, UnhandledExceptionEventArgs args)
+        {
+            var e = (Exception)args.ExceptionObject;
+            var logItem = new LogFields(
+                DateTime.Now.ToString(CultureInfo.InvariantCulture),
+                "",
+                "Unhandled Exception",
+                "Unhandled Exception", "",
+                $"Unhandled Exception: {e}"
+            );
+
+            this.HandleOnFileLogOperationCallback(null, logItem, null);
+        }
+
+        private void SubscribeToUnhandledExceptions()
+        {
+            var currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += this.HandleUnhandledException;
+        }
+
         private void txtFtpSubFolderPath_TextChanged(object sender, EventArgs e)
         {
             try
@@ -327,10 +323,7 @@ namespace TestApp
             }
             catch (Exception ex)
             {
-
             }
-
         }
     }
-
 }

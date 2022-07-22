@@ -1,222 +1,24 @@
-﻿using CoreUtils;
-using CoreUtils.Classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
 using System.Reflection;
+using CoreUtils;
+using CoreUtils.Classes;
+
 //using ETLBox.Connection;
 //using ETLBox.DataFlow;
 //using ETLBox.DataFlow.Connectors;
 
 // ReSharper disable All
 
-
 namespace DataProcessing
 {
-
     public static partial class Import
     {
-
-        public static Boolean IsCobraImportFile(string srcFilePath)
+        public static Boolean GetCobraFileFormatIsResultFile(string srcFilepath)
         {
-            // convert excel files to csv to check
-            if (FileUtils.IsExcelFile(srcFilePath))
-            {
-                var csvFilePath = Path.GetTempFileName() + ".csv";
-
-                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
-                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
-                    null,
-                    null);
-
-                srcFilePath = csvFilePath;
-            }
-
-            // COBRA files, first line starts with [VERSION],
-            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
-
-            if (contents.Contains("[VERSION],"))
-            {
-                return true;
-            }
-
-
             return false;
-        }
-        public static Boolean IsCobraImportLine(string line)
-        {
-            if (line != null)
-            {
-                return false;
-            }
-
-            if (Utils.IsBlank(line, true))
-            {
-                return false;
-            }
-
-            // proper line
-            if (regexCobraImportRecType.IsMatch(line?.Trim().Substring(0, 3)))
-            {
-                return true;
-            }
-
-            // exclude known irrelevant lines that are in header of footer
-            List<string> ignoreText = new List<string>() {
-                "PLEASE EMAIL COMPLETED FILE TO PROCESSING@CLARITYBENEFITSOLUTIONS.COM".ToLower() ,
-            };
-            foreach (var ignore in ignoreText)
-            {
-                if (line.ToLower().Contains(ignore.ToLower()))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-
-        }
-        public static Boolean IsCobraImportQbFile(string srcFilePath)
-        {
-            // convert excel files to csv to check
-            if (FileUtils.IsExcelFile(srcFilePath))
-            {
-                var csvFilePath = Path.GetTempFileName() + ".csv";
-
-                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
-                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
-                    null,
-                    null);
-
-                srcFilePath = csvFilePath;
-            }
-
-            Boolean isCobraFile = IsCobraImportFile(srcFilePath);
-            if (!isCobraFile)
-            {
-                return false;
-            }
-
-            // COBRA files, first line starts with [VERSION],
-            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
-
-            if (contents.Contains("[QB],"))
-            {
-                return true;
-            }
-
-            return false;
-        }
-        public static Boolean IsCobraImportSpmFile(string srcFilePath)
-        {
-            // convert excel files to csv to check
-            if (FileUtils.IsExcelFile(srcFilePath))
-            {
-                var csvFilePath = Path.GetTempFileName() + ".csv";
-
-                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
-                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
-                    null,
-                    null);
-
-                srcFilePath = csvFilePath;
-            }
-
-            Boolean isCobraFile = IsCobraImportFile(srcFilePath);
-            if (!isCobraFile)
-            {
-                return false;
-            }
-
-            // COBRA files, first line starts with [VERSION],
-            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
-
-            if (contents.Contains("[SPM],"))
-            {
-                return true;
-            }
-
-            return false;
-        }
-        public static Boolean IsCobraImportNpmFile(string srcFilePath)
-        {
-            // convert excel files to csv to check
-            if (FileUtils.IsExcelFile(srcFilePath))
-            {
-                var csvFilePath = Path.GetTempFileName() + ".csv";
-
-                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
-                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
-                    null,
-                    null);
-
-                srcFilePath = csvFilePath;
-            }
-
-            Boolean isCobraFile = IsCobraImportFile(srcFilePath);
-            if (!isCobraFile)
-            {
-                return false;
-            }
-
-            // COBRA files, first line starts with [VERSION],
-            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
-
-            if (contents.Contains("[NPM],"))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static string GetCobraFileVersionNoFromFile(string srcFilePath)
-        {
-            string versionNo = "";
-
-            // convert excel files to csv to check
-            if (FileUtils.IsExcelFile(srcFilePath))
-            {
-                var csvFilePath = Path.GetTempFileName() + ".csv";
-
-                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
-                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
-                    null,
-                    null);
-
-                srcFilePath = csvFilePath;
-            }
-
-            int rowNo = 0;
-            string firstLine = null;
-
-            using var inputFile = new StreamReader(srcFilePath);
-            while (true)
-            {
-                string line = inputFile.ReadLine()!;
-                rowNo++;
-
-                // if we reached end of file, return what we got
-                if (line == null)
-                {
-                    return versionNo;
-                }
-
-                string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
-                var columnCount = columns.Length;
-                if (columnCount == 0)
-                {
-                    continue;
-                }
-
-                // take first non blank line with 2 columns
-                if (Utils.IsBlank(firstLine) && columnCount >= 2 && columns[0].ToUpperInvariant() == "[VERSION]")
-                {
-                    versionNo = columns[1];
-                    return versionNo;
-                }
-            }
         }
 
         public static TypedCsvSchema GetCobraFileImportMappings(string rowType, string versionNo, Boolean forImport = true)
@@ -240,7 +42,6 @@ namespace DataProcessing
                     // source filename
                     mappings.Add(new TypedCsvColumn("cobra_res_file_name", "cobra_res_file_name", FormatType.String, null, 0, 0, 0,
                         0));
-
                 }
                 else
                 {
@@ -262,6 +63,7 @@ namespace DataProcessing
                     break;
 
                 #region "QB"
+
                 //////////////////////////////
                 // QB
                 /// //////////////////////////////
@@ -320,6 +122,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[QBEVENT]":
                     switch (versionNo)
                     {
@@ -358,6 +161,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[QBPLANINITIAL]":
                     switch (versionNo)
                     {
@@ -372,6 +176,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[QBPLAN]":
                     switch (versionNo)
                     {
@@ -400,6 +205,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[QBDEPENDENT]":
                     switch (versionNo)
                     {
@@ -433,6 +239,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[QBDEPENDENTPLANINITIAL]":
                     switch (versionNo)
                     {
@@ -444,6 +251,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[QBDEPENDENTPLAN]":
                     switch (versionNo)
                     {
@@ -458,6 +266,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case " [QBNOTE]":
                     switch (versionNo)
                     {
@@ -474,6 +283,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[QBSUBSIDYSCHEDULE]":
                     switch (versionNo)
                     {
@@ -495,6 +305,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[QBSTATEINSERTS]":
                     switch (versionNo)
                     {
@@ -517,6 +328,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[QBDISABILITYEXTENSION]":
                     switch (versionNo)
                     {
@@ -533,6 +345,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[QBPLANMEMBERSPECIFICRATEINITIAL]":
                     switch (versionNo)
                     {
@@ -545,6 +358,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[QBPLANMEMBERSPECIFICRATE]":
                     switch (versionNo)
                     {
@@ -559,6 +373,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[QBPLANTERMREINSTATE]":
                     switch (versionNo)
                     {
@@ -573,6 +388,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[QBLETTERATTACHMENT]":
                     switch (versionNo)
                     {
@@ -584,6 +400,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[QBLOOKUP]":
                     switch (versionNo)
                     {
@@ -597,6 +414,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[MEMBERUSERDEFINEDFIELD]":
                     switch (versionNo)
                     {
@@ -609,10 +427,11 @@ namespace DataProcessing
                             break;
                     }
                     break;
-                #endregion
 
+                #endregion "QB"
 
                 #region "SPM"
+
                 //////////////////////////////
                 // SPM: for DirectBilling Plans
                 /// //////////////////////////////
@@ -689,11 +508,11 @@ namespace DataProcessing
                             mappings.Add(new CobraTypedCsvColumn("SPMInitialGracePeriodOptionType", FormatType.String, 0, 0, "Initial grace period option – “CUSTOM” or “CLIENT DEFAULT” or “IGNORE”. Not required, if not specified – “CLIENT DEFAULT” is used by default. Flexible Billing must be disabled."));
                             mappings.Add(new CobraTypedCsvColumn("InitialGracePeriodDays", FormatType.Integer, 0, 0, "Required when SPMInitialGracePeriodOptionType is “CUSTOM”. Number of days for the initial grace period that a non-elected SPM will have.Flexible Billing must be disabled."));
 
-
                             //
                             break;
                     }
                     break;
+
                 case "[SPMPLAN]":
                     switch (versionNo)
                     {
@@ -717,6 +536,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[SPMDEPENDENT]":
                     switch (versionNo)
                     {
@@ -750,6 +570,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[SPMDEPENDENTPLAN]":
                     switch (versionNo)
                     {
@@ -764,6 +585,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case " [SPMNOTE]":
                     switch (versionNo)
                     {
@@ -779,6 +601,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[SPMSUBSIDYSCHEDULE]":
                     switch (versionNo)
                     {
@@ -799,6 +622,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[SPMPLANMEMBERSPECIFICRATE]":
                     switch (versionNo)
                     {
@@ -813,6 +637,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[SPMLETTERATTACHMENT]":
                     switch (versionNo)
                     {
@@ -824,6 +649,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[SPMLOOKUP]":
                     switch (versionNo)
                     {
@@ -842,9 +668,11 @@ namespace DataProcessing
                             break;
                     }
                     break;
-                #endregion
+
+                #endregion "SPM"
 
                 #region NPM
+
                 //////////////////////////////
                 // NPM
                 /// //////////////////////////////
@@ -913,6 +741,7 @@ namespace DataProcessing
                             break;
                     }
                     break;
+
                 case "[NPMLOOKUP]":
                     switch (versionNo)
                     {
@@ -926,7 +755,9 @@ namespace DataProcessing
                             break;
                     }
                     break;
-                #endregion
+
+                #endregion NPM
+
                 default:
                     var message = $"ERROR: {MethodBase.GetCurrentMethod()?.Name} : rowFormat : {rowType} is invalid";
                     throw new Exception(message);
@@ -934,6 +765,54 @@ namespace DataProcessing
 
             // entrire line
             return mappings;
+        }
+
+        public static string GetCobraFileVersionNoFromFile(string srcFilePath)
+        {
+            string versionNo = "";
+
+            // convert excel files to csv to check
+            if (FileUtils.IsExcelFile(srcFilePath))
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
+            }
+
+            int rowNo = 0;
+            string firstLine = null;
+
+            using var inputFile = new StreamReader(srcFilePath);
+            while (true)
+            {
+                string line = inputFile.ReadLine()!;
+                rowNo++;
+
+                // if we reached end of file, return what we got
+                if (line == null)
+                {
+                    return versionNo;
+                }
+
+                string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
+                var columnCount = columns.Length;
+                if (columnCount == 0)
+                {
+                    continue;
+                }
+
+                // take first non blank line with 2 columns
+                if (Utils.IsBlank(firstLine) && columnCount >= 2 && columns[0].ToUpperInvariant() == "[VERSION]")
+                {
+                    versionNo = columns[1];
+                    return versionNo;
+                }
+            }
         }
 
         public static string GetCobraRowFormatFromLine(string line)
@@ -954,19 +833,31 @@ namespace DataProcessing
 
             //todo: improce this
             return firstColValue;
-
         }
 
-        public static Boolean GetCobraFileFormatIsResultFile(string srcFilepath)
+        //imports passed line into table as per passed columns
+        public static void ImportCobraCsvLine(string srcFileName, int srcRowNo, string line, DbConnection dbConn, string tableName,
+        string versionNo, FileOperationLogParams fileLogParams,
+        OnErrorCallback onErrorCallback)
         {
-            return false;
+            // get row format for current lione as file can have multiple row types
+            string rowType = GetCobraRowFormatFromLine(line);
+
+            // get mappings for event type & version
+            string escapedLine = line.Replace("\"", "\"\"");
+
+            // add fixed columns to line
+            line = $"{srcRowNo},\"{escapedLine}\",{srcFileName},{line}";
+
+            // import into DB
+            TypedCsvSchema mappings = GetCobraFileImportMappings(rowType, versionNo);
+            ImpExpUtils.ImportCsvLine(line, dbConn, tableName, mappings, fileLogParams, onErrorCallback);
         }
 
         public static void ImportCobraFile(DbConnection dbConn, string srcFilePath, string orgSrcFilePath,
           Boolean hasHeaderRow, FileOperationLogParams fileLogParams
           , OnErrorCallback onErrorCallback)
         {
-
             try
             {
                 string fileName = Path.GetFileName(srcFilePath);
@@ -1026,26 +917,161 @@ namespace DataProcessing
             }
         }
 
-        //imports passed line into table as per passed columns
-        public static void ImportCobraCsvLine(string srcFileName, int srcRowNo, string line, DbConnection dbConn, string tableName,
-        string versionNo, FileOperationLogParams fileLogParams,
-        OnErrorCallback onErrorCallback)
+        public static Boolean IsCobraImportFile(string srcFilePath)
         {
-            // get row format for current lione as file can have multiple row types
-            string rowType = GetCobraRowFormatFromLine(line);
+            // convert excel files to csv to check
+            if (FileUtils.IsExcelFile(srcFilePath))
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
 
-            // get mappings for event type & version
-            string escapedLine = line.Replace("\"", "\"\"");
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
+                    null,
+                    null);
 
-            // add fixed columns to line
-            line = $"{srcRowNo},\"{escapedLine}\",{srcFileName},{line}";
+                srcFilePath = csvFilePath;
+            }
 
-            // import into DB
-            TypedCsvSchema mappings = GetCobraFileImportMappings(rowType, versionNo);
-            ImpExpUtils.ImportCsvLine(line, dbConn, tableName, mappings, fileLogParams, onErrorCallback);
+            // COBRA files, first line starts with [VERSION],
+            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
 
-        } // routine
+            if (contents.Contains("[VERSION],"))
+            {
+                return true;
+            }
 
+            return false;
+        }
 
+        public static Boolean IsCobraImportLine(string line)
+        {
+            if (line != null)
+            {
+                return false;
+            }
+
+            if (Utils.IsBlank(line, true))
+            {
+                return false;
+            }
+
+            // proper line
+            if (regexCobraImportRecType.IsMatch(line?.Trim().Substring(0, 3)))
+            {
+                return true;
+            }
+
+            // exclude known irrelevant lines that are in header of footer
+            List<string> ignoreText = new List<string>() {
+                "PLEASE EMAIL COMPLETED FILE TO PROCESSING@CLARITYBENEFITSOLUTIONS.COM".ToLower() ,
+            };
+            foreach (var ignore in ignoreText)
+            {
+                if (line.ToLower().Contains(ignore.ToLower()))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static Boolean IsCobraImportNpmFile(string srcFilePath)
+        {
+            // convert excel files to csv to check
+            if (FileUtils.IsExcelFile(srcFilePath))
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
+            }
+
+            Boolean isCobraFile = IsCobraImportFile(srcFilePath);
+            if (!isCobraFile)
+            {
+                return false;
+            }
+
+            // COBRA files, first line starts with [VERSION],
+            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
+
+            if (contents.Contains("[NPM],"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static Boolean IsCobraImportQbFile(string srcFilePath)
+        {
+            // convert excel files to csv to check
+            if (FileUtils.IsExcelFile(srcFilePath))
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
+            }
+
+            Boolean isCobraFile = IsCobraImportFile(srcFilePath);
+            if (!isCobraFile)
+            {
+                return false;
+            }
+
+            // COBRA files, first line starts with [VERSION],
+            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
+
+            if (contents.Contains("[QB],"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public static Boolean IsCobraImportSpmFile(string srcFilePath)
+        {
+            // convert excel files to csv to check
+            if (FileUtils.IsExcelFile(srcFilePath))
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
+            }
+
+            Boolean isCobraFile = IsCobraImportFile(srcFilePath);
+            if (!isCobraFile)
+            {
+                return false;
+            }
+
+            // COBRA files, first line starts with [VERSION],
+            string contents = FileUtils.GetFlatFileContents(srcFilePath, 1);
+
+            if (contents.Contains("[SPM],"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        // routine
     }
 }

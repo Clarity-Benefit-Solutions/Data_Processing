@@ -10,51 +10,9 @@ using Hangfire;
 
 namespace DataProcessingWebApp.Controllers
 {
-
     [System.Web.Http.Authorize]
     public class DataProcessingController : Controller
     {
-        [System.Web.Http.Authorize]
-        public string Index()
-        {
-            return "DataProcessingController";
-        }
-
-        // GET api/<controller>/5
-        [System.Web.Http.Authorize]
-        public JobDetails StartJob(string id, string ftpSubFolderPath)
-        {
-            try
-            {
-                if (Utils.IsBlank(id))
-                {
-                    return new JobDetails("", id, "", "Job ID MUST BE PASSED");
-                }
-
-                // do job in background
-                var jobId = BackgroundJob.Enqueue(() => DataProcessingJob.StartJob(null, id, ftpSubFolderPath));
-
-                return new JobDetails(id, jobId, $"[JobDetails ID {jobId} Queued for {id} and ftpSubFolderPath {ftpSubFolderPath}", "STARTED");
-            }
-            catch (Exception ex)
-            {
-                return new JobDetails(id, "", $"[Job {id} and ftpSubFolderPath {ftpSubFolderPath} Could Not Be Queued as {ex}", "FAILED");
-            }
-        }
-
-
-        [System.Web.Http.Authorize]
-        public JobDetails CheckFileAlegeus(HttpPostedFileBase file)
-        {
-            return this.CheckFile(file, "alegeus");
-        }
-
-        [System.Web.Http.Authorize]
-        public string localFtpRoot(string ftpSubFolderPath)
-        {
-            return DataProcessingJob.localFtpRoot(ftpSubFolderPath);
-        }
-
         [System.Web.Http.Authorize]
         public JobDetails CheckFile(HttpPostedFileBase file, string platform)
         {
@@ -87,9 +45,21 @@ namespace DataProcessingWebApp.Controllers
         }
 
         [System.Web.Http.Authorize]
+        public JobDetails CheckFileAlegeus(HttpPostedFileBase file)
+        {
+            return this.CheckFile(file, "alegeus");
+        }
+
+        [System.Web.Http.Authorize]
         public JobDetails CheckFileCobra(HttpPostedFileBase file)
         {
             return this.CheckFile(file, "cobra");
+        }
+
+        [System.Web.Http.Authorize]
+        public string Index()
+        {
+            return "DataProcessingController";
         }
 
         [System.Web.Http.Authorize]
@@ -138,6 +108,33 @@ namespace DataProcessingWebApp.Controllers
                     $"[JobDetails jobId {jobId} Results Could Not Be Queried as {ex}", "FAILED", "FAILED", "FAILED");
             }
         }
-    }
 
+        [System.Web.Http.Authorize]
+        public string localFtpRoot(string ftpSubFolderPath)
+        {
+            return DataProcessingJob.localFtpRoot(ftpSubFolderPath);
+        }
+
+        // GET api/<controller>/5
+        [System.Web.Http.Authorize]
+        public JobDetails StartJob(string id, string ftpSubFolderPath)
+        {
+            try
+            {
+                if (Utils.IsBlank(id))
+                {
+                    return new JobDetails("", id, "", "Job ID MUST BE PASSED");
+                }
+
+                // do job in background
+                var jobId = BackgroundJob.Enqueue(() => DataProcessingJob.StartJob(null, id, ftpSubFolderPath));
+
+                return new JobDetails(id, jobId, $"[JobDetails ID {jobId} Queued for {id} and ftpSubFolderPath {ftpSubFolderPath}", "STARTED");
+            }
+            catch (Exception ex)
+            {
+                return new JobDetails(id, "", $"[Job {id} and ftpSubFolderPath {ftpSubFolderPath} Could Not Be Queued as {ex}", "FAILED");
+            }
+        }
+    }
 }

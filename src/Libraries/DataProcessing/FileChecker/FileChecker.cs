@@ -1,19 +1,18 @@
-﻿using CoreUtils;
-using CoreUtils.Classes;
-using DataProcessing.DataModels.CobraPoint;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
+using CoreUtils;
+using CoreUtils.Classes;
+using DataProcessing.DataModels.CobraPoint;
 
 // ReSharper disable All
 
 // ReSharper disable once CheckNamespace
 namespace DataProcessing
 {
-
     [SuppressMessage("ReSharper", "InconsistentNaming")]
     public partial class FileChecker : IDisposable
     {
@@ -21,18 +20,21 @@ namespace DataProcessing
         public static readonly string ErrorSeparator = ";";
 
         //
+        public readonly FileCheckResults fileCheckResults = new FileCheckResults();
+
+        public Boolean hasHeaderRow = false;
+
+        public HeaderType headerType = HeaderType.NotApplicable;
+
+        //
         private static ExtendedCache _cache = new ExtendedCache(TimeSpan.FromHours(1), TimeSpan.FromHours(5), null);
+
+        private readonly DbConnection dbConnCobra;
 
         //
         private readonly DbConnection dbConnPortalWc;
-        private readonly DbConnection dbConnCobra;
+
         private readonly CobraPointEntities dbCtxCobra;
-
-        //
-        public readonly FileCheckResults fileCheckResults = new FileCheckResults();
-        public Boolean hasHeaderRow = false;
-        public HeaderType headerType = HeaderType.NotApplicable;
-
 
         public FileChecker(string _srcFilePath, PlatformType _platformType, DbConnection _dbConn,
             FileOperationLogParams _fileLogParams, OnErrorCallback _onErrorCallback) : base()
@@ -48,23 +50,17 @@ namespace DataProcessing
             this.OnErrorCallback = _onErrorCallback;
         }
 
-        private Vars Vars { get; } = new Vars();
-
-        public string SrcFilePath { get; set; }
-        public string OriginalSrcFilePath { get; set; }
-        public PlatformType PlatformType { get; set; }
+        public DbConnection DbConn { get; set; }
         public EdiRowFormat EdiFileFormat { get; set; }
         public FileOperationLogParams FileLogParams { get; set; }
-
-        public DbConnection DbConn { get; set; }
 
         //
         public OnErrorCallback OnErrorCallback { get; }
 
-        public void Dispose()
-        {
-            //
-        }
+        public string OriginalSrcFilePath { get; set; }
+        public PlatformType PlatformType { get; set; }
+        public string SrcFilePath { get; set; }
+        private Vars Vars { get; } = new Vars();
 
         public void ClearCache()
         {
@@ -73,6 +69,11 @@ namespace DataProcessing
             }
 
             _cache = new ExtendedCache(TimeSpan.FromHours(1), TimeSpan.FromHours(5), null);
+        }
+
+        public void Dispose()
+        {
+            //
         }
 
         #region CheckFile
@@ -100,14 +101,15 @@ namespace DataProcessing
                     case PlatformType.Alegeus:
                         platformName = "Alegeus";
                         break;
+
                     case PlatformType.Cobra:
                         platformName = "Cobra";
                         break;
+
                     default:
                         platformName = "uUnknown";
                         break;
                 }
-
 
                 // act on resultType
                 switch (resultType)
@@ -121,7 +123,7 @@ namespace DataProcessing
                             {
                                 if (Utils.IsTestFile(this.SrcFilePath))
                                 {
-                                    destFilePath = $"{Vars.alegeusFilesTestPath}/{ fileName}";
+                                    destFilePath = $"{Vars.alegeusFilesTestPath}/{fileName}";
                                 }
                                 else
                                 {
@@ -132,7 +134,7 @@ namespace DataProcessing
                             {
                                 if (Utils.IsTestFile(this.SrcFilePath))
                                 {
-                                    destFilePath = $"{Vars.cobraFilesTestPath}/{ fileName}";
+                                    destFilePath = $"{Vars.cobraFilesTestPath}/{fileName}";
                                 }
                                 else
                                 {
@@ -149,7 +151,6 @@ namespace DataProcessing
                                 "file_row", null, FileLogParams,
                                 (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                             );
-
                         }
                         else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
                         {
@@ -163,7 +164,6 @@ namespace DataProcessing
                         strCheckResults = "";
                         operationResult = new OperationResult(1, "200", "Completed", strCheckResults, strCheckResults);
                         return operationResult;
-
 
                     ///////////////////////////////////////
                     case OperationResultType.CompleteFail:
@@ -244,7 +244,6 @@ namespace DataProcessing
                                 (directory, file, ex) => { DbUtils.LogError(directory, file, ex, FileLogParams); }
                             );
 
-
                             // 2d) entire file with errors
                             var queryStringExpAllLinesErrFile =
                                 $"exec [dbo].[proc_{platformName}_ExportImportFile] '{srcFileName}', 'all_lines_with_errors', {this.FileLogParams.FileLogId}";
@@ -260,14 +259,12 @@ namespace DataProcessing
                             // delete src file
                             FileUtils.DeleteFile(SrcFilePath, null, null);
 
-
                             // OK result
                             operationResult = new OperationResult(0, "300", "Failed", "", strCheckResults);
                             return operationResult;
                         }
                         else if (fileCheckProcessType == FileCheckProcessType.ReturnResults)
                         {
-
                             string allLinesErrorFilePath = $"{destFilePath}-4-allLines.err";
                             if (PlatformType == PlatformType.Alegeus)
                             {
@@ -280,7 +277,6 @@ namespace DataProcessing
                                     destFilePath = $"{Vars.alegeusFilesRejectsPath}/{fileName}";
                                 }
                                 ext = ".mbi";
-
                             }
                             else if (PlatformType == PlatformType.Cobra)
                             {
@@ -341,10 +337,12 @@ namespace DataProcessing
                         FileLogParams.ProcessingTaskOutcome = "Passed";
                         FileLogParams.ProcessingTaskOutcomeDetails = "PreCheck File: Passed";
                         break;
+
                     case "300":
                         FileLogParams.ProcessingTaskOutcome = "Rejected";
                         FileLogParams.ProcessingTaskOutcomeDetails = "PreCheck File: Rejected";
                         break;
+
                     default:
                         FileLogParams.ProcessingTaskOutcome = "ERROR";
                         FileLogParams.ProcessingTaskOutcomeDetails = "PreCheck File: ERROR";
@@ -353,8 +351,8 @@ namespace DataProcessing
 
                 DbUtils.LogFileOperation(FileLogParams);
             }
-
         }
+
         //
 
         //check file format, format data and check against db - save results to ErrorCode and ErrorMessage of each row
@@ -391,9 +389,6 @@ namespace DataProcessing
             }
         }
 
-        #endregion
-
-
+        #endregion CheckFile
     }
-
 }

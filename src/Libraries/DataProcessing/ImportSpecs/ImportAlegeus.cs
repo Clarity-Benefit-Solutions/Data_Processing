@@ -1,36 +1,43 @@
-﻿using CoreUtils;
-using CoreUtils.Classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using CoreUtils;
+using CoreUtils.Classes;
+
 //using ETLBox.Connection;
 //using ETLBox.DataFlow;
 //using ETLBox.DataFlow.Connectors;
 
 // ReSharper disable All
 
-
 namespace DataProcessing
 {
-
     public static partial class Import
     {
-
-        private static readonly Regex regexAlegeusImportHeader = new Regex("IA,");
-        private static readonly Regex regexAlegeusImportRecType = new Regex("I[B-Z],");
         private static readonly Regex regexAlegeusExportHeader = new Regex("RA,");
         private static readonly Regex regexAlegeusExportRecType = new Regex("R[B-Z],");
-
+        private static readonly Regex regexAlegeusImportHeader = new Regex("IA,");
+        private static readonly Regex regexAlegeusImportRecType = new Regex("I[B-Z],");
         private static readonly Regex regexCobraImportHeader = new Regex(@"\[VERSION\],");
         private static readonly Regex regexCobraImportRecType = new Regex(@"\[.*\],");
 
+        public static Boolean GetAlegeusFileFormatIsResultFile(EdiRowFormat rowFormat)
+        {
+            String fileFormatDesc = rowFormat.ToDescription();
+            if (fileFormatDesc.IndexOf("Result", StringComparison.InvariantCultureIgnoreCase) >= 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
         public static TypedCsvSchema GetAlegeusFileImportMappings(EdiRowFormat rowFormat, HeaderType headerType,
-            Boolean forImport = true)
+                    Boolean forImport = true)
         {
             var mappings = new TypedCsvSchema();
 
@@ -67,7 +74,7 @@ namespace DataProcessing
             switch (rowFormat)
             {
                 /////////////////////////////////////////////////////
-                // IB, RB 
+                // IB, RB
                 case EdiRowFormat.AlegeusDemographics:
                 case EdiRowFormat.AlegeusResultsDemographics:
                     //
@@ -387,7 +394,7 @@ namespace DataProcessing
                             0));
                         mappings.Add(new TypedCsvColumn("EmployeeID", "EmployeeID", FormatType.SSN, null, 9, 9,
                             0, 0));
-                        // Note: do NOT default deposit type 
+                        // Note: do NOT default deposit type
                         mappings.Add(new TypedCsvColumn("DepositType", "DepositType", FormatType.Integer, "1", 1, 1, 0,
                             0 /*, "1"*/));
                         mappings.Add(new TypedCsvColumn("EmployeeDepositAmount", "EmployeeDepositAmount",
@@ -530,67 +537,8 @@ namespace DataProcessing
                     break;
             }
 
-
             // entrire line
             return mappings;
-        }
-
-        public static Boolean IsAlegeusImportLine(string line)
-        {
-            if (line == null)
-            {
-                return false;
-            }
-
-            if (Utils.IsBlank(line, true))
-            {
-                return false;
-            }
-
-            // proper line
-            if (regexAlegeusImportRecType.IsMatch(line?.Trim().Substring(0, 3)))
-            {
-                return true;
-            }
-
-            // exclude known irrelevant lines that are in header of footer
-            List<string> ignoreText = new List<string>() {
-                "PLEASE EMAIL COMPLETED FILE TO",
-                "CLARITY WILL UPDATE",
-                "PROCESSING@CLARITYBENEFITSOLUTIONS.COM",
-            };
-            foreach (var ignore in ignoreText)
-            {
-                if (line.ToLower().Contains(ignore.ToLower()))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-
-        }
-        public static Boolean IsAlegeusImportHeaderLine(string line)
-        {
-            if (line != null & line.Length >= 3)
-                return regexAlegeusImportHeader.IsMatch(line?.Trim().Substring(0, 3));
-
-            return false;
-        }
-
-        public static Boolean IsAlegeusExportRecLine(string text)
-        {
-            if (text != null & text.Length >= 3)
-                return regexAlegeusExportRecType.IsMatch(text?.Trim().Substring(0, 3));
-
-            return false;
-        }
-        public static Boolean IsAlegeusExportHeaderLine(string text)
-        {
-            if (text != null & text.Length >= 3)
-                return regexAlegeusExportHeader.IsMatch(text?.Trim().Substring(0, 3));
-
-            return false;
         }
 
         public static HeaderType GetAlegeusHeaderTypeFromFile(string srcFilePath, Boolean ignoreInvalidHeaderTypes)
@@ -651,7 +599,6 @@ namespace DataProcessing
                 {
                     return HeaderType.New;
                 }
-
 
                 // get file format
                 // note: we are also detecting header type from conettn for prev Own and NoChange header folders
@@ -745,45 +692,6 @@ namespace DataProcessing
             }
         }
 
-        public static Boolean GetAlegeusFileFormatIsResultFile(EdiRowFormat rowFormat)
-        {
-            String fileFormatDesc = rowFormat.ToDescription();
-            if (fileFormatDesc.IndexOf("Result", StringComparison.InvariantCultureIgnoreCase) >= 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static Boolean IsAlegeusImportFile(string srcFilePath)
-        {
-            // convert excel files to csv to check
-            if (FileUtils.IsExcelFile(srcFilePath))
-            {
-                var csvFilePath = Path.GetTempFileName() + ".csv";
-
-                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
-                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
-                    null,
-                    null);
-
-                srcFilePath = csvFilePath;
-            }
-
-            using var inputFile = new StreamReader(srcFilePath);
-            string line;
-            while ((line = inputFile.ReadLine()!) != null)
-            {
-                if (IsAlegeusImportLine(line))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         public static void ImportAlegeusFile(DbConnection dbConn, string srcFilePath,
                   Boolean hasHeaderRow, FileOperationLogParams fileLogParams
                   , OnErrorCallback onErrorCallback)
@@ -805,7 +713,7 @@ namespace DataProcessing
                     isResultFile ? "error_row" : "data_row",
                     (filePath1, rowNo, line) =>
                     {
-                        // we only import valid import lines 
+                        // we only import valid import lines
                         Boolean import = true;
                         return import;
                     },
@@ -863,7 +771,7 @@ namespace DataProcessing
                             {
                                 // get temp file for each format
                                 var splitFileWriter = (StreamWriter)files[fileFormat2][0];
-                                // if there is prvUnwrittenLine it was probably a header line - write to the file that 
+                                // if there is prvUnwrittenLine it was probably a header line - write to the file that
 
                                 splitFileWriter.WriteLine(line);
                                 continue;
@@ -951,7 +859,91 @@ namespace DataProcessing
             }
         }
 
+        public static Boolean IsAlegeusExportHeaderLine(string text)
+        {
+            if (text != null & text.Length >= 3)
+                return regexAlegeusExportHeader.IsMatch(text?.Trim().Substring(0, 3));
 
+            return false;
+        }
 
+        public static Boolean IsAlegeusExportRecLine(string text)
+        {
+            if (text != null & text.Length >= 3)
+                return regexAlegeusExportRecType.IsMatch(text?.Trim().Substring(0, 3));
+
+            return false;
+        }
+
+        public static Boolean IsAlegeusImportFile(string srcFilePath)
+        {
+            // convert excel files to csv to check
+            if (FileUtils.IsExcelFile(srcFilePath))
+            {
+                var csvFilePath = Path.GetTempFileName() + ".csv";
+
+                FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
+                    Import.GetPasswordsToOpenExcelFiles(srcFilePath),
+                    null,
+                    null);
+
+                srcFilePath = csvFilePath;
+            }
+
+            using var inputFile = new StreamReader(srcFilePath);
+            string line;
+            while ((line = inputFile.ReadLine()!) != null)
+            {
+                if (IsAlegeusImportLine(line))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static Boolean IsAlegeusImportHeaderLine(string line)
+        {
+            if (line != null & line.Length >= 3)
+                return regexAlegeusImportHeader.IsMatch(line?.Trim().Substring(0, 3));
+
+            return false;
+        }
+
+        public static Boolean IsAlegeusImportLine(string line)
+        {
+            if (line == null)
+            {
+                return false;
+            }
+
+            if (Utils.IsBlank(line, true))
+            {
+                return false;
+            }
+
+            // proper line
+            if (regexAlegeusImportRecType.IsMatch(line?.Trim().Substring(0, 3)))
+            {
+                return true;
+            }
+
+            // exclude known irrelevant lines that are in header of footer
+            List<string> ignoreText = new List<string>() {
+                "PLEASE EMAIL COMPLETED FILE TO",
+                "CLARITY WILL UPDATE",
+                "PROCESSING@CLARITYBENEFITSOLUTIONS.COM",
+            };
+            foreach (var ignore in ignoreText)
+            {
+                if (line.ToLower().Contains(ignore.ToLower()))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
     }
 }

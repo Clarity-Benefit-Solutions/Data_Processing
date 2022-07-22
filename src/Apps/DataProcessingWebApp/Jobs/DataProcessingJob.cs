@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 using CoreUtils;
 using CoreUtils.Classes;
@@ -12,7 +11,6 @@ using Hangfire.Server;
 
 namespace DataProcessingWebApp.Jobs
 {
-
     public class DataProcessingJob : IDisposable
     {
         public void Dispose()
@@ -49,7 +47,8 @@ namespace DataProcessingWebApp.Jobs
             var vars = new Vars();
             return vars.localFtpRoot;
         }
-        public static async Task<string> StartJob(PerformContext context, string id, string ftpSubFolderPath  ="")
+
+        public static async Task<string> StartJob(PerformContext context, string id, string ftpSubFolderPath = "")
         {
             List<string> listLogs = new List<string>();
 
@@ -72,7 +71,7 @@ namespace DataProcessingWebApp.Jobs
 
                     case @"copytestfiles":
                         var directoryPath = Vars.GetProcessBaseDir();
-                        await IncomingFileProcessing.CopyTestFiles( ftpSubFolderPath );
+                        await IncomingFileProcessing.CopyTestFiles(ftpSubFolderPath);
 
                         break;
 
@@ -99,6 +98,7 @@ namespace DataProcessingWebApp.Jobs
         }
 
 #pragma warning disable CS1998
+
         public static async Task<string> CheckFile(PerformContext context, string srcFilePath, string platform)
 #pragma warning restore CS1998
         {
@@ -186,5 +186,4 @@ namespace DataProcessingWebApp.Jobs
             }
         }
     }
-
 }
