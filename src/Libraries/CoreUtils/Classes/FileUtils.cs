@@ -418,7 +418,7 @@ namespace CoreUtils.Classes
             }
         }
 
-        public static string FixPath(string filePath, bool makeLowerCase = false)
+        public static string FixPath(string filePath, bool makeLowerCase = false, bool fixLongPaths = false)
         {
             // do not fix path is starts with // i.e. is a UNC path
             if (filePath.StartsWith("\\\\"))
@@ -437,6 +437,11 @@ namespace CoreUtils.Classes
             if (makeLowerCase)
             {
                 filePath = filePath.ToLower();
+            }
+
+            if (fixLongPaths && filePath.Length >= 250)
+            {
+                filePath = $"{Utils.Left(filePath, 250)}{Path.GetExtension(filePath)}";
             }
 
             return filePath;

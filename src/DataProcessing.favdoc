@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Favorites xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <folders>
+    <Folder>
+      <name>DataProcessing</name>
+      <folders />
+      <favorites>
+        <Favorite>
+          <name>IncomingFileProcessing.cs</name>
+          <path>Libraries\DataProcessing\Processes\IncomingFileProcessing.cs</path>
+          <absolutePath>E:\FileAndDataProcessingAndErrorLog\src\Libraries\DataProcessing\Processes\IncomingFileProcessing.cs</absolutePath>
+          <position>
+            <line>352</line>
+            <column>1</column>
+            <lineHash>ECtRuXZaVqPomffPDuOOUlH5xQOzV7MwpJGD63sVVgQ=</lineHash>
+          </position>
+        </Favorite>
+        <Favorite>
+          <name>ImportAlegeus.cs</name>
+          <path>Libraries\DataProcessing\ImportSpecs\ImportAlegeus.cs</path>
+          <absolutePath>E:\FileAndDataProcessingAndErrorLog\src\Libraries\DataProcessing\ImportSpecs\ImportAlegeus.cs</absolutePath>
+          <position>
+            <line>1</line>
+            <column>1</column>
+            <lineHash>+C3wS7Ft5DyHeLCyPV9r1wsaOWkxFdQYa1IzhmbnvNw=</lineHash>
+          </position>
+        </Favorite>
+        <Favorite>
+          <name>FileCheckerCobra.cs</name>
+          <path>Libraries\DataProcessing\FileChecker\FileCheckerCobra.cs</path>
+          <absolutePath>E:\FileAndDataProcessingAndErrorLog\src\Libraries\DataProcessing\FileChecker\FileCheckerCobra.cs</absolutePath>
+          <position>
+            <line>119</line>
+            <column>15</column>
+            <lineHash>6n/90IBT57j6LMW2WMH1k2uBOtYBfm+q8a6GjcvbXko=</lineHash>
+          </position>
+        </Favorite>
+        <Favorite>
+          <name>FileCheckerAlegeus.cs</name>
+          <path>Libraries\DataProcessing\FileChecker\FileCheckerAlegeus.cs</path>
+          <absolutePath>E:\FileAndDataProcessingAndErrorLog\src\Libraries\DataProcessing\FileChecker\FileCheckerAlegeus.cs</absolutePath>
+          <position>
+            <line>1</line>
+            <column>1</column>
+            <lineHash>XdqhyIKKLgn61rYE8buWPhv0tDrXs57X40Z9Or9V9o0=</lineHash>
+          </position>
+        </Favorite>
+        <Favorite>
+          <name>ImportCobra.cs</name>
+          <path>Libraries\DataProcessing\ImportSpecs\ImportCobra.cs</path>
+          <absolutePath>E:\FileAndDataProcessingAndErrorLog\src\Libraries\DataProcessing\ImportSpecs\ImportCobra.cs</absolutePath>
+          <position>
+            <line>1</line>
+            <column>1</column>
+            <lineHash>+C3wS7Ft5DyHeLCyPV9r1wsaOWkxFdQYa1IzhmbnvNw=</lineHash>
+          </position>
+        </Favorite>
+      </favorites>
+    </Folder>
+  </folders>
+  <favorites />
+</Favorites>

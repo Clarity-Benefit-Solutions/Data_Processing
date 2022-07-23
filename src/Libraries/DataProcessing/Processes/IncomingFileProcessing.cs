@@ -121,16 +121,14 @@ namespace DataProcessing
                                 {
                                     return false;
                                 }
-
-                                if (
-                                    // skip if line is not of a import row Type
-                                    !Import.IsAlegeusImportLine(line)
-                                )
+                                else if (!Import.IsAlegeusImportLine(line) && Import.IsAlegeusIgnoreLine(line))
                                 {
                                     return false;
                                 }
-
-                                return true;
+                                else
+                                {
+                                    return true;
+                                }
                             },
                             fileLogParams,
                             (directory, file, ex) => { DbUtils.LogError(directory, file, ex, fileLogParams); }
@@ -304,33 +302,34 @@ namespace DataProcessing
             try
             {
                 //1. fix path
-                srcFilePath = FileUtils.FixPath(srcFilePath);
+                currentFilePath = FileUtils.FixPath(currentFilePath, false, false);
+                if (FileUtils.FixPath(srcFilePath) != FileUtils.FixPath(currentFilePath))
+                {
+                    FileUtils.MoveFile(srcFilePath, currentFilePath, null, null);
+                }
 
                 //
-                fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                    Path.GetFileName(srcFilePath), srcFilePath,
+                fileLogParams.SetFileNames("", Path.GetFileName(currentFilePath), currentFilePath,
+                    Path.GetFileName(currentFilePath), currentFilePath,
                     $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                     "Success", "Found Source File");
                 DbUtils.LogFileOperation(fileLogParams);
 
                 // 2. archive source in source subfolder
-                string srcArchiveDir = $"{Path.GetDirectoryName(srcFilePath)}/Archive/{Utils.ToIsoDateString(DateTime.Now)}";
-                string srcArchivePath = $"{srcArchiveDir}/{Path.GetFileName(srcFilePath)}";
+                string srcArchiveDir = $"{Path.GetDirectoryName(currentFilePath)}/Archive/{Utils.ToIsoDateString(DateTime.Now)}";
+                string srcArchivePath = $"{srcArchiveDir}/{Path.GetFileName(currentFilePath)}";
 
                 // handle long paths
-                if (srcArchivePath.Length >= 250)
-                {
-                    srcArchivePath = $"{Utils.Left(srcArchivePath, 250)}{Path.GetExtension(srcArchivePath)}";
-                }
+                srcArchivePath = FileUtils.FixPath(srcArchivePath);
                 //
                 try
                 {
-                    FileUtils.CopyFile(srcFilePath, srcArchivePath, null, null);
+                    FileUtils.CopyFile(currentFilePath, srcArchivePath, null, null);
                 }
                 catch (Exception ex)
                 {
-                    fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
-                        Path.GetFileName(srcFilePath), srcFilePath,
+                    fileLogParams.SetFileNames("", Path.GetFileName(currentFilePath), currentFilePath,
+                        Path.GetFileName(currentFilePath), currentFilePath,
                         $"IncomingFileProcessing-{MethodBase.GetCurrentMethod()?.Name}",
                         "Error", $"Archiving File Error: {ex.Message}");
 
@@ -339,33 +338,33 @@ namespace DataProcessing
 
                 // 2B. Convert excel file to csv now itself so any password protected files that cannot be opened will be rejected. Also we can look inside the file easier
                 // convert from xl is needed
-                if (FileUtils.IsExcelFile(srcFilePath))
+                if (FileUtils.IsExcelFile(currentFilePath))
                 {
-                    var csvFilePath = $"{Path.GetDirectoryName(srcFilePath)}/{Path.GetFileNameWithoutExtension(srcFilePath)}.csv";
-                    FileUtils.ConvertExcelFileToCsv(srcFilePath, csvFilePath,
-                        Import.GetPasswordsToOpenExcelFiles(srcFilePath),
+                    var csvFilePath = $"{Path.GetDirectoryName(currentFilePath)}/{Path.GetFileNameWithoutExtension(currentFilePath)}.csv";
+                    FileUtils.ConvertExcelFileToCsv(currentFilePath, csvFilePath,
+                        Import.GetPasswordsToOpenExcelFiles(currentFilePath),
                         null,
                         null);
-                    FileUtils.DeleteFile(srcFilePath, null, null);
-                    srcFilePath = csvFilePath;
+                    FileUtils.DeleteFile(currentFilePath, null, null);
+                    currentFilePath = csvFilePath;
                 }
 
-                var platformType = Import.GetPlatformTypeForFile(srcFilePath);
+                var platformType = Import.GetPlatformTypeForFile(currentFilePath);
 
                 // 4. make FilenameProperty uniform
-                var uniformFilePath = Import.GetUniformNameForFile(platformType, srcFilePath);
-                if (Path.GetFileName(srcFilePath) != Path.GetFileName(uniformFilePath))
+                var uniformFilePath = Import.GetUniformPathForFile(platformType, currentFilePath);
+                if (Path.GetFileName(currentFilePath) != Path.GetFileName(uniformFilePath))
                 {
-                    FileUtils.MoveFile(srcFilePath, uniformFilePath, null, null);
+                    FileUtils.MoveFile(currentFilePath, uniformFilePath, null, null);
                     currentFilePath = uniformFilePath;
                 }
 
                 // 5. add uniqueId to file so we can track it across folders and operations
-                var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(uniformFilePath, true, true, fileLogParams);
+                var uniqueIdFilePath = DbUtils.AddUniqueIdToFilePathAndLogToDb(currentFilePath, true, true, fileLogParams);
                 currentFilePath = uniqueIdFilePath;
 
                 // 6. Suffix uniquePath to Archived Source file so we can trace back from passed/reject file
-                string srcArchiveCombinedPath = $"{srcArchivePath}---{Path.GetFileName(uniqueIdFilePath)}";
+                string srcArchiveCombinedPath = $"{srcArchivePath}---{Path.GetFileName(currentFilePath)}";
                 FileUtils.MoveFile(srcArchivePath, srcArchiveCombinedPath, null, null);
 
                 // 7. move source to platform holding dir
@@ -387,10 +386,12 @@ namespace DataProcessing
 
                 // 8. copy source file to holding archive root
                 string destPathHoldingArchive = $"{destDirHolding}/Archive/{Utils.ToIsoDateString(DateTime.Now)}/{Path.GetFileName(currentFilePath)}";
+                destPathHoldingArchive = FileUtils.FixPath(destPathHoldingArchive, false, true);
                 FileUtils.CopyFile(currentFilePath, destPathHoldingArchive, null, null);
 
                 // 9. move source file to holding root
                 string destPathHolding = $"{destDirHolding}/{Path.GetFileName(currentFilePath)}";
+                destPathHolding = FileUtils.FixPath(destPathHolding, false, true);
                 FileUtils.MoveFile(currentFilePath, destPathHolding, null, null);
                 //
                 currentFilePath = destPathHolding;
@@ -418,12 +419,13 @@ namespace DataProcessing
                     {
                         emptyFilePath = $"{Vars.unknownFilesEmptyPath}/{Path.GetFileName(currentFilePath)}";
                     }
+                    emptyFilePath = FileUtils.FixPath(emptyFilePath, false, true);
 
                     FileUtils.MoveFile(currentFilePath, emptyFilePath,
                         (srcFilePath2, destFilePath2, dummy4) =>
                         {
                             //
-                            fileLogParams.SetFileNames("", Path.GetFileName(srcFilePath), srcFilePath,
+                            fileLogParams.SetFileNames("", Path.GetFileName(currentFilePath), currentFilePath,
                             Path.GetFileName(emptyFilePath), emptyFilePath,
                             "IncomingFileProcessing-MoveEmptyFiles", "Success",
                             $"Moved Empty file to Archive - Done folder");
@@ -442,7 +444,9 @@ namespace DataProcessing
                 {
                     // 11. move Alegeus Files to headers Dir
                     string headerPath = $"{Vars.alegeusFileHeadersRoot}/{Path.GetFileName(destPathHolding)}";
+                    headerPath = FileUtils.FixPath(headerPath, false, true);
                     FileUtils.MoveFile(destPathHolding, headerPath, null, null);
+
                     // add to fileLog
                     fileLogParams.SetFileNames("", Path.GetFileName(destPathHolding), destPathHolding,
                         Path.GetFileName(headerPath), headerPath, "IncomingFileProcessing-CopyToHeadersDir", "Success",
@@ -457,15 +461,18 @@ namespace DataProcessing
                     "ERROR", ex2.ToString());
                 DbUtils.LogFileOperation(fileLogParams);
                 //
-                var completeFilePath = currentFilePath;
+
+                // if we moved the src file already...
                 if (Path.GetFileName(srcFilePath) != Path.GetFileName(currentFilePath))
                 {
-                    completeFilePath =
+                    var completeFilePath =
                         $"{Path.GetDirectoryName(currentFilePath)}/{Path.GetFileName(srcFilePath)}---{Path.GetFileName(currentFilePath)}";
+                    completeFilePath = FileUtils.FixPath(completeFilePath, false, true);
+
                     FileUtils.MoveFile(currentFilePath, completeFilePath, null, null);
                 }
-
-                Import.MoveFileToPlatformRejectsFolder(completeFilePath, ex2.ToString());
+                //
+                Import.MoveFileToPlatformRejectsFolder(currentFilePath, ex2.ToString());
                 ;
             }
         }

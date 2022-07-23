@@ -140,7 +140,7 @@ namespace DataProcessing
                 (srcFilePath, destFilePath, file, fileContents) =>
                 {
                     // add uniqueId to file so we can track it across folders and operations
-                    var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(destFilePath, false, false, fileLogParams);
+                    var uniqueIdFilePath = DbUtils.AddUniqueIdToFilePathAndLogToDb(destFilePath, false, false, fileLogParams);
 
                     fileLogParams.SetFileNames("", srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
                         Path.GetFileName(uniqueIdFilePath), $"ErrorLog-{MethodBase.GetCurrentMethod()?.Name}",
@@ -182,7 +182,7 @@ namespace DataProcessing
                 (srcFilePath, destFilePath, file, fileContents) =>
                 {
                     // add uniqueId to file so we can track it across folders and operations
-                    var uniqueIdFilePath = DbUtils.AddUniqueIdToFileAndLogToDb(destFilePath, true, false, fileLogParams);
+                    var uniqueIdFilePath = DbUtils.AddUniqueIdToFilePathAndLogToDb(destFilePath, true, false, fileLogParams);
 
                     fileLogParams.SetFileNames("", srcFilePath, Path.GetFileName(srcFilePath), uniqueIdFilePath,
                         Path.GetFileName(uniqueIdFilePath),

@@ -71,7 +71,7 @@ namespace DataProcessing
             }
         }
 
-        public static string GetUniformNameForFile(PlatformType platformType, string srcFilePath)
+        public static string GetUniformPathForFile(PlatformType platformType, string srcFilePath)
         {
             string newPath = srcFilePath;
             var srcFileName = Path.GetFileName(srcFilePath);
@@ -128,27 +128,18 @@ namespace DataProcessing
 
                         if (platformType == PlatformType.Alegeus)
                         {
-                            //
-                            // col1: Record Type
-                            var firstColValue = columns[0];
-                            if (!Utils.IsBlank(firstColValue) && firstColValue.Length == 2
-                                                              && firstColValue.StartsWith("I",
-                                                                  StringComparison.InvariantCultureIgnoreCase)
-                                                              && !firstColValue.Equals("IA",
-                                                                  StringComparison.InvariantCultureIgnoreCase)
-                               )
+                            // is it a valid import line
+                            if (Import.IsAlegeusImportLine(line))
                             {
-                                recType = firstColValue.Trim();
+                                //col1: recType
+                                recType = columns[0];
 
-                                //
                                 // col2: tpaid
-                                var secondColValue = columns[1];
-
                                 // col3: employerid
-                                var thirdColValue = columns[2];
+                                var thirdColValue = columns[2].Trim();
                                 if (thirdColValue.StartsWith("BEN", StringComparison.InvariantCultureIgnoreCase))
                                 {
-                                    BenCode = thirdColValue.Trim();
+                                    BenCode = thirdColValue;
                                 }
 
                                 // exit when we have both
@@ -158,11 +149,14 @@ namespace DataProcessing
                                 }
                             }
                         }
-                        if (platformType == PlatformType.Cobra)
+
+                        else if (platformType == PlatformType.Cobra)
                         {
                             //
                             // col1: Record Type
-                            var firstColValue = columns[0];
+                            var firstColValue = columns[0].Trim();
+
+                            //QB or SPM
                             if (!Utils.IsBlank(firstColValue)
                                 && (firstColValue == "[QB]" || firstColValue == "[SPM]")
                                )
@@ -171,8 +165,8 @@ namespace DataProcessing
 
                                 //
                                 // col2: client name
-                                var secondColValue = columns[1];
-                                BenCode = secondColValue.Trim();
+                                var secondColValue = columns[1].Trim();
+                                BenCode = secondColValue;
 
                                 // exit when we have both
                                 if (!Utils.IsBlank(BenCode) && !Utils.IsBlank(recType))
@@ -180,11 +174,12 @@ namespace DataProcessing
                                     break;
                                 }
                             }
+                            //NPM
                             else if (!Utils.IsBlank(firstColValue)
                                 && (firstColValue == "[NPM]")
                                )
                             {
-                                recType = firstColValue.Trim().Replace("[", "").Replace("]", "");
+                                recType = firstColValue;
 
                                 // col4: client name
                                 var fourthColValue = columns[3];
@@ -219,9 +214,10 @@ namespace DataProcessing
                 fileName = $"{testMarker}EMPTY_{Path.GetFileName(srcFileName)}";
             }
 
+            // remove invalidchars from path
             fileName = FileUtils.FixFileName(fileName);
             //
-            /*newPath = $"{Path.GetDirectoryName(srcFilePath)}/{Utils.GetUniqueIdFromFileName(srcFileName)}--";*/
+
             newPath = $"{Path.GetDirectoryName(srcFilePath)}/";
             newPath += fileName;
 
@@ -352,16 +348,8 @@ namespace DataProcessing
                     {
                         rowNo++;
                     }
-                    // for each header row, ensure enough columns are created as header columns are less than the data columns and then the csv data reader errors when asked for columns that are in the data schema but not in the header itself
-                    if (line.Length >= 2 && (line.Substring(0, 2) == "IA" || line.Substring(0, 2) == "RA"))
-                    {
-                        line += AppendCommasToCsvLine;
-                    }
-                    else
-                    {
-                        // add extra cols as sometimes error message column is missing
-                        line += AppendCommasToCsvLine;
-                    }
+                    // for each row, ensure enough columns are created as header columns are less than the data columns and then the csv data reader errors when asked for columns that are in the data schema but not in the header itself
+                    line += AppendCommasToCsvLine;
 
                     // add src file path as res_file_name
                     var newLine = $"{rowNo},{Utils.CsvQuote(line)},{fileName},{line}";

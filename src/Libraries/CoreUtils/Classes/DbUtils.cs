@@ -20,7 +20,7 @@ namespace CoreUtils
 
         public static event EventHandler<MessageLogParams> EventOnLogOperationCallback;
 
-        public static string AddUniqueIdToFileAndLogToDb(string srcFilePath, Boolean fixFileNameLength, Boolean forceNewFileId, FileOperationLogParams fileLogParams)
+        public static string AddUniqueIdToFilePathAndLogToDb(string srcFilePath, Boolean fixFileNameLength, Boolean forceNewFileId, FileOperationLogParams fileLogParams)
         {
             // get filename without leading fileid
 

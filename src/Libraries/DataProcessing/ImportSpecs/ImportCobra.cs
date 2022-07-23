@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using CoreUtils;
 using CoreUtils.Classes;
 
@@ -16,6 +17,12 @@ namespace DataProcessing
 {
     public static partial class Import
     {
+        private static readonly Regex regexCobraImportHeader = new Regex(@"^\[VERSION\]");
+        private static readonly Regex regexCobraImportRecType = new Regex(@"^\[.*\]");
+        //todo: input regex values for Cobra
+        private static readonly Regex regexCobraResultHeader = new Regex("XXX");
+        private static readonly Regex regexCobraResultRecType = new Regex("XXX");
+
         public static Boolean GetCobraFileFormatIsResultFile(string srcFilepath)
         {
             return false;
@@ -943,39 +950,6 @@ namespace DataProcessing
             return false;
         }
 
-        public static Boolean IsCobraImportLine(string line)
-        {
-            if (line != null)
-            {
-                return false;
-            }
-
-            if (Utils.IsBlank(line, true))
-            {
-                return false;
-            }
-
-            // proper line
-            if (regexCobraImportRecType.IsMatch(line?.Trim().Substring(0, 3)))
-            {
-                return true;
-            }
-
-            // exclude known irrelevant lines that are in header of footer
-            List<string> ignoreText = new List<string>() {
-                "PLEASE EMAIL COMPLETED FILE TO PROCESSING@CLARITYBENEFITSOLUTIONS.COM".ToLower() ,
-            };
-            foreach (var ignore in ignoreText)
-            {
-                if (line.ToLower().Contains(ignore.ToLower()))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         public static Boolean IsCobraImportNpmFile(string srcFilePath)
         {
             // convert excel files to csv to check
@@ -1072,6 +1046,104 @@ namespace DataProcessing
             return false;
         }
 
-        // routine
+
+        // returns true if it is a valid Import Header Line
+        public static Boolean IsCobraImportHeaderLine(string line)
+        {
+            if (Utils.IsBlank(line, true))
+            {
+                return false;
+            }
+            string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
+
+            return regexCobraImportHeader.IsMatch(columns[0]?.Trim());
+
+        }
+
+        // returns true if it is a valid Import Line
+        public static Boolean IsCobraImportLine(string line)
+        {
+
+            if (Utils.IsBlank(line, true))
+            {
+                return false;
+            }
+
+            // proper line
+            string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
+            if (regexCobraImportRecType.IsMatch(columns[0].Trim()))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        // returns true if it is a line containing text that we wish tio client to not add to file next time
+        public static Boolean IsCobraIrrelevantLine(string line)
+        {
+            if (IsCobraImportLine(line) || IsCobraResultLine(line) || IsCobraImportHeaderLine(line) || IsCobraResultHeaderLine(line))
+            {
+                return false;
+            }
+
+            if (IsCobraIgnoreLine(line))
+            {
+                return false;
+            }
+
+            return true;
+
+        }
+
+        public static Boolean IsCobraIgnoreLine(string line)
+        {
+            if (Utils.IsBlank(line, true))
+            {
+                return true;
+            }
+
+            // exclude known irrelevant lines that are in header of footer
+            List<string> ignoreText = new List<string>() {
+            "PLEASE EMAIL COMPLETED FILE TO",
+            "CLARITY WILL UPDATE",
+            "PROCESSING@CLARITYBENEFITSOLUTIONS.COM",
+        };
+            foreach (var ignore in ignoreText)
+            {
+                if (line.ToLower().Contains(ignore.ToLower()))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        public static Boolean IsCobraResultHeaderLine(string line)
+        {
+            if (Utils.IsBlank(line, true))
+            {
+                return false;
+            }
+            string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
+            return regexCobraResultHeader.IsMatch(columns[0]);
+        }
+        // returns true if it is a valid Result Line
+        public static Boolean IsCobraResultLine(string line)
+        {
+            if (Utils.IsBlank(line, true))
+            {
+                return false;
+            }
+
+            // proper line
+            string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
+            if (regexCobraResultRecType.IsMatch(columns[0].Trim()))
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

@@ -11,7 +11,7 @@
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.CreateAsync(System.String,Sylvan.Data.Csv.CsvDataReaderOptions)">
             <summary>
-            Creates a new CsvDataReader asynchronously.                                                                                          
+            Creates a new CsvDataReader asynchronously.
             </summary>
             <param name="filename">The name of a file containing CSV data.</param>
             <param name="options">The options to configure the reader, or null to use the default options.</param>
@@ -35,10 +35,10 @@
             <returns>A task representing the asynchronous creation of a CsvDataReader instance.</returns>
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.ReadAsync(System.Threading.CancellationToken)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.NextResultAsync(System.Threading.CancellationToken)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.Create(System.String,Sylvan.Data.Csv.CsvDataReaderOptions)">
             <summary>
@@ -66,22 +66,22 @@
             <returns>A CsvDataReader instance.</returns>
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.Read">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.NextResult">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.Close">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Sylvan.Data.Csv.CsvDataReader.Item(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Sylvan.Data.Csv.CsvDataReader.Item(System.String)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Sylvan.Data.Csv.CsvDataReader.Depth">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Sylvan.Data.Csv.CsvDataReader.RowFieldCount">
             <summary>
@@ -90,98 +90,98 @@
             </summary>
         </member>
         <member name="P:Sylvan.Data.Csv.CsvDataReader.FieldCount">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Sylvan.Data.Csv.CsvDataReader.HasRows">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Sylvan.Data.Csv.CsvDataReader.RowNumber">
             <summary> Gets the current 1-based row number of the data reader.</summary>
         </member>
         <member name="P:Sylvan.Data.Csv.CsvDataReader.IsClosed">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Sylvan.Data.Csv.CsvDataReader.RecordsAffected">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetBoolean(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetByte(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetBytes(System.Int32,System.Int64,System.Byte[],System.Int32,System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetChar(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetChars(System.Int32,System.Int64,System.Char[],System.Int32,System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetTimeSpan(System.Int32)">
             <summary>
-            Gets the value of the field as a <see cref="T:System.TimeSpan"/>.
+            Gets the value of the field as a <see cref="T:System.TimeSpan" />.
             </summary>
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetDateTimeOffset(System.Int32)">
             <summary>
-            Gets the value of the field as a <see cref="T:System.DateTimeOffset"/>.
+            Gets the value of the field as a <see cref="T:System.DateTimeOffset" />.
             </summary>
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetDateTime(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetDecimal(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetDouble(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetEnumerator">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetDataTypeName(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetFieldType(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetFloat(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetGuid(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetInt16(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetInt32(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetInt64(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetName(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetOrdinal(System.String)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetString(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetValue(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetValues(System.Object[])">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.IsDBNull(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.IsDBNullAsync(System.Int32,System.Threading.CancellationToken)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetColumnSchema">
             <summary>
@@ -190,10 +190,10 @@
             <returns>A collection of DbColumn.</returns>
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetSchemaTable">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Sylvan.Data.Csv.CsvDataReader.CsvColumn.Item(System.String)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetRawRecord(System.Char[],System.Int32)">
             <summary>
@@ -204,7 +204,7 @@
             <returns>The length of the record data.</returns>
         </member>
         <member name="M:Sylvan.Data.Csv.CsvDataReader.GetFieldValue``1(System.Int32)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="T:Sylvan.Data.Csv.StringFactory">
             <summary>
@@ -476,7 +476,7 @@
         </member>
         <member name="P:Sylvan.Data.Csv.CsvDataWriterOptions.Style">
             <summary>
-            The style of the CSV file to be written, defaults to <see cref="F:Sylvan.Data.Csv.CsvStyle.Standard"/>.
+            The style of the CSV file to be written, defaults to <see cref="F:Sylvan.Data.Csv.CsvStyle.Standard" />.
             </summary>
         </member>
         <member name="P:Sylvan.Data.Csv.CsvDataWriterOptions.Delimiter">

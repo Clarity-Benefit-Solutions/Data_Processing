@@ -88,6 +88,13 @@ namespace DataProcessing.DataModels.DataProcessing
                 return this.row_type.Replace("[", "").Replace("]", "");
             }
         }
+        public Boolean hasError
+        {
+            get
+            {
+                return !Utils.IsBlank(this.error_message);
+            }
+        }
 
         public string ColumnValue(string colName)
         {
@@ -486,6 +493,14 @@ namespace DataProcessing.DataModels.DataProcessing
 
     public partial class mbi_file_table_stage
     {
+        public Boolean hasError
+        {
+            get
+            {
+                return !Utils.IsBlank(this.error_message);
+            }
+        }
+
         public string ColumnValue(string colName)
         {
             switch (colName.ToLowerInvariant())
