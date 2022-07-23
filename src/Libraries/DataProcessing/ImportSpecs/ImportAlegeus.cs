@@ -887,11 +887,11 @@ namespace DataProcessing
             {
                 if (line.ToLower().Contains(ignore.ToLower()))
                 {
-                    return false;
+                    return true;
                 }
             }
 
-            return true;
+            return false;
         }
 
         public static Boolean IsAlegeusImportFile(string srcFilePath)

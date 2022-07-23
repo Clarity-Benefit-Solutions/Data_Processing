@@ -117,11 +117,19 @@ namespace DataProcessing
                             "data_row",
                             (filePath1, rowNo, line) =>
                             {
+                                // ignore first line if not proper import record type - is a header
                                 if (Utils.IsBlank(line))
                                 {
                                     return false;
                                 }
-                                else if (!Import.IsAlegeusImportLine(line) && Import.IsAlegeusIgnoreLine(line))
+                                else if (rowNo == 1
+                                && !Import.IsAlegeusIgnoreLine(line) &&
+                                (Path.GetExtension(srcFilePath) == ".csv" || Path.GetExtension(srcFilePath) == ".mbi")
+                                )
+                                {
+                                    return false;
+                                }
+                                else if (Import.IsAlegeusIgnoreLine(line))
                                 {
                                     return false;
                                 }

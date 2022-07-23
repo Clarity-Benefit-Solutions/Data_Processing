@@ -1,4 +1,5 @@
-create PROCEDURE [dbo].[proc_alegeus_ExportImportFile](
+create 
+ PROCEDURE [dbo].[proc_alegeus_ExportImportFile](
                                                      @mbi_file_name nvarchar(2000),
                                                      @exportType nvarchar(50),
                                                      @batchId nvarchar(2000) )
@@ -22,8 +23,9 @@ BEGIN
         end;
     if (@exportType) = 'original_file'
         begin
+            /* sumeet: use org_data_row as that as the data we actually imported*/
             set @recordsSql =
-                        'select ltrim(rtrim(data_row)) as file_row, source_row_no from [dbo].[mbi_file_table]  ' +
+                        'select ltrim(rtrim(org_data_row)) as file_row, source_row_no from [dbo].[mbi_file_table]  ' +
                         ' where mbi_file_name = @mbi_file_name ' +
                         --                         ' and (len(isnull(error_message, ''''))) = 0 ' +
                         ' and row_type <> ''IA'' ';
@@ -40,8 +42,8 @@ BEGIN
         begin
             set @recordsSql =
                         'select ltrim(rtrim(concat(data_row, '','', ' +
-                        'case when len(error_message) > 0 then concat( ''PreCheck Errors: '' , error_message ) ' +
-                        ' else ''PreCheck: OK'' end ) )) as file_row ' +
+                        'case when len(error_message) > 0 then concat( ''Warning: '' , error_message ) ' +
+                        ' else ''OK'' end ) )) as file_row ' +
                         ', source_row_no from [dbo].[mbi_file_table]  ' +
                         ' where mbi_file_name = @mbi_file_name ' +
                         --  ' and (len(isnull(error_message, ''''))) = 0 ' +
@@ -51,8 +53,8 @@ BEGIN
         begin
             set @recordsSql =
                         'select ltrim(rtrim(concat(data_row, '','', ' +
-                        'case when len(error_message) > 0 then concat( ''PreCheck Errors: '' , error_message ) ' +
-                        ' else ''PreCheck: OK'' end ) )) as file_row ' +
+                        'case when len(error_message) > 0 then concat( ''Warning: '' , error_message ) ' +
+                        ' else ''OK'' end ) )) as file_row ' +
                         ', source_row_no from [dbo].[mbi_file_table]  ' +
                         ' where mbi_file_name = @mbi_file_name ' +
                         ' and (len(isnull(error_message, ''''))) <> 0 ' +

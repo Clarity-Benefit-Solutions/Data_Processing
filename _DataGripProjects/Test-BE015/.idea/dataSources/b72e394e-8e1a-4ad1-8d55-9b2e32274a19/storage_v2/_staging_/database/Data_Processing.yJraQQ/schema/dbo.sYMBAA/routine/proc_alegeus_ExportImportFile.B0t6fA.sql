@@ -1,4 +1,5 @@
-create or alter PROCEDURE [dbo].[proc_alegeus_ExportImportFile](
+create or alter
+ PROCEDURE [dbo].[proc_alegeus_ExportImportFile](
                                                      @mbi_file_name nvarchar(2000),
                                                      @exportType nvarchar(50),
                                                      @batchId nvarchar(2000) )
@@ -18,7 +19,7 @@ BEGIN
                         'select ltrim(rtrim(data_row)) as file_row, source_row_no from [dbo].[mbi_file_table]  ' +
                         ' where mbi_file_name = @mbi_file_name ' +
                         ' and (len(isnull(error_message, ''''))) = 0 ' +
-                        ' and row_type <> ''IA'' ';
+                        ' and isnull(row_type,'''') <> ''IA'' ';
         end;
     if (@exportType) = 'original_file'
         begin
@@ -27,7 +28,7 @@ BEGIN
                         'select ltrim(rtrim(org_data_row)) as file_row, source_row_no from [dbo].[mbi_file_table]  ' +
                         ' where mbi_file_name = @mbi_file_name ' +
                         --                         ' and (len(isnull(error_message, ''''))) = 0 ' +
-                        ' and row_type <> ''IA'' ';
+                        ' and isnull(row_type,'''') <> ''IA'' ';
         end;
     if (@exportType) = 'rejected_lines'
         begin
@@ -35,29 +36,29 @@ BEGIN
                         'select ltrim(rtrim(data_row)) as file_row, source_row_no from [dbo].[mbi_file_table]  ' +
                         ' where mbi_file_name = @mbi_file_name ' +
                         ' and (len(isnull(error_message, ''''))) > 0 ' +
-                        ' and row_type <> ''IA'' ';
+                        ' and isnull(row_type,'''') <> ''IA'' ';
         end;
     if (@exportType) = 'all_lines_with_errors'
         begin
             set @recordsSql =
                         'select ltrim(rtrim(concat(data_row, '','', ' +
-                        'case when len(error_message) > 0 then concat( ''PreCheck Errors: '' , error_message ) ' +
-                        ' else ''PreCheck: OK'' end ) )) as file_row ' +
+                        'case when len(error_message) > 0 then concat( ''Warning: '' , error_message ) ' +
+                        ' else ''OK'' end ) )) as file_row ' +
                         ', source_row_no from [dbo].[mbi_file_table]  ' +
                         ' where mbi_file_name = @mbi_file_name ' +
                         --  ' and (len(isnull(error_message, ''''))) = 0 ' +
-                        ' and row_type <> ''IA'' ';
+                        ' and isnull(row_type,'''') <> ''IA'' ';
         end;
     if (@exportType) = 'rejected_lines_with_errors'
         begin
             set @recordsSql =
                         'select ltrim(rtrim(concat(data_row, '','', ' +
-                        'case when len(error_message) > 0 then concat( ''PreCheck Errors: '' , error_message ) ' +
-                        ' else ''PreCheck: OK'' end ) )) as file_row ' +
+                        'case when len(error_message) > 0 then concat( ''Warning: '' , error_message ) ' +
+                        ' else ''OK'' end ) )) as file_row ' +
                         ', source_row_no from [dbo].[mbi_file_table]  ' +
                         ' where mbi_file_name = @mbi_file_name ' +
                         ' and (len(isnull(error_message, ''''))) <> 0 ' +
-                        ' and row_type <> ''IA'' ';
+                        ' and row_type is null Or row_type <> ''IA'' ';
         end;
     
     if (isnull( @recordsSql , '' ) = '')
