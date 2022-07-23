@@ -555,11 +555,6 @@ namespace DataProcessing
                         $" and PlanStartDate='{fileRow.PlanStartDate}'" +
                         $" and EffectiveDate='{fileRow.EffectiveDate}'" +
                         $" and DepositType='{fileRow.DepositType}'" +
-                        // todo: flag only if
-                        // check amounts also - deposit type ER / EE
-                        // EmployeeDepositAmount ?? ??
-                        // EmployerDepositAmount ?? ??
-                        //$" and DepositType='{fileRow.DepositType}'" +
                         $" and len(isnull(error_message, '')) = 0" +
                         $" order by row_id desc, mbi_file_name, source_row_no ;";
                     //
@@ -572,9 +567,37 @@ namespace DataProcessing
                         return false;
                     }
 
+                    Boolean isDuplicate = false;
                     DataRow prvRow = dbResults.Rows[0];
+
+                    // check if EE + ER match
+                    foreach (DataRow row in dbResults.Rows)
+                    {
+                        // ee amount present in both
+                        if (Utils.ToDecimal(fileRow.EmployeeDepositAmount) > 0
+                             && Utils.ToDecimal(row["EmployeeDepositAmount"].ToString()) > 0
+                           )
+                        {
+                            isDuplicate = true;
+                            break;
+                        }
+                        // eR amount present in both
+                        if (Utils.ToDecimal(fileRow.EmployerDepositAmount) > 0
+                             && Utils.ToDecimal(row["EmployerDepositAmount"].ToString()) > 0
+                           )
+                        {
+                            isDuplicate = true;
+                            break;
+                        }
+                        
+                    }
+
                     //
-                    errorMessage = $"Potential Duplicate Posting! Was probably posted earlier on '{Utils.ToIsoDateString(prvRow["CreatedAt"])}' as part of file  '{prvRow["mbi_file_name"]}'";
+                    if (isDuplicate)
+                    {
+                        errorMessage = $"Potential Duplicate Posting! Was probably posted earlier on '{Utils.ToIsoDateString(prvRow["CreatedAt"])}' as part of file  '{prvRow["mbi_file_name"]}'";
+                    }
+
                     break;
 
                 default:
@@ -792,7 +815,7 @@ namespace DataProcessing
 
         private void CheckAlegeusRowData(mbi_file_table_stage fileRow, TypedCsvSchema mappings)
         {
-            
+
             var rowFormat = ImpExpUtils.GetAlegeusRowFormat(fileRow.row_type);
             switch (rowFormat)
             {
@@ -802,8 +825,8 @@ namespace DataProcessing
                     return;
 
                 case EdiRowFormat.Unknown:
-                    
-                    this.AddAlegeusErrorForRow(fileRow, "Invalid Record Type", $"Record Type '{fileRow.row_type}' is invalid", 
+
+                    this.AddAlegeusErrorForRow(fileRow, "Invalid Record Type", $"Record Type '{fileRow.row_type}' is invalid",
                         Import.IsAlegeusIrrelevantLine(fileRow.data_row));
                     return;
             }
