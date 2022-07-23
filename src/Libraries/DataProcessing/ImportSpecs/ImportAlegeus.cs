@@ -18,11 +18,11 @@ namespace DataProcessing
 {
     public static partial class Import
     {
-        
-        private static readonly Regex regexAlegeusImportHeader = new Regex("^IA");
-        private static readonly Regex regexAlegeusImportRecType = new Regex("^I[B,C,D,E,F,G,H,I,J,K,L,M,N,Q,R,S,T,U,V,W,X,Z]");
-        private static readonly Regex regexAlegeusResultHeader = new Regex("^RA"); 
-        private static readonly Regex regexAlegeusResultRecType = new Regex("^R[B,C,D,E,F,H,I,Z]");
+
+        private static readonly Regex regexAlegeusImportHeader = new Regex("^IA$");
+        private static readonly Regex regexAlegeusImportRecType = new Regex("^I[B,C,D,E,F,G,H,I,J,K,L,M,N,Q,R,S,T,U,V,W,X,Z]$");
+        private static readonly Regex regexAlegeusResultHeader = new Regex("^RA$");
+        private static readonly Regex regexAlegeusResultRecType = new Regex("^R[B,C,D,E,F,H,I,Z]$");
 
         public static Boolean GetAlegeusFileFormatIsResultFile(EdiRowFormat rowFormat)
         {
@@ -770,7 +770,7 @@ namespace DataProcessing
                             {
                                 // get temp file for each format
                                 var splitFileWriter = (StreamWriter)files[fileFormat2][0];
-                                
+
                                 // if there is prvUnwrittenLine it was probably a header line - write to the file that
                                 splitFileWriter.WriteLine(line);
                                 continue;
@@ -967,7 +967,24 @@ namespace DataProcessing
                 return false;
             }
 
-            return true;
+            //todo: how to determine is it ia line the employer added to the file that is header, footer or non rele vent data
+            int columnsWithData = 0;
+            string[] columns = ImpExpUtils.GetCsvColumnsFromText(line);
+            foreach (var col in columns)
+            {
+                if (!Utils.IsBlank(col))
+                {
+                    columnsWithData++;
+                }
+            }
+            // if many cols are without data, it is probably a filler line
+            if (columnsWithData <= 6)
+            {
+                return true;
+            }
+
+            
+            return false;
 
         }
 

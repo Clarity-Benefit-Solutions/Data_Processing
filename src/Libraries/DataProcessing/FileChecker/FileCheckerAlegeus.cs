@@ -628,8 +628,8 @@ namespace DataProcessing
 
             if (isWarningOnly)
             {
-                fileRow.error_code = $"Warning: {fileRow.error_code}";
-                fileRow.error_message = $"Warning: {fileRow.error_message}";
+                fileRow.error_code = $"IRRELEVANT_LINE: {fileRow.error_code}";
+                fileRow.error_message = $"IRRELEVANT_LINE: {fileRow.error_message}";
             }
 
             //
@@ -792,17 +792,19 @@ namespace DataProcessing
 
         private void CheckAlegeusRowData(mbi_file_table_stage fileRow, TypedCsvSchema mappings)
         {
-            // don't check header fileRow
-
+            
             var rowFormat = ImpExpUtils.GetAlegeusRowFormat(fileRow.row_type);
             switch (rowFormat)
             {
+                // don't check header fileRow
                 case EdiRowFormat.AlegeusHeader:
                 case EdiRowFormat.AlegeusResultsHeader:
                     return;
 
                 case EdiRowFormat.Unknown:
-                    this.AddAlegeusErrorForRow(fileRow, "Invalid Record Type", $"Record Type '{fileRow.row_type}' is invalid");
+                    
+                    this.AddAlegeusErrorForRow(fileRow, "Invalid Record Type", $"Record Type '{fileRow.row_type}' is invalid", 
+                        Import.IsAlegeusIrrelevantLine(fileRow.data_row));
                     return;
             }
 
