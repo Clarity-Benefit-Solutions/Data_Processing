@@ -103,15 +103,15 @@ begin
     
     if (len( @error_message ) = 0)
         begin
-            return '';
+            return ' | OK';
         end
     
     if @error_message like 'IRRELEVANT_LINE:%'
         begin
-            return ', Warning: This line was ignored. Please remove this line from future files';
+            return ' | WARNING: This line was ignored. Please remove this line from future files';
         end
     
-    return concat( ', ERROR: ' , @error_message );
+    return concat( ' | ERROR: ' , @error_message );
 
 end;
 
