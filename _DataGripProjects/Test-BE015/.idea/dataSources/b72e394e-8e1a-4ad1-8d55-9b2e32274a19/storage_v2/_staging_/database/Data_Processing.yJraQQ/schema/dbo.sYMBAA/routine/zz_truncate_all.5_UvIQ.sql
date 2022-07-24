@@ -22,5 +22,5 @@ begin
 end;
 go
 
-
+exec zz_truncate_all
 

@@ -106,39 +106,76 @@ namespace DataProcessing
 
         #region CheckCobraFile
 
+        public Boolean CheckQBPlanNotExists(string versionNo, cobra_file_table_stage fileRow, TypedCsvSchema mappings)
+        {
+            string errorMessage = "";
+
+            var plan = GetQBPlan(versionNo, fileRow, mappings);
+
+            if (plan != null && plan.MemberID > 0)
+            {
+                if (currentClientDivisionID > 0)
+                {
+                    errorMessage += $"Duplicate QB Plan. The Plan '{fileRow.PlanName}' already exists for Client '{currentClient.ClientName}' and Division '{currentClientDivision.DivisionName}' and SSN '{currentQB.SSN}'";
+                }
+                else
+                {
+                    errorMessage += $"Duplicate QB Plan. The Plan '{fileRow.PlanName}' already exists for Client '{currentClient.ClientName}' and SSN '{currentQB.SSN}'";
+                }
+            }
+
+            //
+            if (!Utils.IsBlank(errorMessage))
+            {
+                this.AddCobraErrorForRow(fileRow, "Duplicate QB Plan", $"{errorMessage}");
+                // do not check any more
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public QBPlan GetQBPlan(string versionNo, cobra_file_table_stage fileRow, TypedCsvSchema mappings)
+        {
+            var clientPlan = GetClientQBPlan(versionNo, fileRow, mappings);
+            if (clientPlan == null || clientPlan.ClientID <= 0)
+            {
+                return null;
+            }
+
+
+            // check client+division has plan
+            var qbPlans = clientPlan.QBPlans
+                .Where(
+                    x => x.MemberID == currentQB.MemberID
+                    )
+                .ToList();
+            //
+            return qbPlans.FirstOrDefault();
+
+            //
+        }
+
         public Boolean CheckClientQBPlanExists(string versionNo, cobra_file_table_stage fileRow, TypedCsvSchema mappings)
         {
             string errorMessage = "";
 
-            // check client+division has plan
-            var clientPlans = currentClient.ClientPlanQBs
-                .Where(
-                    x => x.PlanName == fileRow.PlanName
-                    )
-                .ToList();
-            //
-            if (clientPlans.Count == 0)
-            {
-                errorMessage += $"The Plan '{fileRow.PlanName}' could not found for Client '{currentClient.ClientName}'";
-            }
-            else if (currentClientDivisionID > 0)
-            {
-                int divPlansFound = 0;
-                foreach (var clientPlan in clientPlans)
-                {
-                    var divPlans = currentClientDivision.ClientDivisionQBPlans.Where(x => x.ClientPlanQBID == clientPlan.ClientPlanQBID).ToList();
+            ClientPlanQB plan = GetClientQBPlan(versionNo, fileRow, mappings);
 
-                    //
-                    if (divPlans.Count > 0)
-                    {
-                        divPlansFound++;
-                    }
-                }
-                if (divPlansFound == 0)
+            if (plan == null || plan.ClientID <= 0)
+            {
+                if (currentClientDivisionID > 0)
                 {
                     errorMessage += $"The Plan '{fileRow.PlanName}' could not found for Client '{currentClient.ClientName}' and Division '{currentClientDivision.DivisionName}'";
                 }
+                else
+                {
+                    errorMessage += $"The Plan '{fileRow.PlanName}' could not found for Client '{currentClient.ClientName}'";
+                }
             }
+
             //
             if (!Utils.IsBlank(errorMessage))
             {
@@ -152,295 +189,37 @@ namespace DataProcessing
             }
         }
 
-        public Boolean CheckCobraClientPlanExists(cobra_file_table_stage fileRow, TypedCsvColumn column,
-            string versionNo)
+        public ClientPlanQB GetClientQBPlan(string versionNo, cobra_file_table_stage fileRow, TypedCsvSchema mappings)
         {
-            var errorMessage = "";
-            //var cacheKey =
-            //    $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{fileRow.ClientName}-{fileRow.AccountTypeCode}-{fileRow.PlanId}";
-            //if (_cache.ContainsKey(cacheKey))
-            //{
-            //    errorMessage = _cache.Get(cacheKey)?.ToString();
-            //}
-            //else
-            //{
-            //    // check DB
-            //    if (Utils.IsBlank(fileRow.ClientName))
-            //    {
-            //        errorMessage += $"The Client Name cannot be blank";
-            //        ;
-            //    }
-            //    else if (Utils.IsBlank(fileRow.AccountTypeCode))
-            //    {
-            //        errorMessage += $"The AccountTypeCode cannot be blank";
-            //        ;
-            //    }
-            //    else
-            //    {
-            //        DataTable dbResults = GetAllCobraPlansForClient(fileRow.ClientName);
 
-            //        // planid is not always present e.g. in deposit file
-            //        string filter = $"ClientName = '{fileRow.ClientName}'";
-            //        if (!Utils.IsBlank(fileRow.AccountTypeCode))
-            //        {
-            //            filter += $" and account_type_code = '{fileRow.AccountTypeCode}' ";
-            //        }
-
-            //        if (!Utils.IsBlank(fileRow.PlanId))
-            //        {
-            //            filter += $" and plan_id = '{fileRow.PlanId}' ";
-            //        }
-
-            //        DataRow[] dbRows = dbResults.Select(filter);
-
-            //        if (dbRows.Length == 0)
-            //        {
-            //            errorMessage +=
-            //                $"The AccountTypeID {fileRow.AccountTypeCode}" +
-            //                (!Utils.IsBlank(fileRow.PlanId) ? $" and Plan ID {fileRow.PlanId}" : "") +
-            //                $" could not be found for Client Name {fileRow.ClientName}";
-            //            ;
-            //        }
-            //        else
-            //        {
-            //            DataRow dbData = dbRows[0];
-            //            DateTime actualPlanStartDate = (DateTime)dbData["plan_year_start_date"];
-            //            DateTime actualPlanEndDate = (DateTime)dbData["plan_year_end_date"];
-            //            //DateTime actualGracePeriodEndDate = (DateTime)dbData["grace_period_end_date"];
-
-            //            //check start and end dates
-            //            if (!Utils.IsBlank(fileRow.PlanStartDate) && !Utils.IsBlank(fileRow.PlanEndDate) &&
-            //                Utils.ToDate(fileRow.PlanStartDate) > Utils.ToDate(fileRow.PlanEndDate))
-            //            {
-            //                errorMessage +=
-            //                    $"The AccountTypeID {fileRow.AccountTypeCode}" +
-            //                    (!Utils.IsBlank(fileRow.PlanId) ? $" and Plan ID {fileRow.PlanId}" : "") +
-            //                    $" Start Date {fileRow.PlanStartDate} must be before the Plan End Date {fileRow.PlanEndDate}";
-            //            }
-
-            //            //check plan dates match Cobra
-            //            if (!Utils.IsBlank(fileRow.PlanStartDate) &&
-            //                actualPlanStartDate > Utils.ToDate(fileRow.PlanStartDate))
-            //            {
-            //                errorMessage +=
-            //                    $"The AccountTypeID {fileRow.AccountTypeCode}" +
-            //                    (!Utils.IsBlank(fileRow.PlanId) ? $" and Plan ID {fileRow.PlanId}" : "") +
-            //                    $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {fileRow.PlanStartDate}";
-            //            }
-
-            //            if (!Utils.IsBlank(fileRow.PlanEndDate) &&
-            //                actualPlanEndDate < Utils.ToDate(fileRow.PlanEndDate))
-            //            {
-            //                errorMessage =
-            //                    $"The AccountTypeID {fileRow.AccountTypeCode}" +
-            //                    (!Utils.IsBlank(fileRow.PlanId) ? $" and Plan ID {fileRow.PlanId}" : "") +
-            //                    $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {fileRow.PlanStartDate}";
-            //                ;
-            //            }
-
-            //            //check effectivedate is within plan dates
-            //            if (!Utils.IsBlank(fileRow.EffectiveDate) &&
-            //                actualPlanStartDate > Utils.ToDate(fileRow.EffectiveDate))
-            //            {
-            //                errorMessage +=
-            //                    $"The AccountTypeID {fileRow.AccountTypeCode}" +
-            //                    (!Utils.IsBlank(fileRow.PlanId) ? $" and Plan ID {fileRow.PlanId}" : "") +
-            //                    $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {fileRow.EffectiveDate}";
-            //            }
-
-            //            if (!Utils.IsBlank(fileRow.EffectiveDate) &&
-            //                actualPlanEndDate < Utils.ToDate(fileRow.EffectiveDate))
-            //            {
-            //                errorMessage =
-            //                    $"The AccountTypeID {fileRow.AccountTypeCode}" +
-            //                    (!Utils.IsBlank(fileRow.PlanId) ? $" and Plan ID {fileRow.PlanId}" : "") +
-            //                    $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {fileRow.EffectiveDate}";
-            //                ;
-            //            }
-            //        }
-
-            //        //
-            //        _cache.Add(cacheKey, errorMessage);
-            //    }
-            //}
-
+            // check client+division has plan
+            var clientPlans = currentClient.ClientPlanQBs
+                .Where(
+                    x => x.PlanName == fileRow.PlanName
+                    )
+                .ToList();
             //
-            if (!Utils.IsBlank(errorMessage))
+            if (clientPlans.Count == 0)
             {
-                this.AddCobraErrorForRow(fileRow, column.SourceColumn, $"{errorMessage}");
-                // do not check any more
-                return true;
+                return null;
             }
-            else
+            else if (currentClientDivisionID > 0)
             {
-                return false;
+                foreach (var clientPlan in clientPlans)
+                {
+                    var divPlans = currentClientDivision.ClientDivisionQBPlans.Where(x => x.ClientPlanQBID == clientPlan.ClientPlanQBID).ToList();
+
+                    //
+                    if (divPlans.Count > 0)
+                    {
+                        return clientPlan;
+                    }
+                }
             }
+            return null;
+            //
         }
 
-        public Boolean CheckCobraEmployeePlanExists(cobra_file_table_stage fileRow, TypedCsvColumn column,
-            string versionNo)
-        {
-            var errorMessage = "";
-            //var cacheKey =
-            //    $"{MethodBase.GetCurrentMethod()?.Name}-{this.PlatformType.ToDescription()}-{fileRow.ClientName}-{fileRow.MemberId}-{fileRow.AccountTypeCode}-{fileRow.PlanId}";
-            //if (_cache.ContainsKey(cacheKey))
-            //{
-            //    errorMessage = _cache.Get(cacheKey)?.ToString();
-            //}
-            //else
-            //{
-            //    // check DB
-            //    if (Utils.IsBlank(fileRow.ClientName))
-            //    {
-            //        errorMessage += $"The Client Name cannot be blank";
-            //        ;
-            //    }
-            //    else if (Utils.IsBlank(fileRow.MemberId))
-            //    {
-            //        errorMessage += $"The Client Name cannot be blank";
-            //        ;
-            //    }
-            //    else if (Utils.IsBlank(fileRow.AccountTypeCode))
-            //    {
-            //        errorMessage += $"The AccountTypeCode cannot be blank";
-            //        ;
-            //    }
-            //    else
-            //    {
-            //        //// if we are enrolling an employee in a plan, only check if ER has this EE
-            //        //if (versionNo == string.CobraEnrollment)
-            //        //{
-            //        //  //as it is an enrollment file, check the EE exists and enroll in the plan
-            //        //  var hasError = this.CheckEmployeeExists(fileRow);
-            //        //  //return hasError;
-            //        //}
-
-            //        DataTable dbResults = GetAllCobraEmployeePlansForClient(fileRow.ClientName);
-
-            //        // planid is not always present e.g. in deposit file
-            //        string filter = $" MemberId = '{fileRow.MemberId}' ";
-            //        if (!Utils.IsBlank(fileRow.AccountTypeCode))
-            //        {
-            //            filter += $" and plancode = '{fileRow.AccountTypeCode}' ";
-            //        }
-
-            //        if (!Utils.IsBlank(fileRow.PlanId))
-            //        {
-            //            filter += $" and plandesc = '{fileRow.PlanId}' ";
-            //        }
-
-            //        DataRow[] dbRows = dbResults.Select(filter);
-
-            //        if (dbRows.Length == 0)
-            //        {
-            //            if (true  /*|| versionNo == string.CobraEnrollment*/)
-            //            {
-            //                // as it is an enrollment, enroll the EE in this plan demographics file,
-            //                DataRow newRow = dbResults.NewRow();
-            //                newRow["ClientName"] = fileRow.ClientName;
-            //                newRow["MemberId"] = fileRow.MemberId;
-            //                newRow["plancode"] = fileRow.AccountTypeCode;
-            //                newRow["plandesc"] = fileRow.PlanId;
-            //                newRow["planstart"] = Utils.ToDateTime(fileRow.PlanStartDate);
-            //                newRow["planend"] = Utils.ToDateTime(fileRow.PlanEndDate);
-
-            //                dbResults.Rows.Add(newRow);
-
-            //                var cacheKey2 =
-            //                    $"GetAllEmployeePlansForClient-{this.PlatformType.ToDescription()}-{fileRow.ClientName}-AllEmployeePlans";
-            //                //
-            //                _cache.Add(cacheKey2, dbResults);
-
-            //                //
-            //                return false;
-            //            }
-
-            //            errorMessage +=
-            //                $"The AccountTypeID {fileRow.AccountTypeCode}" +
-            //                (!Utils.IsBlank(fileRow.PlanId) ? $" and Plan ID {fileRow.PlanId}" : "") +
-            //                $" could not be found for Employee Id {fileRow.MemberId}";
-            //            ;
-            //        }
-            //        else
-            //        {
-            //            DataRow dbData = dbRows[0];
-
-            //            // for demographics file, the employee will not yet exist or the status may be changing (activating or terminating) - do not check
-
-            //            DateTime actualPlanStartDate = (DateTime)dbData["planstart"];
-            //            DateTime actualPlanEndDate = (DateTime)dbData["planend"];
-            //            //DateTime? actualGracePeriodEndDate = Utils.ToDate(dbData["actualGracePeriodEndDate"]?.ToString());
-
-            //            //note: we need to ensure we got Cobra plans going back many years properly. we have data from 2004 onwards in the portal
-            //            //check start and end dates
-            //            if (!Utils.IsBlank(fileRow.PlanStartDate) && !Utils.IsBlank(fileRow.PlanEndDate) &&
-            //                Utils.ToDate(fileRow.PlanStartDate) > Utils.ToDate(fileRow.PlanEndDate))
-            //            {
-            //                errorMessage +=
-            //                    $"The AccountTypeID {fileRow.AccountTypeCode}" +
-            //                    (!Utils.IsBlank(fileRow.PlanId) ? $" and Plan ID {fileRow.PlanId}" : "") +
-            //                    $" Start Date {fileRow.PlanStartDate} must be before the Plan End Date {fileRow.PlanEndDate} for Employee Id {fileRow.MemberId}";
-            //            }
-
-            //            //check plan dates match Cobra
-            //            if (!Utils.IsBlank(fileRow.PlanStartDate) &&
-            //                actualPlanStartDate > Utils.ToDate(fileRow.PlanStartDate))
-            //            {
-            //                errorMessage +=
-            //                    $"The AccountTypeID {fileRow.AccountTypeCode}" +
-            //                    (!Utils.IsBlank(fileRow.PlanId) ? $" and Plan ID {fileRow.PlanId}" : "") +
-            //                    $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {fileRow.PlanStartDate} for Employee Id {fileRow.MemberId}";
-            //            }
-
-            //            if (!Utils.IsBlank(fileRow.PlanEndDate) &&
-            //                actualPlanEndDate < Utils.ToDate(fileRow.PlanEndDate)
-            //                && fileRow.PlanEndDate != "20991231")
-            //            {
-            //                errorMessage =
-            //                    $"The AccountTypeID {fileRow.AccountTypeCode}" +
-            //                    (!Utils.IsBlank(fileRow.PlanId) ? $" and Plan ID {fileRow.PlanId}" : "") +
-            //                    $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {fileRow.PlanEndDate} for Employee Id {fileRow.MemberId}";
-            //                ;
-            //            }
-
-            //            //check effectivedate is within plan dates
-            //            if (!Utils.IsBlank(fileRow.EffectiveDate) &&
-            //                actualPlanStartDate > Utils.ToDate(fileRow.EffectiveDate))
-            //            {
-            //                errorMessage +=
-            //                    $"The AccountTypeID {fileRow.AccountTypeCode}" +
-            //                    (!Utils.IsBlank(fileRow.PlanId) ? $" and Plan ID {fileRow.PlanId}" : "") +
-            //                    $" starts only on {Utils.ToDateString(actualPlanStartDate)} and is not yet started on {fileRow.EffectiveDate} for Employee Id {fileRow.MemberId}";
-            //            }
-
-            //            if (!Utils.IsBlank(fileRow.EffectiveDate) &&
-            //                actualPlanEndDate < Utils.ToDate(fileRow.EffectiveDate))
-            //            {
-            //                errorMessage =
-            //                    $"The AccountTypeID {fileRow.AccountTypeCode}" +
-            //                    (!Utils.IsBlank(fileRow.PlanId) ? $" and Plan ID {fileRow.PlanId}" : "") +
-            //                    $" ended on {Utils.ToDateString(actualPlanEndDate)} and is no longer active on {fileRow.EffectiveDate} for Employee Id {fileRow.MemberId}";
-            //                ;
-            //            }
-            //        }
-            //    }
-
-            //    //
-            //    _cache.Add(cacheKey, errorMessage);
-            //}
-
-            //
-            if (!Utils.IsBlank(errorMessage))
-            {
-                this.AddCobraErrorForRow(fileRow, column.SourceColumn, $"{errorMessage}");
-                // do not check any more
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         public Boolean CheckCobraRecordData(string versionNo, cobra_file_table_stage fileRow, TypedCsvSchema mappings)
         {
@@ -539,11 +318,19 @@ namespace DataProcessing
                     case "[QBPLANINITIAL]":
                         // check client+division has plan
                         lineHasError = CheckClientQBPlanExists(versionNo, fileRow, mappings);
+                        if (!lineHasError)
+                        {
+                            lineHasError = CheckQBPlanNotExists(versionNo, fileRow, mappings);
+                        }
                         break;
 
                     case "[QBPLAN]":
                         // check client+division has plan
                         lineHasError = CheckClientQBPlanExists(versionNo, fileRow, mappings);
+                        if (!lineHasError)
+                        {
+                            lineHasError = CheckQBPlanNotExists(versionNo, fileRow, mappings);
+                        }
                         break;
 
                     case "[QBDEPENDENTPLANINITIAL]":
@@ -761,91 +548,12 @@ namespace DataProcessing
             return false;
         }
 
-        public Boolean CheckCobraTpaExists(cobra_file_table_stage fileRow)
-        {
-            var errorMessage = "";
-            //var cacheKey = $"{MethodBase.GetCurrentMethod()?.Name}-{fileRow.TpaId}";
-            //if (_cache.ContainsKey(cacheKey))
-            //{
-            //    errorMessage = _cache.Get(cacheKey)?.ToString();
-            //}
-            //else
-            //{
-            //    if (PlatformType == PlatformType.Cobra)
-            //    {
-            //        // check DB
-            //        if (Utils.IsBlank(column.FixedValue))
-            //        {
-            //            if (Utils.IsBlank(fileRow.TpaId))
-            //            {
-            //                errorMessage = "TPA ID cannot be blank. It must always be BENEFL";
-            //            }
-            //            else if (fileRow.TpaId != "BENEFL")
-            //            {
-            //                errorMessage = $"TPA ID {fileRow.TpaId} is invalid. It must always be BENEFL";
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        throw new Exception($"{PlatformType.ToDescription()} is not yet handled");
-            //    }
-
-            //    //
-            //    _cache.Add(cacheKey, errorMessage);
-            //}
-
-            //
-            if (!Utils.IsBlank(errorMessage))
-            {
-                this.AddCobraErrorForRow(fileRow, "TPA", $"{errorMessage}");
-                // do not check any more
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
 
         public Boolean CheckForDuplicateCobraPosting(cobra_file_table_stage fileRow,
                   string versionNo)
         {
             string errorMessage = "";
 
-            ////
-            //switch (versionNo)
-            //{
-            //    default:
-            //        string queryString =
-            //            $"select * from  [cobra_file_table] " +
-            //            $" where " +
-            //            $" TpaId='{fileRow.TpaId}'" +
-            //            $" and ClientName='{fileRow.ClientName}'" +
-            //            $" and MemberId='{fileRow.MemberId}'" +
-            //            $" and AccountTypeCode='{fileRow.AccountTypeCode}'" +
-            //            $" and PlanEndDate='{fileRow.PlanEndDate}'" +
-            //            $" and PlanStartDate='{fileRow.PlanStartDate}'" +
-            //            $" and EffectiveDate='{fileRow.EffectiveDate}'" +
-            //            $" and DepositType='{fileRow.DepositType}'" +
-            //            $" and len(isnull(error_message, '')) = 0" +
-            //            $" order by row_id desc, cobra_file_name, source_row_no ;";
-            //        //
-            //        DataTable dbResults = (DataTable)DbUtils.DbQuery(DbOperation.ExecuteReader, DbConn,
-            //             queryString, null,
-            //             FileLogParams?.GetMessageLogParams());
-            //        //
-            //        if (dbResults.Rows.Count == 0)
-            //        {
-            //            return false;
-            //        }
-
-            //        DataRow prvRow = dbResults.Rows[0];
-            //        //
-            //        errorMessage = $"Potential Duplicate Posting! Was probably posted earlier on {Utils.ToIsoDateString(prvRow["CreatedAt"])} as part of file  {prvRow["cobra_file_name"]}";
-            //        break;
-
-            //}
 
             //
             if (!Utils.IsBlank(errorMessage))
